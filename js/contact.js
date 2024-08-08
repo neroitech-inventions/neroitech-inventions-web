@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault(); // Prevent the form from submitting the traditional way
 
     // Show loading indicator
-    loadingIndicator.style.display = "block";
+    loadingIndicator.style.display = "flex";
 
     const formData = new FormData(form);
     const formObject = {};
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loadingIndicator.style.display = "none";
 
         console.error("Error:", error);
-        alert("There was a problem sending your message.");
+        alert("There was a problem sending your details.");
       });
   });
 });
