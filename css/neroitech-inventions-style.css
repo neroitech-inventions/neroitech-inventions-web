@@ -149,24 +149,15 @@ http://www.templatemo.com/tm-509-hydro
   }
 
 
+  .staff-text {
+    color: white;
+}
+
   /*---------------------------------------
        PRE LOADER              
   -----------------------------------------*/
 
   .preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 99999;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
-    background: none repeat scroll 0 0 #ffffff;
-  }
-  .preloader2 {
     position: fixed;
     top: 0;
     left: 0;
@@ -735,6 +726,24 @@ http://www.templatemo.com/tm-509-hydro
   .footer-link li a:hover {
     color: #FABB05;
   }
+/* Apply white color to text in the form */
+form span,
+form input,
+form select,
+form textarea {
+  color: #ffffff;
+}
+
+/* Apply white color to links within the .form-link class */
+.form-link a {
+  color: #FFFFFF !important; /* Use !important to override other styles */
+  text-decoration: none; /* Optional: Remove underline for better visibility */
+}
+
+/* Apply hover color to links within the .form-link class */
+.form-link a:hover {
+  color: #FABB05 !important; /* Ensure hover color is applied */
+}
 
   .copyright-text p,
   .footer-bottom .phone-contact p {
