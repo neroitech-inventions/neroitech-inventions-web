@@ -918,7 +918,7 @@
                 <form id="submitQuestForm">
                     <div class="form-group">
                         <label for="trackCode">Track Code</label>
-                        <input type="text" id="trackCode" name="trackCode" disabled required>
+                        <input type="text" id="trackCode" name="trackCode" readonly required>
                     </div>
                     <div class="form-group">
                         <label for="proofOfQuest">Proof of Quest</label>
@@ -952,7 +952,8 @@
             RATE_RANGE: 'SnappQuestData!D2:D2',
             QUESTS_RANGE: 'Quests!A1:G100',
             QUESTS_PER_PAGE: 4,
-            FALLBACK_RATE: 1500
+            FALLBACK_RATE: 1500,
+            FORM_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSfZQq0L0iE6aO1fAa8fB5z80w4kcPqx9Z4CqzA2MeQozGo/formResponse'
         };
 
         // State
@@ -960,8 +961,8 @@
         let quests = [];
         let availableCurrentPage = 1;
         let completedCurrentPage = 1;
-        let currentCurrency = 'NGN'; // Default to NGN
-        let usdcRate = 0; // Initialize to 0, will be set after fetch
+        let currentCurrency = 'NGN';
+        let usdcRate = 0;
 
         // DOM Elements
         const DOM = {
@@ -982,9 +983,9 @@
             learnMoreModal: document.getElementById('learnMoreModal'),
             learnMoreLink: document.getElementById('learn-more-link'),
             closeButtons: document.querySelectorAll('.close, .modal-close-btn'),
-            currencyToggle: document.getElementById('currencyToggle'),
             submitQuestModal: document.getElementById('submitQuestModal'),
-            submitQuestForm: document.getElementById('submitQuestForm')
+            submitQuestForm: document.getElementById('submitQuestForm'),
+            currencyToggle: document.getElementById('currencyToggle')
         };
 
         // Fetch data from Google Sheets
@@ -1005,11 +1006,13 @@
                     return rawValue;
                 }
                 const headers = data.values[0].map(h => h.trim());
-                return data.values.slice(1).map(row => {
+                const rows = data.values.slice(1).map(row => {
                     const obj = {};
                     headers.forEach((header, i) => { obj[header] = (row[i] || '').trim(); });
                     return obj;
                 });
+                console.log(`Fetched ${rows.length} rows from ${range}:`, rows);
+                return rows;
             } catch (error) {
                 console.error(`Fetch error for ${range}:`, error);
                 if (error.message.includes('403')) {
@@ -1090,6 +1093,7 @@
                 quests = questRows.map(quest => {
                     const status = parseInt(quest.Status) || 0;
                     const reward = parseFloat(quest.Reward.replace('₦', '')) || 0;
+                    const trackCode = quest['Track Code'] || '';
                     return {
                         id: parseInt(quest.ID) || 0,
                         title: quest.Title || 'Untitled Quest',
@@ -1098,9 +1102,23 @@
                         reward: reward,
                         link: quest.Link || '',
                         status: status === 0 ? 'active' : 'completed',
-                        trackCode: quest['Track Code'] || '' // Add track code from sheet
+                        trackCode: trackCode
                     };
                 });
+
+                // Validate track codes for uniqueness
+                const trackCodes = quests.map(q => q.trackCode);
+                const uniqueTrackCodes = new Set(trackCodes);
+                if (uniqueTrackCodes.size !== trackCodes.length) {
+                    console.warn('Duplicate track codes detected:', trackCodes);
+                    alert('Warning: Duplicate track codes found in the Google Sheet. Please ensure each quest has a unique Track Code.');
+                } else {
+                    console.log('All track codes are unique:', trackCodes);
+                }
+
+                // Log available quests for debugging
+                const availableQuests = quests.filter(q => q.status === 'active');
+                console.log('Available quests with track codes:', availableQuests.map(q => ({ id: q.id, trackCode: q.trackCode })));
 
                 initializeProfile();
             } catch (error) {
@@ -1157,7 +1175,7 @@
                     <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
                     <div style="display: flex; gap: 8px;">
                         ${quest.status === 'active' && quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">Go to Quest</a>` : ''}
-                        ${quest.status === 'active' ? `<button class="submit-btn" data-quest-id="${quest.id}">Submit Quest</button>` : ''}
+                        ${quest.status === 'active' ? `<button class="submit-btn" data-quest-id="${quest.id}" data-track-code="${quest.trackCode}">Submit Quest</button>` : ''}
                     </div>
                 </div>
             `;
@@ -1227,7 +1245,7 @@
                     body: formBody,
                     mode: 'no-cors'
                 });
-                console.log(`Quest ${questId} submitted successfully`);
+                console.log(`Quest ${questId} submitted successfully with track code: ${formData.trackCode}`);
                 alert('Quest submitted successfully! Awaiting admin approval.');
             } catch (error) {
                 console.error(`Error submitting quest ${questId}:`, error);
@@ -1312,12 +1330,10 @@
                 const submitBtn = event.target.closest('.submit-btn');
                 if (submitBtn) {
                     const questId = submitBtn.dataset.questId;
-                    console.log(`Opening Submit Quest modal for quest ID: ${questId}`);
+                    const trackCode = submitBtn.dataset.trackCode;
+                    console.log(`Opening Submit Quest modal for quest ID: ${questId}, Track Code: ${trackCode}`);
                     DOM.submitQuestForm.dataset.questId = questId;
-                    const quest = quests.find(q => q.id === parseInt(questId));
-                    if (quest) {
-                        DOM.submitQuestForm.querySelector('#trackCode').value = quest.trackCode || '';
-                    }
+                    DOM.submitQuestForm.querySelector('#trackCode').value = trackCode || '';
                     DOM.submitQuestModal.style.display = 'block';
                     setTimeout(() => DOM.submitQuestModal.classList.add('active'), 10);
                 }
