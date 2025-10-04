@@ -918,7 +918,7 @@
                 <form id="submitQuestForm">
                     <div class="form-group">
                         <label for="trackCode">Track Code</label>
-                        <input type="text" id="trackCode" name="trackCode" required>
+                        <input type="text" id="trackCode" name="trackCode" disabled required>
                     </div>
                     <div class="form-group">
                         <label for="proofOfQuest">Proof of Quest</label>
@@ -952,8 +952,7 @@
             RATE_RANGE: 'SnappQuestData!D2:D2',
             QUESTS_RANGE: 'Quests!A1:G100',
             QUESTS_PER_PAGE: 4,
-            FALLBACK_RATE: 1500,
-            FORM_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSfZQq0L0iE6aO1fAa8fB5z80w4kcPqx9Z4CqzA2MeQozGo/formResponse'
+            FALLBACK_RATE: 1500
         };
 
         // State
@@ -961,8 +960,8 @@
         let quests = [];
         let availableCurrentPage = 1;
         let completedCurrentPage = 1;
-        let currentCurrency = 'NGN';
-        let usdcRate = 0;
+        let currentCurrency = 'NGN'; // Default to NGN
+        let usdcRate = 0; // Initialize to 0, will be set after fetch
 
         // DOM Elements
         const DOM = {
@@ -983,9 +982,9 @@
             learnMoreModal: document.getElementById('learnMoreModal'),
             learnMoreLink: document.getElementById('learn-more-link'),
             closeButtons: document.querySelectorAll('.close, .modal-close-btn'),
+            currencyToggle: document.getElementById('currencyToggle'),
             submitQuestModal: document.getElementById('submitQuestModal'),
-            submitQuestForm: document.getElementById('submitQuestForm'),
-            currencyToggle: document.getElementById('currencyToggle')
+            submitQuestForm: document.getElementById('submitQuestForm')
         };
 
         // Fetch data from Google Sheets
@@ -1098,7 +1097,8 @@
                         description: quest.Description || 'No description available',
                         reward: reward,
                         link: quest.Link || '',
-                        status: status === 0 ? 'active' : 'completed'
+                        status: status === 0 ? 'active' : 'completed',
+                        trackCode: quest['Track Code'] || '' // Add track code from sheet
                     };
                 });
 
@@ -1314,6 +1314,10 @@
                     const questId = submitBtn.dataset.questId;
                     console.log(`Opening Submit Quest modal for quest ID: ${questId}`);
                     DOM.submitQuestForm.dataset.questId = questId;
+                    const quest = quests.find(q => q.id === parseInt(questId));
+                    if (quest) {
+                        DOM.submitQuestForm.querySelector('#trackCode').value = quest.trackCode || '';
+                    }
                     DOM.submitQuestModal.style.display = 'block';
                     setTimeout(() => DOM.submitQuestModal.classList.add('active'), 10);
                 }
