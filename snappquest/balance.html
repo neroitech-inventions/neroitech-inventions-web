@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="SnappQuest - Check User Balance">
     <title>SnappQuest - Check Balance</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" onerror="console.error('Font Awesome failed to load')">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -304,6 +304,60 @@
         .error-message.show {
             display: block;
         }
+        .currency-switch {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .currency-switch input[type="checkbox"] {
+            display: none;
+        }
+        .currency-switch label {
+            position: relative;
+            width: 60px;
+            height: 28px;
+            background: #E5E7EB;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .currency-switch label::before {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #ffffff;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .currency-switch input:checked + label {
+            background: linear-gradient(135deg, #6366F1, #34D399);
+        }
+        .currency-switch input:checked + label::before {
+            transform: translateX(32px);
+        }
+        .currency-switch span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1F2937;
+        }
+        .currency-switch .ngn-label {
+            color: #6B7280;
+        }
+        .currency-switch .usdc-label {
+            color: #6B7280;
+        }
+        .currency-switch input:checked ~ .ngn-label {
+            color: #1F2937;
+        }
+        .currency-switch input:not(:checked) ~ .usdc-label {
+            color: #1F2937;
+        }
         footer {
             background: linear-gradient(135deg, #1F2937, #111827);
             color: #E5E7EB;
@@ -334,7 +388,7 @@
             flex-wrap: wrap;
             justify-content: space-between;
             margin-bottom: 32px;
-            gap: 24px;
+            gap: 32px;
         }
         .footer-col {
             flex: 1 1 200px;
@@ -357,7 +411,7 @@
             padding: 0;
         }
         .footer-link li {
-            margin-bottom: 12px;
+            margin-bottom: 11px;
         }
         .footer-link a {
             color: #34D399;
@@ -383,58 +437,226 @@
             gap: 16px;
         }
         .copyright-text p {
-            font-size: 14px;
+            font-size: 12px;
             margin: 0;
             opacity: 0.9;
         }
-        .social-icons ul {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            gap: 24px;
-        }
-        .social-icons a {
-            color: #34D399;
-            font-size: 12px;
-            text-decoration: none;
+        #back-to-top {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #6366F1, #34D399);
+            color: #ffffff;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            animation: pulseButton 2s ease-in-out infinite;
         }
-        .social-icons a:hover {
+        @keyframes pulseButton {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        #back-to-top:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(52, 211, 153, 0.5);
+        }
+        #back-to-top i {
+            font-size: 24px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.7);
+            padding-top: 80px;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+        .modal.active {
+            opacity: 1;
+        }
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 5% auto;
+            padding: 0;
+            width: 80%;
+            max-width: 720px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-60px);
+            transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            opacity: 0;
+        }
+        .modal.active .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #6366F1, #34D399);
             color: #ffffff;
+            padding: 24px;
+            border-radius: 20px 20px 0 0;
+            font-size: 28px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-body {
+            padding: 32px;
+            font-size: 16px;
+            color: #1F2937;
+        }
+        .modal-body h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+        .modal-body p {
+            margin-bottom: 24px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #4B5563;
+        }
+        .modal-body ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 24px;
+        }
+        .modal-body ul li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #4B5563;
+        }
+        .modal-body ul li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: #34D399;
+            position: absolute;
+            left: 0;
+            top: 4px;
+        }
+        .modal-body a {
+            color: #6366F1;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .modal-body a:hover {
+            color: #34D399;
+        }
+        .close {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .close:hover,
+        .close:focus {
+            color: #E5E7EB;
+            transform: scale(1.2);
+        }
+        .modal-close-btn {
+            background: linear-gradient(135deg, #6366F1, #34D399);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 24px;
+            display: inline-block;
+        }
+        .modal-close-btn:hover {
+            background: linear-gradient(135deg, #4F46E5, #22C55E);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .modal-content {
+                width: 90%;
+                border-radius: 16px;
             }
-            .balance-form {
+            .modal-header {
+                font-size: 24px;
+                padding: 20px;
+            }
+            .modal-body {
                 padding: 24px;
             }
-            .balance-result {
-                padding: 24px;
+            .modal-body h3 {
+                font-size: 20px;
+            }
+            .modal-body p,
+            .modal-body ul li {
+                font-size: 14px;
+            }
+            .modal-close-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            .currency-switch label {
+                width: 50px;
+                height: 24px;
+            }
+            .currency-switch label::before {
+                width: 20px;
+                height: 20px;
+                top: 2px;
+                left: 2px;
+            }
+            .currency-switch input:checked + label::before {
+                transform: translateX(26px);
+            }
+            .currency-switch span {
+                font-size: 12px;
             }
             .footer-row {
+                gap: 24px;
                 flex-direction: column;
-                gap: 32px;
             }
             .footer-bottom {
                 flex-direction: column;
                 text-align: center;
             }
-            .social-icons ul {
-                justify-content: center;
-            }
         }
     </style>
-    <link href="images/icon.png" rel="icon">
+    <link href="images/icon.png" rel="icon" onerror="console.error('Favicon failed to load')">
 </head>
 <body>
     <header>
         <div class="logo">
-            <a href="index.html"><img src="images/logo.png" alt="SnappQuest Logo"></a>
+            <a href="index.html"><img src="images/logo.png" alt="SnappQuest Logo" onerror="console.error('Logo image failed to load')"></a>
         </div>
         <div class="nav-container">
             <nav class="nav-links">
@@ -476,6 +698,12 @@
                     <div class="stat-label">Total Quests Completed</div>
                 </div>
             </div>
+            <div class="currency-switch">
+                <span class="usdc-label">NGN</span>
+                <input type="checkbox" id="currencyToggle">
+                <label for="currencyToggle"></label>
+                <span class="ngn-label">USDC</span>
+            </div>
         </div>
     </div>
     <footer>
@@ -483,14 +711,14 @@
             <div class="footer-row">
                 <div class="footer-col footer-info">
                     <h2>SnappQuest</h2>
-                    <p>The Engage-to-Earn tool for Solana, where every action matters. Whether it's liking, retweeting, commenting, or gaining followers, each interaction adds value and rewards the community.</p>
+                    <p>The Engage-to-Earn tool for Solana, <br>where every action counts. From likes and retweets to comments and followers, every interaction creates value and earns rewards.</p>
                 </div>
                 <div class="footer-col">
                     <h2>Quick Links</h2>
                     <ul class="footer-link">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="index.html#create-quest">Create Quest</a></li>
-                        <li><a href="https://t.me/SnappQuest/134" target="_blank">Join Quest</a></li>
+                        <li><a href="profile.html">Join Quest</a></li>
                         <li><a href="#" id="learn-more-link">How It Works</a></li>
                     </ul>
                 </div>
@@ -498,34 +726,72 @@
                     <h2>Other Tools</h2>
                     <ul class="footer-link">
                         <li><a href="https://t.me/EarnlyQuestBot" target="_blank"><i class="fas fa-tasks"></i>Earnly Bot</a></li>
+                        <li><a href="quote.html" target="_blank"><i class="fas fa-plus-circle"></i>Snapp Quote</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h2>Custom Quest</h2>
                     <p>Reach out on Telegram for partnerships or customized quests. Create your own custom quest by contacting the team!</p>
+                    <ul class="footer-link">
+                        <li><a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i> X (Twitter)</a></li>
+                        <li><a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
                 <div class="copyright-text">
                     <p>&copy; 2025 SnappQuest. All rights reserved.</p>
                 </div>
-                <div class="social-icons">
-                    <ul>
-                        <li><a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i> X (Twitter)</a></li>
-                        <li><a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
-                    </ul>
-                </div>
             </div>
         </div>
     </footer>
-
+    <button id="back-to-top" title="Back to Top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    <div id="learnMoreModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>SnappQuest Overview</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <h3>Vision</h3>
+                <p>SnappQuest exists to become the Engage-to-Earn tool for Superteam Nigeria and the Solana ecosystem, rewarding effort, not just outcomes.</p>
+                <h3>Mission</h3>
+                <p>To unlock quick earning opportunities for the SnappQuest community, while providing sponsors with real engagement in return.</p>
+                <h3>The Problem</h3>
+                <p>New projects and the Solana community struggle to gain visibility, while communities show up but often don't get rewarded.</p>
+                <h3>The Solution: SnappQuest</h3>
+                <p>SnappQuest is a tool that incentivizes participation, turning effort into recognition, rewards, and earning opportunities.</p>
+                <h3>How SnappQuest Works</h3>
+                <p>Create your Quest, generate the quote, and after payment, submit the new Quest for admin approval. Admins verify the Quest, if it’s legitimate, they move it to the active Quests for community participation.</p>
+                <h3>Key Features</h3>
+                <ul>
+                    <li>Real engagement</li>
+                    <li>No bots</li>
+                    <li>Community powered</li>
+                </ul>
+                <h3>Long-Term Vision</h3>
+                <p>SnappQuest becomes the go-to tool for engagement across Solana, helping contributors, builders, and communities thrive.</p>
+                <button class="modal-close-btn">Close</button>
+            </div>
+        </div>
+    </div>
     <script>
         // Configuration
         const CONFIG = {
             API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
             SPREADSHEET_ID: '1kyUzw6Dx3LDosQwpTmqp2cxEM846tir6CxiN1t6-eOA',
-            RANGE: 'Form responses 3!A1:K1000' // Updated sheet name; replace 'Users' with actual sheet name
+            RANGE: 'Form responses 3!A1:K1000',
+            STATS_ID: '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w',
+            RATE_RANGE: 'SnappQuestData!D2:D2',
+            FALLBACK_RATE: 1500
         };
+
+        // State
+        let currentCurrency = 'NGN'; // Default to NGN
+        let usdcRate = 0; // Initialize to 0, will be set after fetch
+        let userData = {};
 
         // DOM Elements
         const DOM = {
@@ -539,17 +805,31 @@
             hamburger: document.querySelector('.hamburger'),
             navContainer: document.querySelector('.nav-container'),
             overlay: document.querySelector('.overlay'),
-            disconnectBtn: document.getElementById('disconnectBtn')
+            disconnectBtn: document.getElementById('disconnectBtn'),
+            backToTopButton: document.getElementById('back-to-top'),
+            learnMoreModal: document.getElementById('learnMoreModal'),
+            learnMoreLink: document.getElementById('learn-more-link'),
+            closeButtons: document.querySelectorAll('.close, .modal-close-btn'),
+            currencyToggle: document.getElementById('currencyToggle')
         };
 
         // Fetch data from Google Sheets
-        async function fetchSheetData() {
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SPREADSHEET_ID}/values/${CONFIG.RANGE}?key=${CONFIG.API_KEY}`;
+        async function fetchSheetData(spreadsheetId, range) {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${CONFIG.API_KEY}`;
             try {
                 const response = await fetch(url);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
                 const data = await response.json();
                 if (data.error) throw new Error(data.error.message);
-                if (!data.values?.length) throw new Error('No data found');
+                if (!data.values?.length) throw new Error(`No data in ${range}`);
+                if (range === CONFIG.RATE_RANGE) {
+                    const rawValue = data.values[0][0];
+                    console.log(`Raw value from SnappQuestData!D2: "${rawValue}"`);
+                    return rawValue;
+                }
                 const headers = data.values[0].map(h => h.trim());
                 return data.values.slice(1).map(row => {
                     const obj = {};
@@ -557,9 +837,13 @@
                     return obj;
                 });
             } catch (error) {
-                console.error('Fetch error:', error);
-                showError(`Failed to load data: ${error.message}. Please check if the sheet name is correct and publicly accessible.`);
-                return [];
+                console.error(`Fetch error for ${range}:`, error);
+                if (error.message.includes('403')) {
+                    showError(`Permission denied accessing ${range}. Ensure the Google Sheet is shared with "Anyone with the link" (Viewer access) and the API key is valid.`);
+                } else {
+                    showError(`Failed to load ${range.split('!')[0]} data: ${error.message}. Check console for details.`);
+                }
+                return range === CONFIG.RATE_RANGE ? null : [];
             }
         }
 
@@ -576,9 +860,39 @@
             DOM.errorMessage.classList.remove('show');
         }
 
-        // Format number with commas
-        function formatNumber(num) {
-            return Number(num).toLocaleString('en-US');
+        // Format number with K, M, B abbreviations
+        function formatNumber(num, prefix) {
+            const absNum = Math.abs(num);
+            if (absNum >= 1_000_000_000) {
+                const value = num / 1_000_000_000;
+                return `${prefix}${value.toFixed(value % 1 === 0 ? 0 : 1)}B`;
+            } else if (absNum >= 1_000_000) {
+                const value = num / 1_000_000;
+                return `${prefix}${value.toFixed(value % 1 === 0 ? 0 : 1)}M`;
+            } else if (absNum >= 10_000) {
+                const value = num / 1_000;
+                return `${prefix}${value.toFixed(value % 1 === 0 ? 0 : 1)}K`;
+            } else {
+                return `${prefix}${num.toLocaleString('en-US', {
+                    minimumFractionDigits: prefix === '$' ? 2 : 0,
+                    maximumFractionDigits: prefix === '$' ? 2 : 0
+                })}`;
+            }
+        }
+
+        // Format currency based on currentCurrency
+        function formatCurrency(amount, currency) {
+            const num = parseFloat(amount) || 0;
+            if (currency === 'USDC') {
+                if (usdcRate <= 0 || isNaN(usdcRate)) {
+                    console.warn(`Invalid usdcRate: ${usdcRate}. Displaying NGN instead.`);
+                    return formatNumber(num, '₦');
+                }
+                const usdcAmount = num / usdcRate; // NGN/USDC: divide
+                console.log(`Converting ${num} NGN to USDC: ${num} / ${usdcRate} = ${usdcAmount}`);
+                return formatNumber(usdcAmount, '$');
+            }
+            return formatNumber(num, '₦');
         }
 
         // Fetch and display user data
@@ -590,7 +904,7 @@
                 return;
             }
 
-            const data = await fetchSheetData();
+            const data = await fetchSheetData(CONFIG.SPREADSHEET_ID, CONFIG.RANGE);
             if (!data.length) return;
 
             const user = data.find(row => row.Access.toLowerCase() === username.toLowerCase());
@@ -599,10 +913,45 @@
                 return;
             }
 
-            DOM.balance.textContent = formatNumber(user.Balance || 0);
-            DOM.totalEarnings.textContent = formatNumber(user['Total Earnings'] || 0);
-            DOM.totalQuestsCompleted.textContent = formatNumber(user.TotalQuestsCompleted || 0);
+            userData = {
+                balance: parseFloat(user.Balance) || 0,
+                totalEarnings: parseFloat(user['Total Earnings']) || 0,
+                totalQuestsCompleted: parseInt(user.TotalQuestsCompleted) || 0
+            };
+
+            DOM.balance.textContent = formatCurrency(userData.balance, currentCurrency);
+            DOM.totalEarnings.textContent = formatCurrency(userData.totalEarnings, currentCurrency);
+            DOM.totalQuestsCompleted.textContent = userData.totalQuestsCompleted.toLocaleString('en-US');
             DOM.balanceResult.classList.add('show');
+        }
+
+        // Load NGN/USDC rate
+        async function loadRate() {
+            try {
+                const rateData = await fetchSheetData(CONFIG.STATS_ID, CONFIG.RATE_RANGE);
+                if (rateData === null) {
+                    console.warn(`No rate found in SnappQuestData!D2. Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
+                    showError(`Failed to fetch rate from SnappQuestData!D2. Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
+                    usdcRate = CONFIG.FALLBACK_RATE;
+                } else {
+                    const cleanedRate = rateData.toString().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+                    console.log(`Cleaned rate value: "${cleanedRate}"`);
+                    usdcRate = parseFloat(cleanedRate) || 0;
+                    console.log(`Fetched NGN/USDC rate from SnappQuestData!D2: ${usdcRate}`);
+                    if (usdcRate <= 0 || isNaN(usdcRate)) {
+                        console.warn(`Invalid NGN/USDC rate: ${usdcRate} (raw: "${rateData}", cleaned: "${cleanedRate}"). Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
+                        showError(`Invalid rate in SnappQuestData!D2 (${rateData}). Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
+                        usdcRate = CONFIG.FALLBACK_RATE;
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching rate:', error);
+                showError(`Failed to load rate: ${error.message}. Displaying amounts in NGN.`);
+                usdcRate = CONFIG.FALLBACK_RATE;
+                currentCurrency = 'NGN';
+                DOM.currencyToggle.checked = false;
+                DOM.currencyToggle.disabled = true;
+            }
         }
 
         // Event listeners
@@ -611,28 +960,84 @@
             DOM.usernameInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') checkBalance();
             });
-            DOM.disconnectBtn.addEventListener('click', () => window.location.href = 'index.html');
+            DOM.disconnectBtn.addEventListener('click', () => {
+                console.log('Disconnect Wallet clicked');
+                window.location.href = 'index.html';
+            });
             DOM.hamburger.addEventListener('click', () => {
+                console.log('Hamburger menu toggled');
                 DOM.hamburger.classList.toggle('active');
                 DOM.navContainer.classList.toggle('active');
                 DOM.overlay.classList.toggle('active');
             });
             DOM.navContainer.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', () => {
+                    console.log('Nav link clicked:', link.href);
                     DOM.hamburger.classList.remove('active');
                     DOM.navContainer.classList.remove('active');
                     DOM.overlay.classList.remove('active');
                 });
             });
             DOM.overlay.addEventListener('click', () => {
+                console.log('Overlay clicked');
                 DOM.hamburger.classList.remove('active');
                 DOM.navContainer.classList.remove('active');
                 DOM.overlay.classList.remove('active');
             });
+            DOM.learnMoreLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Learn More link clicked');
+                DOM.learnMoreModal.style.display = 'block';
+                setTimeout(() => DOM.learnMoreModal.classList.add('active'), 10);
+            });
+            DOM.closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    console.log('Modal close button clicked');
+                    DOM.learnMoreModal.classList.remove('active');
+                    setTimeout(() => DOM.learnMoreModal.style.display = 'none', 400);
+                });
+            });
+            window.addEventListener('click', (event) => {
+                if (event.target === DOM.learnMoreModal) {
+                    console.log('Clicked outside modal');
+                    DOM.learnMoreModal.classList.remove('active');
+                    setTimeout(() => DOM.learnMoreModal.style.display = 'none', 400);
+                }
+            });
+            window.addEventListener('scroll', () => {
+                console.log('Scroll position:', window.scrollY);
+                DOM.backToTopButton.classList.toggle('visible', window.scrollY > 300);
+            });
+            DOM.backToTopButton.addEventListener('click', () => {
+                console.log('Back to top clicked');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            DOM.currencyToggle.addEventListener('change', () => {
+                currentCurrency = DOM.currencyToggle.checked ? 'USDC' : 'NGN';
+                console.log(`Currency toggled to: ${currentCurrency}`);
+                if (userData.balance !== undefined) {
+                    DOM.balance.textContent = formatCurrency(userData.balance, currentCurrency);
+                    DOM.totalEarnings.textContent = formatCurrency(userData.totalEarnings, currentCurrency);
+                }
+            });
         }
 
         // Initialize
-        window.addEventListener('load', setupEventListeners);
+        window.addEventListener('load', () => {
+            console.log('Page loaded, setting up event listeners');
+            setupEventListeners();
+            loadRate();
+            console.log('Checking footer assets...');
+            if (!document.querySelector('footer')) {
+                console.error('Footer element not found in DOM');
+            }
+            if (!DOM.learnMoreModal) {
+                console.error('Learn More modal not found in DOM');
+            }
+            if (!DOM.backToTopButton) {
+                console.error('Back to top button not found in DOM');
+            }
+        });
     </script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SnappQuest - The Engage-to-Earn Tool for Solana Community.">
+    <meta name="description" content="SnappQuest - Incentivize engagement, reward verified participation.">
     <title>SnappQuest - The Engage-to-Earn Tool for Solana Community</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -540,7 +540,7 @@
             background: linear-gradient(135deg, #1F2937, #111827);
             color: #E5E7EB;
             padding: 64px 24px;
-            text-align: left; /* Align left for columns */
+            text-align: left;
             position: relative;
             overflow: hidden;
         }
@@ -569,7 +569,7 @@
             flex-wrap: wrap;
             justify-content: space-between;
             margin-bottom: 32px;
-            gap: 24px; /* Added for better spacing */
+            gap: 24px;
         }
 
         .footer-col {
@@ -585,10 +585,10 @@
         }
 
         .footer-col p {
-            font-size: 12px;
+            font-size: 12px; /* Adjusted for consistency */
             line-height: 1.6;
             opacity: 0.9;
-            margin-bottom: 16px; /* Improved spacing */
+            margin-bottom: 16px;
         }
 
         .footer-link {
@@ -597,7 +597,7 @@
         }
 
         .footer-link li {
-            margin-bottom: 12px;
+            margin-bottom: 11px;
         }
 
         .footer-link a {
@@ -627,31 +627,9 @@
         }
 
         .copyright-text p {
-            font-size: 14px;
+            font-size: 12px;
             margin: 0;
             opacity: 0.9;
-        }
-
-        .social-icons ul {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            gap: 24px;
-        }
-
-        .social-icons a {
-            color: #34D399;
-            font-size: 12px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .social-icons a:hover {
-            color: #ffffff;
         }
 
         @media (max-width: 768px) {
@@ -662,9 +640,6 @@
             .footer-bottom {
                 flex-direction: column;
                 text-align: center;
-            }
-            .social-icons ul {
-                justify-content: center;
             }
         }
 
@@ -865,7 +840,7 @@
 
         /* Copy Confirmation Modal Specific Styles */
         #copyConfirmationModal .modal-content {
-            max-width: 400px; /* Smaller width for confirmation popup */
+            max-width: 400px;
         }
 
         #copyConfirmationModal .modal-body {
@@ -1028,8 +1003,8 @@
     <section id="hero">
         <div class="hero-content">
             <h1>Welcome to SnappQuest</h1>
-            <p>The Engage-to-Earn Tool for Solana Community</p>
-            <div class="journey-text">No Bots. Real Engagement.</div>
+            <p>Incentivize engagement, reward verified participation.</p>
+            <div class="journey-text">Engage-to-Earn</div>
 
             <div class="action-icons">
                 <a href="#create-quest" class="action-icon">
@@ -1050,18 +1025,18 @@
         <div class="steps">
             <div class="step">
                 <div class="step-icon"><i class="fas fa-search"></i></div>
-                <h3>Explore Quests</h3>
-                <p>Discover exciting quests within the SnappQuest community</p>
+                <h3>Create Quest</h3>
+                <p>You can incentivize community participation using a Quest</p>
             </div>
             <div class="step">
                 <div class="step-icon"><i class="fas fa-tasks"></i></div>
-                <h3>Complete Quests</h3>
-                <p>Participate and submit your contributions to the community</p>
+                <h3>Join Quests</h3>
+                <p>Participate in a quest and submit proof to earn a reward</p>
             </div>
             <div class="step">
                 <div class="step-icon"><i class="fas fa-trophy"></i></div>
                 <h3>Earn Rewards</h3>
-                <p>You earn rewards for completing active quests on time</p>
+                <p>You earn rewards once your completed quest is verified</p>
             </div>
         </div>
     </section>
@@ -1072,7 +1047,7 @@
             <div class="footer-row">
                 <div class="footer-col footer-info">
                     <h2>SnappQuest</h2>
-                    <p>The Engage-to-Earn tool for Solana, where every action matters. Whether it's liking, retweeting, commenting, or gaining followers, each interaction adds value and rewards the community.</p>
+                    <p>The Engage-to-Earn tool for Solana, <br>where every action counts. From likes and retweets to comments and followers, every interaction creates value and earns rewards.</p>
                 </div>
 
                 <div class="footer-col">
@@ -1089,25 +1064,23 @@
                     <h2>Other Tools</h2>
                     <ul class="footer-link">
                         <li><a href="https://t.me/EarnlyQuestBot" target="_blank"><i class="fas fa-tasks"></i>Earnly Bot</a></li>
+                        <li><a href="quote.html" target="_blank"><i class="fas fa-plus-circle"></i>Snapp Quote</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-col">
                     <h2>Custom Quest</h2>
-                    <p>Reach out on Telegram for partnerships or customized quests.
-                        Create your own custom quest by contacting the team!</p>
+                    <p>Reach out on Telegram for partnerships or customized quests. Create your own custom quest by contacting the team!</p>
+                    <ul class="footer-link">
+                        <li><a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i> X (Twitter)</a></li>
+                        <li><a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
+                    </ul>
                 </div>
             </div>
 
             <div class="footer-bottom">
                 <div class="copyright-text">
                     <p>&copy; 2025 SnappQuest. All rights reserved.</p>
-                </div>
-                <div class="social-icons">
-                    <ul>
-                        <li><a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i> X (Twitter)</a></li>
-                        <li><a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -1164,8 +1137,8 @@
                 <span class="close">&times;</span>
             </div>
             <div class="modal-body">
-                <h3>Quest Options</h3>
-                <p>Select the engagement types and quantities for your quest. Minimum price is <span id="minPriceText">₦20</span> per engagement.</p>
+                <h3>Snapp Quote</h3>
+                <p>Select the engagement types and quantities for your quest. Minimum price is <span id="minPriceText">₦20</span> per engagement (plus a <span id="feeText">₦20</span> fee).</p>
                 <div class="currency-switch">
                     <span>NGN</span>
                     <label class="switch">
@@ -1199,18 +1172,11 @@
                         </label>
                         <input type="number" name="followersQuantity" placeholder="Quantity" min="0" disabled>
                     </div>
-                    <!--
-                    <div class="quest-option">
-                        <label>
-                            <input type="checkbox" name="questType" value="engagement"> Engagement Quest
-                        </label>
-                        <input type="number" name="engagementQuantity" placeholder="Quantity" min="0" disabled>
-                    </div>-->
                     <div class="price-calculation">
                         <h3>Total Price: <span id="totalPrice">₦0</span></h3>
                     </div>
                     <div class="buttons-container">
-                        <button type="submit" class="modal-close-btn">Create Quest</button>
+                        <button type="submit" class="modal-close-btn" onclick="window.open('quest.html');">Create Quest</button>
                         <button type="button" class="modal-close-btn" id="customQuestBtn" onclick="window.open('https://t.me/SnappQuest/146', '_blank');">Custom Quest</button>
                     </div>
                 </form>
@@ -1262,12 +1228,14 @@
         const checkboxes = createQuestForm.querySelectorAll('input[name="questType"]');
         const totalPriceSpan = document.getElementById("totalPrice");
         const minPriceText = document.getElementById("minPriceText");
+        const feeText = document.getElementById("feeText");
         const currencyToggle = document.getElementById("currencyToggle");
         const customQuestBtn = document.getElementById("customQuestBtn");
 
         // Currency variables
         let currency = 'NGN';
         let pricePerEngagement = 20;
+        let fee = 20;
         let currencySymbol = '₦';
 
         // Toggle hamburger menu
@@ -1370,13 +1338,17 @@
             if (currencyToggle.checked) {
                 currency = 'USDC';
                 pricePerEngagement = 0.2;
-                currencySymbol = '';
-                minPriceText.textContent = '0.2 USDC';
+                fee = 0.2;
+                currencySymbol = '$';
+                minPriceText.textContent = '$0.2';
+                feeText.textContent = '$0.2';
             } else {
                 currency = 'NGN';
                 pricePerEngagement = 20;
+                fee = 20;
                 currencySymbol = '₦';
                 minPriceText.textContent = '₦20';
+                feeText.textContent = '₦20';
             }
             calculateTotalPrice();
         });
@@ -1389,8 +1361,8 @@
                 const value = parseFloat(input.value) || 0;
                 totalEngagements += value;
             });
-            const totalPrice = totalEngagements * pricePerEngagement;
-            const formattedPrice = currency === 'USDC' ? `${totalPrice.toFixed(2)} USDC` : `₦${totalPrice}`;
+            let totalPrice = (totalEngagements * pricePerEngagement) + fee;
+            const formattedPrice = currency === 'USDC' ? `${currencySymbol}${totalPrice.toFixed(2)}` : `${currencySymbol}${totalPrice}`;
             totalPriceSpan.textContent = formattedPrice;
             return { totalPrice, totalEngagements };
         }
@@ -1410,7 +1382,7 @@
             });
 
             const { totalEngagements, totalPrice } = calculateTotalPrice();
-            const formattedTotalPrice = currency === 'USDC' ? `${totalPrice.toFixed(2)} USDC` : `₦${totalPrice}`;
+            const formattedTotalPrice = currency === 'USDC' ? `${currencySymbol}${totalPrice.toFixed(2)}` : `${currencySymbol}${totalPrice}`;
 
             // Format quest details for clipboard
             const questDetails = `
@@ -1420,29 +1392,28 @@ ${questData.likesQuantity ? `X Likes: ${questData.likesQuantity}` : ''}
 ${questData.retweetsQuantity ? `X RTs: ${questData.retweetsQuantity}` : ''}
 ${questData.commentsQuantity ? `X Comments: ${questData.commentsQuantity}` : ''}
 ${questData.followersQuantity ? `X Followers: ${questData.followersQuantity}` : ''}
-${questData.engagementQuantity ? `Engagement Quest: ${questData.engagementQuantity}` : ''}
 ------------------------------
 Total Engagements: ${totalEngagements}
-Total Price: ${formattedTotalPrice}
+Total Price: ${formattedTotalPrice} (includes ${currencySymbol}${currency === 'USDC' ? fee.toFixed(2) : fee} fee)
 ------------------------------
 Created on: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
             `.trim();
 
+            /* Commented out clipboard copy and confirmation modal
             // Copy to clipboard and show confirmation modal
             navigator.clipboard.writeText(questDetails).then(() => {
                 console.log("Quest details copied to clipboard:", questDetails);
-                // Show copy confirmation modal
                 copyConfirmationModal.style.display = "block";
                 setTimeout(() => copyConfirmationModal.classList.add("active"), 10);
             }).catch(err => {
                 console.error("Failed to copy quest details:", err);
-                // Show error message in modal
                 copyConfirmationModal.querySelector(".modal-body p").textContent = "Failed to copy quest details. Please try again.";
                 copyConfirmationModal.style.display = "block";
                 setTimeout(() => copyConfirmationModal.classList.add("active"), 10);
             });
+            */
 
-            // Open a link (e.g., a confirmation page or external platform)
+            // Open a link
             window.open("https://t.me/SnappQuest/129", "_blank");
 
             // Close the create quest modal
