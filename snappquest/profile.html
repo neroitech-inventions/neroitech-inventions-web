@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="SnappQuest - User Profile for Engage-to-Earn Tasks">
     <title>SnappQuest - User Profile</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" onerror="console.error('Font Awesome failed to load')">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -650,6 +650,54 @@
             transform: translateY(-3px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 8px;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1F2937;
+            background: #FFFFFF;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6366F1;
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+        }
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .modal-submit-btn {
+            background: linear-gradient(135deg, #10B981, #34D399);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 16px;
+        }
+        .modal-submit-btn:hover {
+            background: linear-gradient(135deg, #059669, #22C55E);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
         @media (max-width: 768px) {
             .profile-stats {
                 gap: 20px;
@@ -719,14 +767,27 @@
             .currency-switch span {
                 font-size: 12px;
             }
+            .form-group label {
+                font-size: 14px;
+            }
+            .form-group input,
+            .form-group textarea {
+                font-size: 12px;
+                padding: 10px;
+            }
+            .modal-submit-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                margin-right: 12px;
+            }
         }
     </style>
-    <link href="images/icon.png" rel="icon">
+    <link href="images/icon.png" rel="icon" onerror="console.error('Favicon failed to load')">
 </head>
 <body>
     <header>
         <div class="logo">
-            <a href="index.html"><img src="images/logo.png" alt="SnappQuest Logo"></a>
+            <a href="index.html"><img src="images/logo.png" alt="SnappQuest Logo" onerror="console.error('Logo image failed to load')"></a>
         </div>
         <div class="nav-container">
             <nav class="nav-links">
@@ -847,17 +908,52 @@
             </div>
         </div>
     </div>
+    <div id="submitQuestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Submit Quest</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="submitQuestForm">
+                    <div class="form-group">
+                        <label for="trackCode">Track Code</label>
+                        <input type="text" id="trackCode" name="trackCode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="proofOfQuest">Proof of Quest</label>
+                        <textarea id="proofOfQuest" name="proofOfQuest" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="questLink">Quest Link</label>
+                        <input type="text" id="questLink" name="questLink" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telegram">Telegram</label>
+                        <input type="text" id="telegram" name="telegram" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="twitter">Twitter (X)</label>
+                        <input type="text" id="twitter" name="twitter" required>
+                    </div>
+                    <button type="submit" class="modal-submit-btn">Submit Quest</button>
+                    <button type="button" class="modal-close-btn">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
     <script>
         // Configuration
         const CONFIG = {
             API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
             STATS_ID: '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w',
             QUESTS_ID: '1wY8FlSvSsYPCGo2qYsl20w4kcPqx9Z4CqzA2MeQozGo',
-            STATS_RANGE: 'SnappQuestData!A1:C2', // For userData (AvailableQuests, CompletedQuests, Earnings)
-            RATE_RANGE: 'SnappQuestData!D2:D2', // For NGN/USDC rate
+            STATS_RANGE: 'SnappQuestData!A1:C2',
+            RATE_RANGE: 'SnappQuestData!D2:D2',
             QUESTS_RANGE: 'Quests!A1:G100',
             QUESTS_PER_PAGE: 4,
-            FALLBACK_RATE: 1500 // Fallback NGN/USDC rate matching D2
+            FALLBACK_RATE: 1500,
+            FORM_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSfZQq0L0iE6aO1fAa8fB5z80w4kcPqx9Z4CqzA2MeQozGo/formResponse'
         };
 
         // State
@@ -865,8 +961,8 @@
         let quests = [];
         let availableCurrentPage = 1;
         let completedCurrentPage = 1;
-        let currentCurrency = 'NGN'; // Default to NGN
-        let usdcRate = 0; // Initialize to 0, will be set after fetch
+        let currentCurrency = 'NGN';
+        let usdcRate = 0;
 
         // DOM Elements
         const DOM = {
@@ -887,6 +983,8 @@
             learnMoreModal: document.getElementById('learnMoreModal'),
             learnMoreLink: document.getElementById('learn-more-link'),
             closeButtons: document.querySelectorAll('.close, .modal-close-btn'),
+            submitQuestModal: document.getElementById('submitQuestModal'),
+            submitQuestForm: document.getElementById('submitQuestForm'),
             currencyToggle: document.getElementById('currencyToggle')
         };
 
@@ -952,7 +1050,7 @@
                     console.warn(`Invalid usdcRate: ${usdcRate}. Displaying NGN instead.`);
                     return formatNumber(num, '₦');
                 }
-                const usdcAmount = num / usdcRate; // NGN/USDC: divide
+                const usdcAmount = num / usdcRate;
                 console.log(`Converting ${num} NGN to USDC: ${num} / ${usdcRate} = ${usdcAmount}`);
                 return formatNumber(usdcAmount, '$');
             }
@@ -962,14 +1060,12 @@
         // Load and parse data
         async function loadData() {
             try {
-                // Fetch NGN/USDC rate
                 const rateData = await fetchSheetData(CONFIG.STATS_ID, CONFIG.RATE_RANGE);
                 if (rateData === null) {
                     console.warn(`No rate found in SnappQuestData!D2. Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
                     alert(`Failed to fetch rate from SnappQuestData!D2. Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
                     usdcRate = CONFIG.FALLBACK_RATE;
                 } else {
-                    // Clean the rate value (remove non-numeric except one decimal point)
                     const cleanedRate = rateData.toString().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
                     console.log(`Cleaned rate value: "${cleanedRate}"`);
                     usdcRate = parseFloat(cleanedRate) || 0;
@@ -981,7 +1077,6 @@
                     }
                 }
 
-                // Fetch stats data (AvailableQuests, CompletedQuests, Earnings)
                 const statsRows = await fetchSheetData(CONFIG.STATS_ID, CONFIG.STATS_RANGE);
                 if (!statsRows.length) throw new Error('No stats data found');
                 userData = {
@@ -990,13 +1085,12 @@
                     earnings: parseInt(statsRows[0].Earnings) || 0
                 };
 
-                // Fetch quests data
                 const questRows = await fetchSheetData(CONFIG.QUESTS_ID, CONFIG.QUESTS_RANGE);
                 if (!questRows.length) throw new Error('No quests found');
 
                 quests = questRows.map(quest => {
                     const status = parseInt(quest.Status) || 0;
-                    const reward = parseFloat(quest.Reward.replace('₦', '')) || 0; // Strip ₦ and convert to number
+                    const reward = parseFloat(quest.Reward.replace('₦', '')) || 0;
                     return {
                         id: parseInt(quest.ID) || 0,
                         title: quest.Title || 'Untitled Quest',
@@ -1015,7 +1109,7 @@
                 currentCurrency = 'NGN';
                 DOM.currencyToggle.checked = false;
                 DOM.currencyToggle.disabled = true;
-                usdcRate = CONFIG.FALLBACK_RATE; // Use fallback for other conversions
+                usdcRate = CONFIG.FALLBACK_RATE;
                 initializeProfile();
             }
         }
@@ -1053,9 +1147,7 @@
         function createQuestElement(quest) {
             const card = document.createElement('div');
             card.className = 'quest-card';
-
-            // Placeholder submit link
-            const submitLink = 'https://t.me/SnappQuest/130';
+            card.dataset.questId = quest.id;
 
             card.innerHTML = `
                 <div class="quest-title">${quest.title}</div>
@@ -1065,7 +1157,7 @@
                     <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
                     <div style="display: flex; gap: 8px;">
                         ${quest.status === 'active' && quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">Go to Quest</a>` : ''}
-                        ${quest.status === 'active' && quest.link ? `<a href="${submitLink}" target="_blank" class="submit-btn">Submit Quest</a>` : ''}
+                        ${quest.status === 'active' ? `<button class="submit-btn" data-quest-id="${quest.id}">Submit Quest</button>` : ''}
                     </div>
                 </div>
             `;
@@ -1116,47 +1208,85 @@
             paginationEl.appendChild(info);
         }
 
+        // Submit quest form
+        async function submitQuestForm(questId, formData) {
+            const formUrl = CONFIG.FORM_URL;
+            const formBody = new URLSearchParams({
+                'entry.1234567890': questId.toString(),
+                'entry.1234567891': formData.trackCode,
+                'entry.1234567892': formData.proofOfQuest,
+                'entry.1234567893': formData.questLink,
+                'entry.1234567894': formData.telegram,
+                'entry.1234567895': formData.twitter
+            }).toString();
+
+            try {
+                const response = await fetch(formUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formBody,
+                    mode: 'no-cors'
+                });
+                console.log(`Quest ${questId} submitted successfully`);
+                alert('Quest submitted successfully! Awaiting admin approval.');
+            } catch (error) {
+                console.error(`Error submitting quest ${questId}:`, error);
+                alert(`Failed to submit quest: ${error.message}. Please try again.`);
+            }
+        }
+
         // Event listeners
         function setupEventListeners() {
-            DOM.disconnectBtn.addEventListener('click', () => window.location.href = 'index.html');
+            DOM.disconnectBtn.addEventListener('click', () => {
+                console.log('Disconnect Wallet clicked');
+                window.location.href = 'index.html';
+            });
             DOM.hamburger.addEventListener('click', () => {
+                console.log('Hamburger menu toggled');
                 DOM.hamburger.classList.toggle('active');
                 DOM.navContainer.classList.toggle('active');
                 DOM.overlay.classList.toggle('active');
             });
             DOM.navContainer.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', () => {
+                    console.log('Nav link clicked:', link.href);
                     DOM.hamburger.classList.remove('active');
                     DOM.navContainer.classList.remove('active');
                     DOM.overlay.classList.remove('active');
                 });
             });
             DOM.overlay.addEventListener('click', () => {
+                console.log('Overlay clicked');
                 DOM.hamburger.classList.remove('active');
                 DOM.navContainer.classList.remove('active');
                 DOM.overlay.classList.remove('active');
             });
             DOM.learnMoreLink.addEventListener('click', (e) => {
                 e.preventDefault();
+                console.log('Learn More link clicked');
                 DOM.learnMoreModal.style.display = 'block';
                 setTimeout(() => DOM.learnMoreModal.classList.add('active'), 10);
             });
             DOM.closeButtons.forEach(button => {
                 button.addEventListener('click', () => {
+                    console.log('Learn More modal closed');
                     DOM.learnMoreModal.classList.remove('active');
                     setTimeout(() => DOM.learnMoreModal.style.display = 'none', 400);
                 });
             });
             window.addEventListener('click', (event) => {
                 if (event.target === DOM.learnMoreModal) {
+                    console.log('Clicked outside Learn More modal');
                     DOM.learnMoreModal.classList.remove('active');
                     setTimeout(() => DOM.learnMoreModal.style.display = 'none', 400);
                 }
             });
             window.addEventListener('scroll', () => {
+                console.log('Scroll position:', window.scrollY);
                 DOM.backToTopButton.classList.toggle('visible', window.scrollY > 300);
             });
             DOM.backToTopButton.addEventListener('click', () => {
+                console.log('Back to top clicked');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
             DOM.currencyToggle.addEventListener('change', () => {
@@ -1164,10 +1294,64 @@
                 console.log(`Currency toggled to: ${currentCurrency}`);
                 initializeProfile();
             });
+            DOM.submitQuestModal.querySelectorAll('.close, .modal-close-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    console.log('Submit Quest modal closed');
+                    DOM.submitQuestModal.classList.remove('active');
+                    setTimeout(() => DOM.submitQuestModal.style.display = 'none', 400);
+                });
+            });
+            window.addEventListener('click', (event) => {
+                if (event.target === DOM.submitQuestModal) {
+                    console.log('Clicked outside Submit Quest modal');
+                    DOM.submitQuestModal.classList.remove('active');
+                    setTimeout(() => DOM.submitQuestModal.style.display = 'none', 400);
+                }
+            });
+            DOM.questsGrid.addEventListener('click', (event) => {
+                const submitBtn = event.target.closest('.submit-btn');
+                if (submitBtn) {
+                    const questId = submitBtn.dataset.questId;
+                    console.log(`Opening Submit Quest modal for quest ID: ${questId}`);
+                    DOM.submitQuestForm.dataset.questId = questId;
+                    DOM.submitQuestModal.style.display = 'block';
+                    setTimeout(() => DOM.submitQuestModal.classList.add('active'), 10);
+                }
+            });
+            DOM.submitQuestForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const questId = DOM.submitQuestForm.dataset.questId;
+                const formData = {
+                    trackCode: DOM.submitQuestForm.querySelector('#trackCode').value.trim(),
+                    proofOfQuest: DOM.submitQuestForm.querySelector('#proofOfQuest').value.trim(),
+                    questLink: DOM.submitQuestForm.querySelector('#questLink').value.trim(),
+                    telegram: DOM.submitQuestForm.querySelector('#telegram').value.trim(),
+                    twitter: DOM.submitQuestForm.querySelector('#twitter').value.trim()
+                };
+
+                if (!formData.trackCode || !formData.proofOfQuest || !formData.questLink || !formData.telegram || !formData.twitter) {
+                    console.warn('Form validation failed: All fields are required');
+                    alert('Please fill in all fields.');
+                    return;
+                }
+                const urlRegex = /^https?:\/\/[^\s$.?#].[^\s]*$/;
+                if (!urlRegex.test(formData.questLink) || !urlRegex.test(formData.telegram) || !urlRegex.test(formData.twitter)) {
+                    console.warn('Form validation failed: Invalid URL format');
+                    alert('Quest Link, Telegram, and Twitter must be valid URLs.');
+                    return;
+                }
+
+                console.log(`Submitting quest ${questId} with data:`, formData);
+                await submitQuestForm(questId, formData);
+                DOM.submitQuestModal.classList.remove('active');
+                setTimeout(() => DOM.submitQuestModal.style.display = 'none', 400);
+                DOM.submitQuestForm.reset();
+            });
         }
 
         // Initialize
         window.addEventListener('load', () => {
+            console.log('Page loaded, setting up event listeners');
             setupEventListeners();
             loadData();
         });
