@@ -585,7 +585,7 @@
         }
 
         .footer-col p {
-            font-size: 12px; /* Adjusted for consistency */
+            font-size: 12px;
             line-height: 1.6;
             opacity: 0.9;
             margin-bottom: 16px;
@@ -739,7 +739,7 @@
         }
 
         .modal-body a {
-            color: #6366F1;
+            color: #ffffff;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s ease;
@@ -781,6 +781,74 @@
             background: linear-gradient(135deg, #4F46E5, #22C55E);
             transform: translateY(-3px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* NFT Modal Styles */
+        #joinQuestModal .modal-content {
+            max-width: 400px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(52, 211, 153, 0.1));
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 20px rgba(52, 211, 153, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #joinQuestModal .modal-header {
+            background: linear-gradient(135deg, #6366F1, #34D399);
+            border-radius: 16px 16px 0 0;
+            padding: 20px;
+            font-size: 24px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        #joinQuestModal .modal-body {
+            padding: 24px;
+            text-align: center;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="glow"><stop offset="0%" style="stop-color:rgba(52,211,153,0.3)"/><stop offset="100%" style="stop-color:transparent"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#glow)"/></svg>') no-repeat center;
+            background-size: cover;
+        }
+
+        #joinQuestModal .modal-body h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 16px;
+            background: linear-gradient(90deg, #6366F1, #34D399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        #joinQuestModal .modal-body p {
+            font-size: 16px;
+            color: #1F2937;
+            line-height: 1.6;
+        }
+
+        #joinQuestModal .modal-body img {
+            width: 100%;
+            max-width: 200px;
+            margin: 20px auto;
+            border-radius: 12px;
+            /* border: 2px solid rgba(52, 211, 153, 0.5); */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        #joinQuestModal .modal-close-btn {
+            width: 100%;
+            max-width: 200px;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 10px;
         }
 
         /* Quest Form Styles */
@@ -962,12 +1030,18 @@
                 width: 100%;
             }
 
-            #copyConfirmationModal .modal-content {
+            #copyConfirmationModal .modal-content,
+            #joinQuestModal .modal-content {
                 max-width: 90%;
             }
 
-            #copyConfirmationModal .modal-body p {
+            #copyConfirmationModal .modal-body p,
+            #joinQuestModal .modal-body p {
                 font-size: 16px;
+            }
+
+            #joinQuestModal .modal-body img {
+                max-width: 150px;
             }
 
             .buttons-container {
@@ -989,9 +1063,9 @@
         <div class="nav-container">
             <nav class="nav-links">
                 <a href="#create-quest">Create Quest</a>
-                <a href="profile.html">Join Quest</a>
+                <a href="#join-quest" class="join-quest-link">Join Quest</a>
             </nav>
-            <button class="connect-btn" onclick="window.location.href='profile.html'">Connect Wallet</button>
+            <button class="connect-btn" onclick="window.location.href='profile.html'">Member Access</button>
         </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
@@ -1003,7 +1077,7 @@
     <section id="hero">
         <div class="hero-content">
             <h1>Welcome to SnappQuest</h1>
-            <p>Incentivize engagement, reward verified participation.</p>
+            <p>Turning ENGAGEMENT into Loyalty Rewards</p>
             <div class="journey-text">Engage-to-Earn</div>
 
             <div class="action-icons">
@@ -1011,7 +1085,7 @@
                     <i class="fas fa-plus-circle"></i>
                     <span>Create Quest</span>
                 </a>
-                <a href="profile.html" class="action-icon">
+                <a href="#join-quest" class="action-icon join-quest-link">
                     <i class="fas fa-users"></i>
                     <span>Join Quest</span>
                 </a>
@@ -1055,7 +1129,7 @@
                     <ul class="footer-link">
                         <li><a href="#hero">Home</a></li>
                         <li><a href="#create-quest">Create Quest</a></li>
-                        <li><a href="profile.html">Join Quest</a></li>
+                        <li><a href="#join-quest" class="join-quest-link">Join Quest</a></li>
                         <li><a href="#" id="learn-more-link">How It Works</a></li>
                     </ul>
                 </div>
@@ -1064,7 +1138,7 @@
                     <h2>Other Tools</h2>
                     <ul class="footer-link">
                         <li><a href="https://t.me/EarnlyQuestBot" target="_blank"><i class="fas fa-tasks"></i>Earnly Bot</a></li>
-                        <li><a href="quote.html" target="_blank"><i class="fas fa-plus-circle"></i>Snapp Quote</a></li>
+                        <li><a href="#create-quest" target="_blank"><i class="fas fa-plus-circle"></i>Snapp Quote</a></li>
                     </ul>
                 </div>
 
@@ -1184,6 +1258,23 @@
         </div>
     </div>
 
+    <!-- Modal for Join Quest (NFT Style) -->
+    <div id="joinQuestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Members Only</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <img src="images/vip.png" alt="SnappQuest NFT Card">
+                <h3>Exclusive Access</h3>
+                <p style="color: #E5E7EB;">Joining Quests is exclusive to active Solana ecosystem supporters. Connect with us on Telegram to get involved!</p>
+                <a href="https://t.me/SnappQuest" target="_blank" class="modal-close-btn">Join Telegram</a>
+                <button class="modal-close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal for Copy Confirmation -->
     <div id="copyConfirmationModal" class="modal">
         <div class="modal-content">
@@ -1202,16 +1293,20 @@
         // Get modals
         const learnMoreModal = document.getElementById("learnMoreModal");
         const createQuestModal = document.getElementById("createQuestModal");
+        const joinQuestModal = document.getElementById("joinQuestModal");
         const copyConfirmationModal = document.getElementById("copyConfirmationModal");
 
         // Get links that open modals
         const learnMoreLink = document.getElementById("learn-more-link");
         const createQuestLinks = document.querySelectorAll('a[href="#create-quest"]');
+        const joinQuestLinks = document.querySelectorAll('.join-quest-link, .join-quest-btn');
 
         // Get close buttons
         const learnMoreClose = learnMoreModal.querySelector(".close");
         const learnMoreCloseBtn = learnMoreModal.querySelector(".modal-close-btn");
         const createQuestClose = createQuestModal.querySelector(".close");
+        const joinQuestClose = joinQuestModal.querySelector(".close");
+        const joinQuestCloseBtn = joinQuestModal.querySelector(".modal-close-btn:not([href])");
         const copyConfirmationClose = copyConfirmationModal.querySelector(".close");
         const copyConfirmationCloseBtn = copyConfirmationModal.querySelector(".modal-close-btn");
 
@@ -1237,6 +1332,12 @@
         let pricePerEngagement = 20;
         let fee = 20;
         let currencySymbol = '₦';
+
+        // Close modal function
+        function closeModal(modal) {
+            modal.classList.remove("active");
+            setTimeout(() => modal.style.display = "none", 400);
+        }
 
         // Toggle hamburger menu
         hamburger.addEventListener("click", () => {
@@ -1277,47 +1378,60 @@
             };
         });
 
+        // Open Join Quest modal
+        joinQuestLinks.forEach(link => {
+            link.onclick = function (e) {
+                e.preventDefault();
+                joinQuestModal.style.display = "block";
+                setTimeout(() => joinQuestModal.classList.add("active"), 10);
+            };
+        });
+
         // Close Learn More modal
         learnMoreClose.onclick = function () {
-            learnMoreModal.classList.remove("active");
-            setTimeout(() => learnMoreModal.style.display = "none", 400);
+            closeModal(learnMoreModal);
         };
 
         learnMoreCloseBtn.onclick = function () {
-            learnMoreModal.classList.remove("active");
-            setTimeout(() => learnMoreModal.style.display = "none", 400);
+            closeModal(learnMoreModal);
         };
 
         // Close Create Quest modal
         createQuestClose.onclick = function () {
-            createQuestModal.classList.remove("active");
-            setTimeout(() => createQuestModal.style.display = "none", 400);
+            closeModal(createQuestModal);
+        };
+
+        // Close Join Quest modal
+        joinQuestClose.onclick = function () {
+            closeModal(joinQuestModal);
+        };
+
+        joinQuestCloseBtn.onclick = function () {
+            closeModal(joinQuestModal);
         };
 
         // Close Copy Confirmation modal
         copyConfirmationClose.onclick = function () {
-            copyConfirmationModal.classList.remove("active");
-            setTimeout(() => copyConfirmationModal.style.display = "none", 400);
+            closeModal(copyConfirmationModal);
         };
 
         copyConfirmationCloseBtn.onclick = function () {
-            copyConfirmationModal.classList.remove("active");
-            setTimeout(() => copyConfirmationModal.style.display = "none", 400);
+            closeModal(copyConfirmationModal);
         };
 
         // Close modals when clicking outside
         window.onclick = function (event) {
             if (event.target == learnMoreModal) {
-                learnMoreModal.classList.remove("active");
-                setTimeout(() => learnMoreModal.style.display = "none", 400);
+                closeModal(learnMoreModal);
             }
             if (event.target == createQuestModal) {
-                createQuestModal.classList.remove("active");
-                setTimeout(() => createQuestModal.style.display = "none", 400);
+                closeModal(createQuestModal);
+            }
+            if (event.target == joinQuestModal) {
+                closeModal(joinQuestModal);
             }
             if (event.target == copyConfirmationModal) {
-                copyConfirmationModal.classList.remove("active");
-                setTimeout(() => copyConfirmationModal.style.display = "none", 400);
+                closeModal(copyConfirmationModal);
             }
         };
 
@@ -1399,33 +1513,14 @@ Total Price: ${formattedTotalPrice} (includes ${currencySymbol}${currency === 'U
 Created on: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
             `.trim();
 
-            /* Commented out clipboard copy and confirmation modal
-            // Copy to clipboard and show confirmation modal
-            navigator.clipboard.writeText(questDetails).then(() => {
-                console.log("Quest details copied to clipboard:", questDetails);
-                copyConfirmationModal.style.display = "block";
-                setTimeout(() => copyConfirmationModal.classList.add("active"), 10);
-            }).catch(err => {
-                console.error("Failed to copy quest details:", err);
-                copyConfirmationModal.querySelector(".modal-body p").textContent = "Failed to copy quest details. Please try again.";
-                copyConfirmationModal.style.display = "block";
-                setTimeout(() => copyConfirmationModal.classList.add("active"), 10);
-            });
-            */
-
-            // Open a link
             window.open("https://t.me/SnappQuest/129", "_blank");
-
-            // Close the create quest modal
-            createQuestModal.classList.remove("active");
-            setTimeout(() => createQuestModal.style.display = "none", 400);
+            closeModal(createQuestModal);
         });
 
         // Custom Quest button handler
         customQuestBtn.addEventListener("click", () => {
             window.open("https://t.me/SnappQuest", "_blank");
-            createQuestModal.classList.remove("active");
-            setTimeout(() => createQuestModal.style.display = "none", 400);
+            closeModal(createQuestModal);
         });
 
         // Back to Top Button Functionality

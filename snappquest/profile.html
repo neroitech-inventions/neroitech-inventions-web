@@ -7,6 +7,7 @@
     <title>SnappQuest - User Profile</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" onerror="console.error('Font Awesome failed to load')">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
         * {
             margin: 0;
@@ -315,7 +316,17 @@
         .quest-sponsor {
             font-size: 14px;
             color: #6B7280;
+            margin-bottom: 8px;
+        }
+        .quest-remaining {
+            font-size: 14px;
             margin-bottom: 16px;
+        }
+        .quest-remaining.low {
+            color: #EF4444;
+        }
+        .quest-remaining.normal {
+            color: #34D399;
         }
         .quest-description {
             font-size: 14px;
@@ -475,7 +486,7 @@
             flex-wrap: wrap;
             justify-content: space-between;
             margin-bottom: 32px;
-            gap: 24px;
+            gap: 32px;
         }
         .footer-col {
             flex: 1 1 200px;
@@ -681,6 +692,10 @@
             min-height: 100px;
             resize: vertical;
         }
+        .form-group input[readonly] {
+            background: #E5E7EB;
+            cursor: not-allowed;
+        }
         .modal-submit-btn {
             background: linear-gradient(135deg, #10B981, #34D399);
             color: #ffffff;
@@ -794,7 +809,7 @@
                 <a href="balance.html">View Balance</a>
                 <a href="leaderboard.html">View Leaderboard</a>
             </nav>
-            <button class="disconnect-btn" id="disconnectBtn">Disconnect Wallet</button>
+            <button class="disconnect-btn" id="disconnectBtn">Sign Out</button>
         </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
@@ -848,8 +863,7 @@
                     <h2>Quick Links</h2>
                     <ul class="footer-link">
                         <li><a href="index.html">Home</a></li>
-                        <li><a href="index.html#create-quest">Create Quest</a></li>
-                        <li><a href="profile.html">Join Quest</a></li>
+                        <li><a href="quest.html">Create Quest</a></li>
                         <li><a href="#" id="learn-more-link">How It Works</a></li>
                     </ul>
                 </div>
@@ -857,7 +871,6 @@
                     <h2>Other Tools</h2>
                     <ul class="footer-link">
                         <li><a href="https://t.me/EarnlyQuestBot" target="_blank"><i class="fas fa-tasks"></i>Earnly Bot</a></li>
-                        <li><a href="quote.html" target="_blank"><i class="fas fa-plus-circle"></i>Snapp Quote</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -915,26 +928,26 @@
                 <span class="close">&times;</span>
             </div>
             <div class="modal-body">
-                <form id="submitQuestForm">
+                <form id="submitQuestForm" onsubmit="handleSubmit(event)">
                     <div class="form-group">
                         <label for="trackCode">Track Code</label>
-                        <input type="text" id="trackCode" name="trackCode" readonly required>
+                        <input type="text" id="trackCode" name="entry.2147360639" readonly required>
                     </div>
                     <div class="form-group">
                         <label for="proofOfQuest">Proof of Quest</label>
-                        <textarea id="proofOfQuest" name="proofOfQuest" required></textarea>
+                        <textarea id="proofOfQuest" name="entry.1526178092" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="questLink">Quest Link</label>
-                        <input type="text" id="questLink" name="questLink" required>
+                        <input type="text" id="questLink" name="entry.884208731" required>
                     </div>
                     <div class="form-group">
-                        <label for="telegram">Telegram</label>
-                        <input type="text" id="telegram" name="telegram" required>
+                        <label for="telegram">Telegram Username (e.g., @username)</label>
+                        <input type="text" id="telegram" name="entry.256576255" required>
                     </div>
                     <div class="form-group">
-                        <label for="twitter">Twitter (X)</label>
-                        <input type="text" id="twitter" name="twitter" required>
+                        <label for="twitter">Twitter Username (e.g., @username)</label>
+                        <input type="text" id="twitter" name="entry.1138659293" required>
                     </div>
                     <button type="submit" class="modal-submit-btn">Submit Quest</button>
                     <button type="button" class="modal-close-btn">Close</button>
@@ -942,18 +955,23 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
         // Configuration
         const CONFIG = {
             API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
             STATS_ID: '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w',
             QUESTS_ID: '1wY8FlSvSsYPCGo2qYsl20w4kcPqx9Z4CqzA2MeQozGo',
+            QUANTITY_ID: '1o_kkpaYmp56mq_May0bBdbmdXK669DGOYY3YHZpdh7E',
+            RESPONSE_ID: '1uI__u1VylTAb6ukduHOuHXkcGX5UwgpAFzD8DY5-_bI',
             STATS_RANGE: 'SnappQuestData!A1:C2',
             RATE_RANGE: 'SnappQuestData!D2:D2',
             QUESTS_RANGE: 'Quests!A1:G100',
+            QUANTITY_RANGE: 'Form responses 3!A1:L1000',
+            RESPONSE_RANGE: 'Form responses 4!A1:F1000',
             QUESTS_PER_PAGE: 4,
             FALLBACK_RATE: 1500,
-            FORM_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSfZQq0L0iE6aO1fAa8fB5z80w4kcPqx9Z4CqzA2MeQozGo/formResponse'
+            FORM_ACTION: 'https://docs.google.com/forms/d/1ObMPuTI2S1842DmfYePB4uKxfw2cLDtSlFsllUZZ-2I/formResponse'
         };
 
         // State
@@ -1006,13 +1024,11 @@
                     return rawValue;
                 }
                 const headers = data.values[0].map(h => h.trim());
-                const rows = data.values.slice(1).map(row => {
+                return data.values.slice(1).map(row => {
                     const obj = {};
                     headers.forEach((header, i) => { obj[header] = (row[i] || '').trim(); });
                     return obj;
                 });
-                console.log(`Fetched ${rows.length} rows from ${range}:`, rows);
-                return rows;
             } catch (error) {
                 console.error(`Fetch error for ${range}:`, error);
                 if (error.message.includes('403')) {
@@ -1021,6 +1037,48 @@
                     alert(`Failed to load ${range.split('!')[0]} data: ${error.message}. Check console for details.`);
                 }
                 return range === CONFIG.RATE_RANGE ? null : [];
+            }
+        }
+
+        // Fetch form responses to check for duplicates or count submissions
+        async function fetchFormResponses() {
+            return await fetchSheetData(CONFIG.RESPONSE_ID, CONFIG.RESPONSE_RANGE);
+        }
+
+        // Check if submission already exists
+        async function isDuplicateSubmission(trackCode, telegram) {
+            const responses = await fetchFormResponses();
+            if (!responses.length) return false;
+
+            const normalizedTrackCode = trackCode.trim().toLowerCase();
+            const normalizedTelegram = telegram.trim().toLowerCase().replace(/^@/, '');
+
+            return responses.some(row => {
+                const rowTrackCode = row['Track Code'].trim().toLowerCase();
+                const rowTelegram = row['Telegram'].trim().toLowerCase().replace(/^@/, '');
+                return rowTrackCode === normalizedTrackCode && rowTelegram === normalizedTelegram;
+            });
+        }
+
+        // Get quest quantity and submission count
+        async function getQuestAvailability(trackCode) {
+            try {
+                // Fetch quantity from QUANTITY_ID (L:L for Track Code, F:F for Quantity)
+                const quantityRows = await fetchSheetData(CONFIG.QUANTITY_ID, CONFIG.QUANTITY_RANGE);
+                const quantityRow = quantityRows.find(row => row['Track Code'] && row['Track Code'].trim().toLowerCase() === trackCode.trim().toLowerCase());
+                const quantity = quantityRow ? parseInt(quantityRow.Quantity) || 0 : 0;
+
+                // Fetch submission count from RESPONSE_ID (B:B for Track Code)
+                const responses = await fetchFormResponses();
+                const submissionCount = responses.filter(row => row['Track Code'] && row['Track Code'].trim().toLowerCase() === trackCode.trim().toLowerCase()).length;
+
+                // Calculate remaining submissions
+                const remaining = quantity - submissionCount;
+                console.log(`Track Code: ${trackCode}, Quantity: ${quantity}, Submissions: ${submissionCount}, Remaining: ${remaining}`);
+                return { remaining, total: quantity };
+            } catch (error) {
+                console.error(`Error checking availability for track code ${trackCode}:`, error);
+                return { remaining: 'Error checking availability', total: 0 };
             }
         }
 
@@ -1090,10 +1148,11 @@
                 const questRows = await fetchSheetData(CONFIG.QUESTS_ID, CONFIG.QUESTS_RANGE);
                 if (!questRows.length) throw new Error('No quests found');
 
-                quests = questRows.map(quest => {
+                quests = await Promise.all(questRows.map(async quest => {
                     const status = parseInt(quest.Status) || 0;
                     const reward = parseFloat(quest.Reward.replace('₦', '')) || 0;
                     const trackCode = quest['Track Code'] || '';
+                    const availability = trackCode && status === 0 ? await getQuestAvailability(trackCode) : { remaining: null, total: 0 };
                     return {
                         id: parseInt(quest.ID) || 0,
                         title: quest.Title || 'Untitled Quest',
@@ -1102,9 +1161,11 @@
                         reward: reward,
                         link: quest.Link || '',
                         status: status === 0 ? 'active' : 'completed',
-                        trackCode: trackCode
+                        trackCode: trackCode,
+                        remaining: availability.remaining,
+                        total: availability.total
                     };
-                });
+                }));
 
                 // Validate track codes for uniqueness
                 const trackCodes = quests.map(q => q.trackCode);
@@ -1118,7 +1179,7 @@
 
                 // Log available quests for debugging
                 const availableQuests = quests.filter(q => q.status === 'active');
-                console.log('Available quests with track codes:', availableQuests.map(q => ({ id: q.id, trackCode: q.trackCode })));
+                console.log('Available quests with track codes and remaining:', availableQuests.map(q => ({ id: q.id, trackCode: q.trackCode, remaining: q.remaining })));
 
                 initializeProfile();
             } catch (error) {
@@ -1167,15 +1228,39 @@
             card.className = 'quest-card';
             card.dataset.questId = quest.id;
 
+            let remainingText = '';
+            let remainingClass = '';
+            if (quest.status === 'active' && quest.remaining !== null) {
+                if (typeof quest.remaining === 'number') {
+                    if (quest.remaining < 0) {
+                        remainingText = 'Invalid Quest, Please contact an admin';
+                        remainingClass = 'low';
+                    } else if (quest.remaining === 0) {
+                        remainingText = 'No submissions remaining';
+                        remainingClass = 'low';
+                    } else if (quest.total > 0 && quest.remaining === quest.total) {
+                        remainingText = 'Yeah!!! You will be the first to submit';
+                        remainingClass = 'normal';
+                    } else {
+                        remainingText = `${quest.remaining} submission${quest.remaining === 1 ? '' : 's'} remaining`;
+                        remainingClass = quest.remaining < 3 ? 'low' : 'normal';
+                    }
+                } else {
+                    remainingText = quest.remaining;
+                    remainingClass = 'low';
+                }
+            }
+
             card.innerHTML = `
                 <div class="quest-title">${quest.title}</div>
                 <div class="quest-sponsor">Sponsored by: ${quest.sponsor}</div>
+                ${remainingText ? `<div class="quest-remaining ${remainingClass}">${remainingText}</div>` : ''}
                 <div class="quest-description">${quest.description}</div>
                 <div class="quest-reward">
                     <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
                     <div style="display: flex; gap: 8px;">
                         ${quest.status === 'active' && quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">Go to Quest</a>` : ''}
-                        ${quest.status === 'active' ? `<button class="submit-btn" data-quest-id="${quest.id}" data-track-code="${quest.trackCode}">Submit Quest</button>` : ''}
+                        ${quest.status === 'active' && typeof quest.remaining === 'number' && quest.remaining > 0 ? `<button class="submit-btn" data-quest-id="${quest.id}" data-track-code="${quest.trackCode}">Submit Quest</button>` : ''}
                     </div>
                 </div>
             `;
@@ -1220,37 +1305,10 @@
             });
             paginationEl.appendChild(nextBtn);
 
-            const info = document.createElement('span');
+            const info = document.createElement('div');
             info.className = 'pagination-info';
             info.textContent = `Page ${currentPage} of ${totalPages}`;
             paginationEl.appendChild(info);
-        }
-
-        // Submit quest form
-        async function submitQuestForm(questId, formData) {
-            const formUrl = CONFIG.FORM_URL;
-            const formBody = new URLSearchParams({
-                'entry.1234567890': questId.toString(),
-                'entry.1234567891': formData.trackCode,
-                'entry.1234567892': formData.proofOfQuest,
-                'entry.1234567893': formData.questLink,
-                'entry.1234567894': formData.telegram,
-                'entry.1234567895': formData.twitter
-            }).toString();
-
-            try {
-                const response = await fetch(formUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: formBody,
-                    mode: 'no-cors'
-                });
-                console.log(`Quest ${questId} submitted successfully with track code: ${formData.trackCode}`);
-                alert('Quest submitted successfully! Awaiting admin approval.');
-            } catch (error) {
-                console.error(`Error submitting quest ${questId}:`, error);
-                alert(`Failed to submit quest: ${error.message}. Please try again.`);
-            }
         }
 
         // Event listeners
@@ -1287,9 +1345,13 @@
             });
             DOM.closeButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    console.log('Learn More modal closed');
+                    console.log('Modal closed');
                     DOM.learnMoreModal.classList.remove('active');
-                    setTimeout(() => DOM.learnMoreModal.style.display = 'none', 400);
+                    DOM.submitQuestModal.classList.remove('active');
+                    setTimeout(() => {
+                        DOM.learnMoreModal.style.display = 'none';
+                        DOM.submitQuestModal.style.display = 'none';
+                    }, 400);
                 });
             });
             window.addEventListener('click', (event) => {
@@ -1297,6 +1359,11 @@
                     console.log('Clicked outside Learn More modal');
                     DOM.learnMoreModal.classList.remove('active');
                     setTimeout(() => DOM.learnMoreModal.style.display = 'none', 400);
+                }
+                if (event.target === DOM.submitQuestModal) {
+                    console.log('Clicked outside Submit Quest modal');
+                    DOM.submitQuestModal.classList.remove('active');
+                    setTimeout(() => DOM.submitQuestModal.style.display = 'none', 400);
                 }
             });
             window.addEventListener('scroll', () => {
@@ -1311,20 +1378,6 @@
                 currentCurrency = DOM.currencyToggle.checked ? 'USDC' : 'NGN';
                 console.log(`Currency toggled to: ${currentCurrency}`);
                 initializeProfile();
-            });
-            DOM.submitQuestModal.querySelectorAll('.close, .modal-close-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    console.log('Submit Quest modal closed');
-                    DOM.submitQuestModal.classList.remove('active');
-                    setTimeout(() => DOM.submitQuestModal.style.display = 'none', 400);
-                });
-            });
-            window.addEventListener('click', (event) => {
-                if (event.target === DOM.submitQuestModal) {
-                    console.log('Clicked outside Submit Quest modal');
-                    DOM.submitQuestModal.classList.remove('active');
-                    setTimeout(() => DOM.submitQuestModal.style.display = 'none', 400);
-                }
             });
             DOM.questsGrid.addEventListener('click', (event) => {
                 const submitBtn = event.target.closest('.submit-btn');
@@ -1341,31 +1394,128 @@
             DOM.submitQuestForm.addEventListener('submit', async (event) => {
                 event.preventDefault();
                 const questId = DOM.submitQuestForm.dataset.questId;
-                const formData = {
-                    trackCode: DOM.submitQuestForm.querySelector('#trackCode').value.trim(),
-                    proofOfQuest: DOM.submitQuestForm.querySelector('#proofOfQuest').value.trim(),
-                    questLink: DOM.submitQuestForm.querySelector('#questLink').value.trim(),
-                    telegram: DOM.submitQuestForm.querySelector('#telegram').value.trim(),
-                    twitter: DOM.submitQuestForm.querySelector('#twitter').value.trim()
+                const submitButton = DOM.submitQuestForm.querySelector('.modal-submit-btn');
+                submitButton.disabled = true;
+                submitButton.textContent = 'Submitting...';
+
+                const formData = new FormData(DOM.submitQuestForm);
+                const data = {
+                    trackCode: formData.get('entry.2147360639').trim(),
+                    proofOfQuest: formData.get('entry.1526178092').trim(),
+                    questLink: formData.get('entry.884208731').trim(),
+                    telegram: formData.get('entry.256576255').trim(),
+                    twitter: formData.get('entry.1138659293').trim()
                 };
 
-                if (!formData.trackCode || !formData.proofOfQuest || !formData.questLink || !formData.telegram || !formData.twitter) {
+                // Validate form fields
+                if (!data.trackCode || !data.proofOfQuest || !data.questLink || !data.telegram || !data.twitter) {
                     console.warn('Form validation failed: All fields are required');
-                    alert('Please fill in all fields.');
-                    return;
-                }
-                const urlRegex = /^https?:\/\/[^\s$.?#].[^\s]*$/;
-                if (!urlRegex.test(formData.questLink) || !urlRegex.test(formData.telegram) || !urlRegex.test(formData.twitter)) {
-                    console.warn('Form validation failed: Invalid URL format');
-                    alert('Quest Link, Telegram, and Twitter must be valid URLs.');
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Please fill in all fields.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Submit Quest';
                     return;
                 }
 
-                console.log(`Submitting quest ${questId} with data:`, formData);
-                await submitQuestForm(questId, formData);
-                DOM.submitQuestModal.classList.remove('active');
-                setTimeout(() => DOM.submitQuestModal.style.display = 'none', 400);
-                DOM.submitQuestForm.reset();
+                const urlRegex = /^https?:\/\/[^\s$.?#].[^\s]*$/;
+                if (!urlRegex.test(data.proofOfQuest) || !urlRegex.test(data.questLink)) {
+                    console.warn('Form validation failed: Invalid URL format for Proof of Quest or Quest Link');
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Proof of Quest and Quest Link must be valid URLs.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Submit Quest';
+                    return;
+                }
+
+                const usernameRegex = /^@?[\w]+$/;
+                if (!usernameRegex.test(data.telegram) || !usernameRegex.test(data.twitter)) {
+                    console.warn('Form validation failed: Invalid username format for Telegram or Twitter');
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Telegram and Twitter must be valid usernames (e.g., @username).',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Submit Quest';
+                    return;
+                }
+
+                // Check for duplicate submission
+                try {
+                    const isDuplicate = await isDuplicateSubmission(data.trackCode, data.telegram);
+                    if (isDuplicate) {
+                        console.warn(`Duplicate submission detected for track code: ${data.trackCode} and telegram: ${data.telegram}`);
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'You have already submitted this quest.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Submit Quest';
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error checking for duplicate submission:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to verify submission. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Submit Quest';
+                    return;
+                }
+
+                // Submit the form
+                try {
+                    const response = await fetch(CONFIG.FORM_ACTION, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    if (!response.ok) {
+                        throw new Error(`Form submission failed with status ${response.status}`);
+                    }
+                    console.log(`Quest ${questId} submitted successfully`);
+                    DOM.submitQuestModal.classList.remove('active');
+                    setTimeout(() => {
+                        DOM.submitQuestModal.style.display = 'none';
+                        Swal.fire({
+                            title: 'Submitted Successfully!',
+                            text: 'Your quest has been submitted. Awaiting admin approval.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        DOM.submitQuestForm.reset();
+                        DOM.submitQuestModal.classList.remove('active');
+                        DOM.submitQuestModal.style.display = 'none';
+                        loadData(); // Refresh data to update remaining submissions
+                    }, 400);
+                } catch (error) {
+                    console.error('Form submission error:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while submitting your quest. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    DOM.submitQuestForm.reset();
+                    DOM.submitQuestModal.classList.remove('active');
+                    DOM.submitQuestModal.style.display = 'none';
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Submit Quest';
+                }
             });
         }
 
