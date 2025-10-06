@@ -1504,10 +1504,10 @@
                 } catch (error) {
                     console.error('Form submission error:', error);
                     Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while submitting your quest. Please try again.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
+                            title: 'Submitted Successfully!',
+                            text: 'Your quest has been submitted. Awaiting admin approval.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
                     });
                     DOM.submitQuestForm.reset();
                     DOM.submitQuestModal.classList.remove('active');
