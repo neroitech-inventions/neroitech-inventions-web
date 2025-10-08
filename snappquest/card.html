@@ -346,6 +346,9 @@
             outline: none;
             border-bottom-color: #14B8A6;
         }
+        .form-group input:invalid {
+            border-bottom-color: #EF4444;
+        }
         .form-group label {
             position: absolute;
             top: 12px;
@@ -361,6 +364,16 @@
             top: -8px;
             font-size: 12px;
             color: #14B8A6;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
         }
         .buttons {
             display: flex;
@@ -627,8 +640,8 @@
         </div>
         <div class="nav-container">
             <nav class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="quest.html" class="join-quest-link">Launch a Quest</a>
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="quest.html" class="join-quest-link"><i class="fas fa-plus-circle"></i> Launch a Quest</a>
             </nav>
             <button class="connect-btn" onclick="window.location.href='profile.html'"><i class="fas fa-sign-in-alt"></i> Member Access</button>
         </div>
@@ -637,7 +650,7 @@
         </button>
     </header>
     <main>
-        <h1><i class="fas fa-gift"></i> SnappQuest Gift Card</h1>
+        <h1><i class="fas fa-gift"></i> Gift Card</h1>
         <div class="gift-card-container" id="card-container">
             <div class="gift-card" id="gift-card">
                 <div class="wave-pattern"></div>
@@ -656,8 +669,9 @@
             </div>
         </div>
         <div class="form-group">
-            <input type="number" id="amount" min="1" placeholder=" " required>
+            <input type="text" id="amount" placeholder=" " required>
             <label for="amount" id="amount-label">Enter Amount (NGN)</label>
+            <div aria-live="polite" class="sr-only" id="amount-error"></div>
         </div>
         <div class="buttons">
             <button class="btn activate" id="activateBtn"><i class="fas fa-gift"></i> Activate Gift Card</button>
@@ -693,6 +707,18 @@
         let currentCurrency = 'NGN';
         const exchangeRate = 1600;
 
+        // Format number with commas for display
+        function formatWithCommas(value) {
+            const cleanedValue = value.replace(/[^0-9,]/g, '');
+            const numberValue = cleanedValue.replace(/,/g, '');
+            return numberValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        // Parse formatted string (with commas) to a number for calculations
+        function parseFormattedNumber(value) {
+            return parseFloat(value.replace(/,/g, '')) || 0;
+        }
+
         function formatAmount(amount, currency) {
             if (currency === 'USDC') {
                 const usdAmount = Math.floor(amount / exchangeRate);
@@ -718,7 +744,7 @@
 
         function updateCardAmount() {
             const amountInput = document.getElementById('amount').value;
-            const amount = parseFloat(amountInput);
+            const amount = parseFormattedNumber(amountInput);
             if (!isNaN(amount) && amount > 0) {
                 document.getElementById('card-amount').textContent = formatAmount(
                     currentCurrency === 'USDC' ? amount * exchangeRate : amount,
@@ -767,15 +793,38 @@
             giftCard.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(99, 102, 241, 0.5)';
         });
 
-        document.getElementById('amount').addEventListener('input', updateCardAmount);
+        // Handle input formatting for comma separators
+        const amountInput = document.getElementById('amount');
+        amountInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/[^0-9,]/g, '');
+            const errorDiv = document.getElementById('amount-error');
+            if (value) {
+                e.target.value = formatWithCommas(value);
+                e.target.setCustomValidity('');
+                errorDiv.textContent = '';
+            } else {
+                e.target.setCustomValidity('Please enter a valid number');
+                errorDiv.textContent = 'Please enter a valid number';
+            }
+            updateCardAmount();
+        });
+
+        // Restrict input to numbers only (prevent letters, symbols, etc.)
+        amountInput.addEventListener('keypress', (e) => {
+            const char = String.fromCharCode(e.which || e.keyCode);
+            if (!/[0-9]/.test(char)) {
+                e.preventDefault();
+            }
+        });
 
         document.getElementById('toggleCurrency').addEventListener('change', () => {
             currentCurrency = document.getElementById('toggleCurrency').checked ? 'USDC' : 'NGN';
+            amountInput.value = '';
             updateCurrencyUI();
         });
 
         document.getElementById('activateBtn').addEventListener('click', () => {
-            const amountInput = parseFloat(document.getElementById('amount').value);
+            const amountInput = parseFormattedNumber(document.getElementById('amount').value);
             if (isNaN(amountInput) || amountInput <= 0) {
                 Swal.fire({
                     title: 'No amount',
@@ -891,28 +940,6 @@
                 });
             }
         });
-
-//       document.getElementById('gift-card').addEventListener('click', () => {
-//            Swal.fire({
-//                title: 'Coming Soon!',
-//                text: 'This feature is on its way. Stay tuned for exciting updates!',
-//                icon: 'info',
-//                confirmButtonText: 'Got It!',
-//                confirmButtonColor: '#14B8A6',
-//                background: '#FFFFFF',
-//                customClass: {
-//                   popup: 'swal2-popup-custom',
-//                    title: 'swal2-title-custom',
-//                    content: 'swal2-content-custom'
-//               },
-//               showClass: {
-//                  popup: 'animate__animated animate__bounceIn'
-//               },
-//              hideClass: {
-//                   popup: 'animate__animated animate__bounceOut'
-//               }
-//           });
-//       });
 
         // Back to Top Button Functionality
         const backToTopButton = document.getElementById('back-to-top');
