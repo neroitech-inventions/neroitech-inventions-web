@@ -709,7 +709,7 @@
 
         // Format number with commas for display
         function formatWithCommas(value) {
-            const cleanedValue = value.replace(/[^0-9,]/g, '');
+            const cleanedValue = value.replace(/[^0-9]/g, '');
             const numberValue = cleanedValue.replace(/,/g, '');
             return numberValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
@@ -793,26 +793,37 @@
             giftCard.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(99, 102, 241, 0.5)';
         });
 
-        // Handle input formatting for comma separators
+        // Handle input formatting for comma separators and max limit
         const amountInput = document.getElementById('amount');
         amountInput.addEventListener('input', (e) => {
-            let value = e.target.value.replace(/[^0-9,]/g, '');
+            let value = e.target.value.replace(/[^0-9]/g, '');
             const errorDiv = document.getElementById('amount-error');
-            if (value) {
+            const maxAmount = 100000000; // 100 million
+            const amount = parseFloat(value);
+            
+            if (value && amount <= maxAmount) {
                 e.target.value = formatWithCommas(value);
                 e.target.setCustomValidity('');
                 errorDiv.textContent = '';
+            } else if (amount > maxAmount) {
+                e.target.value = formatWithCommas(maxAmount.toString());
+                e.target.setCustomValidity('');
+                errorDiv.textContent = '';
             } else {
+                e.target.value = '';
                 e.target.setCustomValidity('Please enter a valid number');
                 errorDiv.textContent = 'Please enter a valid number';
             }
             updateCardAmount();
         });
 
-        // Restrict input to numbers only (prevent letters, symbols, etc.)
+        // Restrict input to numbers only and prevent exceeding max digits
         amountInput.addEventListener('keypress', (e) => {
             const char = String.fromCharCode(e.which || e.keyCode);
-            if (!/[0-9]/.test(char)) {
+            const currentValue = e.target.value.replace(/,/g, '');
+            const maxAmount = 100000000; // 100 million
+            
+            if (!/[0-9]/.test(char) || (currentValue.length >= 8 && parseFloat(currentValue + char) > maxAmount)) {
                 e.preventDefault();
             }
         });
@@ -862,14 +873,14 @@
                     popup: 'swal2-popup-custom',
                     title: 'swal2-title-custom',
                     content: 'swal2-content-custom'
-                },
-                showClass: {
-                    popup: 'animate__animated animate__bounceIn'
-                },
-                hideClass: {
-                    popup: 'animate__animated animate__bounceOut'
-                }
-            });
+                    },
+                    showClass: {
+                        popup: 'animate__animated animate__bounceIn'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__bounceOut'
+                    }
+                });
         });
 
         document.getElementById('verifyBtn').addEventListener('click', () => {
