@@ -33,22 +33,22 @@ export const HowItWorks = () => (
         <div className="step-icon">
           <FaSearch />
         </div>
-        <h3>Explore Quests</h3>
-        <p>Discover exciting quests within the SnappQuest community</p>
+        <h3>Create Quest</h3>
+        <p>Incentivize community participation with a Quest</p>
       </div>
       <div className="step">
         <div className="step-icon">
           <FaTasks />
         </div>
-        <h3>Complete Quests</h3>
-        <p>Participate and submit your contributions to the community</p>
+        <h3>Join Quests</h3>
+        <p>Support Solana to access exclusive Quest rewards</p>
       </div>
       <div className="step">
         <div className="step-icon">
           <FaTrophy />
         </div>
         <h3>Earn Rewards</h3>
-        <p>You earn rewards for completing active quests on time</p>
+        <p>Get rewarded once your completed Quest is verified</p>
       </div>
     </div>
   </section>

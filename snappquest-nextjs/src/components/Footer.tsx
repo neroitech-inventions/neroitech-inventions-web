@@ -1,3 +1,9 @@
+import {
+  faGift,
+  faMicrochip,
+  faPlusCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaTasks } from "react-icons/fa";
 import { FaTwitter, FaTelegram } from "react-icons/fa";
 
@@ -8,9 +14,8 @@ export const Footer: React.FC = () => (
         <div className="footer-col footer-info">
           <h2>SnappQuest</h2>
           <p>
-            The Engage-to-Earn layer for Solana, where every action matters.
-            Whether it's liking, retweeting, commenting, or gaining followers,
-            each interaction adds value and rewards the community.
+            An Engage-to-Earn tool empowering the Solana community to own
+            engagement and grow together.
           </p>
         </div>
 
@@ -39,8 +44,29 @@ export const Footer: React.FC = () => (
           <ul className="footer-link">
             <li>
               <a href="https://t.me/EarnlyQuestBot" target="_blank">
-                <FaTasks />
+                <FontAwesomeIcon
+                  icon={faMicrochip}
+                  // style={{ marginRight: "3px" }}
+                />
                 Earnly Bot
+              </a>
+            </li>
+            <li>
+              <a href="https://t.me/EarnlyQuestBot" target="_blank">
+                <FontAwesomeIcon
+                  icon={faPlusCircle}
+                  // style={{ marginRight: "3px" }}
+                />
+                Snapp Quote
+              </a>
+            </li>
+            <li>
+              <a href="https://t.me/EarnlyQuestBot" target="_blank">
+                <FontAwesomeIcon
+                  icon={faGift}
+                  // style={{ marginRight: "3px" }}
+                />
+                Gift Card
               </a>
             </li>
           </ul>

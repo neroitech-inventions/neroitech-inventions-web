@@ -4,127 +4,38 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { BackToTopButton } from "@/components/BackToTopButton";
-import {
-  FaTwitter,
-  FaTelegram,
-  FaHeart,
-  FaComment,
-  FaTasks,
-  FaDownload,
-  FaWallet,
-  FaIdCard,
-  FaEnvelope,
-  FaUserFriends,
-  FaCalendarCheck,
-  FaRetweet,
-  FaShare,
-  FaLaptopCode,
-  FaCommentDots,
-  FaMicrophone,
-  FaQuestionCircle,
-} from "react-icons/fa";
+import { QuestCard } from "@/components/QuestCard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUnlock, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 
-// Mock data matching vanilla profile
-interface Task {
-  description: string;
-  status: "pending" | "completed";
-  icon: React.ReactNode;
-  link?: string;
-}
+// Configuration
+const CONFIG = {
+  STATS_RANGE: "SnappQuestData!A1:C2",
+  RATE_RANGE: "SnappQuestData!D2:D2",
+  QUESTS_RANGE: "Quests!A1:G100",
+  QUANTITY_RANGE: "Form responses 3!A1:L1000",
+  RESPONSE_RANGE: "Form responses 4!A1:F1000",
+  FALLBACK_RATE: 1500,
+};
 
+// Types
 interface Quest {
   id: number;
   title: string;
   sponsor: string;
-  tasks: Task[];
-  reward: string;
-  completed: boolean;
+  description: string;
+  reward: number;
+  link?: string;
+  remaining?: number | string;
+  status: "active" | "completed";
+  trackCode?: string;
 }
 
-const mockQuests: Quest[] = [
-  {
-    id: 1,
-    title: "Promote Solana DeFi Project",
-    sponsor: "SolanaDeFi Inc.",
-    tasks: [
-      {
-        description: "Follow @SolanaDeFi on X",
-        status: "completed",
-        icon: <FaTwitter />,
-        link: "https://x.com/SolanaDeFi",
-      },
-      {
-        description: "Like and retweet the latest announcement",
-        status: "completed",
-        icon: <FaHeart />,
-        link: "https://x.com/SolanaDeFi/status/123456",
-      },
-      {
-        description: "Comment with your thoughts on DeFi",
-        status: "completed",
-        icon: <FaComment />,
-        link: "https://x.com/SolanaDeFi/status/123456",
-      },
-    ],
-    reward: "₦500",
-    completed: true,
-  },
-  {
-    id: 2,
-    title: "Join NFT Community Engagement",
-    sponsor: "NFTCollective",
-    tasks: [
-      {
-        description: "Join the Telegram group",
-        status: "completed",
-        icon: <FaTelegram />,
-        link: "https://t.me/NFTCollective",
-      },
-      {
-        description: "Mint a free NFT",
-        status: "completed",
-        icon: <FaTasks />,
-        link: "https://nftcollective.io/mint",
-      },
-      {
-        description: "Share your minted NFT on X",
-        status: "completed",
-        icon: <FaTwitter />,
-        link: "https://x.com/NFTCollective",
-      },
-    ],
-    reward: "₦300",
-    completed: true,
-  },
-  {
-    id: 3,
-    title: "Test New Wallet Feature",
-    sponsor: "Phantom Wallet",
-    tasks: [
-      {
-        description: "Download Phantom Wallet",
-        status: "pending",
-        icon: <FaDownload />,
-        link: "https://phantom.app",
-      },
-      {
-        description: "Create a new wallet",
-        status: "pending",
-        icon: <FaWallet />,
-        link: "https://phantom.app",
-      },
-      {
-        description: "Complete KYC verification",
-        status: "pending",
-        icon: <FaIdCard />,
-        link: "https://phantom.app/kyc",
-      },
-    ],
-    reward: "₦750",
-    completed: false,
-  },
-  // ... add more quests to match vanilla data
-];
+interface UserStats {
+  availableQuests: number;
+  completedQuests: number;
+  earnings: number;
+}
 
 export default function ProfilePage() {
   const { publicKey } = useWallet();
@@ -133,6 +44,210 @@ export default function ProfilePage() {
   const [availableCurrentPage, setAvailableCurrentPage] = useState(1);
   const [completedCurrentPage, setCompletedCurrentPage] = useState(1);
   const questsPerPage = 4;
+
+  // Data state
+  const [quests, setQuests] = useState<Quest[]>([]);
+  const [userStats, setUserStats] = useState<UserStats>({
+    availableQuests: 0,
+    completedQuests: 0,
+    earnings: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Currency state (NGN / USDC)
+  type Currency = "NGN" | "USDC";
+  const [currency, setCurrency] = useState<Currency>(
+    () =>
+      (typeof window !== "undefined" &&
+        (localStorage.getItem("sq-currency") as Currency)) ||
+      "NGN"
+  );
+  const [usdcRate, setUsdcRate] = useState<number>(CONFIG.FALLBACK_RATE);
+
+  // Fetch data from API
+  const fetchSheetData = useCallback(async (type: string, range: string) => {
+    try {
+      const response = await fetch(
+        `/api/sheets?type=${type}&range=${encodeURIComponent(range)}`
+      );
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to fetch data");
+      }
+      const data = await response.json();
+      return data.values || [];
+    } catch (err: any) {
+      console.error(`Error fetching ${type} data:`, err);
+      throw err;
+    }
+  }, []);
+
+  // Get quest availability
+  const getQuestAvailability = useCallback(
+    async (trackCode: string) => {
+      try {
+        // Fetch quantity
+        const quantityRows = await fetchSheetData(
+          "quantity",
+          CONFIG.QUANTITY_RANGE
+        );
+        const headers = quantityRows[0] || [];
+        const trackCodeIndex = headers.findIndex(
+          (h: string) => h.trim() === "Track Code"
+        );
+        const quantityIndex = headers.findIndex(
+          (h: string) => h.trim() === "Quantity"
+        );
+
+        const quantityRow = quantityRows
+          .slice(1)
+          .find(
+            (row: any[]) =>
+              row[trackCodeIndex]?.trim().toLowerCase() ===
+              trackCode.trim().toLowerCase()
+          );
+        const quantity = quantityRow
+          ? parseInt(quantityRow[quantityIndex]) || 0
+          : 0;
+
+        // Fetch submission count
+        const responseRows = await fetchSheetData(
+          "response",
+          CONFIG.RESPONSE_RANGE
+        );
+        const responseHeaders = responseRows[0] || [];
+        const responseTrackIndex = responseHeaders.findIndex(
+          (h: string) => h.trim() === "Track Code"
+        );
+
+        const submissionCount = responseRows
+          .slice(1)
+          .filter(
+            (row: any[]) =>
+              row[responseTrackIndex]?.trim().toLowerCase() ===
+              trackCode.trim().toLowerCase()
+          ).length;
+
+        const remaining = quantity - submissionCount;
+        return { remaining, total: quantity };
+      } catch (error) {
+        console.error(`Error checking availability for ${trackCode}:`, error);
+        return { remaining: "Error checking availability", total: 0 };
+      }
+    },
+    [fetchSheetData]
+  );
+
+  // Load all data
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Fetch USDC rate
+        try {
+          const rateData = await fetchSheetData("stats", CONFIG.RATE_RANGE);
+          if (rateData && rateData[0] && rateData[0][0]) {
+            const cleanedRate = rateData[0][0]
+              .toString()
+              .replace(/[^0-9.]/g, "");
+            const rate = parseFloat(cleanedRate) || 0;
+            if (rate > 0 && !isNaN(rate)) {
+              setUsdcRate(rate);
+            }
+          }
+        } catch (err) {
+          console.warn("Failed to fetch USDC rate, using fallback:", err);
+        }
+
+        // Fetch stats
+        try {
+          const statsRows = await fetchSheetData("stats", CONFIG.STATS_RANGE);
+          if (statsRows && statsRows.length > 1) {
+            const headers = statsRows[0];
+            const dataRow = statsRows[1];
+            setUserStats({
+              availableQuests: parseInt(dataRow[0]) || 0,
+              completedQuests: parseInt(dataRow[1]) || 0,
+              earnings: parseInt(dataRow[2]) || 0,
+            });
+          }
+        } catch (err) {
+          console.warn("Failed to fetch stats:", err);
+        }
+
+        // Fetch quests
+        const questRows = await fetchSheetData("quests", CONFIG.QUESTS_RANGE);
+        if (!questRows || questRows.length < 2) {
+          throw new Error("No quest data found");
+        }
+
+        const headers = questRows[0];
+        const questData = await Promise.all(
+          questRows.slice(1).map(async (row: any[], index: number) => {
+            const id = parseInt(row[0]) || index + 1;
+            const title = row[1] || "Untitled Quest";
+            const sponsor = row[2] || "Unknown Sponsor";
+            const description = row[3] || "No description available";
+            const reward =
+              parseFloat(row[4]?.toString().replace(/[^0-9.]/g, "")) || 0;
+            const link = row[5] || "";
+            const statusValue = parseInt(row[6]) || 0;
+            const status = statusValue === 0 ? "active" : "completed";
+            const trackCode = row[7] || "";
+
+            let availability = {
+              remaining: undefined as number | string | undefined,
+              total: 0,
+            };
+            if (status === "active" && trackCode) {
+              availability = await getQuestAvailability(trackCode);
+            }
+
+            return {
+              id,
+              title,
+              sponsor,
+              description,
+              reward,
+              link,
+              status,
+              trackCode,
+              remaining: availability.remaining,
+            } as Quest;
+          })
+        );
+
+        setQuests(questData);
+      } catch (err: any) {
+        console.error("Error loading data:", err);
+        setError(err.message || "Failed to load quest data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, [fetchSheetData, getQuestAvailability]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("sq-currency", currency);
+    } catch {}
+  }, [currency]);
+
+  const formatAmount = useCallback(
+    (amountNgn: number) => {
+      if (currency === "USDC") {
+        const usdc = amountNgn / usdcRate;
+        return `$${usdc.toFixed(2)}`;
+      }
+      return `₦${amountNgn.toLocaleString("en-NG")}`;
+    },
+    [currency, usdcRate]
+  );
 
   // Mock user data
   const userData = {
@@ -143,18 +258,18 @@ export default function ProfilePage() {
       : "User",
     wallet:
       publicKey?.toBase58() || "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
-    totalQuests: mockQuests.length,
-    completedQuests: mockQuests.filter((q) => q.completed).length,
-    totalEarnings: 2150,
+    totalQuests: userStats.availableQuests,
+    completedQuests: userStats.completedQuests,
+    totalEarnings: userStats.earnings,
   };
 
   const availableQuests = useMemo(
-    () => mockQuests.filter((q) => !q.completed),
-    []
+    () => quests.filter((q) => q.status === "active"),
+    [quests]
   );
   const completedQuests = useMemo(
-    () => mockQuests.filter((q) => q.completed),
-    []
+    () => quests.filter((q) => q.status === "completed"),
+    [quests]
   );
 
   const paginatedAvailable = useMemo(() => {
@@ -167,15 +282,67 @@ export default function ProfilePage() {
     return completedQuests.slice(start, start + questsPerPage);
   }, [completedQuests, completedCurrentPage]);
 
-  const completeQuest = useCallback((questId: number) => {
-    const quest = mockQuests.find((q) => q.id === questId);
-    if (quest) {
-      setCompletionMessage(
-        `Congratulations! You have completed "${quest.title}" and earned ${quest.reward}.`
-      );
-      setCompletionModalOpen(true);
-    }
-  }, []);
+  const completeQuest = useCallback(
+    (questId: number) => {
+      const quest = quests.find((q) => q.id === questId);
+      if (quest) {
+        setCompletionMessage(
+          `Congratulations! You have completed "${
+            quest.title
+          }" and earned ${formatAmount(quest.reward)}.`
+        );
+        setCompletionModalOpen(true);
+      }
+    },
+    [quests, formatAmount]
+  );
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen">
+        <div className="profile-container">
+          <div className="profile-header">
+            <div className="profile-avatar">L</div>
+            <div className="profile-name">Loading...</div>
+            <p style={{ textAlign: "center", marginTop: "20px" }}>
+              Fetching quest data from Google Sheets...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen">
+        <div className="profile-container">
+          <div className="profile-header">
+            <div className="profile-avatar">!</div>
+            <div className="profile-name">Error Loading Data</div>
+            <p
+              style={{
+                textAlign: "center",
+                marginTop: "20px",
+                color: "#EF4444",
+              }}
+            >
+              {error}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="complete-btn"
+              style={{ marginTop: "20px" }}
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -196,55 +363,39 @@ export default function ProfilePage() {
               <div className="stat-label">Completed Quests</div>
             </div>
             <div className="stat">
-              <div className="stat-number">{userData.totalEarnings}</div>
-              <div className="stat-label">Earnings (NGN)</div>
+              <div className="stat-number">
+                {formatAmount(userData.totalEarnings)}
+              </div>
+              <div className="stat-label">Earnings ({currency})</div>
             </div>
+          </div>
+
+          {/* Currency Toggle */}
+          <div className="currency-switch">
+            <span className="usdc-label">NGN</span>
+            <input
+              type="checkbox"
+              id="currencyToggle"
+              checked={currency === "USDC"}
+              onChange={(e) => setCurrency(e.target.checked ? "USDC" : "NGN")}
+            />
+            <label htmlFor="currencyToggle"></label>
+            <span className="ngn-label">USDC</span>
           </div>
         </div>
 
         <div className="quests-section" id="available-quests">
-          <h2 className="section-title">Available Quests</h2>
+          <h2 className="section-title">
+            <FontAwesomeIcon icon={faUnlock} /> Available Quests
+          </h2>
           <div className="quests-grid">
             {paginatedAvailable.map((quest) => (
-              <div key={quest.id} className="quest-card">
-                <div className="quest-title">{quest.title}</div>
-                <div className="quest-sponsor">
-                  Sponsored by: {quest.sponsor}
-                </div>
-                <div className="quest-tasks">
-                  {quest.tasks.map((task, idx) => (
-                    <div key={idx} className="task">
-                      <div className="task-icon">{task.icon}</div>
-                      <span className="task-description">
-                        {task.link ? (
-                          <a
-                            href={task.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {task.description}
-                          </a>
-                        ) : (
-                          task.description
-                        )}
-                      </span>
-                      <span className={`task-status ${task.status}`}>
-                        {task.status.charAt(0).toUpperCase() +
-                          task.status.slice(1)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <div className="quest-reward">
-                  <span className="reward-amount">{quest.reward}</span>
-                  <button
-                    className="complete-btn"
-                    onClick={() => completeQuest(quest.id)}
-                  >
-                    Complete Quest
-                  </button>
-                </div>
-              </div>
+              <QuestCard
+                key={quest.id}
+                quest={quest}
+                formatAmount={formatAmount}
+                onSubmit={completeQuest}
+              />
             ))}
           </div>
           {/* Pagination for available quests */}
@@ -283,42 +434,16 @@ export default function ProfilePage() {
         </div>
 
         <div className="quests-section" id="completed-quests">
-          <h2 className="section-title">Completed Quests</h2>
+          <h2 className="section-title">
+            <FontAwesomeIcon icon={faCheckDouble} /> Completed Quests
+          </h2>
           <div className="quests-grid">
             {paginatedCompleted.map((quest) => (
-              <div key={quest.id} className="quest-card">
-                <div className="quest-title">{quest.title}</div>
-                <div className="quest-sponsor">
-                  Sponsored by: {quest.sponsor}
-                </div>
-                <div className="quest-tasks">
-                  {quest.tasks.map((task, idx) => (
-                    <div key={idx} className="task">
-                      <div className="task-icon">{task.icon}</div>
-                      <span className="task-description">
-                        {task.link ? (
-                          <a
-                            href={task.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {task.description}
-                          </a>
-                        ) : (
-                          task.description
-                        )}
-                      </span>
-                      <span className={`task-status ${task.status}`}>
-                        {task.status.charAt(0).toUpperCase() +
-                          task.status.slice(1)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <div className="quest-reward">
-                  <span className="reward-amount">{quest.reward}</span>
-                </div>
-              </div>
+              <QuestCard
+                key={quest.id}
+                quest={quest}
+                formatAmount={formatAmount}
+              />
             ))}
           </div>
           {/* Pagination for completed quests */}

@@ -1,9 +1,16 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { BackToTopButton } from "@/components/BackToTopButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMedal } from "@fortawesome/free-solid-svg-icons";
 
 type Row = string[];
 
 const RANGE = "Form responses 3!A1:K1000";
+const RATE_RANGE = "SnappQuestData!D2:D2";
+const FALLBACK_RATE = 1500;
 
 const getEnv = (key: string, fallback = "") =>
   (typeof process !== "undefined" ? (process as any).env?.[key] : undefined) ||
@@ -17,12 +24,12 @@ const EARNINGS_COL = getEnv(
 );
 const COMPLETED_COL = getEnv(
   "NEXT_PUBLIC_SHEETS_COMPLETED_COLUMN",
-  "Total Quests Completed"
+  "TotalQuestsCompleted"
 );
 const CURRENCY_SYMBOL = getEnv("NEXT_PUBLIC_CURRENCY_SYMBOL", "₦");
 
 async function fetchSheet(): Promise<Row[]> {
-  const url = `/api/sheets?range=${encodeURIComponent(RANGE)}`;
+  const url = `/api/sheets?type=leaderboard&range=${encodeURIComponent(RANGE)}`;
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(`Sheets API error: ${res.status}`);
   const json = await res.json();
@@ -72,6 +79,72 @@ export default function LeaderboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Currency state
+  type Currency = "NGN" | "USDC";
+  const [currency, setCurrency] = useState<Currency>("NGN");
+  const [usdcRate, setUsdcRate] = useState<number>(FALLBACK_RATE);
+
+  // Fetch USDC rate
+  useEffect(() => {
+    const fetchRate = async () => {
+      try {
+        const res = await fetch(
+          `/api/sheets?type=stats&range=${encodeURIComponent(RATE_RANGE)}`,
+          { cache: "no-store" }
+        );
+        if (res.ok) {
+          const json = await res.json();
+          if (json.values && json.values[0] && json.values[0][0]) {
+            const cleanedRate = json.values[0][0]
+              .toString()
+              .replace(/[^0-9.]/g, "");
+            const rate = parseFloat(cleanedRate) || 0;
+            if (rate > 0 && !isNaN(rate)) {
+              setUsdcRate(rate);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Failed to fetch USDC rate, using fallback:", err);
+      }
+    };
+    fetchRate();
+  }, []);
+
+  // Format currency
+  const formatCurrency = useCallback(
+    (amount: number) => {
+      if (currency === "USDC") {
+        const usdc = amount / usdcRate;
+        // Format USDC with K, M, B abbreviations
+        return formatNumber(usdc, "$");
+      }
+      // Format NGN with K, M, B abbreviations
+      return formatNumber(amount, "₦");
+    },
+    [currency, usdcRate]
+  );
+
+  // Format number with K, M, B abbreviations
+  function formatNumber(num: number, prefix: string): string {
+    const absNum = Math.abs(num);
+    if (absNum >= 1_000_000_000) {
+      const value = num / 1_000_000_000;
+      return `${prefix}${value.toFixed(value % 1 === 0 ? 0 : 1)}B`;
+    } else if (absNum >= 1_000_000) {
+      const value = num / 1_000_000;
+      return `${prefix}${value.toFixed(value % 1 === 0 ? 0 : 1)}M`;
+    } else if (absNum >= 10_000) {
+      const value = num / 1_000;
+      return `${prefix}${value.toFixed(value % 1 === 0 ? 0 : 1)}K`;
+    } else {
+      return `${prefix}${num.toLocaleString("en-US", {
+        minimumFractionDigits: prefix === "$" ? 2 : 0,
+        maximumFractionDigits: prefix === "$" ? 2 : 0,
+      })}`;
+    }
+  }
+
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -92,12 +165,17 @@ export default function LeaderboardPage() {
   const table = useMemo(() => {
     if (!rows || rows.length === 0) return null;
     const [headers, ...data] = rows;
-    // Prefer provided NAME/USERNAME columns; then flexible includes; avoid timestamp
+
+    // Debug: Log all headers
+    console.log("Sheet Headers:", headers);
+
+    // Look for Name column (vanilla uses Name or Access)
     let uIdx =
       findFirstExistingIndex(headers, [
+        "Name",
+        "Access",
         NAME_COL,
         USERNAME_COL,
-        "Name",
         "Username",
       ]) ??
       findByIncludes(headers, ["name"]) ??
@@ -112,15 +190,34 @@ export default function LeaderboardPage() {
         uIdx = 1;
       else uIdx = 0;
     }
-    const eIdx = findColumnIndex(headers, EARNINGS_COL) ?? 0;
+
+    // Look for Total Earnings column
+    const eIdx =
+      findFirstExistingIndex(headers, ["Total Earnings", EARNINGS_COL]) ??
+      findByIncludes(headers, ["total", "earning"]) ??
+      0;
+
+    // Look for TotalQuestsCompleted column (no spaces!)
     const cIdx =
       findFirstExistingIndex(headers, [
+        "TotalQuestsCompleted",
         COMPLETED_COL,
         "Completed Quests",
         "Total Quests Completed",
       ]) ??
+      findByIncludes(headers, ["totalquest"]) ??
       findByIncludes(headers, ["quest", "complet"]) ??
       null;
+
+    console.log("Column Indices:", {
+      nameIdx: uIdx,
+      nameColumn: headers[uIdx],
+      earningsIdx: eIdx,
+      earningsColumn: headers[eIdx],
+      completedIdx: cIdx,
+      completedColumn: cIdx !== null ? headers[cIdx] : null,
+    });
+
     const sorted = [...data].sort(
       (a, b) => toNumber(b[eIdx]) - toNumber(a[eIdx])
     );
@@ -128,7 +225,7 @@ export default function LeaderboardPage() {
   }, [rows]);
 
   return (
-    <main>
+    <div className="min-h-screen">
       <section
         style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 20px" }}
       >
@@ -138,8 +235,10 @@ export default function LeaderboardPage() {
             fontWeight: 700,
             textAlign: "center",
             marginBottom: 16,
+            color: "#1F2937",
           }}
         >
+          <FontAwesomeIcon icon={faMedal} style={{ marginRight: 8 }} />
           SnappQuest Leaderboard
         </h1>
         <div
@@ -163,6 +262,20 @@ export default function LeaderboardPage() {
             Back to Profile
           </a>
         </div>
+
+        {/* Currency Toggle */}
+        <div className="currency-switch" style={{ marginBottom: "20px" }}>
+          <span className="usdc-label">NGN</span>
+          <input
+            type="checkbox"
+            id="currencyToggle"
+            checked={currency === "USDC"}
+            onChange={(e) => setCurrency(e.target.checked ? "USDC" : "NGN")}
+          />
+          <label htmlFor="currencyToggle"></label>
+          <span className="ngn-label">USDC</span>
+        </div>
+
         {loading && <p style={{ textAlign: "center" }}>Loading...</p>}
         {error && (
           <p style={{ color: "#EF4444", textAlign: "center" }}>{error}</p>
@@ -238,7 +351,11 @@ export default function LeaderboardPage() {
                     }}
                   >
                     <td
-                      style={{ padding: 14, fontWeight: 700, color: "#34D399" }}
+                      style={{
+                        padding: 14,
+                        fontWeight: 700,
+                        color: "#34D399",
+                      }}
                     >
                       {i + 1}
                     </td>
@@ -246,8 +363,7 @@ export default function LeaderboardPage() {
                       {r[table.uIdx] || "Unknown"}
                     </td>
                     <td style={{ padding: 14 }}>
-                      {CURRENCY_SYMBOL}
-                      {toNumber(r[table.eIdx]).toLocaleString()}
+                      {formatCurrency(toNumber(r[table.eIdx]))}
                     </td>
                     <td style={{ padding: 14 }}>
                       {table.cIdx != null ? toNumber(r[table.cIdx]) : 0}
@@ -259,6 +375,8 @@ export default function LeaderboardPage() {
           </div>
         )}
       </section>
-    </main>
+
+      <BackToTopButton />
+    </div>
   );
 }
