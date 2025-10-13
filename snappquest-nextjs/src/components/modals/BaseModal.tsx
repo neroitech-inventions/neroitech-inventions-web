@@ -26,19 +26,35 @@ export const BaseModal: React.FC<BaseModalProps> = ({
   }, [open, onClose]);
 
   return (
-    <div
-      className={`modal ${open ? "active" : ""}`}
-      style={{ display: open ? "block" : "none" }}
-    >
-      <div className={`modal-content ${widthClass}`}>
-        <div className="modal-header">
-          <h2>{title}</h2>
-          <span className="close" onClick={onClose}>
-            &times;
-          </span>
-        </div>
-        <div className="modal-body">{children}</div>
-      </div>
-    </div>
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="modal min-h-screen active"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+        >
+          <motion.div
+            className={`modal-content ${widthClass}`}
+            initial={{ opacity: 0, scale: 0.92, y: -24 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: -24 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            <div className="modal-header">
+              <h2>{title}</h2>
+              <span className="close" onClick={onClose}>
+                &times;
+              </span>
+            </div>
+            <div className="modal-body  flex flex-col justify-center items-center">
+              <div className="absolute blur-3xl w-full h-full transparent" />
+              {children}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

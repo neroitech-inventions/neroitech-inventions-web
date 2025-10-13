@@ -387,6 +387,192 @@ header .logo img {
   background: linear-gradient(180deg, #F9FAFB, #E5E7EB);
 }
 
+/* Quest Page */
+.quest-page {
+  background: linear-gradient(135deg, #F9FAFB, #E5E7EB);
+  color: #1F2937;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.quest-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.quote-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  max-width: 720px;
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.quote-header {
+  background: linear-gradient(135deg, #6366F1, #34D399);
+  color: #fff;
+  padding: 24px;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 20px 20px 0 0;
+}
+
+.quote-body {
+  padding: 32px;
+}
+
+.quote-body h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #111827;
+  text-align: center;
+}
+
+.quote-body p {
+  margin-bottom: 24px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #4B5563;
+  text-align: center;
+}
+
+.quote-body form {
+  margin-top: 8px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1F2937;
+  margin-bottom: 8px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1F2937;
+  transition: border-color .3s ease, box-shadow .3s ease;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #6366F1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.price-breakdown {
+  font-size: 14px;
+  color: #6B7280;
+  margin-top: 6px;
+  text-align: center;
+}
+
+.buttons-container {
+  flex-direction: column;
+}
+
+.quote-btn {
+  background: linear-gradient(135deg, #6366F1, #34D399);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+}
+
+.quote-btn:hover {
+  background: linear-gradient(135deg, #4F46E5, #22C55E);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.quote-btn:disabled {
+  opacity: .7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.price-calculation {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.price-calculation h3 {
+  font-size: 20px;
+  color: #111827;
+}
+
+.quest-footer {
+  margin-top: auto;
+}
+
+@media (max-width:768px) {
+  .quest-main {
+    padding: 24px 16px;
+  }
+
+  .quote-container {
+    width: 90%;
+    border-radius: 16px;
+  }
+
+  .quote-header {
+    font-size: 24px;
+    padding: 20px;
+  }
+
+  .quote-body {
+    padding: 24px;
+  }
+
+  .quote-body h3 {
+    font-size: 20px;
+  }
+
+  .quote-body p {
+    font-size: 14px;
+  }
+
+  .buttons-container {
+    flex-direction: column;
+  }
+}
+
 #how-it-works h2 {
   font-size: 48px;
   margin-bottom: 48px;
@@ -637,18 +823,24 @@ footer::before {
 }
 
 /* Modals */
+
 .modal {
-  display: none;
+  display: flex;
   position: fixed;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  left: 0;
   z-index: 1000;
   inset: 0;
   width: 100%;
-  height: 100%;
-  overflow: auto;
   background: rgba(0, 0, 0, 0.7);
-  padding-top: 80px;
+  padding: 40px 16px;
   opacity: 0;
   transition: opacity .4s ease-in-out;
+  overflow-y: auto;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal.active {
@@ -656,27 +848,20 @@ footer::before {
 }
 
 .modal-content {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  margin: 5% auto;
+  /* background: rgba(255, 255, 255, 0.95); */
+  /* backdrop-filter: blur(100px); */
+  margin: 0 auto;
   padding: 0;
   width: 80%;
   max-width: 720px;
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  transform: translateY(-60px);
-  transition: transform .4s ease-in-out, opacity .4s ease-in-out;
-  opacity: 0;
-}
-
-.modal.active .modal-content {
-  transform: translateY(0);
-  opacity: 1;
 }
 
 .modal-header {
   background: linear-gradient(135deg, #6366F1, #34D399);
   color: #fff;
+  width: 100%;
   padding: 24px;
   border-radius: 20px 20px 0 0;
   font-size: 28px;
@@ -689,7 +874,7 @@ footer::before {
 .modal-body {
   padding: 32px;
   font-size: 16px;
-  color: #1F2937;
+  /* color: #1F2937; */
 }
 
 .modal-body h3 {
@@ -754,13 +939,86 @@ footer::before {
   cursor: pointer;
   transition: all .3s ease;
   margin-top: 24px;
-  display: inline-block;
 }
 
 .modal-close-btn:hover {
   background: linear-gradient(135deg, #4F46E5, #22C55E);
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Join Quest Modal */
+.modal-content.join-quest-modal {
+  max-width: 400px;
+  /* background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(52, 211, 153, 0.1)); */
+  backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 20px rgba(52, 211, 153, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-content.join-quest-modal .modal-header {
+  text-align: center;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  border-radius: 16px 16px 0 0;
+}
+
+.modal-content.join-quest-modal .modal-body {
+  padding: 24px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  /* background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="glow"><stop offset="0%" style="stop-color:rgba(52,211,153,0.3)"/><stop offset="100%" style="stop-color:transparent"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#glow)"/></svg>') no-repeat center; */
+  background-size: cover;
+}
+
+.modal-content.join-quest-modal .modal-body h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: linear-gradient(90deg, #6366F1, #34D399);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.modal-content.join-quest-modal .modal-body p {
+  font-size: 16px;
+  color: #E5E7EB;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.modal-content.join-quest-modal .modal-body .nft-card {
+  width: 100%;
+  max-width: 200px;
+  margin: 20px auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  animation: float 3s ease-in-out infinite;
+}
+
+.modal-content.join-quest-modal .modal-body .modal-close-btn {
+  width: 100%;
+  max-width: 200px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 10px;
+}
+
+
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 /* Quest Form */
@@ -835,59 +1093,66 @@ footer::before {
 .currency-switch {
   display: flex;
   align-items: center;
+  gap: 12px;
+  margin-top: 20px;
   justify-content: center;
-  gap: 16px;
-  margin-bottom: 24px;
+}
+
+.currency-switch input[type="checkbox"] {
+  display: none;
+}
+
+.currency-switch label {
+  position: relative;
+  width: 60px;
+  height: 28px;
+  background: #E5E7EB;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.currency-switch label::before {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: #ffffff;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.currency-switch input:checked+label {
+  background: linear-gradient(135deg, #6366F1, #34D399);
+}
+
+.currency-switch input:checked+label::before {
+  transform: translateX(32px);
 }
 
 .currency-switch span {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: #1F2937;
 }
 
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+.currency-switch .ngn-label {
+  color: #6B7280;
 }
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+.currency-switch .usdc-label {
+  color: #6B7280;
 }
 
-.slider {
-  position: absolute;
-  cursor: pointer;
-  inset: 0;
-  background: #ccc;
-  transition: .4s;
-  border-radius: 34px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.currency-switch input:checked~.ngn-label {
+  color: #1F2937;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background: #fff;
-  transition: .4s;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-input:checked+.slider {
-  background: linear-gradient(135deg, #6366F1, #34D399);
-}
-
-input:checked+.slider:before {
-  transform: translateX(26px);
+.currency-switch input:not(:checked)~.usdc-label {
+  color: #1F2937;
 }
 
 .buttons-container {
@@ -903,8 +1168,13 @@ input:checked+.slider:before {
     border-radius: 16px;
   }
 
+  .modal {
+    align-items: flex-start;
+  }
+
   .modal-header {
     font-size: 24px;
+    width: 100%;
     padding: 20px;
   }
 
@@ -1064,6 +1334,41 @@ input:checked+.slider:before {
   margin-bottom: 20px;
 }
 
+.quest-remaining {
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.quest-remaining.low {
+  color: #EF4444;
+}
+
+.quest-remaining.normal {
+  color: #34D399;
+}
+
+.quest-description {
+  font-size: 14px;
+  color: #4B5563;
+  margin-bottom: 20px;
+}
+
+.quest-reward {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+  font-weight: 600;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.reward-amount {
+  color: #34D399;
+}
+
 .task {
   display: flex;
   align-items: center;
@@ -1113,6 +1418,7 @@ input:checked+.slider:before {
   justify-content: space-between;
   align-items: center;
   padding-top: 16px;
+  margin-top: 20px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   font-size: 18px;
   font-weight: 600;
@@ -1212,5 +1518,25 @@ input:checked+.slider:before {
     font-size: 12px;
     width: 100%;
     text-align: center;
+  }
+
+  .currency-switch label {
+    width: 50px;
+    height: 24px;
+  }
+
+  .currency-switch label::before {
+    width: 20px;
+    height: 20px;
+    top: 2px;
+    left: 2px;
+  }
+
+  .currency-switch input:checked+label::before {
+    transform: translateX(26px);
+  }
+
+  .currency-switch span {
+    font-size: 12px;
   }
 }

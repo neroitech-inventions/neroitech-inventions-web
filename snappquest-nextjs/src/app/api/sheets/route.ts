@@ -2,25 +2,49 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Server-side only environment variables (do NOT prefix with NEXT_PUBLIC)
 const API_KEY = process.env.SHEETS_API_KEY;
-const SPREADSHEET_ID = process.env.SHEETS_SPREADSHEET_ID;
-const RANGE = process.env.SHEETS_RANGE || "Form responses 3!A1:K1000";
+
+// Map of spreadsheet types to IDs
+const SPREADSHEET_IDS: Record<string, string> = {
+  stats: process.env.SHEETS_STATS_ID || "",
+  quests: process.env.SHEETS_QUESTS_ID || "",
+  quantity: process.env.SHEETS_QUANTITY_ID || "",
+  response: process.env.SHEETS_RESPONSE_ID || "",
+  leaderboard: process.env.SHEETS_LEADERBOARD_ID || "",
+};
 
 export async function GET(req: NextRequest) {
   try {
-    if (!API_KEY || !SPREADSHEET_ID) {
+    if (!API_KEY) {
       return NextResponse.json(
-        {
-          error:
-            "Server configuration missing SHEETS_API_KEY or SHEETS_SPREADSHEET_ID",
-        },
+        { error: "Server configuration missing SHEETS_API_KEY" },
         { status: 500 }
       );
     }
 
     const { searchParams } = new URL(req.url);
-    const range = searchParams.get("range") || RANGE;
+    const sheetType = searchParams.get("type") || "quests";
+    const range = searchParams.get("range");
 
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodeURIComponent(
+    if (!range) {
+      return NextResponse.json(
+        { error: "Range parameter is required" },
+        { status: 400 }
+      );
+    }
+
+    const spreadsheetId =
+      SPREADSHEET_IDS[sheetType as keyof typeof SPREADSHEET_IDS];
+
+    if (!spreadsheetId) {
+      return NextResponse.json(
+        {
+          error: `Invalid sheet type: ${sheetType}. Valid types: stats, quests, quantity, response`,
+        },
+        { status: 400 }
+      );
+    }
+
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(
       range
     )}?key=${API_KEY}`;
 

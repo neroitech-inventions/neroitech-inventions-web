@@ -1,23 +1,24 @@
+import { faPlusCircle, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
-import { FaPlusCircle, FaUsers } from "react-icons/fa";
 
 export const Hero = () => (
   <section id="hero">
     <div className="hero-content">
       <h1>Welcome to SnappQuest</h1>
-      <p>The Engage-to-Earn Tool for Solana Community</p>
-      <div className="journey-text">No Bots. Real Engagement.</div>
-      <div className="action-icons">
+      <p>Empowering Communities to Own Engagement</p>
+      <div className="journey-text">Engage-to-Earn</div>
+      <div className="action-icons ">
         <a href="#create-quest" className="action-icon">
-          <FaPlusCircle />
-          <span>Create Quest</span>
+          <FontAwesomeIcon icon={faPlusCircle} className="nav-icon" size="lg" />
+          <span className="whitespace-nowrap">Create Quest</span>
         </a>
         <a
           href="https://t.me/SnappQuest/134"
           className="action-icon"
           target="_blank"
         >
-          <FaUsers />
+          <FontAwesomeIcon icon={faUsers} className="nav-icon" size="lg" />
           <span>Join Quest</span>
         </a>
       </div>
