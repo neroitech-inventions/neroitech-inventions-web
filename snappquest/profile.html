@@ -876,7 +876,7 @@
     <button id="back-to-top" title="Back to Top">
         <i class="fas fa-arrow-up"></i>
     </button>
-     <!--<div id="learnMoreModal" class="modal">
+  <div id="learnMoreModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>SnappQuest Overview</h2>
@@ -904,7 +904,7 @@
                 <button class="modal-close-btn">Close</button>
             </div>
         </div>
-    </div>-->
+    </div>
     <div id="submitQuestModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -985,8 +985,8 @@
             navContainer: document.querySelector('.nav-container'),
             overlay: document.querySelector('.overlay'),
             backToTopButton: document.getElementById('back-to-top'),
-            //learnMoreModal: document.getElementById('learnMoreModal'),
-            //learnMoreLink: document.getElementById('learn-more-link'),
+            learnMoreModal: document.getElementById('learnMoreModal'),
+            learnMoreLink: document.getElementById('learn-more-link'),
             closeButtons: document.querySelectorAll('.close, .modal-close-btn'),
             submitQuestModal: document.getElementById('submitQuestModal'),
             submitQuestForm: document.getElementById('submitQuestForm'),
@@ -1413,7 +1413,7 @@
                     }, 400);
                 });
             });
-            /*
+            
             window.addEventListener('click', (event) => {
                 if (event.target === DOM.learnMoreModal) {
                     console.log('Clicked outside Learn More modal');
@@ -1425,7 +1425,7 @@
                     DOM.submitQuestModal.classList.remove('active');
                     setTimeout(() => DOM.submitQuestModal.style.display = 'none', 400);
                 }
-            });   */
+            });   
             window.addEventListener('scroll', () => {
                 console.log('Scroll position:', window.scrollY);
                 DOM.backToTopButton.classList.toggle('visible', window.scrollY > 300);
