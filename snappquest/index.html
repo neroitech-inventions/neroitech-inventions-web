@@ -4,12 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SnappQuest - Empowering Communities to Own Engagement.">
-    <title>SnappQuest - The Engage-to-Earn Tool for Solana Community</title>
+    <meta name="description" content="SnappQuest - The premier Engage-to-Earn platform for the Solana community. Incentivize growth and earn crypto rewards.">
+    <title>SnappQuest - Engage-to-Earn on Solana</title>
+    <link href="images/icon.png" rel="icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* General Reset */
+        /* --- Utilities & Base Styles --- */
+        :root {
+            --color-dark-bg: #0F172A; /* Slate 900 */
+            --color-light-bg: #1E293B; /* Slate 800 */
+            --color-text-primary: #F8FAFC; /* Slate 50 */
+            --color-text-secondary: #94A3B8; /* Slate 400 */
+            --color-indigo: #6366F1; /* Indigo 500 */
+            --color-teal: #34D399; /* Teal 400 */
+            --color-gradient-primary: linear-gradient(135deg, var(--color-indigo), var(--color-teal));
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,39 +29,60 @@
         }
 
         body {
-            background-color: #F9FAFB;
-            color: #1F2937;
+            background-color: var(--color-dark-bg);
+            color: var(--color-text-primary);
             line-height: 1.6;
             font-size: 16px;
-            margin: 0;
             overflow-x: hidden;
         }
 
-        /* Navbar */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--color-teal);
+            transition: color 0.3s ease;
+        }
+
+        /* --- Navbar --- */
         header {
-            background: rgba(31, 41, 55, 0.9);
-            backdrop-filter: blur(12px);
-            padding: 16px 24px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 18px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo a {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: var(--color-gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .logo img {
-            width: 100%;
             max-width: 140px;
             height: auto;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            display: block;
         }
 
         .nav-container {
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 32px;
         }
 
         .nav-links {
@@ -59,16 +91,19 @@
         }
 
         .nav-links a {
-            color: #ffffff;
-            text-decoration: none;
+            color: var(--color-text-secondary);
             font-size: 16px;
             font-weight: 500;
+            transition: color 0.3s ease, transform 0.2s ease;
             position: relative;
-            transition: transform 0.3s ease, color 0.3s ease;
-            background: linear-gradient(90deg, #34D399, #FBBF24);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-text-primary);
+            transform: translateY(-1px);
         }
 
         .nav-links a::after {
@@ -76,9 +111,9 @@
             position: absolute;
             width: 0;
             height: 2px;
-            bottom: -4px;
+            bottom: -6px;
             left: 0;
-            background: linear-gradient(90deg, #34D399, #FBBF24);
+            background: var(--color-gradient-primary);
             transition: width 0.3s ease;
         }
 
@@ -86,40 +121,33 @@
             width: 100%;
         }
 
-        .nav-links a:hover {
-            transform: translateY(-2px);
-        }
-
-        .nav-links a:active {
-            transform: scale(0.95);
-        }
-
         .connect-btn {
-            background: linear-gradient(135deg, #6366F1, #34D399);
-            color: #ffffff;
+            background: var(--color-gradient-primary);
+            color: var(--color-dark-bg);
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 10px 24px;
+            border-radius: 999px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(52, 211, 153, 0.4);
         }
 
         .connect-btn:hover {
+            opacity: 0.9;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .connect-btn:active {
-            transform: scale(0.95);
+            box-shadow: 0 6px 20px rgba(52, 211, 153, 0.6);
         }
 
         .hamburger {
             display: none;
             font-size: 24px;
-            color: #ffffff;
+            color: var(--color-text-primary);
             cursor: pointer;
             z-index: 1001;
             transition: transform 0.3s ease;
@@ -129,8 +157,22 @@
             transform: rotate(90deg);
         }
 
-        /* Mobile Menu Styles */
-        @media (max-width: 768px) {
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        @media (max-width: 900px) {
             .nav-container {
                 display: none;
                 flex-direction: column;
@@ -139,7 +181,7 @@
                 right: 0;
                 height: 100vh;
                 width: 280px;
-                background: rgba(31, 41, 55, 0.95);
+                background: rgba(15, 23, 42, 0.95);
                 backdrop-filter: blur(10px);
                 padding: 80px 24px 24px;
                 transform: translateX(100%);
@@ -161,10 +203,8 @@
                 font-size: 18px;
                 padding: 16px 0;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                text-align: left;
                 width: 100%;
-                background: none;
-                color: #ffffff;
+                color: var(--color-text-primary);
                 transition: background-color 0.3s ease, transform 0.3s ease;
             }
 
@@ -183,311 +223,337 @@
             .hamburger {
                 display: block;
             }
-
-            .overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.6);
-                z-index: 999;
-            }
-
-            .overlay.active {
-                display: block;
-            }
         }
 
-        /* Hero Section */
+        /* --- Hero Section --- */
         #hero {
-            background-image: url('images/hero.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: #ffffff;
-            padding: 120px 24px;
+            padding: 160px 0 120px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
         }
 
         #hero::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(31, 41, 55, 0.7), rgba(99, 102, 241, 0.4));
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80vw;
+            height: 80vh;
+            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
             z-index: 0;
         }
 
-        #hero .hero-content {
+        .hero-content {
             position: relative;
             z-index: 1;
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1.2s ease-out forwards;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         #hero h1 {
-            font-size: 64px;
-            font-weight: 800;
+            font-size: 72px;
+            font-weight: 900;
             margin-bottom: 24px;
-            color: #ffffff;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.9), 0 0 25px rgba(99, 102, 241, 0.5);
-            letter-spacing: -0.5px;
-            line-height: 1.2;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
         }
 
-        #hero p {
-            font-size: 24px;
-            margin-bottom: 32px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.7;
-            color: #E5E7EB;
-            font-weight: 300;
-        }
-
-        #hero .journey-text {
-            font-size: 48px;
-            font-weight: 700;
-            margin: 32px 0;
-            color: #34D399;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
-            animation: pulse 2.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.03);
-            }
-        }
-
-        #hero .action-icons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-
-        .action-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            font-size: 18px;
-            text-decoration: none;
-            color: #ffffff;
-            background: rgba(99, 102, 241, 0.15);
-            backdrop-filter: blur(12px);
-            padding: 16px 32px;
-            border-radius: 16px;
-            width: 240px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            transition: all 0.4s ease;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .action-icon::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
-            z-index: 0;
-        }
-
-        .action-icon:active::before {
-            width: 400px;
-            height: 400px;
-        }
-
-        .action-icon i {
-            font-size: 26px;
-            transition: transform 0.4s ease;
-            z-index: 1;
-        }
-
-        .action-icon span {
-            font-size: 16px;
-            z-index: 1;
-        }
-
-        .action-icon:hover {
-            background: rgba(79, 70, 229, 0.25);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.6), 0 0 20px rgba(52, 211, 153, 0.4);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .action-icon:hover i {
-            transform: scale(1.2);
-        }
-
-        @media (max-width: 768px) {
-            #hero h1 {
-                font-size: 48px;
-            }
-
-            #hero p {
-                font-size: 20px;
-            }
-
-            #hero .journey-text {
-                font-size: 36px;
-            }
-
-            .action-icon {
-                width: 100%;
-                max-width: 280px;
-                padding: 14px 24px;
-                font-size: 16px;
-                gap: 10px;
-            }
-
-            .action-icon i {
-                font-size: 22px;
-            }
-
-            .action-icon span {
-                font-size: 14px;
-            }
-        }
-
-        /* How It Works Section */
-        #how-it-works {
-            padding: 100px 24px;
-            text-align: center;
-            background: linear-gradient(180deg, #F9FAFB, #E5E7EB);
-        }
-
-        #how-it-works h2 {
-            font-size: 48px;
-            margin-bottom: 48px;
-            color: #1F2937;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            text-transform: uppercase;
-            background: linear-gradient(90deg, #6366F1, #34D399);
+        .hero-gradient-text {
+            background: var(--color-gradient-primary);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
 
-        .steps {
+        #hero p {
+            font-size: 20px;
+            margin-bottom: 48px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--color-text-secondary);
+        }
+
+        .cta-buttons {
             display: flex;
             justify-content: center;
-            gap: 32px;
+            gap: 20px;
             flex-wrap: wrap;
-            max-width: 1200px;
-            margin: 0 auto;
         }
 
-        .step {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(8px);
-            padding: 32px;
-            width: 320px;
-            border-radius: 20px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(255, 255, 255, 0.5);
+        .cta-primary {
+            background: var(--color-gradient-primary);
+            color: var(--color-dark-bg);
+            padding: 16px 36px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            border: none;
+            box-shadow: 0 8px 30px rgba(52, 211, 153, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(52, 211, 153, 0.7);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--color-teal);
+            border: 2px solid var(--color-teal);
+            padding: 16px 36px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(52, 211, 153, 0.1);
+            transform: translateY(-3px);
+            color: var(--color-teal);
+            border-color: var(--color-teal);
+        }
+
+        @media (max-width: 768px) {
+            #hero { padding: 120px 0 80px; }
+            #hero h1 { font-size: 48px; letter-spacing: -1px; }
+            #hero p { font-size: 18px; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .cta-primary, .cta-secondary { width: 100%; max-width: 300px; padding: 14px 20px; }
+        }
+
+        /* --- Features Section --- */
+        #features {
+            padding: 80px 0;
+            background-color: var(--color-light-bg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #features h2 {
+            font-size: 40px;
+            font-weight: 800;
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        #features p.subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: var(--color-text-secondary);
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background-color: var(--color-dark-bg);
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: transform 0.4s ease, box-shadow 0.4s ease;
-            position: relative;
         }
 
-        .step:hover {
+        .feature-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), 0 0 20px rgba(52, 211, 153, 0.3);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.3), 0 0 15px rgba(52, 211, 153, 0.3);
         }
 
-        .step .step-icon {
-            font-size: 48px;
-            color: #6366F1;
-            margin-bottom: 24px;
-            transition: transform 0.4s ease, color 0.4s ease;
+        .feature-icon {
+            font-size: 36px;
+            margin-bottom: 20px;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 80px;
-            height: 80px;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.2), transparent);
-            position: relative;
-            animation: spin 10s linear infinite;
+            border-radius: 12px;
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--color-indigo);
         }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .step:hover .step-icon {
-            color: #34D399;
-            transform: scale(1.1);
-        }
-
-        .step h3 {
+        .feature-card h3 {
             font-size: 24px;
-            font-weight: 600;
-            color: #1F2937;
-            margin-bottom: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--color-teal);
         }
 
-        .step p {
+        .feature-card p {
             font-size: 16px;
-            color: #4B5563;
-            line-height: 1.7;
+            color: var(--color-text-secondary);
         }
 
-        .step a {
-            color: #6366F1;
-            text-decoration: none;
+        /* --- Partners Section --- */
+        #partners {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        #partners h3 {
+            font-size: 20px;
             font-weight: 600;
+            color: var(--color-text-secondary);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .partner-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .partner-logo {
+            filter: grayscale(100%) brightness(150%);
+            opacity: 0.6;
+            height: 30px;
+            transition: opacity 0.3s ease;
+        }
+
+        .partner-logo:hover {
+            opacity: 1;
+            filter: none;
+        }
+
+        @media (max-width: 768px) {
+            #features h2 { font-size: 32px; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .partner-logo { height: 25px; }
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--color-light-bg);
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col {
+            min-width: 150px;
+        }
+
+        .footer-col h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--color-text-primary);
+        }
+
+        .footer-link li {
+            margin-bottom: 10px;
+            list-style: none;
+        }
+
+        .footer-link a {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-link a:hover {
+            color: var(--color-teal);
+            transform: translateX(3px);
+        }
+
+        .social-icons a {
+            font-size: 20px;
+            margin-right: 15px;
+            color: var(--color-text-secondary);
+        }
+
+        .social-icons a:hover {
+            color: var(--color-indigo);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom p {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin: 0;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.is-open {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--color-light-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-content h3 {
+            color: var(--color-teal);
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            color: var(--color-text-secondary);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: var(--color-text-secondary);
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
             transition: color 0.3s ease;
         }
 
-        .step a:hover {
-            color: #34D399;
-            text-decoration: underline;
+        .modal-close:hover {
+            color: var(--color-text-primary);
         }
 
         /* Back to Top Button */
@@ -496,8 +562,8 @@
             bottom: 32px;
             right: 32px;
             z-index: 1000;
-            background: linear-gradient(135deg, #6366F1, #34D399);
-            color: #ffffff;
+            background: var(--color-gradient-primary);
+            color: var(--color-dark-bg);
             width: 56px;
             height: 56px;
             border-radius: 50%;
@@ -534,538 +600,20 @@
         #back-to-top i {
             font-size: 24px;
         }
-
-        /* Footer Updates */
-        footer {
-            background: linear-gradient(135deg, #1F2937, #111827);
-            color: #E5E7EB;
-            padding: 64px 24px;
-            text-align: left;
-            position: relative;
-            overflow: hidden;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(52,211,153,0.2)" fill-opacity="1" d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,213.3C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat top center;
-            background-size: cover;
-            z-index: 0;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .footer-row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-bottom: 32px;
-            gap: 24px;
-        }
-
-        .footer-col {
-            flex: 1 1 200px;
-            margin: 0;
-        }
-
-        .footer-col h2 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: #ffffff;
-        }
-
-        .footer-col p {
-            font-size: 12px;
-            line-height: 1.6;
-            opacity: 0.9;
-            margin-bottom: 16px;
-        }
-
-        .footer-link {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-link li {
-            margin-bottom: 11px;
-        }
-
-        .footer-link a {
-            color: #34D399;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .footer-link a:hover {
-            color: #ffffff;
-            transform: translateX(4px);
-        }
-
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 24px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .copyright-text p {
-            font-size: 12px;
-            margin: 0;
-            opacity: 0.9;
-        }
-
-        @media (max-width: 768px) {
-            .footer-row {
-                flex-direction: column;
-                gap: 32px;
-            }
-            .footer-bottom {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background: rgba(0, 0, 0, 0.7);
-            padding-top: 80px;
-            opacity: 0;
-            transition: opacity 0.4s ease-in-out;
-        }
-
-        .modal.active {
-            opacity: 1;
-        }
-
-        .modal-content {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            margin: 5% auto;
-            padding: 0;
-            width: 80%;
-            max-width: 720px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            transform: translateY(-60px);
-            transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
-            opacity: 0;
-        }
-
-        .modal.active .modal-content {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .modal-header {
-            background: linear-gradient(135deg, #6366F1, #34D399);
-            color: #ffffff;
-            padding: 24px;
-            border-radius: 20px 20px 0 0;
-            font-size: 28px;
-            font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-body {
-            padding: 32px;
-            font-size: 16px;
-            color: #1F2937;
-        }
-
-        .modal-body h3 {
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #111827;
-        }
-
-        .modal-body p {
-            margin-bottom: 24px;
-            font-size: 16px;
-            line-height: 1.8;
-            color: #4B5563;
-        }
-
-        .modal-body ul {
-            list-style: none;
-            padding-left: 0;
-            margin-bottom: 24px;
-        }
-
-        .modal-body ul li {
-            position: relative;
-            padding-left: 28px;
-            margin-bottom: 12px;
-            font-size: 16px;
-            color: #4B5563;
-        }
-
-        .modal-body ul li::before {
-            content: '\f00c';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            color: #34D399;
-            position: absolute;
-            left: 0;
-            top: 4px;
-        }
-
-        .modal-body a {
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        .modal-body a:hover {
-            color: #34D399;
-        }
-
-        .close {
-            color: #ffffff;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #E5E7EB;
-            transform: scale(1.2);
-        }
-
-        .modal-close-btn {
-            background: linear-gradient(135deg, #6366F1, #34D399);
-            color: #ffffff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 24px;
-            display: inline-block;
-        }
-
-        .modal-close-btn:hover {
-            background: linear-gradient(135deg, #4F46E5, #22C55E);
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        /* NFT Modal Styles */
-        #joinQuestModal .modal-content {
-            max-width: 400px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(52, 211, 153, 0.1));
-            backdrop-filter: blur(12px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 20px rgba(52, 211, 153, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        #joinQuestModal .modal-header {
-            background: linear-gradient(135deg, #6366F1, #34D399);
-            border-radius: 16px 16px 0 0;
-            padding: 20px;
-            font-size: 24px;
-            text-align: center;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
-        #joinQuestModal .modal-body {
-            padding: 24px;
-            text-align: center;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="glow"><stop offset="0%" style="stop-color:rgba(52,211,153,0.3)"/><stop offset="100%" style="stop-color:transparent"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#glow)"/></svg>') no-repeat center;
-            background-size: cover;
-        }
-
-        #joinQuestModal .modal-body h3 {
-            font-size: 20px;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 16px;
-            background: linear-gradient(90deg, #6366F1, #34D399);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        #joinQuestModal .modal-body p {
-            font-size: 16px;
-            color: #1F2937;
-            line-height: 1.6;
-        }
-
-        #joinQuestModal .modal-body img {
-            width: 100%;
-            max-width: 200px;
-            margin: 20px auto;
-            border-radius: 12px;
-            /* border: 2px solid rgba(52, 211, 153, 0.5); */
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        #joinQuestModal .modal-close-btn {
-            width: 100%;
-            max-width: 200px;
-            padding: 12px;
-            font-size: 16px;
-            border-radius: 10px;
-        }
-
-        /* Quest Form Styles */
-        .quest-option {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .quest-option label {
-            font-size: 16px;
-            font-weight: 500;
-            color: #1F2937;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .quest-option input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: #34D399;
-            cursor: pointer;
-        }
-
-        .quest-option input[type="number"] {
-            width: 100px;
-            padding: 8px;
-            border: 1px solid #D1D5DB;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #1F2937;
-            transition: border-color 0.3s ease;
-        }
-
-        .quest-option input[type="number"]:focus {
-            outline: none;
-            border-color: #6366F1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-        }
-
-        .quest-option input[type="number"]:disabled {
-            background-color: #E5E7EB;
-            cursor: not-allowed;
-        }
-
-        .price-calculation {
-            margin-top: 24px;
-            text-align: center;
-        }
-
-        .price-calculation h3 {
-            font-size: 20px;
-            color: #111827;
-        }
-
-        /* Copy Confirmation Modal Specific Styles */
-        #copyConfirmationModal .modal-content {
-            max-width: 400px;
-        }
-
-        #copyConfirmationModal .modal-body {
-            text-align: center;
-        }
-
-        #copyConfirmationModal .modal-body p {
-            font-size: 18px;
-            font-weight: 500;
-            color: #111827;
-        }
-
-        /* Currency Switch Styles */
-        .currency-switch {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .currency-switch span {
-            font-size: 16px;
-            font-weight: 500;
-            color: #1F2937;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        input:checked + .slider {
-            background: linear-gradient(135deg, #6366F1, #34D399);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        /* Buttons Container */
-        .buttons-container {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 24px;
-        }
-
-        @media (max-width: 768px) {
-            .modal-content {
-                width: 90%;
-                border-radius: 16px;
-            }
-
-            .modal-header {
-                font-size: 24px;
-                padding: 20px;
-            }
-
-            .modal-body {
-                padding: 24px;
-            }
-
-            .modal-body h3 {
-                font-size: 20px;
-            }
-
-            .modal-body p,
-            .modal-body ul li {
-                font-size: 14px;
-            }
-
-            .modal-close-btn {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-
-            .quest-option {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .quest-option input[type="number"] {
-                width: 100%;
-            }
-
-            #copyConfirmationModal .modal-content,
-            #joinQuestModal .modal-content {
-                max-width: 90%;
-            }
-
-            #copyConfirmationModal .modal-body p,
-            #joinQuestModal .modal-body p {
-                font-size: 16px;
-            }
-
-            #joinQuestModal .modal-body img {
-                max-width: 150px;
-            }
-
-            .buttons-container {
-                flex-direction: column;
-            }
-        }
     </style>
-
-    <!-- Favicon -->
-    <link href="images/icon.png" rel="icon">
 </head>
 
 <body>
-    <!-- Navbar -->
     <header>
         <div class="logo">
-            <a href="index.html"><img src="images/logo.png" alt="SnappQuest Logo"></a>
+            <a href="#"><img src="images/logo.png" alt="SnappQuest Logo"></a>
         </div>
         <div class="nav-container">
             <nav class="nav-links">
-                <a href="quest.html"><i class="fas fa-plus-circle"></i> Create Quest</a>               
-                <a class="join-quest-link"><i class="fas fa-flag-checkered"></i> Join Quest</a>
+                <a href="quest.html"><i class="fas fa-plus-circle"></i> Create Quests</a>
+                <a class="join-quest-link" onclick="openModal('joinQuestModal')"><i class="fas fa-flag-checkered"></i> Join Quest</a>
             </nav>
-            <button class="connect-btn" onclick="window.location.href='profile.html'"><i class="fas fa-sign-in-alt"></i> Member Access</button>
+            <button class="connect-btn" onclick="window.location.href='profile.html'"><i class="fas fa-eye"></i> Explore Quest</button>
         </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
@@ -1073,470 +621,174 @@
     </header>
     <div class="overlay"></div>
 
-    <!-- Hero Section -->
     <section id="hero">
         <div class="hero-content">
-            <h1>Welcome to SnappQuest</h1>
-            <p>Turning passive communities into active ecosystems</p>
-            <div class="journey-text">Engage-to-Earn</div>
-
-            <div class="action-icons">
-                <a href="quest.html" class="action-icon">
-                    <i class="fas fa-plus-circle"></i>
-                    <span>Create Quest</span>
+            <h1>Need Engagement? <span class="hero-gradient-text">Use Incentives.</span></h1>
+            <p>Empowering creators and communities to turn engagement into real-world value on Solana.</p>
+            <div class="cta-buttons">
+                <a href="quest.html" class="cta-primary">
+                    <i class="fas fa-plus-circle"></i> Create Quest
                 </a>
-                <a href="#join-quest" class="action-icon join-quest-link">
-                    <i class="fas fa-users"></i>
-                    <span>Join Quest</span>
-                </a>
+                <button class="cta-secondary join-quest-link" onclick="openModal('joinQuestModal')">
+                    <i class="fas fa-users"></i> Join Quests
+                </button>
             </div>
         </div>
     </section>
-
-    <!-- How It Works Section -->
-    <section id="how-it-works">
-        <h2>How It Works</h2>
-        <div class="steps">
-            <div class="step">
-                <div class="step-icon"><i class="fas fa-search"></i></div>
-                <h3>Create Quest</h3>
-                <p>Incentivize community participation with a Quest</p>
-            </div>
-            <div class="step">
-                <div class="step-icon"><i class="fas fa-tasks"></i></div>
-                <h3>Join Quests</h3>
-                <p>Support Solana to access exclusive Quest rewards</p>
-            </div>
-            <div class="step">
-                <div class="step-icon"><i class="fas fa-trophy"></i></div>
-                <h3>Earn Rewards</h3>
-                <p>Get rewarded once your completed Quest is verified</p>
+ <!--
+    <section id="partners">
+        <div class="container">
+            <h3>Trusted by Solana Ecosystem Supporters</h3>
+           <div class="partner-logos">
+                <img src="" alt="Solana Logo" class="partner-logo" style="width: auto;">
+                <img src="" alt="Phantom Logo" class="partner-logo" style="width: 120px;">
+                <img src="" alt="Raydium Logo" class="partner-logo" style="width: 100px;">
+                <img src="" alt="Serum Logo" class="partner-logo" style="width: 100px;">
             </div>
         </div>
-    </section>
+    </section>-->
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-row">
-                <div class="footer-col footer-info">
-                    <h2>SnappQuest</h2>
-                    <p>An Engage-to-Earn tool empowering the Solana community to own engagement and grow together.</p>
+    <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.15), rgba(255,255,255,0)); margin: 40px 0;">
+
+    <section id="features">
+        <div class="container">
+            <h2>The Power of Incentives</h2>
+            <p class="subtitle">SnappQuest enables you to incentivize the Solana community to engage with your content. Create a Quest and let the community join in.</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-flag-checkered"></i></div>
+                    <h3>Create a Quest</h3>
+                    <p>The X algorithm might hide your posts, but your community is already here waiting. Create a Quest to incentivize engagement.</strong></p>
                 </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-users"></i></div>
+                    <h3>Join Quest</h3>
+                    <p>Only verified Solana supporters are allowed to join Quests and earn rewards. Please get verified to engage-to-earn.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-handshake"></i></div>
+                    <h3>Community Ownership</h3>
+                    <p>Your engagement is valuable. We capture and reward it, using it to support creators and communities on Solana.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <footer>
+        <div class="container">
+            <div class="footer-row">
+                <div class="footer-col" style="min-width: 250px;">
+                    <h3 class="hero-gradient-text">SnappQuest</h3>
+                    <p style="color: var(--color-text-secondary); font-size: 14px;">The Engage-to-Earn tool for Solana.<br>Building active, incentivized, sustainable communities.</p>
+                    <div class="social-icons">
+                        <a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+                    </div>
+                </div>
                 <div class="footer-col">
-                    <h2>Quick Links</h2>
+                    <h3>Explore</h3>
                     <ul class="footer-link">
                         <li><a href="#hero">Home</a></li>
                         <li><a href="quest.html">Create Quest</a></li>
-                        <li><a href="#join-quest" class="join-quest-link">Join Quest</a></li>
-                        <li><a href="#" id="learn-more-link">How It Works</a></li>
+                        <li><a onclick="openModal('joinQuestModal')">Join Quest</a></li>
+                        <li><a href="card.html">Explore Quest</a></li>
                     </ul>
                 </div>
-
                 <div class="footer-col">
-                    <h2>Other Tools</h2>
+                    <h3>Other Tools</h3>
                     <ul class="footer-link">
-                        <li><a href="https://t.me/EarnlyQuestBot" target="_blank"><i class="fas fa-microchip"></i>Earnly Bot</a></li>
-                        <li><a href="#create-quest" target="_blank"><i class="fas fa-plus-circle"></i>Snapp Quote</a></li>
-                        <li><a href="card.html" target="_blank"><i class="fas fa-gift"></i>Gift Card</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-col">
-                    <h2>Custom Quest</h2>
-                    <p>Reach out on Telegram for partnerships or customized quests. Create your own custom quest by contacting the team!</p>
-                    <ul class="footer-link">
-                        <li><a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i> X (Twitter)</a></li>
-                        <li><a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
+                        <li><a href="card.html"><i class="fas fa-gift"></i> Gift Card</a></li>
                     </ul>
                 </div>
             </div>
-
             <div class="footer-bottom">
-                <div class="copyright-text">
-                    <p>&copy; 2025 SnappQuest. All rights reserved.</p>
-                </div>
+                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by Neroitech Inventions.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Back to Top Button -->
     <button id="back-to-top" title="Back to Top">
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- Modal for Learn More Section -->
-    <div id="learnMoreModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>SnappQuest Overview</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <h3>Vision</h3>
-                <p>SnappQuest exists to become the Engage-to-Earn tool for Superteam Nigeria and the Solana ecosystem, rewarding effort, not just outcomes.</p>
-
-                <h3>Mission</h3>
-                <p>To unlock quick earning opportunities for the SnappQuest community, while providing sponsors with real engagement in return.</p>
-
-                <h3>The Problem</h3>
-                <p>New projects and the Solana community struggle to gain visibility, while communities show up but often don't get rewarded.</p>
-
-                <h3>The Solution: SnappQuest</h3>
-                <p>SnappQuest is a tool that incentivizes participation, turning effort into recognition, rewards, and earning opportunities.</p>
-
-                <h3>How SnappQuest Works</h3>
-                <p>Create your Quest, generate the quote, and after payment, submit the new Quest for admin approval. Admins verify the Quest, if it’s legitimate, they move it to the active Quests for community participation.</p>
-
-                <h3>Key Features</h3>
-                <ul>
-                    <li>Real engagement</li>
-                    <li>No bots</li>
-                    <li>Community powered</li>
-                </ul>
-
-                <h3>Long-Term Vision</h3>
-                <p>SnappQuest becomes the go-to tool for engagement across Solana, helping contributors, builders, and communities thrive.</p>
-
-                <button class="modal-close-btn">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for Create Quest -->
-    <div id="createQuestModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Estimate Prices in Seconds</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <h3>Snapp Quote</h3>
-                <p>Select the engagement types and quantities for your quest. Minimum price is <span id="minPriceText">₦20</span> per engagement (plus a <span id="feeText">₦20</span> fee).</p>
-                <div class="currency-switch">
-                    <span>NGN</span>
-                    <label class="switch">
-                        <input type="checkbox" id="currencyToggle">
-                        <span class="slider"></span>
-                    </label>
-                    <span>USDC</span>
-                </div>
-                <form id="createQuestForm">
-                    <div class="quest-option">
-                        <label>
-                            <input type="checkbox" name="questType" value="likes"> X Likes
-                        </label>
-                        <input type="number" name="likesQuantity" placeholder="Quantity" min="0" disabled>
-                    </div>
-                    <div class="quest-option">
-                        <label>
-                            <input type="checkbox" name="questType" value="retweets"> X RTs
-                        </label>
-                        <input type="number" name="retweetsQuantity" placeholder="Quantity" min="0" disabled>
-                    </div>
-                    <div class="quest-option">
-                        <label>
-                            <input type="checkbox" name="questType" value="comments"> X Comments
-                        </label>
-                        <input type="number" name="commentsQuantity" placeholder="Quantity" min="0" disabled>
-                    </div>
-                    <div class="quest-option">
-                        <label>
-                            <input type="checkbox" name="questType" value="followers"> X Followers
-                        </label>
-                        <input type="number" name="followersQuantity" placeholder="Quantity" min="0" disabled>
-                    </div>
-                    <div class="price-calculation">
-                        <h3>Total Price: <span id="totalPrice">₦0</span></h3>
-                    </div>
-                    <div class="buttons-container">
-                        <button type="submit" class="modal-close-btn" onclick="window.open('quest.html');">Create Quest</button>
-                        <button type="button" class="modal-close-btn" id="customQuestBtn" onclick="window.open('https://t.me/SnappQuest/146', '_blank');">Custom Quest</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for Join Quest (NFT Style) -->
     <div id="joinQuestModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2>Members Only</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <img src="images/vip.png" alt="SnappQuest NFT Card">
-                <h3>Exclusive Access</h3>
-                <p style="color: #E5E7EB;">For real Solana supporters only, join the movement and get access on Telegram.</p>
-                <a href="https://t.me/SnappQuest" target="_blank" class="modal-close-btn">Join Telegram</a>
-                <button class="modal-close-btn">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for Copy Confirmation -->
-    <div id="copyConfirmationModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Success</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <p>Quest details copied to clipboard!</p>
-                <button class="modal-close-btn">OK</button>
-            </div>
+            <span class="modal-close" onclick="closeModal('joinQuestModal')">&times;</span>
+            <h3>Invite Only!!! 🚫</h3>
+            <img src="images/verified.png" alt="Verified" style="max-width: 150px; margin: 15px auto; border-radius: 8px; animation: float 3s ease-in-out infinite;">
+            <p>Only verified Solana supporters are allowed to join Quests and earn rewards. Please get verified to engage-to-earn.</p>
+            <button class="cta-primary" style="margin-top: 20px; color: var(--color-text-primary); background: var(--color-indigo);" onclick="window.open('https://t.me/SnappQuest', '_blank')"><i class="fab fa-telegram-plane"></i> Join Community</button>
         </div>
     </div>
 
     <script>
-        // Get modals
-        const learnMoreModal = document.getElementById("learnMoreModal");
-        const createQuestModal = document.getElementById("createQuestModal");
-        const joinQuestModal = document.getElementById("joinQuestModal");
-        const copyConfirmationModal = document.getElementById("copyConfirmationModal");
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Get links that open modals
-        const learnMoreLink = document.getElementById("learn-more-link");
-        const createQuestLinks = document.querySelectorAll('a[href="#create-quest"]');
-        const joinQuestLinks = document.querySelectorAll('.join-quest-link, .join-quest-btn');
-
-        // Get close buttons
-        const learnMoreClose = learnMoreModal.querySelector(".close");
-        const learnMoreCloseBtn = learnMoreModal.querySelector(".modal-close-btn");
-        const createQuestClose = createQuestModal.querySelector(".close");
-        const joinQuestClose = joinQuestModal.querySelector(".close");
-        const joinQuestCloseBtn = joinQuestModal.querySelector(".modal-close-btn:not([href])");
-        const copyConfirmationClose = copyConfirmationModal.querySelector(".close");
-        const copyConfirmationCloseBtn = copyConfirmationModal.querySelector(".modal-close-btn");
-
-        // Get hamburger menu elements
-        const hamburger = document.querySelector(".hamburger");
-        const navContainer = document.querySelector(".nav-container");
-        const overlay = document.querySelector(".overlay");
+        // Get elements for hamburger menu
+        const hamburger = document.querySelector('.hamburger');
+        const navContainer = document.querySelector('.nav-container');
+        const overlay = document.querySelector('.overlay');
 
         // Get back to top button
-        const backToTopButton = document.getElementById("back-to-top");
+        const backToTopButton = document.getElementById('back-to-top');
 
-        // Get form elements
-        const createQuestForm = document.getElementById("createQuestForm");
-        const checkboxes = createQuestForm.querySelectorAll('input[name="questType"]');
-        const totalPriceSpan = document.getElementById("totalPrice");
-        const minPriceText = document.getElementById("minPriceText");
-        const feeText = document.getElementById("feeText");
-        const currencyToggle = document.getElementById("currencyToggle");
-        const customQuestBtn = document.getElementById("customQuestBtn");
-
-        // Currency variables
-        let currency = 'NGN';
-        let pricePerEngagement = 20;
-        let fee = 20;
-        let currencySymbol = '₦';
-
-        // Close modal function
-        function closeModal(modal) {
-            modal.classList.remove("active");
-            setTimeout(() => modal.style.display = "none", 400);
+        // Modal Functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('is-open');
         }
 
-        // Toggle hamburger menu
-        hamburger.addEventListener("click", () => {
-            hamburger.classList.toggle("active");
-            navContainer.classList.toggle("active");
-            overlay.classList.toggle("active");
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('is-open');
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('is-open');
+            }
         });
 
+        // Toggle hamburger menu
+        function toggleMobileMenu() {
+            hamburger.classList.toggle('active');
+            navContainer.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        hamburger.addEventListener('click', toggleMobileMenu);
+
         // Close hamburger menu when a link is clicked
-        navContainer.querySelectorAll("a").forEach(link => {
-            link.addEventListener("click", () => {
-                hamburger.classList.remove("active");
-                navContainer.classList.remove("active");
-                overlay.classList.remove("active");
+        navContainer.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navContainer.classList.remove('active');
+                overlay.classList.remove('active');
             });
         });
 
         // Close hamburger menu when overlay is clicked
-        overlay.addEventListener("click", () => {
-            hamburger.classList.remove("active");
-            navContainer.classList.remove("active");
-            overlay.classList.remove("active");
-        });
-
-        // Open Learn More modal
-        learnMoreLink.onclick = function (e) {
-            e.preventDefault();
-            learnMoreModal.style.display = "block";
-            setTimeout(() => learnMoreModal.classList.add("active"), 10);
-        };
-
-        // Open Create Quest modal
-        createQuestLinks.forEach(link => {
-            link.onclick = function (e) {
-                e.preventDefault();
-                createQuestModal.style.display = "block";
-                setTimeout(() => createQuestModal.classList.add("active"), 10);
-            };
-        });
-
-        // Open Join Quest modal
-        joinQuestLinks.forEach(link => {
-            link.onclick = function (e) {
-                e.preventDefault();
-                joinQuestModal.style.display = "block";
-                setTimeout(() => joinQuestModal.classList.add("active"), 10);
-            };
-        });
-
-        // Close Learn More modal
-        learnMoreClose.onclick = function () {
-            closeModal(learnMoreModal);
-        };
-
-        learnMoreCloseBtn.onclick = function () {
-            closeModal(learnMoreModal);
-        };
-
-        // Close Create Quest modal
-        createQuestClose.onclick = function () {
-            closeModal(createQuestModal);
-        };
-
-        // Close Join Quest modal
-        joinQuestClose.onclick = function () {
-            closeModal(joinQuestModal);
-        };
-
-        joinQuestCloseBtn.onclick = function () {
-            closeModal(joinQuestModal);
-        };
-
-        // Close Copy Confirmation modal
-        copyConfirmationClose.onclick = function () {
-            closeModal(copyConfirmationModal);
-        };
-
-        copyConfirmationCloseBtn.onclick = function () {
-            closeModal(copyConfirmationModal);
-        };
-
-        // Close modals when clicking outside
-        window.onclick = function (event) {
-            if (event.target == learnMoreModal) {
-                closeModal(learnMoreModal);
-            }
-            if (event.target == createQuestModal) {
-                closeModal(createQuestModal);
-            }
-            if (event.target == joinQuestModal) {
-                closeModal(joinQuestModal);
-            }
-            if (event.target == copyConfirmationModal) {
-                closeModal(copyConfirmationModal);
-            }
-        };
-
-        // Enable/disable quantity inputs based on checkbox state
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener("change", () => {
-                const quantityInput = checkbox.parentElement.nextElementSibling;
-                quantityInput.disabled = !checkbox.checked;
-                if (!checkbox.checked) {
-                    quantityInput.value = "";
-                }
-                calculateTotalPrice();
-            });
-        });
-
-        // Currency toggle listener
-        currencyToggle.addEventListener("change", () => {
-            if (currencyToggle.checked) {
-                currency = 'USDC';
-                pricePerEngagement = 0.2;
-                fee = 0.2;
-                currencySymbol = '$';
-                minPriceText.textContent = '$0.2';
-                feeText.textContent = '$0.2';
-            } else {
-                currency = 'NGN';
-                pricePerEngagement = 20;
-                fee = 20;
-                currencySymbol = '₦';
-                minPriceText.textContent = '₦20';
-                feeText.textContent = '₦20';
-            }
-            calculateTotalPrice();
-        });
-
-        // Calculate total price
-        function calculateTotalPrice() {
-            let totalEngagements = 0;
-            const inputs = createQuestForm.querySelectorAll('input[type="number"]');
-            inputs.forEach(input => {
-                const value = parseFloat(input.value) || 0;
-                totalEngagements += value;
-            });
-            let totalPrice = (totalEngagements * pricePerEngagement) + fee;
-            const formattedPrice = currency === 'USDC' ? `${currencySymbol}${totalPrice.toFixed(2)}` : `${currencySymbol}${totalPrice}`;
-            totalPriceSpan.textContent = formattedPrice;
-            return { totalPrice, totalEngagements };
-        }
-
-        // Update total price on quantity input change
-        createQuestForm.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener("input", calculateTotalPrice);
-        });
-
-        // Handle form submission
-        createQuestForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const formData = new FormData(createQuestForm);
-            const questData = {};
-            formData.forEach((value, key) => {
-                questData[key] = value;
-            });
-
-            const { totalEngagements, totalPrice } = calculateTotalPrice();
-            const formattedTotalPrice = currency === 'USDC' ? `${currencySymbol}${totalPrice.toFixed(2)}` : `${currencySymbol}${totalPrice}`;
-
-            // Format quest details for clipboard
-            const questDetails = `
-SnappQuest: New Quest Created
-------------------------------
-${questData.likesQuantity ? `X Likes: ${questData.likesQuantity}` : ''}
-${questData.retweetsQuantity ? `X RTs: ${questData.retweetsQuantity}` : ''}
-${questData.commentsQuantity ? `X Comments: ${questData.commentsQuantity}` : ''}
-${questData.followersQuantity ? `X Followers: ${questData.followersQuantity}` : ''}
-------------------------------
-Total Engagements: ${totalEngagements}
-Total Price: ${formattedTotalPrice} (includes ${currencySymbol}${currency === 'USDC' ? fee.toFixed(2) : fee} fee)
-------------------------------
-Created on: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
-            `.trim();
-
-            window.open("https://t.me/SnappQuest/129", "_blank");
-            closeModal(createQuestModal);
-        });
-
-        // Custom Quest button handler
-        customQuestBtn.addEventListener("click", () => {
-            window.open("https://t.me/SnappQuest", "_blank");
-            closeModal(createQuestModal);
+        overlay.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navContainer.classList.remove('active');
+            overlay.classList.remove('active');
         });
 
         // Back to Top Button Functionality
-        window.addEventListener("scroll", () => {
+        window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {
-                backToTopButton.classList.add("visible");
+                backToTopButton.classList.add('visible');
             } else {
-                backToTopButton.classList.remove("visible");
+                backToTopButton.classList.remove('visible');
             }
         });
 
-        backToTopButton.addEventListener("click", () => {
+        backToTopButton.addEventListener('click', () => {
             window.scrollTo({
                 top: 0,
-                behavior: "smooth"
+                behavior: 'smooth'
             });
         });
     </script>

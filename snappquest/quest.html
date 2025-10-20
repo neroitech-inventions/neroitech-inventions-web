@@ -400,91 +400,71 @@
         footer {
             background: linear-gradient(135deg, #1F2937, #111827);
             color: #E5E7EB;
-            padding: 64px 24px;
+            padding: 60px 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);     
             text-align: left;
             position: relative;
             overflow: hidden;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(52,211,153,0.2)" fill-opacity="1" d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,213.3C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat top center;
-            background-size: cover;
-            z-index: 0;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
         }
 
         .footer-row {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            margin-bottom: 32px;
-            gap: 24px;
+            gap: 40px;
+            margin-bottom: 40px;
         }
 
         .footer-col {
-            flex: 1 1 200px;
-            margin: 0;
+            min-width: 150px;
         }
 
-        .footer-col h2 {
-            font-size: 20px;
-            font-weight: 600;
+        .footer-col h3 {
+            font-size: 18px;
+            font-weight: 700;
             margin-bottom: 16px;
-            color: #ffffff;
-        }
-
-        .footer-col p {
-            font-size: 12px; /* Adjusted for consistency */
-            line-height: 1.6;
-            opacity: 0.9;
-            margin-bottom: 16px;
-        }
-
-        .footer-link {
-            list-style: none;
-            padding: 0;
+            color: var(--color-text-primary);
         }
 
         .footer-link li {
-            margin-bottom: 11px;
+            margin-bottom: 10px;
+            list-style: none;
         }
 
         .footer-link a {
-            color: #34D399;
-            text-decoration: none;
-            font-weight: 500;
+            color: var(--color-text-secondary);
             font-size: 14px;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
+            text-decoration: none;
         }
 
         .footer-link a:hover {
-            color: #ffffff;
-            transform: translateX(4px);
+            color: var(--color-teal);
+            transform: translateX(3px);
+        }
+
+        .social-icons a {
+            font-size: 20px;
+            margin-right: 15px;
+            color: var(--color-text-secondary);
+        }
+
+        .social-icons a:hover {
+            color: var(--color-indigo);
         }
 
         .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
+            padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 24px;
-            flex-wrap: wrap;
-            gap: 16px;
+        }
+
+        .footer-bottom p {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin: 0;
         }
 
         .copyright-text p {
@@ -750,7 +730,7 @@
             <nav class="nav-links">
                 <a href="index.html"><i class="fas fa-home"></i> Home</a>
             </nav>
-            <button class="connect-btn" onclick="window.location.href='profile.html'"><i class="fas fa-sign-in-alt"></i> Member Access</button>
+            <button class="connect-btn" onclick="window.location.href='profile.html'"><i class="fas fa-eye"></i> Explore Quest</button>
         </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
@@ -894,40 +874,34 @@
 
     <!-- Footer -->
     <footer>
-        <div class="footer-container">
+        <div class="container">
             <div class="footer-row">
-                <div class="footer-col footer-info">
-                    <h2>SnappQuest</h2>
-                    <p>An Engage-to-Earn tool empowering the Solana community to own engagement and grow together.</p>
+                <div class="footer-col" style="min-width: 250px;">
+                    <h3 class="hero-gradient-text">SnappQuest</h3>
+                    <p style="color: var(--color-text-secondary); font-size: 14px;">The Engage-to-Earn tool for Solana.<br>Building active, incentivized, sustainable communities.</p>
+                    <div class="social-icons">
+                        <a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+                    </div>
                 </div>
                 <div class="footer-col">
-                    <h2>Quick Links</h2>
+                    <h3>Explore</h3>
                     <ul class="footer-link">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="index.html#create-quest">Create Quest</a></li>
-                        <li><a href="#" id="learn-more-link">How It Works</a></li>
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="quest.html">Create Quest</a></li>
+                        <li><a onclick="openModal('joinQuestModal')">Join Quest</a></li>
+                        <li><a href="card.html">Explore Quest</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h2>Other Tools</h2>
+                    <h3>Other Tools</h3>
                     <ul class="footer-link">
-                        <li><a href="https://t.me/EarnlyQuestBot" target="_blank"><i class="fas fa-microchip"></i>Earnly Bot</a></li>
-                        <li><a href="card.html" target="_blank"><i class="fas fa-gift"></i>Gift Card</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h2>Custom Quest</h2>
-                    <p>Reach out on Telegram for partnerships or customized quests. Create your own custom quest by contacting the team!</p>
-                    <ul class="footer-link">
-                        <li><a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i> X (Twitter)</a></li>
-                        <li><a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
+                        <li><a href="card.html"><i class="fas fa-gift"></i> Gift Card</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <div class="copyright-text">
-                    <p>&copy; 2025 SnappQuest. All rights reserved.</p>
-                </div>
+                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by Neroitech Inventions.</p>
             </div>
         </div>
     </footer>
@@ -991,8 +965,11 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js">
+                // Set current year in footer
+                document.getElementById('currentYear').textContent = new Date().getFullYear();   
+    </script>
+    <script>     
         // Currency variables
         let currency = 'NGN';
         let pricePerEngagement = 20;
