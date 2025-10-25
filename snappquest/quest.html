@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Empower communities to engage - Create a New Quest.">
+    <meta name="description" content="Incentive Engagement — Create a New Quest.">
     <title>SnappQuest - Create a New Quest</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -878,7 +878,7 @@
             <div class="footer-row">
                 <div class="footer-col" style="min-width: 250px;">
                     <h3 class="hero-gradient-text">SnappQuest</h3>
-                    <p style="color: var(--color-text-secondary); font-size: 14px;">The Engage-to-Earn tool for Solana.<br>Building active, incentivized, sustainable communities.</p>
+                    <p style="color: var(--color-text-secondary); font-size: 14px;">The Engage-to-Earn Business Solution.<br>Building active, incentivized, sustainable communities.</p>
                     <div class="social-icons">
                         <a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i></a>
                         <a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram-plane"></i></a>
@@ -1006,6 +1006,7 @@
 
         // Set initial trackcode
         trackcodeInput.value = generateTrackCode();
+        const tcode = document.getElementById("trackcode").value;
 
         // Calculate total price and update reward
         function calculateTotalPrice() {
@@ -1057,8 +1058,41 @@
 
         // Handle form submission
         function handleSubmit(event) {
-            event.preventDefault();
+        event.preventDefault();
 
+        const amount = document.getElementById("totalPrice").innerText.trim();
+        const isUSDC = document.getElementById("currencyToggle").checked;
+
+        const ngnPayment = `
+            <strong>Amount:</strong> ${amount}<br><br>
+            <strong>Bank Name:</strong> PalmPay<br>
+            <strong>Account Name:</strong> Nyerhowo Isuru<br>
+            <strong>Account Number:</strong> 8107854712
+        `;
+
+        const usdcPayment = `
+            <strong>Amount:</strong> ${amount} USDC<br><br>
+            <strong>USDC Wallet (Solana):</strong><br>
+            HFUZVFgtSXwKTJuwo8t4NuGWvwkns5c3MmZBM8BCgWMG
+        `;
+
+        Swal.fire({
+            title: isUSDC ? 'Pay in USDC' : 'Pay in NGN',
+            html: isUSDC ? usdcPayment : ngnPayment,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'I Have Paid ✅',
+            cancelButtonText: 'Cancel ❌',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                // ❌ JUST RESET IF CANCELLED
+                resetFormAndState();
+                calculateTotalPrice();
+                return;
+            }
+
+            // ✅ YES → RUN YOUR ORIGINAL SUBMISSION LOGIC
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
 
@@ -1083,18 +1117,19 @@
                 console.error('Error:', error);
                 Swal.fire({
                     title: 'Submitted Successfully!',
-                    html: 'Your quest has been added to the pending list. Join the <a href="https://t.me/SnappQuest/129" target="_blank">SnappQuest Telegram group</a> to finalize it with the admin.',
+                    html: `Your quest is now pending. Share your track code: ${tcode} with the admin in the <a href="https://t.me/SnappQuest/129" target="_blank">Telegram</a> group to complete approval.`,
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then(() => {
-    resetFormAndState(); // Resets form, regenerates track code, and resets reward
-});
+                    resetFormAndState();
+                });
             })
             .finally(() => {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit Quest';
             });
-        }
+        });
+    }
 
         // Hamburger menu toggle
         hamburger.addEventListener("click", () => {

@@ -193,9 +193,9 @@ http://www.templatemo.com/tm-509-hydro
     animation: spinner .9s linear infinite;
   }
 
-  @-webkit-@keyframes spinner {
+  /*@-webkit-@keyframes spinner {
     to {transform: rotate(360deg);}
-  }
+  }*/
 
   @keyframes spinner {
     to {transform: rotate(360deg);}
@@ -807,45 +807,51 @@ form textarea {
 
 
  /* clients section */
-#clients {
-  background-color: #f8f9fa; /* Light grey background */
+ #clients {
+  background-color: #f8f9fa;
   padding: 5px 0;
-  overflow: hidden; /* Hide overflow to keep the scrolling effect contained */
-  position: relative;
+  overflow: hidden;
   width: 100%;
+  position: relative;
 }
 
-/* Container for the scrolling effect */
+/* Full-width continuous scroll */
 .clients-list {
   display: flex;
   align-items: center;
   white-space: nowrap;
-  animation: scroll 30s linear infinite; /* Adjust duration as needed */
+  animation: scroll 50s linear infinite; /* slower speed */
+  width: max-content; /* allows full stretch */
 }
 
-/* Each image */
+/* Keep your ORIGINAL sizes */
 .clients-list img {
-  max-width: 120px; /* Adjust size as needed */
-  margin: 0 15px; /* Space between images */
-  opacity: 0.2; /* Faded color effect */
-  transition: opacity 0.2s ease;
-  flex-shrink: 0; /* Prevent images from shrinking */
+  max-width: 120px;
+  margin: 0 15px;
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+  flex-shrink: 0;
+}
+
+/* Smooth scroll animation */
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%); /* because you duplicated images */
+  }
 }
 
 /* Full color on hover */
 .clients-list img:hover {
   opacity: 1; /* Full color on hover */
   cursor: pointer;
+  animation-play-state: paused;
 }
 
-/* Keyframes for horizontal scrolling */
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+.clients-list:hover {
+  animation-play-state: paused;
 }
 
 /* Duplicate the images for continuous scrolling */
