@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SnappQuest - Leaderboard">
-    <title>SnappQuest - Leaderboard</title>
+    <meta name="description" content="SnappQuest - Check User Balance">
+    <title>SnappQuest - Check Balance</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" onerror="console.error('Font Awesome failed to load')">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -172,96 +172,133 @@
                 display: block;
             }
         }
-        .leaderboard-container {
-            max-width: 1200px;
+        .balance-container {
+            max-width: 800px;
             margin: 0 auto;
             padding: 40px 24px;
         }
-        .leaderboard-header {
-            text-align: center;
-            margin-bottom: 32px;
+        .balance-form {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(52, 211, 153, 0.1));
-            padding: 20px;
+            padding: 32px;
             border-radius: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 32px;
         }
-        .leaderboard-header h2 {
-            font-size: 32px;
+        .balance-form h2 {
+            font-size: 28px;
             font-weight: 700;
             color: #1F2937;
-            background: linear-gradient(90deg, #6366F1, #34D399);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 16px;
+            margin-bottom: 24px;
+            text-align: center;
         }
-        .leaderboard-header .header-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
+        .form-group {
+            margin-bottom: 24px;
         }
-        .back-btn {
-            background: linear-gradient(135deg, #6366F1, #4F46E5);
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            color: #1F2937;
+            margin-bottom: 8px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #1F2937;
+            background: #ffffff;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #6366F1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #6366F1, #34D399);
             color: #ffffff;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            display: block;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .submit-btn:active {
+            transform: scale(0.95);
+        }
+        .back-btn {
+            background: #6B7280;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            margin-top: 16px;
+            text-align: center;
             text-decoration: none;
         }
         .back-btn:hover {
+            background: #4B5563;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         .back-btn:active {
             transform: scale(0.95);
         }
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
+        .balance-result {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(52, 211, 153, 0.1));
+            padding: 32px;
             border-radius: 16px;
-            overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: none;
         }
-        .leaderboard-table th,
-        .leaderboard-table td {
-            padding: 16px;
-            text-align: left;
-            font-size: 16px;
+        .balance-result.show {
+            display: block;
         }
-        .leaderboard-table th {
-            background: linear-gradient(135deg, #6366F1, #34D399);
-            color: #ffffff;
-            font-weight: 600;
+        .balance-result h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 24px;
+            text-align: center;
         }
-        .leaderboard-table tr:nth-child(even) {
-            background: rgba(255, 255, 255, 0.8);
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
         }
-        .leaderboard-table tr:nth-child(odd) {
-            background: rgba(243, 244, 246, 0.8);
+        .stat {
+            text-align: center;
         }
-        .leaderboard-table tr:hover {
-            background: rgba(209, 213, 219, 0.5);
-            transform: translateY(-2px);
-            transition: all 0.3s ease;
-        }
-        .leaderboard-table .rank {
+        .stat-number {
+            font-size: 24px;
             font-weight: 700;
             color: #34D399;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #6B7280;
         }
         .error-message {
             color: #EF4444;
             font-size: 14px;
             text-align: center;
-            margin: 16px 0;
+            margin-top: 16px;
             display: none;
         }
         .error-message.show {
@@ -271,6 +308,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            margin-top: 20px;
             justify-content: center;
         }
         .currency-switch input[type="checkbox"] {
@@ -556,14 +594,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         @media (max-width: 768px) {
-            .leaderboard-table th,
-            .leaderboard-table td {
-                padding: 12px;
-                font-size: 14px;
-            }
-            .leaderboard-header h2 {
-                font-size: 24px;
-            }
             .modal-content {
                 width: 90%;
                 border-radius: 16px;
@@ -602,23 +632,15 @@
             .currency-switch span {
                 font-size: 12px;
             }
+            .footer-row {
+                gap: 24px;
+                flex-direction: column;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
         }
-
-        /* Skeleton loading styles */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 8px;
-        }
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        .leaderboard-table td.skeleton {
-            height: 48px; /* Match row height */
-        }
-
     </style>
     <link href="images/icon.png" rel="icon" onerror="console.error('Favicon failed to load')">
 </head>
@@ -630,7 +652,7 @@
         <div class="nav-container">
             <nav class="nav-links">
                 <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
-                <a href="balance.html"><i class="fas fa-wallet"></i> Check Your Balance</a>
+                <a href="leaderboard.html"><i class="fas fa-trophy"></i> View Leaderboard</a>
             </nav>
             <button class="disconnect-btn" id="disconnectBtn"><i class="fas fa-sign-out-alt"></i> Home</button>
         </div>
@@ -639,31 +661,40 @@
         </div>
     </header>
     <div class="overlay"></div>
-    <div class="leaderboard-container">
-        <div class="leaderboard-header">
-            <h2><i class="fas fa-medal"></i> SnappQuest Leaderboard</h2>
+    <div class="balance-container">
+        <div class="balance-form">
+            <h2><i class="fas fa-coins"></i> Check Your Balance</h2>
+            <div class="form-group">
+                <label for="username">Username (Access)</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+            </div>
+            <button class="submit-btn" id="submitBtn">View Balance</button>
             <a href="profile.html" class="back-btn">Back to Profile</a>
-            <p></p>
+            <div class="error-message" id="errorMessage"></div>
         </div>
-        <div class="currency-switch">
-            <span class="usdc-label">NGN</span>
-            <input type="checkbox" id="currencyToggle">
-            <label for="currencyToggle"></label>
-            <span class="ngn-label">USDC</span>
+        <div class="balance-result" id="balanceResult">
+            <h2><i class="fas fa-money-bill"></i> Balance Details</h2>
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-number" id="balance">0</div>
+                    <div class="stat-label">Balance</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="totalEarnings">0</div>
+                    <div class="stat-label">Total Earnings</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="totalQuestsCompleted">0</div>
+                    <div class="stat-label">Total Quests Completed</div>
+                </div>
+            </div>
+            <div class="currency-switch">
+                <span class="usdc-label">NGN</span>
+                <input type="checkbox" id="currencyToggle">
+                <label for="currencyToggle"></label>
+                <span class="ngn-label">USDC</span>
+            </div>
         </div>
-        <br>
-        <div class="error-message" id="errorMessage"></div>
-        <table class="leaderboard-table" id="leaderboardTable">
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Name</th>
-                    <th>Total Earnings</th>
-                    <th>Total Quests Completed</th>
-                </tr>
-            </thead>
-            <tbody id="leaderboardBody"></tbody>
-        </table>
     </div>
     <footer>
         <div class="container">
@@ -680,7 +711,7 @@
                     <h3>Explore</h3>
                     <ul class="footer-link">
                         <li><a href="#hero">Home</a></li>
-                        <li><a href="card.html">Explore Quest</a></li>
+                        <li><a href="quest.html">Create Quest</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -697,8 +728,8 @@
     </footer>
     <button id="back-to-top" title="Back to Top">
         <i class="fas fa-arrow-up"></i>
-    </button><!--
-    <div id="learnMoreModal" class="modal">
+    </button>
+    <!--<div id="learnMoreModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>SnappQuest Overview</h2>
@@ -727,9 +758,11 @@
             </div>
         </div>
     </div>-->
-    <script> // Set current year in footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear(); </script>
     <script>
+                // Set current year in footer
+                document.getElementById('currentYear').textContent = new Date().getFullYear();   
+        </script>
+    <script>       
         // Configuration
         const CONFIG = {
             API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
@@ -741,13 +774,18 @@
         };
 
         // State
-        let currentCurrency = 'NGN';
-        let usdcRate = 0;
-        let leaderboardData = [];
+        let currentCurrency = 'NGN'; // Default to NGN
+        let usdcRate = 0; // Initialize to 0, will be set after fetch
+        let userData = {};
 
         // DOM Elements
         const DOM = {
-            leaderboardBody: document.getElementById('leaderboardBody'),
+            submitBtn: document.getElementById('submitBtn'),
+            usernameInput: document.getElementById('username'),
+            balance: document.getElementById('balance'),
+            totalEarnings: document.getElementById('totalEarnings'),
+            totalQuestsCompleted: document.getElementById('totalQuestsCompleted'),
+            balanceResult: document.getElementById('balanceResult'),
             errorMessage: document.getElementById('errorMessage'),
             hamburger: document.querySelector('.hamburger'),
             navContainer: document.querySelector('.nav-container'),
@@ -759,44 +797,6 @@
             closeButtons: document.querySelectorAll('.close, .modal-close-btn'),
             currencyToggle: document.getElementById('currencyToggle')
         };
-
-        // Show loading skeletons
-        function showLoading() {
-            DOM.leaderboardBody.innerHTML = '';
-            const skeletonRows = 10; // Number of skeleton rows to show
-            for (let i = 0; i < skeletonRows; i++) {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="skeleton"></td>
-                    <td class="skeleton"></td>
-                    <td class="skeleton"></td>
-                    <td class="skeleton"></td>
-                `;
-                DOM.leaderboardBody.appendChild(row);
-            }
-        }
-
-        // Hide loading skeletons (populateLeaderboard will clear the body)
-        function hideLoading() {
-            // No need to do anything specific, as populateLeaderboard clears innerHTML
-        }
-
-        // Log error to backend silently
-        function logError(message) {
-            const logPayload = {
-                page: "leaderboard",
-                timestamp: new Date().toISOString(),
-                error: message,
-                url: window.location.href,
-                userAgent: navigator.userAgent
-            };
-
-            fetch('https://httpbin.org/post', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(logPayload)
-            }).catch(() => {}); // Silent, no user impact
-        }
 
         // Fetch data from Google Sheets
         async function fetchSheetData(spreadsheetId, range) {
@@ -822,25 +822,21 @@
                     return obj;
                 });
             } catch (error) {
-                logError(`Fetch error for ${range}: ${error.message}`); // Log to backend
-                console.error(`Fetch error for ${range}:`, error); // Keep console for dev
+                console.error(`Fetch error for ${range}:`, error);
+                if (error.message.includes('403')) {
+                    showError(`Permission denied accessing ${range}. Ensure the Google Sheet is shared with "Anyone with the link" (Viewer access) and the API key is valid.`);
+                } else {
+                    showError(`Failed to load ${range.split('!')[0]} data: ${error.message}. Check console for details.`);
+                }
                 return range === CONFIG.RATE_RANGE ? null : [];
             }
         }
 
         // Show error message
         function showError(message) {
-            // Hide the red banner from users
-            DOM.errorMessage.textContent = '';
-            DOM.errorMessage.classList.remove('show');
-
-            // Friendly UI
-            DOM.leaderboardBody.innerHTML = `
-                <tr><td colspan="4" style="text-align:center; padding:40px; color:#6366F1; font-weight:600;">
-                    <i class="fas fa-sync fa-spin"></i>&nbsp;
-                    We’re refreshing the leaderboard, hang tight!
-                </td></tr>
-            `;
+            DOM.errorMessage.textContent = message;
+            DOM.errorMessage.classList.add('show');
+            DOM.balanceResult.classList.remove('show');
         }
 
         // Clear error message
@@ -871,17 +867,47 @@
 
         // Format currency based on currentCurrency
         function formatCurrency(amount, currency) {
-            const num = parseFloat(amount.replace(/[^0-9.]/g, '') || 0);
+            const num = parseFloat(amount) || 0;
             if (currency === 'USDC') {
                 if (usdcRate <= 0 || isNaN(usdcRate)) {
-                    console.warn(`Invalid usdcRate: ${usdcRate}. Displaying NGN.`);
+                    console.warn(`Invalid usdcRate: ${usdcRate}. Displaying NGN instead.`);
                     return formatNumber(num, '₦');
                 }
-                const usdcAmount = num / usdcRate;
+                const usdcAmount = num / usdcRate; // NGN/USDC: divide
                 console.log(`Converting ${num} NGN to USDC: ${num} / ${usdcRate} = ${usdcAmount}`);
                 return formatNumber(usdcAmount, '$');
             }
             return formatNumber(num, '₦');
+        }
+
+        // Fetch and display user data
+        async function checkBalance() {
+            clearError();
+            const username = DOM.usernameInput.value.trim();
+            if (!username) {
+                showError('Please enter a username.');
+                return;
+            }
+
+            const data = await fetchSheetData(CONFIG.SPREADSHEET_ID, CONFIG.RANGE);
+            if (!data.length) return;
+
+            const user = data.find(row => row.Access.toLowerCase() === username.toLowerCase());
+            if (!user) {
+                showError('Username not found.');
+                return;
+            }
+
+            userData = {
+                balance: parseFloat(user.Balance) || 0,
+                totalEarnings: parseFloat(user['Total Earnings']) || 0,
+                totalQuestsCompleted: parseInt(user.TotalQuestsCompleted) || 0
+            };
+
+            DOM.balance.textContent = formatCurrency(userData.balance, currentCurrency);
+            DOM.totalEarnings.textContent = formatCurrency(userData.totalEarnings, currentCurrency);
+            DOM.totalQuestsCompleted.textContent = userData.totalQuestsCompleted.toLocaleString('en-US');
+            DOM.balanceResult.classList.add('show');
         }
 
         // Load NGN/USDC rate
@@ -890,58 +916,35 @@
                 const rateData = await fetchSheetData(CONFIG.STATS_ID, CONFIG.RATE_RANGE);
                 if (rateData === null) {
                     console.warn(`No rate found in SnappQuestData!D2. Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
-                    logError(`No rate found in SnappQuestData!D2. Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
+                    showError(`Failed to fetch rate from SnappQuestData!D2. Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
                     usdcRate = CONFIG.FALLBACK_RATE;
                 } else {
                     const cleanedRate = rateData.toString().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
                     console.log(`Cleaned rate value: "${cleanedRate}"`);
                     usdcRate = parseFloat(cleanedRate) || 0;
-                    console.log(`Fetched NGN/USDC rate: ${usdcRate}`);
+                    console.log(`Fetched NGN/USDC rate from SnappQuestData!D2: ${usdcRate}`);
                     if (usdcRate <= 0 || isNaN(usdcRate)) {
-                        console.warn(`Invalid NGN/USDC rate: ${usdcRate}. Using fallback: ${CONFIG.FALLBACK_RATE}`);
-                        logError(`Invalid rate (${rateData}). Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
+                        console.warn(`Invalid NGN/USDC rate: ${usdcRate} (raw: "${rateData}", cleaned: "${cleanedRate}"). Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
+                        showError(`Invalid rate in SnappQuestData!D2 (${rateData}). Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
                         usdcRate = CONFIG.FALLBACK_RATE;
                     }
                 }
             } catch (error) {
-                logError(`Failed to load rate: ${error.message}`);
                 console.error('Error fetching rate:', error);
+                showError(`Failed to load rate: ${error.message}. Displaying amounts in NGN.`);
                 usdcRate = CONFIG.FALLBACK_RATE;
                 currentCurrency = 'NGN';
                 DOM.currencyToggle.checked = false;
                 DOM.currencyToggle.disabled = true;
-                showError(); // Show friendly message
             }
-        }
-
-        // Populate leaderboard
-        async function populateLeaderboard() {
-            clearError();
-            const data = await fetchSheetData(CONFIG.SPREADSHEET_ID, CONFIG.RANGE);
-            if (!data.length) return;
-
-            leaderboardData = data.sort((a, b) => {
-                const earningsA = parseFloat(a['Total Earnings']?.replace(/[^0-9.]/g, '') || 0);
-                const earningsB = parseFloat(b['Total Earnings']?.replace(/[^0-9.]/g, '') || 0);
-                return earningsB - earningsA;
-            });
-
-            DOM.leaderboardBody.innerHTML = '';
-            leaderboardData.forEach((user, index) => {
-                const row = document.createElement('tr');
-                const displayName = user.Name || user.Access || 'Unknown';
-                row.innerHTML = `
-                    <td class="rank">${index + 1}</td>
-                    <td>${displayName}</td>
-                    <td>${formatCurrency(user['Total Earnings'], currentCurrency)}</td>
-                    <td>${formatNumber(user.TotalQuestsCompleted, '')}</td>
-                `;
-                DOM.leaderboardBody.appendChild(row);
-            });
         }
 
         // Event listeners
         function setupEventListeners() {
+            DOM.submitBtn.addEventListener('click', checkBalance);
+            DOM.usernameInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') checkBalance();
+            });
             DOM.disconnectBtn.addEventListener('click', () => {
                 console.log('Disconnect Wallet clicked');
                 window.location.href = 'index.html';
@@ -965,13 +968,13 @@
                 DOM.hamburger.classList.remove('active');
                 DOM.navContainer.classList.remove('active');
                 DOM.overlay.classList.remove('active');
-            });/*
-            DOM.learnMoreLink.addEventListener('click', (e) => {
+            });
+            /* DOM.learnMoreLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 console.log('Learn More link clicked');
                 DOM.learnMoreModal.style.display = 'block';
                 setTimeout(() => DOM.learnMoreModal.classList.add('active'), 10);
-            }); 
+            });
             DOM.closeButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     console.log('Modal close button clicked');
@@ -982,10 +985,10 @@
             window.addEventListener('click', (event) => {
                 if (event.target === DOM.learnMoreModal) {
                     console.log('Clicked outside modal');
-                    DOM.learnMoreModal.classList.remove('active');
-                    setTimeout(() => DOM.learnMoreModal.style.display = 'none', 400);
-                }
-            });*/
+                  DOM.learnMoreModal.classList.remove('active');
+                  setTimeout(() => DOM.learnMoreModal.style.display = 'none', 400);
+         }
+      }); */
             window.addEventListener('scroll', () => {
                 console.log('Scroll position:', window.scrollY);
                 DOM.backToTopButton.classList.toggle('visible', window.scrollY > 300);
@@ -997,7 +1000,10 @@
             DOM.currencyToggle.addEventListener('change', () => {
                 currentCurrency = DOM.currencyToggle.checked ? 'USDC' : 'NGN';
                 console.log(`Currency toggled to: ${currentCurrency}`);
-                populateLeaderboard();
+                if (userData.balance !== undefined) {
+                    DOM.balance.textContent = formatCurrency(userData.balance, currentCurrency);
+                    DOM.totalEarnings.textContent = formatCurrency(userData.totalEarnings, currentCurrency);
+                }
             });
         }
 
@@ -1005,17 +1011,14 @@
         window.addEventListener('load', () => {
             console.log('Page loaded, setting up event listeners');
             setupEventListeners();
-            showLoading(); // Show skeletons on load
-            loadRate().then(() => {
-                populateLeaderboard().then(hideLoading); // Hide after populate
-            });
+            loadRate();
             console.log('Checking footer assets...');
             if (!document.querySelector('footer')) {
                 console.error('Footer element not found in DOM');
             }
-            if (!DOM.learnMoreModal) {
+            /*if (!DOM.learnMoreModal) {
                 console.error('Learn More modal not found in DOM');
-            }
+            }*/
             if (!DOM.backToTopButton) {
                 console.error('Back to top button not found in DOM');
             }

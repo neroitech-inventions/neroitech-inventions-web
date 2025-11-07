@@ -180,45 +180,31 @@
         .leaderboard-header {
             text-align: center;
             margin-bottom: 32px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(52, 211, 153, 0.1));
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         .leaderboard-header h2 {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
             color: #1F2937;
-            background: linear-gradient(90deg, #6366F1, #34D399);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
             margin-bottom: 16px;
         }
-        .leaderboard-header .header-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-        }
         .back-btn {
-            background: linear-gradient(135deg, #6366F1, #4F46E5);
+            background: #6B7280;
             color: #ffffff;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            display: inline-block;
+            text-align: center;
             text-decoration: none;
         }
         .back-btn:hover {
+            background: #4B5563;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         .back-btn:active {
             transform: scale(0.95);
@@ -271,6 +257,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            margin-top: 20px;
             justify-content: center;
         }
         .currency-switch input[type="checkbox"] {
@@ -603,22 +590,6 @@
                 font-size: 12px;
             }
         }
-
-        /* Skeleton loading styles */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 8px;
-        }
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        .leaderboard-table td.skeleton {
-            height: 48px; /* Match row height */
-        }
-
     </style>
     <link href="images/icon.png" rel="icon" onerror="console.error('Favicon failed to load')">
 </head>
@@ -727,9 +698,9 @@
             </div>
         </div>
     </div>-->
-    <script> // Set current year in footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear(); </script>
-    <script>
+    <script>        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();   </script>
+    <script>      
         // Configuration
         const CONFIG = {
             API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
@@ -760,44 +731,6 @@
             currencyToggle: document.getElementById('currencyToggle')
         };
 
-        // Show loading skeletons
-        function showLoading() {
-            DOM.leaderboardBody.innerHTML = '';
-            const skeletonRows = 10; // Number of skeleton rows to show
-            for (let i = 0; i < skeletonRows; i++) {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="skeleton"></td>
-                    <td class="skeleton"></td>
-                    <td class="skeleton"></td>
-                    <td class="skeleton"></td>
-                `;
-                DOM.leaderboardBody.appendChild(row);
-            }
-        }
-
-        // Hide loading skeletons (populateLeaderboard will clear the body)
-        function hideLoading() {
-            // No need to do anything specific, as populateLeaderboard clears innerHTML
-        }
-
-        // Log error to backend silently
-        function logError(message) {
-            const logPayload = {
-                page: "leaderboard",
-                timestamp: new Date().toISOString(),
-                error: message,
-                url: window.location.href,
-                userAgent: navigator.userAgent
-            };
-
-            fetch('https://httpbin.org/post', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(logPayload)
-            }).catch(() => {}); // Silent, no user impact
-        }
-
         // Fetch data from Google Sheets
         async function fetchSheetData(spreadsheetId, range) {
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${CONFIG.API_KEY}`;
@@ -822,25 +755,17 @@
                     return obj;
                 });
             } catch (error) {
-                logError(`Fetch error for ${range}: ${error.message}`); // Log to backend
-                console.error(`Fetch error for ${range}:`, error); // Keep console for dev
+                console.error(`Fetch error for ${range}:`, error);
+                showError(`Failed to load ${range.split('!')[0]} data: ${error.message}.`);
                 return range === CONFIG.RATE_RANGE ? null : [];
             }
         }
 
         // Show error message
         function showError(message) {
-            // Hide the red banner from users
-            DOM.errorMessage.textContent = '';
-            DOM.errorMessage.classList.remove('show');
-
-            // Friendly UI
-            DOM.leaderboardBody.innerHTML = `
-                <tr><td colspan="4" style="text-align:center; padding:40px; color:#6366F1; font-weight:600;">
-                    <i class="fas fa-sync fa-spin"></i>&nbsp;
-                    We’re refreshing the leaderboard, hang tight!
-                </td></tr>
-            `;
+            DOM.errorMessage.textContent = message;
+            DOM.errorMessage.classList.add('show');
+            DOM.leaderboardBody.innerHTML = '';
         }
 
         // Clear error message
@@ -890,7 +815,7 @@
                 const rateData = await fetchSheetData(CONFIG.STATS_ID, CONFIG.RATE_RANGE);
                 if (rateData === null) {
                     console.warn(`No rate found in SnappQuestData!D2. Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
-                    logError(`No rate found in SnappQuestData!D2. Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
+                    showError(`Failed to fetch rate. Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
                     usdcRate = CONFIG.FALLBACK_RATE;
                 } else {
                     const cleanedRate = rateData.toString().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
@@ -899,18 +824,17 @@
                     console.log(`Fetched NGN/USDC rate: ${usdcRate}`);
                     if (usdcRate <= 0 || isNaN(usdcRate)) {
                         console.warn(`Invalid NGN/USDC rate: ${usdcRate}. Using fallback: ${CONFIG.FALLBACK_RATE}`);
-                        logError(`Invalid rate (${rateData}). Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
+                        showError(`Invalid rate (${rateData}). Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
                         usdcRate = CONFIG.FALLBACK_RATE;
                     }
                 }
             } catch (error) {
-                logError(`Failed to load rate: ${error.message}`);
                 console.error('Error fetching rate:', error);
+                showError(`Failed to load rate: ${error.message}. Displaying NGN.`);
                 usdcRate = CONFIG.FALLBACK_RATE;
                 currentCurrency = 'NGN';
                 DOM.currencyToggle.checked = false;
                 DOM.currencyToggle.disabled = true;
-                showError(); // Show friendly message
             }
         }
 
@@ -1005,10 +929,7 @@
         window.addEventListener('load', () => {
             console.log('Page loaded, setting up event listeners');
             setupEventListeners();
-            showLoading(); // Show skeletons on load
-            loadRate().then(() => {
-                populateLeaderboard().then(hideLoading); // Hide after populate
-            });
+            loadRate().then(populateLeaderboard);
             console.log('Checking footer assets...');
             if (!document.querySelector('footer')) {
                 console.error('Footer element not found in DOM');
