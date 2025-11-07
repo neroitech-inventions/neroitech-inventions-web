@@ -460,7 +460,7 @@
             background: linear-gradient(135deg, #1F2937, #111827);
             color: #E5E7EB;
             padding: 60px 60px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);            
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             text-align: left;
             position: relative;
             overflow: hidden;
@@ -472,23 +472,19 @@
             gap: 40px;
             margin-bottom: 40px;
         }
-
         .footer-col {
             min-width: 150px;
         }
-
         .footer-col h3 {
             font-size: 18px;
             font-weight: 700;
             margin-bottom: 16px;
             color: var(--color-text-primary);
         }
-
         .footer-link li {
             margin-bottom: 10px;
             list-style: none;
         }
-
         .footer-link a {
             color: var(--color-text-secondary);
             font-size: 14px;
@@ -497,34 +493,28 @@
             gap: 8px;
             text-decoration: none;
         }
-
         .footer-link a:hover {
             color: var(--color-teal);
             transform: translateX(3px);
         }
-
         .social-icons a {
             font-size: 20px;
             margin-right: 15px;
             color: var(--color-text-secondary);
         }
-
         .social-icons a:hover {
             color: var(--color-indigo);
         }
-
         .footer-bottom {
             text-align: center;
             padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-
         .footer-bottom p {
             font-size: 12px;
             color: var(--color-text-secondary);
             margin: 0;
         }
-
         .copyright-text p {
             font-size: 12px;
             margin: 0;
@@ -787,6 +777,27 @@
                 margin-right: 12px;
             }
         }
+        /* Added: Skeleton loading styles */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .stat-number.skeleton {
+            width: 60px;
+            height: 28px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .quest-card.skeleton {
+            min-height: 200px;
+            width: 100%;
+        }
     </style>
     <link href="images/icon.png" rel="icon" onerror="console.error('Favicon failed to load')">
 </head>
@@ -813,15 +824,15 @@
             <div class="profile-name" id="profileName">Loading...</div>
             <div class="profile-stats">
                 <div class="stat">
-                    <div class="stat-number" id="totalQuests">0</div>
+                    <div class="stat-number skeleton" id="totalQuests">0</div>
                     <div class="stat-label">Available Quests</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-number" id="completedQuests">0</div>
+                    <div class="stat-number skeleton" id="completedQuests">0</div>
                     <div class="stat-label">Completed Quests</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-number" id="totalEarnings">0</div>
+                    <div class="stat-number skeleton" id="totalEarnings">0</div>
                     <div class="stat-label">Total Earnings</div>
                 </div>
             </div>
@@ -941,9 +952,8 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
-
         // Set current year in footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();        
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
         // Configuration
         const CONFIG = {
             API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
@@ -960,7 +970,6 @@
             FALLBACK_RATE: 1500,
             FORM_ACTION: 'https://docs.google.com/forms/d/1ObMPuTI2S1842DmfYePB4uKxfw2cLDtSlFsllUZZ-2I/formResponse'
         };
-
         // State
         let userData = {};
         let quests = [];
@@ -968,7 +977,6 @@
         let completedCurrentPage = 1;
         let currentCurrency = 'NGN';
         let usdcRate = 0;
-
         // DOM Elements
         const DOM = {
             disconnectBtn: document.getElementById('disconnectBtn'),
@@ -992,7 +1000,48 @@
             submitQuestForm: document.getElementById('submitQuestForm'),
             currencyToggle: document.getElementById('currencyToggle')
         };
+        // Added: Show skeleton placeholders while loading
+        function showLoading() {
+            // Stats
+            DOM.availableQuests.textContent = '';
+            DOM.completedQuests.textContent = '';
+            DOM.earnings.textContent = '';
+            // Quests grids: Add dummy skeleton cards
+            const skeletonCount = CONFIG.QUESTS_PER_PAGE;
+            [DOM.questsGrid, DOM.completedGrid].forEach(grid => {
+                grid.innerHTML = '';
+                for (let i = 0; i < skeletonCount; i++) {
+                    const skeletonCard = document.createElement('div');
+                    skeletonCard.className = 'quest-card skeleton';
+                    grid.appendChild(skeletonCard);
+                }
+            });
+            // Disable pagination during loading
+            DOM.availablePagination.innerHTML = '';
+            DOM.completedPagination.innerHTML = '';
+        }
+        // Added: Hide skeletons and show real data
+        function hideLoading() {
+            DOM.availableQuests.classList.remove('skeleton');
+            DOM.completedQuests.classList.remove('skeleton');
+            DOM.earnings.classList.remove('skeleton');
+        }
+        // Log error to backend silently
+        function logError(message) {
+            const logPayload = {
+                page: "profile",
+                timestamp: new Date().toISOString(),
+                error: message,
+                url: window.location.href,
+                userAgent: navigator.userAgent
+            };
 
+            fetch('https://httpbin.org/post', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(logPayload)
+            }).catch(() => {}); // Silent, no user impact
+        }
         // Fetch data from Google Sheets
         async function fetchSheetData(spreadsheetId, range) {
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${CONFIG.API_KEY}`;
@@ -1017,60 +1066,32 @@
                     return obj;
                 });
             } catch (error) {
-                console.error(`Fetch error for ${range}:`, error);
+                logError(`Fetch error for ${range}: ${error.message}`); // Log to backend
+                console.error(`Fetch error for ${range}:`, error); // Keep console for dev
                 if (error.message.includes('403')) {
-                    Swal.fire({
-                        title: 'Permission Denied',
-                        text: `Permission denied accessing ${range.split('!')[0]}. Ensure the Google Sheet is shared with "Anyone with the link" (Viewer access) and the API key is valid.`,
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#8B5CF6',
-                        background: '#FFFFFF',
-                        customClass: {
-                            popup: 'swal2-popup-custom',
-                            title: 'swal2-title-custom',
-                            content: 'swal2-content-custom'
-                        }
-                    });
+                    // Removed Swal.fire
                 } else {
-                    Swal.fire({
-                        title: 'Load Error',
-                        text: `Failed to load ${range.split('!')[0]} data: ${error.message}. Check console for details.`,
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#8B5CF6',
-                        background: '#FFFFFF',
-                        customClass: {
-                            popup: 'swal2-popup-custom',
-                            title: 'swal2-title-custom',
-                            content: 'swal2-content-custom'
-                        }
-                    });
+                    // Removed Swal.fire
                 }
                 return range === CONFIG.RATE_RANGE ? null : [];
             }
         }
-
         // Fetch form responses to check for duplicates or count submissions
         async function fetchFormResponses() {
             return await fetchSheetData(CONFIG.RESPONSE_ID, CONFIG.RESPONSE_RANGE);
         }
-
         // Check if submission already exists
         async function isDuplicateSubmission(trackCode, telegram) {
             const responses = await fetchFormResponses();
             if (!responses.length) return false;
-
             const normalizedTrackCode = trackCode.trim().toLowerCase();
             const normalizedTelegram = telegram.trim().toLowerCase().replace(/^@/, '');
-
             return responses.some(row => {
                 const rowTrackCode = row['Track Code'].trim().toLowerCase();
                 const rowTelegram = row['Telegram'].trim().toLowerCase().replace(/^@/, '');
                 return rowTrackCode === normalizedTrackCode && rowTelegram === normalizedTelegram;
             });
         }
-
         // Get quest quantity and submission count
         async function getQuestAvailability(trackCode) {
             try {
@@ -1078,11 +1099,9 @@
                 const quantityRows = await fetchSheetData(CONFIG.QUANTITY_ID, CONFIG.QUANTITY_RANGE);
                 const quantityRow = quantityRows.find(row => row['Track Code'] && row['Track Code'].trim().toLowerCase() === trackCode.trim().toLowerCase());
                 const quantity = quantityRow ? parseInt(quantityRow.Quantity) || 0 : 0;
-
                 // Fetch submission count from RESPONSE_ID (B:B for Track Code)
                 const responses = await fetchFormResponses();
                 const submissionCount = responses.filter(row => row['Track Code'] && row['Track Code'].trim().toLowerCase() === trackCode.trim().toLowerCase()).length;
-
                 // Calculate remaining submissions
                 const remaining = quantity - submissionCount;
                 console.log(`Track Code: ${trackCode}, Quantity: ${quantity}, Submissions: ${submissionCount}, Remaining: ${remaining}`);
@@ -1092,7 +1111,6 @@
                 return { remaining: 'Error checking availability', total: 0 };
             }
         }
-
         // Format number with K, M, B abbreviations
         function formatNumber(num, prefix) {
             const absNum = Math.abs(num);
@@ -1112,7 +1130,6 @@
                 })}`;
             }
         }
-
         // Format currency based on currentCurrency
         function formatCurrency(amount, currency) {
             const num = parseFloat(amount) || 0;
@@ -1127,26 +1144,14 @@
             }
             return formatNumber(num, '₦');
         }
-
         // Load and parse data
         async function loadData() {
+            showLoading(); // Added: Show skeletons at start
             try {
                 const rateData = await fetchSheetData(CONFIG.STATS_ID, CONFIG.RATE_RANGE);
                 if (rateData === null) {
                     console.warn(`No rate found in SnappQuestData!D2. Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
-                    Swal.fire({
-                        title: 'Load Error',
-                        text: `No rate found in SnappQuestData!D2. Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`,
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#8B5CF6',
-                        background: '#FFFFFF',
-                        customClass: {
-                            popup: 'swal2-popup-custom',
-                            title: 'swal2-title-custom',
-                            content: 'swal2-content-custom'
-                        }
-                    });
+                    logError(`No rate found in SnappQuestData!D2. Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
                     usdcRate = CONFIG.FALLBACK_RATE;
                 } else {
                     const cleanedRate = rateData.toString().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
@@ -1155,23 +1160,10 @@
                     console.log(`Fetched NGN/USDC rate from SnappQuestData!D2: ${usdcRate}`);
                     if (usdcRate <= 0 || isNaN(usdcRate)) {
                         console.warn(`Invalid NGN/USDC rate: ${usdcRate} (raw: "${rateData}", cleaned: "${cleanedRate}"). Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
-                        Swal.fire({
-                            title: 'Load Error',
-                            text: `Invalid rate in SnappQuestData!D2 (${rateData}). Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`,
-                            icon: 'error',
-                            confirmButtonText: 'OK',
-                            confirmButtonColor: '#8B5CF6',
-                            background: '#FFFFFF',
-                            customClass: {
-                                popup: 'swal2-popup-custom',
-                                title: 'swal2-title-custom',
-                                content: 'swal2-content-custom'
-                            }
-                        });
+                        logError(`Invalid rate in SnappQuestData!D2 (${rateData}). Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
                         usdcRate = CONFIG.FALLBACK_RATE;
                     }
                 }
-
                 const statsRows = await fetchSheetData(CONFIG.STATS_ID, CONFIG.STATS_RANGE);
                 if (!statsRows.length) throw new Error('No stats data found');
                 userData = {
@@ -1179,10 +1171,8 @@
                     completedQuests: parseInt(statsRows[0].CompletedQuests) || 0,
                     earnings: parseInt(statsRows[0].Earnings) || 0
                 };
-
                 const questRows = await fetchSheetData(CONFIG.QUESTS_ID, CONFIG.QUESTS_RANGE);
                 if (!questRows.length) throw new Error('No quests found');
-
                 quests = await Promise.all(questRows.map(async quest => {
                     const status = parseInt(quest.Status) || 0;
                     const reward = parseFloat(quest.Reward.replace('₦', '')) || 0;
@@ -1201,57 +1191,31 @@
                         total: availability.total
                     };
                 }));
-
                 // Validate track codes for uniqueness
                 const trackCodes = quests.map(q => q.trackCode);
                 const uniqueTrackCodes = new Set(trackCodes);
                 if (uniqueTrackCodes.size !== trackCodes.length) {
                     console.warn('Duplicate track codes detected:', trackCodes);
-                    Swal.fire({
-                        title: 'Load Error',
-                        text: 'Duplicate track codes found in the Google Sheet. Please ensure each quest has a unique Track Code.',
-                        icon: 'warning',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#8B5CF6',
-                        background: '#FFFFFF',
-                        customClass: {
-                            popup: 'swal2-popup-custom',
-                            title: 'swal2-title-custom',
-                            content: 'swal2-content-custom'
-                        }
-                    });
+                    logError('Duplicate track codes found in the Google Sheet.');
                 } else {
                     console.log('All track codes are unique:', trackCodes);
                 }
-
                 // Log available quests for debugging
                 const availableQuests = quests.filter(q => q.status === 'active');
                 console.log('Available quests with track codes and remaining:', availableQuests.map(q => ({ id: q.id, trackCode: q.trackCode, remaining: q.remaining })));
-
+                hideLoading(); // Added: Hide skeletons after successful fetch
                 initializeProfile();
             } catch (error) {
+                logError(`Failed to load data: ${error.message}`); // Log to backend
                 console.error('Error loading data:', error);
-                Swal.fire({
-                    title: 'Load Error',
-                    text: `Failed to load data: ${error.message}. Displaying amounts in NGN.`,
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#8B5CF6',
-                    background: '#FFFFFF',
-                    customClass: {
-                        popup: 'swal2-popup-custom',
-                        title: 'swal2-title-custom',
-                        content: 'swal2-content-custom'
-                    }
-                });
                 currentCurrency = 'NGN';
                 DOM.currencyToggle.checked = false;
                 DOM.currencyToggle.disabled = true;
                 usdcRate = CONFIG.FALLBACK_RATE;
+                hideLoading(); // Added: Hide skeletons even on error
                 initializeProfile();
             }
         }
-
         // Initialize profile UI
         function initializeProfile() {
             DOM.profileName.textContent = 'SnappQuest';
@@ -1262,7 +1226,6 @@
             DOM.currencyToggle.checked = currentCurrency === 'USDC';
             populateQuests();
         }
-
         // Populate quests
         function populateQuests() {
             const availableQuests = quests.filter(q => q.status === 'active');
@@ -1270,23 +1233,19 @@
             populateQuestGrid(availableQuests, DOM.questsGrid, availableCurrentPage, DOM.availablePagination, true);
             populateQuestGrid(completedQuests, DOM.completedGrid, completedCurrentPage, DOM.completedPagination, false);
         }
-
         // Populate quest grid with pagination
         function populateQuestGrid(quests, grid, currentPage, paginationEl, isAvailable) {
             grid.innerHTML = quests.length ? '' : '<p>No quests available.</p>';
             const start = (currentPage - 1) * CONFIG.QUESTS_PER_PAGE;
             const paginatedQuests = quests.slice(start, start + CONFIG.QUESTS_PER_PAGE);
-
             paginatedQuests.forEach(quest => grid.appendChild(createQuestElement(quest)));
             renderPagination(quests.length, currentPage, paginationEl, isAvailable);
         }
-
         // Create quest card
         function createQuestElement(quest) {
             const card = document.createElement('div');
             card.className = 'quest-card';
             card.dataset.questId = quest.id;
-
             let remainingText = '';
             let remainingClass = '';
             if (quest.status === 'active' && quest.remaining !== null) {
@@ -1309,7 +1268,6 @@
                     remainingClass = 'low';
                 }
             }
-
             card.innerHTML = `
                 <div class="quest-title">${quest.title}</div>
                 <div class="quest-sponsor">Sponsored by: ${quest.sponsor}</div>
@@ -1323,16 +1281,13 @@
                     </div>
                 </div>
             `;
-
             return card;
         }
-
         // Render pagination
         function renderPagination(totalQuests, currentPage, paginationEl, isAvailable) {
             paginationEl.innerHTML = '';
             const totalPages = Math.ceil(totalQuests / CONFIG.QUESTS_PER_PAGE);
             if (totalPages <= 1) return;
-
             const prevBtn = document.createElement('button');
             prevBtn.className = 'pagination-btn';
             prevBtn.textContent = 'Previous';
@@ -1342,7 +1297,6 @@
                 populateQuests();
             });
             paginationEl.appendChild(prevBtn);
-
             for (let i = 1; i <= totalPages; i++) {
                 const pageBtn = document.createElement('button');
                 pageBtn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
@@ -1353,7 +1307,6 @@
                 });
                 paginationEl.appendChild(pageBtn);
             }
-
             const nextBtn = document.createElement('button');
             nextBtn.className = 'pagination-btn';
             nextBtn.textContent = 'Next';
@@ -1363,13 +1316,11 @@
                 populateQuests();
             });
             paginationEl.appendChild(nextBtn);
-
             const info = document.createElement('div');
             info.className = 'pagination-info';
             info.textContent = `Page ${currentPage} of ${totalPages}`;
             paginationEl.appendChild(info);
         }
-
         // Event listeners
         function setupEventListeners() {
             DOM.disconnectBtn.addEventListener('click', () => {
@@ -1413,7 +1364,7 @@
                     }, 400);
                 });
             });
-            
+           
             window.addEventListener('click', (event) => {
                 if (event.target === DOM.learnMoreModal) {
                     console.log('Clicked outside Learn More modal');
@@ -1425,7 +1376,7 @@
                     DOM.submitQuestModal.classList.remove('active');
                     setTimeout(() => DOM.submitQuestModal.style.display = 'none', 400);
                 }
-            });   
+            });
             window.addEventListener('scroll', () => {
                 console.log('Scroll position:', window.scrollY);
                 DOM.backToTopButton.classList.toggle('visible', window.scrollY > 300);
@@ -1457,7 +1408,6 @@
                 const submitButton = DOM.submitQuestForm.querySelector('.modal-submit-btn');
                 submitButton.disabled = true;
                 submitButton.textContent = 'Submitting...';
-
                 const formData = new FormData(DOM.submitQuestForm);
                 const data = {
                     trackCode: formData.get('entry.2147360639').trim(),
@@ -1466,7 +1416,6 @@
                     telegram: formData.get('entry.256576255').trim(),
                     twitter: formData.get('entry.1138659293').trim()
                 };
-
                 // Validate form fields
                 if (!data.trackCode || !data.proofOfQuest || !data.questLink || !data.telegram || !data.twitter) {
                     console.warn('Form validation failed: All fields are required');
@@ -1480,7 +1429,6 @@
                     submitButton.textContent = 'Submit Quest';
                     return;
                 }
-
                 const urlRegex = /^https?:\/\/[^\s$.?#].[^\s]*$/;
                 if (!urlRegex.test(data.proofOfQuest) || !urlRegex.test(data.questLink)) {
                     console.warn('Form validation failed: Invalid URL format for Proof of Quest or Quest Link');
@@ -1494,7 +1442,6 @@
                     submitButton.textContent = 'Submit Quest';
                     return;
                 }
-
                 const usernameRegex = /^@?[\w]+$/;
                 if (!usernameRegex.test(data.telegram) || !usernameRegex.test(data.twitter)) {
                     console.warn('Form validation failed: Invalid username format for Telegram or Twitter');
@@ -1508,7 +1455,6 @@
                     submitButton.textContent = 'Submit Quest';
                     return;
                 }
-
                 // Check for duplicate submission
                 try {
                     const isDuplicate = await isDuplicateSubmission(data.trackCode, data.telegram);
@@ -1536,7 +1482,6 @@
                     submitButton.textContent = 'Submit Quest';
                     return;
                 }
-
                 // Submit the form
                 try {
                     const response = await fetch(CONFIG.FORM_ACTION, {
@@ -1578,7 +1523,6 @@
                 }
             });
         }
-
         // Initialize
         window.addEventListener('load', () => {
             console.log('Page loaded, setting up event listeners');
