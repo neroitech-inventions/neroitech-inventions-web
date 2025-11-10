@@ -309,6 +309,7 @@
             font-size: 18px;
             font-weight: 700;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .cta-secondary:hover {
@@ -316,6 +317,10 @@
             transform: translateY(-3px);
             color: var(--color-teal);
             border-color: var(--color-teal);
+            cursor: pointer;
+        }
+        .join-quest-link {
+            cursor: pointer;
         }
 
         @media (max-width: 768px) {
@@ -611,9 +616,9 @@
         <div class="nav-container">
             <nav class="nav-links">
                 <a href="quest.html"><i class="fas fa-plus-circle"></i> Create Quests</a>
-                <a class="join-quest-link" onclick="openModal('joinQuestModal')"><i class="fas fa-flag-checkered"></i> Join Quest</a>
+                <a class="join-quest-link" onclick="window.location.href='profile.html'"><i class="fas fa-flag-checkered"></i> Join Quest</a>
             </nav>
-            <button class="connect-btn" onclick="window.location.href='profile.html'"><i class="fas fa-eye"></i> Explore Quest</button>
+            <button class="connect-btn" onclick="window.location.href='search.html'"><i class="fas fa-search"></i> TrackQuest</a></button>
         </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
@@ -629,7 +634,7 @@
                 <a href="quest.html" class="cta-primary">
                     <i class="fas fa-plus-circle"></i> Create Quest
                 </a>
-                <button class="cta-secondary join-quest-link" onclick="openModal('joinQuestModal')">
+                <button class="cta-secondary join-quest-link" onclick="window.location.href='profile.html'">
                     <i class="fas fa-users"></i> Join Quests
                 </button>
             </div>
@@ -658,17 +663,17 @@
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-flag-checkered"></i></div>
                     <h3>Create a Quest</h3>
-                    <p>The X algorithm may hide your posts, but your community is already here on SnappQuest. Create a quest and let them engage instantly.</strong></p>
+                    <p>Turn passive communities into active ones, create a quest and spark real engagement.</strong></p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-users"></i></div>
                     <h3>Join Quest</h3>
-                    <p>Only verified community supporters are allowed to join Quests and earn rewards. Please get verified to engage-to-earn on SnappQuest.</p>
+                    <p>Once a Quest is live, your community can join, participate, and earn rewards through SnappQuest.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-handshake"></i></div>
                     <h3>Community Ownership</h3>
-                    <p>Your engagement is valuable. We capture and reward it, using it to support creators and communities needing your interactions.</p>
+                    <p>Every interaction counts, reward your community and drive genuine engagement.</p>
                 </div>
             </div>
         </div>
@@ -690,19 +695,19 @@
                     <ul class="footer-link">
                         <li><a href="#hero">Home</a></li>
                         <li><a href="quest.html">Create Quest</a></li>
-                        <li><a onclick="openModal('joinQuestModal')">Join Quest</a></li>
-                        <li><a href="card.html">Explore Quest</a></li>
+                        <li><a class="join-quest-link" onclick="window.location.href='profile.html'">Join Quest</a></li>
+                        <li><a href="card.html">Gift Card</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h3>Other Tools</h3>
                     <ul class="footer-link">
-                        <li><a href="card.html"><i class="fas fa-gift"></i> Gift Card</a></li>
+                        <li><a href="search.html"><i class="fas fa-search"></i> TrackQuest</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by Neroitech Inventions.</p>
+                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank"> Neroitech Inventions.</a></p>
             </div>
         </div>
     </footer>

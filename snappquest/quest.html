@@ -440,20 +440,13 @@
             text-decoration: none;
         }
 
-        .footer-link a:hover {
-            color: var(--color-teal);
-            transform: translateX(3px);
-        }
-
+        .footer-link a:hover { color: #34D399; transform: translateX(3px); }
         .social-icons a {
             font-size: 20px;
             margin-right: 15px;
             color: var(--color-text-secondary);
         }
-
-        .social-icons a:hover {
-            color: var(--color-indigo);
-        }
+        .social-icons a:hover { color: #6366F1; }
 
         .footer-bottom {
             text-align: center;
@@ -466,7 +459,10 @@
             color: var(--color-text-secondary);
             margin: 0;
         }
-
+        .footer-bottom a {
+            color: #34D399;
+            text-decoration: none;
+        }
         .copyright-text p {
             font-size: 12px;
             margin: 0;
@@ -730,7 +726,7 @@
             <nav class="nav-links">
                 <a href="index.html"><i class="fas fa-home"></i> Home</a>
             </nav>
-            <button class="connect-btn" onclick="window.location.href='profile.html'"><i class="fas fa-eye"></i> Explore Quest</button>
+            <button class="connect-btn" onclick="window.location.href='search.html'"><i class="fas fa-search"></i> TrackQuest</a></button>
         </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
@@ -896,12 +892,12 @@
                 <div class="footer-col">
                     <h3>Other Tools</h3>
                     <ul class="footer-link">
-                        <li><a href="card.html"><i class="fas fa-gift"></i> Gift Card</a></li>
+                        <li><a href="search.html"><i class="fas fa-search"></i> TrackQuest</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by Neroitech Inventions.</p>
+                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank"> Neroitech Inventions.</a></p>
             </div>
         </div>
     </footer>

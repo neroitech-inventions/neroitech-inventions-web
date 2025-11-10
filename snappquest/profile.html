@@ -379,6 +379,22 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
+        .share-btn {
+            background: linear-gradient(135deg, #FBBF24, #F59E0B);
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .share-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+        }
         .pagination {
             display: flex;
             justify-content: center;
@@ -493,18 +509,13 @@
             gap: 8px;
             text-decoration: none;
         }
-        .footer-link a:hover {
-            color: var(--color-teal);
-            transform: translateX(3px);
-        }
+        .footer-link a:hover { color: #34D399; transform: translateX(3px); }
         .social-icons a {
             font-size: 20px;
             margin-right: 15px;
             color: var(--color-text-secondary);
         }
-        .social-icons a:hover {
-            color: var(--color-indigo);
-        }
+        .social-icons a:hover { color: #6366F1; }
         .footer-bottom {
             text-align: center;
             padding-top: 20px;
@@ -515,6 +526,10 @@
             color: var(--color-text-secondary);
             margin: 0;
         }
+        .footer-bottom a {
+            color: #34D399;
+            text-decoration: none;
+        }        
         .copyright-text p {
             font-size: 12px;
             margin: 0;
@@ -798,6 +813,15 @@
             min-height: 200px;
             width: 100%;
         }
+        #questModal {
+            z-index: 1000;
+        }
+        #submitQuestModal {
+            z-index: 1010;
+        }
+        #learnMoreModal {
+            z-index: 1000;
+        }
     </style>
     <link href="images/icon.png" rel="icon" onerror="console.error('Favicon failed to load')">
 </head>
@@ -875,12 +899,12 @@
                 <div class="footer-col">
                     <h3>Other Tools</h3>
                     <ul class="footer-link">
-                        <li><a href="card.html"><i class="fas fa-gift"></i> Gift Card</a></li>
+                        <li><a href="search.html"><i class="fas fa-search"></i> TrackQuest</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by Neroitech Inventions.</p>
+                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank"> Neroitech Inventions.</a></p>
             </div>
         </div>
     </footer>
@@ -913,6 +937,17 @@
                 <h3>Long-Term Vision</h3>
                 <p>SnappQuest becomes the go-to tool for engagement across Solana, helping contributors, builders, and communities thrive.</p>
                 <button class="modal-close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+    <div id="questModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="questModalTitle">Quest Details</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <!-- Cloned quest card content here -->
             </div>
         </div>
     </div>
@@ -994,8 +1029,7 @@
             overlay: document.querySelector('.overlay'),
             backToTopButton: document.getElementById('back-to-top'),
             learnMoreModal: document.getElementById('learnMoreModal'),
-            learnMoreLink: document.getElementById('learn-more-link'),
-            closeButtons: document.querySelectorAll('.close, .modal-close-btn'),
+            questModal: document.getElementById('questModal'),
             submitQuestModal: document.getElementById('submitQuestModal'),
             submitQuestForm: document.getElementById('submitQuestForm'),
             currencyToggle: document.getElementById('currencyToggle')
@@ -1225,7 +1259,19 @@
             DOM.earnings.textContent = formatCurrency(userData.earnings, currentCurrency);
             DOM.currencyToggle.checked = currentCurrency === 'USDC';
             populateQuests();
+            checkUrlParam();
         }
+        // Initialize price toggle
+        function initializeToggle() {
+            DOM.profileName.textContent = 'SnappQuest';
+            DOM.profileAvatar.textContent = 'S';
+            DOM.availableQuests.textContent = userData.availableQuests.toLocaleString('en-US');
+            DOM.completedQuests.textContent = userData.completedQuests.toLocaleString('en-US');
+            DOM.earnings.textContent = formatCurrency(userData.earnings, currentCurrency);
+            DOM.currencyToggle.checked = currentCurrency === 'USDC';
+            populateQuests();
+        }
+
         // Populate quests
         function populateQuests() {
             const availableQuests = quests.filter(q => q.status === 'active');
@@ -1246,6 +1292,7 @@
             const card = document.createElement('div');
             card.className = 'quest-card';
             card.dataset.questId = quest.id;
+            card.dataset.trackCode = quest.trackCode;
             let remainingText = '';
             let remainingClass = '';
             if (quest.status === 'active' && quest.remaining !== null) {
@@ -1277,7 +1324,8 @@
                     <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
                     <div style="display: flex; gap: 8px;">
                         ${quest.status === 'active' && quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">Go to Quest</a>` : ''}
-                        ${quest.status === 'active' && typeof quest.remaining === 'number' && quest.remaining > 0 ? `<button class="submit-btn" data-quest-id="${quest.id}" data-track-code="${quest.trackCode}">Submit Quest</button>` : ''}
+                        ${quest.status === 'active' && typeof quest.remaining === 'number' && quest.remaining > 0 ? `<button class="submit-btn">Submit Quest</button>` : ''}
+                        <button class="share-btn"><i class="fas fa-share-alt"></i> Share</button>
                     </div>
                 </div>
             `;
@@ -1321,6 +1369,91 @@
             info.textContent = `Page ${currentPage} of ${totalPages}`;
             paginationEl.appendChild(info);
         }
+        // Close modal function
+        function closeModal(modal) {
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 400);
+        }
+        // Open quest modal
+        function openQuestModal(card) {
+            const modal = DOM.questModal;
+            const titleEl = modal.querySelector('#questModalTitle');
+            titleEl.textContent = card.querySelector('.quest-title').textContent || 'Quest Details';
+            const body = modal.querySelector('.modal-body');
+            body.innerHTML = '';
+            const clone = card.cloneNode(true);
+            const shareBtn = clone.querySelector('.share-btn');
+            if (shareBtn) shareBtn.remove();
+            body.appendChild(clone);
+            modal.style.display = 'block';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+        // Open submit modal
+        function openSubmitModal(trackCode) {
+            DOM.submitQuestForm.querySelector('#trackCode').value = trackCode || '';
+            DOM.submitQuestModal.style.display = 'block';
+            setTimeout(() => DOM.submitQuestModal.classList.add('active'), 10);
+        }
+        // Copy share URL
+        function copyShareUrl(trackCode) {
+            const baseUrl = window.location.href.split('?')[0];
+            const url = `${baseUrl}?quest=${trackCode}`;
+            navigator.clipboard.writeText(url).then(() => {
+                Swal.fire({
+                    title: 'Copied!',
+                    text: 'Quest link copied to clipboard.',
+                    icon: 'success',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+        // Check URL param for quest
+        function checkUrlParam() {
+            const params = new URLSearchParams(window.location.search);
+            const questCode = params.get('quest');
+            if (questCode) {
+                const quest = quests.find(q => q.trackCode === questCode);
+                if (quest) {
+                    const virtualCard = createQuestElement(quest);
+                    openQuestModal(virtualCard);
+                } else {
+                    console.warn('Quest not found for code:', questCode);
+                }
+            }
+        }
+        // Handle quest clicks
+        function handleQuestClick(e) {
+            const target = e.target;
+            const submitBtn = target.closest('.submit-btn');
+            if (submitBtn) {
+                const card = submitBtn.closest('.quest-card');
+                if (!card) return;
+                const trackCode = card.dataset.trackCode;
+                openSubmitModal(trackCode);
+                return;
+            }
+            const shareBtn = target.closest('.share-btn');
+            if (shareBtn) {
+                const card = shareBtn.closest('.quest-card');
+                if (!card) return;
+                const trackCode = card.dataset.trackCode;
+                copyShareUrl(trackCode);
+                return;
+            }
+            const completeBtn = target.closest('.complete-btn');
+            if (completeBtn) {
+                return;
+            }
+            const card = target.closest('.quest-card');
+            if (card && !card.closest('.modal')) {
+                openQuestModal(card);
+            }
+        }
         // Event listeners
         function setupEventListeners() {
             DOM.disconnectBtn.addEventListener('click', () => {
@@ -1347,35 +1480,15 @@
                 DOM.navContainer.classList.remove('active');
                 DOM.overlay.classList.remove('active');
             });
-           /* DOM.learnMoreLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log('Learn More link clicked');
-                DOM.learnMoreModal.style.display = 'block';
-                setTimeout(() => DOM.learnMoreModal.classList.add('active'), 10);
-            }); */
-            DOM.closeButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    console.log('Modal closed');
-                    DOM.learnMoreModal.classList.remove('active');
-                    DOM.submitQuestModal.classList.remove('active');
-                    setTimeout(() => {
-                        DOM.learnMoreModal.style.display = 'none';
-                        DOM.submitQuestModal.style.display = 'none';
-                    }, 400);
+            const modals = [DOM.learnMoreModal, DOM.questModal, DOM.submitQuestModal];
+            modals.forEach(modal => {
+                if (!modal) return;
+                modal.querySelectorAll('.close, .modal-close-btn').forEach(btn => {
+                    btn.addEventListener('click', () => closeModal(modal));
                 });
-            });
-           
-            window.addEventListener('click', (event) => {
-                if (event.target === DOM.learnMoreModal) {
-                    console.log('Clicked outside Learn More modal');
-                    DOM.learnMoreModal.classList.remove('active');
-                    setTimeout(() => DOM.learnMoreModal.style.display = 'none', 400);
-                }
-                if (event.target === DOM.submitQuestModal) {
-                    console.log('Clicked outside Submit Quest modal');
-                    DOM.submitQuestModal.classList.remove('active');
-                    setTimeout(() => DOM.submitQuestModal.style.display = 'none', 400);
-                }
+                window.addEventListener('click', (event) => {
+                    if (event.target === modal) closeModal(modal);
+                });
             });
             window.addEventListener('scroll', () => {
                 console.log('Scroll position:', window.scrollY);
@@ -1388,23 +1501,11 @@
             DOM.currencyToggle.addEventListener('change', () => {
                 currentCurrency = DOM.currencyToggle.checked ? 'USDC' : 'NGN';
                 console.log(`Currency toggled to: ${currentCurrency}`);
-                initializeProfile();
+                initializeToggle()
             });
-            DOM.questsGrid.addEventListener('click', (event) => {
-                const submitBtn = event.target.closest('.submit-btn');
-                if (submitBtn) {
-                    const questId = submitBtn.dataset.questId;
-                    const trackCode = submitBtn.dataset.trackCode;
-                    console.log(`Opening Submit Quest modal for quest ID: ${questId}, Track Code: ${trackCode}`);
-                    DOM.submitQuestForm.dataset.questId = questId;
-                    DOM.submitQuestForm.querySelector('#trackCode').value = trackCode || '';
-                    DOM.submitQuestModal.style.display = 'block';
-                    setTimeout(() => DOM.submitQuestModal.classList.add('active'), 10);
-                }
-            });
+            document.addEventListener('click', handleQuestClick);
             DOM.submitQuestForm.addEventListener('submit', async (event) => {
                 event.preventDefault();
-                const questId = DOM.submitQuestForm.dataset.questId;
                 const submitButton = DOM.submitQuestForm.querySelector('.modal-submit-btn');
                 submitButton.disabled = true;
                 submitButton.textContent = 'Submitting...';
@@ -1491,7 +1592,7 @@
                     if (!response.ok) {
                         throw new Error(`Form submission failed with status ${response.status}`);
                     }
-                    console.log(`Quest ${questId} submitted successfully`);
+                    console.log(`Quest submitted successfully`);
                     DOM.submitQuestModal.classList.remove('active');
                     setTimeout(() => {
                         DOM.submitQuestModal.style.display = 'none';
