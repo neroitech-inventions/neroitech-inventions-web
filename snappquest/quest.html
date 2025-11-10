@@ -134,6 +134,9 @@
 
         /* Mobile Menu Styles */
         @media (max-width: 768px) {
+            .logo img {
+                max-width: 120px;
+            }
             .nav-container {
                 display: none;
                 flex-direction: column;
@@ -884,9 +887,7 @@
                     <h3>Explore</h3>
                     <ul class="footer-link">
                         <li><a href="#hero">Home</a></li>
-                        <li><a href="quest.html">Create Quest</a></li>
                         <li><a onclick="openModal('joinQuestModal')">Join Quest</a></li>
-                        <li><a href="card.html">Explore Quest</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -962,10 +963,10 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js">
-                // Set current year in footer
-                document.getElementById('currentYear').textContent = new Date().getFullYear();   
     </script>
-    <script>     
+    <script> 
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();    
         // Currency variables
         let currency = 'NGN';
         let pricePerEngagement = 20;
