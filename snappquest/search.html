@@ -82,26 +82,6 @@
         .nav-links a:active {
             transform: scale(0.95);
         }
-        .disconnect-btn {
-            background: #EF4444;
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-        .disconnect-btn:hover {
-            background: #DC2626;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        .disconnect-btn:active {
-            transform: scale(0.95);
-        }
         .connect-btn {
             background: linear-gradient(135deg, #6366F1, #34D399);
             color: #ffffff;
@@ -114,12 +94,10 @@
             transition: all 0.3s ease;
             white-space: nowrap;
         }
-
         .connect-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
-
         .connect-btn:active {
             transform: scale(0.95);
         }        
@@ -176,12 +154,6 @@
             .nav-links a:hover {
                 background: rgba(255, 255, 255, 0.1);
                 transform: translateX(4px);
-            }
-            .disconnect-btn {
-                margin-top: 24px;
-                width: 100%;
-                padding: 16px;
-                font-size: 18px;
             }
             .hamburger {
                 display: block;
@@ -281,7 +253,6 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
         }
         .search-bar button:hover:not(:disabled) {
             transform: scale(1.05);
@@ -352,6 +323,15 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
+
+        /* === PERFECT MOBILE TABLE FIX === */
+        .submissions-section {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 -16px;
+            padding: 0 16px;
+            border-radius: 16px;
+        }
         .submissions-table {
             width: 100%;
             border-collapse: separate;
@@ -360,19 +340,28 @@
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-width: 650px;
+        }
+        .submissions-table th,
+        .submissions-table td {
+            padding: 12px 8px;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+            font-size: 14px;
         }
         .submissions-table th {
             background: linear-gradient(135deg, #6366F1, #34D399);
             color: #ffffff;
-            padding: 16px;
-            text-align: left;
             font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            word-wrap: break-word;
+            hyphens: auto;
         }
-        .submissions-table td {
-            padding: 16px;
-            border-bottom: 1px solid #E5E7EB;
-        }
-        .submissions-table tr:last-child td { border-bottom: none; }
         .submissions-table tr:hover { background: #F9FAFB; }
         .submissions-table a { color: #6366F1; text-decoration: none; font-weight: 500; }
         .submissions-table a:hover { text-decoration: underline; }
@@ -426,24 +415,16 @@
         .footer-bottom p { font-size: 12px; color: #E5E7EB; margin: 0; }
         .footer-bottom a { color: #34D399; text-decoration: none; }
 
-        /* RESPONSIVE FIXES - ADDED FOR MOBILE PERFECTION */
+        /* RESPONSIVE FIXES */
         @media (max-width: 768px) {
             .search-container { margin: 50px auto 30px; }
             .search-bar input { font-size: 16px; }
             .search-bar button { padding: 10px 20px; font-size: 14px; }
             .quest-info { padding: 20px; }
             .insights-grid { grid-template-columns: 1fr; }
-            .submissions-section {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                margin: 0 -16px;
-                padding: 0 16px;
-            }
-            .submissions-table th,
-            .submissions-table td { padding: 12px; font-size: 14px; }
+            .submissions-section { margin: 0 -16px; padding: 0 16px; }
             .footer-row { flex-direction: column; gap: 32px; }
         }
-
         @media (max-width: 640px) {
             .search-bar {
                 flex-direction: column;
@@ -459,64 +440,31 @@
                 border-radius: 12px !important;
                 width: 100%;
             }
-            footer {
-                padding: 40px 20px;
-            }
-            .footer-col h3 {
-                font-size: 16px;
-            }
-            .footer-link a {
-                font-size: 13px;
-            }
+            footer { padding: 40px 20px; }
         }
-
         @media (max-width: 480px) {
-            .search-logo {
-                font-size: 48px !important;
+            .search-logo { font-size: 48px !important; }
+            .powered-by { font-size: 16px; }
+            .tracker-container { padding: 20px 16px; }
+            .search-container { margin: 40px auto 30px; }
+            .quest-info { padding: 16px; }
+            .insight-card { padding: 16px; }
+            .chart-container, .submissions-table { border-radius: 12px; }
+            .section-title { font-size: 24px; }
+            .submissions-table { min-width: 600px; }
+            .submissions-table th, .submissions-table td {
+                padding: 10px 6px;
+                font-size: 13px;
+                max-width: 120px;
             }
-            .powered-by {
-                font-size: 16px;
-            }
-            .tracker-container {
-                padding: 20px 16px;
-            }
-            .search-container {
-                margin: 40px auto 30px;
-            }
-            .quest-info {
-                padding: 16px;
-            }
-            .insight-card {
-                padding: 16px;
-            }
-            .chart-container,
-            .submissions-table {
-                border-radius: 12px;
-            }
-            .section-title {
-                font-size: 24px;
-            }
-            #back-to-top {
-                bottom: 20px;
-                right: 20px;
-                width: 48px;
-                height: 48px;
-            }
-            #back-to-top i {
-                font-size: 20px;
-            }
+            .submissions-section { margin: 0 -12px; padding: 0 12px; }
+            #back-to-top { bottom: 20px; right: 20px; width: 48px; height: 48px; }
+            #back-to-top i { font-size: 20px; }
         }
-
         @media (max-width: 375px) {
-            .search-logo {
-                font-size: 42px !important;
-            }
-            .search-bar input {
-                font-size: 16px;
-                padding: 14px;
-            }
+            .search-logo { font-size: 42px !important; }
+            .search-bar input { font-size: 16px; padding: 14px; }
         }
-
         #back-to-top {
             position: fixed;
             bottom: 32px;
@@ -554,9 +502,9 @@
         </div>
         <div class="nav-container">
             <nav class="nav-links">
-                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="index.html"> Home</a>
             </nav>
-            <button class="connect-btn" onclick="window.location.href='profile.html'"><i class="fas fa-eye"></i> Explore Quest</button>
+            <button class="connect-btn" onclick="window.location.href='profile.html'"> Explore Quest</button>
         </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
@@ -574,7 +522,7 @@
             </div>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Enter Track Code to search for Quest submissions">
-                <button id="searchBtn"><i class="fas fa-search"></i> Search</button>
+                <button id="searchBtn"> Search</button>
             </div>
         </div>
 
@@ -585,20 +533,24 @@
                 <canvas id="submissionsChart"></canvas>
             </div>
             <div class="submissions-section">
-                <h2 class="section-title"><i class="fas fa-list"></i> Submissions</h2>
-                <button class="export-btn" id="exportCsv"><i class="fas fa-download"></i> Export to CSV</button>
-                <table class="submissions-table">
-                    <thead>
-                        <tr>
-                            <th>Timestamp</th>
-                            <th>Proof of Quest</th>
-                            <th>Quest Link</th>
-                            <th>Telegram</th>
-                            <th>Twitter (X)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="submissionsBody"></tbody>
-                </table>
+                <h2 class="section-title"> Submissions</h2>
+                <button class="export-btn" id="exportCsv"> Export to CSV</button>
+                
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 16px; margin-bottom: 20px;">
+                    <table class="submissions-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Proof of Quest</th>
+                                <th>Quest Link</th>
+                                <th>Telegram</th>
+                                <th>Twitter (X)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="submissionsBody"></tbody>
+                    </table>
+                </div>
+                
                 <p id="noResults" class="no-results" style="display: none;">No submissions found for this Track Code.</p>
             </div>
         </div>
@@ -611,8 +563,8 @@
                     <h3 class="hero-gradient-text">SnappQuest</h3>
                     <p style="color: var(--color-text-secondary); font-size: 14px;">The Engage-to-Earn Business Solution.<br>Building active, incentivized, sustainable communities.</p>
                     <div class="social-icons">
-                        <a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+                        <a href="https://x.com/SnappQuest" target="_blank">Twitter</a>
+                        <a href="https://t.me/SnappQuest" target="_blank">Telegram</a>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -625,12 +577,12 @@
                 <div class="footer-col">
                     <h3>Other Tools</h3>
                     <ul class="footer-link">
-                        <li><a href="search.html"><i class="fas fa-search"></i> TrackQuest</a></li>
+                        <li><a href="search.html"> TrackQuest</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank"> Neroitech Inventions.</a></p>
+                <p>© <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions.</a></p>
             </div>
         </div>
     </footer>
@@ -666,7 +618,6 @@
             navContainer: document.querySelector('.nav-container'),
             overlay: document.querySelector('.overlay'),
             backToTopButton: document.getElementById('back-to-top'),
-            disconnectBtn: document.getElementById('disconnectBtn'),
             exportCsv: document.getElementById('exportCsv')
         };
 
@@ -745,11 +696,11 @@
             }
 
             DOM.insightsGrid.innerHTML = `
-                <div class="insight-card"><i class="fas fa-users insight-icon"></i><div class="insight-number">${count}</div><div class="insight-label">Total Submissions</div></div>
-                <div class="insight-card"><i class="fas fa-clipboard-list insight-icon"></i><div class="insight-number">${totalSlots}</div><div class="insight-label">Total Slots</div></div>
-                <div class="insight-card"><i class="fas fa-hourglass-half insight-icon"></i><div class="insight-number">${remaining}</div><div class="insight-label">Remaining Slots</div></div>
-                <div class="insight-card"><i class="fas fa-calendar-check insight-icon"></i><div class="insight-number">${earliest}</div><div class="insight-label">First Submission</div></div>
-                <div class="insight-card"><i class="fas fa-calendar-times insight-icon"></i><div class="insight-number">${latest}</div><div class="insight-label">Last Submission</div></div>
+                <div class="insight-card">Total Submissions<div class="insight-number">${count}</div></div>
+                <div class="insight-card">Total Slots<div class="insight-number">${totalSlots}</div></div>
+                <div class="insight-card">Remaining Slots<div class="insight-number">${remaining}</div></div>
+                <div class="insight-card">First Submission<div class="insight-number">${earliest}</div></div>
+                <div class="insight-card">Last Submission<div class="insight-number">${latest}</div></div>
             `;
 
             if (currentChart) currentChart.destroy();
@@ -779,8 +730,8 @@
                     <td>${sub.Timestamp}</td>
                     <td><a href="${sub['Proof of Quest']}" target="_blank">View Proof</a></td>
                     <td><a href="${sub['Quest Link']}" target="_blank">View Quest</a></td>
-                    <td><a href="https://t.me/${sub.Telegram.replace('@','')}" target="_blank" class="contact-link"><i class="fab fa-telegram-plane"></i> ${sub.Telegram}</a></td>
-                    <td><a href="https://x.com/${sub['Twitter (X)'].replace('@','')}" target="_blank" class="contact-link"><i class="fab fa-twitter"></i> ${sub['Twitter (X)']}</a></td>
+                    <td><a href="https://t.me/${sub.Telegram.replace('@','')}" target="_blank" class="contact-link"> ${sub.Telegram}</a></td>
+                    <td><a href="https://x.com/${sub['Twitter (X)'].replace('@','')}" target="_blank" class="contact-link"> ${sub['Twitter (X)']}</a></td>
                 `;
                 DOM.submissionsBody.appendChild(tr);
             });
@@ -824,14 +775,14 @@
 
         function disableSearchButton() {
             DOM.searchBtn.disabled = true;
-            DOM.searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+            DOM.searchBtn.innerHTML = ' Searching...';
             DOM.searchBtn.style.pointerEvents = 'none';
             DOM.searchBtn.style.opacity = '0.6';
         }
 
         function resetSearchButton() {
             DOM.searchBtn.disabled = false;
-            DOM.searchBtn.innerHTML = '<i class="fas fa-search"></i> Search';
+            DOM.searchBtn.innerHTML = ' Search';
             DOM.searchBtn.style.pointerEvents = 'auto';
             DOM.searchBtn.style.opacity = '1';
         }
@@ -850,7 +801,6 @@
                 if (DOM.results.style.display === 'block') clearResults();
             });
 
-            DOM.disconnectBtn && DOM.disconnectBtn.addEventListener('click', () => location.href = 'index.html');
             DOM.hamburger.addEventListener('click', () => {
                 DOM.hamburger.classList.toggle('active');
                 DOM.navContainer.classList.toggle('active');
