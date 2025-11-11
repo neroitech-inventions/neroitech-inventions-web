@@ -7,6 +7,7 @@
     <title>SnappQuest - User Profile</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" onerror="console.error('Font Awesome failed to load')">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="images/icon.png" rel="icon">    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
         * {
@@ -16,7 +17,7 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
         body {
-            background-color: #F9FAFB;
+            background: linear-gradient(135deg, #F9FAFB, #E5E7EB);
             color: #1F2937;
             line-height: 1.6;
             font-size: 16px;
@@ -269,13 +270,13 @@
             font-weight: 500;
             color: #1F2937;
         }
-        .currency-switch .ngn-label {
+        .currency-switch .VERSE-label {
             color: #6B7280;
         }
         .currency-switch .usdc-label {
             color: #6B7280;
         }
-        .currency-switch input:checked ~ .ngn-label {
+        .currency-switch input:checked ~ .VERSE-label {
             color: #1F2937;
         }
         .currency-switch input:not(:checked) ~ .usdc-label {
@@ -835,7 +836,7 @@
         </div>
         <div class="nav-container">
             <nav class="nav-links">
-                <a href="balance.html"><i class="fas fa-wallet"></i> Check Your Balance</a>
+                <a href="stats.html"><i class="fas fa-chart-bar"></i> View Stats</a>
                 <a href="leaderboard.html"><i class="fas fa-trophy"></i> View Leaderboard</a>
             </nav>
             <button class="disconnect-btn" id="disconnectBtn"><i class="fas fa-sign-out-alt"></i> Home</button>
@@ -864,10 +865,10 @@
                 </div>
             </div>
             <div class="currency-switch">
-                <span class="usdc-label">NGN</span>
+                <span class="usdc-label">VERSE</span>
                 <input type="checkbox" id="currencyToggle">
                 <label for="currencyToggle"></label>
-                <span class="ngn-label">USDC</span>
+                <span class="VERSE-label">USDC</span>
             </div>
         </div>
         <div class="quests-section" id="available-quests">
@@ -1005,7 +1006,7 @@
             QUANTITY_RANGE: 'Form responses 3!A1:L1000',
             RESPONSE_RANGE: 'Form responses 4!A1:F1000',
             QUESTS_PER_PAGE: 4,
-            FALLBACK_RATE: 1500,
+            FALLBACK_RATE: 1/0.000057,
             FORM_ACTION: 'https://docs.google.com/forms/d/1ObMPuTI2S1842DmfYePB4uKxfw2cLDtSlFsllUZZ-2I/formResponse'
         };
         // State
@@ -1013,7 +1014,7 @@
         let quests = [];
         let availableCurrentPage = 1;
         let completedCurrentPage = 1;
-        let currentCurrency = 'NGN';
+        let currentCurrency = 'VERSE';
         let usdcRate = 0;
         // DOM Elements
         const DOM = {
@@ -1172,14 +1173,14 @@
             const num = parseFloat(amount) || 0;
             if (currency === 'USDC') {
                 if (usdcRate <= 0 || isNaN(usdcRate)) {
-                    console.warn(`Invalid usdcRate: ${usdcRate}. Displaying NGN instead.`);
-                    return formatNumber(num, '₦');
+                    console.warn(`Invalid usdcRate: ${usdcRate}. Displaying VERSE instead.`);
+                    return formatNumber(num, 'V');
                 }
                 const usdcAmount = num / usdcRate;
-                console.log(`Converting ${num} NGN to USDC: ${num} / ${usdcRate} = ${usdcAmount}`);
+                console.log(`Converting ${num} VERSE to USDC: ${num} / ${usdcRate} = ${usdcAmount}`);
                 return formatNumber(usdcAmount, '$');
             }
-            return formatNumber(num, '₦');
+            return formatNumber(num, '𝕍');
         }
         // Load and parse data
         async function loadData() {
@@ -1188,16 +1189,16 @@
                 const rateData = await fetchSheetData(CONFIG.STATS_ID, CONFIG.RATE_RANGE);
                 if (rateData === null) {
                     console.warn(`No rate found in SnappQuestData!D2. Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
-                    logError(`No rate found in SnappQuestData!D2. Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
+                    logError(`No rate found in SnappQuestData!D2. Using fallback rate (${CONFIG.FALLBACK_RATE} VERSE/USDC).`);
                     usdcRate = CONFIG.FALLBACK_RATE;
                 } else {
                     const cleanedRate = rateData.toString().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
                     console.log(`Cleaned rate value: "${cleanedRate}"`);
                     usdcRate = parseFloat(cleanedRate) || 0;
-                    console.log(`Fetched NGN/USDC rate from SnappQuestData!D2: ${usdcRate}`);
+                    console.log(`Fetched VERSE/USDC rate from SnappQuestData!D2: ${usdcRate}`);
                     if (usdcRate <= 0 || isNaN(usdcRate)) {
-                        console.warn(`Invalid NGN/USDC rate: ${usdcRate} (raw: "${rateData}", cleaned: "${cleanedRate}"). Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
-                        logError(`Invalid rate in SnappQuestData!D2 (${rateData}). Using fallback rate (${CONFIG.FALLBACK_RATE} NGN/USDC).`);
+                        console.warn(`Invalid VERSE/USDC rate: ${usdcRate} (raw: "${rateData}", cleaned: "${cleanedRate}"). Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
+                        logError(`Invalid rate in SnappQuestData!D2 (${rateData}). Using fallback rate (${CONFIG.FALLBACK_RATE} VERSE/USDC).`);
                         usdcRate = CONFIG.FALLBACK_RATE;
                     }
                 }
@@ -1212,7 +1213,7 @@
                 if (!questRows.length) throw new Error('No quests found');
                 quests = await Promise.all(questRows.map(async quest => {
                     const status = parseInt(quest.Status) || 0;
-                    const reward = parseFloat(quest.Reward.replace('₦', '')) || 0;
+                    const reward = parseFloat(quest.Reward.replace('𝕍', '')) || 0;
                     const trackCode = quest['Track Code'] || '';
                     const availability = trackCode && status === 0 ? await getQuestAvailability(trackCode) : { remaining: null, total: 0 };
                     return {
@@ -1245,7 +1246,7 @@
             } catch (error) {
                 logError(`Failed to load data: ${error.message}`); // Log to backend
                 console.error('Error loading data:', error);
-                currentCurrency = 'NGN';
+                currentCurrency = 'VERSE';
                 DOM.currencyToggle.checked = false;
                 DOM.currencyToggle.disabled = true;
                 usdcRate = CONFIG.FALLBACK_RATE;
@@ -1502,7 +1503,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
             DOM.currencyToggle.addEventListener('change', () => {
-                currentCurrency = DOM.currencyToggle.checked ? 'USDC' : 'NGN';
+                currentCurrency = DOM.currencyToggle.checked ? 'USDC' : 'VERSE';
                 console.log(`Currency toggled to: ${currentCurrency}`);
                 initializeToggle()
             });

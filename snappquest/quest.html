@@ -1,24 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Incentive Engagement — Create a New Quest.">
     <title>SnappQuest - Create a New Quest</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" onerror="console.error('Font Awesome failed to load')">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="images/icon.png" rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
-        /* General Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-
         body {
             background: linear-gradient(135deg, #F9FAFB, #E5E7EB);
             color: #1F2937;
@@ -27,6 +24,17 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            /* SMOOTH FONT PATCH – makes text as crisp as profile page */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        /* Force GPU layer (the secret sauce) */
+        header {
+            background: linear-gradient(90deg, transparent, transparent);
+            -webkit-background-clip: text;
+            background-clip: text;
         }
 
         /* Navbar */
@@ -657,7 +665,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-
         /* Responsive Design */
         @media (max-width: 768px) {
             main {
@@ -729,7 +736,7 @@
             <nav class="nav-links">
                 <a href="index.html"><i class="fas fa-home"></i> Home</a>
             </nav>
-            <button class="connect-btn" onclick="window.location.href='search.html'"><i class="fas fa-search"></i> TrackQuest</a></button>
+            <button class="connect-btn" onclick="window.location.href='search.html'"><i class="fas fa-search"></i> TrackQuest</button>
         </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
@@ -745,7 +752,7 @@
             </div>
             <div class="quote-body">
                 <h3>Quest Details</h3>
-                <p>Fill out all fields below to create your quest. Cost is <span id="minPriceText">₦20</span> per engagement (plus a <span id="feeText">₦20</span> fee).</p>
+                <p>Fill out all fields below to create your quest. Cost is <span id="minPriceText">𝕍1000</span> per engagement (plus a <span id="feeText">𝕍1000</span> fee).</p>
                 <form id="createQuestForm" action="https://docs.google.com/forms/d/e/1FAIpQLSe9lmAvmoScW5kuVpZprjVq5rF7TLYQTU_PJYKnN1SRQXAI5Q/formResponse" method="POST" onsubmit="handleSubmit(event)">
                     <div class="form-group">
                         <label for="email">Email Address</label>
@@ -786,7 +793,7 @@
                     <h3>Quest Options</h3>
                     <p>Select an engagement type and quantity.</p>
                     <div class="currency-switch">
-                        <span>NGN</span>
+                        <span>VERSE</span>
                         <label class="switch">
                             <input type="checkbox" id="currencyToggle">
                             <span class="slider"></span>
@@ -801,66 +808,117 @@
                             <option value="X (Twitter) RTs">X (Twitter) RTs</option>
                             <option value="X (Twitter) Comments">X (Twitter) Comments</option>
                             <option value="X (Twitter) Followers">X (Twitter) Followers</option>
+                            <option value="Custom Quest">Custom Quest</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="quantity">Quantity</label>
                         <select name="entry.1138659293" id="quantity" required>
                             <option value="" disabled selected>Select a quantity</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="13">13</option>
-                            <option value="14">14</option>
-                            <option value="15">15</option>
-                            <option value="16">16</option>
-                            <option value="17">17</option>
-                            <option value="18">18</option>
-                            <option value="19">19</option>
-                            <option value="20">20</option>
-                            <option value="21">21</option>
-                            <option value="22">22</option>
-                            <option value="23">23</option>
-                            <option value="24">24</option>
-                            <option value="25">25</option>
-                            <option value="26">26</option>
-                            <option value="27">27</option>
-                            <option value="28">28</option>
-                            <option value="29">29</option>
-                            <option value="30">30</option>
-                            <option value="31">31</option>
-                            <option value="32">32</option>
-                            <option value="33">33</option>
-                            <option value="34">34</option>
-                            <option value="35">35</option>
-                            <option value="36">36</option>
-                            <option value="37">37</option>
-                            <option value="38">38</option>
-                            <option value="39">39</option>
-                            <option value="40">40</option>
-                            <option value="41">41</option>
-                            <option value="42">42</option>
-                            <option value="43">43</option>
-                            <option value="44">44</option>
-                            <option value="45">45</option>
-                            <option value="46">46</option>
-                            <option value="47">47</option>
-                            <option value="48">48</option>
-                            <option value="49">49</option>
-                            <option value="50">50</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+<option value="32">32</option>
+<option value="33">33</option>
+<option value="34">34</option>
+<option value="35">35</option>
+<option value="36">36</option>
+<option value="37">37</option>
+<option value="38">38</option>
+<option value="39">39</option>
+<option value="40">40</option>
+<option value="41">41</option>
+<option value="42">42</option>
+<option value="43">43</option>
+<option value="44">44</option>
+<option value="45">45</option>
+<option value="46">46</option>
+<option value="47">47</option>
+<option value="48">48</option>
+<option value="49">49</option>
+<option value="50">50</option>
+<option value="51">51</option>
+<option value="52">52</option>
+<option value="53">53</option>
+<option value="54">54</option>
+<option value="55">55</option>
+<option value="56">56</option>
+<option value="57">57</option>
+<option value="58">58</option>
+<option value="59">59</option>
+<option value="60">60</option>
+<option value="61">61</option>
+<option value="62">62</option>
+<option value="63">63</option>
+<option value="64">64</option>
+<option value="65">65</option>
+<option value="66">66</option>
+<option value="67">67</option>
+<option value="68">68</option>
+<option value="69">69</option>
+<option value="70">70</option>
+<option value="71">71</option>
+<option value="72">72</option>
+<option value="73">73</option>
+<option value="74">74</option>
+<option value="75">75</option>
+<option value="76">76</option>
+<option value="77">77</option>
+<option value="78">78</option>
+<option value="79">79</option>
+<option value="80">80</option>
+<option value="81">81</option>
+<option value="82">82</option>
+<option value="83">83</option>
+<option value="84">84</option>
+<option value="85">85</option>
+<option value="86">86</option>
+<option value="87">87</option>
+<option value="88">88</option>
+<option value="89">89</option>
+<option value="90">90</option>
+<option value="91">91</option>
+<option value="92">92</option>
+<option value="93">93</option>
+<option value="94">94</option>
+<option value="95">95</option>
+<option value="96">96</option>
+<option value="97">97</option>
+<option value="98">98</option>
+<option value="99">99</option>
+<option value="100">100</option>
                         </select>
                     </div>
                     <div class="price-calculation">
-                        <h3>Total Price: <span id="totalPrice">₦20</span></h3>
+                        <h3>Total Price: <span id="totalPrice">𝕍1000</span></h3>
                     </div>
                     <div class="buttons-container">
                         <button type="submit" class="quote-btn" id="submitBtn">Submit Quest</button>
@@ -887,7 +945,7 @@
                     <h3>Explore</h3>
                     <ul class="footer-link">
                         <li><a href="#hero">Home</a></li>
-                        <li><a onclick="openModal('joinQuestModal')">Join Quest</a></li>
+                        <li><a href="profile.html">Join Quest</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -898,7 +956,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank"> Neroitech Inventions.</a></p>
+                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions.</a></p>
             </div>
         </div>
     </footer>
@@ -908,8 +966,8 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
-     <!-- Modal for Learn More Section -->
-     <div id="learnMoreModal" class="modal">
+    <!-- Modal for Learn More Section -->
+    <div id="learnMoreModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>SnappQuest Overview</h2>
@@ -918,29 +976,22 @@
             <div class="modal-body">
                 <h3>Vision</h3>
                 <p>SnappQuest exists to become the Engage-to-Earn tool for Superteam Nigeria and the Solana ecosystem, rewarding effort, not just outcomes.</p>
-
                 <h3>Mission</h3>
                 <p>To unlock quick earning opportunities for the SnappQuest community, while providing sponsors with real engagement in return.</p>
-
                 <h3>The Problem</h3>
                 <p>New projects and the Solana community struggle to gain visibility, while communities show up but often don't get rewarded.</p>
-
                 <h3>The Solution: SnappQuest</h3>
                 <p>SnappQuest is a tool that incentivizes participation, turning effort into recognition, rewards, and earning opportunities.</p>
-
                 <h3>How SnappQuest Works</h3>
                 <p>Create your Quest, generate the quote, and after payment, submit the new Quest for admin approval. Admins verify the Quest, if it’s legitimate, they move it to the active Quests for community participation.</p>
-
                 <h3>Key Features</h3>
                 <ul>
                     <li>Real engagement</li>
                     <li>No bots</li>
                     <li>Community powered</li>
                 </ul>
-
                 <h3>Long-Term Vision</h3>
                 <p>SnappQuest becomes the go-to tool for engagement across Solana, helping contributors, builders, and communities thrive.</p>
-
                 <button class="modal-close-btn">Close</button>
             </div>
         </div>
@@ -962,16 +1013,16 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script> 
-            // Set current year in footer
-            document.getElementById('currentYear').textContent = new Date().getFullYear();    
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();    
+        
         // Currency variables
-        let currency = 'NGN';
-        let pricePerEngagement = 20;
-        let fee = 20;
-        let currencySymbol = '₦';
+        let currency = 'VERSE';
+        let pricePerEngagement = 1000;
+        let fee = 1000;
+        let currencySymbol = '𝕍';
 
         // Get elements
         const createQuestForm = document.getElementById("createQuestForm");
@@ -988,10 +1039,9 @@
         const backToTopButton = document.getElementById("back-to-top");
         const rewardInput = document.getElementById("reward");
         const trackcodeInput = document.getElementById("trackcode");
-        const learnMoreLink = document.getElementById("learn-more-link");
         const submitBtn = document.getElementById("submitBtn");
 
-        // Function to generate random 8-character alphanumeric track code (A-Z, 0-9)
+        // Generate random 8-character track code
         function generateTrackCode() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let result = '';
@@ -1001,22 +1051,21 @@
             return result;
         }
 
-        // Set initial trackcode
         trackcodeInput.value = generateTrackCode();
-        const tcode = document.getElementById("trackcode").value;
+        const tcode = trackcodeInput.value;
 
         // Calculate total price and update reward
         function calculateTotalPrice() {
             const quantity = parseInt(createQuestForm.quantity.value) || 0;
             let totalPrice = (quantity * pricePerEngagement) + fee;
-            let rewardAmount = quantity * pricePerEngagement; // Total minus fee
+            let rewardAmount = quantity * pricePerEngagement;
             const formattedTotal = currency === 'USDC' ? `${currencySymbol}${totalPrice.toFixed(2)}` : `${currencySymbol}${totalPrice}`;
             const formattedReward = currency === 'USDC' ? `${currencySymbol}${rewardAmount.toFixed(2)}` : `${currencySymbol}${rewardAmount}`;
             totalPriceSpan.textContent = formattedTotal;
-            rewardInput.value = formattedReward; // Update reward field
+            rewardInput.value = formattedReward;
         }
 
-        // Currency toggle listener
+        // Currency toggle
         currencyToggle.addEventListener("change", () => {
             if (currencyToggle.checked) {
                 currency = 'USDC';
@@ -1026,116 +1075,105 @@
                 minPriceText.textContent = '$0.2';
                 feeText.textContent = '$0.2';
             } else {
-                currency = 'NGN';
-                pricePerEngagement = 20;
-                fee = 20;
-                currencySymbol = '₦';
-                minPriceText.textContent = '₦20';
-                feeText.textContent = '₦20';
+                currency = 'VERSE';
+                pricePerEngagement = 1000;
+                fee = 1000;
+                currencySymbol = '𝕍';
+                minPriceText.textContent = '𝕍1000';
+                feeText.textContent = '𝕍1000';
             }
             calculateTotalPrice();
         });
 
-        // Update total price on quantity change
         createQuestForm.quantity.addEventListener("change", calculateTotalPrice);
-        
+
         function resetFormAndState() {
-    createQuestForm.reset(); // Reset all form fields
-    currencyToggle.checked = false; // Reset currency toggle to NGN
-    currency = 'NGN';
-    pricePerEngagement = 20;
-    fee = 20;
-    currencySymbol = '₦';
-    minPriceText.textContent = '₦20';
-    feeText.textContent = '₦20';
-    trackcodeInput.value = generateTrackCode(); // Generate new track code
-    totalPriceSpan.textContent = '₦20'; // Reset total price
-    rewardInput.value = '₦0'; // Reset reward
-}
+            createQuestForm.reset();
+            currencyToggle.checked = false;
+            currency = 'VERSE';
+            pricePerEngagement = 1000;
+            fee = 20;
+            currencySymbol = '𝕍';
+            minPriceText.textContent = '𝕍1000';
+            feeText.textContent = '𝕍1000';
+            trackcodeInput.value = generateTrackCode();
+            totalPriceSpan.textContent = '𝕍1000';
+            rewardInput.value = '𝕍0';
+        }
 
         // Handle form submission
         function handleSubmit(event) {
-        event.preventDefault();
+            event.preventDefault();
+            const amount = document.getElementById("totalPrice").innerText.trim();
+            const isUSDC = document.getElementById("currencyToggle").checked;
 
-        const amount = document.getElementById("totalPrice").innerText.trim();
-        const isUSDC = document.getElementById("currencyToggle").checked;
+            const VERSEPayment = `
+                <strong>Amount:</strong> ${amount}<br><br>
+                <strong>Bank Name:</strong> PalmPay<br>
+                <strong>Account Name:</strong> Nyerhowo Isuru<br>
+                <strong>Account Number:</strong> 8107854712
+            `;
 
-        const ngnPayment = `
-            <strong>Amount:</strong> ${amount}<br><br>
-            <strong>Bank Name:</strong> PalmPay<br>
-            <strong>Account Name:</strong> Nyerhowo Isuru<br>
-            <strong>Account Number:</strong> 8107854712
-        `;
+            const usdcPayment = `
+                <strong>Amount:</strong> ${amount} USDC<br><br>
+                <strong>USDC Wallet (Solana):</strong><br>
+                HFUZVFgtSXwKTJuwo8t4NuGWvwkns5c3MmZBM8BCgWMG
+            `;
 
-        const usdcPayment = `
-            <strong>Amount:</strong> ${amount} USDC<br><br>
-            <strong>USDC Wallet (Solana):</strong><br>
-            HFUZVFgtSXwKTJuwo8t4NuGWvwkns5c3MmZBM8BCgWMG
-        `;
-
-        Swal.fire({
-            title: isUSDC ? 'Pay in USDC' : 'Pay in NGN',
-            html: isUSDC ? usdcPayment : ngnPayment,
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonText: 'I Have Paid ✅',
-            cancelButtonText: 'Cancel ❌',
-            allowOutsideClick: false
-        }).then((result) => {
-            if (!result.isConfirmed) {
-                // ❌ JUST RESET IF CANCELLED
-                resetFormAndState();
-                calculateTotalPrice();
-                return;
-            }
-
-            // ✅ YES → RUN YOUR ORIGINAL SUBMISSION LOGIC
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
-
-            const form = document.getElementById('createQuestForm');
-            const formData = new FormData(form);
-
-            fetch(form.action, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (response.status >= 400) {
-                    throw new Error(`Server responded with status ${response.status}`);
-                }
-                copyConfirmationModal.style.display = "block";
-                setTimeout(() => copyConfirmationModal.classList.add("active"), 10);
-                form.reset();
-                trackcodeInput.value = generateTrackCode();
-                calculateTotalPrice();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    title: 'Submitted Successfully!',
-                    html: `Your quest is now pending. Share your track code: ${tcode} with the admin in the <a href="https://t.me/SnappQuest/129" target="_blank">Telegram</a> group to complete approval.`,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
+            Swal.fire({
+                title: isUSDC ? 'Pay in USDC' : 'Pay in VERSE',
+                html: isUSDC ? usdcPayment : VERSEPayment,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'I Have Paid',
+                cancelButtonText: 'Cancel',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (!result.isConfirmed) {
                     resetFormAndState();
-                });
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit Quest';
-            });
-        });
-    }
+                    calculateTotalPrice();
+                    return;
+                }
 
-        // Hamburger menu toggle
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting...';
+
+                const formData = new FormData(createQuestForm);
+
+                fetch(createQuestForm.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.status >= 400) throw new Error(`Server responded with status ${response.status}`);
+                    copyConfirmationModal.style.display = "block";
+                    setTimeout(() => copyConfirmationModal.classList.add("active"), 10);
+                    resetFormAndState();
+                    calculateTotalPrice();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Submitted Successfully!',
+                        html: `Your quest is now pending. Share your track code: ${tcode} with the admin in the <a href="https://t.me/SnappQuest/129" target="_blank">Telegram</a> group to complete approval.`,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => resetFormAndState());
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Quest';
+                });
+            });
+        }
+
+        // Hamburger menu
         hamburger.addEventListener("click", () => {
             hamburger.classList.toggle("active");
             navContainer.classList.toggle("active");
             overlay.classList.toggle("active");
         });
 
-        // Close hamburger menu when a link is clicked
         navContainer.querySelectorAll("a").forEach(link => {
             link.addEventListener("click", () => {
                 hamburger.classList.remove("active");
@@ -1144,21 +1182,13 @@
             });
         });
 
-        // Close hamburger menu when overlay is clicked
         overlay.addEventListener("click", () => {
             hamburger.classList.remove("active");
             navContainer.classList.remove("active");
             overlay.classList.remove("active");
         });
 
-        // Open Learn More modal
-        learnMoreLink.addEventListener("click", (e) => {
-            e.preventDefault();
-            learnMoreModal.style.display = "block";
-            setTimeout(() => learnMoreModal.classList.add("active"), 10);
-        });
-
-        // Close modals
+        // Modal handling
         closeButtons.forEach(button => {
             button.addEventListener("click", () => {
                 learnMoreModal.classList.remove("active");
@@ -1170,19 +1200,18 @@
             });
         });
 
-        // Close modals when clicking outside
         window.addEventListener("click", (event) => {
-            if (event.target === learnMoreModal) {
+            if (event.target === learnMoreModal || event.target === copyConfirmationModal) {
                 learnMoreModal.classList.remove("active");
-                setTimeout(() => learnMoreModal.style.display = "none", 400);
-            }
-            if (event.target === copyConfirmationModal) {
                 copyConfirmationModal.classList.remove("active");
-                setTimeout(() => copyConfirmationModal.style.display = "none", 400);
+                setTimeout(() => {
+                    learnMoreModal.style.display = "none";
+                    copyConfirmationModal.style.display = "none";
+                }, 400);
             }
         });
 
-        // Back to Top Button Functionality
+        // Back to Top Button
         window.addEventListener("scroll", () => {
             if (window.scrollY > 300) {
                 backToTopButton.classList.add("visible");
@@ -1192,15 +1221,11 @@
         });
 
         backToTopButton.addEventListener("click", () => {
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
+            window.scrollTo({ top: 0, behavior: "smooth" });
         });
 
-        // Initialize total price
+        // Initialize
         calculateTotalPrice();
     </script>
 </body>
-
 </html>

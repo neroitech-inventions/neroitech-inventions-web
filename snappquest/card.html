@@ -460,7 +460,7 @@
             color: #1F2937;
             transition: color 0.3s ease;
         }
-        .currency-switcher input:checked + label span.ngn {
+        .currency-switcher input:checked + label span.VERSE {
             color: #14B8A6;
         }
         .currency-switcher input:not(:checked) + label span.usd {
@@ -669,7 +669,7 @@
                     <img src="images/logo.png" alt="SnappQuest Logo" onerror="this.src='https://via.placeholder.com/80x20?text=Logo'">
                 </div>
                 <div class="card-access-code" id="access-code">XXXXX</div>
-                <div class="card-amount" id="card-amount">₦0</div>
+                <div class="card-amount" id="card-amount">𝕍0</div>
                 <div class="chip"></div>
                 <div class="mag-strip"></div>
                 <div class="hologram"></div>
@@ -677,7 +677,7 @@
         </div>
         <div class="form-group">
             <input type="text" id="amount" placeholder=" " required>
-            <label for="amount" id="amount-label">Enter Amount (NGN)</label>
+            <label for="amount" id="amount-label">Enter Amount (VERSE)</label>
             <div aria-live="polite" class="sr-only" id="amount-error"></div>
         </div>
         <div class="buttons">
@@ -687,8 +687,8 @@
         <div class="currency-switcher">
             <input type="checkbox" id="toggleCurrency" name="currency">
             <label for="toggleCurrency">
-                <span class="usdc">NGN</span>
-                <span class="ngn">USDC</span>
+                <span class="usdc">VERSE</span>
+                <span class="VERSE">USDC</span>
                 <div class="slider"></div>
             </label>
         </div>
@@ -711,7 +711,7 @@
     <script>
         // Gift Card Functionality
         let giftCards = JSON.parse(localStorage.getItem('giftCards')) || {};
-        let currentCurrency = 'NGN';
+        let currentCurrency = 'VERSE';
         const exchangeRate = 1600;
 
         // Format number with commas for display
@@ -731,7 +731,7 @@
                 const usdAmount = Math.floor(amount / exchangeRate);
                 return `$${usdAmount.toLocaleString('en-US')}`;
             }
-            return `₦${amount.toLocaleString('en-NG')}`;
+            return `𝕍${amount.toLocaleString('en-NG')}`;
         }
 
         function displaySampleCard() {
@@ -764,8 +764,8 @@
 
         function updateCurrencyUI() {
             const amountLabel = document.getElementById('amount-label');
-            if (currentCurrency === 'NGN') {
-                amountLabel.textContent = 'Enter Amount (NGN)';
+            if (currentCurrency === 'VERSE') {
+                amountLabel.textContent = 'Enter Amount (VERSE)';
             } else {
                 amountLabel.textContent = 'Enter Amount (USDC)';
             }
@@ -836,7 +836,7 @@
         });
 
         document.getElementById('toggleCurrency').addEventListener('change', () => {
-            currentCurrency = document.getElementById('toggleCurrency').checked ? 'USDC' : 'NGN';
+            currentCurrency = document.getElementById('toggleCurrency').checked ? 'USDC' : 'VERSE';
             amountInput.value = '';
             updateCurrencyUI();
         });
@@ -859,16 +859,16 @@
                 });
                 return;
             }
-            const amountNGN = currentCurrency === 'USDC' ? amountInput * exchangeRate : amountInput;
+            const amountVERSE = currentCurrency === 'USDC' ? amountInput * exchangeRate : amountInput;
             let code = generateCode();
             while (giftCards[code]) {
                 code = generateCode();
             }
-            giftCards[code] = amountNGN;
+            giftCards[code] = amountVERSE;
             localStorage.setItem('giftCards', JSON.stringify(giftCards));
 
             document.getElementById('access-code').textContent = code;
-            document.getElementById('card-amount').textContent = formatAmount(amountNGN, currentCurrency);
+            document.getElementById('card-amount').textContent = formatAmount(amountVERSE, currentCurrency);
             Swal.fire({
                 title: 'Coming Soon!',
                 text: 'This feature is on its way. Stay tuned for exciting updates!',
