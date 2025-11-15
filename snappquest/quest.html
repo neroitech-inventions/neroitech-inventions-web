@@ -279,7 +279,8 @@
         .form-group input[type="text"],
         .form-group input[type="email"],
         .form-group textarea,
-        .form-group select {
+        .form-group select,
+        .form-group input[type="number"] {
             width: 100%;
             padding: 8px;
             border: 1px solid #D1D5DB;
@@ -292,7 +293,8 @@
         .form-group input[type="text"]:focus,
         .form-group input[type="email"]:focus,
         .form-group textarea:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group input[type="number"]:focus {
             outline: none;
             border-color: #6366F1;
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
@@ -723,6 +725,105 @@
                 text-align: center;
             }
         }
+
+        /* Enhanced SweetAlert2 Styles for Modern Look */
+        .swal2-popup {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+
+        .swal2-title {
+            background: linear-gradient(135deg, #6366F1, #34D399) !important;
+            color: #ffffff !important;
+            padding: 24px !important;
+            font-size: 28px !important;
+            font-weight: 700 !important;
+            margin: 0 !important;
+            border-radius: 20px 20px 0 0 !important;
+        }
+
+        .swal2-html-container {
+            padding: 32px !important;
+            color: #1F2937 !important;
+            font-size: 16px !important;
+            line-height: 1.8 !important;
+        }
+
+        .swal2-confirm {
+            background: linear-gradient(135deg, #6366F1, #34D399) !important;
+            color: #ffffff !important;
+            border: none !important;
+            padding: 12px 24px !important;
+            border-radius: 12px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease !important;
+            margin-right: 10px !important;
+        }
+
+        .swal2-confirm:hover {
+            background: linear-gradient(135deg, #4F46E5, #22C55E) !important;
+            transform: translateY(-3px) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .swal2-cancel {
+            background: linear-gradient(135deg, #EF4444, #DC2626) !important;
+            color: #ffffff !important;
+            border: none !important;
+            padding: 12px 24px !important;
+            border-radius: 12px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .swal2-cancel:hover {
+            background: linear-gradient(135deg, #DC2626, #B91C1C) !important;
+            transform: translateY(-3px) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .swal2-actions {
+            padding: 0 32px 32px !important;
+            justify-content: center !important;
+        }
+
+        .swal2-icon.swal2-success .swal2-success-ring {
+            border: 0.25em solid rgba(52, 211, 153, 0.3) !important;
+        }
+
+        .swal2-icon.swal2-success [class^='swal2-success-line'] {
+            background-color: #34D399 !important;
+        }
+
+        /* Custom button styles inside modals */
+        .copy-btn {
+            background: linear-gradient(135deg, #6366F1, #34D399);
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(135deg, #4F46E5, #22C55E);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 
@@ -736,7 +837,7 @@
             <nav class="nav-links">
                 <a href="index.html"><i class="fas fa-home"></i> Home</a>
             </nav>
-            <button class="connect-btn" onclick="window.location.href='search.html'"><i class="fas fa-search"></i> TrackQuest</button>
+            <button class="connect-btn" onclick="window.location.href='profile.html'"><i class="fas fa-eye"></i> Explore Quest</button>
         </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
@@ -752,7 +853,7 @@
             </div>
             <div class="quote-body">
                 <h3>Quest Details</h3>
-                <p>Fill out all fields below to create your quest. Cost is <span id="minPriceText">𝕍1000</span> per engagement (plus a <span id="feeText">𝕍1000</span> fee).</p>
+                <p>Fill out all fields below to create your quest. Cost is <span id="minPriceText">𝕍1,000</span> per engagement (plus a <span id="feeText">𝕍1,000</span> fee).</p>
                 <form id="createQuestForm" action="https://docs.google.com/forms/d/e/1FAIpQLSe9lmAvmoScW5kuVpZprjVq5rF7TLYQTU_PJYKnN1SRQXAI5Q/formResponse" method="POST" onsubmit="handleSubmit(event)">
                     <div class="form-group">
                         <label for="email">Email Address</label>
@@ -800,121 +901,135 @@
                         </label>
                         <span>USDC</span>
                     </div>
+                    <div id="networkSelection" class="form-group" style="display: none;">
+                        <label for="network">Select Network</label>
+                        <select id="network">
+                            <option value="Solana" selected>Solana</option>
+                            <option value="Polygon">Polygon</option>                            
+                            <option value="Ethereum" disabled>Ethereum (Coming Soon)</option>
+                        </select>
+                    </div>
                     <div class="form-group">
-                        <label for="questOptions">Quest Options</label>
+                        <label for="questOptions">Type of Quest</label>
                         <select name="entry.256576255" id="questOptions" required>
-                            <option value="" disabled selected>Select an option</option>
-                            <option value="X (Twitter) Likes">X (Twitter) Likes</option>
-                            <option value="X (Twitter) RTs">X (Twitter) RTs</option>
-                            <option value="X (Twitter) Comments">X (Twitter) Comments</option>
-                            <option value="X (Twitter) Followers">X (Twitter) Followers</option>
+                            <option value="" disabled selected>Select type of quest</option>
+                            <option value="Community Quest">Community Quest</option>
+                            <option value="Content Quest">Content Quest</option>
+                            <option value="Design Quest">Design Quest</option>
+                            <option value="Development Quest">Development Quest</option>
+                            <option value="Engagement Quest">Engagement Quest</option>
+                            <option value="Game Quest">Game Quest</option>                           
                             <option value="Custom Quest">Custom Quest</option>
                         </select>
+                    </div>
+                    <div class="form-group" id="customAmountGroup" style="display: none;">
+                        <label for="customAmount">Amount per Engagement</label>
+                        <input type="number" id="customAmount" placeholder="Enter amount" step="any" required>
                     </div>
                     <div class="form-group">
                         <label for="quantity">Quantity</label>
                         <select name="entry.1138659293" id="quantity" required>
-                            <option value="" disabled selected>Select a quantity</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="6">6</option>
-<option value="7">7</option>
-<option value="8">8</option>
-<option value="9">9</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-<option value="13">13</option>
-<option value="14">14</option>
-<option value="15">15</option>
-<option value="16">16</option>
-<option value="17">17</option>
-<option value="18">18</option>
-<option value="19">19</option>
-<option value="20">20</option>
-<option value="21">21</option>
-<option value="22">22</option>
-<option value="23">23</option>
-<option value="24">24</option>
-<option value="25">25</option>
-<option value="26">26</option>
-<option value="27">27</option>
-<option value="28">28</option>
-<option value="29">29</option>
-<option value="30">30</option>
-<option value="31">31</option>
-<option value="32">32</option>
-<option value="33">33</option>
-<option value="34">34</option>
-<option value="35">35</option>
-<option value="36">36</option>
-<option value="37">37</option>
-<option value="38">38</option>
-<option value="39">39</option>
-<option value="40">40</option>
-<option value="41">41</option>
-<option value="42">42</option>
-<option value="43">43</option>
-<option value="44">44</option>
-<option value="45">45</option>
-<option value="46">46</option>
-<option value="47">47</option>
-<option value="48">48</option>
-<option value="49">49</option>
-<option value="50">50</option>
-<option value="51">51</option>
-<option value="52">52</option>
-<option value="53">53</option>
-<option value="54">54</option>
-<option value="55">55</option>
-<option value="56">56</option>
-<option value="57">57</option>
-<option value="58">58</option>
-<option value="59">59</option>
-<option value="60">60</option>
-<option value="61">61</option>
-<option value="62">62</option>
-<option value="63">63</option>
-<option value="64">64</option>
-<option value="65">65</option>
-<option value="66">66</option>
-<option value="67">67</option>
-<option value="68">68</option>
-<option value="69">69</option>
-<option value="70">70</option>
-<option value="71">71</option>
-<option value="72">72</option>
-<option value="73">73</option>
-<option value="74">74</option>
-<option value="75">75</option>
-<option value="76">76</option>
-<option value="77">77</option>
-<option value="78">78</option>
-<option value="79">79</option>
-<option value="80">80</option>
-<option value="81">81</option>
-<option value="82">82</option>
-<option value="83">83</option>
-<option value="84">84</option>
-<option value="85">85</option>
-<option value="86">86</option>
-<option value="87">87</option>
-<option value="88">88</option>
-<option value="89">89</option>
-<option value="90">90</option>
-<option value="91">91</option>
-<option value="92">92</option>
-<option value="93">93</option>
-<option value="94">94</option>
-<option value="95">95</option>
-<option value="96">96</option>
-<option value="97">97</option>
-<option value="98">98</option>
-<option value="99">99</option>
-<option value="100">100</option>
+                            <option value="" disabled selected>Select the number of participants</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                            <option value="32">32</option>
+                            <option value="33">33</option>
+                            <option value="34">34</option>
+                            <option value="35">35</option>
+                            <option value="36">36</option>
+                            <option value="37">37</option>
+                            <option value="38">38</option>
+                            <option value="39">39</option>
+                            <option value="40">40</option>
+                            <option value="41">41</option>
+                            <option value="42">42</option>
+                            <option value="43">43</option>
+                            <option value="44">44</option>
+                            <option value="45">45</option>
+                            <option value="46">46</option>
+                            <option value="47">47</option>
+                            <option value="48">48</option>
+                            <option value="49">49</option>
+                            <option value="50">50</option>
+                            <option value="51">51</option>
+                            <option value="52">52</option>
+                            <option value="53">53</option>
+                            <option value="54">54</option>
+                            <option value="55">55</option>
+                            <option value="56">56</option>
+                            <option value="57">57</option>
+                            <option value="58">58</option>
+                            <option value="59">59</option>
+                            <option value="60">60</option>
+                            <option value="61">61</option>
+                            <option value="62">62</option>
+                            <option value="63">63</option>
+                            <option value="64">64</option>
+                            <option value="65">65</option>
+                            <option value="66">66</option>
+                            <option value="67">67</option>
+                            <option value="68">68</option>
+                            <option value="69">69</option>
+                            <option value="70">70</option>
+                            <option value="71">71</option>
+                            <option value="72">72</option>
+                            <option value="73">73</option>
+                            <option value="74">74</option>
+                            <option value="75">75</option>
+                            <option value="76">76</option>
+                            <option value="77">77</option>
+                            <option value="78">78</option>
+                            <option value="79">79</option>
+                            <option value="80">80</option>
+                            <option value="81">81</option>
+                            <option value="82">82</option>
+                            <option value="83">83</option>
+                            <option value="84">84</option>
+                            <option value="85">85</option>
+                            <option value="86">86</option>
+                            <option value="87">87</option>
+                            <option value="88">88</option>
+                            <option value="89">89</option>
+                            <option value="90">90</option>
+                            <option value="91">91</option>
+                            <option value="92">92</option>
+                            <option value="93">93</option>
+                            <option value="94">94</option>
+                            <option value="95">95</option>
+                            <option value="96">96</option>
+                            <option value="97">97</option>
+                            <option value="98">98</option>
+                            <option value="99">99</option>
+                            <option value="100">100</option>
                         </select>
                     </div>
                     <div class="price-calculation">
@@ -922,7 +1037,6 @@
                     </div>
                     <div class="buttons-container">
                         <button type="submit" class="quote-btn" id="submitBtn">Submit Quest</button>
-                        <button type="button" class="quote-btn" id="customQuestBtn" onclick="window.open('https://t.me/SnappQuest/146', '_blank');">Custom Quest</button>
                     </div>
                 </form>
             </div>
@@ -952,6 +1066,7 @@
                     <h3>Other Tools</h3>
                     <ul class="footer-link">
                         <li><a href="search.html"><i class="fas fa-search"></i> TrackQuest</a></li>
+                        <li><a href="explorer.html"><i class="fas fa-cubes"></i> Explorer</a></li>
                     </ul>
                 </div>
             </div>
@@ -1005,7 +1120,7 @@
                 <span class="close">&times;</span>
             </div>
             <div class="modal-body" id="modalBody">
-                <p>Your quest has been added to the pending list. Join the <a href="https://t.me/SnappQuest/129" target="_blank">SnappQuest Telegram group</a> to finalize it with the admin.</p>
+                <p>Your quest has been added to the <a href="explorer.html" target="_blank">pending list</a></p>
                 <p id="modalDetails"></p>
                 <p id="modalPayment"></p>
             </div>
@@ -1023,6 +1138,7 @@
         let pricePerEngagement = 1000;
         let fee = 1000;
         let currencySymbol = '𝕍';
+        let network = 'Polygon';
 
         // Get elements
         const createQuestForm = document.getElementById("createQuestForm");
@@ -1032,6 +1148,8 @@
         const minPriceText = document.getElementById("minPriceText");
         const feeText = document.getElementById("feeText");
         const currencyToggle = document.getElementById("currencyToggle");
+        const networkSelect = document.getElementById("network");
+        const networkSelection = document.getElementById("networkSelection");
         const closeButtons = document.querySelectorAll(".close, .modal-close-btn");
         const hamburger = document.querySelector(".hamburger");
         const navContainer = document.querySelector(".nav-container");
@@ -1040,6 +1158,9 @@
         const rewardInput = document.getElementById("reward");
         const trackcodeInput = document.getElementById("trackcode");
         const submitBtn = document.getElementById("submitBtn");
+        const questOptions = document.getElementById("questOptions");
+        const customAmountGroup = document.getElementById("customAmountGroup");
+        const customAmount = document.getElementById("customAmount");
 
         // Generate random 8-character track code
         function generateTrackCode() {
@@ -1052,35 +1173,102 @@
         }
 
         trackcodeInput.value = generateTrackCode();
-        const tcode = trackcodeInput.value;
+        let tcode = trackcodeInput.value;
 
         // Calculate total price and update reward
         function calculateTotalPrice() {
             const quantity = parseInt(createQuestForm.quantity.value) || 0;
-            let totalPrice = (quantity * pricePerEngagement) + fee;
-            let rewardAmount = quantity * pricePerEngagement;
-            const formattedTotal = currency === 'USDC' ? `${currencySymbol}${totalPrice.toFixed(2)}` : `${currencySymbol}${totalPrice}`;
-            const formattedReward = currency === 'USDC' ? `${currencySymbol}${rewardAmount.toFixed(2)}` : `${currencySymbol}${rewardAmount}`;
+            let effectivePrice = pricePerEngagement;
+            if (questOptions.value === "Custom Quest") {
+                effectivePrice = parseFloat(customAmount.value) || 0;
+            }
+            let totalPrice = (quantity * effectivePrice) + fee;
+            let rewardAmount = quantity * effectivePrice;
+            let formattedTotal;
+            let formattedReward;
+            if (currency === 'USDC') {
+                formattedTotal = `${currencySymbol}${totalPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+                formattedReward = `${currencySymbol}${rewardAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            } else {
+                formattedTotal = `${currencySymbol}${totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+                formattedReward = `${currencySymbol}${rewardAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            }
             totalPriceSpan.textContent = formattedTotal;
             rewardInput.value = formattedReward;
+        }
+
+        function updateCustomInput() {
+            if (currency === 'USDC') {
+                customAmount.step = '0.01';
+                customAmount.placeholder = 'Enter amount in USDC (e.g. 0.20)';
+                customAmount.min = fee;
+            } else {
+                customAmount.step = '1';
+                customAmount.placeholder = 'Enter amount in VERSE (e.g. 1000)';
+                customAmount.min = fee;
+            }
+        }
+
+        function setDefaultPrice() {
+            if (currency === 'USDC') {
+                pricePerEngagement = 0.2;
+                minPriceText.textContent = '$0.20';
+                feeText.textContent = '$0.20';
+            } else {
+                pricePerEngagement = 1000;
+                minPriceText.textContent = '𝕍1,000';
+                feeText.textContent = '𝕍1,000';
+            }
         }
 
         // Currency toggle
         currencyToggle.addEventListener("change", () => {
             if (currencyToggle.checked) {
                 currency = 'USDC';
-                pricePerEngagement = 0.2;
                 fee = 0.2;
                 currencySymbol = '$';
-                minPriceText.textContent = '$0.2';
-                feeText.textContent = '$0.2';
+                networkSelection.style.display = 'block';
+                network = networkSelect.value;
             } else {
                 currency = 'VERSE';
-                pricePerEngagement = 1000;
                 fee = 1000;
                 currencySymbol = '𝕍';
-                minPriceText.textContent = '𝕍1000';
-                feeText.textContent = '𝕍1000';
+                networkSelection.style.display = 'none';
+                network = 'Polygon';
+            }
+            if (questOptions.value !== "Custom Quest") {
+                setDefaultPrice();
+            }
+            if (questOptions.value === "Custom Quest") {
+                updateCustomInput();
+            }
+            calculateTotalPrice();
+        });
+
+        networkSelect.addEventListener("change", () => {
+            network = networkSelect.value;
+            calculateTotalPrice();
+        });
+
+        questOptions.addEventListener("change", () => {
+            if (questOptions.value === "Custom Quest") {
+                customAmountGroup.style.display = 'block';
+                updateCustomInput();
+            } else {
+                customAmountGroup.style.display = 'none';
+                setDefaultPrice();
+            }
+            calculateTotalPrice();
+        });
+
+        customAmount.addEventListener("input", calculateTotalPrice);
+
+        customAmount.addEventListener("blur", () => {
+            if (customAmount.value !== '') {
+                let val = parseFloat(customAmount.value) || 0;
+                if (val < fee) {
+                    customAmount.value = currency === 'USDC' ? fee.toFixed(2) : fee;
+                }
             }
             calculateTotalPrice();
         });
@@ -1092,44 +1280,105 @@
             currencyToggle.checked = false;
             currency = 'VERSE';
             pricePerEngagement = 1000;
-            fee = 20;
+            fee = 1000;
             currencySymbol = '𝕍';
-            minPriceText.textContent = '𝕍1000';
-            feeText.textContent = '𝕍1000';
-            trackcodeInput.value = generateTrackCode();
-            totalPriceSpan.textContent = '𝕍1000';
+            minPriceText.textContent = '𝕍1,000';
+            feeText.textContent = '𝕍1,000';
+            networkSelection.style.display = 'none';
+            network = 'Polygon';
+            customAmountGroup.style.display = 'none';
+            tcode = generateTrackCode();
+            trackcodeInput.value = tcode;
+            totalPriceSpan.textContent = '𝕍1,000';
             rewardInput.value = '𝕍0';
+        }
+
+        // Copy functions
+        function copyWalletAddress(button) {
+            const addr = button.previousElementSibling.textContent;
+            navigator.clipboard.writeText(addr).then(() => {
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied';
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                }, 2000);
+            });
+        }
+
+        function copyTrackCode(button, code) {
+            navigator.clipboard.writeText(code).then(() => {
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied';
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                }, 2000);
+            });
         }
 
         // Handle form submission
         function handleSubmit(event) {
             event.preventDefault();
-            const amount = document.getElementById("totalPrice").innerText.trim();
-            const isUSDC = document.getElementById("currencyToggle").checked;
 
-            const VERSEPayment = `
-                <strong>Amount:</strong> ${amount}<br><br>
-                <strong>Bank Name:</strong> PalmPay<br>
-                <strong>Account Name:</strong> Nyerhowo Isuru<br>
-                <strong>Account Number:</strong> 8107854712
-            `;
+            if (questOptions.value === "Custom Quest" && (customAmount.value === '' || parseFloat(customAmount.value) < fee)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Custom Amount',
+                    text: `Please enter an amount of at least ${currencySymbol}${currency === 'USDC' ? fee.toFixed(2) : fee} ${currency}.`,
+                });
+                return;
+            }
 
-            const usdcPayment = `
-                <strong>Amount:</strong> ${amount} USDC<br><br>
-                <strong>USDC Wallet (Solana):</strong><br>
-                HFUZVFgtSXwKTJuwo8t4NuGWvwkns5c3MmZBM8BCgWMG
-            `;
+            const quantity = parseInt(createQuestForm.quantity.value) || 0;
+            const totalPriceNum = (quantity * pricePerEngagement) + fee;
+            const formattedAmount = currency === 'USDC' ? totalPriceNum.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : totalPriceNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            let swalTitle;
+            let paymentHtml;
+            let showCancelButton = true;
+            let confirmButtonText = 'I Have Paid';
+            let cancelButtonText = 'Cancel';
+            if (network === 'Ethereum') {
+                swalTitle = 'Coming Soon';
+                paymentHtml = '<p>Ethereum for USDC is coming soon.</p>';
+                showCancelButton = false;
+                confirmButtonText = 'OK';
+            } else {
+                let walletAddr;
+                let qrData;
+                if (network === 'Polygon') {
+                    walletAddr = '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
+                    qrData = walletAddr;
+                } else {
+                    walletAddr = 'HFUZVFgtSXwKTJuwo8t4NuGWvwkns5c3MmZBM8BCgWMG';
+                    qrData = `solana:${walletAddr}`;
+                }
+                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrData)}&size=200x200`;
+                paymentHtml = `
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <strong>Amount:</strong> ${currencySymbol}${formattedAmount} ${currency}<br><br>
+                        <img src="${qrUrl}" alt="Wallet QR Code" style="border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);"><br><br>
+                        <strong>Wallet Address (${network}):</strong><br>
+                        <span style="word-break: break-all; display: inline-block; max-width: 100%;">${walletAddr}</span>
+                        <button class="copy-btn" onclick="copyWalletAddress(this)"><i class="fas fa-copy"></i> Copy Address</button>
+                    </div>
+                    <p style="text-align: center; font-size: 14px; color: #4B5563;">Scan the QR code or copy the address to send payment from your app.</p>
+                `;
+                swalTitle = `Pay with ${currency} on ${network}`;
+                if (network === 'Solana') {
+                    swalTitle = 'Pay with USDC on Solana';
+                }
+            }
 
             Swal.fire({
-                title: isUSDC ? 'Pay in USDC' : 'Pay in VERSE',
-                html: isUSDC ? usdcPayment : VERSEPayment,
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonText: 'I Have Paid',
-                cancelButtonText: 'Cancel',
-                allowOutsideClick: false
+                title: swalTitle,
+                html: paymentHtml,
+                showCancelButton: showCancelButton,
+                confirmButtonText: confirmButtonText,
+                cancelButtonText: cancelButtonText,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
             }).then((result) => {
-                if (!result.isConfirmed) {
+                if (network === 'Ethereum' || !result.isConfirmed) {
                     resetFormAndState();
                     calculateTotalPrice();
                     return;
@@ -1146,6 +1395,12 @@
                 })
                 .then(response => {
                     if (response.status >= 400) throw new Error(`Server responded with status ${response.status}`);
+                    document.getElementById('modalDetails').innerHTML = `
+                        Your quest is now <a href="explorer.html" target="_blank">pending</a>. Copy your track code: <strong style="cursor: pointer;" onclick="copyTrackCode(this.nextElementSibling, '${tcode}')">${tcode}</strong>
+                        <button class="copy-btn" onclick="copyTrackCode(this, '${tcode}')"><i class="fas fa-copy"></i> Copy Track Code</button><br><br>
+                        Share it with the Verse Recruitment (Socials) Boss in the <a href="https://t.me/GetVerse/395236" target="_blank">Telegram group</a> to complete approval.
+                    `;
+                    document.getElementById('modalPayment').innerHTML = '';
                     copyConfirmationModal.style.display = "block";
                     setTimeout(() => copyConfirmationModal.classList.add("active"), 10);
                     resetFormAndState();
@@ -1155,8 +1410,7 @@
                     console.error('Error:', error);
                     Swal.fire({
                         title: 'Submitted Successfully!',
-                        html: `Your quest is now pending. Share your track code: ${tcode} with the admin in the <a href="https://t.me/SnappQuest/129" target="_blank">Telegram</a> group to complete approval.`,
-                        icon: 'success',
+                        html: `Your quest is now <a href="explorer.html" target="_blank">pending</a>. Write down your track code: <strong style="cursor: pointer;" onclick="copyTrackCode(this.nextElementSibling, '${tcode}')">${tcode}</strong> <button class="copy-btn" onclick="copyTrackCode(this, '${tcode}')"><i class="fas fa-copy"></i> Copy Track Code</button><br><br>Share it with the Verse Recruitment (Socials) Boss in the <a href="https://t.me/GetVerse/395236" target="_blank">Telegram</a> group to complete approval.`,
                         confirmButtonText: 'OK'
                     }).then(() => resetFormAndState());
                 })

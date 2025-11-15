@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="TrackQuest - Official Quest Tracker Search Engine by SnappQuest">
-    <title>TrackQuest - Search Quest Submissions by Track Code (Free Public Tracker)</title>
+    <title>TrackQuest - Public Quest Tracker</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -518,7 +518,7 @@
                 <span>T</span><span>r</span><span>a</span><span>c</span><span>k</span><span>Q</span><span>u</span><span>e</span><span>s</span><span>t</span>
             </div>
             <div class="powered-by">
-                Free Public Tracker</a>
+                Public Quest Tracker</a>
             </div>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Enter Track Code to search for Quest submissions">
@@ -544,7 +544,7 @@
                                 <th>Proof of Quest</th>
                                 <th>Quest Link</th>
                                 <th>Telegram</th>
-                                <th>Twitter (X)</th>
+                                <th>Polygon Address</th>
                             </tr>
                         </thead>
                         <tbody id="submissionsBody"></tbody>
@@ -578,6 +578,7 @@
                     <h3>Other Tools</h3>
                     <ul class="footer-link">
                         <li><a href="search.html"><i class="fas fa-search"></i> TrackQuest</a></li>
+                        <li><a href="explorer.html"><i class="fas fa-cubes"></i> Explorer</a></li>
                     </ul>
                 </div>
             </div>
@@ -643,6 +644,11 @@
                 return;
             }
 
+            if (trackCode === 'PENDING') {
+                window.location.href = 'explorer.html';
+                return;
+            }
+
             disableSearchButton();
             showLoading();
 
@@ -682,7 +688,7 @@
                 <p>Sponsored by: ${quest.Sponsor || 'Unknown'}</p>
                 <p>Reward: ₦${parseFloat(quest.Reward) || 0}</p>
                 <p>Description: ${quest.Description || 'No description'}</p>
-            ` : '<p>No quest found for this Track Code.</p>';
+            ` : '<p>No quests found for this Track Code. Please enter `Pending` to view pending quests in the SnappQuest Explorer.</p>';
 
             const count = submissions.length;
             const remaining = Math.max(0, totalSlots - count);
@@ -731,7 +737,7 @@
                     <td><a href="${sub['Proof of Quest']}" target="_blank">View Proof</a></td>
                     <td><a href="${sub['Quest Link']}" target="_blank">View Quest</a></td>
                     <td><a href="https://t.me/${sub.Telegram.replace('@','')}" target="_blank" class="contact-link"> ${sub.Telegram}</a></td>
-                    <td><a href="https://x.com/${sub['Twitter (X)'].replace('@','')}" target="_blank" class="contact-link"> ${sub['Twitter (X)']}</a></td>
+                    <td><a href="https://polygonscan.com/address/${sub['Polygon Address']}" target="_blank" class="contact-link"> ${sub['Polygon Address']}</a></td>
                 `;
                 DOM.submissionsBody.appendChild(tr);
             });
@@ -741,13 +747,13 @@
 
         function exportToCsv(data) {
             if (!data.length) { Swal.fire('Info', 'No data to export.', 'info'); return; }
-            const headers = ['Timestamp', 'Proof of Quest', 'Quest Link', 'Telegram', 'Twitter (X)'];
+            const headers = ['Timestamp', 'Proof of Quest', 'Quest Link', 'Telegram', 'Polygon Address'];
             const rows = data.map(r => [
                 r.Timestamp,
                 r['Proof of Quest'],
                 r['Quest Link'],
                 r.Telegram,
-                r['Twitter (X)']
+                r['Polygon Address']
             ]);
             const csv = [headers, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\n');
             const blob = new Blob([csv], { type: 'text/csv' });

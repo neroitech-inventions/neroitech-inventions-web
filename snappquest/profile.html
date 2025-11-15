@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="SnappQuest - User Profile for Engage-to-Earn Tasks">
-    <title>SnappQuest - User Profile</title>
+    <title>SnappQuest - Explore Quest</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" onerror="console.error('Font Awesome failed to load')">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="images/icon.png" rel="icon">    
+    <link href="images/icon.png" rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
         * {
@@ -403,39 +403,62 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             margin-top: 24px;
+            flex-wrap: wrap;
         }
         .pagination-btn {
             background: #ffffff;
             border: 1px solid #D1D5DB;
             padding: 8px 16px;
-            border-radius: 6px;
+            border-radius: 50px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 500;
             color: #1F2937;
             cursor: pointer;
             transition: all 0.3s ease;
+            min-width: 40px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         .pagination-btn:hover {
-            background: #F3F4F6;
+            background: linear-gradient(135deg, #F3F4F6, #E5E7EB);
             border-color: #6366F1;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.2);
         }
         .pagination-btn.active {
             background: linear-gradient(135deg, #6366F1, #34D399);
             color: #ffffff;
             border: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
         .pagination-btn:disabled {
             background: #E5E7EB;
             color: #9CA3AF;
             cursor: not-allowed;
             border: 1px solid #D1D5DB;
+            transform: none;
+            box-shadow: none;
+        }
+        .pagination-btn.icon {
+            padding: 8px 12px;
+            font-size: 16px;
+        }
+        .pagination-ellipsis {
+            font-size: 14px;
+            color: #6B7280;
+            padding: 8px;
+            user-select: none;
         }
         .pagination-info {
             font-size: 14px;
             color: #6B7280;
+            padding: 8px 16px;
+            background: #F3F4F6;
+            border-radius: 50px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         #back-to-top {
             position: fixed;
@@ -533,7 +556,7 @@
         .footer-bottom a {
             color: #34D399;
             text-decoration: none;
-        }        
+        }
         .copyright-text p {
             font-size: 12px;
             margin: 0;
@@ -904,6 +927,7 @@
                     <h3>Other Tools</h3>
                     <ul class="footer-link">
                         <li><a href="search.html"><i class="fas fa-search"></i> TrackQuest</a></li>
+                        <li><a href="explorer.html"><i class="fas fa-cubes"></i> Explorer</a></li>
                     </ul>
                 </div>
             </div>
@@ -968,20 +992,20 @@
                         <input type="text" id="trackCode" name="entry.2147360639" readonly required>
                     </div>
                     <div class="form-group">
-                        <label for="proofOfQuest">Proof of Quest</label>
-                        <textarea id="proofOfQuest" name="entry.1526178092" required></textarea>
+                        <label for="proofOfQuest">Proof of Quest (Upload via imgbb.com)</label>
+                        <textarea id="proofOfQuest" name="entry.1526178092" placeholder="Paste Proof Link Here (Upload via imgbb.com)" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="questLink">Quest Link</label>
-                        <input type="text" id="questLink" name="entry.884208731" required>
+                        <input type="text" id="questLink" name="entry.884208731" placeholder="Enter Quest Link Here" required>
                     </div>
                     <div class="form-group">
                         <label for="telegram">Telegram Username (e.g., @username)</label>
-                        <input type="text" id="telegram" name="entry.256576255" required>
+                        <input type="text" id="telegram" name="entry.256576255" placeholder="Enter your Telegram username" required>
                     </div>
                     <div class="form-group">
-                        <label for="twitter">Twitter Username (e.g., @username)</label>
-                        <input type="text" id="twitter" name="entry.1138659293" required>
+                        <label for="twitter">Polygon Wallet Address</label>
+                        <input type="text" id="twitter" name="entry.1138659293" placeholder="Enter your Polygon Wallet Address" required>
                     </div>
                     <button type="submit" class="modal-submit-btn">Submit Quest</button>
                     <button type="button" class="modal-close-btn">Close</button>
@@ -1073,7 +1097,6 @@
                 url: window.location.href,
                 userAgent: navigator.userAgent
             };
-
             fetch('https://httpbin.org/post', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1275,7 +1298,6 @@
             DOM.currencyToggle.checked = currentCurrency === 'USDC';
             populateQuests();
         }
-
         // Populate quests
         function populateQuests() {
             const availableQuests = quests.filter(q => q.status === 'active');
@@ -1327,8 +1349,8 @@
                 <div class="quest-reward">
                     <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
                     <div style="display: flex; gap: 8px;">
-                        ${quest.status === 'active' && quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">Go to Quest</a>` : ''}
-                        ${quest.status === 'active' && typeof quest.remaining === 'number' && quest.remaining > 0 ? `<button class="submit-btn">Submit Quest</button>` : ''}
+                        ${quest.status === 'active' && quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">View Quest</a>` : ''}
+                        ${quest.status === 'active' && typeof quest.remaining === 'number' && quest.remaining > 0 ? `<button class="submit-btn">Submit</button>` : ''}
                         <button class="share-btn"><i class="fas fa-share-alt"></i> Share</button>
                     </div>
                 </div>
@@ -1340,28 +1362,45 @@
             paginationEl.innerHTML = '';
             const totalPages = Math.ceil(totalQuests / CONFIG.QUESTS_PER_PAGE);
             if (totalPages <= 1) return;
+            const maxVisiblePages = 5; // Modern: limit visible numbers
             const prevBtn = document.createElement('button');
-            prevBtn.className = 'pagination-btn';
-            prevBtn.textContent = 'Previous';
+            prevBtn.className = 'pagination-btn icon';
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
             prevBtn.disabled = currentPage === 1;
             prevBtn.addEventListener('click', () => {
                 if (isAvailable) availableCurrentPage--; else completedCurrentPage--;
                 populateQuests();
             });
             paginationEl.appendChild(prevBtn);
-            for (let i = 1; i <= totalPages; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
-                pageBtn.textContent = i;
-                pageBtn.addEventListener('click', () => {
-                    if (isAvailable) availableCurrentPage = i; else completedCurrentPage = i;
-                    populateQuests();
-                });
-                paginationEl.appendChild(pageBtn);
+            // Add first page if needed
+            if (currentPage > Math.floor(maxVisiblePages / 2) + 1) {
+                addPageButton(1, currentPage, paginationEl, isAvailable);
+                if (currentPage > Math.floor(maxVisiblePages / 2) + 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'pagination-ellipsis';
+                    ellipsis.textContent = '...';
+                    paginationEl.appendChild(ellipsis);
+                }
+            }
+            // Add visible pages around current
+            const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            for (let i = startPage; i <= endPage; i++) {
+                addPageButton(i, currentPage, paginationEl, isAvailable);
+            }
+            // Add last page if needed
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'pagination-ellipsis';
+                    ellipsis.textContent = '...';
+                    paginationEl.appendChild(ellipsis);
+                }
+                addPageButton(totalPages, currentPage, paginationEl, isAvailable);
             }
             const nextBtn = document.createElement('button');
-            nextBtn.className = 'pagination-btn';
-            nextBtn.textContent = 'Next';
+            nextBtn.className = 'pagination-btn icon';
+            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
             nextBtn.disabled = currentPage === totalPages;
             nextBtn.addEventListener('click', () => {
                 if (isAvailable) availableCurrentPage++; else completedCurrentPage++;
@@ -1372,6 +1411,17 @@
             info.className = 'pagination-info';
             info.textContent = `Page ${currentPage} of ${totalPages}`;
             paginationEl.appendChild(info);
+        }
+
+        function addPageButton(page, currentPage, paginationEl, isAvailable) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = `pagination-btn ${page === currentPage ? 'active' : ''}`;
+            pageBtn.textContent = page;
+            pageBtn.addEventListener('click', () => {
+                if (isAvailable) availableCurrentPage = page; else completedCurrentPage = page;
+                populateQuests();
+            });
+            paginationEl.appendChild(pageBtn);
         }
         // Close modal function
         function closeModal(modal) {
