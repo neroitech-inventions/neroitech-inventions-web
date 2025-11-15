@@ -506,6 +506,22 @@
         .leaderboard-table td.skeleton {
             height: 48px;
         }
+
+        /* New responsive table styles */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+        @media (max-width: 768px) {
+            .leaderboard-table {
+                min-width: 600px; /* Ensure it has a minimum width to trigger scroll if needed */
+            }
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 12px; /* Slightly reduce padding on mobile for better fit */
+                font-size: 14px; /* Slightly reduce font size on mobile */
+            }
+        }
     </style>
     <link href="images/icon.png" rel="icon" onerror="console.error('Favicon failed to load')">
 </head>
@@ -550,17 +566,19 @@
         </div>
         <br>
         <div class="error-message" id="errorMessage"></div>
-        <table class="leaderboard-table" id="leaderboardTable">
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Sponsor</th>
-                    <th>Total Quests</th>
-                    <th>Total Amount</th>
-                </tr>
-            </thead>
-            <tbody id="leaderboardBody"></tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="leaderboard-table" id="leaderboardTable">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Sponsor</th>
+                        <th>Total Quests</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody"></tbody>
+            </table>
+        </div>
     </div>
 
     <footer>
