@@ -266,6 +266,9 @@
             transform: translateZ(5px);
         }
         .card-amount {
+            display: flex;
+            align-items: center;
+            gap: 4px;
             font-size: 22px;
             font-weight: 700;
             position: absolute;
@@ -273,6 +276,19 @@
             right: 20px;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
             transform: translateZ(5px);
+        }
+        .currency-logo {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+            display: none;
+        }
+        .currency-logo.verse-logo.show {
+            display: inline-block;
+        }
+        .currency-logo.usdc-logo.show {
+            display: inline-block;
         }
         .chip {
             width: 60px;
@@ -578,6 +594,10 @@
                 bottom: 15px;
                 right: 15px;
             }
+            .currency-logo {
+                width: 18px;
+                height: 18px;
+            }
             .chip {
                 width: 40px;
                 height: 30px;
@@ -636,9 +656,7 @@
             }
         }
     </style>
-
-    <!-- Favicon -->
-    <link href="images/icon.png" rel="icon">    
+    <link href="images/icon.png" rel="icon">
 </head>
 <body>
     <header>
@@ -669,7 +687,11 @@
                     <img src="images/logo.png" alt="SnappQuest Logo" onerror="this.src='https://via.placeholder.com/80x20?text=Logo'">
                 </div>
                 <div class="card-access-code" id="access-code">XXXXX</div>
-                <div class="card-amount" id="card-amount">𝕍0</div>
+                <div class="card-amount" id="card-amount">
+                    <img src="images/verse_logo.svg" alt="𝕍" class="currency-logo verse-logo">
+                    <img src="images/usdc_logo.svg" alt="$" class="currency-logo usdc-logo">
+                    <span class="amount-text">0</span>
+                </div>
                 <div class="chip"></div>
                 <div class="mag-strip"></div>
                 <div class="hologram"></div>
@@ -702,7 +724,7 @@
     </main>
     <footer>
         <div class="footer-container">
-            <p>&copy; SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank"> Neroitech Inventions.</a></p>
+            <p>&copy; SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions.</a></p>
         </div>
     </footer>
     <button id="back-to-top" title="Back to Top">
@@ -727,17 +749,32 @@
         }
 
         function formatAmount(amount, currency) {
+            const amountText = document.querySelector('.amount-text');
+            const verseLogo = document.querySelector('.verse-logo');
+            const usdcLogo = document.querySelector('.usdc-logo');
             if (currency === 'USDC') {
                 const usdAmount = Math.floor(amount / exchangeRate);
+                amountText.textContent = usdAmount.toLocaleString('en-US');
+                verseLogo.classList.remove('show');
+                usdcLogo.classList.add('show');
                 return `$${usdAmount.toLocaleString('en-US')}`;
+            } else {
+                amountText.textContent = amount.toLocaleString('en-NG');
+                verseLogo.classList.add('show');
+                usdcLogo.classList.remove('show');
+                return `VERSE ${amount.toLocaleString('en-NG')}`;
             }
-            return `𝕍${amount.toLocaleString('en-NG')}`;
         }
 
         function displaySampleCard() {
             const sampleCode = generateCode();
             document.getElementById('access-code').textContent = sampleCode;
-            document.getElementById('card-amount').textContent = formatAmount(1000, currentCurrency);
+            const amountText = document.querySelector('.amount-text');
+            const verseLogo = document.querySelector('.verse-logo');
+            const usdcLogo = document.querySelector('.usdc-logo');
+            amountText.textContent = '1,000';
+            verseLogo.classList.toggle('show', currentCurrency === 'VERSE');
+            usdcLogo.classList.toggle('show', currentCurrency === 'USDC');
         }
 
         function generateCode() {
@@ -752,13 +789,18 @@
         function updateCardAmount() {
             const amountInput = document.getElementById('amount').value;
             const amount = parseFormattedNumber(amountInput);
+            const amountText = document.querySelector('.amount-text');
+            const verseLogo = document.querySelector('.verse-logo');
+            const usdcLogo = document.querySelector('.usdc-logo');
             if (!isNaN(amount) && amount > 0) {
-                document.getElementById('card-amount').textContent = formatAmount(
-                    currentCurrency === 'USDC' ? amount * exchangeRate : amount,
-                    currentCurrency
-                );
+                const displayAmount = currentCurrency === 'USDC' ? amount * exchangeRate : amount;
+                amountText.textContent = (currentCurrency === 'USDC' ? Math.floor(displayAmount / exchangeRate) : displayAmount).toLocaleString(currentCurrency === 'USDC' ? 'en-US' : 'en-NG');
+                verseLogo.classList.toggle('show', currentCurrency === 'VERSE');
+                usdcLogo.classList.toggle('show', currentCurrency === 'USDC');
             } else {
-                document.getElementById('card-amount').textContent = formatAmount(0, currentCurrency);
+                amountText.textContent = '0';
+                verseLogo.classList.toggle('show', currentCurrency === 'VERSE');
+                usdcLogo.classList.toggle('show', currentCurrency === 'USDC');
             }
         }
 
@@ -868,7 +910,12 @@
             localStorage.setItem('giftCards', JSON.stringify(giftCards));
 
             document.getElementById('access-code').textContent = code;
-            document.getElementById('card-amount').textContent = formatAmount(amountVERSE, currentCurrency);
+            const amountText = document.querySelector('.amount-text');
+            const verseLogo = document.querySelector('.verse-logo');
+            const usdcLogo = document.querySelector('.usdc-logo');
+            amountText.textContent = (currentCurrency === 'USDC' ? Math.floor(amountVERSE / exchangeRate) : amountVERSE).toLocaleString(currentCurrency === 'USDC' ? 'en-US' : 'en-NG');
+            verseLogo.classList.toggle('show', currentCurrency === 'VERSE');
+            usdcLogo.classList.toggle('show', currentCurrency === 'USDC');
             Swal.fire({
                 title: 'Coming Soon!',
                 text: 'This feature is on its way. Stay tuned for exciting updates!',
@@ -880,14 +927,14 @@
                     popup: 'swal2-popup-custom',
                     title: 'swal2-title-custom',
                     content: 'swal2-content-custom'
-                    },
-                    showClass: {
-                        popup: 'animate__animated animate__bounceIn'
-                    },
-                    hideClass: {
-                        popup: 'animate__animated animate__bounceOut'
-                    }
-                });
+                },
+                showClass: {
+                    popup: 'animate__animated animate__bounceIn'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__bounceOut'
+                }
+            });
         });
 
         document.getElementById('verifyBtn').addEventListener('click', () => {
@@ -935,7 +982,12 @@
                     }
                 });
                 document.getElementById('access-code').textContent = code;
-                document.getElementById('card-amount').textContent = formatAmount(amount, currentCurrency);
+                const amountText = document.querySelector('.amount-text');
+                const verseLogo = document.querySelector('.verse-logo');
+                const usdcLogo = document.querySelector('.usdc-logo');
+                amountText.textContent = (currentCurrency === 'USDC' ? Math.floor(amount / exchangeRate) : amount).toLocaleString(currentCurrency === 'USDC' ? 'en-US' : 'en-NG');
+                verseLogo.classList.toggle('show', currentCurrency === 'VERSE');
+                usdcLogo.classList.toggle('show', currentCurrency === 'USDC');
             } else {
                 Swal.fire({
                     title: 'Coming Soon!',

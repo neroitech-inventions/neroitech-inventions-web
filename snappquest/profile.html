@@ -350,6 +350,9 @@
         }
         .reward-amount {
             color: #34D399;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         .complete-btn {
             background: linear-gradient(135deg, #10B981, #34D399);
@@ -849,6 +852,15 @@
         #learnMoreModal {
             z-index: 1000;
         }
+        .currency-logo {
+            height: 1em;
+            width: auto;
+        }
+        .stat-number, .reward-amount {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
     </style>
     <link href="images/icon.png" rel="icon" onerror="console.error('Favicon failed to load')">
 </head>
@@ -1029,7 +1041,7 @@
             QUESTS_RANGE: 'Quests!A1:G100',
             QUANTITY_RANGE: 'Form responses 3!A1:L1000',
             RESPONSE_RANGE: 'Form responses 4!A1:F1000',
-            QUESTS_PER_PAGE: 4,
+            QUESTS_PER_PAGE: 3,
             FALLBACK_RATE: 1/0.000057,
             FORM_ACTION: 'https://docs.google.com/forms/d/1ObMPuTI2S1842DmfYePB4uKxfw2cLDtSlFsllUZZ-2I/formResponse'
         };
@@ -1173,23 +1185,12 @@
             }
         }
         // Format number with K, M, B abbreviations
-        function formatNumber(num, prefix) {
+        function formatNumber(num, decimals = 0) {
             const absNum = Math.abs(num);
-            if (absNum >= 1_000_000_000) {
-                const value = num / 1_000_000_000;
-                return `${prefix}${value.toFixed(value % 1 === 0 ? 0 : 1)}B`;
-            } else if (absNum >= 1_000_000) {
-                const value = num / 1_000_000;
-                return `${prefix}${value.toFixed(value % 1 === 0 ? 0 : 1)}M`;
-            } else if (absNum >= 10_000) {
-                const value = num / 1_000;
-                return `${prefix}${value.toFixed(value % 1 === 0 ? 0 : 1)}K`;
-            } else {
-                return `${prefix}${num.toLocaleString('en-US', {
-                    minimumFractionDigits: prefix === '$' ? 2 : 0,
-                    maximumFractionDigits: prefix === '$' ? 2 : 0
-                })}`;
-            }
+            if (absNum >= 1_000_000_000) return (num / 1_000_000_000).toFixed(1) + 'B';
+            if (absNum >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M';
+            if (absNum >= 10_000) return (num / 1_000).toFixed(1) + 'K';
+            return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
         }
         // Format currency based on currentCurrency
         function formatCurrency(amount, currency) {
@@ -1197,13 +1198,13 @@
             if (currency === 'USDC') {
                 if (usdcRate <= 0 || isNaN(usdcRate)) {
                     console.warn(`Invalid usdcRate: ${usdcRate}. Displaying VERSE instead.`);
-                    return formatNumber(num, 'V');
+                    return '<img src="images/verse_logo.svg" alt="𝕍" class="currency-logo"> ' + formatNumber(num, 0);
                 }
                 const usdcAmount = num / usdcRate;
                 console.log(`Converting ${num} VERSE to USDC: ${num} / ${usdcRate} = ${usdcAmount}`);
-                return formatNumber(usdcAmount, '$');
+                return '<img src="images/usdc_logo.svg" alt="$" class="currency-logo"> ' + formatNumber(usdcAmount, 2);
             }
-            return formatNumber(num, '𝕍');
+            return '<img src="images/verse_logo.svg" alt="𝕍" class="currency-logo"> ' + formatNumber(num, 0);
         }
         // Load and parse data
         async function loadData() {
@@ -1283,7 +1284,7 @@
             DOM.profileAvatar.textContent = 'S';
             DOM.availableQuests.textContent = userData.availableQuests.toLocaleString('en-US');
             DOM.completedQuests.textContent = userData.completedQuests.toLocaleString('en-US');
-            DOM.earnings.textContent = formatCurrency(userData.earnings, currentCurrency);
+            DOM.earnings.innerHTML = formatCurrency(userData.earnings, currentCurrency);
             DOM.currencyToggle.checked = currentCurrency === 'USDC';
             populateQuests();
             checkUrlParam();
@@ -1294,7 +1295,7 @@
             DOM.profileAvatar.textContent = 'S';
             DOM.availableQuests.textContent = userData.availableQuests.toLocaleString('en-US');
             DOM.completedQuests.textContent = userData.completedQuests.toLocaleString('en-US');
-            DOM.earnings.textContent = formatCurrency(userData.earnings, currentCurrency);
+            DOM.earnings.innerHTML = formatCurrency(userData.earnings, currentCurrency);
             DOM.currencyToggle.checked = currentCurrency === 'USDC';
             populateQuests();
         }
@@ -1412,7 +1413,6 @@
             info.textContent = `Page ${currentPage} of ${totalPages}`;
             paginationEl.appendChild(info);
         }
-
         function addPageButton(page, currentPage, paginationEl, isAvailable) {
             const pageBtn = document.createElement('button');
             pageBtn.className = `pagination-btn ${page === currentPage ? 'active' : ''}`;

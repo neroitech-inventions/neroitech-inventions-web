@@ -263,8 +263,12 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
             transition: all 0.3s ease;
+            line-height: 1;
         }
         .grand-total:hover .amount {
             transform: scale(1.05);
@@ -323,7 +327,6 @@
         .error-message.show {
             display: block;
         }
-
         /* 🎨 MODERNIZED CURRENCY SWITCH */
         .currency-switch {
             display: flex;
@@ -399,7 +402,6 @@
         .currency-switch input:not(:checked) ~ .usdc-label {
             color: #4F46E5;
         }
-
         footer {
             background: linear-gradient(135deg, #1F2937, #111827);
             color: #E5E7EB;
@@ -506,7 +508,6 @@
         .leaderboard-table td.skeleton {
             height: 48px;
         }
-
         /* New responsive table styles */
         .table-responsive {
             overflow-x: auto;
@@ -521,6 +522,12 @@
                 padding: 12px; /* Slightly reduce padding on mobile for better fit */
                 font-size: 14px; /* Slightly reduce font size on mobile */
             }
+        }
+        .currency-logo {
+            height: 1em;
+            width: auto;
+            margin-right: 2px;
+            vertical-align: middle;
         }
     </style>
     <link href="images/icon.png" rel="icon" onerror="console.error('Favicon failed to load')">
@@ -542,20 +549,17 @@
         </div>
     </header>
     <div class="overlay"></div>
-
     <div class="leaderboard-container">
         <div class="leaderboard-header">
             <h2><i class="fas fa-medal"></i> Sponsors Leaderboard</h2>
             <a href="profile.html" class="back-btn">Back to Quest</a>
         </div>
-
         <!-- UPGRADED FANCY GRAND TOTAL -->
         <div class="grand-total">
             <h3>Grand Total Sponsored</h3>
-            <span id="grandTotalAmount" class="amount">𝕍0</span>
+            <span id="grandTotalAmount" class="amount"><img src="images/verse_logo.svg" alt="𝕍" class="currency-logo">0</span>
             <div class="subtitle">By all sponsors combined</div>
         </div>
-
         <div class="currency-switch">
             <div class="pill">
                 <span class="usdc-label">VERSE</span>
@@ -580,7 +584,6 @@
             </table>
         </div>
     </div>
-
     <footer>
         <div class="container">
             <div class="footer-row">
@@ -595,8 +598,8 @@
                 <div class="footer-col">
                     <h3>Explore</h3>
                     <ul class="footer-link">
-                        <li><a href="#hero">Home</a></li>
-                        <li><a href="card.html">Explore Quest</a></li>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="quest.html">Create Quest</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -615,9 +618,8 @@
     <button id="back-to-top" title="Back to Top">
         <i class="fas fa-arrow-up"></i>
     </button>
-
-    <script> 
-        document.getElementById('currentYear').textContent = new Date().getFullYear(); 
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
     <script>
         // Configuration
@@ -629,12 +631,10 @@
             RATE_RANGE: 'SnappQuestData!D2:D2',
             FALLBACK_RATE: 1/0.000057
         };
-
         // State
         let currentCurrency = 'VERSE';
         let usdcRate = 0;
         let grandTotal = 0; // New: store grand total
-
         // DOM Elements
         const DOM = {
             leaderboardBody: document.getElementById('leaderboardBody'),
@@ -647,7 +647,6 @@
             backToTopButton: document.getElementById('back-to-top'),
             currencyToggle: document.getElementById('currencyToggle')
         };
-
         // Show loading skeletons
         function showLoading() {
             DOM.leaderboardBody.innerHTML = '';
@@ -659,13 +658,11 @@
             }
             DOM.grandTotalAmount.textContent = 'Loading...';
         }
-
         // Log error silently
         function logError(message) {
             const logPayload = { page: "sponsor-leaderboard", timestamp: new Date().toISOString(), error: message, url: window.location.href };
             fetch('https://httpbin.org/post', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(logPayload) }).catch(() => {});
         }
-
         // Fetch sheet data
         async function fetchSheetData(spreadsheetId, range) {
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${CONFIG.API_KEY}`;
@@ -688,7 +685,6 @@
                 return range === CONFIG.RATE_RANGE ? null : [];
             }
         }
-
         // Friendly loading message
         function showError() {
             DOM.leaderboardBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:40px; color:#6366F1; font-weight:600;">
@@ -696,31 +692,29 @@
             </td></tr>`;
             DOM.grandTotalAmount.textContent = 'Loading...';
         }
-
         // Format number
-        function formatNumber(num, prefix) {
+        function formatNumber(num, decimals = 0) {
             const absNum = Math.abs(num);
-            if (absNum >= 1_000_000_000) return `${prefix}${(num / 1_000_000_000).toFixed(1)}B`;
-            if (absNum >= 1_000_000) return `${prefix}${(num / 1_000_000).toFixed(1)}M`;
-            if (absNum >= 10_000) return `${prefix}${(num / 1_000).toFixed(1)}K`;
-            return `${prefix}${num.toLocaleString('en-US', { minimumFractionDigits: prefix === '$' ? 2 : 0, maximumFractionDigits: prefix === '$' ? 2 : 0 })}`;
+            if (absNum >= 1_000_000_000) return (num / 1_000_000_000).toFixed(1) + 'B';
+            if (absNum >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M';
+            if (absNum >= 10_000) return (num / 1_000).toFixed(1) + 'K';
+            return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
         }
-
         // Format currency
         function formatCurrency(amount, currency) {
             const num = parseFloat(amount) || 0;
+            const verseLogo = '<img src="images/verse_logo.svg" alt="𝕍" class="currency-logo">';
+            const usdcLogo = '<img src="images/usdc_logo.svg" alt="$" class="currency-logo">';
             if (currency === 'USDC') {
-                if (usdcRate <= 0 || isNaN(usdcRate)) return formatNumber(num, '𝕍');
-                return formatNumber(num / usdcRate, '$');
+                if (usdcRate <= 0 || isNaN(usdcRate)) return verseLogo + formatNumber(num, 0);
+                return usdcLogo + formatNumber(num / usdcRate, 2);
             }
-            return formatNumber(num, '𝕍');
+            return verseLogo + formatNumber(num, 0);
         }
-
         // Update grand total banner
         function updateGrandTotal() {
-            DOM.grandTotalAmount.textContent = formatCurrency(grandTotal, currentCurrency);
+            DOM.grandTotalAmount.innerHTML = formatCurrency(grandTotal, currentCurrency);
         }
-
         // Load rate
         async function loadRate() {
             try {
@@ -739,23 +733,18 @@
                 showError();
             }
         }
-
         // Populate leaderboard + grand total
         async function populateLeaderboard() {
             const data = await fetchSheetData(CONFIG.SPREADSHEET_ID, CONFIG.RANGE);
             if (!data.length) return;
-
             const sponsorMap = new Map();
             grandTotal = 0;
-
             data.forEach(quest => {
                 const sponsorName = quest.Sponsor ? quest.Sponsor.trim() : 'Unknown';
                 const sponsorKey = sponsorName.toLowerCase();
                 const rewardStr = quest.Reward || '0'; // Column E
                 const reward = parseFloat(rewardStr.replace(/[^0-9.]/g, '')) || 0;
-
                 grandTotal += reward;
-
                 if (!sponsorMap.has(sponsorKey)) {
                     sponsorMap.set(sponsorKey, { name: sponsorName, quests: 0, amount: 0 });
                 }
@@ -763,25 +752,21 @@
                 entry.quests++;
                 entry.amount += reward;
             });
-
             const sorted = Array.from(sponsorMap.values())
                 .sort((a, b) => b.amount - a.amount);
-
             DOM.leaderboardBody.innerHTML = '';
             sorted.forEach((sponsor, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td class="rank">${index + 1}</td>
                     <td>${sponsor.name}</td>
-                    <td>${formatNumber(sponsor.quests, '')}</td>
+                    <td>${formatNumber(sponsor.quests, 0)}</td>
                     <td>${formatCurrency(sponsor.amount, currentCurrency)}</td>
                 `;
                 DOM.leaderboardBody.appendChild(row);
             });
-
             updateGrandTotal(); // Update banner
         }
-
         // Event listeners
         function setupEventListeners() {
             DOM.disconnectBtn.addEventListener('click', () => { window.location.href = 'index.html'; });
@@ -813,7 +798,6 @@
                 populateLeaderboard(); // Re-populate to update all amounts + grand total
             });
         }
-
         // Init
         window.addEventListener('load', () => {
             setupEventListeners();

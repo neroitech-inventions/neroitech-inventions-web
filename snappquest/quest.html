@@ -589,7 +589,7 @@
             border-radius: 20px 20px 0 0 !important;
         }
         .swal2-html-container {
-            padding: 32 carnepx !important;
+            padding: 32px !important;
             color: #1F2937 !important;
             font-size: 16px !important;
             line-height: 1.8 !important;
@@ -646,6 +646,23 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
+        .reward-display {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1F2937;
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .currency-logo {
+            height: 1em;
+            width: auto;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -674,7 +691,7 @@
             </div>
             <div class="quote-body">
                 <h3>Quest Details</h3>
-                <p>Fill out all fields below to create your quest. Cost is <span id="minPriceText">𝕍1,000</span> per engagement (plus a <span id="feeText">𝕍1,000</span> fee).</p>
+                <p>Fill out all fields below to create your quest. Cost is <span id="minPriceText"><img src="images/verse_logo.svg" alt="𝕍" class="currency-logo">1,000</span> per engagement (plus a <span id="feeText"><img src="images/verse_logo.svg" alt="𝕍" class="currency-logo">1,000</span> fee).</p>
                 <form id="createQuestForm" action="https://docs.google.com/forms/d/e/1FAIpQLSe9lmAvmoScW5kuVpZprjVq5rF7TLYQTU_PJYKnN1SRQXAI5Q/formResponse" method="POST" onsubmit="handleSubmit(event)">
                     <div class="form-group">
                         <label for="email">Email Address</label>
@@ -694,7 +711,8 @@
                     </div>
                     <div class="form-group">
                         <label for="reward">Reward (Auto-generated)</label>
-                        <input type="text" name="entry.1547645284" id="reward" placeholder="Auto-calculated reward" readonly>
+                        <span id="rewardDisplay" class="reward-display"></span>
+                        <input type="hidden" name="entry.1547645284" id="reward">
                     </div>
                     <div class="form-group">
                         <label for="link">Link</label>
@@ -854,7 +872,7 @@
                         </select>
                     </div>
                     <div class="price-calculation">
-                        <h3>Total Price: <span id="totalPrice">𝕍1000</span></h3>
+                        <h3>Total Price: <span id="totalPrice">1,000 VERSE</span></h3>
                     </div>
                     <div class="buttons-container">
                         <button type="submit" class="quote-btn" id="submitBtn">Submit Quest</button>
@@ -976,7 +994,8 @@
         const navContainer = document.querySelector(".nav-container");
         const overlay = document.querySelector(".overlay");
         const backToTopButton = document.getElementById("back-to-top");
-        const rewardInput = document.getElementById("reward");
+        const reward = document.getElementById("reward");
+        const rewardDisplay = document.getElementById("rewardDisplay");
         const trackcodeInput = document.getElementById("trackcode");
         const submitBtn = document.getElementById("submitBtn");
         const questOptions = document.getElementById("questOptions");
@@ -996,6 +1015,13 @@
         trackcodeInput.value = generateTrackCode();
         let tcode = trackcodeInput.value;
 
+        function formatCurrency(amount, currency) {
+            const num = parseFloat(amount) || 0;
+            const formattedNum = currency === 'USDC' ? num.toFixed(2) : num.toString();
+            const logo = currency === 'USDC' ? '<img src="images/usdc_logo.svg" alt="$" class="currency-logo">' : '<img src="images/verse_logo.svg" alt="𝕍" class="currency-logo">';
+            return logo + ' ' + formattedNum.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
         // Calculate total price and update reward
         function calculateTotalPrice() {
             const quantity = parseInt(createQuestForm.quantity.value) || 0;
@@ -1005,10 +1031,10 @@
             }
             let totalPrice = (quantity * effectivePrice) + fee;
             let rewardAmount = quantity * effectivePrice;
-            let formattedTotal = currency === 'USDC' ? `${currencySymbol}${totalPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}` : `${currencySymbol}${totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-            let formattedReward = currency === 'USDC' ? `${currencySymbol}${rewardAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}` : `${currencySymbol}${rewardAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-            totalPriceSpan.textContent = formattedTotal;
-            rewardInput.value = formattedReward;
+            const formattedNum = currency === 'USDC' ? totalPrice.toFixed(2) : totalPrice.toString();
+            totalPriceSpan.innerHTML = formattedNum.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' ' + currency;
+            rewardDisplay.innerHTML = formatCurrency(rewardAmount, currency);
+            reward.value = currency === 'USDC' ? '$' + rewardAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '𝕍' + rewardAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
         function updateCustomInput() {
@@ -1026,12 +1052,12 @@
         function setDefaultPrice() {
             if (currency === 'USDC') {
                 pricePerEngagement = 0.2;
-                minPriceText.textContent = '$0.20';
-                feeText.textContent = '$0.20';
+                minPriceText.innerHTML = formatCurrency(0.2, 'USDC');
+                feeText.innerHTML = formatCurrency(0.2, 'USDC');
             } else {
                 pricePerEngagement = 1000;
-                minPriceText.textContent = '𝕍1,000';
-                feeText.textContent = '𝕍1,000';
+                minPriceText.innerHTML = formatCurrency(1000, 'VERSE');
+                feeText.innerHTML = formatCurrency(1000, 'VERSE');
             }
         }
 
@@ -1081,15 +1107,16 @@
             pricePerEngagement = 1000;
             fee = 1000;
             currencySymbol = '𝕍';
-            minPriceText.textContent = '𝕍1,000';
-            feeText.textContent = '𝕍1,000';
+            minPriceText.innerHTML = formatCurrency(1000, 'VERSE');
+            feeText.innerHTML = formatCurrency(1000, 'VERSE');
             networkSelection.style.display = 'none';
             network = 'Polygon';
             customAmountGroup.style.display = 'none';
             tcode = generateTrackCode();
             trackcodeInput.value = tcode;
-            totalPriceSpan.textContent = '𝕍1,000';
-            rewardInput.value = '𝕍0';
+            totalPriceSpan.innerHTML = '1,000 VERSE';
+            rewardDisplay.innerHTML = formatCurrency(0, 'VERSE');
+            reward.value = '𝕍0';
             calculateTotalPrice();
         }
 
@@ -1152,7 +1179,7 @@
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrData)}&size=200x200`;
             paymentHtml = `
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <strong>Amount:</strong> ${currencySymbol}${formattedAmount} ${currency}<br><br>
+                    <strong>Amount:</strong> ${formattedAmount} ${currency}<br><br>
                     <img src="${qrUrl}" alt="Wallet QR Code" style="border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);"><br><br>
                     <strong>Wallet Address (${network}):</strong><br>
                     <span style="word-break: break-all; display: inline-block; max-width: 100%;">${walletAddr}</span>
@@ -1274,6 +1301,7 @@
         });
 
         // Initialize
+        setDefaultPrice();
         calculateTotalPrice();
     </script>
 </body>

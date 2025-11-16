@@ -437,6 +437,10 @@
             .footer-link a {
                 font-size: 13px;
             }
+            .currency-logo {
+                width: 18px;
+                height: 18px;
+            }
         }
         @media (max-width: 480px) {
             #back-to-top { bottom: 20px; right: 20px; width: 48px; height: 48px; }
@@ -491,6 +495,12 @@
                 font-size: 16px;
                 margin-right: 8px;
             }
+        }
+        .currency-logo {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
         }
     </style>
 </head>
@@ -665,7 +675,7 @@
                     </div>
                     <div class="quest-field">
                         <i class="fas fa-coins"></i>
-                        <span>Reward: ${formatReward(quest.Reward)}𝕍</span>
+                        <span>Reward: ${getOriginalRewardHTML(quest.Reward)}</span>
                     </div>
                     <div class="quest-field">
                         <i class="fas fa-hashtag"></i>
@@ -738,6 +748,18 @@
             return parseReward(rewardStr).toLocaleString('en-US');
         }
 
+        function getOriginalRewardHTML(rewardStr) {
+            if (!rewardStr) return '0';
+            const numStr = rewardStr.replace(/[^0-9.]/g, '');
+            const num = parseFloat(numStr);
+            if (isNaN(num)) return '0';
+            const formattedNum = num.toLocaleString('en-US');
+            const isUSDC = rewardStr.includes('$') || rewardStr.toUpperCase().includes('USDC');
+            const logoSrc = isUSDC ? 'images/usdc_logo.svg' : 'images/verse_logo.svg';
+            const altText = isUSDC ? '$' : '𝕍';
+            return `<img src="${logoSrc}" alt="${altText}" class="currency-logo"> ${formattedNum}`;
+        }
+
         // Copy quest details to clipboard
         async function copyToClipboard(rowIndex, trackCode) {
             if (!trackCode) {
@@ -750,7 +772,7 @@
                 return;
             }
             const verseReward = parseReward(quest.Reward);
-            const rewardStr = `${verseReward}𝕍`;
+            const rewardStr = `${verseReward}VERSE`;
             const data = [
                 quest['Track Code'] || '',
                 quest.Title || '',

@@ -382,7 +382,7 @@
         }
         .quests-table {
             width: 100%;
-            min-width: 800px; /* Ensures table remains wide enough to avoid cramping */
+            min-width: 800px;
             border-collapse: collapse;
             background: white;
             border-radius: 12px;
@@ -416,44 +416,6 @@
             text-decoration: underline;
             color: #4F46E5;
         }
-        /* Optional: Stacked layout for mobile (uncomment to use instead of scroll) */
-        /*
-        @media (max-width: 768px) {
-            .quests-table {
-                display: block;
-                min-width: auto;
-            }
-            .quests-table thead {
-                display: none;
-            }
-            .quests-table tbody, .quests-table tr {
-                display: block;
-            }
-            .quests-table tr {
-                margin-bottom: 16px;
-                padding: 16px;
-                background: white;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            }
-            .quests-table td {
-                display: flex;
-                justify-content: space-between;
-                padding: 8px 0;
-                border-bottom: none;
-                font-size: 14px;
-            }
-            .quests-table td:before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: #1F2937;
-                flex: 1;
-            }
-            .quests-table td:last-child {
-                border-bottom: none;
-            }
-        }
-        */
         @media (max-width: 768px) {
             .table-wrapper {
                 margin-top: 24px;
@@ -723,6 +685,31 @@
             transform: translateY(-3px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
+        .reward-logo {
+            height: 0.8em;
+            width: auto;
+        }
+        .reward-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5px; /* Ensures consistent spacing between logo and digits */
+        }
+        @media (max-width: 768px) {
+            .stat-number {
+                font-size: 24px;
+            }
+            .quests-table th, .quests-table td {
+                font-size: 13px;
+            }
+        }
+        @media (max-width: 480px) {
+            .stat-number {
+                font-size: 20px;
+            }
+            .quests-table th, .quests-table td {
+                font-size: 12px;
+            }
+        }
     </style>
     <link href="images/icon.png" rel="icon" onerror="console.error('Favicon failed to load')">
 </head>
@@ -782,8 +769,8 @@
                 <canvas id="questChart"></canvas>
             </div>
             <div class="currency-switch">
-                <button class="currency-btn active" data-currency="VERSE">𝕍 VERSE</button>
-                <button class="currency-btn" data-currency="USDC">$ USDC</button>
+                <button class="currency-btn active" data-currency="VERSE">VERSE</button>
+                <button class="currency-btn" data-currency="USDC">USDC</button>
             </div>
             <h3 style="font-size: 24px; font-weight: 600; margin: 32px 0 16px; text-align: center;"><i class="fas fa-list"></i> Quest List</h3>
             <div class="table-wrapper">
@@ -930,43 +917,55 @@
         }
 
         // Format number with K, M, B abbreviations
-        function formatNumber(num, prefix) {
+        function formatNumber(num, decimals = 0) {
             const absNum = Math.abs(num);
+            let value, suffix = '';
             if (absNum >= 1_000_000_000) {
-                const value = num / 1_000_000_000;
-                return `${prefix}${value.toFixed(value % 1 === 0 ? 0 : 1)}B`;
+                value = num / 1_000_000_000;
+                suffix = 'B';
             } else if (absNum >= 1_000_000) {
-                const value = num / 1_000_000;
-                return `${prefix}${value.toFixed(value % 1 === 0 ? 0 : 1)}M`;
+                value = num / 1_000_000;
+                suffix = 'M';
             } else if (absNum >= 10_000) {
-                const value = num / 1_000;
-                return `${prefix}${value.toFixed(value % 1 === 0 ? 0 : 1)}K`;
+                value = num / 1_000;
+                suffix = 'K';
             } else {
-                return `${prefix}${num.toLocaleString('en-US', {
-                    minimumFractionDigits: prefix === '$' ? 2 : 0,
-                    maximumFractionDigits: prefix === '$' ? 2 : 0
-                })}`;
+                value = num;
             }
+            const fixedValue = value.toFixed(value % 1 === 0 ? 0 : decimals);
+            return fixedValue + suffix;
         }
 
         // Format currency based on currentCurrency
         function formatCurrency(amount, currency) {
             const num = parseFloat(amount) || 0;
+            let displayNum = num;
+            let logoSrc = 'images/verse_logo.svg';
+            let altText = '𝕍';
+            let decimals = 0;
+
             if (currency === 'USDC') {
+                logoSrc = 'images/usdc_logo.svg';
+                altText = '$';
+                decimals = 2;
                 if (usdcRate <= 0 || isNaN(usdcRate)) {
                     console.warn(`Invalid usdcRate: ${usdcRate}. Displaying VERSE instead.`);
-                    return formatNumber(num, '𝕍');
+                    logoSrc = 'images/verse_logo.svg';
+                    altText = 'Verse';
+                    decimals = 0;
+                } else {
+                    displayNum = num / usdcRate; // VERSE to USDC
                 }
-                const usdcAmount = num / usdcRate; // VERSE/USDC: divide
-                console.log(`Converting ${num} VERSE to USDC: ${num} / ${usdcRate} = ${usdcAmount}`);
-                return formatNumber(usdcAmount, '$');
             }
-            return formatNumber(num, '𝕍');
+
+            const formattedNum = formatNumber(displayNum, decimals);
+            const rewardHtml = `<img src="${logoSrc}" alt="${altText}" class="reward-logo">&nbsp;${formattedNum}`;
+            return `<span class="reward-display">${rewardHtml}</span>`;
         }
 
         // Update display based on current currency
         function updateDisplay() {
-            DOM.totalPayout.textContent = formatCurrency(sponsorData.totalPayout, currentCurrency);
+            DOM.totalPayout.innerHTML = formatCurrency(sponsorData.totalPayout, currentCurrency);
             
             let tableBody = '';
             sponsorData.quests.forEach(row => {

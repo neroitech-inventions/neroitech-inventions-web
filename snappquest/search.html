@@ -100,7 +100,7 @@
         }
         .connect-btn:active {
             transform: scale(0.95);
-        }        
+        }
         .hamburger {
             display: none;
             font-size: 24px;
@@ -323,7 +323,6 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
-
         /* === PERFECT MOBILE TABLE FIX === */
         .submissions-section {
             overflow-x: auto;
@@ -414,7 +413,6 @@
         }
         .footer-bottom p { font-size: 12px; color: #E5E7EB; margin: 0; }
         .footer-bottom a { color: #34D399; text-decoration: none; }
-
         /* RESPONSIVE FIXES */
         @media (max-width: 768px) {
             .search-container { margin: 50px auto 30px; }
@@ -492,6 +490,11 @@
         #back-to-top.visible { opacity: 1; visibility: visible; }
         #back-to-top:hover { transform: translateY(-6px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(52, 211, 153, 0.5); }
         #back-to-top i { font-size: 24px; }
+        .reward-logo {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+        }
     </style>
     <link href="images/icon.png" rel="icon">
 </head>
@@ -511,21 +514,19 @@
         </div>
     </header>
     <div class="overlay"></div>
-
     <div class="tracker-container">
         <div class="search-container">
             <div class="search-logo">
                 <span>T</span><span>r</span><span>a</span><span>c</span><span>k</span><span>Q</span><span>u</span><span>e</span><span>s</span><span>t</span>
             </div>
             <div class="powered-by">
-                Public Quest Tracker</a>
+                Public Quest Tracker
             </div>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Enter Track Code to search for Quest submissions">
                 <button id="searchBtn"> Search</button>
             </div>
         </div>
-
         <div id="results" class="results-container" style="display: none;">
             <div id="questInfo" class="quest-info"></div>
             <div class="insights-grid" id="insightsGrid"></div>
@@ -535,7 +536,6 @@
             <div class="submissions-section">
                 <h2 class="section-title"> Submissions</h2>
                 <button class="export-btn" id="exportCsv"> Export to CSV</button>
-                
                 <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 16px; margin-bottom: 20px;">
                     <table class="submissions-table">
                         <thead>
@@ -550,12 +550,10 @@
                         <tbody id="submissionsBody"></tbody>
                     </table>
                 </div>
-                
                 <p id="noResults" class="no-results" style="display: none;">No submissions found for this Track Code.</p>
             </div>
         </div>
     </div>
-
     <footer>
         <div class="container">
             <div class="footer-row">
@@ -587,15 +585,12 @@
             </div>
         </div>
     </footer>
-
     <button id="back-to-top" title="Back to Top">
         <i class="fas fa-arrow-up"></i>
     </button>
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
         document.getElementById('currentYear').textContent = new Date().getFullYear();
-
         const CONFIG = {
             API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
             QUESTS_ID: '1wY8FlSvSsYPCGo2qYsl20w4kcPqx9Z4CqzA2MeQozGo',
@@ -605,7 +600,6 @@
             QUANTITY_RANGE: 'Form responses 3!A1:L1000',
             RESPONSE_RANGE: 'Form responses 4!A1:F1000'
         };
-
         const DOM = {
             searchInput: document.getElementById('searchInput'),
             searchBtn: document.getElementById('searchBtn'),
@@ -621,9 +615,7 @@
             backToTopButton: document.getElementById('back-to-top'),
             exportCsv: document.getElementById('exportCsv')
         };
-
         let currentChart = null;
-
         async function fetchSheetData(spreadsheetId, range) {
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${CONFIG.API_KEY}`;
             const response = await fetch(url);
@@ -636,34 +628,28 @@
                 return obj;
             });
         }
-
         async function performSearch() {
             const trackCode = DOM.searchInput.value.trim().toUpperCase();
             if (!trackCode) {
                 Swal.fire('Error', 'Please enter a Track Code.', 'error');
                 return;
             }
-
             if (trackCode === 'PENDING') {
                 window.location.href = 'explorer.html';
                 return;
             }
-
             disableSearchButton();
             showLoading();
-
             try {
                 const [quests, quantities, responses] = await Promise.all([
                     fetchSheetData(CONFIG.QUESTS_ID, CONFIG.QUESTS_RANGE),
                     fetchSheetData(CONFIG.QUANTITY_ID, CONFIG.QUANTITY_RANGE),
                     fetchSheetData(CONFIG.RESPONSE_ID, CONFIG.RESPONSE_RANGE)
                 ]);
-
                 const quest = quests.find(q => q['Track Code']?.toUpperCase() === trackCode);
                 const quantityRow = quantities.find(q => q['Track Code']?.toUpperCase() === trackCode);
                 const totalSlots = quantityRow ? parseInt(quantityRow.Quantity) || 0 : 0;
                 const submissions = responses.filter(r => r['Track Code']?.toUpperCase() === trackCode);
-
                 displayResults(quest, totalSlots, submissions);
             } catch (err) {
                 Swal.fire('Error', 'Failed to load data. Please try again later.', 'error');
@@ -672,24 +658,29 @@
                 resetSearchButton();
             }
         }
-
         function parseDate(dateStr) {
             const parts = dateStr.match(/(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+)/);
             if (!parts) return new Date(NaN);
             const [_, d, m, y, h, min, s] = parts;
             return new Date(y, m-1, d, h, min, s);
         }
-
         function displayResults(quest, totalSlots, submissions) {
             DOM.results.style.display = 'block';
-
+            let rewardDisplay = quest ? (quest.Reward || '0') : '0';
+            // Replace 𝕍 with Verse logo
+            rewardDisplay = rewardDisplay.replace(/𝕍/g, '<img src="images/verse_logo.svg" alt="𝕍" class="reward-logo" align="absmiddle"> ');
+            // Replace $ with USDC logo
+            rewardDisplay = rewardDisplay.replace(/\$/g, '<img src="images/usdc_logo.svg" alt="$" class="reward-logo" align="absmiddle"> ');
+            // If no 𝕍 or $ symbols, prepend Verse logo
+            if (!rewardDisplay.includes('verse_logo.svg') && !rewardDisplay.includes('usdc_logo.svg')) {
+                rewardDisplay = `<img src="images/verse_logo.svg" alt="Verse" class="reward-logo" align="absmiddle"> ${rewardDisplay}`;
+            }
             DOM.questInfo.innerHTML = quest ? `
                 <h2>${quest.Title || 'Unknown Quest'}</h2>
                 <p>Sponsored by: ${quest.Sponsor || 'Unknown'}</p>
-                <p>Reward: ₦${parseFloat(quest.Reward) || 0}</p>
+                <p>Reward: ${rewardDisplay}</p>
                 <p>Description: ${quest.Description || 'No description'}</p>
             ` : '<p>No quests found for this Track Code. Please enter `Pending` to view pending quests in the SnappQuest Explorer.</p>';
-
             const count = submissions.length;
             const remaining = Math.max(0, totalSlots - count);
             let earliest = 'N/A', latest = 'N/A';
@@ -700,7 +691,6 @@
                     latest = new Date(Math.max(...times)).toLocaleDateString();
                 }
             }
-
             DOM.insightsGrid.innerHTML = `
                 <div class="insight-card">Total Submissions<div class="insight-number">${count}</div></div>
                 <div class="insight-card">Total Slots<div class="insight-number">${totalSlots}</div></div>
@@ -708,7 +698,6 @@
                 <div class="insight-card">First Submission<div class="insight-number">${earliest}</div></div>
                 <div class="insight-card">Last Submission<div class="insight-number">${latest}</div></div>
             `;
-
             if (currentChart) currentChart.destroy();
             const dates = submissions.map(s => parseDate(s.Timestamp).toLocaleDateString());
             const dateMap = dates.reduce((a, d) => (a[d] = (a[d] || 0) + 1, a), {});
@@ -727,7 +716,6 @@
                 },
                 options: { responsive: true, scales: { y: { beginAtZero: true } } }
             });
-
             DOM.submissionsBody.innerHTML = '';
             DOM.noResults.style.display = submissions.length ? 'none' : 'block';
             submissions.forEach(sub => {
@@ -741,10 +729,8 @@
                 `;
                 DOM.submissionsBody.appendChild(tr);
             });
-
             DOM.exportCsv.onclick = () => exportToCsv(submissions);
         }
-
         function exportToCsv(data) {
             if (!data.length) { Swal.fire('Info', 'No data to export.', 'info'); return; }
             const headers = ['Timestamp', 'Proof of Quest', 'Quest Link', 'Telegram', 'Polygon Address'];
@@ -762,7 +748,6 @@
             a.href = url; a.download = 'trackquest_submissions.csv'; a.click();
             URL.revokeObjectURL(url);
         }
-
         function showLoading() {
             DOM.results.style.display = 'block';
             DOM.questInfo.innerHTML = '<div class="skeleton" style="height:200px;"></div>';
@@ -770,7 +755,6 @@
             DOM.submissionsBody.innerHTML = Array(4).fill('<tr><td class="skeleton" colspan="5" style="height:50px;"></td></tr>').join('');
             DOM.noResults.style.display = 'none';
         }
-
         function clearResults() {
             DOM.results.style.display = 'none';
             DOM.questInfo.innerHTML = '';
@@ -778,35 +762,29 @@
             DOM.submissionsBody.innerHTML = '';
             if (currentChart) { currentChart.destroy(); currentChart = null; }
         }
-
         function disableSearchButton() {
             DOM.searchBtn.disabled = true;
             DOM.searchBtn.innerHTML = ' Searching...';
             DOM.searchBtn.style.pointerEvents = 'none';
             DOM.searchBtn.style.opacity = '0.6';
         }
-
         function resetSearchButton() {
             DOM.searchBtn.disabled = false;
             DOM.searchBtn.innerHTML = ' Search';
             DOM.searchBtn.style.pointerEvents = 'auto';
             DOM.searchBtn.style.opacity = '1';
         }
-
         function setupEventListeners() {
             DOM.searchBtn.addEventListener('click', e => {
                 if (DOM.searchBtn.disabled) { e.preventDefault(); e.stopPropagation(); return; }
                 performSearch();
             });
-
             DOM.searchInput.addEventListener('keypress', e => {
                 if (e.key === 'Enter' && !DOM.searchBtn.disabled) performSearch();
             });
-
             DOM.searchInput.addEventListener('input', () => {
                 if (DOM.results.style.display === 'block') clearResults();
             });
-
             DOM.hamburger.addEventListener('click', () => {
                 DOM.hamburger.classList.toggle('active');
                 DOM.navContainer.classList.toggle('active');
@@ -822,7 +800,6 @@
             });
             DOM.backToTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
         }
-
         window.addEventListener('load', setupEventListeners);
     </script>
 </body>
