@@ -1228,8 +1228,7 @@
                 document.getElementById('modalDetails').innerHTML = `
                     Your quest is now <a href="explorer.html" target="_blank">pending</a>. Copy your track code: <strong style="cursor: pointer;" onclick="copyTrackCode(this.nextElementSibling, '${tcode}')">${tcode}</strong>
                     <button class="copy-btn" onclick="copyTrackCode(this, '${tcode}')"><i class="fas fa-copy"></i> Copy Track Code</button><br><br>
-                    Share it with the Verse Recruitment (Socials) Boss in the <a href="https://t.me/GetVerse/395236" target="_blank">Telegram group</a> to complete approval.
-                `;
+                    Share it with the SnappQuest team in the <a href="https://t.me/SnappQuest/134" target="_blank">Pending Quests Telegram group</a> to complete approval.`;
                 copyConfirmationModal.style.display = "block";
                 setTimeout(() => copyConfirmationModal.classList.add("active"), 10);
                 resetFormAndState();
@@ -1237,7 +1236,7 @@
                 console.error('Submission error:', error);
                 Swal.fire({
                     title: 'Success',
-                    html: `Your quest is now <a href="explorer.html" target="_blank">pending</a>. Copy your track code: <strong style="cursor: pointer;" onclick="copyTrackCode(this.nextElementSibling, '${tcode}')">${tcode}</strong> <button class="copy-btn" onclick="copyTrackCode(this, '${tcode}')"><i class="fas fa-copy"></i> Copy Track Code</button><br><br>Share it with the Verse Recruitment (Socials) Boss in the <a href="https://t.me/GetVerse/395236" target="_blank">Telegram group</a> to complete approval.`,
+                    html: `Your quest is now <a href="explorer.html" target="_blank">pending</a>. Copy your track code: <strong style="cursor: pointer;" onclick="copyTrackCode(this.nextElementSibling, '${tcode}')">${tcode}</strong> <button class="copy-btn" onclick="copyTrackCode(this, '${tcode}')"><i class="fas fa-copy"></i> Copy Track Code</button><br><br>Share it with the SnappQuest team in the <a href="https://t.me/SnappQuest/134" target="_blank">Pending Quests Telegram group</a> to complete approval.`,
                     confirmButtonText: 'OK'
                 });
                 resetFormAndState();
