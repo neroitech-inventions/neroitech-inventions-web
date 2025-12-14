@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verse Portfolio Playoff</title>
+    <link rel="icon" href="img/icon.png" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root{--bg:#0a0e17;--card:rgba(20,25,40,0.6);--glass:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1);--text:#e2e8f0;--text-muted:#94a3b8;--primary:#00d4ff;--purple:#8b5cf6;--pink:#ec4899;--green:#10b981;--red:#ff006e}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Space Grotesk',sans-serif;background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);background-size:400% 400%;animation:gradient 15s ease infinite;color:var(--text);min-height:100vh;padding:20px;overflow-x:hidden}
+        @keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .container{max-width:1100px;margin:0 auto;padding-bottom:100px}
+        header{text-align:center;margin-bottom:40px;padding:20px}
+        h1{font-size:4rem;background:linear-gradient(90deg,#00d4ff,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;letter-spacing:-2px;text-shadow:0 0 40px rgba(0,212,255,0.5)}
+
+        /* GAME CLOSED SCREEN – ULTRA FANCY */
+        #game-closed-screen {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(20px);
+            display: none; align-items: center; justify-content: center; z-index: 9999; flex-direction: column;
+            text-align: center; padding: 40px; color: white;
+        }
+        #game-closed-screen::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at center, rgba(255,0,110,0.15), transparent 70%);
+            pointer-events: none; animation: pulseGlow 4s infinite alternate;
+        }
+        #game-closed-screen h1 {
+            font-size: 5.5rem; margin-bottom: 30px;
+            background: linear-gradient(90deg, #ff006e, #ec4899, #ff006e);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 60px rgba(255,0,110,0.6);
+        }
+        #game-closed-screen p {
+            font-size: 1.8rem; margin: 30px 0; color: #ff6699; font-weight: 500;
+        }
+        #game-closed-screen .icon {
+            font-size: 8rem; margin-bottom: 40px; color: #ff006e;
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes pulseGlow { from { opacity: 0.4; } to { opacity: 0.8; } }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        .balance-card{background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:24px;padding:30px;text-align:center;margin-bottom:40px;box-shadow:0 20px 40px rgba(0,0,0,0.4);position:relative;overflow:hidden}
+        .balance-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,212,255,0.1),rgba(139,92,246,0.1));pointer-events:none}
+        .total-balance{font-size:3.5rem;font-weight:700;background:linear-gradient(90deg,#00ff88,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:10px 0}
+        .available{color:var(--text-muted);font-size:1.1rem}
+        .available.over{color:var(--red);font-weight:bold}
+        .wallet-info{margin-top:20px;font-size:1.1rem;color:var(--text-muted)}
+        .wallet-info span{color:var(--text);font-weight:600;font-family:'Courier New',monospace}
+
+        .profit-badge{
+            font-size:2.5rem;font-weight:700;padding:14px 36px;border-radius:60px;backdrop-filter:blur(20px);
+            box-shadow:0 10px 40px rgba(0,0,0,0.5);display:flex;align-items:center;gap:10px;
+            opacity:0;transform:translateY(20px);transition:all 0.8s cubic-bezier(0.175,0.885,0.32,1.275);
+            animation:badgeFloat 6s ease-in-out infinite;
+        }
+        .profit-badge.show{opacity:1;transform:translateY(0)}
+        .profit-badge.positive{background:linear-gradient(135deg,rgba(16,185,129,0.32),rgba(34,197,94,0.18));border:1.5px solid rgba(52,211,153,0.6);color:#34d399;text-shadow:0 0 30px rgba(52,211,153,0.8)}
+        .profit-badge.negative{background:linear-gradient(135deg,rgba(255,0,110,0.32),rgba(236,72,153,0.18));border:1.5px solid rgba(255,0,110,0.6);color:#ff3388;text-shadow:0 0 30px rgba(255,51,136,0.8)}
+        .profit-badge.glow{animation:badgeFloat 4s ease-in-out infinite,glowPulse 2s infinite alternate}
+        @keyframes badgeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        @keyframes glowPulse{from{box-shadow:0 10px 40px rgba(0,0,0,0.5),0 0 40px rgba(52,211,153,0.6)}to{box-shadow:0 15px 60px rgba(0,0,0,0.7),0 0 80px rgba(52,211,153,1)}}
+        .negative.glow{animation:badgeFloat 4s ease-in-out infinite,glowPulseRed 2s infinite alternate}
+        @keyframes glowPulseRed{from{box-shadow:0 10px 40px rgba(0,0,0,0.5),0 0 40px rgba(255,0,110,0.6)}to{box-shadow:0 15px 60px rgba(0,0,0,0.7),0 0 80px rgba(255,0,110,1)}}
+
+        .tokens-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:40px}
+        .token-card{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:20px;padding:24px;transition:all .4s cubic-bezier(.175,.885,.32,1.275);position:relative;overflow:hidden}
+        .token-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gradient);transform:scaleX(0);transition:transform .4s}
+        .token-card:hover{transform:translateY(-12px);box-shadow:0 25px 50px rgba(0,212,255,0.2);border-color:var(--primary)}
+        .token-card:hover::before{transform:scaleX(1)}
+        .token-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+        .token-name{font-size:1.5rem;font-weight:600}
+        .token-icon{width:50px;height:50px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:white;font-weight:bold}
+        input{width:100%;padding:16px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:12px;color:white;font-size:1.1rem;margin:12px 0;transition:all .3s;text-align:right}
+        input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(0,212,255,0.2)}
+        input:disabled{opacity:0.6;cursor:not-allowed;background:rgba(255,255,255,0.08)}
+        .allocation{font-size:0.95rem;color:var(--text-muted)}
+        .chart-container{background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:24px;padding:30px;margin-bottom:30px;height:400px}
+        .buttons{display:flex;gap:20px;margin:30px 0}
+        button{flex:1;padding:18px;background:linear-gradient(90deg,#00d4ff,#8b5cf6);border:none;border-radius:16px;color:white;font-size:1.3rem;font-weight:600;cursor:pointer;transition:all .4s;box-shadow:0 10px 30px rgba(0,212,255,0.3);position:relative;overflow:hidden}
+        button:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 20px 40px rgba(0,212,255,0.4)}
+        #reset-btn{background:linear-gradient(90deg,#ff006e,#ec4899);box-shadow:0 10px 30px rgba(255,0,110,0.3)}
+        #allocate-btn:disabled,#allocate-btn.hidden{display:none!important}
+        #allocate-btn::after{content:"Submitting...";position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);border-radius:16px;font-weight:700;color:white}
+        #allocate-btn.submitting::after{display:flex}
+        .message{text-align:center;margin-top:20px;font-size:1.1rem;font-weight:500;opacity:0;transition:opacity .5s}
+        .live-warning{text-align:center;margin:20px 0;padding:12px;background:rgba(255,0,110,0.15);border:1px solid var(--red);border-radius:12px;color:var(--red);font-weight:bold;opacity:0;transition:opacity .4s}
+        .live-warning.show{opacity:1}
+        .footer-credit{text-align:center;margin-top:60px;padding:20px;font-size:0.9rem;color:#64748b;opacity:0.7}
+        .footer-credit a{color:#00d4ff;text-decoration:none;font-weight:600}
+        #back-to-top{position:fixed;bottom:30px;right:30px;width:60px;height:60px;background:linear-gradient(135deg,#00d4ff,#8b5cf6);border:none;border-radius:50%;color:white;font-size:1.8rem;cursor:pointer;box-shadow:0 10px 30px rgba(0,212,255,0.4);opacity:0;visibility:hidden;transition:all .4s;z-index:999;display:flex;align-items:center;justify-content:center}
+        #back-to-top.show{opacity:1;visibility:visible}
+        .modal{display:none;position:fixed;z-index:1000;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);align-items:center;justify-content:center}
+        .modal-content{background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:24px;padding:40px;max-width:500px;width:90%;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.6);position:relative;overflow:hidden}
+        .modal-content::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,0,110,0.15),rgba(139,92,246,0.1));pointer-events:none}
+        .modal-content h2{font-size:2rem;margin-bottom:20px;background:linear-gradient(90deg,#ff006e,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .modal-buttons{display:flex;gap:16px;margin-top:30px}
+        .modal-btn{flex:1;padding:16px;border-radius:16px;font-weight:600;transition:all .3s;cursor:pointer}
+        .modal-btn.cancel{background:rgba(255,255,255,0.1);border:1px solid var(--border);color:var(--text)}
+        .modal-btn.cancel:hover{background:rgba(255,255,255,0.2)}
+        .modal-btn.confirm{background:linear-gradient(90deg,#ff006e,#ec4899);box-shadow:0 10px 30px rgba(255,0,110,0.3)}
+        .modal-btn.confirm:hover{transform:translateY(-3px);box-shadow:0 15px 35px rgba(255,0,110,0.4)}
+        .toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:12px;pointer-events:none}
+        .toast{min-width:340px;background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:18px;padding:18px 22px;box-shadow:0 15px 35px rgba(0,0,0,.5),0 0 30px rgba(0,212,255,.25);color:var(--text);font-weight:500;font-size:1.05rem;display:flex;align-items:center;gap:14px;opacity:0;transform:translateX(100%);transition:all .5s cubic-bezier(.175,.885,.32,1.275);pointer-events:all;position:relative;overflow:hidden}
+        .toast.show{opacity:1;transform:translateX(0)}
+        .toast::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--tgrad)}
+        .toast-icon{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
+        .toast.success .toast-icon{background:linear-gradient(135deg,#10b981,#34d399)}
+        .toast.error .toast-icon{background:linear-gradient(135deg,#ff006e,#ec4899)}
+        .toast.info .toast-icon{background:linear-gradient(135deg,#8b5cf6,#00d4ff)}
+        .toast.success::before{--tgrad:linear-gradient(90deg,#10b981,#34d399)}
+        .toast.error::before{--tgrad:linear-gradient(90deg,#ff006e,#ec4899)}
+        .toast.info::before{--tgrad:linear-gradient(90deg,#8b5cf6,#00d4ff)}
+        .toast-close{margin-left:auto;cursor:pointer;font-size:1.3rem;opacity:.7}
+        .btc{--gradient:linear-gradient(90deg,#f7931a,#f0b90b)}
+        .eth{--gradient:linear-gradient(90deg,#858688,#3B3B3B)}
+        .sol{--gradient:linear-gradient(90deg,#5CA8CA,#976CE5)}
+        .verse{--gradient:linear-gradient(90deg,#BB13E4,#8A37EA)}
+        .avax{--gradient:linear-gradient(90deg,#E03E3F,#E03E3F)}
+    </style>
+</head>
+<body>
+
+    <!-- GAME CLOSED FULL SCREEN OVERLAY -->
+    <div id="game-closed-screen">
+        <div class="icon">
+            <i class="fas fa-lock"></i>
+        </div>
+        <h1>GAME CLOSED</h1>
+        <p>The playoff is currently closed by the admin.<br>Come back later!</p>
+    </div>
+
+    <div class="container">
+        <header><h1>Portfolio Playoff</h1></header>
+
+        <!-- UPGRADED BALANCE CARD WITH PROFIT/LOSS BADGE -->
+        <div class="balance-card">
+            <div class="available"><b>Total Portfolio Value</b></div>
+            
+            <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:25px;margin:20px 0;">
+                <div class="total-balance">$<span id="total-balance">100,000.00</span></div>
+                
+                <div id="profit-badge" class="profit-badge" style="display:none;">
+                    <span id="profit-sign">+0.00</span><span style="font-size:1.8rem;opacity:0.9;">%</span>
+                </div>
+            </div>
+
+            <div class="available" id="available-text"><b>Available to allocate:</b> $<span id="available-balance">100,000.00</span></div>
+            <div class="wallet-info"><b>Connected:</b> <span id="wallet-address">Not connected</span></div>
+        </div>
+
+        <div class="live-warning" id="live-warning">Over allocation! Reduce your amounts.</div>
+
+        <div class="tokens-grid">
+            <div class="token-card verse"><div class="token-header"><div class="token-name">Verse</div><div class="token-icon">V</div></div><input type="text" id="verse-amount" class="formatted-input" placeholder="0" data-raw="0"><div class="allocation">Allocated: $<span id="verse-alloc">0.00</span> (<span id="verse-percent">0</span>%)</div></div>
+            <div class="token-card btc"><div class="token-header"><div class="token-name">Bitcoin</div><div class="token-icon">B</div></div><input type="text" id="btc-amount" class="formatted-input" placeholder="0" data-raw="0"><div class="allocation">Allocated: $<span id="btc-alloc">0.00</span> (<span id="btc-percent">0</span>%)</div></div>
+            <div class="token-card eth"><div class="token-header"><div class="token-name">Ethereum</div><div class="token-icon">E</div></div><input type="text" id="eth-amount" class="formatted-input" placeholder="0" data-raw="0"><div class="allocation">Allocated: $<span id="eth-alloc">0.00</span> (<span id="eth-percent">0</span>%)</div></div>
+            <div class="token-card sol"><div class="token-header"><div class="token-name">Solana</div><div class="token-icon">S</div></div><input type="text" id="sol-amount" class="formatted-input" placeholder="0" data-raw="0"><div class="allocation">Allocated: $<span id="sol-alloc">0.00</span> (<span id="sol-percent">0</span>%)</div></div>
+            <div class="token-card avax"><div class="token-header"><div class="token-name">Avalanche</div><div class="token-icon">A</div></div><input type="text" id="avax-amount" class="formatted-input" placeholder="0" data-raw="0"><div class="allocation">Allocated: $<span id="avax-alloc">0.00</span> (<span id="avax-percent">0</span>%)</div></div>
+        </div>
+
+        <div class="chart-container"><canvas id="portfolioChart"></canvas></div>
+
+        <div class="buttons">
+            <button id="allocate-btn">Allocate Funds Now</button>
+            <button id="reset-btn">Disconnect wallet</button>
+        </div>
+
+        <div class="message" id="message"></div>
+        <div class="footer-credit">Powered by <a href="https://snappquest.niti.com.ng/" target="_blank">SnappQuest</a></div>
+    </div>
+
+    <button id="back-to-top"><i class="fas fa-arrow-up"></i></button>
+
+    <div id="wallet-modal" class="modal">
+        <div class="modal-content">
+            <h2>Connect Your Info</h2>
+            <div class="input-group"><input id="telegram-input" type="text" placeholder="Telegram @yourusername"></div>
+            <div class="input-group"><input id="wallet-input" type="text" placeholder="0x... (Polygon Address)"></div>
+            <button id="submit-wallet">Connect</button>
+        </div>
+    </div>
+
+    <div id="disconnect-modal" class="modal">
+        <div class="modal-content">
+            <h2>Disconnect Wallet?</h2>
+            <p style="margin:20px 0;font-size:1.1rem;color:var(--text-muted)">This will clear all your data and reset the page.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" id="cancel-disconnect">Cancel</button>
+                <button class="modal-btn confirm" id="confirm-disconnect">Yes</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        const SHEET_ID = "1S5PAc7N-vz6s_g8d5WnyDfxnD6820XohcsiP5iJUStY";
+        const API_KEY  = "AIzaSyDseGK7WIi6hUGD_1Oz8cweDraAQpFisoQ";
+        const SHEET_RANGE = "Form responses 1!A:I";
+        const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScE0i6UIKbJPvdv21pj3FsqsnPrbLX9ItcnbgGnDLVuzAAkag/formResponse";
+        const FIELD = {verse:"entry.647719580",btc:"entry.1396080383",eth:"entry.1707728293",sol:"entry.522687597",avax:"entry.1098884549",wallet:"entry.1373418169",tg:"entry.1769653888"};
+        const totalBalance = 100000;
+        let chart, walletAddress = null, telegramHandle = null, allocateBtn;
+
+        // Check game status from cell M10
+        async function checkGameStatus() {
+            try {
+                const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Form responses 1!M10?key=${API_KEY}`);
+                const data = await res.json();
+                const value = data.values?.[0]?.[0];
+
+                if (value === "1" || value === 1) {
+                    document.getElementById('game-closed-screen').style.display = 'flex';
+                    document.querySelector('.container').style.display = 'none';
+                    return false; // game closed
+                }
+            } catch (e) {
+                console.warn("Could not check game status, assuming open");
+            }
+            return true; // game open
+        }
+
+        const colors = {verse:'#BB13E4',btc:'#f7931a',eth:'#3F3F3F',sol:'#976CE5',avax:'#E03E3F',available:'#334155'};
+
+        function showToast(msg,type='success'){
+            const c=document.getElementById('toast-container');
+            const t=document.createElement('div'); t.className=`toast ${type}`;
+            t.innerHTML=`<div class="toast-icon"><i class="fas fa-${type==='success'?'check-circle':type==='error'?'times-circle':'info-circle'}"></i></div><div>${msg}</div><div class="toast-close"><i class="fas fa-times"></i></div>`;
+            c.appendChild(t); setTimeout(()=>t.classList.add('show'),100);
+            t.querySelector('.toast-close').onclick=()=>{t.classList.remove('show');setTimeout(()=>t.remove(),500)};
+            setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),500)},8000);
+        }
+
+        async function fetchSheetData(){
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_RANGE}?key=${API_KEY}`;
+            try{
+                const r = await fetch(url);
+                if(!r.ok) return [];
+                const data = await r.json();
+                if(data.error) return [];
+                return data.values || [];
+            }catch(e){ return []; }
+        }
+
+        async function lockIfAlreadySubmitted(){
+            if(!walletAddress || !telegramHandle) return false;
+            const rows = await fetchSheetData();
+            for(const row of rows){
+                if(row.length < 9) continue;
+                const [timestamp, v, b, e, s, a, w, t, currentValue] = row;
+                if((w && w.toLowerCase() === walletAddress.toLowerCase()) || (t && t.toLowerCase() === telegramHandle.toLowerCase())){
+                    ['verse','btc','eth','sol','avax'].forEach((tok,i)=>{ 
+                        const inp = document.getElementById(tok+'-amount'); 
+                        const val = row[i+1] || '0';
+                        inp.dataset.raw = val; 
+                        inp.value = Number(val).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); 
+                        inp.disabled = true;
+                    });
+                    document.querySelectorAll('.formatted-input').forEach(i=>i.disabled=true);
+                    allocateBtn.style.display='none';
+                    document.getElementById('message').textContent="You already submitted! Portfolio locked.";
+                    document.getElementById('message').style.color="#8b5cf6"; document.getElementById('message').style.opacity=1;
+                    
+                    const liveValue = currentValue ? parseFloat(currentValue.replace(/[^0-9.-]/g,'')) || 100000 : 100000;
+                    document.getElementById('total-balance').textContent = liveValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    
+                    showToast("Welcome back! Your live portfolio value loaded.", "info");
+                    updateInRealTime();
+                    updateProfitBadge();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function formatNumber(n,f=false){return Number(n||0).toLocaleString('en-US',f?{minimumFractionDigits:2,maximumFractionDigits:2}:{maximumFractionDigits:2})}
+        function truncateAddress(a){return !a||a.length<11?"Not connected":`${a.slice(0,6)}...${a.slice(-4)}`}
+        function updateWalletDisplay(){document.getElementById('wallet-address').textContent=walletAddress&&telegramHandle?`${telegramHandle} • ${truncateAddress(walletAddress)}`:'Not connected'}
+
+        function updateProfitBadge() {
+            const balanceText = document.getElementById('total-balance').textContent.replace(/,/g, '');
+            const current = parseFloat(balanceText) || 100000;
+            const initial = 100000;
+            const pct = ((current - initial) / initial) * 100;
+
+            const badge = document.getElementById('profit-badge');
+            const sign = document.getElementById('profit-sign');
+
+            if (Math.abs(current - 100000) < 1) {
+                badge.style.display = 'none';
+                return;
+            }
+
+            sign.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(2);
+
+            badge.className = 'profit-badge show';
+            badge.style.display = 'flex';
+
+            if (pct >= 0) {
+                badge.classList.add('positive');
+                if (pct >= 15) badge.classList.add('glow');
+            } else {
+                badge.classList.add('negative');
+                if (pct <= -15) badge.classList.add('glow');
+            }
+        }
+
+        function updateInRealTime(){
+            let total = 0;
+            ['verse','btc','eth','sol','avax'].forEach(t=>{
+                const raw = parseFloat(document.getElementById(t+'-amount').dataset.raw) || 0;
+                total += raw;
+                document.getElementById(t+'-alloc').textContent = formatNumber(raw, true);
+                document.getElementById(t+'-percent').textContent = ((raw/totalBalance)*100).toFixed(1);
+            });
+
+            const available = totalBalance - total;
+            document.getElementById('available-balance').textContent = formatNumber(Math.max(0, available), true);
+            document.getElementById('available-text').classList.toggle('over', available < 0);
+            document.getElementById('live-warning').classList.toggle('show', available < 0);
+
+            if(total === 100000) allocateBtn.classList.remove('hidden');
+            else allocateBtn.classList.add('hidden');
+
+            chart.data.datasets[0].data = ['verse','btc','eth','sol','avax'].map(t=>parseFloat(document.getElementById(t+'-amount').dataset.raw)||0).concat(Math.max(0, available));
+            chart.update('none');
+        }
+
+        function initChart(){
+            const ctx = document.getElementById('portfolioChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: { labels: ['Verse','Bitcoin','Ethereum','Solana','Avalanche','Available'], datasets: [{ data: [0,0,0,0,0,totalBalance], backgroundColor: Object.values(colors), borderWidth: 0, hoverOffset: 20 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#e2e8f0', padding: 20, font: { size: 14 } } } } }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // First: Check if game is open
+            const gameIsOpen = await checkGameStatus();
+
+            if (!gameIsOpen) {
+                // Game closed — show beautiful closed screen and stop everything
+                return;
+            }
+
+            // Game is open — proceed normally
+            allocateBtn = document.getElementById('allocate-btn');
+
+            document.querySelectorAll('.formatted-input').forEach(input => {
+                const move = el => setTimeout(() => el.selectionStart = el.selectionEnd = el.value.length, 0);
+                input.addEventListener('input', function () {
+                    if(this.disabled) return;
+                    let v = this.value.replace(/[^0-9.]/g, '');
+                    const p = v.split('.'); if(p.length > 2) v = p[0] + '.' + p.slice(1).join('');
+                    let n = parseFloat(v); if(isNaN(n)) n = 0;
+                    if(n > 100000) n = 100000;
+                    this.dataset.raw = n; this.value = formatNumber(n); move(this);
+                    updateInRealTime();
+                });
+                input.addEventListener('blur', () => this.value = formatNumber(parseFloat(this.dataset.raw) || 0, true));
+                input.addEventListener('focus', () => { this.value = formatNumber(parseFloat(this.dataset.raw) || 0); move(this); });
+            });
+
+            document.getElementById('submit-wallet').onclick = () => {
+                const tg = document.getElementById('telegram-input').value.trim();
+                const poly = document.getElementById('wallet-input').value.trim();
+                if(!tg||!poly) return showToast("Fill both fields","error");
+                if(!tg.startsWith('@')) return showToast("Telegram must start with @","error");
+                if(!poly.startsWith('0x')||poly.length<30) return showToast("Invalid Polygon address","error");
+                walletAddress = poly; telegramHandle = tg;
+                localStorage.setItem('portfolio_wallet', poly);
+                localStorage.setItem('portfolio_telegram', tg);
+                document.getElementById('wallet-modal').style.display = 'none';
+                updateWalletDisplay(); showToast(`Connected as ${tg}`, "success");
+                lockIfAlreadySubmitted();
+            };
+
+            walletAddress = localStorage.getItem('portfolio_wallet');
+            telegramHandle = localStorage.getItem('portfolio_telegram');
+            if(walletAddress && telegramHandle){
+                updateWalletDisplay();
+                await lockIfAlreadySubmitted();
+            } else {
+                document.getElementById('wallet-modal').style.display = 'flex';
+            }
+
+            allocateBtn.onclick = async () => {
+                if(allocateBtn.classList.contains('submitting')) return;
+                allocateBtn.classList.add('submitting');
+
+                const total = ['verse','btc','eth','sol','avax'].reduce((s,t)=>s+(parseFloat(document.getElementById(t+'-amount').dataset.raw)||0),0);
+                if(total !== 100000) { allocateBtn.classList.remove('submitting'); return; }
+
+                const data = {verse:document.getElementById('verse-amount').dataset.raw||"0",btc:document.getElementById('btc-amount').dataset.raw||"0",eth:document.getElementById('eth-amount').dataset.raw||"0",sol:document.getElementById('sol-amount').dataset.raw||"0",avax:document.getElementById('avax-amount').dataset.raw||"0",wallet:walletAddress,tg:telegramHandle};
+                const fd = new FormData(); for(const k in FIELD) fd.append(FIELD[k], data[k]);
+                await fetch(FORM_URL, {method:"POST", mode:"no-cors", body:fd});
+
+                showToast("Submitted successfully! Good luck boss!", "success");
+                document.querySelectorAll('.formatted-input').forEach(i=>i.disabled=true);
+                allocateBtn.style.display='none';
+                document.getElementById('message').textContent="You're in the playoff!"; 
+                document.getElementById('message').style.color="#00ff88"; document.getElementById('message').style.opacity=1;
+            };
+
+            document.getElementById('reset-btn').onclick = () => {
+                document.getElementById('disconnect-modal').style.display = 'flex';
+            };
+            document.getElementById('cancel-disconnect').onclick = () => {
+                document.getElementById('disconnect-modal').style.display = 'none';
+            };
+            document.getElementById('confirm-disconnect').onclick = () => {
+                localStorage.clear();
+                location.reload();
+            };
+
+            initChart(); 
+            updateInRealTime();
+            updateProfitBadge();
+            window.addEventListener('scroll',()=>document.getElementById('back-to-top').classList.toggle('show',window.scrollY>500));
+            document.getElementById('back-to-top').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+        });
+    </script>
+</body>
+</body>
+</html>
