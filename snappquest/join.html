@@ -372,6 +372,17 @@
             font-family: 'Font Awesome 6 Free';
             font-weight: 900;
         }
+        .quest-remaining.game {
+            color: #3B82F6;
+        }
+        .quest-deadline {
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 16px;
+        }
+        .quest-deadline.expired {
+            color: #EF4444;
+        }
         .quest-description {
             font-size: 14px;
             color: #4B5563;
@@ -1078,7 +1089,7 @@
             RESPONSE_ID: '1uI__u1VylTAb6ukduHOuHXkcGX5UwgpAFzD8DY5-_bI',
             STATS_RANGE: 'SnappQuestData!A1:C2',
             RATE_RANGE: 'SnappQuestData!D2:D2',
-            QUESTS_RANGE: 'Quests!A1:G100',
+            QUESTS_RANGE: 'Quests!A1:H100',
             QUANTITY_RANGE: 'Form responses 3!A1:L1000',
             RESPONSE_RANGE: 'Form responses 4!A1:F1000',
             QUESTS_PER_PAGE: 3,
@@ -1246,6 +1257,34 @@
             }
             return '<img src="images/verse_logo.svg" alt="𝕍" class="currency-logo"> ' + formatNumber(num, 0);
         }
+        // Format time left for countdown
+        function formatTimeLeft(ms) {
+            if (ms <= 0) return 'Expired';
+            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((ms % (1000 * 60)) / 1000);
+            return `${days}d ${hours}h ${mins}m ${secs}s`;
+        }
+        // Update countdown timers
+        function updateCountdowns() {
+            document.querySelectorAll('.quest-deadline').forEach(el => {
+                const expiry = parseInt(el.dataset.expiry);
+                const now = Date.now();
+                const diff = expiry - now;
+                const countdownEl = el.querySelector('.countdown');
+                countdownEl.textContent = formatTimeLeft(diff);
+                if (diff <= 0) {
+                    el.classList.add('expired');
+                    // Remove submit button if present
+                    const card = el.closest('.quest-card');
+                    const submitBtn = card.querySelector('.submit-btn');
+                    if (submitBtn) submitBtn.remove();
+                } else {
+                    el.classList.remove('expired');
+                }
+            });
+        }
         // Load and parse data
         async function loadData() {
             showLoading(); // Added: Show skeletons at start
@@ -1279,6 +1318,17 @@
                     const status = parseInt(quest.Status) || 0;
                     const reward = parseFloat(quest.Reward.replace('𝕍', '')) || 0;
                     const trackCode = quest['Track Code'] || '';
+                    const deadline = quest.Deadline || '0';
+                    let parsedDeadline = '0';
+                    if (deadline && deadline !== '0') {
+                        const expiryDate = new Date(deadline);
+                        if (isNaN(expiryDate.getTime())) {
+                            console.warn('Invalid deadline:', deadline);
+                            parsedDeadline = '0';
+                        } else {
+                            parsedDeadline = deadline;
+                        }
+                    }
                     const availability = trackCode && status === 0 ? await getQuestAvailability(trackCode) : { remaining: null, total: 0 };
                     return {
                         id: parseInt(quest.ID) || 0,
@@ -1287,10 +1337,12 @@
                         description: quest.Description || 'No description available',
                         reward: reward,
                         link: quest.Link || '',
-                        status: status === 0 ? 'active' : 'completed',
+                        status: (status === 0 || status === 2) ? 'active' : 'completed',
+                        isGame: status === 2,
                         trackCode: trackCode,
                         remaining: availability.remaining,
-                        total: availability.total
+                        total: availability.total,
+                        deadline: parsedDeadline
                     };
                 }));
                 // Validate track codes for uniqueness
@@ -1327,6 +1379,8 @@
             DOM.earnings.innerHTML = formatCurrency(userData.earnings, currentCurrency);
             DOM.currencyToggle.checked = currentCurrency === 'USDC';
             populateQuests();
+            updateCountdowns();
+            setInterval(updateCountdowns, 1000);
             checkUrlParam();
         }
         // Initialize price toggle
@@ -1365,6 +1419,9 @@
             if (quest.status === 'completed') {
                 statusText = 'Completed';
                 statusClass = 'completed';
+            } else if (quest.isGame) {
+                statusText = 'Game on SnappQuest';
+                statusClass = 'game';
             } else if (quest.remaining !== null) {
                 if (typeof quest.remaining === 'number') {
                     if (quest.remaining < 0) {
@@ -1385,16 +1442,26 @@
                     statusClass = 'low';
                 }
             }
+            let deadlineHtml = '';
+            let showSubmit = true;
+            if (!quest.isGame && quest.deadline !== '0') {
+                const expiryTime = new Date(quest.deadline).getTime();
+                const diff = expiryTime - Date.now();
+                const isExpired = diff <= 0;
+                if (isExpired) showSubmit = false;
+                deadlineHtml = `<div class="quest-deadline ${isExpired ? 'expired' : ''}" data-expiry="${expiryTime}">Expires in: <span class="countdown">${formatTimeLeft(diff)}</span></div>`;
+            }
             card.innerHTML = `
                 <div class="quest-title">${quest.title}</div>
                 <div class="quest-sponsor">Sponsored by: ${quest.sponsor}</div>
                 ${statusText ? `<div class="quest-remaining ${statusClass}">${statusText}</div>` : ''}
+                ${deadlineHtml}
                 <div class="quest-description">${quest.description}</div>
                 <div class="quest-reward">
                     <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
                     <div style="display: flex; gap: 8px;">
-                        ${quest.status === 'active' && quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">View Quest</a>` : ''}
-                        ${quest.status === 'active' && typeof quest.remaining === 'number' && quest.remaining > 0 ? `<button class="submit-btn">Submit</button>` : ''}
+                        ${quest.status === 'active' && quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">${quest.isGame ? 'Play Game' : 'View Quest'}</a>` : ''}
+                        ${quest.status === 'active' && typeof quest.remaining === 'number' && quest.remaining > 0 && showSubmit ? `<button class="submit-btn">Submit</button>` : ''}
                         <button class="share-btn"><i class="fas fa-share-alt"></i> Share</button>
                     </div>
                 </div>
