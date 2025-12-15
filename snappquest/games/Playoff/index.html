@@ -52,20 +52,50 @@
         .wallet-info{margin-top:20px;font-size:1.1rem;color:var(--text-muted)}
         .wallet-info span{color:var(--text);font-weight:600;font-family:'Courier New',monospace}
 
-        .profit-badge{
+        /* BADGES CONTAINER */
+        #badges-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 20px 0;
+        }
+
+        .profit-badge, .rank-badge {
             font-size:2.5rem;font-weight:700;padding:14px 36px;border-radius:60px;backdrop-filter:blur(20px);
             box-shadow:0 10px 40px rgba(0,0,0,0.5);display:flex;align-items:center;gap:10px;
             opacity:0;transform:translateY(20px);transition:all 0.8s cubic-bezier(0.175,0.885,0.32,1.275);
             animation:badgeFloat 6s ease-in-out infinite;
         }
-        .profit-badge.show{opacity:1;transform:translateY(0)}
+        .profit-badge.show, .rank-badge.show{opacity:1;transform:translateY(0)}
         .profit-badge.positive{background:linear-gradient(135deg,rgba(16,185,129,0.32),rgba(34,197,94,0.18));border:1.5px solid rgba(52,211,153,0.6);color:#34d399;text-shadow:0 0 30px rgba(52,211,153,0.8)}
         .profit-badge.negative{background:linear-gradient(135deg,rgba(255,0,110,0.32),rgba(236,72,153,0.18));border:1.5px solid rgba(255,0,110,0.6);color:#ff3388;text-shadow:0 0 30px rgba(255,51,136,0.8)}
-        .profit-badge.glow{animation:badgeFloat 4s ease-in-out infinite,glowPulse 2s infinite alternate}
+        .profit-badge.glow, .rank-badge.glow{animation:badgeFloat 4s ease-in-out infinite,glowPulse 2s infinite alternate}
         @keyframes badgeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
         @keyframes glowPulse{from{box-shadow:0 10px 40px rgba(0,0,0,0.5),0 0 40px rgba(52,211,153,0.6)}to{box-shadow:0 15px 60px rgba(0,0,0,0.7),0 0 80px rgba(52,211,153,1)}}
         .negative.glow{animation:badgeFloat 4s ease-in-out infinite,glowPulseRed 2s infinite alternate}
         @keyframes glowPulseRed{from{box-shadow:0 10px 40px rgba(0,0,0,0.5),0 0 40px rgba(255,0,110,0.6)}to{box-shadow:0 15px 60px rgba(0,0,0,0.7),0 0 80px rgba(255,0,110,1)}}
+
+        /* RANK BADGE */
+        .rank-badge {
+            background: linear-gradient(135deg, rgba(139,92,246,0.32), rgba(0,212,255,0.18));
+            border: 1.5px solid rgba(139,92,246,0.6);
+            color: #8b5cf6;
+            text-shadow: 0 0 30px rgba(139,92,246,0.8);
+        }
+        .rank-badge.top3 {
+            background: linear-gradient(135deg, rgba(255,215,0,0.4), rgba(255,223,0,0.2));
+            border: 1.5px solid rgba(255,215,0,0.8);
+            color: gold;
+            text-shadow: 0 0 40px rgba(255,215,0,0.9);
+            animation: badgeFloat 4s ease-in-out infinite, glowPulseGold 2s infinite alternate;
+        }
+        @keyframes glowPulseGold {
+            from { box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 40px rgba(255,215,0,0.6); }
+            to { box-shadow: 0 15px 60px rgba(0,0,0,0.7), 0 0 80px rgba(255,215,0,1); }
+        }
+        .rank-badge i { font-size: 2rem; }
 
         .tokens-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:40px}
         .token-card{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:20px;padding:24px;transition:all .4s cubic-bezier(.175,.885,.32,1.275);position:relative;overflow:hidden}
@@ -121,6 +151,19 @@
         .sol{--gradient:linear-gradient(90deg,#5CA8CA,#976CE5)}
         .verse{--gradient:linear-gradient(90deg,#BB13E4,#8A37EA)}
         .avax{--gradient:linear-gradient(90deg,#E03E3F,#E03E3F)}
+
+        /* Purge link style */
+        #purge-link {
+            color: #ff006e;
+            font-weight: bold;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+        #purge-link:hover {
+            color: #ff3388;
+            text-shadow: 0 0 10px rgba(255,0,110,0.5);
+        }
     </style>
 </head>
 <body>
@@ -137,15 +180,20 @@
     <div class="container">
         <header><h1>Portfolio Playoff</h1></header>
 
-        <!-- UPGRADED BALANCE CARD WITH PROFIT/LOSS BADGE -->
+        <!-- BALANCE CARD -->
         <div class="balance-card">
             <div class="available"><b>Total Portfolio Value</b></div>
             
-            <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:25px;margin:20px 0;">
+            <!-- Badges container -->
+            <div id="badges-container">
                 <div class="total-balance">$<span id="total-balance">100,000.00</span></div>
                 
                 <div id="profit-badge" class="profit-badge" style="display:none;">
                     <span id="profit-sign">+0.00</span><span style="font-size:1.8rem;opacity:0.9;">%</span>
+                </div>
+
+                <div id="rank-badge" class="rank-badge" style="display:none;">
+                    <i class="fas fa-trophy"></i> <span id="rank-position">#</span>
                 </div>
             </div>
 
@@ -207,22 +255,21 @@
         const totalBalance = 100000;
         let chart, walletAddress = null, telegramHandle = null, allocateBtn;
 
-        // Check game status from cell M10
         async function checkGameStatus() {
             try {
                 const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Form responses 1!M10?key=${API_KEY}`);
                 const data = await res.json();
                 const value = data.values?.[0]?.[0];
 
-                if (value === "1" || value === 1) {
+                if (value === "0" || value === 1) {
                     document.getElementById('game-closed-screen').style.display = 'flex';
                     document.querySelector('.container').style.display = 'none';
-                    return false; // game closed
+                    return false;
                 }
             } catch (e) {
                 console.warn("Could not check game status, assuming open");
             }
-            return true; // game open
+            return true;
         }
 
         const colors = {verse:'#BB13E4',btc:'#f7931a',eth:'#3F3F3F',sol:'#976CE5',avax:'#E03E3F',available:'#334155'};
@@ -247,6 +294,47 @@
             }catch(e){ return []; }
         }
 
+        // Calculate and display rank
+        async function updateRank(myValue) {
+            const rankBadge = document.getElementById('rank-badge');
+            const rankPosition = document.getElementById('rank-position');
+            rankBadge.style.display = 'none';
+
+            const rows = await fetchSheetData();
+            const allValues = [];
+
+            rows.forEach(row => {
+                if (row.length >= 9) {
+                    const valStr = row[8]; // Column I
+                    const val = parseFloat(valStr?.replace(/[^0-9.-]/g, '')) || 100000;
+                    allValues.push(val);
+                }
+            });
+
+            if (allValues.length === 0) return;
+
+            // Sort descending
+            const sorted = [...allValues].sort((a, b) => b - a);
+
+            // Find user's position (1-based)
+            let rank = sorted.indexOf(myValue) + 1;
+            if (rank === 0) rank = sorted.length + 1; // safety
+
+            // Proper rank with ties
+            const uniqueSorted = [...new Set(sorted)];
+            const properRank = uniqueSorted.indexOf(myValue) + 1;
+
+            const suffix = properRank === 1 ? 'st' : properRank === 2 ? 'nd' : properRank === 3 ? 'rd' : 'th';
+            rankPosition.textContent = properRank + suffix;
+
+            rankBadge.className = 'rank-badge show';
+            rankBadge.style.display = 'flex';
+
+            if (properRank <= 3) {
+                rankBadge.classList.add('top3', 'glow');
+            }
+        }
+
         async function lockIfAlreadySubmitted(){
             if(!walletAddress || !telegramHandle) return false;
             const rows = await fetchSheetData();
@@ -263,15 +351,24 @@
                     });
                     document.querySelectorAll('.formatted-input').forEach(i=>i.disabled=true);
                     allocateBtn.style.display='none';
-                    document.getElementById('message').textContent="You already submitted! Portfolio locked.";
-                    document.getElementById('message').style.color="#8b5cf6"; document.getElementById('message').style.opacity=1;
-                    
+
+                    document.getElementById('message').innerHTML = 'You already submitted! Portfolio locked. <span id="purge-link">Purge</span>';
+                    document.getElementById('message').style.color="#8b5cf6"; 
+                    document.getElementById('message').style.opacity=1;
+
+                    document.getElementById('purge-link').onclick = () => {
+                        localStorage.removeItem('portfolio_wallet');
+                        localStorage.removeItem('portfolio_telegram');
+                        location.reload();
+                    };
+
                     const liveValue = currentValue ? parseFloat(currentValue.replace(/[^0-9.-]/g,'')) || 100000 : 100000;
                     document.getElementById('total-balance').textContent = liveValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                     
                     showToast("Welcome back! Your live portfolio value loaded.", "info");
                     updateInRealTime();
                     updateProfitBadge();
+                    await updateRank(liveValue); // Show rank
                     return true;
                 }
             }
@@ -341,15 +438,9 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // First: Check if game is open
             const gameIsOpen = await checkGameStatus();
+            if (!gameIsOpen) return;
 
-            if (!gameIsOpen) {
-                // Game closed — show beautiful closed screen and stop everything
-                return;
-            }
-
-            // Game is open — proceed normally
             allocateBtn = document.getElementById('allocate-btn');
 
             document.querySelectorAll('.formatted-input').forEach(input => {
@@ -426,6 +517,5 @@
             document.getElementById('back-to-top').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
         });
     </script>
-</body>
 </body>
 </html>

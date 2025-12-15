@@ -152,6 +152,24 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
+        /* NEW: PnL Column Styling */
+        .pnl {
+            font-weight: 700;
+            text-align: center;
+        }
+        .pnl.positive {
+            background: linear-gradient(90deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(16,185,129,0.6);
+        }
+        .pnl.negative {
+            background: linear-gradient(90deg, #ff006e, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255,0,110,0.6);
+        }
+
         /* BOTTOM ACTION BUTTONS */
         .bottom-actions {
             position: fixed; bottom: 30px; right: 30px; display: flex; gap: 16px; z-index: 100;
@@ -227,6 +245,7 @@
                             <th>Telegram</th>
                             <th>Wallet</th>
                             <th>Value</th>
+                            <th>PnL %</th> <!-- NEW COLUMN -->
                             <th>Verse</th>
                             <th>Bitcoin</th>
                             <th>ETH</th>
@@ -260,6 +279,7 @@
         const API_KEY  = "AIzaSyDseGK7WIi6hUGD_1Oz8cweDraAQpFisoQ";
     
         const DATA_RANGE = "Form responses 1!A2:AA";
+        const INITIAL_INVESTMENT = 100000;
     
         function formatNumber(n) {
             n = Number(n || 0);
@@ -302,6 +322,7 @@
             document.getElementById('login-screen').style.display = 'flex';
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
+            location.reload();
         };
     
         async function loadDashboard() {
@@ -322,16 +343,19 @@
                     const rawValue = row[8]; // Column I
                     const totalValue = rawValue !== undefined && rawValue !== "" 
                         ? parseFloat(rawValue) || 0 
-                        : 100000; // Only default to 100K if cell is truly empty
+                        : 100000;
+    
+                    const pnlPercent = ((totalValue - INITIAL_INVESTMENT) / INITIAL_INVESTMENT) * 100;
     
                     return {
-                        tg:        row[7] || '—',           // Telegram (G)
-                        wallet:    row[6] || '—',           // Wallet (H)
+                        tg:        row[7] || '—',
+                        wallet:    row[6] || '—',
                         totalValue: totalValue,
+                        pnlPercent: pnlPercent,
                         tokens:    tokenCols.map(i => parseFloat(row[i]) || 0)
                     };
                 })
-                .filter(u => u.totalValue > 0)  // Now removes $0 users properly
+                .filter(u => u.totalValue > 0)
                 .sort((a, b) => b.totalValue - a.totalValue);
     
                 const totalPlayers = userData.length;
@@ -362,26 +386,32 @@
                     options: { responsive: true, scales: { y: { beginAtZero: true } } }
                 });
     
-                // Ranking Table
+                // Ranking Table with PnL
                 const tbody = document.querySelector('#ranking-table tbody');
                 tbody.innerHTML = '';
                 userData.forEach((u, i) => {
+                    const sign = u.pnlPercent >= 0 ? '+' : '';
+                    const pnlClass = u.pnlPercent >= 0 ? 'positive' : 'negative';
+                    const pnlText = `${sign}${u.pnlPercent.toFixed(2)}%`;
+    
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td class="rank">#${i+1}</td>
                         <td>${u.tg}</td>
                         <td>${truncateAddress(u.wallet)}</td>
                         <td class="value">$${u.totalValue.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+                        <td class="pnl ${pnlClass}">${pnlText}</td>
                         ${u.tokens.map(t => `<td>${formatNumber(t)}</td>`).join('')}
                     `;
                     tbody.appendChild(tr);
                 });
     
-                // Export CSV
+                // Export CSV (now includes PnL)
                 document.getElementById('export-btn').onclick = () => {
-                    let csv = "Rank,Telegram,Wallet,Total Value USD,Verse Tokens,BTC Tokens,ETH Tokens,SOL Tokens,AVAX Tokens\n";
+                    let csv = "Rank,Telegram,Wallet,Total Value USD,PnL %,Verse Tokens,BTC Tokens,ETH Tokens,SOL Tokens,AVAX Tokens\n";
                     userData.forEach((u, i) => {
-                        csv += `${i+1},${u.tg},${u.wallet},${u.totalValue.toFixed(2)},${u.tokens.map(t => t.toFixed(6)).join(',')}\n`;
+                        const sign = u.pnlPercent >= 0 ? '+' : '';
+                        csv += `${i+1},${u.tg},${u.wallet},${u.totalValue.toFixed(2)},${sign}${u.pnlPercent.toFixed(2)}%,${u.tokens.map(t => t.toFixed(6)).join(',')}\n`;
                     });
                     const blob = new Blob([csv], { type: 'text/csv' });
                     const url = URL.createObjectURL(blob);

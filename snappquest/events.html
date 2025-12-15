@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verse Community Events</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+        body{background:linear-gradient(135deg,#0F172A 0%,#1E1B4B 50%,#0F172A 100%);color:#E5E7EB;min-height:100vh;padding:40px 20px;overflow-x:hidden;}
+        header{text-align:center;margin-bottom:80px;}
+        .logo{font-size:3.2rem;font-weight:900;background:linear-gradient(90deg,#6366F1,#34D399,#FBBF24);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-1px;text-shadow:0 0 40px rgba(99,102,241,0.3);}
+        .total-distributed{text-align:center;margin:0 auto 80px;max-width:600px;background:rgba(31,41,55,0.85);backdrop-filter:blur(20px);padding:32px;border-radius:24px;box-shadow:0 12px 40px rgba(0,0,0,0.4);border:1px solid rgba(99,102,241,0.2);}
+        .total-distributed h2{font-size:1.4rem;color:#9CA3AF;margin-bottom:16px;font-weight:500;}
+        .total-amount{font-size:3.5rem;font-weight:900;background:linear-gradient(90deg,#34D399,#FBBF24,#34D399);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 60px rgba(251,191,36,0.4);}
+        .day-menu{display:flex;justify-content:center;gap:16px;margin-bottom:60px;flex-wrap:wrap;padding:0 20px;}
+        .day-btn{padding:16px 32px;background:rgba(31,41,55,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:16px;color:#D1D5DB;font-weight:700;font-size:1.1rem;cursor:pointer;transition:all .4s cubic-bezier(.175,.885,.32,1.275);box-shadow:0 4px 12px rgba(0,0,0,0.2);position:relative;overflow:hidden;}
+        .day-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);transition:left .6s;}
+        .day-btn:hover::before{left:100%;}
+        .day-btn.active{background:linear-gradient(135deg,#6366F1,#34D399);color:white;border:none;transform:translateY(-4px) scale(1.05);box-shadow:0 12px 32px rgba(99,102,241,0.5);}
+        .day-btn:hover:not(.active){transform:translateY(-4px);box-shadow:0 8px 24px rgba(99,102,241,0.3);border-color:#6366F1;}
+        .events-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:32px;margin-bottom:60px;max-width:1400px;margin-left:auto;margin-right:auto;}
+        .event-card{background:rgba(31,41,55,0.95);backdrop-filter:blur(20px);border-radius:24px;padding:32px;box-shadow:0 12px 32px rgba(0,0,0,0.4);transition:all .4s cubic-bezier(.175,.885,.32,1.275);position:relative;overflow:hidden;border:1px solid rgba(99,102,241,0.2);}
+        .event-card:hover{transform:translateY(-12px) scale(1.02);box-shadow:0 24px 48px rgba(99,102,241,0.4);}
+        .event-title{font-size:1.8rem;font-weight:800;margin-bottom:12px;background:linear-gradient(90deg,#E5E7EB,#F3F4F6);-webkit-background-clip:text;background-clip:text;color:transparent;}
+        .event-sponsor{font-size:1.1rem;color:#34D399;margin-bottom:12px;font-weight:600;}
+        .event-description{font-size:1.05rem;color:#CBD5E1;margin-bottom:24px;line-height:1.6;}
+        .event-reward{font-size:1.5rem;font-weight:800;margin-bottom:20px;background:linear-gradient(90deg,#FBBF24,#34D399);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 30px rgba(251,191,36,0.4);}
+        .event-timer{font-size:1.1rem;color:#9CA3AF;margin-bottom:20px;display:flex;align-items:center;gap:10px;font-weight:600;}
+        .event-timer .countdown{color:#34D399;font-weight:700;}
+        .event-timer.expired{color:#EF4444;}
+        .event-timer.expired .countdown{color:#EF4444;}
+
+        .participate-btn{
+            display:inline-block;
+            background:linear-gradient(135deg,#6366F1,#34D399);
+            color:white;
+            padding:16px 32px;
+            border-radius:16px;
+            font-weight:700;
+            font-size:1.1rem;
+            text-align:center;
+            text-decoration:none;
+            box-shadow:0 6px 20px rgba(99,102,241,0.4);
+            position:relative;
+            overflow:hidden;
+            transition:all .4s ease;
+            width: 100%;
+        }
+        .participate-btn::before{
+            content:'';
+            position:absolute;
+            top:0;left:-100%;
+            width:100%;height:100%;
+            background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+            transition:left .6s;
+            pointer-events:none;
+        }
+        .participate-btn:hover::before{left:100%;}
+        .participate-btn:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(99,102,241,0.6);}
+
+        .no-events-message{
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #9CA3AF;
+            background: rgba(31,41,55,0.6);
+            border-radius: 24px;
+            border: 1px dashed rgba(99,102,241,0.3);
+        }
+
+        .pagination{display:flex;justify-content:center;gap:16px;margin:60px 0;}
+        .page-btn{padding:14px 24px;background:rgba(31,41,55,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:16px;color:#D1D5DB;font-weight:700;cursor:pointer;transition:all .4s;min-width:60px;}
+        .page-btn.active{background:linear-gradient(135deg,#6366F1,#34D399);color:white;border:none;transform:scale(1.1);box-shadow:0 8px 24px rgba(99,102,241,0.5);}
+        .page-btn:hover:not(.disabled):not(.active){transform:translateY(-4px);box-shadow:0 8px 24px rgba(99,102,241,0.3);}
+        .page-btn.disabled{opacity:0.4;cursor:not-allowed;}
+        #back-to-top{position:fixed;bottom:32px;right:32px;z-index:1000;background:linear-gradient(135deg,#6366F1,#34D399);color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,0.3);opacity:0;visibility:hidden;transition:all .5s;cursor:pointer;}
+        #back-to-top.visible{opacity:1;visibility:visible;}
+                
+        .footer-credit {
+            text-align: center;
+            margin: 100px auto 40px;
+            padding: 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #00d4ff, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: glow 3s ease-in-out infinite alternate;
+            max-width: 800px;
+        }
+        .footer-credit a {
+            color: #00d4ff;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        .footer-credit a:hover {
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+        }
+        @keyframes glow {
+            from { opacity: 0.8; }
+            to { opacity: 1; text-shadow: 0 0 20px rgba(0,212,255,0.5); }
+        }
+    </style>
+</head>
+<body>
+
+    <header><div class="logo">Verse Community Events</div></header>
+
+    <div class="total-distributed">
+        <h2>Total Amount Distributed</h2>
+        <div class="total-amount">100<br><h2>Verse Scratchers</h2></div>
+    </div>
+
+    <div class="day-menu">
+        <button class="day-btn active" data-day="monday">Monday</button>
+        <button class="day-btn" data-day="tuesday">Tuesday</button>
+        <button class="day-btn" data-day="wednesday">Wednesday</button>
+        <button class="day-btn" data-day="thursday">Thursday</button>
+        <button class="day-btn" data-day="friday">Friday</button>
+        <button class="day-btn" data-day="saturday">Saturday</button>
+        <button class="day-btn" data-day="sunday">Sunday</button>
+    </div>
+
+    <div class="events-grid" id="events-grid"></div>
+    <div class="pagination" id="pagination"></div>
+
+    <div class="footer-credit">Powered by <a href="https://snappquest.niti.com.ng/" target="_blank">SnappQuest</a></div>
+
+    <button id="back-to-top" title="Back to Top"><i class="fas fa-arrow-up"></i></button>
+
+    <script>
+        const currentDate = new Date('2025-12-15'); // Monday, Dec 15, 2025
+        const EVENTS_PER_PAGE = 4;
+
+        const eventsData = {
+            monday: [
+                { title: "", sponsor: "", description: "No Event Uploaded", reward: "", start: new Date('0000-00-00T00:00:00'), end: new Date('0000-00-00T00:00:00'), link: "" },                
+            ],
+            tuesday: [
+                { title: "", sponsor: "", description: "No Event Uploaded", reward: "", start: new Date('0000-00-00T00:00:00'), end: new Date('0000-00-00T00:00:00'), link: "" },                                
+            ],
+            wednesday: [  // Fixed typo: was "wenesday"
+                { title: "", sponsor: "", description: "No Event Uploaded", reward: "", start: new Date('0000-00-00T00:00:00'), end: new Date('0000-00-00T00:00:00'), link: "" },                                
+            ],
+            thursday: [
+                { title: "", sponsor: "", description: "No Event Uploaded", reward: "", start: new Date('0000-00-00T00:00:00'), end: new Date('0000-00-00T00:00:00'), link: "" },                
+            ],
+            friday: [
+                { title: "", sponsor: "", description: "No Event Uploaded", reward: "", start: new Date('0000-00-00T00:00:00'), end: new Date('0000-00-00T00:00:00'), link: "" },                
+            ],
+            saturday: [
+                { title: "", sponsor: "", description: "No Event Uploaded", reward: "", start: new Date('0000-00-00T00:00:00'), end: new Date('0000-00-00T00:00:00'), link: "" },                
+            ],
+            sunday: [
+                { title: "SnappQuest Engagement Quest", sponsor: "Crypto Raira", description: "Just engage with the latest Verse tweet (linked) and drop your proof on SnappQuest to secure your reward.", reward: "50 Verse Scratchers", start: new Date('2025-12-21T06:00:00'), end: new Date('2025-12-22T00:00:00'), link: "https://www.google.com" },
+                { title: "The Verse Scramble Challenge", sponsor: "Aderoju Isaac", description: "A key Verse-related word is hidden in this scrambled puzzle, can you crack it?", reward: "50 Verse Scratchers", start: new Date('2025-12-21T06:30:00'), end: new Date('2025-12-22T00:00:00'), link: "https://forms.gle/qhmHvbKLE8eifwwP8" },                
+            ]
+        };
+
+        function formatTimeLeft(ms) {
+            if (ms <= 0) return 'Expired';
+            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((ms % (1000 * 60)) / 1000);
+            return `${days}d ${hours}h ${mins}m ${secs}s`;
+        }
+
+        function updateCountdowns() {
+            document.querySelectorAll('.event-timer').forEach(el => {
+                const start = new Date(el.dataset.start).getTime();
+                const end = new Date(el.dataset.end).getTime();
+                const now = Date.now();
+                let status = '';
+                let timeLeft = 0;
+                if (now < start) {
+                    status = 'Launches in: ';
+                    timeLeft = start - now;
+                } else if (now < end) {
+                    status = 'Closes in: ';
+                    timeLeft = end - now;
+                } else {
+                    status = 'Closed';
+                    timeLeft = 0;
+                    el.closest('.event-card').querySelector('.participate-btn')?.remove();
+                }
+                el.innerHTML = `<i class="fas fa-clock"></i> ${status}<span class="countdown">${formatTimeLeft(timeLeft)}</span>`;
+                if (timeLeft <= 0) el.classList.add('expired');
+                else el.classList.remove('expired');
+            });
+        }
+
+        let currentDay = 'monday';
+        let currentPage = 1;
+
+        function renderEvents() {
+            const grid = document.getElementById('events-grid');
+            grid.innerHTML = '';
+            const dayEvents = eventsData[currentDay] || [];
+
+            // Check if this day has only placeholder "no event" entries
+            const hasRealEvents = dayEvents.some(event => 
+                event.title.trim() !== "" || event.description !== "No Event Uploaded"
+            );
+
+            if (!hasRealEvents) {
+                const message = document.createElement('div');
+                message.className = 'no-events-message';
+                message.textContent = 'No event uploaded';
+                grid.appendChild(message);
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            // Otherwise, show normal events
+            const start = (currentPage - 1) * EVENTS_PER_PAGE;
+            const end = start + EVENTS_PER_PAGE;
+            const paginated = dayEvents.slice(start, end);
+
+            paginated.forEach(event => {
+                const card = document.createElement('div');
+                card.className = 'event-card';
+                const isActive = Date.now() >= event.start.getTime() && Date.now() < event.end.getTime();
+                card.innerHTML = `
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-sponsor">Sponsored by: ${event.sponsor}</div>
+                    <div class="event-description">${event.description}</div>
+                    <div class="event-reward">Reward: ${event.reward}</div>
+                    <div class="event-timer" data-start="${event.start.toISOString()}" data-end="${event.end.toISOString()}">
+                        <i class="fas fa-clock"></i> Calculating...
+                    </div>
+                    ${isActive ? `<a href="${event.link}" class="participate-btn" target="_blank" rel="noopener">Participate Now</a>` : ''}
+                `;
+                grid.appendChild(card);
+            });
+
+            renderPagination(dayEvents.length);
+            updateCountdowns();
+        }
+
+        function renderPagination(total) {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            const totalPages = Math.ceil(total / EVENTS_PER_PAGE);
+            if (totalPages <= 1) return;
+
+            const prev = document.createElement('button');
+            prev.className = 'page-btn' + (currentPage === 1 ? ' disabled' : '');
+            prev.textContent = '< Prev';
+            prev.onclick = () => { if (currentPage > 1) { currentPage--; renderEvents(); } };
+            pagination.appendChild(prev);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+                btn.textContent = i;
+                btn.onclick = () => { currentPage = i; renderEvents(); };
+                pagination.appendChild(btn);
+            }
+
+            const next = document.createElement('button');
+            next.className = 'page-btn' + (currentPage === totalPages ? ' disabled' : '');
+            next.textContent = 'Next >';
+            next.onclick = () => { if (currentPage < totalPages) { currentPage++; renderEvents(); } };
+            pagination.appendChild(next);
+        }
+
+        document.querySelectorAll('.day-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelector('.day-btn.active')?.classList.remove('active');
+                btn.classList.add('active');
+                currentDay = btn.dataset.day;
+                currentPage = 1;
+                renderEvents();
+            };
+        });
+
+        // Back to Top
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('visible', window.scrollY > 300);
+        });
+        backToTop.onclick = () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        setInterval(updateCountdowns, 1000);
+        renderEvents();
+    </script>
+</body>
+</html>
