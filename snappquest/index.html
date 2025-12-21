@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <!-- SnappQuest Framework - Version 1.0: This is the initial rollout designed as a customizable template for projects to build an Engage-to-Earn tool. Feel free to modify sections as needed to fit your project's branding and functionality. Comment out or replace elements for customization. -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="SnappQuest — The Engage-to-Earn Business Solution for Incentivizing Growth and Engagement.">
@@ -11,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         /* --- Utilities & Base Styles --- */
+        /* Customize: Adjust color variables below to match your project's theme. You can add or remove variables as needed. */
         :root {
             --color-dark-bg: #0F172A; /* Slate 900 */
             --color-light-bg: #1E293B; /* Slate 800 */
@@ -612,6 +614,7 @@
 </head>
 
 <body>
+    <!-- Customize: Modify the header section below to change logo, navigation links, or buttons for your project. Comment out unused links or add new ones. -->
     <header>
         <div class="logo">
             <a href="#"><img src="images/logo.png" alt="SnappQuest Logo"></a>
@@ -629,6 +632,7 @@
     </header>
     <div class="overlay"></div>
 
+    <!-- Customize: Update hero section text, buttons, or background for your project's messaging. Comment out CTAs if not needed. -->
     <section id="hero">
         <div class="hero-content">
             <h1>Incentive <span class="hero-gradient-text">Engagement</span></h1>
@@ -643,17 +647,19 @@
             </div>
         </div>
     </section>
+    <!-- Customize: Change partner logos, add/remove chains, or replace with your project's partners/supported features. Comment out the entire section if irrelevant. -->
     <section id="partners">
         <div class="container">
             <h3>Supported Chains on SnappQuest</h3>
            <div class="partner-logos">
-                <img src="images/solana.png" alt="Solana Logo" class="partner-logo" style="width: auto;">  <img src="images/polygon.png" alt="Polygon Logo" class="partner-logo" style="width: auto;">
+                <img src="images/solana.png" alt="Solana Logo" class="partner-logo" style="width: auto;"> <img src="images/sui.png" alt="Sui Logo" class="partner-logo" style="width: auto;"> <img src="images/polygon.png" alt="Polygon Logo" class="partner-logo" style="width: auto;">
             </div>
         </div>
     </section>
 
     <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.15), rgba(255,255,255,0)); margin: 40px 0;">
 
+    <!-- Customize: Modify features section to highlight your project's unique aspects. Add/remove cards, change icons/text as needed. Comment out cards for simplification. -->
     <section id="features">
         <div class="container">
             <h2>The Power of Incentives</h2>
@@ -678,6 +684,7 @@
         </div>
     </section>
 
+    <!-- Customize: Update footer content, links, social icons, or copyright info for your project. Comment out columns or add new ones. -->
     <footer>
         <div class="container">
             <div class="footer-row">
@@ -695,7 +702,7 @@
                         <li><a href="#hero">Home</a></li>
                         <li><a href="create.html">Create Quest</a></li>
                         <li><a class="join-quest-link" onclick="window.location.href='join.html'">Join Quest</a></li>
-                        <li><a href="events.html">Verse Events</a></li>
+                        <li><a href="events.html" target="_blank">Explore Events</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -715,17 +722,8 @@
     <button id="back-to-top" title="Back to Top">
         <i class="fas fa-arrow-up"></i>
     </button>
-
-    <div id="joinQuestModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal('joinQuestModal')">&times;</span>
-            <h3>Invite Only!!! 🚫</h3>
-            <img src="images/verified.png" alt="Verified" style="max-width: 150px; margin: 15px auto; border-radius: 8px; animation: float 3s ease-in-out infinite;">
-            <p>Only verified Solana supporters are allowed to join Quests and earn rewards. Please get verified to engage-to-earn.</p>
-            <button class="cta-primary" style="margin-top: 20px; color: var(--color-text-primary); background: var(--color-indigo);" onclick="window.open('https://t.me/SnappQuest', '_blank')"><i class="fab fa-telegram-plane"></i> Join Community</button>
-        </div>
-    </div>
-
+    
+    <!-- Customize: Adjust JavaScript below for custom behaviors, or add new scripts. Comment out unused functions. -->
     <script>
         // Set current year in footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
