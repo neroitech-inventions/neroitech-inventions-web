@@ -382,7 +382,7 @@
                 const data = await res.json();
                 const value = data.values?.[0]?.[0];
 
-                if (value === "0" || value === 1) {
+                if (value === "1" || value === 1) {
                     document.getElementById('game-closed-screen').style.display = 'flex';
                     document.querySelector('.container').style.display = 'none';
                     return false;
