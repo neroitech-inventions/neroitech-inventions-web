@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+   <!-- SnappQuest Framework - Version 1.0: This is the initial rollout designed as a customizable template for projects to build an Engage-to-Earn tool. Feel free to modify sections as needed to fit your project's branding and functionality. Comment out or replace elements for customization. -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Incentive Engagement — Create a New Quest.">
     <title>SnappQuest - Create a New Quest</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" onerror="console.error('Font Awesome failed to load')">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Customize: Update to the latest Font Awesome CDN for new icons like X (formerly Twitter). -->
     <link href="images/icon.png" rel="icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+ 
     <style>
+        /* Customize: Adjust styles here for colors, fonts, layouts, etc. to match your project's theme. */
         * {
             margin: 0;
             padding: 0;
@@ -666,6 +670,7 @@
     </style>
 </head>
 <body>
+    <!-- Customize: Modify the header section below to change logo, navigation links, or buttons for your project. Comment out unused links or add new ones. -->
     <!-- Navbar -->
     <header>
         <div class="logo">
@@ -683,6 +688,7 @@
     </header>
     <div class="overlay"></div>
 
+    <!-- Customize: Update main content, form fields, or layout to fit your project's quest creation process. Add/remove fields as needed. -->
     <!-- Main Content -->
     <main>
         <div class="quote-container">
@@ -745,7 +751,9 @@
                         <select id="network">
                             <option value="Solana" selected>Solana</option>
                             <option value="Polygon">Polygon</option>
+                            <option value="Sui" disabled>Sui (Coming Soon)</option>
                             <option value="Ethereum" disabled>Ethereum (Coming Soon)</option>
+
                         </select>
                     </div>
                     <div class="form-group">
@@ -882,6 +890,7 @@
         </div>
     </main>
 
+    <!-- Customize: Update footer content, links, social icons, or copyright info for your project. Comment out columns or add new ones. Change 'fa-twitter' to 'fa-x-twitter' for the new X logo. -->
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -920,37 +929,7 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- Modal for Learn More Section -->
-    <div id="learnMoreModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>SnappQuest Overview</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <h3>Vision</h3>
-                <p>SnappQuest exists to become the Engage-to-Earn tool for Superteam Nigeria and the Solana ecosystem, rewarding effort, not just outcomes.</p>
-                <h3>Mission</h3>
-                <p>To unlock quick earning opportunities for the SnappQuest community, while providing sponsors with real engagement in return.</p>
-                <h3>The Problem</h3>
-                <p>New projects and the Solana community struggle to gain visibility, while communities show up but often don't get rewarded.</p>
-                <h3>The Solution: SnappQuest</h3>
-                <p>SnappQuest is a tool that incentivizes participation, turning effort into recognition, rewards, and earning opportunities.</p>
-                <h3>How SnappQuest Works</h3>
-                <p>Create your Quest, generate the quote, and after payment, submit the new Quest for admin approval. Admins verify the Quest, if it’s legitimate, they move it to the active Quests for community participation.</p>
-                <h3>Key Features</h3>
-                <ul>
-                    <li>Real engagement</li>
-                    <li>No bots</li>
-                    <li>Community powered</li>
-                </ul>
-                <h3>Long-Term Vision</h3>
-                <p>SnappQuest becomes the go-to tool for engagement across Solana, helping contributors, builders, and communities thrive.</p>
-                <button class="modal-close-btn">Close</button>
-            </div>
-        </div>
-    </div>
-
+    <!-- Customize: Adjust modal for copy confirmation or payment details. -->
     <!-- Modal for Copy Confirmation -->
     <div id="copyConfirmationModal" class="modal">
         <div class="modal-content">
@@ -968,6 +947,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <!-- Customize: Modify JavaScript variables, functions, or event listeners for custom logic, currencies, networks, etc. Comment out unused parts. -->
     <script>
         // Set current year in footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
@@ -981,7 +961,6 @@
 
         // Get elements
         const createQuestForm = document.getElementById("createQuestForm");
-        const learnMoreModal = document.getElementById("learnMoreModal");
         const copyConfirmationModal = document.getElementById("copyConfirmationModal");
         const totalPriceSpan = document.getElementById("totalPrice");
         const minPriceText = document.getElementById("minPriceText");
@@ -1265,29 +1244,6 @@
             hamburger.classList.remove("active");
             navContainer.classList.remove("active");
             overlay.classList.remove("active");
-        });
-
-        // Modal handling
-        closeButtons.forEach(button => {
-            button.addEventListener("click", () => {
-                learnMoreModal.classList.remove("active");
-                copyConfirmationModal.classList.remove("active");
-                setTimeout(() => {
-                    learnMoreModal.style.display = "none";
-                    copyConfirmationModal.style.display = "none";
-                }, 400);
-            });
-        });
-
-        window.addEventListener("click", (event) => {
-            if (event.target === learnMoreModal || event.target === copyConfirmationModal) {
-                learnMoreModal.classList.remove("active");
-                copyConfirmationModal.classList.remove("active");
-                setTimeout(() => {
-                    learnMoreModal.style.display = "none";
-                    copyConfirmationModal.style.display = "none";
-                }, 400);
-            }
         });
 
         // Back to Top Button

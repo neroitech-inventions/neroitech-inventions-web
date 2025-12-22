@@ -1,71 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+   <!-- SnappQuest Framework - Version 1.0: This is the initial rollout designed as a customizable template for projects to build an Engage-to-Earn tool. Feel free to modify sections as needed to fit your project's branding and functionality. Comment out or replace elements for customization. -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore Events</title>
+    <!-- Customize: Update to the latest Font Awesome CDN for new icons like X (formerly Twitter). -->
     <link href="images/icon.png" rel="icon">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-        body{background:linear-gradient(135deg,#0F172A 0%,#1E1B4B 50%,#0F172A 100%);color:#E5E7EB;min-height:100vh;padding:40px 20px;overflow-x:hidden;}
-        header{text-align:center;margin-bottom:80px;}
-        .logo{font-size:3.2rem;font-weight:900;background:linear-gradient(90deg,#6366F1,#34D399,#FBBF24);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-1px;text-shadow:0 0 40px rgba(99,102,241,0.3);}
-        .total-distributed{text-align:center;margin:0 auto 80px;max-width:600px;background:rgba(31,41,55,0.85);backdrop-filter:blur(20px);padding:32px;border-radius:24px;box-shadow:0 12px 40px rgba(0,0,0,0.4);border:1px solid rgba(99,102,241,0.2);}
-        .total-distributed h2{font-size:1.4rem;color:#9CA3AF;margin-bottom:16px;font-weight:500;}
-        .total-amount{font-size:3.5rem;font-weight:900;background:linear-gradient(90deg,#34D399,#FBBF24,#34D399);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 60px rgba(251,191,36,0.4);}
-        .day-menu{display:flex;justify-content:center;gap:16px;margin-bottom:60px;flex-wrap:wrap;padding:0 20px;}
-        .day-btn{padding:16px 32px;background:rgba(31,41,55,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:16px;color:#D1D5DB;font-weight:700;font-size:1.1rem;cursor:pointer;transition:all .4s cubic-bezier(.175,.885,.32,1.275);box-shadow:0 4px 12px rgba(0,0,0,0.2);position:relative;overflow:hidden;}
-        .day-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);transition:left .6s;}
-        .day-btn:hover::before{left:100%;}
-        .day-btn.active{background:linear-gradient(135deg,#6366F1,#34D399);color:white;border:none;transform:translateY(-4px) scale(1.05);box-shadow:0 12px 32px rgba(99,102,241,0.5);}
-        .day-btn:hover:not(.active){transform:translateY(-4px);box-shadow:0 8px 24px rgba(99,102,241,0.3);border-color:#6366F1;}
-        .events-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:32px;margin-bottom:60px;max-width:1400px;margin-left:auto;margin-right:auto;}
-        .event-card{background:rgba(31,41,55,0.95);backdrop-filter:blur(20px);border-radius:24px;padding:32px;box-shadow:0 12px 32px rgba(0,0,0,0.4);transition:all .4s cubic-bezier(.175,.885,.32,1.275);position:relative;overflow:hidden;border:1px solid rgba(99,102,241,0.2);}
-        .event-card:hover{transform:translateY(-12px) scale(1.02);box-shadow:0 24px 48px rgba(99,102,241,0.4);}
-        .event-title{font-size:1.8rem;font-weight:800;margin-bottom:12px;background:linear-gradient(90deg,#E5E7EB,#F3F4F6);-webkit-background-clip:text;background-clip:text;color:transparent;}
-        .event-sponsor{font-size:1.1rem;color:#34D399;margin-bottom:12px;font-weight:600;}
-        .event-description{font-size:1.05rem;color:#CBD5E1;margin-bottom:24px;line-height:1.6;}
-        .event-reward{font-size:1.5rem;font-weight:800;margin-bottom:20px;background:linear-gradient(90deg,#FBBF24,#34D399);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 30px rgba(251,191,36,0.4);}
-        .event-timer{font-size:1.1rem;color:#9CA3AF;margin-bottom:20px;display:flex;align-items:center;gap:10px;font-weight:600;}
-        .event-timer .countdown{color:#34D399;font-weight:700;}
-        .event-timer.expired{color:#EF4444;}
-        .event-timer.expired .countdown{color:#EF4444;}
+        /* --- Utilities & Base Styles --- */
+        /* Customize: Adjust color variables below to match your project's theme. You can add or remove variables as needed. */
+        :root {
+            --color-dark-bg: #0F172A; /* Slate 900 */
+            --color-light-bg: #1E293B; /* Slate 800 */
+            --color-text-primary: #F8FAFC; /* Slate 50 */
+            --color-text-secondary: #94A3B8; /* Slate 400 */
+            --color-indigo: #6366F1; /* Indigo 500 */
+            --color-teal: #34D399; /* Teal 400 */
+            --color-gradient-primary: linear-gradient(135deg, var(--color-indigo), var(--color-teal));
+        }
 
-        .participate-btn{
-            display:inline-block;
-            background:linear-gradient(135deg,#6366F1,#34D399);
-            color:white;
-            padding:16px 32px;
-            border-radius:16px;
-            font-weight:700;
-            font-size:1.1rem;
-            text-align:center;
-            text-decoration:none;
-            box-shadow:0 6px 20px rgba(99,102,241,0.4);
-            position:relative;
-            overflow:hidden;
-            transition:all .4s ease;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--color-dark-bg);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: clamp(40px, 8vw, 80px);
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: clamp(2.5rem, 7vw, 3.2rem);
+            font-weight: 900;
+            background: linear-gradient(90deg, #6366F1, #34D399, #FBBF24);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -1px;
+            text-shadow: 0 0 40px rgba(99,102,241,0.3);
+        }
+
+        .total-distributed {
+            text-align: center;
+            margin: 0 auto clamp(40px, 8vw, 80px);
+            max-width: 600px;
+            background: rgba(31,41,55,0.85);
+            backdrop-filter: blur(20px);
+            padding: clamp(20px, 5vw, 32px);
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            border: 1px solid rgba(99,102,241,0.2);
+        }
+
+        .total-distributed h2 {
+            font-size: clamp(1.2rem, 3vw, 1.4rem);
+            color: #9CA3AF;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .total-amount {
+            font-size: clamp(2.8rem, 8vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(90deg, #34D399, #FBBF24, #34D399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 60px rgba(251,191,36,0.4);
+            line-height: 1.2;
+        }
+
+        .total-amount h2 {
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
+            margin-top: 8px;
+        }
+
+        .day-menu {
+            display: flex;
+            justify-content: center;
+            gap: clamp(10px, 2vw, 16px);
+            margin-bottom: clamp(40px, 8vw, 60px);
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+
+        .day-btn {
+            padding: clamp(12px, 3vw, 16px) clamp(20px, 5vw, 32px);
+            min-width: 120px;
+            background: rgba(31,41,55,0.9);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            color: #D1D5DB;
+            font-weight: 700;
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            cursor: pointer;
+            transition: all .4s cubic-bezier(.175,.885,.32,1.275);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left .6s;
         }
-        .participate-btn::before{
-            content:'';
-            position:absolute;
-            top:0;left:-100%;
-            width:100%;height:100%;
-            background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
-            transition:left .6s;
-            pointer-events:none;
-        }
-        .participate-btn:hover::before{left:100%;}
-        .participate-btn:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(99,102,241,0.6);}
 
-        .no-events-message{
+        .day-btn:hover::before { left: 100%; }
+
+        .day-btn.active {
+            background: linear-gradient(135deg, #6366F1, #34D399);
+            color: white;
+            border: none;
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(99,102,241,0.5);
+        }
+
+        .day-btn:hover:not(.active) {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(99,102,241,0.3);
+            border-color: #6366F1;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+            gap: clamp(20px, 5vw, 32px);
+            margin-bottom: clamp(40px, 8vw, 60px);
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 10px;
+        }
+
+        .event-card {
+            background: rgba(31,41,55,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: clamp(20px, 5vw, 32px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+            transition: all .4s cubic-bezier(.175,.885,.32,1.275);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(99,102,241,0.2);
+        }
+
+        .event-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 24px 48px rgba(99,102,241,0.4);
+        }
+
+        .event-title {
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, #E5E7EB, #F3F4F6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .event-sponsor {
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            color: #34D399;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .event-description {
+            font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+            color: #CBD5E1;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .event-reward {
+            font-size: clamp(1.3rem, 4vw, 1.5rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #FBBF24, #34D399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(251,191,36,0.4);
+        }
+
+        .event-timer {
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            color: #9CA3AF;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .event-timer .countdown {
+            color: #34D399;
+            font-weight: 700;
+        }
+
+        .event-timer.expired { color: #EF4444; }
+        .event-timer.expired .countdown { color: #EF4444; }
+
+        .participate-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #6366F1, #34D399);
+            color: white;
+            padding: clamp(12px, 3vw, 16px);
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(99,102,241,0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all .4s ease;
+        }
+
+        .participate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left .6s;
+            pointer-events: none;
+        }
+
+        .participate-btn:hover::before { left: 100%; }
+        .participate-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(99,102,241,0.6); }
+
+        .no-events-message {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 80px 20px;
-            font-size: 1.8rem;
+            padding: clamp(60px, 15vw, 80px) 20px;
+            font-size: clamp(1.4rem, 5vw, 1.8rem);
             font-weight: 600;
             color: #9CA3AF;
             background: rgba(31,41,55,0.6);
@@ -73,19 +272,87 @@
             border: 1px dashed rgba(99,102,241,0.3);
         }
 
-        .pagination{display:flex;justify-content:center;gap:16px;margin:60px 0;}
-        .page-btn{padding:14px 24px;background:rgba(31,41,55,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:16px;color:#D1D5DB;font-weight:700;cursor:pointer;transition:all .4s;min-width:60px;}
-        .page-btn.active{background:linear-gradient(135deg,#6366F1,#34D399);color:white;border:none;transform:scale(1.1);box-shadow:0 8px 24px rgba(99,102,241,0.5);}
-        .page-btn:hover:not(.disabled):not(.active){transform:translateY(-4px);box-shadow:0 8px 24px rgba(99,102,241,0.3);}
-        .page-btn.disabled{opacity:0.4;cursor:not-allowed;}
-        #back-to-top{position:fixed;bottom:32px;right:32px;z-index:1000;background:linear-gradient(135deg,#6366F1,#34D399);color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,0.3);opacity:0;visibility:hidden;transition:all .5s;cursor:pointer;}
-        #back-to-top.visible{opacity:1;visibility:visible;}
-                
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: clamp(10px, 2vw, 16px);
+            margin: clamp(40px, 8vw, 60px) 0;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            padding: clamp(10px, 2vw, 14px) clamp(18px, 4vw, 24px);
+            min-width: 50px;
+            background: rgba(31,41,55,0.9);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            color: #D1D5DB;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .4s;
+        }
+
+        .page-btn.active {
+            background: linear-gradient(135deg, #6366F1, #34D399);
+            color: white;
+            border: none;
+            transform: scale(1.1);
+            box-shadow: 0 8px 24px rgba(99,102,241,0.5);
+        }
+
+        .page-btn:hover:not(.disabled):not(.active) {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(99,102,241,0.3);
+        }
+
+        .page-btn.disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* Back to Top Button */
+        #back-to-top {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 1000;
+            background: var(--color-gradient-primary);
+            color: var(--color-dark-bg);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            animation: pulseButton 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseButton {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #back-to-top:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(52, 211, 153, 0.5);
+        }
+
+        #back-to-top i {
+            font-size: 24px;
+        }
+
         .footer-credit {
             text-align: center;
-            margin: 100px auto 40px;
+            margin: clamp(60px, 12vw, 100px) auto 40px;
             padding: 30px;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             font-weight: 600;
             background: linear-gradient(90deg, #00d4ff, #8b5cf6, #ec4899);
             -webkit-background-clip: text;
@@ -94,44 +361,55 @@
             animation: glow 3s ease-in-out infinite alternate;
             max-width: 800px;
         }
+
         .footer-credit a {
             color: #00d4ff;
             text-decoration: none;
             font-weight: 700;
             transition: all 0.3s;
         }
+
         .footer-credit a:hover {
             text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
         }
+
         @keyframes glow {
             from { opacity: 0.8; }
             to { opacity: 1; text-shadow: 0 0 20px rgba(0,212,255,0.5); }
+        }
+
+        /* Mobile-specific improvements */
+        @media (max-width: 480px) {
+            .day-menu { gap: 10px; }
+            .day-btn { min-width: 100px; font-size: 0.95rem; }
         }
     </style>
 </head>
 <body>
 
-    <header><div class="logo">Community Events</div></header>
+    <div class="container">
+        <header><div class="logo">Community Events</div></header>
 
-    <div class="total-distributed">
-        <h2>Total Rewards</h2>
-        <div class="total-amount">50<br><h2>Verse Scratchers</h2></div>
+        <div class="total-distributed">
+            <h2>Total Rewards</h2>
+            <div class="total-amount">50<br><h2>Verse Scratchers</h2></div>
+        </div>
+
+        <div class="day-menu">
+            <button class="day-btn active" data-day="monday">Monday</button>
+            <button class="day-btn" data-day="tuesday">Tuesday</button>
+            <button class="day-btn" data-day="wednesday">Wednesday</button>
+            <button class="day-btn" data-day="thursday">Thursday</button>
+            <button class="day-btn" data-day="friday">Friday</button>
+            <button class="day-btn" data-day="saturday">Saturday</button>
+            <button class="day-btn" data-day="sunday">Sunday</button>
+        </div>
+
+        <div class="events-grid" id="events-grid"></div>
+        <div class="pagination" id="pagination"></div>
+
+        <div class="footer-credit">Powered by <a href="https://snappquest.niti.com.ng/" target="_blank">SnappQuest</a></div>
     </div>
-
-    <div class="day-menu">
-        <button class="day-btn active" data-day="monday">Monday</button>
-        <button class="day-btn" data-day="tuesday">Tuesday</button>
-        <button class="day-btn" data-day="wednesday">Wednesday</button>
-        <button class="day-btn" data-day="thursday">Thursday</button>
-        <button class="day-btn" data-day="friday">Friday</button>
-        <button class="day-btn" data-day="saturday">Saturday</button>
-        <button class="day-btn" data-day="sunday">Sunday</button>
-    </div>
-
-    <div class="events-grid" id="events-grid"></div>
-    <div class="pagination" id="pagination"></div>
-
-    <div class="footer-credit">Powered by <a href="https://snappquest.niti.com.ng/" target="_blank">SnappQuest</a></div>
 
     <button id="back-to-top" title="Back to Top"><i class="fas fa-arrow-up"></i></button>
 
@@ -146,7 +424,7 @@
             tuesday: [
                 { title: "", sponsor: "", description: "No Event Uploaded", reward: "", start: new Date('0000-00-00T00:00:00'), end: new Date('0000-00-00T00:00:00'), link: "" },                                
             ],
-            wednesday: [  // Fixed typo: was "wenesday"
+            wednesday: [
                 { title: "", sponsor: "", description: "No Event Uploaded", reward: "", start: new Date('0000-00-00T00:00:00'), end: new Date('0000-00-00T00:00:00'), link: "" },                                
             ],
             thursday: [
@@ -159,8 +437,7 @@
                 { title: "", sponsor: "", description: "No Event Uploaded", reward: "", start: new Date('0000-00-00T00:00:00'), end: new Date('0000-00-00T00:00:00'), link: "" },                
             ],
             sunday: [
-               //{ title: "SnappQuest Engagement Quest", sponsor: "Crypto Raira", description: "Just engage with the latest Verse tweet (linked) and drop your proof on SnappQuest to secure your reward.", reward: "50 Verse Scratchers", start: new Date('2025-12-21T06:00:00'), end: new Date('2025-12-22T00:00:00'), link: "https://www.google.com" },
-                { title: "The Verse Scramble Challenge", sponsor: "Aderoju Isaac", description: "A key Verse-related word is hidden in this scrambled puzzle, can you crack it?", reward: "50 Verse Scratchers", start: new Date('2025-12-21T06:30:00'), end: new Date('2025-12-22T00:00:00'), link: "https://forms.gle/EfobUphhuc7pcu8g7" },                
+                { title: "The Verse Scramble Challenge", sponsor: "Aderoju Isaac", description: "A key Verse-related word is hidden in this scrambled puzzle, can you crack it?", reward: "50 Verse Scratchers", start: new Date('2025-12-21T06:30:00'), end: new Date('2025-12-22T00:00:00'), link: "https://docs.google.com/document/d/1gUmp8FoHjOuBD26a-7ZTPMNCHjxj15T7W5yWjaxz6PE/edit?usp=sharing" },                
             ]
         };
 
