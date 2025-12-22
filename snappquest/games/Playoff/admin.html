@@ -355,7 +355,7 @@
                         tokens:    tokenCols.map(i => parseFloat(row[i]) || 0)
                     };
                 })
-                .filter(u => u.totalValue > 0)
+                .filter(u => u.tokens.some(t => t > 0))  // Only include users with at least one token > 0
                 .sort((a, b) => b.totalValue - a.totalValue);
     
                 const totalPlayers = userData.length;
