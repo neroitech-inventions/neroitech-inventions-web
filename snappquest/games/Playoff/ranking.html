@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playoff Leaderboard</title>
+    <link rel="icon" href="img/icon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0a0e17;
+            --card: rgba(20, 25, 40, 0.8);
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --primary: #00d4ff;
+            --purple: #8b5cf6;
+            --pink: #ec4899;
+            --green: #10b981;
+            --red: #ff006e;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: var(--text);
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+        @keyframes gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        header { text-align: center; margin-bottom: 60px; }
+        h1 {
+            font-size: 4rem;
+            background: linear-gradient(90deg, #00d4ff, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -2px;
+            text-shadow: 0 0 40px rgba(0,212,255,0.5);
+        }
+
+        /* COIN TICKER */
+        #ticker {
+            background: linear-gradient(90deg, rgba(0,212,255,0.1), rgba(139,92,246,0.1));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            white-space: nowrap;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            position: relative;
+        }
+        #ticker::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
+            animation: shine 3s infinite linear;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .ticker-content {
+            display: inline-block;
+            animation: ticker-move 30s linear infinite;
+        }
+        .ticker-item {
+            display: inline-block;
+            margin-right: 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .ticker-symbol { color: var(--primary); }
+        .ticker-price { color: var(--green); }
+        .ticker-change.positive { color: var(--green); }
+        .ticker-change.negative { color: var(--red); }
+
+        @keyframes ticker-move {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        .stat-card {
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s;
+        }
+        .stat-card:hover { transform: translateY(-10px); }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(139,92,246,0.1));
+            pointer-events: none;
+        }
+        .stat-title { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 10px; }
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .ranking-table {
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px;
+            overflow-x: auto;
+            margin-bottom: 100px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { color: var(--text-muted); font-weight: 600; }
+        tr:hover { background: rgba(255,255,255,0.05); }
+        .rank {
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-shadow: 0 0 20px rgba(255,215,0,0.5);
+        }
+        .rank.gold { color: var(--gold); }
+        .rank.silver { color: var(--silver); }
+        .rank.bronze { color: var(--bronze); }
+        .value {
+            font-weight: 700;
+            background: linear-gradient(90deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .pnl {
+            font-weight: 700;
+            text-align: center;
+        }
+        .pnl.positive {
+            background: linear-gradient(90deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(16,185,129,0.6);
+        }
+        .pnl.negative {
+            background: linear-gradient(90deg, #ff006e, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255,0,110,0.6);
+        }
+
+        /* LIVE UPDATE INDICATOR */
+        #live-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(16,185,129,0.2);
+            border: 1px solid rgba(16,185,129,0.4);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(16,185,129,0.3);
+            animation: pulse 2s infinite;
+        }
+        #live-indicator::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--green);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--green);
+            animation: blink 1.5s infinite;
+        }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .footer-credit {
+            text-align: center;
+            margin: 60px 0 40px;
+            padding: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #00d4ff, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        @keyframes glow { from { opacity: 0.8; } to { opacity: 1; text-shadow: 0 0 20px rgba(0,212,255,0.5); } }
+
+        /* MUSIC CONTROL */
+        #music-control {
+            position: fixed;
+            bottom: 100px;
+            left: 30px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 12px 32px rgba(236,72,153,0.4), inset 0 0 20px rgba(255,255,255,0.1);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        #music-control.visible { opacity: 1; visibility: visible; }
+        #music-control:hover { transform: scale(1.15); box-shadow: 0 18px 48px rgba(236,72,153,0.6), inset 0 0 30px rgba(255,255,255,0.2); }
+        #music-control::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        #music-control.playing::before {
+            opacity: 1;
+            animation: wavePulse 2s infinite;
+        }
+        @keyframes wavePulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(2); opacity: 0; } }
+        #music-control i { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; z-index: 2; }
+        #music-control.playing i { transform: rotate(360deg) scale(1.1); }
+
+        /* BACK TO TOP */
+        #back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,212,255,0.4);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #back-to-top.show { opacity: 1; visibility: visible; }
+        #back-to-top:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,212,255,0.5); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header><h1>Playoff Leaderboard</h1></header>
+
+        <!-- TICKER -->
+        <div id="ticker">
+            <div class="ticker-content" id="ticker-content"></div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">Total Players</div>
+                <div class="stat-value" id="total-players">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Value Locked</div>
+                <div class="stat-value" id="tvl">$0</div>
+            </div>
+        </div>
+
+        <div class="ranking-table">
+            <h2 style="text-align:center;margin-bottom:20px; font-size:2.2rem;">Top 10 Rankings</h2>
+            <table id="ranking-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Telegram</th>
+                        <th>Wallet</th>
+                        <th>Value</th>
+                        <th>PnL %</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="footer-credit">
+            Powered by <a href="https://snappquest.niti.com.ng/" target="_blank" style="color:#00d4ff;text-decoration:none;">SnappQuest</a>
+        </div>
+    </div>
+
+    <!-- LIVE INDICATOR -->
+    <div id="live-indicator">Live Updates</div>
+
+    <!-- MUSIC CONTROL -->
+    <button id="music-control" title="Toggle Background Music">
+        <i class="fas fa-music"></i>
+    </button>
+
+    <!-- HIDDEN AUDIO -->
+    <audio id="bg-music" loop>
+        <source src="music/audio.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- BACK TO TOP -->
+    <button id="back-to-top"><i class="fas fa-arrow-up"></i></button>
+
+    <script>
+        const SHEET_ID = "1S5PAc7N-vz6s_g8d5WnyDfxnD6820XohcsiP5iJUStY";
+        const API_KEY = "AIzaSyDseGK7WIi6hUGD_1Oz8cweDraAQpFisoQ";
+        const DATA_RANGE = "Form responses 1!A2:I";
+        const INITIAL_INVESTMENT = 100000;
+        const COINGECKO_URL = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,avalanche-2,verse-bitcoin&vs_currencies=usd&include_24hr_change=true";
+        const musicBtn = document.getElementById('music-control');
+        const audio = document.getElementById('bg-music');
+        let isPlaying = false;
+        let userInteracted = false;
+
+        function unlockAudio() {
+            if (!userInteracted) {
+                userInteracted = true;
+                musicBtn.classList.add('visible');
+            }
+        }
+
+        musicBtn.addEventListener('click', () => {
+            unlockAudio();
+            if (isPlaying) {
+                audio.pause();
+                musicBtn.innerHTML = '<i class="fas fa-music"></i>';
+                musicBtn.classList.remove('playing');
+            } else {
+                audio.volume = 0.3;
+                audio.play().catch(e => console.log("Play interrupted:", e));
+                musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                musicBtn.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+        });
+
+        document.body.addEventListener('click', unlockAudio, { once: true });
+        document.body.addEventListener('touchstart', unlockAudio, { once: true });
+
+        function formatPrice(n) {
+            if (n < 0.001) {
+                return n.toFixed(8).replace(/0+$/, '');
+            }
+            return n.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 6});
+        }
+
+        function formatNumber(n) {
+            n = Number(n || 0);
+            if (n >= 1e9) return (n / 1e9).toFixed(2).replace(/\.00$/, '') + 'B';
+            if (n >= 1e6) return (n / 1e6).toFixed(2).replace(/\.00$/, '') + 'M';
+            if (n >= 1e3) return (n / 1e3).toFixed(2).replace(/\.00$/, '') + 'K';
+            return n.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        function truncateAddress(a) {
+            return !a || a.length < 11 ? a : `${a.slice(0,6)}...${a.slice(-4)}`;
+        }
+
+        async function fetchPrices() {
+            try {
+                const res = await fetch(COINGECKO_URL);
+                const data = await res.json();
+                const tokens = {
+                    'VERSE': { price: data['verse-bitcoin'].usd, change: data['verse-bitcoin'].usd_24h_change },
+                    'BTC': { price: data.bitcoin.usd, change: data.bitcoin.usd_24h_change },
+                    'ETH': { price: data.ethereum.usd, change: data.ethereum.usd_24h_change },
+                    'SOL': { price: data.solana.usd, change: data.solana.usd_24h_change },
+                    'AVAX': { price: data['avalanche-2'].usd, change: data['avalanche-2'].usd_24h_change }
+                };
+
+                let tickerHTML = '';
+                for (const [sym, info] of Object.entries(tokens)) {
+                    const sign = info.change >= 0 ? '+' : '';
+                    const changeClass = info.change >= 0 ? 'positive' : 'negative';
+                    const priceStr = (sym === 'VERSE') ? formatPrice(info.price) : formatNumber(info.price);
+                    tickerHTML += `<span class="ticker-item"><span class="ticker-symbol">${sym}</span>: $${priceStr} <span class="ticker-change ${changeClass}">(${sign}${info.change.toFixed(2)}%)</span></span>`;
+                }
+                // Duplicate for seamless loop
+                document.getElementById('ticker-content').innerHTML = tickerHTML + tickerHTML;
+            } catch (err) {
+                console.error("Failed to fetch prices:", err);
+            }
+        }
+
+        async function loadLeaderboard() {
+            try {
+                const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${DATA_RANGE}?key=${API_KEY}`);
+                const data = await res.json();
+                const rows = data.values || [];
+
+                if (rows.length === 0) return;
+
+                const userData = rows.map(row => {
+                    const rawValue = row[8]; // Column I
+                    const totalValue = rawValue !== undefined && rawValue !== "" 
+                        ? parseFloat(rawValue) || 0 
+                        : 100000;
+
+                    const pnlPercent = ((totalValue - INITIAL_INVESTMENT) / INITIAL_INVESTMENT) * 100;
+
+                    return {
+                        tg: row[7] || '—',
+                        wallet: row[6] || '—',
+                        totalValue: totalValue,
+                        pnlPercent: pnlPercent
+                    };
+                })
+                .filter(u => u.totalValue > 0)
+                .sort((a, b) => b.totalValue - a.totalValue);
+
+                const totalPlayers = userData.length;
+                const tvl = userData.reduce((sum, u) => sum + u.totalValue, 0);
+
+                document.getElementById('total-players').textContent = totalPlayers;
+                document.getElementById('tvl').textContent = `$${formatNumber(tvl)}`;
+
+                // Top 10
+                const tbody = document.querySelector('#ranking-table tbody');
+                tbody.innerHTML = '';
+                userData.slice(0, 10).forEach((u, i) => {
+                    const sign = u.pnlPercent >= 0 ? '+' : '';
+                    const pnlClass = u.pnlPercent >= 0 ? 'positive' : 'negative';
+                    const pnlText = `${sign}${u.pnlPercent.toFixed(2)}%`;
+
+                    let rankClass = '';
+                    if (i === 0) rankClass = 'gold';
+                    else if (i === 1) rankClass = 'silver';
+                    else if (i === 2) rankClass = 'bronze';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="rank ${rankClass}">#${i+1}</td>
+                        <td>${u.tg}</td>
+                        <td>${truncateAddress(u.wallet)}</td>
+                        <td class="value">$${formatNumber(u.totalValue)}</td>
+                        <td class="pnl ${pnlClass}">${pnlText}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Initial loads
+        fetchPrices();
+        loadLeaderboard();
+
+        // Real-time updates
+        setInterval(fetchPrices, 60000); // Every minute for prices
+        setInterval(loadLeaderboard, 30000); // Every 30s for leaderboard
+
+        // Back to top
+        window.addEventListener('scroll', () => {
+            document.getElementById('back-to-top').classList.toggle('show', window.scrollY > 500);
+        });
+        document.getElementById('back-to-top').onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+    </script>
+</body>
+</html>
