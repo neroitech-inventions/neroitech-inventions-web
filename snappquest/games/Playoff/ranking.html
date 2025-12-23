@@ -32,16 +32,16 @@
             animation: gradient 15s ease infinite;
             color: var(--text);
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 40px 20px 120px; /* extra bottom padding for fixed elements */
             overflow-x: hidden;
         }
         @keyframes gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
-        .container { max-width: 1400px; margin: 0 auto; }
+        .container { max-width: 1400px; margin: 0 auto; position: relative; }
 
         header { text-align: center; margin-bottom: 60px; }
         h1 {
-            font-size: 4rem;
+            font-size: clamp(2.5rem, 8vw, 4rem); /* responsive font size */
             background: linear-gradient(90deg, #00d4ff, #8b5cf6, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -121,7 +121,7 @@
         }
         .stat-title { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 10px; }
         .stat-value {
-            font-size: 3rem;
+            font-size: clamp(2.2rem, 6vw, 3rem); /* responsive */
             font-weight: 700;
             background: linear-gradient(90deg, #00ff88, #00d4ff);
             -webkit-background-clip: text;
@@ -201,6 +201,15 @@
         }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        /* MOBILE ADJUSTMENT FOR LIVE INDICATOR */
+        @media (max-width: 768px) {
+            #live-indicator {
+                top: 12px;
+                padding: 6px 18px;
+                font-size: 0.85rem;
+            }
+        }
 
         .footer-credit {
             text-align: center;
@@ -326,7 +335,7 @@
         </div>
     </div>
 
-    <!-- LIVE INDICATOR -->
+    <!-- LIVE INDICATOR - NOW CENTERED ON TOP -->
     <div id="live-indicator">Live Updates</div>
 
     <!-- MUSIC CONTROL -->
