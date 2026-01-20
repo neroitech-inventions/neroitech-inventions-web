@@ -973,6 +973,36 @@
         const navContainer = document.querySelector(".nav-container");
         const overlay = document.querySelector(".overlay");
         const backToTopButton = document.getElementById("back-to-top");
+
+
+// Close modal functions
+function closeModal() {
+    copyConfirmationModal.classList.remove("active");
+    setTimeout(() => {
+        copyConfirmationModal.style.display = "none";
+    }, 400); // match your CSS transition duration
+}
+
+// Close with × button or OK button
+closeButtons.forEach(btn => {
+    btn.addEventListener("click", closeModal);
+});
+
+// Close when clicking outside the modal content
+copyConfirmationModal.addEventListener("click", function(e) {
+    // Only close if clicked on the backdrop (not on the content)
+    if (e.target === copyConfirmationModal) {
+        closeModal();
+    }
+});
+
+
+// Close modal with Escape key
+document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && copyConfirmationModal.classList.contains("active")) {
+        closeModal();
+    }
+});
         const reward = document.getElementById("reward");
         const rewardDisplay = document.getElementById("rewardDisplay");
         const trackcodeInput = document.getElementById("trackcode");
