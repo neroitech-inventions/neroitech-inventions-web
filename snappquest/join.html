@@ -873,6 +873,30 @@
                 margin-right: 12px;
             }
         }
+/* Profile Avatar */
+        .profile-avatar {
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
+.profile-avatar .fallback {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #6366F1, #34D399);
+}
         /* Added: Skeleton loading styles */
         .skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
@@ -934,7 +958,19 @@
     <div class="overlay"></div>
     <div class="profile-container">
         <div class="profile-header">
-            <div class="profile-avatar" id="profileAvatar">S</div>
+            <div class="profile-avatar" id="profileAvatar">
+    <img 
+        src="images/degen.png" 
+        alt="Profile" 
+        style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+    >
+    <span style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: 48px; color: #ffffff;">S</span>
+</div>
+<!--<div class="profile-avatar" id="profileAvatar">
+    <img src="images/degen.png" alt="Profile">
+    <span class="fallback">S</span>
+</div>-->
             <div class="profile-name" id="profileName">Loading...</div>
             <div class="profile-stats">
                 <div class="stat">
@@ -1078,6 +1114,11 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
+        // In initializeProfile() or after DOM is ready
+document.getElementById('profileAvatar').querySelector('img').onerror = function() {
+    this.style.display = 'none';
+    this.nextElementSibling.style.display = 'flex';
+};
         // Set current year in footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         // Configuration
@@ -1374,7 +1415,7 @@
         // Initialize profile UI
         function initializeProfile() {
             DOM.profileName.textContent = 'SnappQuest';
-            DOM.profileAvatar.textContent = 'S';
+            //DOM.profileAvatar.textContent = 'S';
             DOM.availableQuests.textContent = userData.availableQuests.toLocaleString('en-US');
             DOM.completedQuests.textContent = userData.completedQuests.toLocaleString('en-US');
             DOM.earnings.innerHTML = formatCurrency(userData.earnings, currentCurrency);
@@ -1387,7 +1428,7 @@
         // Initialize price toggle
         function initializeToggle() {
             DOM.profileName.textContent = 'SnappQuest';
-            DOM.profileAvatar.textContent = 'S';
+            //DOM.profileAvatar.textContent = 'S';
             DOM.availableQuests.textContent = userData.availableQuests.toLocaleString('en-US');
             DOM.completedQuests.textContent = userData.completedQuests.toLocaleString('en-US');
             DOM.earnings.innerHTML = formatCurrency(userData.earnings, currentCurrency);

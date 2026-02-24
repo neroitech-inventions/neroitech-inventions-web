@@ -702,7 +702,7 @@
                         <li><a href="#hero">Home</a></li>
                         <li><a href="create.html">Create Quest</a></li>
                         <li><a class="join-quest-link" onclick="window.location.href='join.html'">Join Quest</a></li>
-                        <li><a href="events.html" target="_blank">Explore Events</a></li>
+                        <li><a href="airdrop.html">Airdrop Checker</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -722,6 +722,16 @@
     <button id="back-to-top" title="Back to Top">
         <i class="fas fa-arrow-up"></i>
     </button>
+
+<!-- CTA Popup Modal -->
+<div id="ctaModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('ctaModal')">&times;</span>
+        <h3 id="ctaTitle" class="hero-gradient-text">💰 Over 36M VERSE have been paid out as rewards!</h3>
+        <p>Join Quests Now and Start Earning!</p>
+        <button class="cta-primary" onclick="window.location.href='join.html'">Join Quests</button>
+    </div>
+</div>
     
     <!-- Customize: Adjust JavaScript below for custom behaviors, or add new scripts. Comment out unused functions. -->
     <script>
@@ -794,6 +804,55 @@
                 behavior: 'smooth'
             });
         });
+
+        // CTA Popup Logic
+        const CONFIG = {
+            API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
+            STATS_ID: '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w',
+            STATS_RANGE: 'SnappQuestData!A1:C2'
+        };
+
+        async function fetchSheetData(spreadsheetId, range) {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${CONFIG.API_KEY}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                const headers = data.values[0].map(h => h.trim());
+                return data.values.slice(1).map(row => {
+                    const obj = {};
+                    headers.forEach((header, i) => { obj[header] = (row[i] || '').trim(); });
+                    return obj;
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                return [];
+            }
+        }
+
+        function formatNumber(num) {
+            const absNum = Math.abs(num);
+            if (absNum >= 1_000_000_000) return (num / 1_000_000_000).toFixed(1) + 'B';
+            if (absNum >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M';
+            if (absNum >= 10_000) return (num / 1_000).toFixed(1) + 'K';
+            return num.toLocaleString('en-US');
+        }
+
+async function loadEarnings() {
+    const statsRows = await fetchSheetData(CONFIG.STATS_ID, CONFIG.STATS_RANGE);
+    if (statsRows.length === 0) {
+        console.warn('No stats data found. Using fallback value.');
+        document.getElementById('ctaTitle').innerHTML = '💰 Over 36M VERSE have been paid out as rewards!';
+    } else {
+        const earnings = parseInt(statsRows[0].Earnings) || 0;
+        const formatted = formatNumber(earnings);
+        document.getElementById('ctaTitle').innerHTML = `💰 Over ${formatted} VERSE have been paid out as rewards!`;
+    }
+    openModal('ctaModal');
+}
+
+        // Load earnings and show popup on page load
+        window.addEventListener('load', loadEarnings);
     </script>
 </body>
 
