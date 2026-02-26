@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-QM106YDX6N');
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SnappQuest – How to Submit a Quest • Mini Game Tutorial</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="images/icon.png" rel="icon">
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --accent: #f59e0b;
+      --dark: #111827;
+      --gray: #6b7280;
+      --light: #f3f4f6;
+      --success: #34d399;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+      color: var(--dark);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--dark);
+      color: white;
+      padding: clamp(1rem, 5vw, 1.5rem) 1rem;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 8vw, 2.1rem);
+    }
+
+    .subtitle {
+      margin-top: 0.5rem;
+      opacity: 0.9;
+      font-size: clamp(0.9rem, 4vw, 1.1rem);
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 2rem auto;
+      padding: 0 clamp(1rem, 5vw, 2rem);
+      flex: 1;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      padding: clamp(1.5rem, 5vw, 2rem);
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(30px, 8vw, 38px);
+      height: clamp(30px, 8vw, 38px);
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: bold;
+      margin-right: 1rem;
+      font-size: clamp(1rem, 4vw, 1.3rem);
+      flex-shrink: 0;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      font-size: clamp(1.3rem, 5vw, 1.5rem);
+      font-weight: 700;
+    }
+
+    .highlight {
+      background: rgba(16,185,129,0.1);
+      padding: 1.2rem;
+      border-radius: 12px;
+      border-left: 5px solid var(--primary);
+      margin: 1.2rem 0;
+      font-size: clamp(0.9rem, 4vw, 1rem);
+    }
+
+    .input-demo {
+      background: #f9fafb;
+      border: 2px dashed #d1d5db;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      font-family: monospace;
+      color: #374151;
+      white-space: pre-wrap;
+      position: relative;
+      font-size: clamp(0.85rem, 3.5vw, 1rem);
+      word-break: break-all;
+    }
+
+    .input-demo::before {
+      content: "Example what you would paste";
+      position: absolute;
+      top: -12px;
+      left: 16px;
+      background: white;
+      padding: 0 10px;
+      font-size: clamp(0.8rem, 3vw, 0.9rem);
+      color: var(--gray);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2rem;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: clamp(0.7rem, 3vw, 0.9rem) clamp(1.2rem, 5vw, 1.8rem);
+      font-size: clamp(0.95rem, 4vw, 1.1rem);
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      width: auto;
+      min-width: 200px;
+    }
+
+    @media (max-width: 600px) {
+      .btn {
+        width: 100%;
+      }
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--gray);
+      font-size: clamp(0.85rem, 3vw, 0.95rem);
+      border-top: 1px solid #e5e7eb;
+      margin-top: auto;
+    }
+
+    ul {
+      padding-left: clamp(1.2rem, 4vw, 1.8rem);
+      margin: 1rem 0;
+      font-size: clamp(0.9rem, 4vw, 1rem);
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Back to Top from SnappQuest */
+    #back-to-top {
+        position: fixed;
+        bottom: clamp(16px, 5vw, 32px);
+        right: clamp(16px, 5vw, 32px);
+        z-index: 1000;
+        background: linear-gradient(135deg, #6366F1, #34D399);
+        color: #ffffff;
+        width: clamp(48px, 12vw, 56px);
+        height: clamp(48px, 12vw, 56px);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+        cursor: pointer;
+        animation: pulseButton 2s ease-in-out infinite;
+    }
+
+    @keyframes pulseButton {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    #back-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    #back-to-top:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(52, 211, 153, 0.5);
+    }
+
+    #back-to-top i {
+        font-size: clamp(20px, 5vw, 24px);
+    }
+
+    @media (max-width: 480px) {
+        #back-to-top {
+            bottom: 24px;
+            right: 24px;
+            width: 52px;
+            height: 52px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>SnappQuest Submission Game</h1>
+  <p class="subtitle">Learn how to submit a quest in 2 minutes – play & earn knowledge!</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <div class="step-header">
+      <span class="step-number">1</span>
+      Complete the quest
+    </div>
+    <p>
+      <b>Every quest has clear instructions — like:</b>
+      <ul><li>Follow</li><li>Retweet</li><li>Comment</li><li>join Telegram, etc.</li></ul>
+      <br><strong>Do the task first</strong> — then come back to submit proof on SnappQuest.
+    </p>
+    <div class="highlight">
+      <strong>Example task:</strong> "Retweet this post and tag 2 friends"
+      <br><br>
+      → You already retweeted and tagged @friend1 @friend2
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-header">
+      <span class="step-number">2</span>
+      Submit proof
+    </div>
+    <p>
+      You must <b>give the sponsor a way to verify</b> you really did the task.
+      <br><br>
+      <b>Most common proofs:</b>
+    </p>
+    <ul>
+      <li>Your X / Twitter profile link</li>
+      <li>Direct link to your retweet / reply / comment</li>
+      <li>Screenshot (upload to imgur / free image host → paste link)</li>
+    </ul>
+  </div>
+
+  <div class="card" id="interactive-step">
+    <div class="step-header">
+      <span class="step-number">3</span>
+      Fill the submission form
+    </div>
+
+    <p style="margin-bottom: 1.5rem;">
+      Paste links exactly like this in the SnappQuest submit modal:
+    </p>
+
+    <div class="input-demo" id="example-proof" contenteditable="true">
+https://x.com/yourusername/status/1234567890123456789
+https://x.com/yourusername
+https://imgur.com/a/your-proof-screenshot
+    </div>
+
+    <p style="margin: 1.5rem 0 0.8rem; font-weight: 600;">
+      Try it yourself — edit the box above, then press the button:
+    </p>
+
+    <div class="button-row">
+      <button class="btn btn-primary" onclick="checkSubmission()">
+        <i class="fas fa-paper-plane"></i> Submit Proof (simulate)
+      </button>
+    </div>
+
+    <div id="feedback" style="margin-top: 1.8rem; min-height: 80px;"></div>
+  </div>
+
+</div>
+
+<footer>
+  Made with ❤️ for <a href="https://niti.com.ng/snappquest" style="color:#34D399"><b>SnappQuest community</b></a> • Good luck <a href="https://niti.com.ng/snappquest/join.html" style="color:#34D399"><b>submitting your first quest</b></a>!
+</footer>
+
+<div class="confetti-layer" id="confetti"></div>
+
+<button id="back-to-top" title="Back to Top">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<script>
+  function checkSubmission() {
+    const text = document.getElementById('example-proof').innerText.trim();
+    const feedback = document.getElementById('feedback');
+
+    feedback.innerHTML = '';
+
+    if (!text) {
+      feedback.innerHTML = '<p style="color:#ef4444;">You need to paste at least one link!</p>';
+      return;
+    }
+
+    if (text.includes('http') && text.length > 15) {
+      feedback.innerHTML = `
+        <p style="color:#10b981; font-weight:600; font-size:1.2rem;">
+          🎉 Looks good! This is exactly the kind of proof sponsors want.
+        </p>
+        <p style="margin-top:1rem;">
+          You would now click "Submit Quest" in the real form.<br>
+          <strong>Admin will verify → reward sent if valid.</strong>
+        </p>
+      `;
+
+      // Confetti celebration
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#10b981', '#34d399', '#059669', '#fbbf24']
+      });
+
+    } else {
+      feedback.innerHTML = '<p style="color:#ef4444;">Hmm… that doesn’t look like a valid link. Try pasting your X post or profile URL.</p>';
+    }
+  }
+
+  // Back to Top functionality
+  const backToTopButton = document.getElementById('back-to-top');
+
+  window.addEventListener('scroll', () => {
+    backToTopButton.classList.toggle('visible', window.scrollY > 300);
+  });
+
+  backToTopButton.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

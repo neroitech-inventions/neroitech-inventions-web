@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-QM106YDX6N');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Are YOU a VERSE Millionaire? Check instantly and see your bull-run gains! Max 500M VERSE">
@@ -591,7 +600,18 @@
 
             const progress = Math.min((amount / 1000000) * 100, 100);
             document.getElementById('progress').style.width = progress + '%';
-            document.getElementById('progressText').textContent = `${progress.toFixed(0)}% to VERSE Millionaire (${(1000000 - amount).toLocaleString('en-US')} VERSE to go)`;
+            const million = 1000000;
+const remaining = million - amount;
+let progressMessage = "";
+
+if (amount >= million) {
+    const above = (amount - million).toLocaleString('en-US');
+    progressMessage = `You are already a VERSE Millionaire! (+${above} VERSE above 1M 🎉)`;
+} else {
+    progressMessage = `${remaining.toLocaleString('en-US')} VERSE to go`;
+}
+
+document.getElementById('progressText').textContent = `${progress.toFixed(0)}% to VERSE Millionaire • ${progressMessage}`;
 
             // Play sound effect
             if (amount >= 1000000) {
