@@ -2,17 +2,16 @@
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QM106YDX6N');
+    </script>
 
-  gtag('config', 'G-QM106YDX6N');
-</script>
-
-<!-- Verse tag (VGDH) -->
-<script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
+    <!-- Verse tag (VGDH) -->
+    <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +20,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="images/icon.png" rel="icon">
-    <!-- SweetAlert2 CDN - only for nice max limit warning -->
+    <!-- SweetAlert2 CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -219,6 +218,7 @@
         }
 
         .input-group::after {
+            content: "VERSE";
             position: absolute;
             right: clamp(20px, 5vw, 32px);
             top: 50%;
@@ -252,7 +252,7 @@
 
         .modern-input input {
             text-align: center;
-            padding-bottom: 56px; /* space for label */
+            padding-bottom: 56px;
         }
 
         .token-label {
@@ -374,56 +374,47 @@
             color: #64748B;
             font-size: clamp(0.9rem, 3vw, 1rem);
         }
-        .footer-link a {
-            color: var(--color-text-secondary);
-            text-decoration: none;
-            color: #34D399;
-        }
-        .footer-link a:hover { color: #34D399; transform: translateX(3px); }
-        #back-to-top {
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
-    z-index: 1000;
-    background: linear-gradient(135deg, #6366F1, #34D399);
-    color: #ffffff;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s ease;
-    cursor: pointer;
-    animation: pulseButton 2s ease-in-out infinite;
-}
-@keyframes pulseButton {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
-}
-#back-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-}
-#back-to-top:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(52, 211, 153, 0.5);
-}
-#back-to-top i {
-    font-size: 24px;
-}
 
         @media (max-width: 480px) {
             .hero { padding-top: 90px; padding-bottom: 60px; }
             .calculator { padding: 24px 18px; border-radius: 16px; }
             .cta-big { padding: 16px 50px; font-size: 1.2rem; }
+        }
+
+        #back-to-top {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #6366F1, #34D399);
+            color: #ffffff;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            animation: pulseButton 2s ease-in-out infinite;
+        }
+        @keyframes pulseButton {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        #back-to-top:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(52, 211, 153, 0.5);
+        }
+        #back-to-top i {
+            font-size: 24px;
         }
     </style>
 </head>
@@ -483,12 +474,13 @@
             <p style="text-align:center; color:#64748B; font-size: clamp(0.85rem, 3.2vw, 0.95rem);" id="progressText"></p>
         </div>
     </div>
+
     <button id="back-to-top" title="Back to Top">
-    <i class="fas fa-arrow-up"></i>
-</button>
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <div class="tiers">
-        <!-- Filled by JS -->
+
     </div>
 
     <div style="text-align:center; margin: clamp(40px, 10vw, 80px) 0;">
@@ -496,21 +488,21 @@
     </div>
 
     <footer>
-        <p class="footer-link"> <!-- <b>©</b> SnappQuest • Powered by <a href="https://niti.com.ng/" target="_blank"> <b>Neroitech Inventions</b></a> • -->Made by degens for degens who HODL $VERSE</p>
+        <p class="footer-link">Made by degens for degens who HODL $VERSE</p>
     </footer>
 
     <script>
         const ATH_PRICE = 0.007792;
-        let currentPrice = 0.000023; // fallback
+        let currentPrice = 0.000023;
+        let godModeCode = null;
 
-        // Sound effects - your local files
+        // Sound effects
         const successSound = new Audio('sfx/success.mp3');
         const millionaireSound = new Audio('sfx/victory.mp3');
-
-        // Optional: lower volume so it's not blasting
         successSound.volume = 0.6;
         millionaireSound.volume = 0.7;
 
+        // Fetch current VERSE price
         async function fetchCurrentPrice() {
             try {
                 const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=verse-bitcoin&vs_currencies=usd');
@@ -520,6 +512,27 @@
             } catch(e) {
                 console.error('Price fetch failed:', e);
                 document.getElementById('livePrice').textContent = '$' + currentPrice.toFixed(8) + ' (cached)';
+            }
+        }
+
+        async function fetchGodModeCode() {
+            const spreadsheetId = '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w';
+            const range = 'SnappQuestData!E2';
+            const apiKey = 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q';
+
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                if (data.values && data.values[0] && data.values[0][0]) {
+                    godModeCode = parseInt(data.values[0][0], 10);
+                    console.log('God Mode code loaded from Sheets:', godModeCode);
+                } else {
+                    console.warn('No God Mode code found in Sheets cell E2');
+                }
+            } catch (e) {
+                console.error('Failed to load God Mode code from Sheets:', e);
             }
         }
 
@@ -536,29 +549,24 @@
             return tiers.slice().reverse().find(t => amount >= t.min) || tiers[0];
         }
 
-        // Format number with commas as user types
         function formatNumberWithCommas(value) {
             value = value.replace(/[^0-9]/g, '');
             if (!value) return '';
             return Number(value).toLocaleString('en-US');
         }
 
-        // Get clean number (remove commas) for calculations
         function getCleanNumber(str) {
             return parseFloat(str.replace(/,/g, '')) || 0;
         }
 
-        // Real-time formatting + calculation
         const input = document.getElementById('verseInput');
 
         input.addEventListener('input', function(e) {
             let value = this.value;
             let cursorPos = this.selectionStart;
 
-            // Format with commas
             let formatted = formatNumberWithCommas(value);
 
-            // Prevent going over 500M with SweetAlert instead of alert
             let clean = getCleanNumber(formatted);
             if (clean > 500000000) {
                 clean = 500000000;
@@ -576,7 +584,6 @@
 
             this.value = formatted;
 
-            // Keep cursor in correct position after formatting
             let diff = formatted.length - value.length;
             this.setSelectionRange(cursorPos + diff, cursorPos + diff);
         });
@@ -584,6 +591,51 @@
         function calculate() {
             let amount = getCleanNumber(document.getElementById('verseInput').value);
             if (amount < 0) amount = 0;
+
+            if (godModeCode !== null && amount === godModeCode) {
+                Swal.fire({
+                    title: "GOD MODE UNLOCKED! 🔥",
+                    html: `You just won <b style="color:#FBBF24; font-size:1.6rem;">25,000 VERSE</b><br><br>Congrats, true degen! 🎉`,
+                    icon: "success",
+                    confirmButtonText: "Claim Glory",
+                    confirmButtonColor: "#FBBF24",
+                    background: "#0F172A",
+                    color: "#F8FAFC",
+                    backdrop: `rgba(15,23,42,0.9)`,
+                    showClass: { popup: 'animate__animated animate__zoomIn' },
+                    hideClass: { popup: 'animate__animated animate__zoomOut' }
+                });
+
+                // Massive confetti
+                confetti({
+                    particleCount: 400,
+                    spread: 120,
+                    origin: { y: 0.6 },
+                    colors: ['#FBBF24', '#34D399', '#6366F1', '#ffffff']
+                });
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 300,
+                        spread: 100,
+                        origin: { y: 0.5 }
+                    });
+                }, 400);
+
+                // Victory sound full volume
+                millionaireSound.volume = 1.0;
+                millionaireSound.currentTime = 0;
+                millionaireSound.play().catch(() => {});
+
+                // Show result panel with God Mode message
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('tierEmoji').textContent = "⚡";
+                document.getElementById('tierTitle').textContent = "GOD MODE DEGEN";
+                document.getElementById('tierTitle').style.color = "#FBBF24";
+                document.getElementById('holding').innerHTML = `${amount.toLocaleString('en-US')} <span style="font-size: clamp(1rem, 4vw, 1.4rem); color:#64748B">VERSE</span>`;
+                document.getElementById('progressText').textContent = "GOD MODE ACTIVATED • 25,000 VERSE REWARD CLAIMED";
+
+                return; // Exit early - skip normal logic
+            }
 
             const tier = getTier(amount);
             const currentValue = (amount * currentPrice).toFixed(2);
@@ -602,25 +654,24 @@
             document.getElementById('athValue').textContent = `$${Number(athValue).toLocaleString('en-US')}`;
             document.getElementById('multiplier').innerHTML = `Potential <span style="font-size: clamp(1.4rem, 5vw, 2rem)">×${multiplier}</span> gain`;
 
-            const progress = Math.min((amount / 1000000) * 100, 100);
-            document.getElementById('progress').style.width = progress + '%';
             const million = 1000000;
-const remaining = million - amount;
-let progressMessage = "";
+            const progress = Math.min((amount / million) * 100, 100);
+            document.getElementById('progress').style.width = progress + '%';
 
-if (amount >= million) {
-    const above = (amount - million).toLocaleString('en-US');
-    progressMessage = `You are already a VERSE Millionaire! (+${above} VERSE above 1M 🎉)`;
-} else {
-    progressMessage = `${remaining.toLocaleString('en-US')} VERSE to go`;
-}
+            let progressMessage = "";
+            if (amount >= million) {
+                const above = (amount - million).toLocaleString('en-US');
+                progressMessage = `You are already a VERSE Millionaire! (+${above} VERSE above 1M 🎉)`;
+            } else {
+                const remaining = million - amount;
+                progressMessage = `${remaining.toLocaleString('en-US')} VERSE to go`;
+            }
 
-document.getElementById('progressText').textContent = `${progress.toFixed(0)}% to VERSE Millionaire • ${progressMessage}`;
+            document.getElementById('progressText').textContent = `${progress.toFixed(0)}% to VERSE Millionaire • ${progressMessage}`;
 
-            // Play sound effect
-            if (amount >= 1000000) {
+            if (amount >= million) {
                 millionaireSound.currentTime = 0;
-                millionaireSound.play().catch(() => {}); // browser may block until user interaction
+                millionaireSound.play().catch(() => {});
                 confetti({
                     particleCount: 300,
                     spread: 100,
@@ -633,7 +684,6 @@ document.getElementById('progressText').textContent = `${progress.toFixed(0)}% t
             }
         }
 
-        // Populate tiers with commas
         function populateTiers() {
             const container = document.querySelector('.tiers');
             tiers.forEach(t => {
@@ -648,7 +698,6 @@ document.getElementById('progressText').textContent = `${progress.toFixed(0)}% t
             });
         }
 
-        // Hamburger Menu
         const hamburger = document.querySelector('.hamburger');
         const navContainer = document.querySelector('.nav-container');
         const overlay = document.querySelector('.overlay');
@@ -663,24 +712,23 @@ document.getElementById('progressText').textContent = `${progress.toFixed(0)}% t
         overlay.addEventListener('click', toggleMobileMenu);
         navContainer.querySelectorAll('a').forEach(link => link.addEventListener('click', toggleMobileMenu));
 
-        // Init
+        const backToTopButton = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            backToTopButton.classList.toggle('visible', window.scrollY > 300);
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
         window.onload = async () => {
             await fetchCurrentPrice();
+            await fetchGodModeCode();
             populateTiers();
             document.getElementById('verseInput').focus();
             setInterval(fetchCurrentPrice, 60000);
         };
-        const backToTopButton = document.getElementById('back-to-top');
-
-window.addEventListener('scroll', () => {
-    console.log('Scroll position:', window.scrollY);
-    backToTopButton.classList.toggle('visible', window.scrollY > 300);
-});
-
-backToTopButton.addEventListener('click', () => {
-    console.log('Back to top clicked');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
     </script>
 </body>
 </html>
