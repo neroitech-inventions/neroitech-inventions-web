@@ -218,7 +218,7 @@
         }
 
         .input-group::after {
-            content: "VERSE";
+            /*content: "VERSE";*/
             position: absolute;
             right: clamp(20px, 5vw, 32px);
             top: 50%;
@@ -252,7 +252,7 @@
 
         .modern-input input {
             text-align: center;
-            padding-bottom: 56px;
+            padding-bottom: 56px; /* space for label */
         }
 
         .token-label {
@@ -480,7 +480,7 @@
     </button>
 
     <div class="tiers">
-
+        <!-- Filled by JS -->
     </div>
 
     <div style="text-align:center; margin: clamp(40px, 10vw, 80px) 0;">
@@ -515,6 +515,7 @@
             }
         }
 
+        // Fetch God Mode code from Google Sheets (cell E2 in SnappQuestData)
         async function fetchGodModeCode() {
             const spreadsheetId = '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w';
             const range = 'SnappQuestData!E2';
@@ -592,6 +593,42 @@
             let amount = getCleanNumber(document.getElementById('verseInput').value);
             if (amount < 0) amount = 0;
 
+            // Always run normal calculation first (so ATH & multiplier show)
+            const tier = getTier(amount);
+            const currentValue = (amount * currentPrice).toFixed(2);
+            const athValue = (amount * ATH_PRICE).toFixed(2);
+            const multiplier = (ATH_PRICE / currentPrice).toFixed(1);
+
+            const res = document.getElementById('result');
+            res.style.display = 'block';
+
+            // Default normal display
+            document.getElementById('tierEmoji').textContent = tier.emoji;
+            document.getElementById('tierTitle').textContent = tier.title;
+            document.getElementById('tierTitle').style.color = tier.color;
+
+            document.getElementById('holding').innerHTML = `${amount.toLocaleString('en-US')} <span style="font-size: clamp(1rem, 4vw, 1.4rem); color:#64748B">VERSE</span>`;
+            document.getElementById('currentValue').textContent = `$${Number(currentValue).toLocaleString('en-US')}`;
+            document.getElementById('athValue').textContent = `$${Number(athValue).toLocaleString('en-US')}`;
+            document.getElementById('multiplier').innerHTML = `Potential <span style="font-size: clamp(1.4rem, 5vw, 2rem)">×${multiplier}</span> gain`;
+
+            const million = 1000000;
+            const progress = Math.min((amount / million) * 100, 100);
+            document.getElementById('progress').style.width = progress + '%';
+
+            let progressMessage = "";
+            if (amount >= million) {
+                const above = (amount - million).toLocaleString('en-US');
+                progressMessage = `You are already a VERSE Millionaire! (+${above} VERSE above 1M 🎉)`;
+            } else {
+                const remaining = million - amount;
+                progressMessage = `${remaining.toLocaleString('en-US')} VERSE to go`;
+            }
+            document.getElementById('progressText').textContent = `${progress.toFixed(0)}% to VERSE Millionaire • ${progressMessage}`;
+
+            // ────────────────────────────────────────────────
+            // GOD MODE: Override display if triggered
+            // ────────────────────────────────────────────────
             if (godModeCode !== null && amount === godModeCode) {
                 Swal.fire({
                     title: "GOD MODE UNLOCKED! 🔥",
@@ -626,49 +663,14 @@
                 millionaireSound.currentTime = 0;
                 millionaireSound.play().catch(() => {});
 
-                // Show result panel with God Mode message
-                document.getElementById('result').style.display = 'block';
+                // Override display for God Mode flair
                 document.getElementById('tierEmoji').textContent = "⚡";
                 document.getElementById('tierTitle').textContent = "GOD MODE DEGEN";
                 document.getElementById('tierTitle').style.color = "#FBBF24";
-                document.getElementById('holding').innerHTML = `${amount.toLocaleString('en-US')} <span style="font-size: clamp(1rem, 4vw, 1.4rem); color:#64748B">VERSE</span>`;
                 document.getElementById('progressText').textContent = "GOD MODE ACTIVATED • 25,000 VERSE REWARD CLAIMED";
-
-                return; // Exit early - skip normal logic
             }
 
-            const tier = getTier(amount);
-            const currentValue = (amount * currentPrice).toFixed(2);
-            const athValue = (amount * ATH_PRICE).toFixed(2);
-            const multiplier = (ATH_PRICE / currentPrice).toFixed(1);
-
-            const res = document.getElementById('result');
-            res.style.display = 'block';
-
-            document.getElementById('tierEmoji').textContent = tier.emoji;
-            document.getElementById('tierTitle').textContent = tier.title;
-            document.getElementById('tierTitle').style.color = tier.color;
-
-            document.getElementById('holding').innerHTML = `${amount.toLocaleString('en-US')} <span style="font-size: clamp(1rem, 4vw, 1.4rem); color:#64748B">VERSE</span>`;
-            document.getElementById('currentValue').textContent = `$${Number(currentValue).toLocaleString('en-US')}`;
-            document.getElementById('athValue').textContent = `$${Number(athValue).toLocaleString('en-US')}`;
-            document.getElementById('multiplier').innerHTML = `Potential <span style="font-size: clamp(1.4rem, 5vw, 2rem)">×${multiplier}</span> gain`;
-
-            const million = 1000000;
-            const progress = Math.min((amount / million) * 100, 100);
-            document.getElementById('progress').style.width = progress + '%';
-
-            let progressMessage = "";
-            if (amount >= million) {
-                const above = (amount - million).toLocaleString('en-US');
-                progressMessage = `You are already a VERSE Millionaire! (+${above} VERSE above 1M 🎉)`;
-            } else {
-                const remaining = million - amount;
-                progressMessage = `${remaining.toLocaleString('en-US')} VERSE to go`;
-            }
-
-            document.getElementById('progressText').textContent = `${progress.toFixed(0)}% to VERSE Millionaire • ${progressMessage}`;
-
+            // Normal sound & confetti (runs regardless of God Mode)
             if (amount >= million) {
                 millionaireSound.currentTime = 0;
                 millionaireSound.play().catch(() => {});
