@@ -1153,6 +1153,28 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
             FALLBACK_RATE: 1/0.000057,
             FORM_ACTION: 'https://docs.google.com/forms/d/1ObMPuTI2S1842DmfYePB4uKxfw2cLDtSlFsllUZZ-2I/formResponse'
         };
+
+// === WALLET AUTO-DETECTOR (only used for multi-chain quests) ===
+        function isValidEVMAddress(addr) {
+            return /^0x[a-fA-F0-9]{40}$/.test(addr.trim());
+        }
+
+        function isValidSuiAddress(addr) {
+            return /^0x[a-fA-F0-9]{64}$/.test(addr.trim());
+        }
+
+        function isValidSolanaAddress(addr) {
+            return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(addr.trim());
+        }
+
+        function detectChain(address) {
+            if (!address || address.trim() === '') return null;
+            const addr = address.trim();
+            if (isValidEVMAddress(addr)) return 'Polygon';
+            if (isValidSolanaAddress(addr)) return 'Solana';
+            if (isValidSuiAddress(addr)) return 'Sui';
+            return null;
+        }
         // State
         let userData = {};
         let quests = [];
@@ -1611,24 +1633,52 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
             setTimeout(() => modal.classList.add('active'), 10);
         }
         // Open submit modal
+                // Open submit modal
         function openSubmitModal(trackCode) {
             DOM.submitQuestForm.querySelector('#trackCode').value = trackCode || '';
+            
             const quest = quests.find(q => q.trackCode === trackCode);
-            let chainName = 'Polygon';
-            let placeholder = 'Enter your Polygon Wallet Address';
+            let labelText = 'Polygon';
+            let placeholderText = 'Enter your Polygon Wallet Address';
+
             if (quest) {
-                if (quest.chain === 1) {
-                    chainName = 'Solana';
-                    placeholder = 'Enter your Solana Wallet Address';
-                } else if (quest.chain === 2) {
-                    chainName = 'Sui';
-                    placeholder = 'Enter your Sui Wallet Address';
+                switch(quest.chain) {
+                    case 1:
+                        labelText = 'Solana';
+                        placeholderText = 'Enter your Solana Wallet Address';
+                        break;
+                    case 2:
+                        labelText = 'Sui';
+                        placeholderText = 'Enter your Sui Wallet Address';
+                        break;
+                    case 3:                     // ← MULTI-CHAIN
+                        labelText = 'Enter';
+                        placeholderText = 'Enter your Wallet Address (auto-detects)';
+                        break;
                 }
             }
+
             const label = DOM.submitQuestForm.querySelector('label[for="twitter"]');
-            label.textContent = `${chainName} Wallet Address`;
             const input = DOM.submitQuestForm.querySelector('#twitter');
-            input.placeholder = placeholder;
+
+            label.textContent = `${labelText} Wallet Address`;
+            input.placeholder = placeholderText;
+            input.value = '';
+
+            // REAL-TIME AUTO-DETECTION (only for multi-chain quests)
+            if (quest && quest.chain === 3) {
+                input.onkeyup = function() {
+                    const detected = detectChain(this.value);
+                    if (detected) {
+                        label.textContent = `${detected} Wallet Address`;
+                    } else {
+                        label.textContent = 'Wallet Address';
+                    }
+                };
+            } else {
+                input.onkeyup = null;   // remove listener for normal quests
+            }
+
             DOM.submitQuestModal.style.display = 'block';
             setTimeout(() => DOM.submitQuestModal.classList.add('active'), 10);
         }
