@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-       <!-- Google tag (gtag.js) -->
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -15,230 +16,232 @@
 
 <!-- Verse tag (VGDH) -->
 <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
+<title>Website Performance Rater & Bot Detector</title>
+<!-- Favicon -->
+<link href="images/favicon.ico" rel="icon">
 
-
-       <!-- Favicon -->
-       <link href="images/favicon.ico" rel="icon">
-
-  <title>Website Performance Rater</title>
-  <style>
-    :root {
-      --bg: #0f0f17;
-      --card: #1a1a2e;
-      --accent: #00e676;
-      --text: #e0e0ff;
-      --muted: #a0a0cc;
-      --input: #2a2a4a;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 2rem 1rem;
-      line-height: 1.6;
-    }
-    .container {
-      max-width: 500px;
-      margin: 0 auto 2rem;
-      background: var(--card);
-      border-radius: 16px;
-      padding: 2.5rem 2rem;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-      border: 1px solid #2a2a4a;
-      position: relative;
-    }
-    h1, h2, h3 {
-      color: white;
-      margin-bottom: 1.2rem;
-    }
-    h1 { font-size: 2.2rem; text-align: center; margin-bottom: 2rem; }
-    input, button {
-      width: 100%;
-      padding: 1rem;
-      margin: 0.8rem 0;
-      border-radius: 10px;
-      border: none;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-    }
-    input {
-      background: var(--input);
-      color: white;
-      border: 1px solid #3a3a5a;
-    }
-    input::placeholder { color: var(--muted); }
-    input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(0,230,118,0.2);
-    }
-    button {
-      background: linear-gradient(135deg, var(--accent), #00c853);
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,230,118,0.3); }
-    .result {
-      margin-top: 1.5rem;
-      padding: 1.5rem;
-      background: rgba(0,230,118,0.1);
-      border-radius: 12px;
-      border: 1px solid var(--accent);
-      text-align: center;
-      font-size: 1.3rem;
-    }
-    .result strong { color: var(--accent); }
-    .guide {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 2rem;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    }
-    ul { list-style: none; }
-    li { margin: 1.2rem 0; padding-left: 1.5rem; position: relative; }
-    li::before {
-      content: "•";
-      color: var(--accent);
-      position: absolute;
-      left: 0;
-      font-size: 1.4rem;
-    }
-    .powered-by {
-      margin-top: 2rem;
-      text-align: center;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-    .powered-by a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .powered-by a:hover {
-      text-decoration: underline;
-    }
-    .refs {
-      margin-top: 3rem;
-      font-size: 0.95rem;
-      color: var(--muted);
-      text-align: center;
-    }
-    .refs a { color: var(--accent); text-decoration: none; }
-    .refs a:hover { text-decoration: underline; }
-    @media (max-width: 600px) {
-      .container, .guide { padding: 1.8rem 1.2rem; }
-    }
-  </style>
+<style>
+:root{
+  --bg:#0f0f17;
+  --card:#1a1a2e;
+  --accent:#00e676;
+  --text:#e0e0ff;
+  --muted:#a0a0cc;
+  --input:#2a2a4a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:system-ui;
+  background:var(--bg);
+  color:var(--text);
+  padding:2rem 1rem;
+}
+.container{
+  max-width:520px;
+  margin:auto;
+  margin-bottom:2rem;
+  background:var(--card);
+  padding:2rem;
+  border-radius:16px;
+  border:1px solid #2a2a4a;
+}
+h1,h2{margin-bottom:1rem;text-align:center}
+input,textarea,button{
+  width:100%;
+  padding:1rem;
+  margin:0.6rem 0;
+  border-radius:10px;
+  border:none;
+  font-size:1rem;
+}
+input,textarea{
+  background:var(--input);
+  color:white;
+  border:1px solid #3a3a5a;
+}
+textarea{
+  height:160px;
+  resize:vertical;
+}
+button{
+  background:linear-gradient(135deg,var(--accent),#00c853);
+  font-weight:bold;
+  cursor:pointer;
+}
+.result{
+  margin-top:1rem;
+  padding:1rem;
+  background:rgba(0,230,118,0.1);
+  border:1px solid var(--accent);
+  border-radius:10px;
+  text-align:center;
+}
+.guide{
+  background:var(--card);
+  border-radius:16px;
+  padding:2rem;
+  max-width:720px;
+  margin:auto;
+}
+ul{list-style:none;margin:1rem 0;}
+li{margin:0.8rem 0;padding-left:1.2rem;position:relative;}
+li::before{
+  content:"•";
+  color:var(--accent);
+  position:absolute;
+  left:0;
+  font-size:1.2rem;
+}
+.powered-by{
+  margin-top:1rem;
+  text-align:center;
+  font-size:0.9rem;
+  color:var(--muted);
+}
+.powered-by a{
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:500;
+}
+.powered-by a:hover{text-decoration:underline;}
+</style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Website Performance Rater</h1>
-    <input id="visitors" type="number" placeholder="Unique Monthly Visitors" min="0">
-    <input id="visits" type="number" placeholder="Total Visits (Monthly)" min="0">
-    <input id="views" type="number" placeholder="Total Page Views (Monthly)" min="0">
-    <input id="pages" type="number" step="0.1" placeholder="Average Pages per Visit" min="0">
-    <input id="bounce" type="number" step="0.1" placeholder="Bounce Rate (%)" min="0" max="100">
-    <input id="duration" type="number" step="0.1" placeholder="Average Visit Duration (minutes)" min="0">
-    <button onclick="rateSite()">Rate My Website</button>
-    <div class="result" id="result"></div>
+<!-- Website Performance Rater -->
+<div class="container">
+<h1>Website Performance Rater</h1>
+<input id="visitors" type="number" placeholder="Unique Monthly Visitors">
+<input id="visits" type="number" placeholder="Total Visits">
+<input id="views" type="number" placeholder="Total Page Views">
+<input id="pages" type="number" step="0.1" placeholder="Average Pages per Visit">
+<input id="bounce" type="number" step="0.1" placeholder="Bounce Rate %">
+<input id="duration" type="number" step="0.1" placeholder="Average Visit Duration (minutes)">
+<button onclick="rateSite()">Rate Website</button>
+<div class="result" id="result"></div>
 
-    <div class="powered-by">
-      Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions</a>
-    </div>
-  </div>
+<div class="powered-by">
+Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions</a>
+</div>
+</div>
 
-  <div class="container guide">
-    <h2>Understanding Your Metrics (2025–2026 Benchmarks)</h2>
-    <p>Benchmarks vary widely by industry (e.g., e-commerce often has lower bounce rates and higher pages/visit than blogs or B2B SaaS). These are cross-industry medians/averages from recent reports—use them as general guides, not strict rules.</p>
-    <ul>
-      <li><strong>Unique Monthly Visitors:</strong> Number of distinct users in a month.<br>
-        <em>Strong:</em> 10,000+ (many small/medium sites: 1k–15k median; scale to your niche)</li>
-      <li><strong>Total Visits:</strong> Includes repeats.<br>
-        <em>Strong:</em> Returning ratio ≥1.3–1.5× (loyalty indicator)</li>
-      <li><strong>Page Views:</strong> Total pages viewed monthly.<br>
-        <em>Strong:</em> 20,000+ (highly variable by traffic volume)</li>
-      <li><strong>Pages per Visit:</strong> Pages viewed per session.<br>
-        <em>Strong:</em> ≥3–4 | <em>Average:</em> ~2.8 cross-industry | <em>Excellent:</em> 6–10+ (e.g., e-commerce)</li>
-      <li><strong>Bounce Rate:</strong> % single-page sessions.<br>
-        <em>Strong:</em> ≤40–45% | <em>Average:</em> 44–50% | <em>High (needs work):</em> >60% (e-commerce often 25–40%, blogs 50–70%+)</li>
-      <li><strong>Visit Duration:</strong> Average time per session.<br>
-        <em>Strong:</em> ≥2–3 min | <em>Average:</em> ~2:00–2:20 min | <em>Excellent:</em> 3–8+ min (content sites longer)</li>
-    </ul>
-    <p><strong>Tip:</strong> Improve one area at a time—better content often boosts pages/visit, duration, and lowers bounce. Always compare to your industry and traffic sources (e.g., organic vs. paid).</p>
-  </div>
+<!-- Bot Traffic Detector -->
+<div class="container">
+<h2>Traffic Bot Detector</h2>
+<p style="text-align:center;font-size:14px;color:#a0a0cc">Paste analytics report text below</p>
+<textarea id="trafficText"></textarea>
+<button onclick="detectBots()">Analyze Traffic</button>
+<div class="result" id="botResult"></div>
+</div>
 
-  <div class="refs">
-    <p><strong>References & Sources (2025–2026 data):</strong></p>
-    <p>• Databox Website Traffic Benchmarks by Industry</p>
-    <p>• HubSpot Web Trends Report 2025</p>
-    <p>• Contentsquare Digital Experience Benchmark</p>
-    <p>• Semrush & industry aggregates (e.g., average bounce ~47%, pages/session ~2.8, session duration ~2:17 min)</p>
-    <p>• Additional insights: CausalFunnel, Focus-Digital, SEO Profy reports</p>
-  </div>
+<!-- Guide -->
+<div class="guide">
+<h2>Understanding Website Metrics & Traffic</h2>
+<ul>
+<li><strong>Pages Per Visit:</strong> 2.5 – 4+ (higher is better)</li>
+<li><strong>Bounce Rate:</strong> 40% – 50% ideal</li>
+<li><strong>Visit Duration:</strong> 2 – 4 minutes is healthy</li>
+<li><strong>Returning Visitors:</strong> Visit ratio ≥ 1.3 indicates loyalty</li>
+<li><strong>Bot Detection:</strong> Pages/visitor <1.2, very short duration, or unknown sources may indicate bot traffic</li>
+</ul>
+<p>Use the Performance Rater to improve engagement, and the Bot Detector to check for suspicious traffic patterns. Both tools together give a full picture of your website health.</p>
+</div>
 
-  <script>
-    function rateSite() {
-      const visitors = Number(document.getElementById("visitors").value) || 0;
-      const visits    = Number(document.getElementById("visits").value) || 0;
-      const views     = Number(document.getElementById("views").value) || 0;
-      const pages     = Number(document.getElementById("pages").value) || 0;
-      const bounce    = Number(document.getElementById("bounce").value) || 100;
-      const duration  = Number(document.getElementById("duration").value) || 0;
+<script>
+/* ================= Website Performance Rater ================= */
+function rateSite(){
+  const visitors=Number(document.getElementById("visitors").value)||0;
+  const visits=Number(document.getElementById("visits").value)||0;
+  const views=Number(document.getElementById("views").value)||0;
+  const pages=Number(document.getElementById("pages").value)||0;
+  const bounce=Number(document.getElementById("bounce").value)||100;
+  const duration=Number(document.getElementById("duration").value)||0;
 
-      let score = 0;
+  let score=0;
+  if(visitors>=10000)score+=20;
+  else if(visitors>=5000)score+=15;
+  else if(visitors>=1000)score+=10;
+  else score+=5;
 
-      // Unique Visitors (max 20)
-      if (visitors >= 10000) score += 20;
-      else if (visitors >= 5000) score += 15;
-      else if (visitors >= 1000) score += 10;
-      else score += 5;
+  const ratio=visits/(visitors||1);
+  if(ratio>=1.5)score+=15;
+  else if(ratio>=1.3)score+=12;
+  else if(ratio>=1)score+=8;
+  else score+=4;
 
-      // Returning Ratio (max 15)
-      const ratio = visits / (visitors || 1);
-      if (ratio >= 1.5) score += 15;
-      else if (ratio >= 1.3) score += 12;
-      else if (ratio >= 1) score += 8;
-      else score += 4;
+  if(views>=50000)score+=15;
+  else if(views>=20000)score+=12;
+  else if(views>=5000)score+=8;
+  else score+=4;
 
-      // Page Views (max 15)
-      if (views >= 50000) score += 15;
-      else if (views >= 20000) score += 12;
-      else if (views >= 5000) score += 8;
-      else score += 4;
+  if(pages>=4)score+=20;
+  else if(pages>=3)score+=16;
+  else if(pages>=2.5)score+=12;
+  else if(pages>=2)score+=8;
+  else score+=4;
 
-      // Pages per Visit (max 20)
-      if (pages >= 4) score += 20;
-      else if (pages >= 3) score += 16;
-      else if (pages >= 2.5) score += 12;
-      else if (pages >= 2) score += 8;
-      else score += 4;
+  if(bounce<=40)score+=20;
+  else if(bounce<=50)score+=15;
+  else if(bounce<=60)score+=10;
+  else score+=5;
 
-      // Bounce Rate (max 20) — lower is better
-      if (bounce <= 40) score += 20;
-      else if (bounce <= 50) score += 15;
-      else if (bounce <= 60) score += 10;
-      else score += 5;
+  if(duration>=3)score+=10;
+  else if(duration>=2)score+=8;
+  else if(duration>=1)score+=5;
+  else score+=2;
 
-      // Duration in minutes (max 10)
-      if (duration >= 3) score += 10;
-      else if (duration >= 2) score += 8;
-      else if (duration >= 1) score += 5;
-      else score += 2;
+  let rating=score>=80?"Excellent":
+             score>=65?"Very Good":
+             score>=50?"Average":
+             "Needs Improvement";
 
-      let rating = score >= 80 ? "Excellent" :
-                   score >= 65 ? "Very Good" :
-                   score >= 50 ? "Average" : "Needs Improvement";
+  document.getElementById("result").innerHTML=`<strong>Score: ${score}/100</strong><br>Rating: ${rating}`;
+}
 
-      document.getElementById("result").innerHTML = `
-        <strong>Score: ${score}/100</strong><br>
-        Rating: ${rating}<br>
-        <small>(Benchmarks vary by industry—compare to your niche for best context)</small>
-      `;
-    }
-  </script>
+/* ================= Bot Detector ================= */
+function extractNumberFlexible(text,label){
+  const regex = new RegExp(label+"\\s*(is|:)??\\s*([0-9,.]+)","i");
+  const match = text.match(regex);
+  if(!match)return 0;
+  return Number(match[2].replace(/,/g,""));
+}
+
+function detectBots(){
+  const text=document.getElementById("trafficText").value;
+  const visitors=extractNumberFlexible(text,"unique visitors")||
+                 extractNumberFlexible(text,"visitors")||
+                 extractNumberFlexible(text,"total visitors");
+  const visits=extractNumberFlexible(text,"total visit")||
+               extractNumberFlexible(text,"visits");
+  const pageviews=extractNumberFlexible(text,"pageviews")||
+                  extractNumberFlexible(text,"total pageview");
+  let pagesPerVisit=extractNumberFlexible(text,"views per visit")||
+                    extractNumberFlexible(text,"pages per visit");
+  const bounce=extractNumberFlexible(text,"bounce rate");
+  const duration=extractNumberFlexible(text,"duration");
+
+  if(!pagesPerVisit && visitors>0 && pageviews>0) pagesPerVisit=pageviews/visitors;
+
+  let score=0;
+  if(pagesPerVisit<1.2)score+=40;
+  if(visitors>2000 && pagesPerVisit<1.3)score+=20;
+  if(bounce>80)score+=20;
+  if(duration<0.5)score+=10;
+  if(text.toLowerCase().includes("unknown"))score+=10;
+
+  let verdict="Likely Human Traffic";
+  if(score>=50)verdict="Likely Bot Traffic";
+  else if(score>=25)verdict="Suspicious Traffic";
+
+  document.getElementById("botResult").innerHTML=
+  `Visitors: ${visitors}<br>`+
+  `Pageviews: ${pageviews}<br>`+
+  `Pages per Visitor: ${pagesPerVisit?pagesPerVisit.toFixed(2):'N/A'}<br>`+
+  `Bounce: ${bounce||'N/A'}%<br>`+
+  `Duration: ${duration||'N/A'} min<br><br>`+
+  `<strong>${verdict}</strong>`;
+}
+</script>
+
 </body>
 </html>
