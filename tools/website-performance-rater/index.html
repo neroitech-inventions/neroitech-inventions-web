@@ -31,13 +31,13 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
-  font-family:system-ui;
+  font-family:system-ui, Arial;
   background:var(--bg);
   color:var(--text);
   padding:2rem 1rem;
 }
 .container{
-  max-width:520px;
+  max-width:720px;
   margin:auto;
   margin-bottom:2rem;
   background:var(--card);
@@ -45,7 +45,7 @@ body{
   border-radius:16px;
   border:1px solid #2a2a4a;
 }
-h1,h2{margin-bottom:1rem;text-align:center}
+h1,h2,h3{margin-bottom:1rem;text-align:center;}
 input,textarea,button{
   width:100%;
   padding:1rem;
@@ -104,6 +104,74 @@ li::before{
   font-weight:500;
 }
 .powered-by a:hover{text-decoration:underline;}
+
+/* Verse Analyzer Table Styles */
+/* Make table responsive */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  min-width: 600px; /* ensures proper scrolling on small screens */
+  border-collapse: collapse;
+}
+td, th {
+  border: 1px solid #334155;
+  padding: 8px;
+  text-align: center;
+}
+th {
+  background: #1a1a2e;
+}
+.human{color:#22c55e;font-weight:bold;}
+.bot{color:#ef4444;font-weight:bold;}
+.sus{color:#facc15;font-weight:bold;}
+.card{
+  background:#1a1a2e;
+  padding:15px;
+  margin-top:15px;
+  border:1px solid #334155;
+  border-radius:10px;
+}
+textarea.verse{height:250px;background:#0f172a;color:#22c55e;border:1px solid #334155;}
+
+#backToTop {
+  display: none; /* Hidden by default */
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 100;
+  font-size: 24px;
+  background: var(--accent);
+  color: #0f0f17;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  transition: opacity 0.3s ease;
+}
+#backToTop:hover {
+  opacity: 0.8;
+}
+/* Make table responsive */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-wrapper {
+  width: 100%;           /* full viewport width */
+  max-width: 100%;       /* remove container restriction */
+  overflow-x: auto;      /* horizontal scroll on small screens */
+}
+
+.table-wrapper table {
+  width: 100%;           /* table fills wrapper */
+  border-collapse: collapse;
+}
 </style>
 </head>
 <body>
@@ -119,7 +187,6 @@ li::before{
 <input id="duration" type="number" step="0.1" placeholder="Average Visit Duration (minutes)">
 <button onclick="rateSite()">Rate Website</button>
 <div class="result" id="result"></div>
-
 <div class="powered-by">
 Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions</a>
 </div>
@@ -134,7 +201,18 @@ Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions</
 <div class="result" id="botResult"></div>
 </div>
 
+<!-- Verse Ecosystem Intelligence Analyzer -->
+<div class="table-wrapper">
+<h2>Verse App Analytics Intelligence Analyzer</h2>
+<p style="text-align:center;font-size:14px;color:#a0a0cc">Paste the full Verse dashboard data from Verse App Analytics below</p>
+<textarea id="verseData" class="verse"></textarea>
+<button onclick="analyzeVerse()">Analyze Verse Apps</button>
+<div id="verseSummary"></div>
+<div id="verseTable" class="table-container"></div>
+</div>
+
 <!-- Guide -->
+ <br><br>
 <div class="guide">
 <h2>Understanding Website Metrics & Traffic</h2>
 <ul>
@@ -144,8 +222,11 @@ Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions</
 <li><strong>Returning Visitors:</strong> Visit ratio ≥ 1.3 indicates loyalty</li>
 <li><strong>Bot Detection:</strong> Pages/visitor <1.2, very short duration, or unknown sources may indicate bot traffic</li>
 </ul>
-<p>Use the Performance Rater to improve engagement, and the Bot Detector to check for suspicious traffic patterns. Both tools together give a full picture of your website health.</p>
+<p>Use the Performance Rater to improve engagement, the Bot Detector to check for suspicious traffic patterns, and the Verse Analyzer to understand ecosystem-level intelligence.</p>
 </div>
+
+<!-- Back to Top Button -->
+<button id="backToTop" title="Back to Top">↑</button>
 
 <script>
 /* ================= Website Performance Rater ================= */
@@ -241,6 +322,121 @@ function detectBots(){
   `Duration: ${duration||'N/A'} min<br><br>`+
   `<strong>${verdict}</strong>`;
 }
+
+/* ================= Verse Ecosystem Analyzer ================= */
+function analyzeVerse(){
+  let raw = document.getElementById("verseData").value;
+  let lines = raw.split("\n");
+  let apps = [];
+
+  lines.forEach(line => {
+    let match = line.match(/^\d+\s+([^\s]+)\s+[^\s]+\s+[^\s]+\s+([\d,]+)\s+([\d,]+)/);
+    if(match){
+      let domain = match[1];
+      let visitors = parseInt(match[2].replace(/,/g,""));
+      let pageviews = parseInt(match[3].replace(/,/g,""));
+      apps.push({domain, visitors, pageviews});
+    }
+  });
+
+  let realApps = 0, botApps = 0, devApps = 0;
+  let rows = "";
+
+  apps.forEach(app => {
+    let ratio = app.pageviews / app.visitors;
+    let score = 50;
+    let dev = app.domain.includes("edgeone") || app.domain.includes("preview") || app.domain.includes("run.app") || app.domain.includes("sandbox");
+
+    if(dev){ score = 20; devApps++; }
+    else{
+      if(ratio < 1.05) score -= 30;
+      if(ratio > 2) score += 25;
+      if(app.visitors > 1000) score += 10;
+    }
+
+    score = Math.max(0, Math.min(100, score));
+    let type = "Suspicious", cls="sus";
+    if(score > 70){ type="Human"; cls="human"; realApps++; }
+    else if(score < 40){ type="Bot / Dev"; cls="bot"; botApps++; }
+
+    rows += `<tr>
+      <td>${app.domain}</td>
+      <td>${app.visitors}</td>
+      <td>${app.pageviews}</td>
+      <td>${ratio.toFixed(2)}</td>
+      <td>${score}%</td>
+      <td class="${cls}">${type}</td>
+    </tr>`;
+  });
+
+  let total = apps.length;
+
+  document.getElementById("verseSummary").innerHTML = `
+    <div class="card">
+      <h3>Ecosystem Overview</h3>
+      Total Apps: ${total} <br>
+      Likely Real Apps: ${realApps} <br>
+      Bot / Dev Apps: ${botApps + devApps} <br>
+      Dev Environments: ${devApps}
+    </div>`;
+
+  document.getElementById("verseTable").innerHTML = `
+  <div class="table-container">
+  <table>
+    <tr>
+      <th>S/N</th>
+      <th>Domain</th>
+      <th>Visitors</th>
+      <th>Pageviews</th>
+      <th>Engagement</th>
+      <th>Human Score</th>
+      <th>Classification</th>
+    </tr>
+    ${apps.map((app, index) => {
+      let ratio = app.pageviews / app.visitors;
+      let score = 50;
+      let dev = app.domain.includes("edgeone") || app.domain.includes("preview") || app.domain.includes("run.app") || app.domain.includes("sandbox");
+      if(dev){ score = 20; }
+      else {
+        if(ratio < 1.05) score -= 30;
+        if(ratio > 2) score += 25;
+        if(app.visitors > 1000) score += 10;
+      }
+      score = Math.max(0, Math.min(100, score));
+      let type = "Suspicious", cls="sus";
+      if(score > 70){ type="Human"; cls="human"; }
+      else if(score < 40){ type="Bot / Dev"; cls="bot"; }
+
+      return `<tr>
+        <td>${index + 1}</td>
+        <td>${app.domain}</td>
+        <td>${app.visitors}</td>
+        <td>${app.pageviews}</td>
+        <td>${ratio.toFixed(2)}</td>
+        <td>${score}%</td>
+        <td class="${cls}">${type}</td>
+      </tr>`;
+    }).join('')}
+  </table>
+  </div>`;
+}
+
+// Back to Top functionality
+const backToTopBtn = document.getElementById("backToTop");
+
+// Show button after scrolling down 300px
+window.onscroll = function() {
+  if(document.body.scrollTop > 300 || document.documentElement.scrollTop > 300){
+    backToTopBtn.style.display = "block";
+  } else {
+    backToTopBtn.style.display = "none";
+  }
+};
+
+// Smooth scroll to top on click
+backToTopBtn.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 </script>
 
 </body>
