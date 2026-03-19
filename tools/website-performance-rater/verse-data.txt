@@ -8,11 +8,11 @@ Web3
 90d
 Visitors
 
-38,439
+38,446
 
 Pageviews
 
-52,418
+53,000
 
 Active Apps
 
@@ -20,7 +20,7 @@ Active Apps
 
 Custom Events
 
-6,025
+6,030
 
 Community Trends
 3/2
@@ -54,10 +54,10 @@ pageviews
 #	App	Domain	Type	Visitors	Pageviews
 1	sadikufav1.vercel.app	sadikufav1.vercel.app	unknown	8,706	9,261
 2	jessymia.vercel.app	jessymia.vercel.app	unknown	7,775	8,554
-3	verseelectoralhub0.vercel.app	verseelectoralhub0.vercel.app	unknown	7,205	12,500
+3	verseelectoralhub0.vercel.app	verseelectoralhub0.vercel.app	unknown	7,205	13,072
 4	verse-favee-community.base44.app	verse-favee-community.base44.app	unknown	5,967	8,455
 5	niti.com.ng	niti.com.ng	unknown	2,151	4,583
-6	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,513	2,178
+6	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,514	2,180
 7	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,252	1,468
 8	verse-focus-center-pecky222.base44.app	verse-focus-center-pecky222.base44.app	unknown	913	1,096
 9	xvdhes1.vercel.app	xvdhes1.vercel.app	unknown	508	645
@@ -65,7 +65,7 @@ pageviews
 11	forward-amber-j4zzmwcqk1.edgeone.app	forward-amber-j4zzmwcqk1.edgeone.app	unknown	290	292
 12	emmanuella7890.vercel.app	emmanuella7890.vercel.app	unknown	244	244
 13	valerie02.vercel.app	valerie02.vercel.app	unknown	211	446
-14	saifalshammari01.vercel.app	saifalshammari01.vercel.app	unknown	121	155
+14	saifalshammari01.vercel.app	saifalshammari01.vercel.app	unknown	127	163
 15	press.vgdh.io	press.vgdh.io	unknown	94	242
 16	desiboii7-seven.vercel.app	desiboii7-seven.vercel.app	unknown	59	74
 17	whispering-amethyst-tdu932yyt0.edgeone.app	whispering-amethyst-tdu932yyt0.edgeone.app	unknown	47	47
