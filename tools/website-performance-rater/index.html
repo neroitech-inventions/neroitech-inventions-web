@@ -133,6 +133,15 @@ textarea.verse{height:250px;background:#0f172a;color:#22c55e;border:1px solid #3
   transition: opacity 0.3s ease;
 }
 #backToTop:hover {opacity: 0.8;}
+.verse-logo{
+vertical-align: middle;
+margin-right:6px;
+}
+button:disabled{
+opacity:0.5;
+cursor:not-allowed;
+background:#555;
+}
 </style>
 </head>
 <body>
@@ -164,10 +173,16 @@ Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions</
 
 <!-- Verse Ecosystem Intelligence Analyzer -->
 <div class="table-wrapper">
-<h2>Verse App Analytics Intelligence Analyzer</h2>
-<p style="text-align:center;font-size:14px;color:#a0a0cc">Paste the full Verse dashboard data from Verse App Analytics below</p>
+<h2>
+<img src="images/verse_logo.svg" alt="Verse Logo" class="verse-logo" width="25" height="25">
+Verse App Analytics Intelligence Analyzer
+</h2>
+<p style="text-align:center;font-size:14px;color:#a0a0cc">Paste the full Verse dashboard data from <a style="color: #00c853;" href="https://dashboard.vgdh.io/" target="_blank"><b>Verse App Analytics</b></a> below</p>
 <textarea id="verseData" class="verse"></textarea>
-<button onclick="analyzeVerse()">Analyze Verse Apps</button>
+<p id="verseHint" style="font-size:13px;color:#a0a0cc;text-align:center;">
+Verse App Analytics is loaded by default from the database. Click the field and paste new Verse dashboard data to run a fresh analysis.
+</p>
+<button id="analyzeBtn" onclick="analyzeVerse()" disabled>Analyze Verse Apps</button>
 <div id="verseSummary"></div>
 <div id="verseTable" class="table-container"></div>
 </div>
@@ -191,7 +206,7 @@ Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions</
     <li><strong>Visit Duration:</strong> Longer sessions (2–4 min) indicate humans actively browsing. Very short sessions (<0.5 min) are likely bots.</li>
     <li><strong>Engagement Ratio (Pageviews ÷ Visitors):</strong>
       <ul>
-        <li>Ratio <1.05 → Bot</li>
+        <li>Ratio <1.05 → Bot </li>
         <li>Ratio 1.05–1.7 → Suspicious</li>
         <li>Ratio >1.7 → Human</li>
       </ul>
@@ -350,7 +365,7 @@ function analyzeVerse(){
 
   document.getElementById("verseSummary").innerHTML = `
     <div class="card">
-      <h3>Ecosystem Overview</h3>
+      <h3>Verse Ecosystem Overview</h3>
       Total Apps: ${apps.length} <br>
       Likely Real Apps: ${realApps} <br>
       Bot Apps: ${botApps}
@@ -381,6 +396,130 @@ window.onscroll = function(){
   } else backToTopBtn.style.display="none";
 };
 backToTopBtn.addEventListener("click",()=>{window.scrollTo({top:0,behavior:'smooth'});});
+
+
+let fullVerseData = "";
+let verseLines = [];
+let scanIndex = 0;
+let scanInterval;
+let stopScan = false;
+
+window.addEventListener("DOMContentLoaded", function(){
+
+  fetch("verse-data.txt")
+  .then(res => res.text())
+  .then(data => {
+
+      fullVerseData = data;
+      verseLines = data.split("\n");
+
+      // Analyzer already has full data
+      document.getElementById("verseData").value = fullVerseData;
+      analyzeVerse();
+
+      // Clear textarea for visual scan effect
+      document.getElementById("verseData").value = "";
+
+      startScanEffect();
+
+  });
+
+});
+
+function startScanEffect(){
+
+  const textarea = document.getElementById("verseData");
+
+  scanInterval = setInterval(()=>{
+
+    if(stopScan) return;
+
+    if(scanIndex >= verseLines.length){
+
+        // restart scanning again
+        scanIndex = 0;
+
+        // optional: clear screen before restarting
+        textarea.value = "";
+    }
+
+    textarea.value += verseLines[scanIndex] + "\n";
+    textarea.scrollTop = textarea.scrollHeight;
+
+    scanIndex++;
+
+  }, 60);
+
+}
+
+document.getElementById("verseData").addEventListener("click", function(){
+
+  stopScan = true;
+  clearInterval(scanInterval);
+
+});
+
+const verseTextarea = document.getElementById("verseData");
+const analyzeBtn = document.getElementById("analyzeBtn");
+
+let clearedOnce = false;
+
+verseTextarea.addEventListener("click", function(){
+
+  // stop scanning animation
+  stopScan = true;
+  clearInterval(scanInterval);
+
+  // clear textarea only the first time user clicks
+  if(!clearedOnce){
+      verseTextarea.value = "";
+      clearedOnce = true;
+  }
+
+});
+
+verseTextarea.addEventListener("input", function(){
+
+  analyzeBtn.disabled = false;
+
+});
+
+/*function startTypingEffect(){
+
+  const textarea = document.getElementById("verseData");
+
+  typingInterval = setInterval(() => {
+
+    if(typingStopped) return;
+
+    if(currentLine < verseLines.length){
+
+      textarea.value += verseLines[currentLine] + "\n";
+      currentLine++;
+
+    } else {
+
+      clearInterval(typingInterval);
+
+      // Auto analyze once finished
+      analyzeVerse();
+
+    }
+
+  }, 120); // speed of typing (lower = faster)
+
+}
+
+document.getElementById("verseData").addEventListener("click", function(){
+
+  typingStopped = true;
+  clearInterval(typingInterval);
+
+});
+
+*/
+
+
 </script>
 </body>
 </html>
