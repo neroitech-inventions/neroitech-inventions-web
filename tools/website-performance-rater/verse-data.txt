@@ -8,11 +8,11 @@ Web3
 90d
 Visitors
 
-40,625
+40,642
 
 Pageviews
 
-69,402
+69,471
 
 Active Apps
 
@@ -57,9 +57,9 @@ pageviews
 2	jessymia.vercel.app	jessymia.vercel.app	unknown	8,443	13,905
 3	verseelectoralhub0.vercel.app	verseelectoralhub0.vercel.app	unknown	7,213	14,850
 4	verse-favee-community.base44.app	verse-favee-community.base44.app	unknown	5,967	8,455
-5	niti.com.ng	niti.com.ng	unknown	2,269	4,822
-6	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,629	2,723
-7	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,507	2,173
+5	niti.com.ng	niti.com.ng	unknown	2,272	4,826
+6	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,633	2,743
+7	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,510	2,194
 8	verse-focus-center-pecky222.base44.app	verse-focus-center-pecky222.base44.app	unknown	913	1,096
 9	xvdhes1.vercel.app	xvdhes1.vercel.app	unknown	508	645
 10	enekaobi.base44.app	enekaobi.base44.app	unknown	304	314
@@ -67,7 +67,7 @@ pageviews
 12	emmanuella7890.vercel.app	emmanuella7890.vercel.app	unknown	244	244
 13	saifalshammari01.vercel.app	saifalshammari01.vercel.app	unknown	213	273
 14	valerie02.vercel.app	valerie02.vercel.app	unknown	211	446
-15	hub.vgdh.io	hub.vgdh.io	unknown	202	941
+15	hub.vgdh.io	hub.vgdh.io	unknown	209	965
 16	press.vgdh.io	press.vgdh.io	unknown	94	242
 17	desiboii7-seven.vercel.app	desiboii7-seven.vercel.app	unknown	59	74
 18	whispering-amethyst-tdu932yyt0.edgeone.app	whispering-amethyst-tdu932yyt0.edgeone.app	unknown	47	47
