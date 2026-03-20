@@ -8,11 +8,11 @@ Web3
 90d
 Visitors
 
-40,756
+40,921
 
 Pageviews
 
-71,884
+77,633
 
 Active Apps
 
@@ -20,52 +20,39 @@ Active Apps
 
 Custom Events
 
-6,362
+6,400
 
 Community Trends
-3/2
-3/3
 3/4
-3/5
-3/6
 3/7
-3/8
-3/9
 3/10
-3/11
-3/12
 3/13
-3/14
-3/15
 3/16
-3/17
-3/18
-3/19
 3/20
 0
-4000
-8000
-12000
-16000
+4500
+9000
+13500
+18000
 
 App Leaderboard
 Search apps...
 visitors
 pageviews
 #	App	Domain	Type	Visitors	Pageviews
-1	sadikufav1.vercel.app	sadikufav1.vercel.app	unknown	9,465	18,122
-2	jessymia.vercel.app	jessymia.vercel.app	unknown	8,443	13,905
-3	verseelectoralhub0.vercel.app	verseelectoralhub0.vercel.app	unknown	7,213	14,850
-4	verse-favee-community.base44.app	verse-favee-community.base44.app	unknown	5,967	8,455
-5	niti.com.ng	niti.com.ng	unknown	2,320	4,932
-6	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,653	2,847
-7	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,530	2,322
+1	sadikufav1.vercel.app	sadikufav1.vercel.app	unknown	9,466	19,510
+2	jessymia.vercel.app	jessymia.vercel.app	unknown	8,448	17,509
+3	verseelectoralhub0.vercel.app	verseelectoralhub0.vercel.app	unknown	7,214	14,852
+4	verse-favee-community.base44.app	verse-favee-community.base44.app	unknown	5,968	8,456
+5	niti.com.ng	niti.com.ng	unknown	2,369	5,037
+6	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,690	3,074
+7	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,574	2,555
 8	verse-focus-center-pecky222.base44.app	verse-focus-center-pecky222.base44.app	unknown	913	1,096
 9	xvdhes1.vercel.app	xvdhes1.vercel.app	unknown	508	645
 10	enekaobi.base44.app	enekaobi.base44.app	unknown	304	314
 11	forward-amber-j4zzmwcqk1.edgeone.app	forward-amber-j4zzmwcqk1.edgeone.app	unknown	290	292
-12	emmanuella7890.vercel.app	emmanuella7890.vercel.app	unknown	244	244
-13	hub.vgdh.io	hub.vgdh.io	unknown	231	1,077
+12	hub.vgdh.io	hub.vgdh.io	unknown	255	1,263
+13	emmanuella7890.vercel.app	emmanuella7890.vercel.app	unknown	244	244
 14	saifalshammari01.vercel.app	saifalshammari01.vercel.app	unknown	213	273
 15	valerie02.vercel.app	valerie02.vercel.app	unknown	211	446
 16	press.vgdh.io	press.vgdh.io	unknown	94	242
@@ -91,11 +78,11 @@ pageviews
 36	labour-turquoise-mprb6aqmxm.edgeone.app	labour-turquoise-mprb6aqmxm.edgeone.app	unknown	26	26
 37	bright-aquamarine-em4ouesqjg-hu3nbho7qv.edgeone.app	bright-aquamarine-em4ouesqjg-hu3nbho7qv.edgeone.app	unknown	22	22
 38	desiboii.vercel.app	desiboii.vercel.app	unknown	17	24
-39	ais-dev-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	ais-dev-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	unknown	14	70
-40	ais-pre-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	ais-pre-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	unknown	14	15
-41	officialchaserice0100.vercel.app	officialchaserice0100.vercel.app	unknown	13	13
-42	alternative-maroon-wrygl0zhd7-ikpet7fx6a.edgeone.app	alternative-maroon-wrygl0zhd7-ikpet7fx6a.edgeone.app	unknown	13	13
-43	operational-cyan-qe4zil27ng-u6n54vig69.edgeone.app	operational-cyan-qe4zil27ng-u6n54vig69.edgeone.app	unknown	12	12
+39	officialchaserice0100.vercel.app	officialchaserice0100.vercel.app	unknown	15	15
+40	ais-dev-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	ais-dev-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	unknown	14	70
+41	ais-pre-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	ais-pre-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	unknown	14	15
+42	operational-cyan-qe4zil27ng-u6n54vig69.edgeone.app	operational-cyan-qe4zil27ng-u6n54vig69.edgeone.app	unknown	13	13
+43	alternative-maroon-wrygl0zhd7-ikpet7fx6a.edgeone.app	alternative-maroon-wrygl0zhd7-ikpet7fx6a.edgeone.app	unknown	13	13
 44	smoggy-beige-8o7tqrpzds-s7wpz3v5gb.edgeone.app	smoggy-beige-8o7tqrpzds-s7wpz3v5gb.edgeone.app	unknown	12	12
 45	whispering-amethyst-tdu932yyt0-80s3cjpk0r.edgeone.app	whispering-amethyst-tdu932yyt0-80s3cjpk0r.edgeone.app	unknown	11	11
 46	little-turquoise-yxacprahqv-v8ffgx6v2d.edgeone.app	little-turquoise-yxacprahqv-v8ffgx6v2d.edgeone.app	unknown	10	10
@@ -103,9 +90,9 @@ pageviews
 48	ytterbic-amaranth-metf7egpfz-tvawkihgom.edgeone.app	ytterbic-amaranth-metf7egpfz-tvawkihgom.edgeone.app	unknown	10	10
 49	sammiejay.base44.app	sammiejay.base44.app	unknown	10	11
 50	open-yellow-rgfa6ytx6t-pd2ojr0k1y.edgeone.app	open-yellow-rgfa6ytx6t-pd2ojr0k1y.edgeone.app	unknown	10	10
-51	exclusive-magenta-ljttocdytk-l482aujfwl.edgeone.app	exclusive-magenta-ljttocdytk-l482aujfwl.edgeone.app	unknown	9	9
-52	ais-pre-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	ais-pre-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	unknown	9	15
-53	envious-tomato-bealqzs4cg-5vttduqhtv.edgeone.app	envious-tomato-bealqzs4cg-5vttduqhtv.edgeone.app	unknown	9	9
+51	envious-tomato-bealqzs4cg-5vttduqhtv.edgeone.app	envious-tomato-bealqzs4cg-5vttduqhtv.edgeone.app	unknown	9	9
+52	exclusive-magenta-ljttocdytk-l482aujfwl.edgeone.app	exclusive-magenta-ljttocdytk-l482aujfwl.edgeone.app	unknown	9	9
+53	ais-pre-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	ais-pre-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	unknown	9	15
 54	nuclear-ivory-7l6po4hq1b-uagwiw72wf.edgeone.app	nuclear-ivory-7l6po4hq1b-uagwiw72wf.edgeone.app	unknown	9	9
 55	(none)	(none)	unknown	9	10
 56	corporate-ivory-pozlgyfgqt-b9rnqpmevj.edgeone.app	corporate-ivory-pozlgyfgqt-b9rnqpmevj.edgeone.app	unknown	8	8
@@ -183,4 +170,4 @@ pageviews
 128	ais-pre-v72szdbpn2xcickbwvi4ap-385042659597.europe-west2.run.app	ais-pre-v72szdbpn2xcickbwvi4ap-385042659597.europe-west2.run.app	unknown	1	1
 129	ais-dev-3alynkmmkjmilqcx55h5jx-132761690266.europe-west2.run.app	ais-dev-3alynkmmkjmilqcx55h5jx-132761690266.europe-west2.run.app	unknown	1	3
 Verse App Analytics
-3/2
+3/10
