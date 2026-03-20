@@ -142,6 +142,36 @@ opacity:0.5;
 cursor:not-allowed;
 background:#555;
 }
+/* Verification Modal */
+.verify-modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:200;
+}
+
+.verify-box{
+background:#1a1a2e;
+padding:25px;
+border-radius:14px;
+width:300px;
+text-align:center;
+border:1px solid #334155;
+}
+
+.verify-box input{
+margin-top:10px;
+}
+
+.verify-box button{
+margin-top:10px;
+}
 </style>
 </head>
 <body>
@@ -359,7 +389,7 @@ function analyzeVerse(){
       <td>${app.pageviews}</td>
       <td>${ratio.toFixed(2)}</td>
       <td>${score}%</td>
-      <td class="${cls}">${type}</td>
+  <td class="${cls}" onclick="verifyTraffic(this, ${app.visitors}, ${app.pageviews})" style="cursor:pointer">${type}</td>
     </tr>`;
   });
 
@@ -519,7 +549,67 @@ document.getElementById("verseData").addEventListener("click", function(){
 
 */
 
+function verifyTraffic(cell, visitors, pageviews){
 
+  const modal=document.createElement("div");
+  modal.className="verify-modal";
+
+modal.innerHTML=`
+<div class="verify-box" onclick="event.stopPropagation()">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+    <h3 style="margin:0">Final Traffic Verification</h3>
+    <span onclick="closeVerifyModal()" style="cursor:pointer;font-size:18px;color:#aaa;">✕</span>
+  </div>
+
+  <input id="verifyBounce" type="number" placeholder="Bounce Rate %" />
+  <input id="verifyDuration" type="number" step="0.1" placeholder="Visit Duration (minutes)" />
+  <button onclick="submitVerification()">Verify</button>
+</div>`;
+
+  document.body.appendChild(modal);
+modal.addEventListener("click", closeVerifyModal);
+  window.submitVerification=function(){
+
+    const bounce=Number(document.getElementById("verifyBounce").value)||0;
+    const duration=Number(document.getElementById("verifyDuration").value)||0;
+
+    const ratio=pageviews/visitors;
+
+    let score=0;
+
+    if(ratio>1.7) score+=40;
+    else if(ratio>1.05) score+=20;
+
+    if(bounce<=50) score+=20;
+    else if(bounce>80) score-=10;
+
+    if(duration>=2) score+=30;
+    else if(duration<0.5) score-=20;
+
+    let type="Suspicious";
+    let cls="sus";
+
+    if(score>=60){
+      type="Human";
+      cls="human";
+    }
+    else if(score<=10){
+      type="Bot";
+      cls="bot";
+    }
+
+    cell.className=cls;
+    cell.innerText=type;
+
+    modal.remove();
+  }
+
+}
+
+function closeVerifyModal(){
+  const modal=document.querySelector(".verify-modal");
+  if(modal) modal.remove();
+}
 </script>
 </body>
 </html>
