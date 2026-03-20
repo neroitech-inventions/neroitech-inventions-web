@@ -8,11 +8,11 @@ Web3
 90d
 Visitors
 
-40,677
+40,713
 
 Pageviews
 
-70,222
+70,595
 
 Active Apps
 
@@ -20,7 +20,7 @@ Active Apps
 
 Custom Events
 
-6,338
+6,341
 
 Community Trends
 3/2
@@ -53,19 +53,19 @@ Search apps...
 visitors
 pageviews
 #	App	Domain	Type	Visitors	Pageviews
-1	sadikufav1.vercel.app	sadikufav1.vercel.app	unknown	9,463	16,763
+1	sadikufav1.vercel.app	sadikufav1.vercel.app	unknown	9,463	17,003
 2	jessymia.vercel.app	jessymia.vercel.app	unknown	8,443	13,905
 3	verseelectoralhub0.vercel.app	verseelectoralhub0.vercel.app	unknown	7,213	14,850
 4	verse-favee-community.base44.app	verse-favee-community.base44.app	unknown	5,967	8,455
-5	niti.com.ng	niti.com.ng	unknown	2,288	4,853
-6	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,638	2,779
-7	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,516	2,238
+5	niti.com.ng	niti.com.ng	unknown	2,297	4,867
+6	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,647	2,812
+7	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,524	2,285
 8	verse-focus-center-pecky222.base44.app	verse-focus-center-pecky222.base44.app	unknown	913	1,096
 9	xvdhes1.vercel.app	xvdhes1.vercel.app	unknown	508	645
 10	enekaobi.base44.app	enekaobi.base44.app	unknown	304	314
 11	forward-amber-j4zzmwcqk1.edgeone.app	forward-amber-j4zzmwcqk1.edgeone.app	unknown	290	292
 12	emmanuella7890.vercel.app	emmanuella7890.vercel.app	unknown	244	244
-13	hub.vgdh.io	hub.vgdh.io	unknown	216	1,006
+13	hub.vgdh.io	hub.vgdh.io	unknown	225	1,044
 14	saifalshammari01.vercel.app	saifalshammari01.vercel.app	unknown	213	273
 15	valerie02.vercel.app	valerie02.vercel.app	unknown	211	446
 16	press.vgdh.io	press.vgdh.io	unknown	94	242
@@ -89,7 +89,7 @@ pageviews
 34	bright-aquamarine-em4ouesqjg.edgeone.app	bright-aquamarine-em4ouesqjg.edgeone.app	unknown	28	28
 35	aderojuisaac32.vercel.app	aderojuisaac32.vercel.app	unknown	27	45
 36	labour-turquoise-mprb6aqmxm.edgeone.app	labour-turquoise-mprb6aqmxm.edgeone.app	unknown	26	26
-37	bright-aquamarine-em4ouesqjg-hu3nbho7qv.edgeone.app	bright-aquamarine-em4ouesqjg-hu3nbho7qv.edgeone.app	unknown	21	21
+37	bright-aquamarine-em4ouesqjg-hu3nbho7qv.edgeone.app	bright-aquamarine-em4ouesqjg-hu3nbho7qv.edgeone.app	unknown	22	22
 38	desiboii.vercel.app	desiboii.vercel.app	unknown	17	24
 39	ais-dev-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	ais-dev-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	unknown	14	70
 40	ais-pre-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	ais-pre-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	unknown	14	15
