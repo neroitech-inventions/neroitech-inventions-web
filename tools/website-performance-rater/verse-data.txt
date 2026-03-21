@@ -8,11 +8,11 @@ Web3
 90d
 Visitors
 
-44,563
+44,566
 
 Pageviews
 
-83,770
+83,775
 
 Active Apps
 
@@ -58,14 +58,14 @@ pageviews
 2	jessymia.vercel.app	jessymia.vercel.app	unknown	8,448	17,509
 3	verseelectoralhub0.vercel.app	verseelectoralhub0.vercel.app	unknown	7,217	14,855
 4	verse-favee-community.base44.app	verse-favee-community.base44.app	unknown	5,968	8,456
-5	niti.com.ng	niti.com.ng	unknown	2,505	5,277
+5	niti.com.ng	niti.com.ng	unknown	2,507	5,280
 6	sammiejay.base44.app	sammiejay.base44.app	unknown	2,464	2,468
-7	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,759	3,394
+7	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,759	3,395
 8	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,655	2,961
 9	saifalshammari01.vercel.app	saifalshammari01.vercel.app	unknown	952	1,959
 10	verse-focus-center-pecky222.base44.app	verse-focus-center-pecky222.base44.app	unknown	914	1,097
 11	xvdhes1.vercel.app	xvdhes1.vercel.app	unknown	509	646
-12	hub.vgdh.io	hub.vgdh.io	unknown	390	2,159
+12	hub.vgdh.io	hub.vgdh.io	unknown	391	2,160
 13	enekaobi.base44.app	enekaobi.base44.app	unknown	304	314
 14	forward-amber-j4zzmwcqk1.edgeone.app	forward-amber-j4zzmwcqk1.edgeone.app	unknown	290	292
 15	emmanuella7890.vercel.app	emmanuella7890.vercel.app	unknown	244	244
