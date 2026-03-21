@@ -8,11 +8,11 @@ Web3
 90d
 Visitors
 
-41,158
+41,239
 
 Pageviews
 
-78,721
+79,067
 
 Active Apps
 
@@ -20,14 +20,28 @@ Active Apps
 
 Custom Events
 
-6,440
+6,473
 
 Community Trends
+3/2
+3/3
 3/4
+3/5
+3/6
 3/7
+3/8
+3/9
 3/10
+3/11
+3/12
 3/13
+3/14
+3/15
+3/16
 3/17
+3/18
+3/19
+3/20
 3/21
 0
 4500
@@ -40,16 +54,16 @@ Search apps...
 visitors
 pageviews
 #	App	Domain	Type	Visitors	Pageviews
-1	sadikufav1.vercel.app	sadikufav1.vercel.app	unknown	9,467	19,587
+1	sadikufav1.vercel.app	sadikufav1.vercel.app	unknown	9,468	19,596
 2	jessymia.vercel.app	jessymia.vercel.app	unknown	8,448	17,509
-3	verseelectoralhub0.vercel.app	verseelectoralhub0.vercel.app	unknown	7,216	14,854
+3	verseelectoralhub0.vercel.app	verseelectoralhub0.vercel.app	unknown	7,217	14,855
 4	verse-favee-community.base44.app	verse-favee-community.base44.app	unknown	5,968	8,456
-5	niti.com.ng	niti.com.ng	unknown	2,444	5,171
+5	niti.com.ng	niti.com.ng	unknown	2,475	5,222
 6	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,724	3,253
 7	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,627	2,806
 8	verse-focus-center-pecky222.base44.app	verse-focus-center-pecky222.base44.app	unknown	914	1,097
 9	xvdhes1.vercel.app	xvdhes1.vercel.app	unknown	509	646
-10	hub.vgdh.io	hub.vgdh.io	unknown	312	1,682
+10	hub.vgdh.io	hub.vgdh.io	unknown	358	1,965
 11	enekaobi.base44.app	enekaobi.base44.app	unknown	304	314
 12	forward-amber-j4zzmwcqk1.edgeone.app	forward-amber-j4zzmwcqk1.edgeone.app	unknown	290	292
 13	emmanuella7890.vercel.app	emmanuella7890.vercel.app	unknown	244	244
@@ -82,9 +96,9 @@ pageviews
 40	ais-dev-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	ais-dev-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	unknown	14	70
 41	smoggy-beige-8o7tqrpzds-s7wpz3v5gb.edgeone.app	smoggy-beige-8o7tqrpzds-s7wpz3v5gb.edgeone.app	unknown	14	14
 42	ais-pre-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	ais-pre-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	unknown	14	15
-43	alternative-maroon-wrygl0zhd7-ikpet7fx6a.edgeone.app	alternative-maroon-wrygl0zhd7-ikpet7fx6a.edgeone.app	unknown	13	13
-44	operational-cyan-qe4zil27ng-u6n54vig69.edgeone.app	operational-cyan-qe4zil27ng-u6n54vig69.edgeone.app	unknown	13	13
-45	(none)	(none)	unknown	11	12
+43	(none)	(none)	unknown	13	14
+44	alternative-maroon-wrygl0zhd7-ikpet7fx6a.edgeone.app	alternative-maroon-wrygl0zhd7-ikpet7fx6a.edgeone.app	unknown	13	13
+45	operational-cyan-qe4zil27ng-u6n54vig69.edgeone.app	operational-cyan-qe4zil27ng-u6n54vig69.edgeone.app	unknown	13	13
 46	whispering-amethyst-tdu932yyt0-80s3cjpk0r.edgeone.app	whispering-amethyst-tdu932yyt0-80s3cjpk0r.edgeone.app	unknown	11	11
 47	open-yellow-rgfa6ytx6t-pd2ojr0k1y.edgeone.app	open-yellow-rgfa6ytx6t-pd2ojr0k1y.edgeone.app	unknown	10	10
 48	terrestrial-quiz-genius-flow.base44.app	terrestrial-quiz-genius-flow.base44.app	unknown	10	14
