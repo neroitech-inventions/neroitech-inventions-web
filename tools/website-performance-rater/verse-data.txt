@@ -8,11 +8,11 @@ Web3
 90d
 Visitors
 
-43,198
+44,485
 
 Pageviews
 
-82,223
+83,584
 
 Active Apps
 
@@ -20,7 +20,7 @@ Active Apps
 
 Custom Events
 
-6,474
+6,487
 
 Community Trends
 3/2
@@ -58,17 +58,17 @@ pageviews
 2	jessymia.vercel.app	jessymia.vercel.app	unknown	8,448	17,509
 3	verseelectoralhub0.vercel.app	verseelectoralhub0.vercel.app	unknown	7,217	14,855
 4	verse-favee-community.base44.app	verse-favee-community.base44.app	unknown	5,968	8,456
-5	niti.com.ng	niti.com.ng	unknown	2,482	5,239
-6	sammiejay.base44.app	sammiejay.base44.app	unknown	1,901	1,905
-7	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,744	3,336
-8	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,643	2,892
+5	niti.com.ng	niti.com.ng	unknown	2,497	5,265
+6	sammiejay.base44.app	sammiejay.base44.app	unknown	2,463	2,467
+7	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,750	3,366
+8	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,646	2,910
 9	verse-focus-center-pecky222.base44.app	verse-focus-center-pecky222.base44.app	unknown	914	1,097
-10	xvdhes1.vercel.app	xvdhes1.vercel.app	unknown	509	646
-11	hub.vgdh.io	hub.vgdh.io	unknown	380	2,085
-12	enekaobi.base44.app	enekaobi.base44.app	unknown	304	314
-13	forward-amber-j4zzmwcqk1.edgeone.app	forward-amber-j4zzmwcqk1.edgeone.app	unknown	290	292
-14	emmanuella7890.vercel.app	emmanuella7890.vercel.app	unknown	244	244
-15	saifalshammari01.vercel.app	saifalshammari01.vercel.app	unknown	214	1,221
+10	saifalshammari01.vercel.app	saifalshammari01.vercel.app	unknown	911	1,918
+11	xvdhes1.vercel.app	xvdhes1.vercel.app	unknown	509	646
+12	hub.vgdh.io	hub.vgdh.io	unknown	384	2,113
+13	enekaobi.base44.app	enekaobi.base44.app	unknown	304	314
+14	forward-amber-j4zzmwcqk1.edgeone.app	forward-amber-j4zzmwcqk1.edgeone.app	unknown	290	292
+15	emmanuella7890.vercel.app	emmanuella7890.vercel.app	unknown	244	244
 16	valerie02.vercel.app	valerie02.vercel.app	unknown	212	447
 17	press.vgdh.io	press.vgdh.io	unknown	94	242
 18	desiboii7-seven.vercel.app	desiboii7-seven.vercel.app	unknown	59	74
