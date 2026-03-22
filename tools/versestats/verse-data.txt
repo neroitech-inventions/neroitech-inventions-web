@@ -8,19 +8,19 @@ Web3
 90d
 Visitors
 
-44,625
+45,695
 
 Pageviews
 
-83,994
+89,862
 
 Active Apps
 
-139
+141
 
 Custom Events
 
-6,497
+6,602
 
 Community Trends
 3/2
@@ -43,6 +43,7 @@ Community Trends
 3/19
 3/20
 3/21
+3/22
 0
 4500
 9000
@@ -54,144 +55,179 @@ Search apps...
 visitors
 pageviews
 #	App	Domain	Type	Visitors	Pageviews
-1	sadikufav1.vercel.app	sadikufav1.vercel.app	unknown	9,468	19,596
+1	sadikufav1.vercel.app	sadikufav1.vercel.app	unknown	9,470	19,598
 2	jessymia.vercel.app	jessymia.vercel.app	unknown	8,448	17,509
-3	verseelectoralhub0.vercel.app	verseelectoralhub0.vercel.app	unknown	7,217	14,855
-4	verse-favee-community.base44.app	verse-favee-community.base44.app	unknown	5,969	8,472
-5	niti.com.ng	niti.com.ng	unknown	2,529	5,313
-6	sammiejay.base44.app	sammiejay.base44.app	unknown	2,465	2,508
-7	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,771	3,439
-8	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,664	3,006
-9	saifalshammari01.vercel.app	saifalshammari01.vercel.app	unknown	952	1,959
-10	verse-focus-center-pecky222.base44.app	verse-focus-center-pecky222.base44.app	unknown	914	1,097
-11	xvdhes1.vercel.app	xvdhes1.vercel.app	unknown	509	646
-12	hub.vgdh.io	hub.vgdh.io	unknown	402	2,198
-13	enekaobi.base44.app	enekaobi.base44.app	unknown	304	314
-14	forward-amber-j4zzmwcqk1.edgeone.app	forward-amber-j4zzmwcqk1.edgeone.app	unknown	290	292
-15	emmanuella7890.vercel.app	emmanuella7890.vercel.app	unknown	244	244
-16	valerie02.vercel.app	valerie02.vercel.app	unknown	212	447
-17	press.vgdh.io	press.vgdh.io	unknown	94	242
-18	desiboii7-seven.vercel.app	desiboii7-seven.vercel.app	unknown	59	74
-19	whispering-amethyst-tdu932yyt0.edgeone.app	whispering-amethyst-tdu932yyt0.edgeone.app	unknown	47	47
-20	melted-emerald-ysistjrs94.edgeone.app	melted-emerald-ysistjrs94.edgeone.app	unknown	45	45
-21	corporate-ivory-pozlgyfgqt.edgeone.app	corporate-ivory-pozlgyfgqt.edgeone.app	unknown	43	44
-22	smoggy-beige-8o7tqrpzds.edgeone.app	smoggy-beige-8o7tqrpzds.edgeone.app	unknown	43	43
-23	exclusive-magenta-ljttocdytk.edgeone.app	exclusive-magenta-ljttocdytk.edgeone.app	unknown	43	44
-24	ytterbic-amaranth-metf7egpfz.edgeone.app	ytterbic-amaranth-metf7egpfz.edgeone.app	unknown	41	41
-25	alternative-maroon-wrygl0zhd7.edgeone.app	alternative-maroon-wrygl0zhd7.edgeone.app	unknown	39	41
-26	little-turquoise-yxacprahqv.edgeone.app	little-turquoise-yxacprahqv.edgeone.app	unknown	39	41
-27	envious-tomato-bealqzs4cg.edgeone.app	envious-tomato-bealqzs4cg.edgeone.app	unknown	37	38
-28	open-yellow-rgfa6ytx6t.edgeone.app	open-yellow-rgfa6ytx6t.edgeone.app	unknown	36	37
-29	objective-amber-imcrtchodh.edgeone.app	objective-amber-imcrtchodh.edgeone.app	unknown	35	36
-30	political-violet-rydpmyhdey.edgeone.app	political-violet-rydpmyhdey.edgeone.app	unknown	34	34
-31	operational-cyan-qe4zil27ng.edgeone.app	operational-cyan-qe4zil27ng.edgeone.app	unknown	32	32
-32	nuclear-ivory-7l6po4hq1b.edgeone.app	nuclear-ivory-7l6po4hq1b.edgeone.app	unknown	30	30
-33	verse-press-frontend.vercel.app	verse-press-frontend.vercel.app	unknown	29	125
-34	ais-dev-fhile6fobofkipdkkq5tax-21246162805.asia-southeast1.run.app	ais-dev-fhile6fobofkipdkkq5tax-21246162805.asia-southeast1.run.app	unknown	29	135
-35	bright-aquamarine-em4ouesqjg.edgeone.app	bright-aquamarine-em4ouesqjg.edgeone.app	unknown	28	28
-36	aderojuisaac32.vercel.app	aderojuisaac32.vercel.app	unknown	27	45
-37	labour-turquoise-mprb6aqmxm.edgeone.app	labour-turquoise-mprb6aqmxm.edgeone.app	unknown	26	26
-38	bright-aquamarine-em4ouesqjg-hu3nbho7qv.edgeone.app	bright-aquamarine-em4ouesqjg-hu3nbho7qv.edgeone.app	unknown	22	22
-39	officialchaserice0100.vercel.app	officialchaserice0100.vercel.app	unknown	18	18
-40	desiboii.vercel.app	desiboii.vercel.app	unknown	17	24
-41	ais-pre-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	ais-pre-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	unknown	14	15
-42	ais-dev-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	ais-dev-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	unknown	14	70
-43	smoggy-beige-8o7tqrpzds-s7wpz3v5gb.edgeone.app	smoggy-beige-8o7tqrpzds-s7wpz3v5gb.edgeone.app	unknown	14	14
-44	alternative-maroon-wrygl0zhd7-ikpet7fx6a.edgeone.app	alternative-maroon-wrygl0zhd7-ikpet7fx6a.edgeone.app	unknown	13	13
-45	operational-cyan-qe4zil27ng-u6n54vig69.edgeone.app	operational-cyan-qe4zil27ng-u6n54vig69.edgeone.app	unknown	13	13
-46	(none)	(none)	unknown	13	14
-47	whispering-amethyst-tdu932yyt0-80s3cjpk0r.edgeone.app	whispering-amethyst-tdu932yyt0-80s3cjpk0r.edgeone.app	unknown	11	11
-48	envious-tomato-bealqzs4cg-5vttduqhtv.edgeone.app	envious-tomato-bealqzs4cg-5vttduqhtv.edgeone.app	unknown	10	10
-49	terrestrial-quiz-genius-flow.base44.app	terrestrial-quiz-genius-flow.base44.app	unknown	10	14
-50	open-yellow-rgfa6ytx6t-pd2ojr0k1y.edgeone.app	open-yellow-rgfa6ytx6t-pd2ojr0k1y.edgeone.app	unknown	10	10
+3	verseelectoralhub0.vercel.app	verseelectoralhub0.vercel.app	unknown	7,221	14,860
+4	verse-favee-community.base44.app	verse-favee-community.base44.app	unknown	5,975	8,820
+5	niti.com.ng	niti.com.ng	unknown	2,643	5,548
+Visitors
+
+2,643
+
+Pageviews
+
+5,548
+
+Top Pages
+/snappquest/join.html
+2,174
+/snappquest/verse-millionaire.html
+197
+/tools/website-performance-rater/
+196
+/snappquest/minigame.html
+110
+/snappquest/index.html
+84
+Top Sources
+Youtube
+75
+Facebook
+71
+Google
+5
+Telegram
+2
+t.me
+1
+Custom Events
+Outbound Link: Click: 2,566
+View full analytics dashboard →
+6	sammiejay.base44.app	sammiejay.base44.app	unknown	2,476	5,239
+7	abubakker-cryptoverse.vercel.app	abubakker-cryptoverse.vercel.app	unknown	1,845	3,698
+8	verse-events-dapp.vercel.app	verse-events-dapp.vercel.app	unknown	1,736	3,297
+9	saifalshammari01.vercel.app	saifalshammari01.vercel.app	unknown	953	1,960
+10	verse-focus-center-pecky222.base44.app	verse-focus-center-pecky222.base44.app	unknown	918	1,120
+11	verselorestory.netlify.app	verselorestory.netlify.app	unknown	626	1,245
+12	xvdhes1.vercel.app	xvdhes1.vercel.app	unknown	513	650
+13	hub.vgdh.io	hub.vgdh.io	unknown	504	2,792
+14	enekaobi.base44.app	enekaobi.base44.app	unknown	304	314
+15	forward-amber-j4zzmwcqk1.edgeone.app	forward-amber-j4zzmwcqk1.edgeone.app	unknown	290	292
+16	valerie02.vercel.app	valerie02.vercel.app	unknown	261	571
+17	emmanuella7890.vercel.app	emmanuella7890.vercel.app	unknown	244	244
+18	press.vgdh.io	press.vgdh.io	unknown	94	242
+19	desiboii7-seven.vercel.app	desiboii7-seven.vercel.app	unknown	59	74
+20	whispering-amethyst-tdu932yyt0.edgeone.app	whispering-amethyst-tdu932yyt0.edgeone.app	unknown	47	47
+21	melted-emerald-ysistjrs94.edgeone.app	melted-emerald-ysistjrs94.edgeone.app	unknown	45	45
+22	corporate-ivory-pozlgyfgqt.edgeone.app	corporate-ivory-pozlgyfgqt.edgeone.app	unknown	43	44
+23	smoggy-beige-8o7tqrpzds.edgeone.app	smoggy-beige-8o7tqrpzds.edgeone.app	unknown	43	43
+24	exclusive-magenta-ljttocdytk.edgeone.app	exclusive-magenta-ljttocdytk.edgeone.app	unknown	43	44
+25	ytterbic-amaranth-metf7egpfz.edgeone.app	ytterbic-amaranth-metf7egpfz.edgeone.app	unknown	41	41
+26	alternative-maroon-wrygl0zhd7.edgeone.app	alternative-maroon-wrygl0zhd7.edgeone.app	unknown	39	41
+27	little-turquoise-yxacprahqv.edgeone.app	little-turquoise-yxacprahqv.edgeone.app	unknown	39	41
+28	envious-tomato-bealqzs4cg.edgeone.app	envious-tomato-bealqzs4cg.edgeone.app	unknown	37	38
+29	open-yellow-rgfa6ytx6t.edgeone.app	open-yellow-rgfa6ytx6t.edgeone.app	unknown	36	37
+30	objective-amber-imcrtchodh.edgeone.app	objective-amber-imcrtchodh.edgeone.app	unknown	35	36
+31	political-violet-rydpmyhdey.edgeone.app	political-violet-rydpmyhdey.edgeone.app	unknown	34	34
+32	operational-cyan-qe4zil27ng.edgeone.app	operational-cyan-qe4zil27ng.edgeone.app	unknown	32	32
+33	nuclear-ivory-7l6po4hq1b.edgeone.app	nuclear-ivory-7l6po4hq1b.edgeone.app	unknown	30	30
+34	verse-press-frontend.vercel.app	verse-press-frontend.vercel.app	unknown	29	125
+35	ais-dev-fhile6fobofkipdkkq5tax-21246162805.asia-southeast1.run.app	ais-dev-fhile6fobofkipdkkq5tax-21246162805.asia-southeast1.run.app	unknown	29	135
+36	bright-aquamarine-em4ouesqjg.edgeone.app	bright-aquamarine-em4ouesqjg.edgeone.app	unknown	28	28
+37	aderojuisaac32.vercel.app	aderojuisaac32.vercel.app	unknown	27	45
+38	labour-turquoise-mprb6aqmxm.edgeone.app	labour-turquoise-mprb6aqmxm.edgeone.app	unknown	26	26
+39	bright-aquamarine-em4ouesqjg-hu3nbho7qv.edgeone.app	bright-aquamarine-em4ouesqjg-hu3nbho7qv.edgeone.app	unknown	22	22
+40	officialchaserice0100.vercel.app	officialchaserice0100.vercel.app	unknown	18	18
+41	desiboii.vercel.app	desiboii.vercel.app	unknown	17	24
+42	ais-pre-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	ais-pre-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	unknown	14	15
+43	ais-dev-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	ais-dev-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	unknown	14	70
+44	smoggy-beige-8o7tqrpzds-s7wpz3v5gb.edgeone.app	smoggy-beige-8o7tqrpzds-s7wpz3v5gb.edgeone.app	unknown	14	14
+45	alternative-maroon-wrygl0zhd7-ikpet7fx6a.edgeone.app	alternative-maroon-wrygl0zhd7-ikpet7fx6a.edgeone.app	unknown	13	13
+46	operational-cyan-qe4zil27ng-u6n54vig69.edgeone.app	operational-cyan-qe4zil27ng-u6n54vig69.edgeone.app	unknown	13	13
+47	(none)	(none)	unknown	13	14
+48	whispering-amethyst-tdu932yyt0-80s3cjpk0r.edgeone.app	whispering-amethyst-tdu932yyt0-80s3cjpk0r.edgeone.app	unknown	11	11
+49	envious-tomato-bealqzs4cg-5vttduqhtv.edgeone.app	envious-tomato-bealqzs4cg-5vttduqhtv.edgeone.app	unknown	10	10
+50	terrestrial-quiz-genius-flow.base44.app	terrestrial-quiz-genius-flow.base44.app	unknown	10	14
 51	ytterbic-amaranth-metf7egpfz-tvawkihgom.edgeone.app	ytterbic-amaranth-metf7egpfz-tvawkihgom.edgeone.app	unknown	10	10
 52	little-turquoise-yxacprahqv-v8ffgx6v2d.edgeone.app	little-turquoise-yxacprahqv-v8ffgx6v2d.edgeone.app	unknown	10	10
-53	ais-pre-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	ais-pre-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	unknown	9	15
-54	nuclear-ivory-7l6po4hq1b-uagwiw72wf.edgeone.app	nuclear-ivory-7l6po4hq1b-uagwiw72wf.edgeone.app	unknown	9	9
-55	exclusive-magenta-ljttocdytk-l482aujfwl.edgeone.app	exclusive-magenta-ljttocdytk-l482aujfwl.edgeone.app	unknown	9	9
-56	corporate-ivory-pozlgyfgqt-b9rnqpmevj.edgeone.app	corporate-ivory-pozlgyfgqt-b9rnqpmevj.edgeone.app	unknown	8	8
-57	melted-emerald-ysistjrs94-j1ow6j484i.edgeone.app	melted-emerald-ysistjrs94-j1ow6j484i.edgeone.app	unknown	8	8
-58	zairemery6.vercel.app	zairemery6.vercel.app	unknown	8	11
-59	ais-pre-abi6gpglgxtzryfl5upiyg-408970653381.europe-west2.run.app	ais-pre-abi6gpglgxtzryfl5upiyg-408970653381.europe-west2.run.app	unknown	8	11
-60	political-violet-rydpmyhdey-4gl7caojv8.edgeone.app	political-violet-rydpmyhdey-4gl7caojv8.edgeone.app	unknown	8	8
-61	ais-dev-abi6gpglgxtzryfl5upiyg-408970653381.europe-west2.run.app	ais-dev-abi6gpglgxtzryfl5upiyg-408970653381.europe-west2.run.app	unknown	7	14
-62	preview-sandbox--69b96bedc0c1da9113ba9789.base44.app	preview-sandbox--69b96bedc0c1da9113ba9789.base44.app	unknown	7	11
-63	ais-dev-slohp3u7a4udrf2xtpossa-380965813405.europe-west2.run.app	ais-dev-slohp3u7a4udrf2xtpossa-380965813405.europe-west2.run.app	unknown	7	19
-64	forward-amber-j4zzmwcqk1-ob6ivzgxf6.edgeone.app	forward-amber-j4zzmwcqk1-ob6ivzgxf6.edgeone.app	unknown	7	7
-65	app.onecompiler.com	app.onecompiler.com	unknown	7	30
-66	sophisticated-rose-mhdbujsdgo-1ck6nainvz.edgeone.app	sophisticated-rose-mhdbujsdgo-1ck6nainvz.edgeone.app	unknown	7	7
-67	labour-turquoise-mprb6aqmxm-jz71jbctcs.edgeone.app	labour-turquoise-mprb6aqmxm-jz71jbctcs.edgeone.app	unknown	6	6
-68	ais-pre-tp334tshsobx7dym7riyba-392696235387.europe-west2.run.app	ais-pre-tp334tshsobx7dym7riyba-392696235387.europe-west2.run.app	unknown	6	7
-69	ais-dev-v72szdbpn2xcickbwvi4ap-385042659597.europe-west2.run.app	ais-dev-v72szdbpn2xcickbwvi4ap-385042659597.europe-west2.run.app	unknown	6	11
-70	objective-amber-imcrtchodh-ft5t1l7h83.edgeone.app	objective-amber-imcrtchodh-ft5t1l7h83.edgeone.app	unknown	6	6
-71	ais-pre-3alynkmmkjmilqcx55h5jx-132761690266.europe-west2.run.app	ais-pre-3alynkmmkjmilqcx55h5jx-132761690266.europe-west2.run.app	unknown	5	5
-72	preview-sandbox--69a1d4174f2124d623e0f381.base44.app	preview-sandbox--69a1d4174f2124d623e0f381.base44.app	unknown	5	19
-73	ais-dev-tsfjkndwpmmqdk5zeq5zsl-37074123815.europe-west1.run.app	ais-dev-tsfjkndwpmmqdk5zeq5zsl-37074123815.europe-west1.run.app	unknown	4	7
-74	preview--verse-focus-center-pecky222.base44.app	preview--verse-focus-center-pecky222.base44.app	unknown	4	18
-75	preview--verse-favee-community.base44.app	preview--verse-favee-community.base44.app	unknown	4	5
-76	ais-dev-rswsrp57wqrvuwhvwi6tqj-21246162805.asia-southeast1.run.app	ais-dev-rswsrp57wqrvuwhvwi6tqj-21246162805.asia-southeast1.run.app	unknown	4	11
-77	preview-sandbox--699e9bb5bc092ca2b2a3ec08.base44.app	preview-sandbox--699e9bb5bc092ca2b2a3ec08.base44.app	unknown	4	10
-78	ais-pre-26myr3bo3wik7eccxolvob-85036413601.europe-west3.run.app	ais-pre-26myr3bo3wik7eccxolvob-85036413601.europe-west3.run.app	unknown	4	8
-79	ais-pre-6ftzddoz2ghdzok74evx5s-37074123815.europe-west1.run.app	ais-pre-6ftzddoz2ghdzok74evx5s-37074123815.europe-west1.run.app	unknown	4	7
-80	preview--chianaebubeu.base44.app	preview--chianaebubeu.base44.app	unknown	4	5
-81	ais-dev-u5myn77rqq5qfdlzia5gcp-157182445057.europe-west3.run.app	ais-dev-u5myn77rqq5qfdlzia5gcp-157182445057.europe-west3.run.app	unknown	3	6
-82	preview-sandbox--69bb0e5a2023704d2bc683da.base44.app	preview-sandbox--69bb0e5a2023704d2bc683da.base44.app	unknown	3	7
-83	chianaebubeu.base44.app	chianaebubeu.base44.app	unknown	3	4
-84	ais-dev-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	ais-dev-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	unknown	3	23
-85	ais-dev-pk32f2kqbe74qaa73fvceu-385042659597.europe-west2.run.app	ais-dev-pk32f2kqbe74qaa73fvceu-385042659597.europe-west2.run.app	unknown	3	6
-86	ais-pre-zhritex3mmwg5vsc5nsfwe-37074123815.europe-west1.run.app	ais-pre-zhritex3mmwg5vsc5nsfwe-37074123815.europe-west1.run.app	unknown	3	4
-87	crypto-lens-5fa22161nikky456.base44.app	crypto-lens-5fa22161nikky456.base44.app	unknown	3	5
-88	ais-dev-iwpi4e7mqueibngit4b5wz-384007675220.europe-west2.run.app	ais-dev-iwpi4e7mqueibngit4b5wz-384007675220.europe-west2.run.app	unknown	3	4
-89	ais-dev-26myr3bo3wik7eccxolvob-85036413601.europe-west3.run.app	ais-dev-26myr3bo3wik7eccxolvob-85036413601.europe-west3.run.app	unknown	3	20
-90	ais-dev-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	ais-dev-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	unknown	3	10
-91	ais-dev-5llsc7ebve6h7cg6gzfov3-115785488331.asia-east1.run.app	ais-dev-5llsc7ebve6h7cg6gzfov3-115785488331.asia-east1.run.app	unknown	3	14
-92	app-a9bnobxneigx.appmedo.com	app-a9bnobxneigx.appmedo.com	unknown	3	8
-93	ais-dev-lfya6ugaxxm6fuuscwpnsy-37074123815.europe-west1.run.app	ais-dev-lfya6ugaxxm6fuuscwpnsy-37074123815.europe-west1.run.app	unknown	3	21
-94	ais-dev-6ftzddoz2ghdzok74evx5s-37074123815.europe-west1.run.app	ais-dev-6ftzddoz2ghdzok74evx5s-37074123815.europe-west1.run.app	unknown	3	32
-95	app-a9bnobxneigx-vitesandbox.sandbox.medo.dev	app-a9bnobxneigx-vitesandbox.sandbox.medo.dev	unknown	2	7
-96	abubakker-cryptoverse-4fgvmncx9.vercel.app	abubakker-cryptoverse-4fgvmncx9.vercel.app	unknown	2	4
-97	monnnt1.vercel.app	monnnt1.vercel.app	unknown	2	2
-98	verseoyin.base44.app	verseoyin.base44.app	unknown	2	5
-99	ais-dev-tp334tshsobx7dym7riyba-392696235387.europe-west2.run.app	ais-dev-tp334tshsobx7dym7riyba-392696235387.europe-west2.run.app	unknown	2	10
-100	ais-pre-u5myn77rqq5qfdlzia5gcp-157182445057.europe-west3.run.app	ais-pre-u5myn77rqq5qfdlzia5gcp-157182445057.europe-west3.run.app	unknown	2	2
-101	ais-pre-6smxgtw5qpklr6wwopt33o-660048553717.europe-west2.run.app	ais-pre-6smxgtw5qpklr6wwopt33o-660048553717.europe-west2.run.app	unknown	2	2
-102	preview-sandbox--69bad10110e9ac0c708e8208.base44.app	preview-sandbox--69bad10110e9ac0c708e8208.base44.app	unknown	2	2
-103	ais-dev-zhritex3mmwg5vsc5nsfwe-37074123815.europe-west1.run.app	ais-dev-zhritex3mmwg5vsc5nsfwe-37074123815.europe-west1.run.app	unknown	2	12
-104	preview--enekaobi.base44.app	preview--enekaobi.base44.app	unknown	2	2
-105	ais-dev-uvxtyrdzq7cy6td5glnhrb-37074123815.europe-west1.run.app	ais-dev-uvxtyrdzq7cy6td5glnhrb-37074123815.europe-west1.run.app	unknown	2	4
-106	ais-dev-6smxgtw5qpklr6wwopt33o-660048553717.europe-west2.run.app	ais-dev-6smxgtw5qpklr6wwopt33o-660048553717.europe-west2.run.app	unknown	2	3
-107	ais-dev-bwy7oyxjelczb3oic4vvd5-37074123815.europe-west1.run.app	ais-dev-bwy7oyxjelczb3oic4vvd5-37074123815.europe-west1.run.app	unknown	2	7
-108	ais-pre-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	ais-pre-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	unknown	2	2
-109	ais-pre-iwpi4e7mqueibngit4b5wz-384007675220.europe-west2.run.app	ais-pre-iwpi4e7mqueibngit4b5wz-384007675220.europe-west2.run.app	unknown	2	2
-110	preview--crypto-lens-5fa22161nikky456.base44.app	preview--crypto-lens-5fa22161nikky456.base44.app	unknown	1	2
-111	ais-pre-tsfjkndwpmmqdk5zeq5zsl-37074123815.europe-west1.run.app	ais-pre-tsfjkndwpmmqdk5zeq5zsl-37074123815.europe-west1.run.app	unknown	1	4
-112	ais-dev-eh44fo36qcrvq5eij2ywkt-118765840217.europe-west1.run.app	ais-dev-eh44fo36qcrvq5eij2ywkt-118765840217.europe-west1.run.app	unknown	1	2
-113	abubakker-cryptoverse-p3nlidnfi.vercel.app	abubakker-cryptoverse-p3nlidnfi.vercel.app	unknown	1	3
-114	preview--cleop.base44.app	preview--cleop.base44.app	unknown	1	1
-115	preview--leadle.base44.app	preview--leadle.base44.app	unknown	1	1
-116	preview-sandbox--69bb014cf200f3dc99173b78.base44.app	preview-sandbox--69bb014cf200f3dc99173b78.base44.app	unknown	1	2
-117	ais-dev-3alynkmmkjmilqcx55h5jx-132761690266.europe-west2.run.app	ais-dev-3alynkmmkjmilqcx55h5jx-132761690266.europe-west2.run.app	unknown	1	3
-118	goldwork.base44.app	goldwork.base44.app	unknown	1	2
-119	ais-pre-vt3doiw555xsi5ojqxdxpr-136985163141.europe-west1.run.app	ais-pre-vt3doiw555xsi5ojqxdxpr-136985163141.europe-west1.run.app	unknown	1	1
-120	leadle.base44.app	leadle.base44.app	unknown	1	1
-121	preview-sandbox--69b97b06e732ff5cad7abbcb.base44.app	preview-sandbox--69b97b06e732ff5cad7abbcb.base44.app	unknown	1	2
-122	preview--terrestrial-quiz-genius-flow.base44.app	preview--terrestrial-quiz-genius-flow.base44.app	unknown	1	1
-123	ais-dev-3ch2zolsnp7zjxtbsjanlo-408970653381.europe-west2.run.app	ais-dev-3ch2zolsnp7zjxtbsjanlo-408970653381.europe-west2.run.app	unknown	1	1
-124	jessymia-1bnn.vercel.app	jessymia-1bnn.vercel.app	unknown	1	1
-125	ais-dev-si36zvwt2zdzrrfnh6ck2p-384007675220.europe-west2.run.app	ais-dev-si36zvwt2zdzrrfnh6ck2p-384007675220.europe-west2.run.app	unknown	1	2
-126	jessymia-74.vercel.app	jessymia-74.vercel.app	unknown	1	1
-127	preview-sandbox--69ba66ef606a06045fa22161.base44.app	preview-sandbox--69ba66ef606a06045fa22161.base44.app	unknown	1	3
-128	ais-dev-hgwdzun7qxff7qrgmlx77m-37074123815.europe-west1.run.app	ais-dev-hgwdzun7qxff7qrgmlx77m-37074123815.europe-west1.run.app	unknown	1	13
-129	ais-pre-eh44fo36qcrvq5eij2ywkt-118765840217.europe-west1.run.app	ais-pre-eh44fo36qcrvq5eij2ywkt-118765840217.europe-west1.run.app	unknown	1	1
-130	nicho612.vercel.app	nicho612.vercel.app	unknown	1	2
-131	ais-pre-slohp3u7a4udrf2xtpossa-380965813405.europe-west2.run.app	ais-pre-slohp3u7a4udrf2xtpossa-380965813405.europe-west2.run.app	unknown	1	1
-132	abubakker-cryptoverse-n833u1q7l.vercel.app	abubakker-cryptoverse-n833u1q7l.vercel.app	unknown	1	1
-133	preview-sandbox--69bdaba3374f94e369d4179c.base44.app	preview-sandbox--69bdaba3374f94e369d4179c.base44.app	unknown	1	1
-134	ais-pre-3ch2zolsnp7zjxtbsjanlo-408970653381.europe-west2.run.app	ais-pre-3ch2zolsnp7zjxtbsjanlo-408970653381.europe-west2.run.app	unknown	1	1
-135	ais-dev-vt3doiw555xsi5ojqxdxpr-136985163141.europe-west1.run.app	ais-dev-vt3doiw555xsi5ojqxdxpr-136985163141.europe-west1.run.app	unknown	1	23
-136	cleop.base44.app	cleop.base44.app	unknown	1	1
-137	ais-pre-si36zvwt2zdzrrfnh6ck2p-384007675220.europe-west2.run.app	ais-pre-si36zvwt2zdzrrfnh6ck2p-384007675220.europe-west2.run.app	unknown	1	1
-138	ais-pre-v72szdbpn2xcickbwvi4ap-385042659597.europe-west2.run.app	ais-pre-v72szdbpn2xcickbwvi4ap-385042659597.europe-west2.run.app	unknown	1	1
-139	preview-sandbox--69bda3e076dc7329608104fd.base44.app	preview-sandbox--69bda3e076dc7329608104fd.base44.app	unknown	1	2
+53	open-yellow-rgfa6ytx6t-pd2ojr0k1y.edgeone.app	open-yellow-rgfa6ytx6t-pd2ojr0k1y.edgeone.app	unknown	10	10
+54	ais-pre-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	ais-pre-i3243bt66jsvslhjdhozmm-84349725711.europe-west3.run.app	unknown	9	15
+55	nuclear-ivory-7l6po4hq1b-uagwiw72wf.edgeone.app	nuclear-ivory-7l6po4hq1b-uagwiw72wf.edgeone.app	unknown	9	9
+56	exclusive-magenta-ljttocdytk-l482aujfwl.edgeone.app	exclusive-magenta-ljttocdytk-l482aujfwl.edgeone.app	unknown	9	9
+57	corporate-ivory-pozlgyfgqt-b9rnqpmevj.edgeone.app	corporate-ivory-pozlgyfgqt-b9rnqpmevj.edgeone.app	unknown	8	8
+58	melted-emerald-ysistjrs94-j1ow6j484i.edgeone.app	melted-emerald-ysistjrs94-j1ow6j484i.edgeone.app	unknown	8	8
+59	zairemery6.vercel.app	zairemery6.vercel.app	unknown	8	11
+60	ais-pre-abi6gpglgxtzryfl5upiyg-408970653381.europe-west2.run.app	ais-pre-abi6gpglgxtzryfl5upiyg-408970653381.europe-west2.run.app	unknown	8	11
+61	political-violet-rydpmyhdey-4gl7caojv8.edgeone.app	political-violet-rydpmyhdey-4gl7caojv8.edgeone.app	unknown	8	8
+62	ais-dev-abi6gpglgxtzryfl5upiyg-408970653381.europe-west2.run.app	ais-dev-abi6gpglgxtzryfl5upiyg-408970653381.europe-west2.run.app	unknown	7	14
+63	preview-sandbox--69b96bedc0c1da9113ba9789.base44.app	preview-sandbox--69b96bedc0c1da9113ba9789.base44.app	unknown	7	11
+64	ais-dev-slohp3u7a4udrf2xtpossa-380965813405.europe-west2.run.app	ais-dev-slohp3u7a4udrf2xtpossa-380965813405.europe-west2.run.app	unknown	7	19
+65	forward-amber-j4zzmwcqk1-ob6ivzgxf6.edgeone.app	forward-amber-j4zzmwcqk1-ob6ivzgxf6.edgeone.app	unknown	7	7
+66	app.onecompiler.com	app.onecompiler.com	unknown	7	30
+67	sophisticated-rose-mhdbujsdgo-1ck6nainvz.edgeone.app	sophisticated-rose-mhdbujsdgo-1ck6nainvz.edgeone.app	unknown	7	7
+68	labour-turquoise-mprb6aqmxm-jz71jbctcs.edgeone.app	labour-turquoise-mprb6aqmxm-jz71jbctcs.edgeone.app	unknown	6	6
+69	ais-pre-tp334tshsobx7dym7riyba-392696235387.europe-west2.run.app	ais-pre-tp334tshsobx7dym7riyba-392696235387.europe-west2.run.app	unknown	6	7
+70	ais-dev-v72szdbpn2xcickbwvi4ap-385042659597.europe-west2.run.app	ais-dev-v72szdbpn2xcickbwvi4ap-385042659597.europe-west2.run.app	unknown	6	11
+71	objective-amber-imcrtchodh-ft5t1l7h83.edgeone.app	objective-amber-imcrtchodh-ft5t1l7h83.edgeone.app	unknown	6	6
+72	ais-pre-3alynkmmkjmilqcx55h5jx-132761690266.europe-west2.run.app	ais-pre-3alynkmmkjmilqcx55h5jx-132761690266.europe-west2.run.app	unknown	5	5
+73	preview-sandbox--69a1d4174f2124d623e0f381.base44.app	preview-sandbox--69a1d4174f2124d623e0f381.base44.app	unknown	5	19
+74	ais-dev-tsfjkndwpmmqdk5zeq5zsl-37074123815.europe-west1.run.app	ais-dev-tsfjkndwpmmqdk5zeq5zsl-37074123815.europe-west1.run.app	unknown	4	7
+75	preview--verse-focus-center-pecky222.base44.app	preview--verse-focus-center-pecky222.base44.app	unknown	4	18
+76	preview--verse-favee-community.base44.app	preview--verse-favee-community.base44.app	unknown	4	5
+77	ais-dev-rswsrp57wqrvuwhvwi6tqj-21246162805.asia-southeast1.run.app	ais-dev-rswsrp57wqrvuwhvwi6tqj-21246162805.asia-southeast1.run.app	unknown	4	11
+78	preview-sandbox--699e9bb5bc092ca2b2a3ec08.base44.app	preview-sandbox--699e9bb5bc092ca2b2a3ec08.base44.app	unknown	4	10
+79	ais-pre-26myr3bo3wik7eccxolvob-85036413601.europe-west3.run.app	ais-pre-26myr3bo3wik7eccxolvob-85036413601.europe-west3.run.app	unknown	4	8
+80	ais-pre-6ftzddoz2ghdzok74evx5s-37074123815.europe-west1.run.app	ais-pre-6ftzddoz2ghdzok74evx5s-37074123815.europe-west1.run.app	unknown	4	7
+81	preview--chianaebubeu.base44.app	preview--chianaebubeu.base44.app	unknown	4	5
+82	ais-dev-u5myn77rqq5qfdlzia5gcp-157182445057.europe-west3.run.app	ais-dev-u5myn77rqq5qfdlzia5gcp-157182445057.europe-west3.run.app	unknown	3	6
+83	preview-sandbox--69bb0e5a2023704d2bc683da.base44.app	preview-sandbox--69bb0e5a2023704d2bc683da.base44.app	unknown	3	7
+84	chianaebubeu.base44.app	chianaebubeu.base44.app	unknown	3	4
+85	ais-dev-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	ais-dev-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	unknown	3	23
+86	ais-dev-pk32f2kqbe74qaa73fvceu-385042659597.europe-west2.run.app	ais-dev-pk32f2kqbe74qaa73fvceu-385042659597.europe-west2.run.app	unknown	3	6
+87	ais-pre-zhritex3mmwg5vsc5nsfwe-37074123815.europe-west1.run.app	ais-pre-zhritex3mmwg5vsc5nsfwe-37074123815.europe-west1.run.app	unknown	3	4
+88	crypto-lens-5fa22161nikky456.base44.app	crypto-lens-5fa22161nikky456.base44.app	unknown	3	5
+89	ais-dev-iwpi4e7mqueibngit4b5wz-384007675220.europe-west2.run.app	ais-dev-iwpi4e7mqueibngit4b5wz-384007675220.europe-west2.run.app	unknown	3	4
+90	ais-dev-26myr3bo3wik7eccxolvob-85036413601.europe-west3.run.app	ais-dev-26myr3bo3wik7eccxolvob-85036413601.europe-west3.run.app	unknown	3	20
+91	ais-dev-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	ais-dev-fs2dv5fmzx6bwrjn2dqfx2-284362909987.us-east1.run.app	unknown	3	10
+92	ais-dev-5llsc7ebve6h7cg6gzfov3-115785488331.asia-east1.run.app	ais-dev-5llsc7ebve6h7cg6gzfov3-115785488331.asia-east1.run.app	unknown	3	14
+93	app-a9bnobxneigx.appmedo.com	app-a9bnobxneigx.appmedo.com	unknown	3	8
+94	ais-dev-lfya6ugaxxm6fuuscwpnsy-37074123815.europe-west1.run.app	ais-dev-lfya6ugaxxm6fuuscwpnsy-37074123815.europe-west1.run.app	unknown	3	21
+95	ais-dev-6ftzddoz2ghdzok74evx5s-37074123815.europe-west1.run.app	ais-dev-6ftzddoz2ghdzok74evx5s-37074123815.europe-west1.run.app	unknown	3	32
+96	app-a9bnobxneigx-vitesandbox.sandbox.medo.dev	app-a9bnobxneigx-vitesandbox.sandbox.medo.dev	unknown	2	7
+97	abubakker-cryptoverse-4fgvmncx9.vercel.app	abubakker-cryptoverse-4fgvmncx9.vercel.app	unknown	2	4
+98	monnnt1.vercel.app	monnnt1.vercel.app	unknown	2	2
+99	verseoyin.base44.app	verseoyin.base44.app	unknown	2	5
+100	ais-dev-tp334tshsobx7dym7riyba-392696235387.europe-west2.run.app	ais-dev-tp334tshsobx7dym7riyba-392696235387.europe-west2.run.app	unknown	2	10
+101	ais-pre-u5myn77rqq5qfdlzia5gcp-157182445057.europe-west3.run.app	ais-pre-u5myn77rqq5qfdlzia5gcp-157182445057.europe-west3.run.app	unknown	2	2
+102	ais-pre-6smxgtw5qpklr6wwopt33o-660048553717.europe-west2.run.app	ais-pre-6smxgtw5qpklr6wwopt33o-660048553717.europe-west2.run.app	unknown	2	2
+103	preview-sandbox--69bad10110e9ac0c708e8208.base44.app	preview-sandbox--69bad10110e9ac0c708e8208.base44.app	unknown	2	2
+104	ais-dev-zhritex3mmwg5vsc5nsfwe-37074123815.europe-west1.run.app	ais-dev-zhritex3mmwg5vsc5nsfwe-37074123815.europe-west1.run.app	unknown	2	12
+105	preview--enekaobi.base44.app	preview--enekaobi.base44.app	unknown	2	2
+106	ais-dev-uvxtyrdzq7cy6td5glnhrb-37074123815.europe-west1.run.app	ais-dev-uvxtyrdzq7cy6td5glnhrb-37074123815.europe-west1.run.app	unknown	2	4
+107	ais-dev-6smxgtw5qpklr6wwopt33o-660048553717.europe-west2.run.app	ais-dev-6smxgtw5qpklr6wwopt33o-660048553717.europe-west2.run.app	unknown	2	3
+108	ais-dev-bwy7oyxjelczb3oic4vvd5-37074123815.europe-west1.run.app	ais-dev-bwy7oyxjelczb3oic4vvd5-37074123815.europe-west1.run.app	unknown	2	7
+109	ais-pre-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	ais-pre-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	unknown	2	2
+110	ais-pre-iwpi4e7mqueibngit4b5wz-384007675220.europe-west2.run.app	ais-pre-iwpi4e7mqueibngit4b5wz-384007675220.europe-west2.run.app	unknown	2	2
+111	preview--crypto-lens-5fa22161nikky456.base44.app	preview--crypto-lens-5fa22161nikky456.base44.app	unknown	1	2
+112	ais-pre-tsfjkndwpmmqdk5zeq5zsl-37074123815.europe-west1.run.app	ais-pre-tsfjkndwpmmqdk5zeq5zsl-37074123815.europe-west1.run.app	unknown	1	4
+113	ais-dev-eh44fo36qcrvq5eij2ywkt-118765840217.europe-west1.run.app	ais-dev-eh44fo36qcrvq5eij2ywkt-118765840217.europe-west1.run.app	unknown	1	2
+114	abubakker-cryptoverse-p3nlidnfi.vercel.app	abubakker-cryptoverse-p3nlidnfi.vercel.app	unknown	1	3
+115	preview--cleop.base44.app	preview--cleop.base44.app	unknown	1	1
+116	preview--leadle.base44.app	preview--leadle.base44.app	unknown	1	1
+117	ais-dev-zxjx4ek5753ks4i3bfcmic-652746249315.asia-southeast1.run.app	ais-dev-zxjx4ek5753ks4i3bfcmic-652746249315.asia-southeast1.run.app	unknown	1	6
+118	preview-sandbox--69bb014cf200f3dc99173b78.base44.app	preview-sandbox--69bb014cf200f3dc99173b78.base44.app	unknown	1	2
+119	ais-dev-3alynkmmkjmilqcx55h5jx-132761690266.europe-west2.run.app	ais-dev-3alynkmmkjmilqcx55h5jx-132761690266.europe-west2.run.app	unknown	1	3
+120	goldwork.base44.app	goldwork.base44.app	unknown	1	2
+121	ais-pre-vt3doiw555xsi5ojqxdxpr-136985163141.europe-west1.run.app	ais-pre-vt3doiw555xsi5ojqxdxpr-136985163141.europe-west1.run.app	unknown	1	1
+122	leadle.base44.app	leadle.base44.app	unknown	1	1
+123	preview-sandbox--69b97b06e732ff5cad7abbcb.base44.app	preview-sandbox--69b97b06e732ff5cad7abbcb.base44.app	unknown	1	2
+124	preview--terrestrial-quiz-genius-flow.base44.app	preview--terrestrial-quiz-genius-flow.base44.app	unknown	1	1
+125	ais-dev-3ch2zolsnp7zjxtbsjanlo-408970653381.europe-west2.run.app	ais-dev-3ch2zolsnp7zjxtbsjanlo-408970653381.europe-west2.run.app	unknown	1	1
+126	jessymia-1bnn.vercel.app	jessymia-1bnn.vercel.app	unknown	1	1
+127	ais-dev-si36zvwt2zdzrrfnh6ck2p-384007675220.europe-west2.run.app	ais-dev-si36zvwt2zdzrrfnh6ck2p-384007675220.europe-west2.run.app	unknown	1	2
+128	jessymia-74.vercel.app	jessymia-74.vercel.app	unknown	1	1
+129	preview-sandbox--69ba66ef606a06045fa22161.base44.app	preview-sandbox--69ba66ef606a06045fa22161.base44.app	unknown	1	3
+130	ais-dev-hgwdzun7qxff7qrgmlx77m-37074123815.europe-west1.run.app	ais-dev-hgwdzun7qxff7qrgmlx77m-37074123815.europe-west1.run.app	unknown	1	13
+131	ais-pre-eh44fo36qcrvq5eij2ywkt-118765840217.europe-west1.run.app	ais-pre-eh44fo36qcrvq5eij2ywkt-118765840217.europe-west1.run.app	unknown	1	1
+132	nicho612.vercel.app	nicho612.vercel.app	unknown	1	2
+133	ais-pre-slohp3u7a4udrf2xtpossa-380965813405.europe-west2.run.app	ais-pre-slohp3u7a4udrf2xtpossa-380965813405.europe-west2.run.app	unknown	1	1
+134	abubakker-cryptoverse-n833u1q7l.vercel.app	abubakker-cryptoverse-n833u1q7l.vercel.app	unknown	1	1
+135	preview-sandbox--69bdaba3374f94e369d4179c.base44.app	preview-sandbox--69bdaba3374f94e369d4179c.base44.app	unknown	1	1
+136	ais-pre-3ch2zolsnp7zjxtbsjanlo-408970653381.europe-west2.run.app	ais-pre-3ch2zolsnp7zjxtbsjanlo-408970653381.europe-west2.run.app	unknown	1	1
+137	ais-dev-vt3doiw555xsi5ojqxdxpr-136985163141.europe-west1.run.app	ais-dev-vt3doiw555xsi5ojqxdxpr-136985163141.europe-west1.run.app	unknown	1	23
+138	cleop.base44.app	cleop.base44.app	unknown	1	1
+139	ais-pre-si36zvwt2zdzrrfnh6ck2p-384007675220.europe-west2.run.app	ais-pre-si36zvwt2zdzrrfnh6ck2p-384007675220.europe-west2.run.app	unknown	1	1
+140	ais-pre-v72szdbpn2xcickbwvi4ap-385042659597.europe-west2.run.app	ais-pre-v72szdbpn2xcickbwvi4ap-385042659597.europe-west2.run.app	unknown	1	1
+141	preview-sandbox--69bda3e076dc7329608104fd.base44.app	preview-sandbox--69bda3e076dc7329608104fd.base44.app	unknown	1	2
 Verse App Analytics
 3/2
