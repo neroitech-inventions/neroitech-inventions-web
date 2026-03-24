@@ -513,6 +513,70 @@
             height: 20px;
             vertical-align: middle;
         }
+        /* === FANCY WALLET TAG & COPY BUTTON === */
+.blockchain-tag {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+}
+
+.blockchain-tag.Polygon {
+    background: linear-gradient(90deg, #8247E5, #6F00FF);
+    color: white;
+}
+
+.blockchain-tag.Solana {
+    background: linear-gradient(90deg, #14F195, #00C2A3);
+    color: #0F172A;
+}
+
+.blockchain-tag.Sui {
+    background: linear-gradient(90deg, #6F4CFF, #4C00FF);
+    color: white;
+}
+
+.blockchain-tag.Unknown {
+    background: #334155;
+    color: #CBD5E1;
+}
+
+.copy-btn {
+    background: #1e2937;
+    color: #94a3b8;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.copy-btn:hover {
+    background: #34D399;
+    color: white;
+    transform: scale(1.08);
+}
+
+/* Small animation when copied */
+@keyframes copiedPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+}
+
+.copy-btn.copied {
+    animation: copiedPop 0.4s ease;
+}
     </style>
     <link href="images/icon.png" rel="icon">
 </head>
@@ -646,16 +710,96 @@
                 return obj;
             });
         }
-        async function performSearch() {
-            const trackCode = DOM.searchInput.value.trim().toUpperCase();
-            if (!trackCode) {
-                Swal.fire('Error', 'Please enter a Track Code.', 'error');
-                return;
-            }
-            if (trackCode === 'PENDING') {
-                window.location.href = 'explorer.html';
-                return;
-            }
+
+        function getBlockchainTag(wallet) {
+    if (!wallet) return '[Unknown]';
+    
+    wallet = wallet.trim();
+    
+    // Polygon (0x + 42 characters)
+    if (/^0x[a-fA-F0-9]{40}$/.test(wallet)) return '[Polygon]';
+    
+    // Solana (Base58, 32-44 characters)
+    if (/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(wallet)) return '[Solana]';
+    
+    // Sui (0x + 64 hex characters)
+    if (/^0x[a-fA-F0-9]{64}$/.test(wallet)) return '[Sui]';
+    
+    return '[Unknown]';
+}
+
+function getBlockchainClass(wallet) {
+    if (!wallet) return 'Unknown';
+    wallet = wallet.trim();
+    
+    if (/^0x[a-fA-F0-9]{40}$/.test(wallet)) return 'Polygon';
+    if (/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(wallet)) return 'Solana';
+    if (/^0x[a-fA-F0-9]{64}$/.test(wallet)) return 'Sui';
+    
+    return 'Unknown';
+}
+
+function getExplorerUrl(wallet) {
+    if (!wallet) return '#';
+    wallet = wallet.trim();
+
+    // Polygon
+    if (/^0x[a-fA-F0-9]{40}$/.test(wallet)) {
+        return `https://polygonscan.com/address/${wallet}`;
+    }
+    // Solana
+    if (/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(wallet)) {
+        return `https://solscan.io/account/${wallet}`;
+    }
+    // Sui
+    if (/^0x[a-fA-F0-9]{64}$/.test(wallet)) {
+        return `https://suiscan.xyz/mainnet/account/${wallet}`;
+    }
+
+    return '#';
+}
+
+function copyWallet(address) {
+    if (!address) return;
+    
+    navigator.clipboard.writeText(address).then(() => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Copied!',
+            text: address,
+            timer: 1500,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+        });
+    }).catch(() => {
+        Swal.fire('Error', 'Failed to copy address', 'error');
+    });
+}
+async function performSearch() {
+    let trackCode = DOM.searchInput.value.trim();
+
+    // If user entered a full URL like ...?quest=XXXXX, extract the track code
+    try {
+        const url = new URL(trackCode);
+        const params = new URLSearchParams(url.search);
+        if (params.has('quest')) {
+            trackCode = params.get('quest').trim();
+        }
+    } catch(e) {
+        // Not a valid URL, use input as-is
+    }
+
+    trackCode = trackCode.toUpperCase(); // normalize
+    if (!trackCode) {
+        Swal.fire('Error', 'Please enter a Track Code.', 'error');
+        return;
+    }
+
+    if (trackCode === 'PENDING') {
+        window.location.href = 'explorer.html';
+        return;
+    }
             disableSearchButton();
             showLoading();
             try {
@@ -683,72 +827,97 @@
             return new Date(y, m-1, d, h, min, s);
         }
         function displayResults(quest, totalSlots, submissions) {
-            DOM.results.style.display = 'block';
-            let rewardDisplay = quest ? (quest.Reward || '0') : '0';
-            // Replace 𝕍 with Verse logo
-            rewardDisplay = rewardDisplay.replace(/𝕍/g, '<img src="images/verse_logo.svg" alt="𝕍" class="reward-logo" align="absmiddle"> ');
-            // Replace $ with USDC logo
-            rewardDisplay = rewardDisplay.replace(/\$/g, '<img src="images/usdc_logo.svg" alt="$" class="reward-logo" align="absmiddle"> ');
-            // If no 𝕍 or $ symbols, prepend Verse logo
-            if (!rewardDisplay.includes('verse_logo.svg') && !rewardDisplay.includes('usdc_logo.svg')) {
-                rewardDisplay = `<img src="images/verse_logo.svg" alt="Verse" class="reward-logo" align="absmiddle"> ${rewardDisplay}`;
-            }
-            DOM.questInfo.innerHTML = quest ? `
-                <h2>${quest.Title || 'Unknown Quest'}</h2>
-                <p>Sponsored by: ${quest.Sponsor || 'Unknown'}</p>
-                <p>Reward: ${rewardDisplay}</p>
-                <p>Description: ${quest.Description || 'No description'}</p>
-            ` : '<p>No quests found for this Track Code. Please enter `Pending` to view pending quests in the SnappQuest Explorer.</p>';
-            const count = submissions.length;
-            const remaining = Math.max(0, totalSlots - count);
-            let earliest = 'N/A', latest = 'N/A';
-            if (submissions.length > 0) {
-                const times = submissions.map(s => parseDate(s.Timestamp).getTime()).filter(t => !isNaN(t));
-                if (times.length) {
-                    earliest = new Date(Math.min(...times)).toLocaleDateString();
-                    latest = new Date(Math.max(...times)).toLocaleDateString();
-                }
-            }
-            DOM.insightsGrid.innerHTML = `
-                <div class="insight-card">Total Submissions<div class="insight-number">${count}</div></div>
-                <div class="insight-card">Total Slots<div class="insight-number">${totalSlots}</div></div>
-                <div class="insight-card">Remaining Slots<div class="insight-number">${remaining}</div></div>
-                <div class="insight-card">First Submission<div class="insight-number">${earliest}</div></div>
-                <div class="insight-card">Last Submission<div class="insight-number">${latest}</div></div>
-            `;
-            if (currentChart) currentChart.destroy();
-            const dates = submissions.map(s => parseDate(s.Timestamp).toLocaleDateString());
-            const dateMap = dates.reduce((a, d) => (a[d] = (a[d] || 0) + 1, a), {});
-            const labels = Object.keys(dateMap).sort();
-            currentChart = new Chart(DOM.submissionsChart, {
-                type: 'line',
-                data: {
-                    labels,
-                    datasets: [{
-                        label: 'Submissions per Day',
-                        data: labels.map(l => dateMap[l]),
-                        borderColor: '#34D399',
-                        backgroundColor: 'rgba(52, 211, 153, 0.2)',
-                        fill: true
-                    }]
-                },
-                options: { responsive: true, scales: { y: { beginAtZero: true } } }
-            });
-            DOM.submissionsBody.innerHTML = '';
-            DOM.noResults.style.display = submissions.length ? 'none' : 'block';
-            submissions.forEach(sub => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${sub.Timestamp}</td>
-                    <td><a href="${sub['Proof of Quest']}" target="_blank">View Proof</a></td>
-                    <td><a href="${sub['Quest Link']}" target="_blank">View Quest</a></td>
-                    <td><a href="https://t.me/${sub.Telegram.replace('@','')}" target="_blank" class="contact-link"> ${sub.Telegram}</a></td>
-                    <td><a href="https://polygonscan.com/address/${sub['Polygon Address']}" target="_blank" class="contact-link"> ${sub['Polygon Address']}</a></td>
-                `;
-                DOM.submissionsBody.appendChild(tr);
-            });
-            DOM.exportCsv.onclick = () => exportToCsv(submissions);
+    DOM.results.style.display = 'block';
+
+    let rewardDisplay = quest ? (quest.Reward || '0') : '0';
+    rewardDisplay = rewardDisplay.replace(/𝕍/g, '<img src="images/verse_logo.svg" alt="𝕍" class="reward-logo" align="absmiddle"> ');
+    rewardDisplay = rewardDisplay.replace(/\$/g, '<img src="images/usdc_logo.svg" alt="$" class="reward-logo" align="absmiddle"> ');
+    if (!rewardDisplay.includes('verse_logo.svg') && !rewardDisplay.includes('usdc_logo.svg')) {
+        rewardDisplay = `<img src="images/verse_logo.svg" alt="Verse" class="reward-logo" align="absmiddle"> ${rewardDisplay}`;
+    }
+
+    DOM.questInfo.innerHTML = quest ? `
+        <h2>${quest.Title || 'Unknown Quest'}</h2>
+        <p>Sponsored by: ${quest.Sponsor || 'Unknown'}</p>
+        <p>Reward: ${rewardDisplay}</p>
+        <p>Description: ${quest.Description || 'No description'}</p>
+    ` : '<p>No quests found for this Track Code. Please enter `Pending` to view pending quests in the SnappQuest Explorer.</p>';
+
+    const count = submissions.length;
+    const remaining = Math.max(0, totalSlots - count);
+    let earliest = 'N/A', latest = 'N/A';
+    if (submissions.length > 0) {
+        const times = submissions.map(s => parseDate(s.Timestamp).getTime()).filter(t => !isNaN(t));
+        if (times.length) {
+            earliest = new Date(Math.min(...times)).toLocaleDateString();
+            latest = new Date(Math.max(...times)).toLocaleDateString();
         }
+    }
+
+    DOM.insightsGrid.innerHTML = `
+        <div class="insight-card">Total Submissions<div class="insight-number">${count}</div></div>
+        <div class="insight-card">Total Slots<div class="insight-number">${totalSlots}</div></div>
+        <div class="insight-card">Remaining Slots<div class="insight-number">${remaining}</div></div>
+        <div class="insight-card">First Submission<div class="insight-number">${earliest}</div></div>
+        <div class="insight-card">Last Submission<div class="insight-number">${latest}</div></div>
+    `;
+
+    if (currentChart) currentChart.destroy();
+    const dates = submissions.map(s => parseDate(s.Timestamp).toLocaleDateString());
+    const dateMap = dates.reduce((a, d) => (a[d] = (a[d] || 0) + 1, a), {});
+    const labels = Object.keys(dateMap).sort();
+    currentChart = new Chart(DOM.submissionsChart, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                label: 'Submissions per Day',
+                data: labels.map(l => dateMap[l]),
+                borderColor: '#34D399',
+                backgroundColor: 'rgba(52, 211, 153, 0.2)',
+                fill: true
+            }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+
+    // ==================== ONLY THIS PART IS UPDATED ====================
+    DOM.submissionsBody.innerHTML = '';
+    DOM.noResults.style.display = submissions.length ? 'none' : 'block';
+
+    submissions.forEach(sub => {
+        const wallet = (sub['Polygon Address'] || '').trim();
+        const blockchainTag = getBlockchainTag(wallet);
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+            <td>${sub.Timestamp || ''}</td>
+            <td><a href="${sub['Proof of Quest'] || '#'}" target="_blank">View Proof</a></td>
+            <td><a href="${sub['Quest Link'] || '#'}" target="_blank">View Quest</a></td>
+            <td><a href="https://t.me/${(sub.Telegram || '').replace('@','')}" target="_blank" class="contact-link">${sub.Telegram || ''}</a></td>
+<td>
+    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <a href="${getExplorerUrl(wallet)}" 
+           target="_blank" 
+           style="font-family:monospace; word-break:break-all; font-size:15px; color:#e2e8f0; text-decoration:none;">
+            ${wallet}
+        </a>
+        
+        <span class="blockchain-tag ${getBlockchainClass(wallet)}">
+            ${getBlockchainTag(wallet)}
+        </span>
+        
+        <button onclick="copyWallet('${wallet}'); event.stopImmediatePropagation();" 
+                class="copy-btn" title="Copy to clipboard">
+            📋
+        </button>
+    </div>
+</td>
+        `;
+        DOM.submissionsBody.appendChild(tr);
+    });
+    // ===================================================================
+}
         function exportToCsv(data) {
             if (!data.length) { Swal.fire('Info', 'No data to export.', 'info'); return; }
             const headers = ['Timestamp', 'Proof of Quest', 'Quest Link', 'Telegram', 'Polygon Address'];

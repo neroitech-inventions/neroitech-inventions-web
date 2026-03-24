@@ -951,6 +951,97 @@
             align-items: center;
             gap: 4px;
         }
+        /* Wallet Sidebar */
+.wallet-sidebar {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100vh;
+  background: #1F2937;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+  transition: right 0.4s ease;
+  z-index: 1100;
+  padding: 20px;
+  color: white;
+  overflow-y: auto;
+}
+
+.wallet-sidebar.open {
+  right: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.wallet-inputs .wallet-field {
+  margin-bottom: 18px;
+}
+
+.wallet-inputs label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #CBD5E1;
+}
+
+.wallet-inputs input {
+  width: 100%;
+  padding: 12px;
+  background: #334155;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-family: monospace;
+}
+
+.save-wallet-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #34D399, #10B981);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 24px;
+}
+
+.saved-wallets {
+  margin-top: 20px;
+}
+
+.saved-wallet {
+  background: #334155;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.saved-wallet span {
+  font-family: monospace;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.copy-wallet-btn {
+  background: #1E2937;
+  color: #34D399;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
     </style>
     <link href="images/icon.png" rel="icon" onerror="console.error('Favicon failed to load')">
 </head>
@@ -960,16 +1051,48 @@
             <a href="index.html"><img src="images/logo.png" alt="SnappQuest Logo" onerror="console.error('Logo image failed to load')"></a>
         </div>
         <div class="nav-container">
-            <nav class="nav-links">
-                <a href="stats.html"><i class="fas fa-chart-bar"></i> View Stats</a>
-                <a href="leaderboard.html"><i class="fas fa-trophy"></i> View Leaderboard</a>
-            </nav>
-            <button class="disconnect-btn" id="disconnectBtn"><i class="fas fa-sign-out-alt"></i> Home</button>
-        </div>
+    <nav class="nav-links">
+        <a href="stats.html"><i class="fas fa-chart-bar"></i> View Stats</a>
+        <a href="leaderboard.html"><i class="fas fa-trophy"></i> View Leaderboard</a>
+    </nav>
+    
+    <!-- WALLET BUTTON -->
+    <button onclick="toggleWalletSidebar()" style="background:none;border:none;font-size:26px;color:white;cursor:pointer;margin-right:12px;" title="My Wallets">
+        <i class="fas fa-wallet"></i>
+    </button>
+    
+    <button class="disconnect-btn" id="disconnectBtn"><i class="fas fa-sign-out-alt"></i> Home</button>
+</div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
         </div>
     </header>
+    <!-- My Wallets Sidebar -->
+<div id="walletSidebar" class="wallet-sidebar">
+  <div class="sidebar-header">
+    <h3>My Wallets</h3>
+    <span onclick="toggleWalletSidebar()" style="cursor:pointer; font-size:24px;">✕</span>
+  </div>
+  
+  <div class="wallet-inputs">
+    <div class="wallet-field">
+      <label>Solana Address</label>
+      <input type="text" id="solanaWallet" placeholder="Enter Solana wallet">
+    </div>
+    <div class="wallet-field">
+      <label>Polygon Address</label>
+      <input type="text" id="polygonWallet" placeholder="Enter Polygon wallet">
+    </div>
+    <div class="wallet-field">
+      <label>Sui Address</label>
+      <input type="text" id="suiWallet" placeholder="Enter Sui wallet">
+    </div>
+  </div>
+
+  <button onclick="saveWallets()" class="save-wallet-btn">Save Wallets</button>
+
+  <div id="savedWallets" class="saved-wallets"></div>
+</div>
     <div class="overlay"></div>
     <div class="profile-container">
         <div class="profile-header">
@@ -1929,6 +2052,98 @@ function toggleImage(img) {
             setupEventListeners();
             loadData();
         });
+        // Wallet Sidebar Functions
+// Wallet Sidebar Functions
+function toggleWalletSidebar() {
+    const sidebar = document.getElementById('walletSidebar');
+    sidebar.classList.toggle('open');
+    
+    // Close sidebar when clicking anywhere outside it
+    if (sidebar.classList.contains('open')) {
+        setTimeout(() => {
+            document.addEventListener('click', outsideClickHandler, { once: true });
+        }, 10);
+    }
+}
+
+function outsideClickHandler(e) {
+    const sidebar = document.getElementById('walletSidebar');
+    if (!sidebar.contains(e.target) && !e.target.closest('button[onclick="toggleWalletSidebar()"]')) {
+        sidebar.classList.remove('open');
+    }
+}
+
+function saveWallets() {
+  const sol = document.getElementById('solanaWallet').value.trim();
+  const poly = document.getElementById('polygonWallet').value.trim();
+  const sui = document.getElementById('suiWallet').value.trim();
+
+  localStorage.setItem('userSolana', sol);
+  localStorage.setItem('userPolygon', poly);
+  localStorage.setItem('userSui', sui);
+
+  Swal.fire({
+    icon: 'success',
+    title: 'Wallets Saved!',
+    text: 'Your addresses are now stored in the browser.',
+    timer: 2000,
+    showConfirmButton: false
+  });
+
+  renderSavedWallets();
+}
+
+function renderSavedWallets() {
+  const container = document.getElementById('savedWallets');
+  container.innerHTML = '';
+
+  const sol = localStorage.getItem('userSolana') || '';
+  const poly = localStorage.getItem('userPolygon') || '';
+  const sui = localStorage.getItem('userSui') || '';
+
+  if (sol) container.innerHTML += createSavedWalletHTML('Solana', sol);
+  if (poly) container.innerHTML += createSavedWalletHTML('Polygon', poly);
+  if (sui) container.innerHTML += createSavedWalletHTML('Sui', sui);
+
+  if (!container.innerHTML) {
+    container.innerHTML = '<p style="color:#CBD5E1;text-align:center;">No wallets saved yet.</p>';
+  }
+}
+
+function createSavedWalletHTML(chain, address) {
+  return `
+    <div class="saved-wallet">
+      <div>
+        <strong>${chain}</strong><br>
+        <span>${address}</span>
+      </div>
+      <button onclick="copyWallet('${address}')" class="copy-wallet-btn">📋 Copy</button>
+    </div>
+  `;
+}
+
+// Load saved wallets when page opens
+window.addEventListener('load', () => {
+  renderSavedWallets();
+});
+
+// Copy wallet (used by the saved wallets)
+function copyWallet(address) {
+    if (!address) return;
+    navigator.clipboard.writeText(address).then(() => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Copied!',
+            text: address,
+            timer: 1500,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top',           // ← Now appears at the front/top of the sidebar
+            background: '#1F2937',
+            color: '#fff'
+        });
+    });
+}
     </script>
 </body>
 </html>
