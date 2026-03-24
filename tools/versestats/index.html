@@ -293,6 +293,15 @@ Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions</
 Analytics Intelligence Analyzer
 </h2>
 <p style="text-align:center;font-size:14px;color:#a0a0cc">Paste the full Verse dashboard data from <a style="color: #00c853;" href="https://dashboard.vgdh.io/" target="_blank"><b>Verse App Analytics</b></a> below</p>
+<br>
+<div style="text-align:center;margin-bottom:10px;">
+<select id="dataFilter" style="padding:8px;border-radius:6px;background:#0f172a;color:white;border:1px solid #334155;">
+<option selected disabled>Vibe Coding with Verse Program</option>  
+<option value="verse2">Vibe Coding with Verse 2</option>
+<option value="verse1">Vibe Coding with Verse 1</option>
+<option value="all">All Time</option>
+</select>
+</div>
 <textarea id="verseData" class="verse"></textarea>
 <p id="verseHint" style="font-size:13px;color:#a0a0cc;text-align:center;">
 Verse App Analytics is loaded by default from the database. Click the field and paste new Verse dashboard data to run a fresh analysis.
@@ -544,33 +553,165 @@ window.onscroll = function(){
 backToTopBtn.addEventListener("click",()=>{window.scrollTo({top:0,behavior:'smooth'});});
 
 
-let fullVerseData = "";
+let verse1Data = "";
+let verseAllData = "";
+let verse2Data = "";
+
 let verseLines = [];
 let scanIndex = 0;
 let scanInterval;
 let stopScan = false;
 
-window.addEventListener("DOMContentLoaded", function(){
+window.addEventListener("DOMContentLoaded", async function(){
 
-  fetch("verse-data.txt")
-  .then(res => res.text())
-  .then(data => {
+  const verse1 = await fetch("vcwv-1.txt").then(r=>r.text());
+  const verseAll = await fetch("verse-data.txt").then(r=>r.text());
 
-      fullVerseData = data;
-      verseLines = data.split("\n");
+  verse1Data = verse1;
+  verseAllData = verseAll;
 
-      // Analyzer already has full data
-      document.getElementById("verseData").value = fullVerseData;
-      analyzeVerse();
+  const oldLines = verse1.split("\n").map(l=>l.trim()).filter(Boolean);
+  const allLines = verseAll.split("\n").map(l=>l.trim()).filter(Boolean);
 
-      // Clear textarea for visual scan effect
-      document.getElementById("verseData").value = "";
+  function parseLine(line){
 
-      startScanEffect();
+  let match = line.match(/^\d+\s+[^\s]+\s+([^\s]+)\s+(Low|Medium|High|NA)\s+([\d,]+)\s+([\d,]+)/i);
 
-  });
+  if(!match) return null;
+
+  return {
+    domain: match[1],
+    bot: match[2],
+    visitors: parseInt(match[3].replace(/,/g,"")),
+    views: parseInt(match[4].replace(/,/g,""))
+  };
+
+}
+
+
+let verse2Lines = [];
+
+allLines.forEach(line => {
+
+  const newData = parseLine(line);
+
+  if(!newData) return;
+
+  const oldLine = oldLines.find(l => l.includes(newData.domain));
+
+  if(oldLine){
+
+    const oldData = parseLine(oldLine);
+
+    const visitors = Math.max(0, newData.visitors - oldData.visitors);
+    const views = Math.max(0, newData.views - oldData.views);
+
+    verse2Lines.push(`1 x ${newData.domain} ${newData.bot} ${visitors} ${views}`);
+
+  } else {
+
+    verse2Lines.push(line);
+
+  }
 
 });
+
+  verse2Data = verse2Lines.join("\n");
+
+  // DEFAULT VIEW = VERSE 2
+  loadTableData(verse2Data);
+
+  verseLines = verse2Lines;
+
+  startScanEffect();
+
+});
+
+
+function loadTableData(data){
+
+  const textarea = document.getElementById("verseData");
+
+  textarea.value = data;
+
+  analyzeVerse();
+
+  textarea.value = "";
+
+}
+
+
+document.getElementById("dataFilter").addEventListener("change", function(){
+
+  const value = this.value;
+  const textarea = document.getElementById("verseData");
+
+  // STOP current scan
+  stopScan = true;
+  clearInterval(scanInterval);
+
+  // SELECT dataset
+  if(value === "verse1"){
+      verseLines = verse1Data.split("\n").filter(Boolean);
+      textarea.value = verse1Data;
+  }
+
+  if(value === "all"){
+      verseLines = verseAllData.split("\n").filter(Boolean);
+      textarea.value = verseAllData;
+  }
+
+  if(value === "verse2"){
+      verseLines = verse2Data.split("\n").filter(Boolean);
+      textarea.value = verse2Data;
+  }
+
+  // Update table
+  analyzeVerse();
+
+  // Clear textarea for scan animation
+  textarea.value = "";
+
+  // RESET scan
+  scanIndex = 0;
+  stopScan = false;
+
+  // START scan again
+  startScanEffect();
+
+});
+
+function startScanEffect(){
+
+  const textarea = document.getElementById("verseData");
+
+  scanInterval = setInterval(()=>{
+
+    if(stopScan) return;
+
+    if(scanIndex >= verseLines.length){
+
+        scanIndex = 0;
+        textarea.value = "";
+    }
+
+    textarea.value += verseLines[scanIndex] + "\n";
+    textarea.scrollTop = textarea.scrollHeight;
+
+    scanIndex++;
+
+}, 30);
+
+}
+
+
+document.getElementById("verseData").addEventListener("click", function(){
+
+  stopScan = true;
+  clearInterval(scanInterval);
+
+});
+
 
 function startScanEffect(){
 
