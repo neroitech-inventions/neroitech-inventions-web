@@ -175,6 +175,88 @@ margin-top:10px;
 .verify-box button{
 margin-top:10px;
 }
+.bot-low{
+  color:#22c55e;
+  font-weight:bold;
+}
+
+.bot-medium{
+  color:#facc15;
+  font-weight:bold;
+}
+
+.bot-high{
+  color:#ef4444;
+  font-weight:bold;
+}
+
+.bot-na{
+  color:#94a3b8;
+  font-weight:bold;
+}
+.score-perfect { color: #00ff88; font-weight: bold; } /* 100% */
+.score-high { color: #00c853; font-weight: bold; }   /* 70–99% */
+.score-medium { color: #facc15; font-weight: bold; } /* 40–69% */
+.score-low { color: #ef4444; font-weight: bold; }    /* 0–39% */
+
+.metrics-guide {
+  max-width: 720px;
+  margin: auto;
+  font-family: system-ui, Arial;
+  color: #e0e0ff;
+  line-height: 1.6;
+}
+
+.metrics-guide h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.metric-card {
+  background: #1a1a2e;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #334155;
+}
+
+.metric-card h3 {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 0.3rem;
+}
+
+.metric-card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.metric-card li {
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: baseline;
+}
+
+.badge {
+  padding: 0.2rem 0.5rem;
+  margin-left: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.badge.info { background: #334155; color: #00e676; }
+.badge.success { background: #064e3b; color: #22c55e; }
+.badge.warning { background: #78350f; color: #facc15; }
+.badge.danger { background: #7f1d1d; color: #ef4444; }
+
+.tip {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #a0a0cc;
+}
 </style>
 </head>
 <body>
@@ -222,39 +304,40 @@ Verse App Analytics is loaded by default from the database. Click the field and 
 
 <!-- Guide -->
 <br><br>
-<div class="guide">
+<div class="metrics-guide">
   <h2>Understanding Website Metrics & Traffic</h2>
-  <ul>
-    <li><strong>Pages Per Visit:</strong> 2.5 – 4+ (higher is better)</li>
-    <li><strong>Bounce Rate:</strong> 40% – 50% ideal</li>
-    <li><strong>Visit Duration:</strong> 2 – 4 minutes is healthy</li>
-    <li><strong>Returning Visitors:</strong> Visit ratio ≥ 1.3 indicates loyalty</li>
-    <li><strong>Bot Detection:</strong> Pages/visitor <1.2, very short duration, or unknown sources may indicate bot traffic</li>
-  </ul>
 
-  <h3>How We Spot Human, Bot, or Suspicious Traffic</h3>
-  <ul>
-    <li><strong>Pages Per Visit (Engagement):</strong> High engagement (≥2.5) usually means human users. Very low engagement (<1.2) may indicate bots.</li>
-    <li><strong>Bounce Rate:</strong> Around 40–50% is healthy. Extremely high (>80%) can signal bot traffic or low-quality visits.</li>
-    <li><strong>Visit Duration:</strong> Longer sessions (2–4 min) indicate humans actively browsing. Very short sessions (<0.5 min) are likely bots.</li>
-    <li><strong>Engagement Ratio (Pageviews ÷ Visitors):</strong>
-      <ul>
-        <li>Ratio <1.05 → Bot </li>
-        <li>Ratio 1.05–1.7 → Suspicious</li>
-        <li>Ratio >1.7 → Human</li>
-      </ul>
-    </li>
-    <li><strong>Returning Visitors / Unknown Sources:</strong> Loyal returning visitors indicate humans. Unknown sources or low returning rates may indicate bots.</li>
-  </ul>
+  <div class="metric-card">
+    <h3>Key Metrics</h3>
+    <ul>
+      <li><strong>Pages Per Visit:</strong> <span class="badge info">2.5 – 4+ (higher is better)</span></li>
+      <li><strong>Bounce Rate:</strong> <span class="badge info">40% – 50% ideal</span></li>
+      <li><strong>Visit Duration:</strong> <span class="badge info">2 – 4 minutes is healthy</span></li>
+      <li><strong>Returning Visitors:</strong> <span class="badge info">Visit ratio ≥ 1.3 indicates loyalty</span></li>
+      <li><strong>Bot Detection:</strong> <span class="badge warning">Pages/visitor <1.2, very short duration, or unknown sources may indicate bot traffic</span></li>
+    </ul>
+  </div>
 
-  <h3>Summary for Improvement</h3>
-  <ul>
-    <li><b>Human:</b> Good engagement, normal session time, consistent visitor behavior.</li>
-    <li><b>Suspicious:</b> Some low engagement, short duration, or small anomalies... monitor these.</li>
-    <li><b>Bot:</b> Very low engagement, extremely short sessions, or unknown sources... likely automated traffic.</li>
-  </ul>
+  <div class="metric-card">
+    <h3>How We Spot Human, Bot, or Suspicious Traffic</h3>
+    <ul>
+      <li><strong>Pages Per Visit:</strong> <span class="badge success">High engagement (≥2.5) → Human</span>, <span class="badge danger">Low (<1.2) → Bot</span></li>
+      <li><strong>Bounce Rate:</strong> <span class="badge success">40–50% healthy</span>, <span class="badge danger">>80% → Bot/suspicious</span></li>
+      <li><strong>Visit Duration:</strong> <span class="badge success">2–4 min → Human</span>, <span class="badge danger"><0.5 min → Bot</span></li>
+      <li><strong>Engagement Ratio:</strong> <span class="badge danger">Ratio <1.05 → Bot</span>, <span class="badge warning">1.05–1.7 → Suspicious</span>, <span class="badge success">>1.7 → Human</span></li>
+      <li><strong>Returning Visitors / Unknown Sources:</strong> <span class="badge success">Loyal → Human</span>, <span class="badge warning">Low returning → Suspicious/Bot</span></li>
+    </ul>
+  </div>
 
-  <p>Focus on improving Pages Per Visit, lowering Bounce Rate, increasing session duration, and attracting real returning users to convert Suspicious traffic into Human traffic.</p>
+  <div class="metric-card">
+    <h3>Summary for Improvement</h3>
+    <ul>
+      <li><span class="badge success">Human:</span>&nbsp;Good engagement, normal session time, consistent visitor behavior.</li>
+      <li><span class="badge warning">Suspicious:</span>&nbsp;Some low engagement, short duration, or small anomalies — monitor closely.</li>
+      <li><span class="badge danger">Bot:</span>&nbsp;Very low engagement, extremely short sessions, or unknown sources — likely automated traffic.</li>
+    </ul>
+    <p class="tip">Focus on improving <strong>Pages Per Visit</strong>, lowering <strong>Bounce Rate</strong>, increasing <strong>session duration</strong>, and attracting real returning users to convert Suspicious traffic into Human traffic.</p>
+  </div>
 </div>
 
 <!-- Back to Top Button -->
@@ -358,12 +441,14 @@ function analyzeVerse(){
   let apps = [];
 
   lines.forEach(line => {
-    let match = line.match(/^\d+\s+([^\s]+)\s+[^\s]+\s+[^\s]+\s+([\d,]+)\s+([\d,]+)/);
+    let match = line.match(/^\d+\s+[^\s]+\s+([^\s]+)\s+(Low|Medium|High|NA)\s+([\d,]+)\s+([\d,]+)/i);
     if(match){
-      let domain = match[1];
-      let visitors = parseInt(match[2].replace(/,/g,""));
-      let pageviews = parseInt(match[3].replace(/,/g,""));
-      apps.push({domain, visitors, pageviews});
+let domain = match[1];
+let botActivity = match[2];
+let visitors = parseInt(match[3].replace(/,/g,""));
+let pageviews = parseInt(match[4].replace(/,/g,""));
+
+apps.push({domain, visitors, pageviews, botActivity});
     }
   });
 
@@ -385,15 +470,42 @@ function analyzeVerse(){
     if(score > 70){ type="Human"; cls="human"; realApps++; }
     else if(score < 40){ type="Bot"; cls="bot"; botApps++; }
 
-    rows += `<tr>
-      <td>${index+1}</td>
-      <td>${app.domain}</td>
-      <td>${app.visitors}</td>
-      <td>${app.pageviews}</td>
-      <td>${ratio.toFixed(2)}</td>
-      <td>${score}%</td>
+    // Force perfect score for clean apps
+if(app.botActivity && app.botActivity.toLowerCase() === "low" && type === "Human"){
+  score = 100;
+}
+
+
+let scoreClass = "";
+
+if(score === 100){
+  scoreClass = "score-perfect";
+} else if(score >= 70){
+  scoreClass = "score-high";
+} else if(score >= 40){
+  scoreClass = "score-medium";
+} else {
+  scoreClass = "score-low";
+}
+
+    let botClass = "bot-na";
+
+if(app.botActivity){
+  if(app.botActivity.toLowerCase() === "low") botClass = "bot-low";
+  else if(app.botActivity.toLowerCase() === "medium") botClass = "bot-medium";
+  else if(app.botActivity.toLowerCase() === "high") botClass = "bot-high";
+}
+
+rows += `<tr>
+  <td>${index+1}</td>
+  <td>${app.domain}</td>
+  <td>${app.visitors}</td>
+  <td>${app.pageviews}</td>
+  <td>${ratio.toFixed(2)}</td>
+  <td class="${scoreClass}">${score}%</td>
+  <td class="${botClass}">${app.botActivity || "NA"}</td>
   <td class="${cls}" onclick="verifyTraffic(this, ${app.visitors}, ${app.pageviews})" style="cursor:pointer">${type}</td>
-    </tr>`;
+</tr>`;
   });
 
   document.getElementById("verseSummary").innerHTML = `
@@ -413,8 +525,9 @@ function analyzeVerse(){
           <th>Visitors</th>
           <th>Pageviews</th>
           <th>Engagement</th>
-          <th>Human Score</th>
-          <th>Classification</th>
+<th>Human Score</th>
+<th>Bot Activity</th>
+<th>Classification</th>
         </tr>
         ${rows}
       </table>
