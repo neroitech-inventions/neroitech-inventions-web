@@ -577,6 +577,18 @@
 .copy-btn.copied {
     animation: copiedPop 0.4s ease;
 }
+
+/* Exceeded slots = red row */
+.submissions-table tr.exceeded {
+    background: #fee2e2 !important;
+    color: #b91c1c;
+}
+.submissions-table tr.exceeded td {
+    color: #b91c1c;
+}
+.submissions-table tr.exceeded a {
+    color: #b91c1c;
+}
     </style>
     <link href="images/icon.png" rel="icon">
 </head>
@@ -881,14 +893,18 @@ async function performSearch() {
         options: { responsive: true, scales: { y: { beginAtZero: true } } }
     });
 
-    // ==================== ONLY THIS PART IS UPDATED ====================
+    // ==================== ONLY THIS PART CHANGED ====================
     DOM.submissionsBody.innerHTML = '';
     DOM.noResults.style.display = submissions.length ? 'none' : 'block';
 
-    submissions.forEach(sub => {
+    submissions.forEach((sub, index) => {
         const wallet = (sub['Polygon Address'] || '').trim();
-        const blockchainTag = getBlockchainTag(wallet);
         const tr = document.createElement('tr');
+
+        // MARK EXCEEDED ROWS IN RED
+        if (index >= totalSlots && totalSlots > 0) {
+            tr.classList.add('exceeded');
+        }
 
         tr.innerHTML = `
             <td>${sub.Timestamp || ''}</td>
@@ -918,7 +934,8 @@ async function performSearch() {
     });
     // ===================================================================
 }
-        function exportToCsv(data) {
+
+function exportToCsv(data) {
             if (!data.length) { Swal.fire('Info', 'No data to export.', 'info'); return; }
             const headers = ['Timestamp', 'Proof of Quest', 'Quest Link', 'Telegram', 'Polygon Address'];
             const rows = data.map(r => [
