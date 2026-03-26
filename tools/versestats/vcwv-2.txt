@@ -32,6 +32,7 @@ Community Trends
 1600
 2400
 3200
+
 App Leaderboard
 Search apps...
 Bot Activity ▾
@@ -108,4 +109,4 @@ Events
 68	alternative-maroon-wrygl0zhd7.edgeone.app	1	1.0	0	—	—	0	NA
 69	operational-cyan-qe4zil27ng.edgeone.app	1	1.0	0	—	—	0	NA
 Verse App Analytics
-0
+18000
