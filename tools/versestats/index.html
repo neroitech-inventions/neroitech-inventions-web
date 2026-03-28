@@ -573,12 +573,37 @@ lines.forEach(line=>{
 
   let engagement = visitors>0 ? events/visitors : 0;
 
-  let score = 100;
-  if(pages<1.2) score-=30;
-  if(bounce>90) score-=25;
-  if(events<5) score-=20;
-  if(sources<=1) score-=15;
-  score = Math.max(0, Math.min(100, score));
+let score = 100;
+
+if(pages < 1.2) score -= 30;
+
+// Bounce Rate Scoring
+if(bounce <= 1){
+  score -= 80; // No rating
+}
+else if(bounce <= 40){
+  score += 20; // Excellent
+}
+else if(bounce <= 55){
+  score += 12; // Good
+}
+else if(bounce <= 65){
+  score -= 15; // Slightly high
+}
+else if(bounce <= 69){
+  score -= 25; // Bad
+}
+else if(bounce <= 80){
+  score -= 30; // Very bad
+}
+else{
+  score -= 35; // Extremely bad
+}
+
+if(events < 5) score -= 20;
+if(sources <= 1.5) score -= 15;
+
+score = Math.max(0, Math.min(100, score));
 
   let traffic = "Human";
   if(score<40) traffic="Bot";
