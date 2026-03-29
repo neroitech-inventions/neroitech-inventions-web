@@ -499,6 +499,15 @@
     color: #6B7280;
 }
 
+.search-bar input {
+    flex: 1;
+    border: none;
+    padding: 12px 20px;
+    font-size: 17px;
+    outline: none;
+    border-radius: 50px 0 0 50px;
+}
+
     </style>
     <link href="images/icon.png" rel="icon">
 </head>
@@ -548,6 +557,19 @@
         <div class="tab-container">
             <button id="tab-all" class="tab-btn active" onclick="switchTab(0)">🏆 ALL TIME</button>
             <button id="tab-thirty" class="tab-btn" onclick="switchTab(1)">🔥 LAST 30 DAYS</button>
+        </div>
+
+                <!-- Search Bar -->
+        <div class="search-container" style="margin: 30px auto 40px; max-width: 600px;">
+            <div class="search-bar" style="background:#fff; border:1px solid #D1D5DB; border-radius:50px; padding:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); display:flex;">
+                <input type="text" id="leaderboardSearch" 
+                       placeholder="Search by @username or wallet address..." 
+                       style="flex:1; border:none; padding:12px 20px; font-size:17px; outline:none; border-radius:50px 0 0 50px;">
+                <button id="searchClearBtn" 
+                        style="background:#6366F1; color:white; border:none; padding:12px 24px; border-radius:50px; cursor:pointer;">
+                    Clear
+                </button>
+            </div>
         </div>
 
         <div class="submissions-section">
@@ -629,6 +651,7 @@
         let totalLast30 = 0;
         let currentTab = 0;
         let currentPage = 1;
+        let currentSearchTerm = '';
         const ITEMS_PER_PAGE = 10;
 
         const DOM = {
@@ -646,7 +669,9 @@
             totalAllTimeEl: document.getElementById('totalAllTime'),
             totalThirtyEl: document.getElementById('totalThirty'),
             thirtyLabel: document.getElementById('thirtyLabel'),
-            thirtySub: document.getElementById('thirtySub')
+            thirtySub: document.getElementById('thirtySub'),
+            leaderboardSearch: document.getElementById('leaderboardSearch'),
+            searchClearBtn: document.getElementById('searchClearBtn')
         };
 
         function parseDate(dateStr) {
@@ -688,6 +713,15 @@
             if (!wallet || wallet.length < 10) return wallet || '—';
             return `${wallet.slice(0,6)}...${wallet.slice(-4)}`;
         }
+
+        function filterLeaders(leaders) {
+    const term = currentSearchTerm.toLowerCase().trim();
+    if (!term) return leaders;
+    return leaders.filter(item => 
+        (item.telegram && item.telegram.toLowerCase().includes(term)) ||
+        (item.wallet && item.wallet.toLowerCase().includes(term))
+    );
+}
 
        async function loadLeaderboard() {
     // Show modern loader
@@ -788,55 +822,62 @@
             renderPage(leaders);
         }
 
-        function renderPage(leaders) {
-            const totalPages = Math.ceil(leaders.length / ITEMS_PER_PAGE);
-            const start = (currentPage - 1) * ITEMS_PER_PAGE;
-            const pageLeaders = leaders.slice(start, start + ITEMS_PER_PAGE);
+function renderPage(leaders) {
+    const filtered = filterLeaders(leaders);
+    const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const pageLeaders = filtered.slice(start, start + ITEMS_PER_PAGE);
 
-            DOM.leaderboardBody.innerHTML = '';
+    DOM.leaderboardBody.innerHTML = '';
 
-            if (pageLeaders.length === 0) {
-                DOM.noLeaders.style.display = 'block';
-                DOM.pagination.innerHTML = '';
-                return;
-            }
+    if (pageLeaders.length === 0) {
+        DOM.noLeaders.style.display = 'block';
+        DOM.noLeaders.textContent = currentSearchTerm ? 
+            "No matching contributors found." : 
+            "No submissions recorded yet.";
+        DOM.pagination.innerHTML = '';
+        return;
+    }
 
-            DOM.noLeaders.style.display = 'none';
+    DOM.noLeaders.style.display = 'none';
 
-            pageLeaders.forEach((item, idx) => {
-                const globalRank = start + idx + 1;
-                const tr = document.createElement('tr');
-                const walletShort = shortenWallet(item.wallet);
-                const explorer = getExplorerUrl(item.wallet);
-                const tag = getBlockchainTag(item.wallet);
-                const tagClass = getBlockchainClass(item.wallet);
+    pageLeaders.forEach((item, idx) => {
+        const globalRank = start + idx + 1;           // This was the old line
+        // NEW: Show the real overall rank from the full list
+        const overallRank = leaders.indexOf(item) + 1;
 
-                let contributorHTML = '';
-                if (item.telegram) {
-                    const tg = item.telegram.replace('@','');
-                    contributorHTML += `<a href="https://t.me/${tg}" target="_blank" style="display:block;margin-bottom:8px;font-weight:600;color:#6366F1;"><i class="fab fa-telegram-plane"></i> ${item.telegram}</a>`;
-                }
-                contributorHTML += `
-                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                        <a href="${explorer}" target="_blank" style="font-family:monospace;color:#1F2937;text-decoration:none;">${walletShort}</a>
-                        <span class="blockchain-tag ${tagClass}">${tag}</span>
-                        <button onclick="copyWallet('${item.wallet}');event.stopImmediatePropagation()" class="copy-btn" title="Copy">📋</button>
-                    </div>`;
+        const tr = document.createElement('tr');
+        const walletShort = shortenWallet(item.wallet);
+        const explorer = getExplorerUrl(item.wallet);
+        const tag = getBlockchainTag(item.wallet);
+        const tagClass = getBlockchainClass(item.wallet);
 
-                const count = currentTab === 0 ? item.submissions : item.recent;
-
-                tr.innerHTML = `
-                    <td class="rank">#${globalRank}</td>
-                    <td>${contributorHTML}</td>
-                    <td class="sub-count">${count}</td>
-                    <td>${item.firstDate || 'N/A'}</td>
-                    <td>${item.lastDate || 'N/A'}</td>
-                `;
-                DOM.leaderboardBody.appendChild(tr);
-            });
-
-            renderPagination(totalPages);
+        let contributorHTML = '';
+        if (item.telegram) {
+            const tg = item.telegram.replace('@','');
+            contributorHTML += `<a href="https://t.me/${tg}" target="_blank" style="display:block;margin-bottom:8px;font-weight:600;color:#6366F1;"><i class="fab fa-telegram-plane"></i> ${item.telegram}</a>`;
         }
+        contributorHTML += `
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <a href="${explorer}" target="_blank" style="font-family:monospace;color:#1F2937;text-decoration:none;">${walletShort}</a>
+                <span class="blockchain-tag ${tagClass}">${tag}</span>
+                <button onclick="copyWallet('${item.wallet}');event.stopImmediatePropagation()" class="copy-btn" title="Copy">📋</button>
+            </div>`;
+
+        const count = currentTab === 0 ? item.submissions : item.recent;
+
+        tr.innerHTML = `
+            <td class="rank">#${overallRank}</td>
+            <td>${contributorHTML}</td>
+            <td class="sub-count">${count}</td>
+            <td>${item.firstDate || 'N/A'}</td>
+            <td>${item.lastDate || 'N/A'}</td>
+        `;
+        DOM.leaderboardBody.appendChild(tr);
+    });
+
+    renderPagination(totalPages);
+}
 
         function renderPagination(totalPages) {
             let html = `<button class="page-btn" onclick="prevPage()" ${currentPage===1?'disabled':''}>← Previous</button>`;
@@ -877,8 +918,31 @@
             DOM.backToTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
         }
 
+        function setupSearch() {
+    const searchInput = DOM.leaderboardSearch;
+    const clearBtn = DOM.searchClearBtn;
+
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', () => {
+        currentSearchTerm = searchInput.value;
+        currentPage = 1;
+        const leaders = currentTab === 0 ? allTimeLeaders : thirtyLeaders;
+        renderPage(leaders);
+    });
+
+    clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        currentSearchTerm = '';
+        currentPage = 1;
+        const leaders = currentTab === 0 ? allTimeLeaders : thirtyLeaders;
+        renderPage(leaders);
+    });
+}
+
         window.addEventListener('load', () => {
             setupListeners();
+            setupSearch(); 
             loadLeaderboard();
         });
     </script>
