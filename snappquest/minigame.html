@@ -29,7 +29,7 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+      background-color: var(--color-dark-bg);
       color: var(--dark);
       min-height: 100vh;
       display: flex;
@@ -42,6 +42,80 @@
       text-align: center;
       box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     }
+ /* Gamified Header */
+.game-header {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  color: #ffffff;
+  padding: 4rem 1rem;
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(135deg, #0a3d62, #1dd1a1, #10b981);
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+}
+
+.game-header .header-bg {
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 70%);
+  animation: rotateBG 20s linear infinite;
+  z-index: 0;
+}
+
+@keyframes rotateBG {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.game-header .header-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.game-header h1 {
+  font-size: clamp(2rem, 6vw, 3rem);
+  background: rgba(15, 23, 42, 0.95);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 8px rgba(255,255,255,0.5);
+}
+
+.game-header .subtitle {
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  opacity: 0.85;
+  animation: pulseText 2s infinite;
+}
+
+@keyframes pulseText {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+.header-btn {
+  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 50px;
+  box-shadow: 0 8px 20px rgba(16,185,129,0.4);
+  background: linear-gradient(135deg, #34d399, #10b981);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.header-btn:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(16,185,129,0.5);
+}   
     h1 { font-size: clamp(1.8rem, 7vw, 2.4rem); margin-bottom: 0.4rem; }
     .subtitle { font-size: clamp(1rem, 4vw, 1.2rem); opacity: 0.95; }
     .container {
@@ -223,25 +297,71 @@
       font-size: 1.1rem;
     }
 
-    /* Footer */
-    footer {
-      background: linear-gradient(135deg, #1F2937, #111827);
-      color: #E5E7EB;
-      padding: 60px 60px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-    }
-    footer .container { max-width: 1200px; margin: 0 auto; padding: 0; }
-    .footer-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; margin-bottom: 40px; }
-    .footer-col { min-width: 150px; }
-    .footer-col h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: #ffffff; }
-    .footer-link li { margin-bottom: 10px; list-style: none; }
-    .footer-link a { color: #E5E7EB; font-size: 14px; display: flex; align-items: center; gap: 8px; text-decoration: none; }
-    .footer-link a:hover { color: #34D399; transform: translateX(3px); }
-    .social-icons a { font-size: 20px; margin-right: 15px; color: #E5E7EB; }
-    .social-icons a:hover { color: #6366F1; }
-    .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-    .footer-bottom p { font-size: 12px; color: #E5E7EB; margin: 0; }
-    .footer-bottom a { color: #34D399; text-decoration: none; }
+        /* --- Footer --- */
+        footer {
+            background-color: var(--color-light-bg);
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col {
+            min-width: 150px;
+        }
+
+        .footer-col h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--color-text-primary);
+        }
+
+        .footer-link li {
+            margin-bottom: 10px;
+            list-style: none;
+        }
+        .footer-link a {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .footer-link a:hover { color: #34D399; transform: translateX(3px); }
+        .social-icons a {
+            font-size: 20px;
+            margin-right: 15px;
+            color: var(--color-text-secondary);
+        }
+        .social-icons a:hover { color: #6366F1; }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .footer-bottom p {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin: 0;
+        }
+        .footer-bottom a {
+            color: #34D399;
+            text-decoration: none;
+        }
+        .copyright-text p {
+            font-size: 12px;
+            margin: 0;
+            opacity: 0.9;
+        }
 
     @media (max-width: 768px) {
       .container { padding: 0 16px; }
@@ -423,9 +543,12 @@ html, body {
 </head>
 <body>
 
-<header>
-  <h1>How to Submit a Quest</h1>
-  <p class="subtitle">Super simple 3-step guide</p>
+<header class="game-header">
+  <div class="header-bg"></div>
+  <div class="header-content">
+    <h1>⚔️ How to Submit a Quest</h1>
+    <p class="subtitle">Complete 3 Simple Steps</p>
+  </div>
 </header>
 
 <div class="container">
@@ -508,7 +631,7 @@ https://imgur.com/a/your-proof-screenshot</div>
     <div class="footer-row">
       <div class="footer-col" style="min-width: 250px;">
         <h3 class="hero-gradient-text">SnappQuest</h3>
-        <p style="color: #E5E7EB; font-size: 14px;">The Engage-to-Earn Business Solution.<br>Building active, incentivized, sustainable communities.</p>
+        <p style="color: #444444; font-size: 14px;">The Engage-to-Earn Business Solution.<br>Building active, incentivized, sustainable communities.</p>
         <div class="social-icons">
           <a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i></a>
           <a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram-plane"></i></a>
@@ -518,7 +641,7 @@ https://imgur.com/a/your-proof-screenshot</div>
         <h3>Explore</h3>
         <ul class="footer-link">
           <li><a href="index.html">Home</a></li>
-          <li><a href="create.html">Create Quest</a></li>
+          <li><a href="join.html">Join Quest</a></li>
         </ul>
       </div>
       <div class="footer-col">
