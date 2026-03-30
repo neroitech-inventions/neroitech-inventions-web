@@ -7,18 +7,14 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-QM106YDX6N');
 </script>
-
 <!-- Verse tag (VGDH) -->
 <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
-
 <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.tagged-events.outbound-links.file-downloads.hash.pageview-props.revenue.js"></script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SnappQuest – How to Submit a Quest • Mini Game Tutorial</title>
+  <title>How to Submit a Quest (Super Easy Tutorial)</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <link href="images/icon.png" rel="icon">
   <style>
@@ -29,329 +25,555 @@
       --dark: #111827;
       --gray: #6b7280;
       --light: #f3f4f6;
-      --success: #34d399;
     }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
       color: var(--dark);
-      margin: 0;
-      padding: 0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
-
     header {
       background: var(--dark);
       color: white;
-      padding: clamp(1rem, 5vw, 1.5rem) 1rem;
+      padding: 1.5rem 1rem;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(1.8rem, 8vw, 2.1rem);
-    }
-
-    .subtitle {
-      margin-top: 0.5rem;
-      opacity: 0.9;
-      font-size: clamp(0.9rem, 4vw, 1.1rem);
-    }
-
+    h1 { font-size: clamp(1.8rem, 7vw, 2.4rem); margin-bottom: 0.4rem; }
+    .subtitle { font-size: clamp(1rem, 4vw, 1.2rem); opacity: 0.95; }
     .container {
-      max-width: 820px;
+      max-width: 860px;
       margin: 2rem auto;
-      padding: 0 clamp(1rem, 5vw, 2rem);
+      padding: 0 1rem;
       flex: 1;
     }
-
+    /* Progress Bar */
+    .progress {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .progress-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--gray);
+    }
+    .progress-step.active { color: var(--primary); }
+    .progress-step i { font-size: 1.5rem; }
     .card {
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      padding: clamp(1.5rem, 5vw, 2rem);
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+      padding: 2rem;
       margin-bottom: 2rem;
       position: relative;
       overflow: hidden;
     }
-
     .card::before {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 60%);
+      top: -40%; left: -40%;
+      width: 80%; height: 80%;
+      background: radial-gradient(circle, rgba(16,185,129,0.1) 0%, transparent 70%);
       pointer-events: none;
     }
-
-    .step-number {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: clamp(30px, 8vw, 38px);
-      height: clamp(30px, 8vw, 38px);
-      background: var(--primary);
-      color: white;
-      border-radius: 50%;
-      font-weight: bold;
-      margin-right: 1rem;
-      font-size: clamp(1rem, 4vw, 1.3rem);
-      flex-shrink: 0;
-    }
-
     .step-header {
       display: flex;
       align-items: center;
-      margin-bottom: 1.2rem;
-      font-size: clamp(1.3rem, 5vw, 1.5rem);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 700;
     }
-
-    .highlight {
-      background: rgba(16,185,129,0.1);
-      padding: 1.2rem;
-      border-radius: 12px;
-      border-left: 5px solid var(--primary);
-      margin: 1.2rem 0;
-      font-size: clamp(0.9rem, 4vw, 1rem);
-    }
-
-    .input-demo {
-      background: #f9fafb;
-      border: 2px dashed #d1d5db;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-      font-family: monospace;
-      color: #374151;
-      white-space: pre-wrap;
-      position: relative;
-      font-size: clamp(0.85rem, 3.5vw, 1rem);
-      word-break: break-all;
-    }
-
-    .input-demo::before {
-      content: "Example what you would paste";
-      position: absolute;
-      top: -12px;
-      left: 16px;
-      background: white;
-      padding: 0 10px;
-      font-size: clamp(0.8rem, 3vw, 0.9rem);
-      color: var(--gray);
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 2rem;
-      justify-content: center;
-    }
-
-    .btn {
-      padding: clamp(0.7rem, 3vw, 0.9rem) clamp(1.2rem, 5vw, 1.8rem);
-      font-size: clamp(0.95rem, 4vw, 1.1rem);
-      font-weight: 600;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      width: auto;
-      min-width: 200px;
-    }
-
-    @media (max-width: 600px) {
-      .btn {
-        width: 100%;
-      }
-    }
-
-    .btn-primary {
+    .step-number {
+      width: 48px; height: 48px;
       background: var(--primary);
       color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+    }
+    .highlight {
+      background: #ecfdf5;
+      border-left: 6px solid var(--primary);
+      padding: 1.2rem 1.5rem;
+      border-radius: 12px;
+      margin: 1.5rem 0;
     }
 
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
+    /* Twitter Simulator */
+    .twitter-post {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 16px;
+      padding: 16px;
+      margin: 1.2rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .twitter-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .twitter-avatar {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, #1da1f2, #0a7ddf);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 22px;
+    }
+    .twitter-name { font-weight: 700; }
+    .twitter-handle { color: #1da1f2; font-size: 0.95rem; }
+    .twitter-text { font-size: 1.1rem; line-height: 1.4; margin-bottom: 16px; }
+    .twitter-actions {
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #f0f0f0;
+      padding-top: 12px;
+    }
+    .action-btn {
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .action-btn:hover { transform: scale(1.1); }
+    .like-btn { color: #e0245e; }
+    .retweet-btn { color: #17bf63; }
+    .reward {
+      animation: rewardPop 0.6s ease;
+      color: #f59e0b;
+      font-weight: 700;
+    }
+    @keyframes rewardPop {
+      0% { transform: scale(0.5); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
     }
 
-    .btn-success {
-      background: var(--success);
+    /* Rest of styles */
+    .input-demo {
+      background: #f8fafc;
+      border: 3px dashed #10b981;
+      border-radius: 16px;
+      padding: 1.5rem;
+      font-family: monospace;
+      white-space: pre-wrap;
+      font-size: 1rem;
+      line-height: 1.5;
+      min-height: 140px;
+      margin: 1.5rem 0;
+      position: relative;
+        word-break: break-word;
+  overflow-wrap: break-word;
+    }
+    .input-demo::before {
+      content: "📋 Paste your proof links here (one per line)";
+      position: absolute;
+      top: -12px; left: 20px;
+      background: white;
+      padding: 0 12px;
+      font-size: 0.95rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .btn {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(16,185,129,0.3);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #34d399);
       color: white;
     }
-
-    .confetti-layer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 9999;
+    .btn-primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 25px rgba(16,185,129,0.4);
+    }
+    .feedback {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 12px;
+      min-height: 100px;
+      font-size: 1.1rem;
     }
 
+    /* Footer */
     footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--gray);
-      font-size: clamp(0.85rem, 3vw, 0.95rem);
-      border-top: 1px solid #e5e7eb;
-      margin-top: auto;
+      background: linear-gradient(135deg, #1F2937, #111827);
+      color: #E5E7EB;
+      padding: 60px 60px;
+      border-top: 1px solid rgba(255,255,255,0.1);
     }
+    footer .container { max-width: 1200px; margin: 0 auto; padding: 0; }
+    .footer-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; margin-bottom: 40px; }
+    .footer-col { min-width: 150px; }
+    .footer-col h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: #ffffff; }
+    .footer-link li { margin-bottom: 10px; list-style: none; }
+    .footer-link a { color: #E5E7EB; font-size: 14px; display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .footer-link a:hover { color: #34D399; transform: translateX(3px); }
+    .social-icons a { font-size: 20px; margin-right: 15px; color: #E5E7EB; }
+    .social-icons a:hover { color: #6366F1; }
+    .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .footer-bottom p { font-size: 12px; color: #E5E7EB; margin: 0; }
+    .footer-bottom a { color: #34D399; text-decoration: none; }
 
-    ul {
-      padding-left: clamp(1.2rem, 4vw, 1.8rem);
-      margin: 1rem 0;
-      font-size: clamp(0.9rem, 4vw, 1rem);
+    @media (max-width: 768px) {
+      .container { padding: 0 16px; }
+      header { padding: 1rem; }
+      .card { padding: 1.5rem; margin-bottom: 1.5rem; }
+      .step-header { font-size: 1.4rem; }
+      .step-number { width: 42px; height: 42px; font-size: 1.2rem; }
+      .progress { gap: 0.8rem; }
+      .progress-step { font-size: 1rem; }
+      .input-demo { padding: 1rem; min-height: 120px; font-size: 0.95rem; }
+      .btn { padding: 0.9rem 1.5rem; font-size: 1.1rem; width: 100%; }
+            .footer-row {
+                flex-direction: column;
+                gap: 32px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
     }
-
-    li {
-      margin-bottom: 0.5rem;
-    }
-
-    /* Back to Top from SnappQuest */
-    #back-to-top {
-        position: fixed;
-        bottom: clamp(16px, 5vw, 32px);
-        right: clamp(16px, 5vw, 32px);
-        z-index: 1000;
-        background: linear-gradient(135deg, #6366F1, #34D399);
-        color: #ffffff;
-        width: clamp(48px, 12vw, 56px);
-        height: clamp(48px, 12vw, 56px);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.4s ease;
-        cursor: pointer;
-        animation: pulseButton 2s ease-in-out infinite;
-    }
-
-    @keyframes pulseButton {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-    }
-
-    #back-to-top.visible {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    #back-to-top:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(52, 211, 153, 0.5);
-    }
-
-    #back-to-top i {
-        font-size: clamp(20px, 5vw, 24px);
-    }
-
     @media (max-width: 480px) {
-        #back-to-top {
-            bottom: 24px;
-            right: 24px;
-            width: 52px;
-            height: 52px;
-        }
+      h1 { font-size: 1.9rem; }
+      .subtitle { font-size: 1rem; }
+      .step-header { font-size: 1.3rem; }
     }
+
+        #back-to-top {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #6366F1, #34D399);
+            color: #ffffff;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            animation: pulseButton 2s ease-in-out infinite;
+        }
+        @keyframes pulseButton {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        #back-to-top:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(52, 211, 153, 0.5);
+        }
+        #back-to-top i {
+            font-size: 24px;
+        }
+    @keyframes pulseButton { 50% { transform: scale(1.1); } }
+    #back-to-top.visible { opacity: 1; visibility: visible; }
+
+    /* ===== EXTRA MOBILE RESPONSIVENESS (SAFE ADD) ===== */
+
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+.twitter-post {
+  width: 100%;
+}
+
+.twitter-text {
+  word-wrap: break-word;
+}
+
+.twitter-actions {
+  flex-wrap: wrap;
+  gap: 10px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;  
+}
+
+.action-btn {
+  font-size: 1rem;
+}
+
+.input-demo {
+  overflow-wrap: break-word;
+}
+
+.footer-col {
+  flex: 1 1 150px;
+}
+
+.footer-link a {
+  word-break: break-word;
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+
+  .container {
+    margin: 1rem auto;
+  }
+
+  .card {
+    padding: 1.2rem;
+    border-radius: 16px;
+  }
+
+  .step-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .twitter-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .twitter-name {
+    font-size: 0.95rem;
+  }
+
+  .twitter-handle {
+    font-size: 0.85rem;
+  }
+
+  .twitter-text {
+    font-size: 1rem;
+  }
+
+  .progress {
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .progress-step {
+    font-size: 0.9rem;
+  }
+
+  #back-to-top {
+    width: 48px;
+    height: 48px;
+    bottom: 20px;
+    right: 20px;
+  }
+
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+
+  .footer-row {
+    justify-content: flex-start;
+  }
+
+  .footer-col {
+    min-width: 200px;
+  }
+
+}
+
+html, body {
+  overflow-x: hidden;
+}
   </style>
 </head>
 <body>
 
 <header>
-  <h1>SnappQuest Submission Game</h1>
-  <p class="subtitle">Learn how to submit a quest in 2 minutes – play & earn knowledge!</p>
+  <h1>How to Submit a Quest</h1>
+  <p class="subtitle">Super simple 3-step guide</p>
 </header>
 
 <div class="container">
-
-  <div class="card">
-    <div class="step-header">
-      <span class="step-number">1</span>
-      Complete the quest
-    </div>
-    <p>
-      <b>Every quest has clear instructions — like:</b>
-      <ul><li>Follow</li><li>Retweet</li><li>Comment</li><li>join Telegram, etc.</li></ul>
-      <br><strong>Do the task first</strong> — then come back to submit proof on SnappQuest.
-    </p>
-    <div class="highlight">
-      <strong>Example task:</strong> "Retweet this post and tag 2 friends"
-      <br><br>
-      → You already retweeted and tagged @friend1 @friend2
-    </div>
+  <div class="progress">
+    <div class="progress-step active"><i class="fas fa-check-circle"></i> Step 1</div>
+    <div class="progress-step"><i class="fas fa-arrow-right"></i></div>
+    <div class="progress-step"><i class="fas fa-check-circle"></i> Step 2</div>
+    <div class="progress-step"><i class="fas fa-arrow-right"></i></div>
+    <div class="progress-step"><i class="fas fa-check-circle"></i> Step 3</div>
   </div>
 
   <div class="card">
-    <div class="step-header">
-      <span class="step-number">2</span>
-      Submit proof
+    <div class="step-header"><span class="step-number">1</span> Complete the Quest</div>
+    <p><strong>Most quests are on X (Twitter)</strong>. Here’s what a real quest looks like:</p>
+    <div class="twitter-post" id="twitter-post">
+      <div class="twitter-header">
+        <div class="twitter-avatar">🐦</div>
+        <div>
+          <div class="twitter-name">SnappQuest</div>
+          <div class="twitter-handle">@SnappQuest</div>
+        </div>
+      </div>
+      <div class="twitter-text">
+        Quest of the day!!!<br>
+        Please Like ❤️ this post + Retweet 🔄.<br>
+      </div>
+      <div class="twitter-actions">
+        <button class="action-btn like-btn" onclick="likePost()">
+          <i class="fas fa-heart"></i> <span id="like-count">142</span>
+        </button>
+        <button class="action-btn retweet-btn" onclick="retweetPost()">
+          <i class="fas fa-retweet"></i> <span id="retweet-count">89</span>
+        </button>
+      </div>
     </div>
-    <p>
-      You must <b>give the sponsor a way to verify</b> you really did the task.
-      <br><br>
-      <b>Most common proofs:</b>
+    <p style="margin-top:1rem; text-align:center; font-size:0.95rem; color:#10b981;">
+      Click the ❤️ and 🔄 buttons above for rewards!
     </p>
-    <ul>
-      <li>Your X / Twitter profile link</li>
-      <li>Direct link to your retweet / reply / comment</li>
-      <li>Screenshot (upload to imgur / free image host → paste link)</li>
+  </div>
+
+  <div class="card">
+    <div class="step-header"><span class="step-number">2</span> Get Your Proof Ready</div>
+    <p>You need to show the sponsor that you really did the task with any of these.</p>
+    <ul style="margin:1.2rem 0; font-size:1.1rem;">
+      <li>🔗 Direct link to your post / reply</li>
+      <li>🔗 Your X (Twitter) profile link</li>
+      <li>📸 Screenshot link (upload to Imgur or free image host)</li>
     </ul>
+    <p><strong>Tip:</strong> One or more proof is perfect!</p>
   </div>
 
   <div class="card" id="interactive-step">
-    <div class="step-header">
-      <span class="step-number">3</span>
-      Fill the submission form
-    </div>
-
-    <p style="margin-bottom: 1.5rem;">
-      Paste links exactly like this in the SnappQuest submit modal:
-    </p>
-
-    <div class="input-demo" id="example-proof" contenteditable="true">
-https://x.com/yourusername/status/1234567890123456789
+    <div class="step-header"><span class="step-number">3</span> Submit on SnappQuest</div>
+    <p style="margin-bottom:1rem;">Just fill the form like this:</p>
+    <div class="input-demo" id="example-proof" contenteditable="true">https://x.com/yourusername/status/1234567890123456789
 https://x.com/yourusername
-https://imgur.com/a/your-proof-screenshot
-    </div>
-
-    <p style="margin: 1.5rem 0 0.8rem; font-weight: 600;">
-      Try it yourself — edit the box above, then press the button:
-    </p>
-
-    <div class="button-row">
+https://imgur.com/a/your-proof-screenshot</div>
+    <p style="margin-top:1.5rem; font-weight:600;">Try it! Edit the box above then click Submit:</p>
+    <br>
+    <div style="text-align:center;">
       <button class="btn btn-primary" onclick="checkSubmission()">
-        <i class="fas fa-paper-plane"></i> Submit Proof (simulate)
+        <i class="fas fa-paper-plane"></i> Submit Quest (Demo)
       </button>
     </div>
-
-    <div id="feedback" style="margin-top: 1.8rem; min-height: 80px;"></div>
+    <div id="feedback" class="feedback"></div>
   </div>
 
+  <div class="card" style="text-align:center; background:linear-gradient(135deg, #ecfdf5, #f0fdf4);">
+    <h2 style="font-size:1.8rem; margin-bottom:1rem;">🎉 Ready to earn rewards?</h2>
+    <p style="font-size:1.2rem; margin-bottom:1.5rem;">Your first quest submission is just one click away!</p>
+    <a href="https://niti.com.ng/snappquest/join.html" class="btn btn-primary" style="font-size:1.3rem; padding:1.1rem 2.5rem; display:inline-flex; align-items:center; gap:12px; text-decoration: none;">
+      <i class="fas fa-rocket"></i> Submit My First Quest Now
+    </a>
+  </div>
 </div>
 
+<!-- DEFAULT SNAPPQUEST FOOTER -->
 <footer>
-  Made with ❤️ for <a href="https://niti.com.ng/snappquest" style="color:#34D399"><b>SnappQuest community</b></a> • Good luck <a href="https://niti.com.ng/snappquest/join.html" style="color:#34D399"><b>submitting your first quest</b></a>!
+  <div class="container">
+    <div class="footer-row">
+      <div class="footer-col" style="min-width: 250px;">
+        <h3 class="hero-gradient-text">SnappQuest</h3>
+        <p style="color: #E5E7EB; font-size: 14px;">The Engage-to-Earn Business Solution.<br>Building active, incentivized, sustainable communities.</p>
+        <div class="social-icons">
+          <a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Explore</h3>
+        <ul class="footer-link">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="create.html">Create Quest</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Other Tools</h3>
+        <ul class="footer-link">
+          <li><a href="search.html"><i class="fas fa-search"></i> TrackQuest</a></li>
+          <li><a href="explorer.html"><i class="fas fa-cubes"></i> Explorer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions.</a></p>
+    </div>
+  </div>
 </footer>
 
-<div class="confetti-layer" id="confetti"></div>
-
-<button id="back-to-top" title="Back to Top">
-  <i class="fas fa-arrow-up"></i>
-</button>
+<button id="back-to-top" title="Back to Top"><i class="fas fa-arrow-up"></i></button>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-
 <script>
+  document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+  // ====================== TWITTER SIMULATOR ======================
+  let likes = 142;
+  let retweets = 89;
+
+  function likePost() {
+    likes++;
+    document.getElementById('like-count').textContent = likes;
+    const btn = event.currentTarget;
+    btn.style.transform = 'scale(1.4)';
+    setTimeout(() => btn.style.transform = '', 200);
+    showReward("❤️ +1000 Verse Rewards!");
+  }
+
+  function retweetPost() {
+    retweets++;
+    document.getElementById('retweet-count').textContent = retweets;
+    const btn = event.currentTarget;
+    btn.style.transform = 'scale(1.4)';
+    setTimeout(() => btn.style.transform = '', 200);
+    showReward("🔄 +500 Verse Rewards!");
+  }
+
+  function showReward(text) {
+    const rewardHTML = `<div class="reward" style="margin:12px 0; font-size:1.3rem;">${text}</div>`;
+    const post = document.getElementById('twitter-post');
+    post.insertAdjacentHTML('beforeend', rewardHTML);
+    confetti({ particleCount: 80, spread: 70, origin: { y: 0.7 }, colors: ['#10b981', '#f59e0b', '#34d399'] });
+    setTimeout(() => {
+      const rewards = post.querySelectorAll('.reward');
+      if (rewards.length) rewards[rewards.length-1].remove();
+    }, 3000);
+  }
+
   function checkSubmission() {
     const text = document.getElementById('example-proof').innerText.trim();
     const feedback = document.getElementById('feedback');
@@ -370,11 +592,10 @@ https://imgur.com/a/your-proof-screenshot
         </p>
         <p style="margin-top:1rem;">
           You would now click "Submit Quest" in the real form.<br>
-          <strong>Admin will verify → reward sent if valid.</strong>
+          <strong>Admin will verify and send reward if valid.</strong>
         </p>
       `;
 
-      // Confetti celebration
       confetti({
         particleCount: 120,
         spread: 80,
@@ -387,17 +608,14 @@ https://imgur.com/a/your-proof-screenshot
     }
   }
 
-  // Back to Top functionality
-  const backToTopButton = document.getElementById('back-to-top');
-
+  // Back to Top
+  const backBtn = document.getElementById('back-to-top');
   window.addEventListener('scroll', () => {
-    backToTopButton.classList.toggle('visible', window.scrollY > 300);
+    backBtn.classList.toggle('visible', window.scrollY > 300);
   });
-
-  backToTopButton.addEventListener('click', () => {
+  backBtn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 </script>
-
 </body>
 </html>
