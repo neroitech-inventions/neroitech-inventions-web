@@ -241,31 +241,71 @@
         }
         .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* Modern Loader */
-        #loadingOverlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(249, 250, 251, 0.95);
-            backdrop-filter: blur(12px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 99999;
-            opacity: 1;
-            transition: opacity 0.4s ease;
-        }
-        .modern-spinner {
-            width: 64px; height: 64px;
-            border: 6px solid #e5e7eb;
-            border-top: 6px solid #34D399;
-            border-radius: 50%;
-            animation: spin 1.2s linear infinite;
-            margin: 0 auto 24px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { font-size: 22px; font-weight: 700; color: #1F2937; margin-bottom: 8px; }
-        .loading-subtext { font-size: 15px; color: #6B7280; }
+/* ==================== MODERN LOADER - RESPONSIVE ==================== */
+#loadingOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(249, 250, 251, 0.95);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+}
+
+.loading-content {
+    text-align: center;
+    padding: 20px;
+    max-width: 90%;
+}
+
+.modern-spinner {
+    width: 64px;
+    height: 64px;
+    border: 6px solid #e5e7eb;
+    border-top: 6px solid #34D399;
+    border-radius: 50%;
+    animation: spin 1.2s linear infinite;
+    margin: 0 auto 24px;
+}
+
+@keyframes spin { 
+    to { transform: rotate(360deg); } 
+}
+
+.loading-text {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: 8px;
+}
+
+.loading-subtext {
+    font-size: 15px;
+    color: #6B7280;
+    line-height: 1.4;
+}
+
+/* Mobile adjustments for loader */
+@media (max-width: 480px) {
+    .modern-spinner {
+        width: 56px;
+        height: 56px;
+        border-width: 5px;
+    }
+    .loading-text {
+        font-size: 19px;
+    }
+    .loading-subtext {
+        font-size: 14px;
+    }
+    .loading-content {
+        padding: 16px;
+    }
+}
 
         /* Footer */
         footer {
@@ -436,14 +476,14 @@
     </header>
     <div class="overlay"></div>
 
-    <!-- Modern Loading Overlay -->
-    <div id="loadingOverlay">
-        <div class="loading-content" style="text-align:center;">
-            <div class="modern-spinner"></div>
-            <div class="loading-text">Loading Hall of Fame 🏆</div>
-            <div class="loading-subtext">Fetching latest submissions from the community...</div>
-        </div>
+<!-- Modern Loading Overlay -->
+<div id="loadingOverlay">
+    <div class="loading-content">
+        <div class="modern-spinner"></div>
+        <div class="loading-text">Loading Hall of Fame 🏆</div>
+        <div class="loading-subtext">Fetching latest submissions from the community...</div>
     </div>
+</div>
 
     <div class="tracker-container">
         <!-- Your existing content (stats, tabs, search bar, table, pagination) stays the same -->
