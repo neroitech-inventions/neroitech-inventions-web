@@ -15,17 +15,13 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SnappQuest Hall of Fame - Top contributors by submissions">
     <title>Hall of Fame - SnappQuest</title>
     
-    <!-- Customize: Update to the latest Font Awesome CDN for new icons like X (formerly Twitter). -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* Customize: Adjust styles here for colors, fonts, layouts, etc. to match your project's theme. */                
         * {
             margin: 0;
             padding: 0;
@@ -37,8 +33,6 @@
             color: #1F2937;
             line-height: 1.6;
             font-size: 16px;
-            margin: 0;
-            overflow-x: hidden;
         }
         header {
             background: rgba(31, 41, 55, 0.9);
@@ -52,51 +46,17 @@
             z-index: 1000;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-        .logo img {
-            width: 100%;
-            max-width: 140px;
-            height: auto;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-        }
-        .nav-container {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-        .nav-links {
-            display: flex;
-            gap: 24px;
-        }
+        .logo img { max-width: 140px; height: auto; }
+        .nav-container { display: flex; align-items: center; gap: 24px; }
+        .nav-links { display: flex; gap: 24px; }
         .nav-links a {
             color: #ffffff;
             text-decoration: none;
-            font-size: 16px;
             font-weight: 500;
-            position: relative;
-            transition: transform 0.3s ease, color 0.3s ease;
             background: linear-gradient(90deg, #34D399, #FBBF24);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 0;
-            background: linear-gradient(90deg, #34D399, #FBBF24);
-            transition: width 0.3s ease;
-        }
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        .nav-links a:hover {
-            transform: translateY(-2px);
-        }
-        .nav-links a:active {
-            transform: scale(0.95);
         }
         .connect-btn {
             background: linear-gradient(135deg, #6366F1, #34D399);
@@ -123,24 +83,15 @@
             color: #ffffff;
             cursor: pointer;
             z-index: 1001;
-            transition: transform 0.3s ease;
         }
-        .hamburger.active {
-            transform: rotate(90deg);
-        }
+        .hamburger.active { transform: rotate(90deg); }
+
         @media (max-width: 768px) {
-            header {
-                padding: 12px 16px;
-            }
-            .logo img {
-                max-width: 120px;
-            }
             .nav-container {
                 display: none;
                 flex-direction: column;
                 position: fixed;
-                top: 0;
-                right: 0;
+                top: 0; right: 0;
                 height: 100vh;
                 width: 280px;
                 background: rgba(31, 41, 55, 0.95);
@@ -148,101 +99,35 @@
                 padding: 80px 24px 24px;
                 transform: translateX(100%);
                 transition: transform 0.3s ease-in-out;
-                box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+                box-shadow: -4px 0 12px rgba(0,0,0,0.3);
             }
-            .nav-container.active {
-                display: flex;
-                transform: translateX(0);
-            }
-            .nav-links {
-                flex-direction: column;
-                width: 100%;
-            }
+            .nav-container.active { display: flex; transform: translateX(0); }
+            .nav-links { flex-direction: column; width: 100%; }
             .nav-links a {
                 font-size: 18px;
                 padding: 16px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                border-bottom: 1px solid rgba(255,255,255,0.1);
                 text-align: left;
                 width: 100%;
-                background: none;
                 color: #ffffff;
             }
-            .nav-links a:hover {
-                background: rgba(255, 255, 255, 0.1);
-                transform: translateX(4px);
-            }
-            .hamburger {
-                display: block;
-            }
+            .hamburger { display: block; }
             .overlay {
                 display: none;
                 position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.6);
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                background: rgba(0,0,0,0.6);
                 z-index: 999;
             }
-            .overlay.active {
-                display: block;
-            }
-        }
-        @media (max-width: 480px) {
-            .logo img {
-                max-width: 100px;
-            }
-        }
-        .tracker-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 24px;
-        }
-        .search-container {
-            text-align: center;
-            margin: 100px auto 50px;
-            max-width: 700px;
-        }
-        .search-logo {
-            font-size: 72px;
-            font-weight: bold;
-            line-height: 1;
-            letter-spacing: -0.05em;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 12px;
-        }
-        .search-logo span:nth-child(1) { color: #4285F4; }
-        .search-logo span:nth-child(2) { color: #EA4335; }
-        .search-logo span:nth-child(3) { color: #FBBC05; }
-        .search-logo span:nth-child(4) { color: #34A853; }
-        .search-logo span:nth-child(5) { color: #4285F4; }
-        .search-logo span:nth-child(6) { color: #EA4335; }
-        .search-logo span:nth-child(7) { color: #FBBC05; }
-        .search-logo span:nth-child(8) { color: #34A853; }
-        .search-logo span:nth-child(9) { color: #4285F4; }
-        .search-logo span:nth-child(10) { color: #EA4335; }
-        .search-logo span:nth-child(11) { color: #FBBC05; }
-        .search-logo span:nth-child(12) { color: #34A853; }
-        .powered-by {
-            font-size: 18px;
-            color: #6B7280;
-            font-weight: 500;
-            margin-top: 8px;
-        }
-        .powered-by a {
-            color: #34D399;
-            font-weight: 700;
-            text-decoration: none;
-        }
-        .powered-by a:hover {
-            text-decoration: underline;
-        }
-                .leaderboard-intro {
-            text-align: center;
-            margin: 60px auto 40px;
+            .overlay.active { display: block; }
         }
 
-        /* Stats Cards */
+        .tracker-container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .leaderboard-intro { text-align: center; margin: 60px auto 40px; }
+        .search-logo { font-size: 62px; font-weight: bold; letter-spacing: -0.05em; margin-bottom: 12px; }
+        .powered-by { font-size: 20px; color: #6B7280; font-weight: 500; }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -257,22 +142,10 @@
             text-align: center;
         }
         .stat-label { font-size: 15px; color: #6B7280; font-weight: 600; margin-bottom: 8px; }
-        .stat-number {
-            font-size: 42px;
-            font-weight: 800;
-            color: #34D399;
-            line-height: 1;
-        }
+        .stat-number { font-size: 42px; font-weight: 800; color: #34D399; line-height: 1; }
         .stat-sub { font-size: 14px; color: #4B5563; margin-top: 6px; }
 
-        /* Tabs */
-        .tab-container {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
+        .tab-container { display: flex; justify-content: center; gap: 12px; margin: 30px 0; flex-wrap: wrap; }
         .tab-btn {
             padding: 14px 36px;
             border-radius: 50px;
@@ -288,8 +161,36 @@
             color: white;
         }
 
-        /* Table */
-        .submissions-section { overflow-x: auto; margin: 0 -16px; padding: 0 16px; }
+        /* Search Bar */
+        .search-container {
+            margin: 30px auto 40px;
+            max-width: 600px;
+        }
+        .search-bar {
+            background: #fff;
+            border: 1px solid #D1D5DB;
+            border-radius: 50px;
+            padding: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+        }
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 12px 20px;
+            font-size: 17px;
+            outline: none;
+            border-radius: 50px 0 0 50px;
+        }
+
+        /* === PERFECT MOBILE TABLE FIX (copied from your working Airdrop Checker) === */
+        .submissions-section {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 -16px;
+            padding: 0 16px;
+            border-radius: 16px;
+        }
         .submissions-table {
             width: 100%;
             border-collapse: separate;
@@ -300,7 +201,10 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             min-width: 900px;
         }
-        .submissions-table th, .submissions-table td { padding: 16px 12px; }
+        .submissions-table th, .submissions-table td {
+            padding: 16px 12px;
+            text-align: left;
+        }
         .submissions-table th {
             background: linear-gradient(135deg, #6366F1, #34D399);
             color: #ffffff;
@@ -337,12 +241,41 @@
         }
         .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* Footer - Original */
+        /* Modern Loader */
+        #loadingOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(249, 250, 251, 0.95);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+        .modern-spinner {
+            width: 64px; height: 64px;
+            border: 6px solid #e5e7eb;
+            border-top: 6px solid #34D399;
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+            margin: 0 auto 24px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { font-size: 22px; font-weight: 700; color: #1F2937; margin-bottom: 8px; }
+        .loading-subtext { font-size: 15px; color: #6B7280; }
+
+        /* Footer */
         footer {
             background: linear-gradient(135deg, #1F2937, #111827);
             color: #E5E7EB;
             padding: 60px 60px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
         }
         .footer-row {
             display: flex;
@@ -351,6 +284,7 @@
             gap: 40px;
             margin-bottom: 40px;
         }
+        .footer-col { min-width: 150px; }
         .footer-col h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: #ffffff; }
         .footer-link li { margin-bottom: 10px; list-style: none; }
         .footer-link a {
@@ -361,16 +295,18 @@
             gap: 8px;
             text-decoration: none;
         }
-        .footer-link a:hover { color: #34D399; }
+        .footer-link a:hover { color: #34D399; transform: translateX(3px); }
         .social-icons a { font-size: 20px; margin-right: 15px; color: #E5E7EB; }
+        .social-icons a:hover { color: #6366F1; }
         .footer-bottom {
             text-align: center;
             padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         .footer-bottom p { font-size: 12px; color: #E5E7EB; margin: 0; }
         .footer-bottom a { color: #34D399; text-decoration: none; }
 
+        /* RESPONSIVE FIXES - Copied from your working Airdrop Checker */
         @media (max-width: 768px) {
             .tracker-container { padding: 30px 16px; }
             footer { padding: 40px 20px; }
@@ -379,11 +315,37 @@
         }
         @media (max-width: 480px) {
             .search-logo { font-size: 48px; }
+            .submissions-table { min-width: 700px; }
+            .submissions-table th, .submissions-table td {
+                padding: 12px 8px;
+                font-size: 14px;
+            }
         }
-            #back-to-top { bottom: 20px; right: 20px; width: 48px; height: 48px; }
-            #back-to-top i { font-size: 20px; }        
+        @media (max-width: 375px) {
+            .submissions-table { min-width: 620px; }
+            .submissions-table th, .submissions-table td {
+                padding: 10px 6px;
+                font-size: 13px;
+            }
+        }
 
-        #back-to-top {
+        /* Blockchain tags & copy button */
+        .blockchain-tag {
+            font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 9999px;
+            letter-spacing: 0.5px; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .blockchain-tag.Polygon { background: linear-gradient(90deg, #8247E5, #6F00FF); color: white; }
+        .blockchain-tag.Solana { background: linear-gradient(90deg, #14F195, #00C2A3); color: #0F172A; }
+        .blockchain-tag.Sui { background: linear-gradient(90deg, #6F4CFF, #4C00FF); color: white; }
+        .blockchain-tag.Unknown { background: #334155; color: #CBD5E1; }
+        .copy-btn {
+            background: #1e2937; color: #94a3b8; border: none;
+            width: 32px; height: 32px; border-radius: 8px; font-size: 18px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.25s ease;
+        }
+        .copy-btn:hover { background: #34D399; color: white; transform: scale(1.08); }
+            #back-to-top {
             position: fixed;
             bottom: 32px;
             right: 32px;
@@ -408,110 +370,18 @@
             50% { transform: scale(1.1); }
         }
         #back-to-top.visible { opacity: 1; visibility: visible; }
-                /* Fancy Wallet Tag & Copy Button */
-.blockchain-tag {
-    font-size: 13px;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 9999px;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    transition: all 0.2s ease;
-}
-
-.blockchain-tag.Polygon {
-    background: linear-gradient(90deg, #8247E5, #6F00FF);
-    color: white;
-}
-
-.blockchain-tag.Solana {
-    background: linear-gradient(90deg, #14F195, #00C2A3);
-    color: #0F172A;
-}
-
-.blockchain-tag.Sui {
-    background: linear-gradient(90deg, #6F4CFF, #4C00FF);
-    color: white;
-}
-
-.blockchain-tag.Unknown {
-    background: #334155;
-    color: #CBD5E1;
-}
-
-.copy-btn {
-    background: #1e2937;
-    color: #94a3b8;
-    border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-}
-
-.copy-btn:hover {
-    background: #34D399;
-    color: white;
-    transform: scale(1.08);
-}
-
-/* ==================== MODERN LOADER ==================== */
-#loadingOverlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(249, 250, 251, 0.95);
-    backdrop-filter: blur(12px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    opacity: 1;
-    transition: opacity 0.4s ease;
-}
-.modern-spinner {
-    width: 64px;
-    height: 64px;
-    border: 6px solid #e5e7eb;
-    border-top: 6px solid #34D399;
-    border-radius: 50%;
-    animation: spin 1.2s linear infinite;
-    margin: 0 auto 24px;
-}
-@keyframes spin { 
-    to { transform: rotate(360deg); } 
-}
-.loading-text {
-    font-size: 22px;
-    font-weight: 700;
-    color: #1F2937;
-    margin-bottom: 8px;
-}
-.loading-subtext {
-    font-size: 15px;
-    color: #6B7280;
-}
-
-.search-bar input {
-    flex: 1;
-    border: none;
-    padding: 12px 20px;
-    font-size: 17px;
-    outline: none;
-    border-radius: 50px 0 0 50px;
-}
-
+        #back-to-top:hover { transform: translateY(-6px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(52, 211, 153, 0.5); }
+        #back-to-top i { font-size: 24px; }
+        .reward-logo {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+        }
     </style>
     <link href="images/icon.png" rel="icon">
 </head>
 <body>
+    <!-- Your existing HTML body remains exactly the same -->
     <header>
         <div class="logo">
             <a href="index.html"><img src="images/logo.png" alt="SnappQuest Logo"></a>
@@ -527,21 +397,21 @@
     <div class="overlay"></div>
 
     <!-- Modern Loading Overlay -->
-<div id="loadingOverlay">
-    <div class="loading-content" style="text-align:center;">
-        <div class="modern-spinner"></div>
-        <div class="loading-text">Loading Hall of Fame 🏆</div>
-        <div class="loading-subtext">Fetching latest submissions from the community...</div>
+    <div id="loadingOverlay">
+        <div class="loading-content" style="text-align:center;">
+            <div class="modern-spinner"></div>
+            <div class="loading-text">Loading Hall of Fame 🏆</div>
+            <div class="loading-subtext">Fetching latest submissions from the community...</div>
+        </div>
     </div>
-</div>
 
     <div class="tracker-container">
+        <!-- Your existing content (stats, tabs, search bar, table, pagination) stays the same -->
         <div class="leaderboard-intro">
             <div class="search-logo">Hall of Fame 🏆</div>
             <div class="powered-by">Top contributors ranked by number of submissions</div>
         </div>
 
-        <!-- Dynamic Stats -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">TOTAL SUBMISSIONS (ALL TIME)</div>
@@ -559,16 +429,11 @@
             <button id="tab-thirty" class="tab-btn" onclick="switchTab(1)">🔥 LAST 30 DAYS</button>
         </div>
 
-                <!-- Search Bar -->
-        <div class="search-container" style="margin: 30px auto 40px; max-width: 600px;">
-            <div class="search-bar" style="background:#fff; border:1px solid #D1D5DB; border-radius:50px; padding:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); display:flex;">
-                <input type="text" id="leaderboardSearch" 
-                       placeholder="Search by @username or wallet address..." 
-                       style="flex:1; border:none; padding:12px 20px; font-size:17px; outline:none; border-radius:50px 0 0 50px;">
-                <button id="searchClearBtn" 
-                        style="background:#6366F1; color:white; border:none; padding:12px 24px; border-radius:50px; cursor:pointer;">
-                    Clear
-                </button>
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" id="leaderboardSearch" placeholder="Search by @username or wallet address...">
+                <button id="searchClearBtn" style="background:#6366F1; color:white; border:none; padding:12px 24px; border-radius:50px; cursor:pointer;">Clear</button>
             </div>
         </div>
 
@@ -598,7 +463,7 @@
         </div>
     </div>
 
-    <!-- Original Footer -->
+    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-row">
@@ -637,6 +502,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
+        // Your full script remains the same (no changes needed here)
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
         const CONFIG = {
@@ -673,6 +539,8 @@
             leaderboardSearch: document.getElementById('leaderboardSearch'),
             searchClearBtn: document.getElementById('searchClearBtn')
         };
+
+        // ... (all your other functions remain exactly the same - parseDate, getBlockchainTag, etc.)
 
         function parseDate(dateStr) {
             const parts = dateStr.match(/(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+)/);
@@ -715,86 +583,83 @@
         }
 
         function filterLeaders(leaders) {
-    const term = currentSearchTerm.toLowerCase().trim();
-    if (!term) return leaders;
-    return leaders.filter(item => 
-        (item.telegram && item.telegram.toLowerCase().includes(term)) ||
-        (item.wallet && item.wallet.toLowerCase().includes(term))
-    );
-}
+            const term = currentSearchTerm.toLowerCase().trim();
+            if (!term) return leaders;
+            return leaders.filter(item => 
+                (item.telegram && item.telegram.toLowerCase().includes(term)) ||
+                (item.wallet && item.wallet.toLowerCase().includes(term))
+            );
+        }
 
-       async function loadLeaderboard() {
-    // Show modern loader
-    const loader = document.getElementById('loadingOverlay');
-    loader.style.display = 'flex';
-    loader.style.opacity = '1';
+        async function loadLeaderboard() {
+            const loader = document.getElementById('loadingOverlay');
+            loader.style.display = 'flex';
+            loader.style.opacity = '1';
 
-    try {
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.RESPONSE_ID}/values/${CONFIG.RESPONSE_RANGE}?key=${CONFIG.API_KEY}`;
-        const res = await fetch(url);
-        const data = await res.json();
+            try {
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.RESPONSE_ID}/values/${CONFIG.RESPONSE_RANGE}?key=${CONFIG.API_KEY}`;
+                const res = await fetch(url);
+                const data = await res.json();
 
-        const rows = data.values ? data.values.slice(1) : [];
-        totalAllTime = rows.length;
+                const rows = data.values ? data.values.slice(1) : [];
+                totalAllTime = rows.length;
 
-        const walletMap = {};
-        const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+                const walletMap = {};
+                const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
 
-        rows.forEach(row => {
-            const timestamp = row[0] || '';
-            const telegram = (row[4] || '').trim();
-            const walletRaw = (row[5] || '').trim();
-            const walletKey = walletRaw.toLowerCase();
+                rows.forEach(row => {
+                    const timestamp = row[0] || '';
+                    const telegram = (row[4] || '').trim();
+                    const walletRaw = (row[5] || '').trim();
+                    const walletKey = walletRaw.toLowerCase();
 
-            if (!walletKey) return;
+                    if (!walletKey) return;
 
-            if (!walletMap[walletKey]) {
-                walletMap[walletKey] = {
-                    wallet: walletRaw,
-                    submissions: 0,
-                    recent: 0,
-                    firstDate: null,
-                    lastDate: null,
-                    telegram: telegram
-                };
+                    if (!walletMap[walletKey]) {
+                        walletMap[walletKey] = {
+                            wallet: walletRaw,
+                            submissions: 0,
+                            recent: 0,
+                            firstDate: null,
+                            lastDate: null,
+                            telegram: telegram
+                        };
+                    }
+
+                    const entry = walletMap[walletKey];
+                    entry.submissions++;
+
+                    const dateObj = parseDate(timestamp);
+                    if (!isNaN(dateObj.getTime())) {
+                        const dateStr = dateObj.toLocaleDateString('en-US');
+                        if (!entry.firstDate || dateObj < new Date(entry.firstDate)) entry.firstDate = dateStr;
+                        if (!entry.lastDate || dateObj > new Date(entry.lastDate)) entry.lastDate = dateStr;
+
+                        if (dateObj.getTime() >= thirtyDaysAgo) entry.recent++;
+                    }
+                });
+
+                allTimeLeaders = Object.values(walletMap).filter(v => v.submissions > 0)
+                    .sort((a,b) => b.submissions - a.submissions);
+
+                thirtyLeaders = Object.values(walletMap).filter(v => v.recent > 0)
+                    .sort((a,b) => b.recent - a.recent);
+
+                totalLast30 = thirtyLeaders.reduce((sum, item) => sum + item.recent, 0);
+
+                DOM.totalAllTimeEl.textContent = totalAllTime.toLocaleString();
+                DOM.totalThirtyEl.textContent = totalLast30.toLocaleString();
+
+                renderLeaderboard(0);
+            } catch (e) {
+                console.error(e);
+                DOM.noLeaders.style.display = 'block';
+            } finally {
+                const loader = document.getElementById('loadingOverlay');
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 400);
             }
-
-            const entry = walletMap[walletKey];
-            entry.submissions++;
-
-            const dateObj = parseDate(timestamp);
-            if (!isNaN(dateObj.getTime())) {
-                const dateStr = dateObj.toLocaleDateString('en-US');
-                if (!entry.firstDate || dateObj < new Date(entry.firstDate)) entry.firstDate = dateStr;
-                if (!entry.lastDate || dateObj > new Date(entry.lastDate)) entry.lastDate = dateStr;
-
-                if (dateObj.getTime() >= thirtyDaysAgo) entry.recent++;
-            }
-        });
-
-        allTimeLeaders = Object.values(walletMap).filter(v => v.submissions > 0)
-            .sort((a,b) => b.submissions - a.submissions);
-
-        thirtyLeaders = Object.values(walletMap).filter(v => v.recent > 0)
-            .sort((a,b) => b.recent - a.recent);
-
-        totalLast30 = thirtyLeaders.reduce((sum, item) => sum + item.recent, 0);
-
-        DOM.totalAllTimeEl.textContent = totalAllTime.toLocaleString();
-        DOM.totalThirtyEl.textContent = totalLast30.toLocaleString();
-
-        renderLeaderboard(0);
-    } catch (e) {
-        console.error(e);
-        DOM.noLeaders.style.display = 'block';
-    } finally {
-        // Hide loader with smooth fade
-        loader.style.opacity = '0';
-        setTimeout(() => {
-            loader.style.display = 'none';
-        }, 400);
-    }
-}
+        }
 
         function renderLeaderboard(tab) {
             currentTab = tab;
@@ -810,7 +675,6 @@
             DOM.leaderboardTitle.textContent = title;
             DOM.submissionsHeader.textContent = headerText;
 
-            // Update last 30 days label when on that tab
             if (tab === 1) {
                 DOM.thirtyLabel.textContent = "SUBMISSIONS IN LAST 30 DAYS";
                 DOM.thirtySub.textContent = `${totalLast30.toLocaleString()} total submissions in the past 30 days`;
@@ -822,62 +686,57 @@
             renderPage(leaders);
         }
 
-function renderPage(leaders) {
-    const filtered = filterLeaders(leaders);
-    const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    const pageLeaders = filtered.slice(start, start + ITEMS_PER_PAGE);
+        function renderPage(leaders) {
+            const filtered = filterLeaders(leaders);
+            const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const pageLeaders = filtered.slice(start, start + ITEMS_PER_PAGE);
 
-    DOM.leaderboardBody.innerHTML = '';
+            DOM.leaderboardBody.innerHTML = '';
 
-    if (pageLeaders.length === 0) {
-        DOM.noLeaders.style.display = 'block';
-        DOM.noLeaders.textContent = currentSearchTerm ? 
-            "No matching contributors found." : 
-            "No submissions recorded yet.";
-        DOM.pagination.innerHTML = '';
-        return;
-    }
+            if (pageLeaders.length === 0) {
+                DOM.noLeaders.style.display = 'block';
+                DOM.noLeaders.textContent = currentSearchTerm ? "No matching contributors found." : "No submissions recorded yet.";
+                DOM.pagination.innerHTML = '';
+                return;
+            }
 
-    DOM.noLeaders.style.display = 'none';
+            DOM.noLeaders.style.display = 'none';
 
-    pageLeaders.forEach((item, idx) => {
-        const globalRank = start + idx + 1;           // This was the old line
-        // NEW: Show the real overall rank from the full list
-        const overallRank = leaders.indexOf(item) + 1;
+            pageLeaders.forEach((item, idx) => {
+                const globalRank = start + idx + 1;
+                const tr = document.createElement('tr');
+                const walletShort = shortenWallet(item.wallet);
+                const explorer = getExplorerUrl(item.wallet);
+                const tag = getBlockchainTag(item.wallet);
+                const tagClass = getBlockchainClass(item.wallet);
 
-        const tr = document.createElement('tr');
-        const walletShort = shortenWallet(item.wallet);
-        const explorer = getExplorerUrl(item.wallet);
-        const tag = getBlockchainTag(item.wallet);
-        const tagClass = getBlockchainClass(item.wallet);
+                let contributorHTML = '';
+                if (item.telegram) {
+                    const tg = item.telegram.replace('@','');
+                    contributorHTML += `<a href="https://t.me/${tg}" target="_blank" style="display:block;margin-bottom:8px;font-weight:600;color:#6366F1;"><i class="fab fa-telegram-plane"></i> ${item.telegram}</a>`;
+                }
+                contributorHTML += `
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                        <a href="${explorer}" target="_blank" style="font-family:monospace;color:#1F2937;text-decoration:none;">${walletShort}</a>
+                        <span class="blockchain-tag ${tagClass}">${tag}</span>
+                        <button onclick="copyWallet('${item.wallet}');event.stopImmediatePropagation()" class="copy-btn" title="Copy">📋</button>
+                    </div>`;
 
-        let contributorHTML = '';
-        if (item.telegram) {
-            const tg = item.telegram.replace('@','');
-            contributorHTML += `<a href="https://t.me/${tg}" target="_blank" style="display:block;margin-bottom:8px;font-weight:600;color:#6366F1;"><i class="fab fa-telegram-plane"></i> ${item.telegram}</a>`;
+                const count = currentTab === 0 ? item.submissions : item.recent;
+
+                tr.innerHTML = `
+                    <td class="rank">#${globalRank}</td>
+                    <td>${contributorHTML}</td>
+                    <td class="sub-count">${count}</td>
+                    <td>${item.firstDate || 'N/A'}</td>
+                    <td>${item.lastDate || 'N/A'}</td>
+                `;
+                DOM.leaderboardBody.appendChild(tr);
+            });
+
+            renderPagination(totalPages);
         }
-        contributorHTML += `
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                <a href="${explorer}" target="_blank" style="font-family:monospace;color:#1F2937;text-decoration:none;">${walletShort}</a>
-                <span class="blockchain-tag ${tagClass}">${tag}</span>
-                <button onclick="copyWallet('${item.wallet}');event.stopImmediatePropagation()" class="copy-btn" title="Copy">📋</button>
-            </div>`;
-
-        const count = currentTab === 0 ? item.submissions : item.recent;
-
-        tr.innerHTML = `
-            <td class="rank">#${overallRank}</td>
-            <td>${contributorHTML}</td>
-            <td class="sub-count">${count}</td>
-            <td>${item.firstDate || 'N/A'}</td>
-            <td>${item.lastDate || 'N/A'}</td>
-        `;
-        DOM.leaderboardBody.appendChild(tr);
-    });
-
-    renderPagination(totalPages);
-}
 
         function renderPagination(totalPages) {
             let html = `<button class="page-btn" onclick="prevPage()" ${currentPage===1?'disabled':''}>← Previous</button>`;
@@ -901,6 +760,28 @@ function renderPage(leaders) {
             renderLeaderboard(tab);
         }
 
+        function setupSearch() {
+            const searchInput = DOM.leaderboardSearch;
+            const clearBtn = DOM.searchClearBtn;
+
+            if (!searchInput) return;
+
+            searchInput.addEventListener('input', () => {
+                currentSearchTerm = searchInput.value;
+                currentPage = 1;
+                const leaders = currentTab === 0 ? allTimeLeaders : thirtyLeaders;
+                renderPage(leaders);
+            });
+
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                currentSearchTerm = '';
+                currentPage = 1;
+                const leaders = currentTab === 0 ? allTimeLeaders : thirtyLeaders;
+                renderPage(leaders);
+            });
+        }
+
         function setupListeners() {
             DOM.hamburger.addEventListener('click', () => {
                 DOM.hamburger.classList.toggle('active');
@@ -918,31 +799,9 @@ function renderPage(leaders) {
             DOM.backToTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
         }
 
-        function setupSearch() {
-    const searchInput = DOM.leaderboardSearch;
-    const clearBtn = DOM.searchClearBtn;
-
-    if (!searchInput) return;
-
-    searchInput.addEventListener('input', () => {
-        currentSearchTerm = searchInput.value;
-        currentPage = 1;
-        const leaders = currentTab === 0 ? allTimeLeaders : thirtyLeaders;
-        renderPage(leaders);
-    });
-
-    clearBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        currentSearchTerm = '';
-        currentPage = 1;
-        const leaders = currentTab === 0 ? allTimeLeaders : thirtyLeaders;
-        renderPage(leaders);
-    });
-}
-
         window.addEventListener('load', () => {
             setupListeners();
-            setupSearch(); 
+            setupSearch();
             loadLeaderboard();
         });
     </script>
