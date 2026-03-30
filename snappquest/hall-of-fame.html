@@ -377,6 +377,46 @@
             height: 20px;
             vertical-align: middle;
         }
+        /* Responsive Search Bar */
+.search-container {
+    margin: 30px auto 40px;
+    max-width: 600px;
+    padding: 0 16px;
+}
+.search-bar {
+    background: #fff;
+    border: 1px solid #D1D5DB;
+    border-radius: 50px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+}
+.search-bar input {
+    flex: 1;
+    border: none;
+    padding: 12px 20px;
+    font-size: 17px;
+    outline: none;
+    border-radius: 50px 0 0 50px;
+}
+
+@media (max-width: 640px) {
+    .search-bar {
+        flex-direction: column;
+        padding: 8px;
+        border-radius: 16px;
+    }
+    .search-bar input {
+        border-radius: 12px !important;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+    .search-bar button {
+        border-radius: 12px !important;
+        width: 100%;
+        padding: 12px;
+    }
+}
     </style>
     <link href="images/icon.png" rel="icon">
 </head>
@@ -429,13 +469,17 @@
             <button id="tab-thirty" class="tab-btn" onclick="switchTab(1)">🔥 LAST 30 DAYS</button>
         </div>
 
-        <!-- Search Bar -->
-        <div class="search-container">
-            <div class="search-bar">
-                <input type="text" id="leaderboardSearch" placeholder="Search by @username or wallet address...">
-                <button id="searchClearBtn" style="background:#6366F1; color:white; border:none; padding:12px 24px; border-radius:50px; cursor:pointer;">Clear</button>
-            </div>
-        </div>
+<!-- Search Bar -->
+<div class="search-container">
+    <div class="search-bar">
+        <input type="text" id="leaderboardSearch" 
+               placeholder="Search by @username or wallet address...">
+        <button id="searchClearBtn" 
+                style="background:#6366F1; color:white; border:none; padding:12px 24px; border-radius:50px; cursor:pointer;">
+            Clear
+        </button>
+    </div>
+</div>
 
         <div class="submissions-section">
             <h2 id="leaderboard-title" style="text-align:center; margin:30px 0 20px; font-size:28px;">All-Time Hall of Fame 🏆</h2>
@@ -686,57 +730,62 @@
             renderPage(leaders);
         }
 
-        function renderPage(leaders) {
-            const filtered = filterLeaders(leaders);
-            const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-            const start = (currentPage - 1) * ITEMS_PER_PAGE;
-            const pageLeaders = filtered.slice(start, start + ITEMS_PER_PAGE);
+function renderPage(leaders) {
+    const filtered = filterLeaders(leaders);
+    const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const pageLeaders = filtered.slice(start, start + ITEMS_PER_PAGE);
 
-            DOM.leaderboardBody.innerHTML = '';
+    DOM.leaderboardBody.innerHTML = '';
 
-            if (pageLeaders.length === 0) {
-                DOM.noLeaders.style.display = 'block';
-                DOM.noLeaders.textContent = currentSearchTerm ? "No matching contributors found." : "No submissions recorded yet.";
-                DOM.pagination.innerHTML = '';
-                return;
-            }
+    if (pageLeaders.length === 0) {
+        DOM.noLeaders.style.display = 'block';
+        DOM.noLeaders.textContent = currentSearchTerm ? 
+            "No matching contributors found." : 
+            "No submissions recorded yet.";
+        DOM.pagination.innerHTML = '';
+        return;
+    }
 
-            DOM.noLeaders.style.display = 'none';
+    DOM.noLeaders.style.display = 'none';
 
-            pageLeaders.forEach((item, idx) => {
-                const globalRank = start + idx + 1;
-                const tr = document.createElement('tr');
-                const walletShort = shortenWallet(item.wallet);
-                const explorer = getExplorerUrl(item.wallet);
-                const tag = getBlockchainTag(item.wallet);
-                const tagClass = getBlockchainClass(item.wallet);
+    pageLeaders.forEach((item, idx) => {
+        const globalRank = start + idx + 1;           // This was the old line
+        // NEW: Show the real overall rank from the full list
+        const overallRank = leaders.indexOf(item) + 1;
 
-                let contributorHTML = '';
-                if (item.telegram) {
-                    const tg = item.telegram.replace('@','');
-                    contributorHTML += `<a href="https://t.me/${tg}" target="_blank" style="display:block;margin-bottom:8px;font-weight:600;color:#6366F1;"><i class="fab fa-telegram-plane"></i> ${item.telegram}</a>`;
-                }
-                contributorHTML += `
-                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                        <a href="${explorer}" target="_blank" style="font-family:monospace;color:#1F2937;text-decoration:none;">${walletShort}</a>
-                        <span class="blockchain-tag ${tagClass}">${tag}</span>
-                        <button onclick="copyWallet('${item.wallet}');event.stopImmediatePropagation()" class="copy-btn" title="Copy">📋</button>
-                    </div>`;
+        const tr = document.createElement('tr');
+        const walletShort = shortenWallet(item.wallet);
+        const explorer = getExplorerUrl(item.wallet);
+        const tag = getBlockchainTag(item.wallet);
+        const tagClass = getBlockchainClass(item.wallet);
 
-                const count = currentTab === 0 ? item.submissions : item.recent;
-
-                tr.innerHTML = `
-                    <td class="rank">#${globalRank}</td>
-                    <td>${contributorHTML}</td>
-                    <td class="sub-count">${count}</td>
-                    <td>${item.firstDate || 'N/A'}</td>
-                    <td>${item.lastDate || 'N/A'}</td>
-                `;
-                DOM.leaderboardBody.appendChild(tr);
-            });
-
-            renderPagination(totalPages);
+        let contributorHTML = '';
+        if (item.telegram) {
+            const tg = item.telegram.replace('@','');
+            contributorHTML += `<a href="https://t.me/${tg}" target="_blank" style="display:block;margin-bottom:8px;font-weight:600;color:#6366F1;"><i class="fab fa-telegram-plane"></i> ${item.telegram}</a>`;
         }
+        contributorHTML += `
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <a href="${explorer}" target="_blank" style="font-family:monospace;color:#1F2937;text-decoration:none;">${walletShort}</a>
+                <span class="blockchain-tag ${tagClass}">${tag}</span>
+                <button onclick="copyWallet('${item.wallet}');event.stopImmediatePropagation()" class="copy-btn" title="Copy">📋</button>
+            </div>`;
+
+        const count = currentTab === 0 ? item.submissions : item.recent;
+
+        tr.innerHTML = `
+            <td class="rank">#${overallRank}</td>
+            <td>${contributorHTML}</td>
+            <td class="sub-count">${count}</td>
+            <td>${item.firstDate || 'N/A'}</td>
+            <td>${item.lastDate || 'N/A'}</td>
+        `;
+        DOM.leaderboardBody.appendChild(tr);
+    });
+
+    renderPagination(totalPages);
+}
 
         function renderPagination(totalPages) {
             let html = `<button class="page-btn" onclick="prevPage()" ${currentPage===1?'disabled':''}>← Previous</button>`;
