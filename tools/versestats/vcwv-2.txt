@@ -9,19 +9,19 @@ All Time
 24 Mar - 23 Apr
 Visitors
 
-9,353
+10,477
 
 Pageviews
 
-21,983
+23,737
 
 Active Apps
 
-170
+181
 
 Custom Events
 
-10,647
+11,190
 
 Community Trends
 3/24
@@ -31,6 +31,7 @@ Community Trends
 3/28
 3/29
 3/30
+3/31
 0
 1500
 3000
@@ -43,174 +44,185 @@ Bot Activity ▾
 Visitors
 Events
 #	App	Visitors	Pages/Visit	Events	Bounce	Depth	Sources	Bot Activity
-1	hub.vgdh.io	989	5.7	104	34%	5.7	23	Low
-2	grace-daniel224.vercel.app	941	1.6	1,702	74%	1.6	1	Low
-3	saifalshammari01.vercel.app	918	1.3	816	67%	1.3	0	Low
-4	verse-gateway-chemla-c3c5bce3.base44.app	860	1.4	106	92%	1.4	5	Low
-5	paulina1-theta.vercel.app	860	1.6	1,625	72%	1.6	2	Low
-6	niti.com.ng	757	4.2	1,870	7%	4.2	13	Low
-7	crypto-lens-5fa22161nikky456.base44.app	615	1.2	3	91%	1.2	1	Low
-8	abubakker-cryptoverse.vercel.app	580	2.3	3,097	33%	2.3	1	Medium
-9	verse-events-dapp.vercel.app	540	2.3	0	31%	2.3	2	Medium
-10	decentralized-architect-copy-af6496a2.base44.app	338	2.0	22	58%	2.0	4	Low
-11	shojib-ahmed.vercel.app	312	1.6	0	79%	1.6	6	Medium
-12	sammiejay.base44.app	233	2.2	4	34%	2.2	0	Low
-13	verse-nexus-daavy.base44.app	210	1.4	6	83%	1.4	6	Low
-14	verse-cricketgame.netlify.app	149	1.2	0	88%	1.2	2	Medium
-15	naymer.vercel.app	134	1.7	5	67%	1.7	3	Low
-16	ariachain12-six.vercel.app	117	1.3	133	82%	1.3	0	Low
-17	verse-run-pro.base44.app	98	1.1	0	94%	1.1	0	NA
-18	verselorestory.netlify.app	91	2.4	0	24%	2.4	1	NA
-19	raheelzaki-cricket.base44.app	56	1.2	0	82%	1.2	0	NA
-20	verse-cynthiajoyce-crypto.base44.app	47	1.4	0	81%	1.4	1	NA
-21	jamestows1-quiz-master-quest.base44.app	42	6.3	0	86%	6.3	0	NA
+1	crypto-lens-5fa22161nikky456.base44.app	1,055	1.1	3	94%	1.1	1	Low
+2	grace-daniel224.vercel.app	1,035	1.6	1,893	73%	1.6	1	Low
+3	hub.vgdh.io	1,015	5.7	105	34%	5.7	24	Low
+4	paulina1-theta.vercel.app	1,003	1.6	1,932	72%	1.6	2	Low
+5	saifalshammari01.vercel.app	918	1.3	816	67%	1.3	0	Low
+6	verse-gateway-chemla-c3c5bce3.base44.app	860	1.4	106	92%	1.4	5	Low
+7	niti.com.ng	775	4.2	1,910	7%	4.2	13	Low
+8	abubakker-cryptoverse.vercel.app	599	2.3	3,097	34%	2.3	1	Medium
+9	verse-events-dapp.vercel.app	551	2.3	0	31%	2.3	2	Medium
+10	decentralized-architect-copy-af6496a2.base44.app	339	2.0	22	58%	2.0	4	Low
+11	shojib-ahmed.vercel.app	315	1.6	0	79%	1.6	6	Medium
+12	jamestows1-quiz-master-quest.base44.app	309	2.3	0	55%	2.3	0	Medium
+13	sammiejay.base44.app	233	2.2	4	34%	2.2	0	Low
+14	verse-nexus-daavy.base44.app	210	1.4	6	83%	1.4	6	Low
+15	verse-cricketgame.netlify.app	152	1.2	0	88%	1.2	2	Medium
+16	naymer.vercel.app	134	1.7	5	67%	1.7	3	Low
+17	ariachain12-six.vercel.app	117	1.3	133	82%	1.3	0	Low
+18	verse-run-pro.base44.app	102	1.1	0	94%	1.1	0	Medium
+19	verselorestory.netlify.app	91	2.4	0	24%	2.4	1	NA
+20	raheelzaki-cricket.base44.app	63	1.2	0	83%	1.2	0	NA
+21	verse-cynthiajoyce-crypto.base44.app	47	1.4	0	81%	1.4	1	NA
 22	o-luoma1.vercel.app	39	1.4	71	82%	1.4	0	NA
 23	zayed-tau.vercel.app	34	1.5	14	71%	1.5	2	NA
 24	aderojuisaac32.vercel.app	32	1.3	5	84%	1.3	2	NA
-25	ais-pre-4izmz2y7fe6ziutu3s36ye-478186802263.europe-west2.run.app	30	1.0	2	100%	1.0	2	NA
-26	verseelectoralhub0.vercel.app	25	1.0	0	100%	1.0	0	NA
-27	verse-boost-click.base44.app	18	4.4	1	67%	4.4	1	NA
-28	desiboii.vercel.app	17	1.1	0	88%	1.1	1	NA
-29	ayobami299.vercel.app	17	5.2	70	6%	5.2	1	NA
-30	valerie02.vercel.app	15	2.1	11	33%	2.1	0	NA
-31	ais-dev-dcal4fi2wpkhlj6wbhxw57-430114424501.europe-west2.run.app	15	25.2	40	20%	25.2	1	NA
-32	elizabethmary.base44.app	9	1.2	0	89%	1.2	0	NA
-33	preview-sandbox--69c1ade963e90728c3c5bce3.base44.app	9	1.1	0	89%	1.1	1	NA
-34	competent-crimson-uzavhr1mfs.edgeone.app	8	1.0	0	—	—	0	NA
-35	ais-dev-fhile6fobofkipdkkq5tax-21246162805.asia-southeast1.run.app	8	2.9	911	13%	2.9	1	NA
-36	lordthompson914.vercel.app	8	1.0	0	100%	1.0	0	NA
-37	preview--verse-navigator-center-7846a975.base44.app	7	1.6	0	57%	1.6	1	NA
-38	xvdhes1.vercel.app	7	1.0	0	100%	1.0	0	NA
-39	preview--verse-gateway-chemla-c3c5bce3.base44.app	6	1.3	2	67%	1.3	1	NA
-40	ais-dev-slbxx2nwuwb5pcqc4nkz5e-495534316814.europe-west2.run.app	6	5.2	12	0%	5.2	1	NA
-41	ais-pre-3ch2zolsnp7zjxtbsjanlo-408970653381.europe-west2.run.app	5	1.8	0	60%	1.8	1	NA
-42	preview-sandbox--69c4bac543cc38221aea4f9a.base44.app	5	1.0	0	100%	1.0	1	NA
-43	ais-dev-n6loljycfkaehgbgvyjbqk-37074123815.europe-west1.run.app	4	3.5	3	25%	3.5	1	NA
-44	ibrahim123.vercel.app	4	2.3	3	25%	2.3	0	NA
-45	agbapacker.base44.app	4	1.5	0	50%	1.5	0	NA
-46	preview-sandbox--69c8bac48f74ddba2d65a5aa.base44.app	4	1.8	1	50%	1.8	1	NA
+25	checkpoint--69c88ff7e1147abc8e5b0b10--69c8928c78cc7f4e17eea671.base44.app	30	1.0	0	100%	1.0	0	NA
+26	ais-pre-4izmz2y7fe6ziutu3s36ye-478186802263.europe-west2.run.app	30	1.0	2	100%	1.0	2	NA
+27	checkpoint--69c88ff7e1147abc8e5b0b10--69c8934f4cba3a60d39c57d0.base44.app	30	1.0	0	100%	1.0	0	NA
+28	verseelectoralhub0.vercel.app	25	1.0	0	100%	1.0	0	NA
+29	verse-boost-click.base44.app	18	4.4	1	67%	4.4	1	NA
+30	ayobami299.vercel.app	17	5.2	70	6%	5.2	1	NA
+31	desiboii.vercel.app	17	1.1	0	88%	1.1	1	NA
+32	ais-dev-dcal4fi2wpkhlj6wbhxw57-430114424501.europe-west2.run.app	15	25.2	40	20%	25.2	1	NA
+33	valerie02.vercel.app	15	2.1	11	33%	2.1	0	NA
+34	itskosi2.vercel.app	13	1.5	2	62%	1.5	1	NA
+35	elizabethmary.base44.app	9	1.2	0	89%	1.2	0	NA
+36	preview-sandbox--69c1ade963e90728c3c5bce3.base44.app	9	1.1	0	89%	1.1	1	NA
+37	xvdhes1.vercel.app	8	1.0	1	100%	1.0	0	NA
+38	lordthompson914.vercel.app	8	1.0	0	100%	1.0	0	NA
+39	ais-dev-fhile6fobofkipdkkq5tax-21246162805.asia-southeast1.run.app	8	2.9	911	13%	2.9	1	NA
+40	competent-crimson-uzavhr1mfs.edgeone.app	8	1.0	0	—	—	0	NA
+41	preview--verse-navigator-center-7846a975.base44.app	7	1.6	0	57%	1.6	1	NA
+42	preview--verse-gateway-chemla-c3c5bce3.base44.app	6	1.3	2	67%	1.3	1	NA
+43	ais-dev-slbxx2nwuwb5pcqc4nkz5e-495534316814.europe-west2.run.app	6	5.2	12	0%	5.2	1	NA
+44	preview-sandbox--69c4bac543cc38221aea4f9a.base44.app	5	1.0	0	100%	1.0	1	NA
+45	ais-pre-3ch2zolsnp7zjxtbsjanlo-408970653381.europe-west2.run.app	5	1.8	0	60%	1.8	1	NA
+46	agbapacker.base44.app	4	1.5	0	50%	1.5	0	NA
 47	jamorgan9-mind-guess-pro.base44.app	4	1.0	0	100%	1.0	0	NA
-48	preview-sandbox--69c9f16afc313792b73da7e5.base44.app	3	1.0	0	100%	1.0	1	NA
-49	arhamcs0-versebubble.netlify.app	3	1.7	0	33%	1.7	0	NA
-50	bright-aquamarine-em4ouesqjg.edgeone.app	3	1.0	0	—	—	0	NA
-51	officialchaserice0100.vercel.app	3	1.0	0	100%	1.0	0	NA
+48	ais-dev-mtao22uhakl43gqciwgblb-182504716269.europe-west3.run.app	4	1.8	1	50%	1.8	1	NA
+49	ibrahim123.vercel.app	4	2.3	3	25%	2.3	0	NA
+50	ais-dev-n6loljycfkaehgbgvyjbqk-37074123815.europe-west1.run.app	4	3.5	3	25%	3.5	1	NA
+51	preview-sandbox--69c8bac48f74ddba2d65a5aa.base44.app	4	1.8	1	50%	1.8	1	NA
 52	seungabriell.base44.app	3	1.0	0	100%	1.0	0	NA
-53	jessymia.vercel.app	3	1.0	0	100%	1.0	0	NA
-54	ais-dev-4d7ozckcvsxvy7cdbihcfl-662505766523.europe-west2.run.app	3	3.0	0	0%	3.0	1	NA
+53	ais-dev-4d7ozckcvsxvy7cdbihcfl-662505766523.europe-west2.run.app	3	3.0	0	0%	3.0	1	NA
+54	arhamcs0-versebubble.netlify.app	3	1.7	0	33%	1.7	0	NA
 55	preview-sandbox--69c8d0b4ca8f5dc65bb37215.base44.app	3	1.0	0	100%	1.0	1	NA
 56	ais-dev-7ijkpup7wly474tz6kbnpe-495534316814.europe-west2.run.app	3	2.0	0	33%	2.0	1	NA
-57	anniekah.base44.app	3	1.3	0	67%	1.3	0	NA
-58	bakaresule.base44.app	3	1.0	0	100%	1.0	0	NA
-59	ais-pre-nphgwpungjvm3krbdu46fa-478186802263.europe-west2.run.app	3	1.0	0	100%	1.0	0	NA
-60	ais-dev-pk32f2kqbe74qaa73fvceu-385042659597.europe-west2.run.app	3	1.3	0	67%	1.3	0	NA
-61	labour-turquoise-mprb6aqmxm.edgeone.app	2	1.0	0	—	—	0	NA
-62	press.vgdh.io	2	1.5	0	50%	1.5	0	NA
-63	preview-sandbox--69c1c5b3c0580d564512f954.base44.app	2	1.5	0	50%	1.5	0	NA
-64	preview-sandbox--69ca2b8276da8ea82a916eac.base44.app	2	1.5	0	50%	1.5	1	NA
-65	preview-sandbox--69ca41f750af2a447cf68069.base44.app	2	2.0	0	50%	2.0	1	NA
-66	desiboii7-seven.vercel.app	2	1.5	1	50%	1.5	0	NA
-67	chi097-roll-genius-play.base44.app	2	1.0	0	100%	1.0	0	NA
-68	tosintobii.base44.app	2	1.0	0	100%	1.0	0	NA
-69	preview-sandbox--69c703acfa8cad73e7387733.base44.app	2	1.5	0	50%	1.5	1	NA
-70	preview--asknarmi.base44.app	2	1.0	0	100%	1.0	1	NA
+57	bright-aquamarine-em4ouesqjg.edgeone.app	3	1.0	0	—	—	0	NA
+58	ais-dev-pk32f2kqbe74qaa73fvceu-385042659597.europe-west2.run.app	3	1.3	0	67%	1.3	0	NA
+59	jessymia.vercel.app	3	1.0	0	100%	1.0	0	NA
+60	bakaresule.base44.app	3	1.0	0	100%	1.0	0	NA
+61	preview-sandbox--69c9f16afc313792b73da7e5.base44.app	3	1.0	0	100%	1.0	1	NA
+62	anniekah.base44.app	3	1.3	0	67%	1.3	0	NA
+63	ais-pre-nphgwpungjvm3krbdu46fa-478186802263.europe-west2.run.app	3	1.0	0	100%	1.0	0	NA
+64	officialchaserice0100.vercel.app	3	1.0	0	100%	1.0	0	NA
+65	akeemutu.base44.app	3	1.3	0	67%	1.3	0	NA
+66	lokiii235.base44.app	2	1.0	0	100%	1.0	0	NA
+67	preview--abbeytosin.base44.app	2	1.5	0	50%	1.5	1	NA
+68	goodgirl2127.base44.app	2	1.0	0	100%	1.0	0	NA
+69	desiboii7-seven.vercel.app	2	1.5	1	50%	1.5	0	NA
+70	darex2000.base44.app	2	1.0	0	100%	1.0	0	NA
 71	preview--quiz-master-pro-copy-43122e7b.base44.app	2	1.0	0	100%	1.0	1	NA
-72	ais-pre-pk32f2kqbe74qaa73fvceu-385042659597.europe-west2.run.app	2	1.0	1	100%	1.0	1	NA
-73	preview--abbeytosin.base44.app	2	1.5	0	50%	1.5	1	NA
-74	preview-sandbox--69c2835a8621e9bd77ea060c.base44.app	2	1.0	0	100%	1.0	1	NA
-75	preview-sandbox--69c932ff228b658601361014.base44.app	2	1.0	0	100%	1.0	1	NA
-76	sadikufav1.vercel.app	2	1.5	0	50%	1.5	0	NA
-77	asknarmi.base44.app	2	1.0	0	100%	1.0	1	NA
-78	preview--raheelzaki-cricket.base44.app	2	1.0	0	100%	1.0	1	NA
-79	preview-sandbox--69c7d18f5410072be444eeca.base44.app	2	1.0	0	100%	1.0	1	NA
-80	vcelestine.base44.app	2	1.0	0	100%	1.0	0	NA
-81	lizkatz24.base44.app	2	1.0	0	100%	1.0	0	NA
-82	foolishalagboo.base44.app	2	1.0	0	100%	1.0	0	NA
-83	darex2000.base44.app	2	1.0	0	100%	1.0	0	NA
-84	verse-focus-center-pecky222.base44.app	2	1.5	0	50%	1.5	1	NA
-85	preview-sandbox--69ba5af3faf78b16e7cdc5b6.base44.app	2	1.5	0	50%	1.5	0	NA
-86	sabrina216789.base44.app	2	1.0	0	100%	1.0	0	NA
-87	lokiii235.base44.app	2	1.0	0	100%	1.0	0	NA
-88	preview--bakaresule.base44.app	1	2.0	0	0%	2.0	0	NA
-89	open-yellow-rgfa6ytx6t.edgeone.app	1	1.0	0	—	—	0	NA
-90	emmanuella7890.vercel.app	1	1.0	0	100%	1.0	0	NA
-91	preview-sandbox--69c1c5a26c9a0d59f49e9ee6.base44.app	1	2.0	0	0%	2.0	1	NA
-92	sophisticated-rose-mhdbujsdgo.edgeone.app	1	1.0	0	—	—	0	NA
-93	preview--verse-gateway-copy-c3c5bce3.base44.app	1	1.0	0	100%	1.0	1	NA
-94	ais-dev-6c3opqjeozlblhhvpjna2r-495534316814.europe-west2.run.app	1	2.0	1	0%	2.0	0	NA
-95	cleop.base44.app	1	1.0	0	100%	1.0	0	NA
-96	walebayoo.base44.app	1	1.0	0	100%	1.0	0	NA
-97	preview--anniekah.base44.app	1	2.0	0	0%	2.0	1	NA
-98	ais-dev-6ftzddoz2ghdzok74evx5s-37074123815.europe-west1.run.app	1	2.0	0	0%	2.0	1	NA
-99	preview-sandbox--69cae815adadecbc202a35af.base44.app	1	1.0	0	100%	1.0	1	NA
-100	preview-sandbox--69c3f7f6bf10e83643122e7b.base44.app	1	1.0	0	100%	1.0	1	NA
-101	preview--bruiz703-neon-lane-rush.base44.app	1	1.0	0	100%	1.0	0	NA
-102	verse-favee-community.base44.app	1	2.0	0	0%	2.0	0	NA
-103	love72326.base44.app	1	1.0	0	100%	1.0	0	NA
-104	preview--crypto-lens-5fa22161nikky456.base44.app	1	2.0	0	0%	2.0	1	NA
-105	preview--vcelestine.base44.app	1	2.0	0	0%	2.0	1	NA
-106	preview-sandbox--69b97b06e732ff5cad7abbcb.base44.app	1	2.0	0	0%	2.0	1	NA
-107	preview-sandbox--69c600f8aa1fefcd4edee90e.base44.app	1	1.0	0	100%	1.0	0	NA
-108	fancy-gecko-57e165.netlify.app	1	1.0	0	100%	1.0	0	NA
-109	bruiz703-neon-lane-rush.base44.app	1	2.0	0	0%	2.0	0	NA
-110	preview-sandbox--69c0e9e3b220a375f946cff4.base44.app	1	1.0	0	100%	1.0	1	NA
-111	preview--fund-launch-copy-08d711eb.base44.app	1	1.0	0	100%	1.0	0	NA
-112	preview--decentralized-architect-copy-af6496a2.base44.app	1	2.0	0	0%	2.0	0	NA
-113	envious-tomato-bealqzs4cg.edgeone.app	1	1.0	0	—	—	0	NA
-114	ais-dev-3ch2zolsnp7zjxtbsjanlo-408970653381.europe-west2.run.app	1	1.0	0	100%	1.0	1	NA
-115	checkpoint--69c88ff7e1147abc8e5b0b10--69c8934f4cba3a60d39c57d0.base44.app	1	1.0	0	100%	1.0	0	NA
-116	operational-cyan-qe4zil27ng.edgeone.app	1	1.0	0	—	—	0	NA
-117	little-turquoise-yxacprahqv.edgeone.app	1	2.0	0	100%	1.0	0	NA
-118	preview--mind-guess-copy-4edee90e.base44.app	1	2.0	0	0%	2.0	0	NA
-119	preview-sandbox--69bfa77e87f71aa6cf696498.base44.app	1	4.0	0	0%	4.0	1	NA
-120	preview--foolishalagboo.base44.app	1	1.0	0	100%	1.0	0	NA
-121	preview--lokiii235.base44.app	1	1.0	0	100%	1.0	1	NA
-122	gramsule1.base44.app	1	1.0	0	100%	1.0	0	NA
-123	ais-dev-u5myn77rqq5qfdlzia5gcp-157182445057.europe-west3.run.app	1	3.0	0	0%	3.0	1	NA
-124	preview--alagbeseun.base44.app	1	1.0	0	100%	1.0	1	NA
-125	preview-sandbox--69cad8a2fdbe899a53e8b658.base44.app	1	1.0	0	100%	1.0	1	NA
-126	preview-sandbox--69ca7a1f50ed7db4c43022c4.base44.app	1	1.0	0	100%	1.0	0	NA
-127	nuclear-ivory-7l6po4hq1b.edgeone.app	1	1.0	0	—	—	0	NA
-128	smoggy-beige-8o7tqrpzds.edgeone.app	1	1.0	0	—	—	0	NA
-129	preview-sandbox--69c88ff7e1147abc8e5b0b10.base44.app	1	3.0	0	0%	3.0	0	NA
-130	preview--crypto-shield-77ea060cnikky456.base44.app	1	1.0	0	100%	1.0	1	NA
-131	preview--darex2000.base44.app	1	1.0	0	100%	1.0	1	NA
-132	checkpoint--69c88ff7e1147abc8e5b0b10--69c8928c78cc7f4e17eea671.base44.app	1	1.0	0	100%	1.0	0	NA
-133	preview-sandbox--69ca9ac5aceba47c8005b68c.base44.app	1	1.0	0	100%	1.0	0	NA
-134	ais-dev-zhritex3mmwg5vsc5nsfwe-37074123815.europe-west1.run.app	1	1.0	0	100%	1.0	1	NA
-135	ais-dev-26myr3bo3wik7eccxolvob-85036413601.europe-west3.run.app	1	4.0	0	0%	4.0	1	NA
-136	alternative-maroon-wrygl0zhd7.edgeone.app	1	1.0	0	—	—	0	NA
-137	preview-sandbox--69cab4dc9abb8a8f1fedc9d8.base44.app	1	3.0	0	0%	3.0	0	NA
-138	preview--johnwalee.base44.app	1	2.0	0	0%	2.0	1	NA
-139	corporate-ivory-pozlgyfgqt.edgeone.app	1	1.0	0	—	—	0	NA
-140	preview--sammiejay.base44.app	1	2.0	0	0%	2.0	1	NA
-141	abbeytosin.base44.app	1	1.0	0	100%	1.0	0	NA
-142	preview--kotunlowo.base44.app	1	1.0	0	100%	1.0	1	NA
-143	preview--raheelzaki-cricket-bash.base44.app	1	1.0	0	100%	1.0	1	NA
-144	preview-sandbox--69cad12ec7dc267c6a5006f5.base44.app	1	2.0	0	0%	2.0	0	NA
-145	preview-sandbox--69c98495ec9e92ccf193c30f.base44.app	1	2.0	0	0%	2.0	0	NA
-146	ais-dev-rswsrp57wqrvuwhvwi6tqj-21246162805.asia-southeast1.run.app	1	2.0	0	0%	2.0	0	NA
-147	preview-sandbox--69c9e6a4b739f63eec2f2667.base44.app	1	2.0	0	0%	2.0	0	NA
-148	ais-dev-2akryhshjms33fexm3xr64-391885672647.asia-southeast1.run.app	1	2.0	0	0%	2.0	0	NA
-149	kotunlowo.base44.app	1	1.0	0	100%	1.0	0	NA
-150	aderoju9.github.io	1	1.0	1	100%	1.0	0	NA
-151	preview-sandbox--69c6c64f35757b3808d711eb.base44.app	1	1.0	0	100%	1.0	0	NA
-152	preview--love72326.base44.app	1	1.0	0	100%	1.0	1	NA
-153	preview-sandbox--69caa96ddb8994e3d0483b5c.base44.app	1	1.0	0	100%	1.0	1	NA
-154	preview-sandbox--69ca44505186207015448637.base44.app	1	1.0	0	100%	1.0	1	NA
-155	ais-dev-kcxecghucozmc4uwfrrcuy-37074123815.europe-west1.run.app	1	2.0	1	0%	2.0	0	NA
-156	preview--jamestows1-quiz-master-quest.base44.app	1	1.0	0	100%	1.0	1	NA
-157	preview-sandbox--69c5a39a796a037f7846a975.base44.app	1	1.0	0	100%	1.0	1	NA
-158	suleamore.base44.app	1	2.0	0	0%	2.0	0	NA
-159	preview-sandbox--69c5f73da293e73909c1c59c.base44.app	1	4.0	1	0%	4.0	0	NA
-160	dlootbad.base44.app	1	1.0	0	100%	1.0	0	NA
-161	alagbeseun.base44.app	1	1.0	0	100%	1.0	0	NA
-162	preview-sandbox--69c999d7862f0fed9ca46047.base44.app	1	1.0	0	100%	1.0	0	NA
-163	preview-sandbox--69c85756cb1364462df93c0f.base44.app	1	1.0	0	100%	1.0	0	NA
-164	preview-sandbox--69c1a7ef97bd215daf6496a2.base44.app	1	6.0	2	0%	6.0	0	NA
-165	preview-sandbox--69c9f19f4fabf05e8e7cb29e.base44.app	1	1.0	0	100%	1.0	1	NA
-166	preview-sandbox--69c6c06eef7c8744dab8a734.base44.app	1	2.0	0	0%	2.0	0	NA
-167	enekaobi.base44.app	1	1.0	0	100%	1.0	0	NA
-168	preview--seungabriell.base44.app	1	1.0	0	100%	1.0	1	NA
-169	preview--verse-boost-click.base44.app	1	3.0	0	0%	3.0	1	NA
+72	preview-sandbox--69ca2b8276da8ea82a916eac.base44.app	2	1.5	0	50%	1.5	1	NA
+73	verse-focus-center-pecky222.base44.app	2	1.5	0	50%	1.5	1	NA
+74	sabrina216789.base44.app	2	1.0	0	100%	1.0	0	NA
+75	preview-sandbox--69ba5af3faf78b16e7cdc5b6.base44.app	2	1.5	0	50%	1.5	0	NA
+76	preview-sandbox--69c703acfa8cad73e7387733.base44.app	2	1.5	0	50%	1.5	1	NA
+77	preview--asknarmi.base44.app	2	1.0	0	100%	1.0	1	NA
+78	oloruseun.base44.app	2	1.0	0	100%	1.0	0	NA
+79	preview-sandbox--69ca41f750af2a447cf68069.base44.app	2	2.0	0	50%	2.0	1	NA
+80	preview-sandbox--69c2835a8621e9bd77ea060c.base44.app	2	1.0	0	100%	1.0	1	NA
+81	preview--raheelzaki-cricket.base44.app	2	1.0	0	100%	1.0	1	NA
+82	vcelestine.base44.app	2	1.0	0	100%	1.0	0	NA
+83	ais-pre-pk32f2kqbe74qaa73fvceu-385042659597.europe-west2.run.app	2	1.0	1	100%	1.0	1	NA
+84	preview-sandbox--69c7d18f5410072be444eeca.base44.app	2	1.0	0	100%	1.0	1	NA
+85	lizkatz24.base44.app	2	1.0	0	100%	1.0	0	NA
+86	preview--love72326.base44.app	2	1.0	0	100%	1.0	1	NA
+87	foolishalagboo.base44.app	2	1.0	0	100%	1.0	0	NA
+88	chi097-roll-genius-play.base44.app	2	1.0	0	100%	1.0	0	NA
+89	press.vgdh.io	2	1.5	0	50%	1.5	0	NA
+90	sadikufav1.vercel.app	2	1.5	0	50%	1.5	0	NA
+91	labour-turquoise-mprb6aqmxm.edgeone.app	2	1.0	0	—	—	0	NA
+92	tosintobii.base44.app	2	1.0	0	100%	1.0	0	NA
+93	asknarmi.base44.app	2	1.0	0	100%	1.0	1	NA
+94	preview-sandbox--69c932ff228b658601361014.base44.app	2	1.0	0	100%	1.0	1	NA
+95	preview-sandbox--69c1c5b3c0580d564512f954.base44.app	2	1.5	0	50%	1.5	0	NA
+96	preview-sandbox--69ca7a1f50ed7db4c43022c4.base44.app	1	1.0	0	100%	1.0	0	NA
+97	preview--verse-boost-click.base44.app	1	3.0	0	0%	3.0	1	NA
+98	preview--goodgirl2127.base44.app	1	1.0	0	100%	1.0	0	NA
+99	preview--decentralized-architect-copy-af6496a2.base44.app	1	2.0	0	0%	2.0	0	NA
+100	preview--foolishalagboo.base44.app	1	1.0	0	100%	1.0	0	NA
+101	ais-dev-zhritex3mmwg5vsc5nsfwe-37074123815.europe-west1.run.app	1	1.0	0	100%	1.0	1	NA
+102	preview-sandbox--69c9f19f4fabf05e8e7cb29e.base44.app	1	1.0	0	100%	1.0	1	NA
+103	preview-sandbox--69caa96ddb8994e3d0483b5c.base44.app	1	1.0	0	100%	1.0	1	NA
+104	bruiz703-neon-lane-rush.base44.app	1	2.0	0	0%	2.0	0	NA
+105	smoggy-beige-8o7tqrpzds.edgeone.app	1	1.0	0	—	—	0	NA
+106	cleop.base44.app	1	1.0	0	100%	1.0	0	NA
+107	preview--fund-launch-copy-08d711eb.base44.app	1	1.0	0	100%	1.0	0	NA
+108	ais-dev-26myr3bo3wik7eccxolvob-85036413601.europe-west3.run.app	1	4.0	0	0%	4.0	1	NA
+109	preview--anniekah.base44.app	1	2.0	0	0%	2.0	1	NA
+110	goodbenefactor.base44.app	1	1.0	0	100%	1.0	0	NA
+111	alternative-maroon-wrygl0zhd7.edgeone.app	1	1.0	0	—	—	0	NA
+112	ais-dev-6c3opqjeozlblhhvpjna2r-495534316814.europe-west2.run.app	1	2.0	1	0%	2.0	0	NA
+113	emmanuella7890.vercel.app	1	1.0	0	100%	1.0	0	NA
+114	preview--verse-gateway-copy-c3c5bce3.base44.app	1	1.0	0	100%	1.0	1	NA
+115	ais-dev-2akryhshjms33fexm3xr64-391885672647.asia-southeast1.run.app	1	2.0	0	0%	2.0	0	NA
+116	corporate-ivory-pozlgyfgqt.edgeone.app	1	1.0	0	—	—	0	NA
+117	envious-tomato-bealqzs4cg.edgeone.app	1	1.0	0	—	—	0	NA
+118	preview-sandbox--69c6c06eef7c8744dab8a734.base44.app	1	2.0	0	0%	2.0	0	NA
+119	preview-sandbox--69cab4dc9abb8a8f1fedc9d8.base44.app	1	3.0	0	0%	3.0	0	NA
+120	preview--jamestows1-quiz-master-quest.base44.app	1	1.0	0	100%	1.0	1	NA
+121	suleamore.base44.app	1	2.0	0	0%	2.0	0	NA
+122	open-yellow-rgfa6ytx6t.edgeone.app	1	1.0	0	—	—	0	NA
+123	preview--lokiii235.base44.app	1	1.0	0	100%	1.0	1	NA
+124	nuclear-ivory-7l6po4hq1b.edgeone.app	1	1.0	0	—	—	0	NA
+125	preview-sandbox--69c98495ec9e92ccf193c30f.base44.app	1	2.0	0	0%	2.0	0	NA
+126	preview--seungabriell.base44.app	1	1.0	0	100%	1.0	1	NA
+127	preview--kotunlowo.base44.app	1	1.0	0	100%	1.0	1	NA
+128	preview--johnwalee.base44.app	1	2.0	0	0%	2.0	1	NA
+129	preview-sandbox--69caff3f21008552b3505c4e.base44.app	1	1.0	0	100%	1.0	0	NA
+130	preview-sandbox--69b97b06e732ff5cad7abbcb.base44.app	1	2.0	0	0%	2.0	1	NA
+131	preview-sandbox--69c3f7f6bf10e83643122e7b.base44.app	1	1.0	0	100%	1.0	1	NA
+132	preview--alagbeseun.base44.app	1	1.0	0	100%	1.0	1	NA
+133	preview-sandbox--69cae815adadecbc202a35af.base44.app	1	1.0	0	100%	1.0	1	NA
+134	preview--darex2000.base44.app	1	1.0	0	100%	1.0	1	NA
+135	abbeytosin.base44.app	1	1.0	0	100%	1.0	0	NA
+136	preview-sandbox--69c1a7ef97bd215daf6496a2.base44.app	1	6.0	2	0%	6.0	0	NA
+137	ais-dev-3ch2zolsnp7zjxtbsjanlo-408970653381.europe-west2.run.app	1	1.0	0	100%	1.0	1	NA
+138	preview--bruiz703-neon-lane-rush.base44.app	1	1.0	0	100%	1.0	0	NA
+139	preview-sandbox--69ca44505186207015448637.base44.app	1	1.0	0	100%	1.0	1	NA
+140	walebayoo.base44.app	1	1.0	0	100%	1.0	0	NA
+141	preview-sandbox--69bfa77e87f71aa6cf696498.base44.app	1	4.0	0	0%	4.0	1	NA
+142	preview-sandbox--69c999d7862f0fed9ca46047.base44.app	1	1.0	0	100%	1.0	0	NA
+143	preview--vcelestine.base44.app	1	2.0	0	0%	2.0	1	NA
+144	preview-sandbox--69c85756cb1364462df93c0f.base44.app	1	1.0	0	100%	1.0	0	NA
+145	gramsule1.base44.app	1	1.0	0	100%	1.0	0	NA
+146	alagbeseun.base44.app	1	1.0	0	100%	1.0	0	NA
+147	little-turquoise-yxacprahqv.edgeone.app	1	2.0	0	100%	1.0	0	NA
+148	preview-sandbox--69cb4b70fdbe899a53e8e7a4.base44.app	1	1.0	0	100%	1.0	0	NA
+149	preview-sandbox--69c5a39a796a037f7846a975.base44.app	1	1.0	0	100%	1.0	1	NA
+150	preview--mind-guess-copy-4edee90e.base44.app	1	2.0	0	0%	2.0	0	NA
+151	preview-sandbox--69c5f73da293e73909c1c59c.base44.app	1	4.0	1	0%	4.0	0	NA
+152	verse-favee-community.base44.app	1	2.0	0	0%	2.0	0	NA
+153	aderoju9.github.io	1	1.0	1	100%	1.0	0	NA
+154	ais-dev-kcxecghucozmc4uwfrrcuy-37074123815.europe-west1.run.app	1	2.0	1	0%	2.0	0	NA
+155	love72326.base44.app	1	1.0	0	100%	1.0	0	NA
+156	preview-sandbox--69cad12ec7dc267c6a5006f5.base44.app	1	2.0	0	0%	2.0	0	NA
+157	preview-sandbox--69c0e9e3b220a375f946cff4.base44.app	1	1.0	0	100%	1.0	1	NA
+158	preview--bakaresule.base44.app	1	2.0	0	0%	2.0	0	NA
+159	preview-sandbox--69c9e6a4b739f63eec2f2667.base44.app	1	2.0	0	0%	2.0	0	NA
+160	sophisticated-rose-mhdbujsdgo.edgeone.app	1	1.0	0	—	—	0	NA
+161	preview-sandbox--69cb4c0f6f98a0afc32ba184.base44.app	1	1.0	0	100%	1.0	1	NA
+162	preview-sandbox--69cb3f68a8c481825cff6324.base44.app	1	1.0	0	100%	1.0	0	NA
+163	dlootbad.base44.app	1	1.0	0	100%	1.0	0	NA
+164	preview-sandbox--69ca9ac5aceba47c8005b68c.base44.app	1	1.0	0	100%	1.0	0	NA
+165	kotunlowo.base44.app	1	1.0	0	100%	1.0	0	NA
+166	ais-dev-rswsrp57wqrvuwhvwi6tqj-21246162805.asia-southeast1.run.app	1	2.0	0	0%	2.0	0	NA
+167	preview--crypto-shield-77ea060cnikky456.base44.app	1	1.0	0	100%	1.0	1	NA
+168	preview-sandbox--69c600f8aa1fefcd4edee90e.base44.app	1	1.0	0	100%	1.0	0	NA
+169	preview-sandbox--69cad8a2fdbe899a53e8b658.base44.app	1	1.0	0	100%	1.0	1	NA
+170	ais-dev-u5myn77rqq5qfdlzia5gcp-157182445057.europe-west3.run.app	1	3.0	0	0%	3.0	1	NA
+171	preview--sammiejay.base44.app	1	2.0	0	0%	2.0	1	NA
+172	preview-sandbox--69c88ff7e1147abc8e5b0b10.base44.app	1	3.0	0	0%	3.0	0	NA
+173	enekaobi.base44.app	1	1.0	0	100%	1.0	0	NA
+174	preview--raheelzaki-cricket-bash.base44.app	1	1.0	0	100%	1.0	1	NA
+175	ais-dev-6ftzddoz2ghdzok74evx5s-37074123815.europe-west1.run.app	1	2.0	0	0%	2.0	1	NA
+176	preview-sandbox--69c1c5a26c9a0d59f49e9ee6.base44.app	1	2.0	0	0%	2.0	1	NA
+177	operational-cyan-qe4zil27ng.edgeone.app	1	1.0	0	—	—	0	NA
+178	preview--crypto-lens-5fa22161nikky456.base44.app	1	2.0	0	0%	2.0	1	NA
+179	preview-sandbox--69c6c64f35757b3808d711eb.base44.app	1	1.0	0	100%	1.0	0	NA
+180	fancy-gecko-57e165.netlify.app	1	1.0	0	100%	1.0	0	NA
 Verse App Analytics
 0
