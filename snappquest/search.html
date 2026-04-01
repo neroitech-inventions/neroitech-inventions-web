@@ -589,6 +589,30 @@
 .submissions-table tr.exceeded a {
     color: #b91c1c;
 }
+
+/* BLACKLISTED ROWS - RED + BADGE (as requested) */
+.submissions-table tr.blacklisted {
+    background: #fee2e2 !important;
+    color: #b91c1c !important;
+}
+.submissions-table tr.blacklisted td {
+    color: #b91c1c !important;
+}
+.submissions-table tr.blacklisted a {
+    color: #b91c1c !important;
+}
+.blacklisted-badge {
+    background: #b91c1c;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    margin-left: 8px;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+}
     </style>
     <link href="images/icon.png" rel="icon">
 </head>
@@ -693,6 +717,7 @@
             QUESTS_ID: '1wY8FlSvSsYPCGo2qYsl20w4kcPqx9Z4CqzA2MeQozGo',
             QUANTITY_ID: '1o_kkpaYmp56mq_May0bBdbmdXK669DGOYY3YHZpdh7E',
             RESPONSE_ID: '1uI__u1VylTAb6ukduHOuHXkcGX5UwgpAFzD8DY5-_bI',
+            BLACKLIST_ID: '1D6NaJ0I1kLNUSUqWRjy4aaY1pE-we1PqpTmCytG5ass',   // ← BLACKLIST SHEET ADDED
             QUESTS_RANGE: 'Quests!A1:G300',
             QUANTITY_RANGE: 'Form responses 3!A1:L4000',
             RESPONSE_RANGE: 'Form responses 4!A1:F4000'
@@ -713,6 +738,7 @@
             exportCsv: document.getElementById('exportCsv')
         };
         let currentChart = null;
+
         async function fetchSheetData(spreadsheetId, range) {
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${CONFIG.API_KEY}`;
             const response = await fetch(url);
@@ -791,6 +817,7 @@ function copyWallet(address) {
         Swal.fire('Error', 'Failed to copy address', 'error');
     });
 }
+
 async function performSearch() {
     let trackCode = DOM.searchInput.value.trim();
 
@@ -823,11 +850,40 @@ async function performSearch() {
                     fetchSheetData(CONFIG.QUANTITY_ID, CONFIG.QUANTITY_RANGE),
                     fetchSheetData(CONFIG.RESPONSE_ID, CONFIG.RESPONSE_RANGE)
                 ]);
+
+                // ==================== BLACKLIST LOOKUP (Telegram E vs Blacklist A:A) ====================
+                let blacklistedSet = new Set();
+                try {
+                    const blacklistUrl = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.BLACKLIST_ID}/values/NaughtyList!A:A?key=${CONFIG.API_KEY}`;
+                    const blacklistRes = await fetch(blacklistUrl);
+                    if (blacklistRes.ok) {
+                        const blacklistData = await blacklistRes.json();
+                        const values = blacklistData.values || [];
+                        blacklistedSet = new Set(
+                            values
+                                .map(row => (row[0] || '').toString().trim().toLowerCase().replace(/^@/, '').trim())
+                                .filter(val => val.length > 0)
+                        );
+                    } else if (blacklistRes.status === 403) {
+                        throw new Error("403 - Blacklist sheet is not public");
+                    }
+                } catch (blacklistErr) {
+                    console.error('Blacklist error:', blacklistErr);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Blacklist not loaded',
+                        html: 'Please make the Blacklist sheet public:<br><b>Anyone with the link → Viewer</b>',
+                        confirmButtonText: 'OK'
+                    });
+                }
+                // =================================================================
+
                 const quest = quests.find(q => q['Track Code']?.toUpperCase() === trackCode);
                 const quantityRow = quantities.find(q => q['Track Code']?.toUpperCase() === trackCode);
                 const totalSlots = quantityRow ? parseInt(quantityRow.Quantity) || 0 : 0;
                 const submissions = responses.filter(r => r['Track Code']?.toUpperCase() === trackCode);
-                displayResults(quest, totalSlots, submissions);
+
+                displayResults(quest, totalSlots, submissions, blacklistedSet);
             } catch (err) {
                 Swal.fire('Error', 'Failed to load data. Please try again later.', 'error');
                 clearResults();
@@ -835,13 +891,15 @@ async function performSearch() {
                 resetSearchButton();
             }
         }
+
         function parseDate(dateStr) {
             const parts = dateStr.match(/(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+)/);
             if (!parts) return new Date(NaN);
             const [_, d, m, y, h, min, s] = parts;
             return new Date(y, m-1, d, h, min, s);
         }
-        function displayResults(quest, totalSlots, submissions) {
+
+        function displayResults(quest, totalSlots, submissions, blacklistedSet = new Set()) {
     DOM.results.style.display = 'block';
 
     let rewardDisplay = quest ? (quest.Reward || '0') : '0';
@@ -896,24 +954,37 @@ async function performSearch() {
         options: { responsive: true, scales: { y: { beginAtZero: true } } }
     });
 
-    // ==================== ONLY THIS PART CHANGED ====================
+    // ==================== SUBMISSIONS TABLE WITH BLACKLIST CHECK ====================
     DOM.submissionsBody.innerHTML = '';
     DOM.noResults.style.display = submissions.length ? 'none' : 'block';
 
     submissions.forEach((sub, index) => {
         const wallet = (sub['Polygon Address'] || '').trim();
+        const telegramRaw = (sub.Telegram || '').trim();
+        const normalizedTelegram = telegramRaw.toLowerCase().replace(/^@/, '');
+        const isBlacklisted = blacklistedSet.has(normalizedTelegram);
+
         const tr = document.createElement('tr');
 
-        // MARK EXCEEDED ROWS IN RED
+        // Exceeded slots (original logic)
         if (index >= totalSlots && totalSlots > 0) {
             tr.classList.add('exceeded');
+        }
+        // BLACKLISTED → whole row marked red (as you asked)
+        if (isBlacklisted) {
+            tr.classList.add('blacklisted');
+        }
+
+        let telegramHtml = `<a href="https://t.me/${telegramRaw.replace('@','')}" target="_blank" class="contact-link">${telegramRaw || ''}</a>`;
+        if (isBlacklisted) {
+            telegramHtml += ` <span class="blacklisted-badge">BLACKLISTED</span>`;
         }
 
         tr.innerHTML = `
             <td>${sub.Timestamp || ''}</td>
             <td><a href="${sub['Proof of Quest'] || '#'}" target="_blank">View Proof</a></td>
             <td><a href="${sub['Quest Link'] || '#'}" target="_blank">View Quest</a></td>
-            <td><a href="https://t.me/${(sub.Telegram || '').replace('@','')}" target="_blank" class="contact-link">${sub.Telegram || ''}</a></td>
+            <td>${telegramHtml}</td>
 <td>
     <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
         <a href="${getExplorerUrl(wallet)}" 
