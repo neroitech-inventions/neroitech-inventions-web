@@ -581,14 +581,14 @@ if(pages < 1.2) score -= 30;
 if(bounce <= 1){
   score -= 80; // No rating
 }
-else if(bounce <= 40){
+else if(bounce <= 48){
   score += 20; // Excellent
 }
 else if(bounce <= 55){
-  score += 12; // Good
-}
-else if(bounce <= 65){
   score -= 15; // Slightly high
+}
+else if(bounce <= 60){
+  score -= 20; // High
 }
 else if(bounce <= 69){
   score -= 25; // Bad
