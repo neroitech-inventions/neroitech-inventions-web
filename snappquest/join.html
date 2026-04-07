@@ -7,15 +7,11 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-QM106YDX6N');
 </script>
-
 <!-- Verse tag (VGDH) -->
 <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
-
 <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.tagged-events.outbound-links.file-downloads.hash.pageview-props.revenue.js"></script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="SnappQuest - Explore Quests for Engage-to-Earn Tasks">
@@ -893,7 +889,6 @@
     position: relative;
     overflow: hidden;
 }
-
 .profile-avatar img {
     width: 100%;
     height: 100%;
@@ -901,7 +896,6 @@
     border-radius: 50%;
     display: block;
 }
-
 .profile-avatar .fallback {
     position: absolute;
     inset: 0;
@@ -966,11 +960,9 @@
   color: white;
   overflow-y: auto;
 }
-
 .wallet-sidebar.open {
   right: 0;
 }
-
 .sidebar-header {
   display: flex;
   justify-content: space-between;
@@ -979,18 +971,15 @@
   font-size: 22px;
   font-weight: 700;
 }
-
 .wallet-inputs .wallet-field {
   margin-bottom: 18px;
 }
-
 .wallet-inputs label {
   display: block;
   margin-bottom: 6px;
   font-size: 14px;
   color: #CBD5E1;
 }
-
 .wallet-inputs input {
   width: 100%;
   padding: 12px;
@@ -1000,7 +989,6 @@
   color: white;
   font-family: monospace;
 }
-
 .save-wallet-btn {
   width: 100%;
   padding: 14px;
@@ -1012,11 +1000,9 @@
   cursor: pointer;
   margin-bottom: 24px;
 }
-
 .saved-wallets {
   margin-top: 20px;
 }
-
 .saved-wallet {
   background: #334155;
   padding: 12px;
@@ -1026,13 +1012,11 @@
   justify-content: space-between;
   align-items: center;
 }
-
 .saved-wallet span {
   font-family: monospace;
   font-size: 14px;
   word-break: break-all;
 }
-
 .copy-wallet-btn {
   background: #1E2937;
   color: #34D399;
@@ -1055,12 +1039,12 @@
         <a href="stats.html"><i class="fas fa-chart-bar"></i> View Stats</a>
         <a href="leaderboard.html"><i class="fas fa-trophy"></i> View Leaderboard</a>
     </nav>
-    
+   
     <!-- WALLET BUTTON -->
     <button onclick="toggleWalletSidebar()" style="background:none;border:none;font-size:26px;color:white;cursor:pointer;margin-right:12px;" title="My Wallets">
         <i class="fas fa-wallet"></i>
     </button>
-    
+   
     <button class="disconnect-btn" id="disconnectBtn"><i class="fas fa-sign-out-alt"></i> Home</button>
 </div>
         <div class="hamburger">
@@ -1073,7 +1057,7 @@
     <h3>My Wallets</h3>
     <span onclick="toggleWalletSidebar()" style="cursor:pointer; font-size:24px;">✕</span>
   </div>
-  
+ 
   <div class="wallet-inputs">
     <div class="wallet-field">
       <label>Solana Address</label>
@@ -1088,18 +1072,16 @@
       <input type="text" id="suiWallet" placeholder="Enter Sui wallet">
     </div>
   </div>
-
   <button onclick="saveWallets()" class="save-wallet-btn">Save Wallets</button>
-
   <div id="savedWallets" class="saved-wallets"></div>
 </div>
     <div class="overlay"></div>
     <div class="profile-container">
         <div class="profile-header">
             <div class="profile-avatar" id="profileAvatar">
-    <img 
-        src="images/degen.png" 
-        alt="Profile" 
+    <img
+        src="images/degen.png"
+        alt="Profile"
         style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;"
         onclick="toggleImage(this)"
         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
@@ -1278,22 +1260,23 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
             RESPONSE_RANGE: 'Form responses 4!A1:F4000',
             QUESTS_PER_PAGE: 3,
             FALLBACK_RATE: 1/0.000057,
-            FORM_ACTION: 'https://docs.google.com/forms/d/1ObMPuTI2S1842DmfYePB4uKxfw2cLDtSlFsllUZZ-2I/formResponse'
+            FORM_ACTION: 'https://docs.google.com/forms/d/1ObMPuTI2S1842DmfYePB4uKxfw2cLDtSlFsllUZZ-2I/formResponse',
+            
+            // ADVERT CONFIG (now read from sheet)
+            AD_ID: '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w',            
+            AD_RANGE: 'SnappQuestData!A5:B5'
         };
-
+        let tapCounts = {}; // tracks how many times each quest has been tapped
 // === WALLET AUTO-DETECTOR (only used for multi-chain quests) ===
         function isValidEVMAddress(addr) {
             return /^0x[a-fA-F0-9]{40}$/.test(addr.trim());
         }
-
         function isValidSuiAddress(addr) {
             return /^0x[a-fA-F0-9]{64}$/.test(addr.trim());
         }
-
         function isValidSolanaAddress(addr) {
             return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(addr.trim());
         }
-
         function detectChain(address) {
             if (!address || address.trim() === '') return null;
             const addr = address.trim();
@@ -1309,6 +1292,9 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
         let completedCurrentPage = 1;
         let currentCurrency = 'VERSE';
         let usdcRate = 0;
+        
+        let AD_IMAGE_URL = 'images/ad.jpg'; // fallback
+        let AD_LINK = 'https://niti.com.ng/snappquest/ad.html';
         // DOM Elements
         const DOM = {
             disconnectBtn: document.getElementById('disconnectBtn'),
@@ -1495,6 +1481,7 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
         async function loadData() {
             showLoading(); // Added: Show skeletons at start
             try {
+                // === 1. Fetch VERSE/USDC rate ===
                 const rateData = await fetchSheetData(CONFIG.STATS_ID, CONFIG.RATE_RANGE);
                 if (rateData === null) {
                     console.warn(`No rate found in SnappQuestData!D2. Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
@@ -1511,15 +1498,50 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                         usdcRate = CONFIG.FALLBACK_RATE;
                     }
                 }
+
+                // === 2. NEW: Fetch Live Ad from Google Sheet (A5:B5) ===
+                try {
+                    const adUrl = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.AD_ID}/values/${CONFIG.AD_RANGE}?key=${CONFIG.API_KEY}`;
+                    const adResponse = await fetch(adUrl);
+                    
+                    if (!adResponse.ok) {
+                        throw new Error(`HTTP ${adResponse.status}`);
+                    }
+
+                    const adJson = await adResponse.json();
+
+                    if (adJson.values && adJson.values.length > 0) {
+                        const adRow = adJson.values[0];
+                        AD_IMAGE_URL = (adRow[0] || '').trim() || 'images/ad.jpg';
+                        AD_LINK = (adRow[1] || '').trim() || '';
+
+                        console.log(`✅ LIVE AD LOADED successfully from ${CONFIG.AD_RANGE}:`, {
+                            image: AD_IMAGE_URL,
+                            link: AD_LINK || '(no link)'
+                        });
+                    } else {
+                        console.warn('⚠️ No data found in SnappQuestData!A5:B5 — using fallback ad');
+                    }
+                } catch (adError) {
+                    console.warn('⚠️ Could not load ad from Google Sheet (using fallback):', adError.message);
+                    logError(`Ad fetch failed: ${adError.message}`);
+                    // AD_IMAGE_URL and AD_LINK remain on fallback
+                }
+
+                // === 3. Fetch Stats ===
                 const statsRows = await fetchSheetData(CONFIG.STATS_ID, CONFIG.STATS_RANGE);
                 if (!statsRows.length) throw new Error('No stats data found');
+
                 userData = {
                     availableQuests: parseInt(statsRows[0].AvailableQuests) || 0,
                     completedQuests: parseInt(statsRows[0].CompletedQuests) || 0,
                     earnings: parseInt(statsRows[0].Earnings) || 0
                 };
+
+                // === 4. Fetch Quests ===
                 const questRows = await fetchSheetData(CONFIG.QUESTS_ID, CONFIG.QUESTS_RANGE);
                 if (!questRows.length) throw new Error('No quests found');
+
                 quests = await Promise.all(questRows.map(async quest => {
                     const status = parseInt(quest.Status) || 0;
                     const reward = parseFloat(quest.Reward.replace('𝕍', '')) || 0;
@@ -1536,6 +1558,7 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                         }
                     }
                     const availability = trackCode && status === 0 ? await getQuestAvailability(trackCode) : { remaining: null, total: 0 };
+                    
                     return {
                         id: parseInt(quest.ID) || 0,
                         title: quest.Title || 'Untitled Quest',
@@ -1543,8 +1566,9 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                         description: quest.Description || 'No description available',
                         reward: reward,
                         link: quest.Link || '',
-                        status: (status === 0 || status === 2) ? 'active' : 'completed',
+                        status: (status === 0 || status === 2 || status === 3) ? 'active' : 'completed',
                         isGame: status === 2,
+                        tapToUnlock: status === 3,
                         trackCode: trackCode,
                         remaining: availability.remaining,
                         total: availability.total,
@@ -1552,6 +1576,7 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                         chain: parseInt(quest.Chain) || 0
                     };
                 }));
+
                 // Validate track codes for uniqueness
                 const trackCodes = quests.map(q => q.trackCode);
                 const uniqueTrackCodes = new Set(trackCodes);
@@ -1561,19 +1586,22 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                 } else {
                     console.log('All track codes are unique:', trackCodes);
                 }
+
                 // Log available quests for debugging
                 const availableQuests = quests.filter(q => q.status === 'active');
                 console.log('Available quests with track codes and remaining:', availableQuests.map(q => ({ id: q.id, trackCode: q.trackCode, remaining: q.remaining })));
-                hideLoading(); // Added: Hide skeletons after successful fetch
+
+                hideLoading(); // Hide skeletons after successful fetch
                 initializeProfile();
+
             } catch (error) {
-                logError(`Failed to load data: ${error.message}`); // Log to backend
+                logError(`Failed to load data: ${error.message}`);
                 console.error('Error loading data:', error);
                 currentCurrency = 'VERSE';
                 DOM.currencyToggle.checked = false;
                 DOM.currencyToggle.disabled = true;
                 usdcRate = CONFIG.FALLBACK_RATE;
-                hideLoading(); // Added: Hide skeletons even on error
+                hideLoading();
                 initializeProfile();
             }
         }
@@ -1615,9 +1643,33 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
             paginatedQuests.forEach(quest => grid.appendChild(createQuestElement(quest)));
             renderPagination(quests.length, currentPage, paginationEl, isAvailable);
         }
-        // Create quest card
+        // Create quest card - UPDATED FOR STATUS = 3
         function createQuestElement(quest) {
             const card = document.createElement('div');
+
+            // === TAP TO UNLOCK QUEST (Status = 3) ===
+            if (quest.tapToUnlock === true) {
+                card.className = 'quest-card tap-to-unlock';
+                card.style.borderLeft = '6px solid #F59E0B';
+                
+                // IMPORTANT: These two lines must be here
+                card.dataset.questId = quest.id;
+                card.dataset.trackCode = quest.trackCode || '';
+
+                card.innerHTML = `
+                    <div class="quest-title">Tap to Unlock Quest</div>
+                    <div class="quest-sponsor">Sponsored by: ${quest.sponsor}</div>
+                    <div class="quest-remaining game">Tap the card 60 times to unlock • 0/60</div>
+                    <div class="quest-description">${quest.description}</div>
+                    <div class="quest-reward">
+                        <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
+                    </div>
+                `;
+                card.addEventListener('click', () => handleTapToUnlock(card, quest));
+                return card;
+            }
+
+            // === ORIGINAL CODE (unchanged) ===
             card.className = `quest-card ${quest.status}-quest`;
             card.dataset.questId = quest.id;
             card.dataset.trackCode = quest.trackCode;
@@ -1745,29 +1797,47 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
             modal.classList.remove('active');
             setTimeout(() => modal.style.display = 'none', 400);
         }
-        // Open quest modal
-        function openQuestModal(card) {
-            const modal = DOM.questModal;
-            const titleEl = modal.querySelector('#questModalTitle');
-            titleEl.textContent = card.querySelector('.quest-title').textContent || 'Quest Details';
-            const body = modal.querySelector('.modal-body');
-            body.innerHTML = '';
-            const clone = card.cloneNode(true);
-            const shareBtn = clone.querySelector('.share-btn');
-            if (shareBtn) shareBtn.remove();
-            body.appendChild(clone);
-            modal.style.display = 'block';
-            setTimeout(() => modal.classList.add('active'), 10);
+// Clean openQuestModal - no conflict with tap-to-unlock
+function openQuestModal(originalCard) {
+    const modal = DOM.questModal;
+    const titleEl = modal.querySelector('#questModalTitle');
+    titleEl.textContent = originalCard.querySelector('.quest-title').textContent || 'Quest Details';
+
+    const body = modal.querySelector('.modal-body');
+    body.innerHTML = '';
+
+    const clone = originalCard.cloneNode(true);
+
+    // Re-attach tap listener for safety (in case)
+    if (originalCard.classList.contains('tap-to-unlock')) {
+        const quest = quests.find(q => 
+            q.trackCode === originalCard.dataset.trackCode || 
+            q.id === parseInt(originalCard.dataset.questId || 0)
+        );
+        if (quest && quest.tapToUnlock) {
+            clone.addEventListener('click', (e) => {
+                e.stopImmediatePropagation();
+                handleTapToUnlock(clone, quest);
+            });
         }
+    }
+
+    // Remove share button (as you said forget it)
+    const shareBtn = clone.querySelector('.share-btn');
+    if (shareBtn) shareBtn.remove();
+
+    body.appendChild(clone);
+    modal.style.display = 'block';
+    setTimeout(() => modal.classList.add('active'), 10);
+}
         // Open submit modal
                 // Open submit modal
         function openSubmitModal(trackCode) {
             DOM.submitQuestForm.querySelector('#trackCode').value = trackCode || '';
-            
+           
             const quest = quests.find(q => q.trackCode === trackCode);
             let labelText = 'Polygon';
             let placeholderText = 'Enter your Polygon Wallet Address';
-
             if (quest) {
                 switch(quest.chain) {
                     case 1:
@@ -1778,20 +1848,17 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                         labelText = 'Sui';
                         placeholderText = 'Enter your Sui Wallet Address';
                         break;
-                    case 3:                     // ← MULTI-CHAIN
+                    case 3: // ← MULTI-CHAIN
                         labelText = 'Enter';
                         placeholderText = 'Enter your Wallet Address (auto-detects)';
                         break;
                 }
             }
-
             const label = DOM.submitQuestForm.querySelector('label[for="twitter"]');
             const input = DOM.submitQuestForm.querySelector('#twitter');
-
             label.textContent = `${labelText} Wallet Address`;
             input.placeholder = placeholderText;
             input.value = '';
-
             // REAL-TIME AUTO-DETECTION (only for multi-chain quests)
             if (quest && quest.chain === 3) {
                 input.onkeyup = function() {
@@ -1803,9 +1870,8 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                     }
                 };
             } else {
-                input.onkeyup = null;   // remove listener for normal quests
+                input.onkeyup = null; // remove listener for normal quests
             }
-
             DOM.submitQuestModal.style.display = 'block';
             setTimeout(() => DOM.submitQuestModal.classList.add('active'), 10);
         }
@@ -1841,34 +1907,48 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                 }
             }
         }
-        // Handle quest clicks
-        function handleQuestClick(e) {
-            const target = e.target;
-            const submitBtn = target.closest('.submit-btn');
-            if (submitBtn) {
-                const card = submitBtn.closest('.quest-card');
-                if (!card) return;
-                const trackCode = card.dataset.trackCode;
-                openSubmitModal(trackCode);
-                return;
-            }
-            const shareBtn = target.closest('.share-btn');
-            if (shareBtn) {
-                const card = shareBtn.closest('.quest-card');
-                if (!card) return;
-                const trackCode = card.dataset.trackCode;
-                copyShareUrl(trackCode);
-                return;
-            }
-            const completeBtn = target.closest('.complete-btn');
-            if (completeBtn) {
-                return;
-            }
-            const card = target.closest('.quest-card');
-            if (card && !card.closest('.modal')) {
-                openQuestModal(card);
-            }
+// FINAL FIXED handleQuestClick - tapping now works reliably in modal
+function handleQuestClick(e) {
+    const target = e.target;
+    const card = target.closest('.quest-card');
+    if (!card) return;
+
+    // === ALWAYS handle tap-to-unlock first (grid or modal) ===
+    if (card.classList.contains('tap-to-unlock')) {
+        const quest = quests.find(q => 
+            (q.trackCode && q.trackCode === card.dataset.trackCode) ||
+            (q.id && q.id === parseInt(card.dataset.questId || 0))
+        );
+        if (quest && quest.tapToUnlock) {
+            e.stopImmediatePropagation();   // Prevent any other handlers
+            handleTapToUnlock(card, quest);
+            return;
         }
+    }
+
+    // === Normal buttons (Submit, Share, etc.) ===
+    const submitBtn = target.closest('.submit-btn');
+    if (submitBtn) {
+        const trackCode = card.dataset.trackCode;
+        openSubmitModal(trackCode);
+        return;
+    }
+
+    const shareBtn = target.closest('.share-btn');
+    if (shareBtn) {
+        const trackCode = card.dataset.trackCode;
+        copyShareUrl(trackCode);
+        return;
+    }
+
+    const completeBtn = target.closest('.complete-btn');
+    if (completeBtn) return;
+
+    // Only open modal if click is on a normal quest card OUTSIDE modal
+    if (!card.closest('.modal') && !card.classList.contains('tap-to-unlock')) {
+        openQuestModal(card);
+    }
+}
         // Event listeners
         function setupEventListeners() {
             DOM.disconnectBtn.addEventListener('click', () => {
@@ -2039,15 +2119,12 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                 }
             });
         }
-
 function toggleImage(img) {
     // Change this to your second image path
     const image1 = "images/degen.png";
     const image2 = "images/degen2.png";
-
     img.src = (img.src.includes(image1)) ? image2 : image1;
 }
-
         // Initialize
         window.addEventListener('load', () => {
             console.log('Page loaded, setting up event listeners');
@@ -2059,7 +2136,7 @@ function toggleImage(img) {
 function toggleWalletSidebar() {
     const sidebar = document.getElementById('walletSidebar');
     sidebar.classList.toggle('open');
-    
+   
     // Close sidebar when clicking anywhere outside it
     if (sidebar.classList.contains('open')) {
         setTimeout(() => {
@@ -2067,23 +2144,19 @@ function toggleWalletSidebar() {
         }, 10);
     }
 }
-
 function outsideClickHandler(e) {
     const sidebar = document.getElementById('walletSidebar');
     if (!sidebar.contains(e.target) && !e.target.closest('button[onclick="toggleWalletSidebar()"]')) {
         sidebar.classList.remove('open');
     }
 }
-
 function saveWallets() {
   const sol = document.getElementById('solanaWallet').value.trim();
   const poly = document.getElementById('polygonWallet').value.trim();
   const sui = document.getElementById('suiWallet').value.trim();
-
   localStorage.setItem('userSolana', sol);
   localStorage.setItem('userPolygon', poly);
   localStorage.setItem('userSui', sui);
-
   Swal.fire({
     icon: 'success',
     title: 'Wallets Saved!',
@@ -2091,27 +2164,21 @@ function saveWallets() {
     timer: 2000,
     showConfirmButton: false
   });
-
   renderSavedWallets();
 }
-
 function renderSavedWallets() {
   const container = document.getElementById('savedWallets');
   container.innerHTML = '';
-
   const sol = localStorage.getItem('userSolana') || '';
   const poly = localStorage.getItem('userPolygon') || '';
   const sui = localStorage.getItem('userSui') || '';
-
   if (sol) container.innerHTML += createSavedWalletHTML('Solana', sol);
   if (poly) container.innerHTML += createSavedWalletHTML('Polygon', poly);
   if (sui) container.innerHTML += createSavedWalletHTML('Sui', sui);
-
   if (!container.innerHTML) {
     container.innerHTML = '<p style="color:#CBD5E1;text-align:center;">No wallets saved yet.</p>';
   }
 }
-
 function createSavedWalletHTML(chain, address) {
   return `
     <div class="saved-wallet">
@@ -2123,12 +2190,10 @@ function createSavedWalletHTML(chain, address) {
     </div>
   `;
 }
-
 // Load saved wallets when page opens
 window.addEventListener('load', () => {
   renderSavedWallets();
 });
-
 // Copy wallet (used by the saved wallets)
 function copyWallet(address) {
     if (!address) return;
@@ -2140,11 +2205,69 @@ function copyWallet(address) {
             timer: 1500,
             showConfirmButton: false,
             toast: true,
-            position: 'top',           // ← Now appears at the front/top of the sidebar
+            position: 'top', // ← Now appears at the front/top of the sidebar
             background: '#1F2937',
             color: '#fff'
         });
     });
+}
+// IMPROVED TAP TO UNLOCK - uses live ad from Google Sheet
+async function handleTapToUnlock(card, quest) {
+    const trackCode = quest.trackCode || quest.id.toString();
+    if (!tapCounts[trackCode]) tapCounts[trackCode] = 0;
+
+    tapCounts[trackCode]++;
+    const tapsDone = tapCounts[trackCode];
+    const tapsLeft = Math.max(0, 60 - tapsDone);
+
+    // Update progress
+    const progressEl = card.querySelector('.quest-remaining');
+    if (progressEl) {
+        progressEl.innerHTML = `
+            <span style="color:#F59E0B; font-weight:700;">${tapsDone}/60 taps • ${tapsLeft} more to unlock</span>
+        `;
+    }
+
+    // Show sponsor ad from Google Sheet
+    const descriptionEl = card.querySelector('.quest-description');
+    if (descriptionEl) {
+        const originalDesc = descriptionEl.innerHTML;
+        
+        descriptionEl.innerHTML = `
+            <div style="background:#fef3c7; padding:16px; border-radius:12px; text-align:center; margin:12px 0 16px;">
+                <img src="${AD_IMAGE_URL}" style="max-width:100%; height:auto; border-radius:8px;" alt="Sponsor Ad">
+                ${AD_LINK ? `<br><a href="${AD_LINK}" target="_blank" style="color:#D97706; font-weight:600; margin-top:8px; display:inline-block;">Click for full offer →</a>` : ''}
+            </div>
+        `;
+
+        // Keep ad visible for 8 seconds
+        setTimeout(() => {
+            if (descriptionEl && descriptionEl.innerHTML.includes('Sponsor')) {
+                descriptionEl.innerHTML = originalDesc;
+            }
+        }, 8000);
+    }
+
+    // Unlock at 60 taps
+    if (tapsDone >= 60) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Quest Unlocked!',
+            text: 'You can now submit this quest.',
+            timer: 2000,
+            showConfirmButton: false
+        });
+
+        const availability = await getQuestAvailability(trackCode);
+        quest.remaining = availability.remaining;
+        quest.total = availability.total;
+
+        quest.tapToUnlock = false;
+        quest.status = 'active';
+
+        const newCardHTML = createQuestElement(quest).outerHTML;
+        card.outerHTML = newCardHTML;
+    }
 }
     </script>
 </body>
