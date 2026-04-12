@@ -654,6 +654,9 @@
             <div class="submissions-section">
                 <h2 class="section-title"> Submissions</h2>
                 <button class="export-btn" id="exportCsv"> Export to CSV</button>
+                <button class="export-btn" id="bulkPaymentBtn" style="background: linear-gradient(135deg, #6366F1, #4F46E5); margin-left: 12px;">
+                    📋 Copy Bulk Payment List
+                </button>
                 <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 16px; margin-bottom: 20px;">
                     <table class="submissions-table">
                         <thead>
@@ -735,7 +738,8 @@
             navContainer: document.querySelector('.nav-container'),
             overlay: document.querySelector('.overlay'),
             backToTopButton: document.getElementById('back-to-top'),
-            exportCsv: document.getElementById('exportCsv')
+            exportCsv: document.getElementById('exportCsv'),
+            bulkPaymentBtn: document.getElementById('bulkPaymentBtn')
         };
         let currentChart = null;
 
@@ -900,114 +904,224 @@ async function performSearch() {
         }
 
         function displayResults(quest, totalSlots, submissions, blacklistedSet = new Set()) {
-    DOM.results.style.display = 'block';
+            DOM.results.style.display = 'block';
 
-    let rewardDisplay = quest ? (quest.Reward || '0') : '0';
-    rewardDisplay = rewardDisplay.replace(/𝕍/g, '<img src="images/verse_logo.svg" alt="𝕍" class="reward-logo" align="absmiddle"> ');
-    rewardDisplay = rewardDisplay.replace(/\$/g, '<img src="images/usdc_logo.svg" alt="$" class="reward-logo" align="absmiddle"> ');
-    if (!rewardDisplay.includes('verse_logo.svg') && !rewardDisplay.includes('usdc_logo.svg')) {
-        rewardDisplay = `<img src="images/verse_logo.svg" alt="Verse" class="reward-logo" align="absmiddle"> ${rewardDisplay}`;
-    }
+            let rewardDisplay = quest ? (quest.Reward || '0') : '0';
+            rewardDisplay = rewardDisplay.replace(/𝕍/g, '<img src="images/verse_logo.svg" alt="𝕍" class="reward-logo" align="absmiddle"> ');
+            rewardDisplay = rewardDisplay.replace(/\$/g, '<img src="images/usdc_logo.svg" alt="$" class="reward-logo" align="absmiddle"> ');
+            if (!rewardDisplay.includes('verse_logo.svg') && !rewardDisplay.includes('usdc_logo.svg')) {
+                rewardDisplay = `<img src="images/verse_logo.svg" alt="Verse" class="reward-logo" align="absmiddle"> ${rewardDisplay}`;
+            }
 
-    DOM.questInfo.innerHTML = quest ? `
-        <h2>${quest.Title || 'Unknown Quest'}</h2>
-        <p>Sponsored by: ${quest.Sponsor || 'Unknown'}</p>
-        <p>Reward: ${rewardDisplay}</p>
-        <p>Description: ${quest.Description || 'No description'}</p>
-    ` : '<p>No quests found for this Track Code. Please enter `Pending` to view pending quests in the SnappQuest Explorer.</p>';
+            DOM.questInfo.innerHTML = quest ? `
+                <h2>${quest.Title || 'Unknown Quest'}</h2>
+                <p>Sponsored by: ${quest.Sponsor || 'Unknown'}</p>
+                <p>Reward: ${rewardDisplay}</p>
+                <p>Description: ${quest.Description || 'No description'}</p>
+            ` : '<p>No quests found for this Track Code. Please enter `Pending` to view pending quests in the SnappQuest Explorer.</p>';
 
-    const count = submissions.length;
-    const remaining = Math.max(0, totalSlots - count);
-    let earliest = 'N/A', latest = 'N/A';
-    if (submissions.length > 0) {
-        const times = submissions.map(s => parseDate(s.Timestamp).getTime()).filter(t => !isNaN(t));
-        if (times.length) {
-            earliest = new Date(Math.min(...times)).toLocaleDateString();
-            latest = new Date(Math.max(...times)).toLocaleDateString();
+            const count = submissions.length;
+            const remaining = Math.max(0, totalSlots - count);
+            let earliest = 'N/A', latest = 'N/A';
+            if (submissions.length > 0) {
+                const times = submissions.map(s => parseDate(s.Timestamp).getTime()).filter(t => !isNaN(t));
+                if (times.length) {
+                    earliest = new Date(Math.min(...times)).toLocaleDateString();
+                    latest = new Date(Math.max(...times)).toLocaleDateString();
+                }
+            }
+
+            DOM.insightsGrid.innerHTML = `
+                <div class="insight-card">Total Submissions<div class="insight-number">${count}</div></div>
+                <div class="insight-card">Total Slots<div class="insight-number">${totalSlots}</div></div>
+                <div class="insight-card">Remaining Slots<div class="insight-number">${remaining}</div></div>
+                <div class="insight-card">First Submission<div class="insight-number">${earliest}</div></div>
+                <div class="insight-card">Last Submission<div class="insight-number">${latest}</div></div>
+            `;
+
+            if (currentChart) currentChart.destroy();
+            const dates = submissions.map(s => parseDate(s.Timestamp).toLocaleDateString());
+            const dateMap = dates.reduce((a, d) => (a[d] = (a[d] || 0) + 1, a), {});
+            const labels = Object.keys(dateMap).sort();
+            currentChart = new Chart(DOM.submissionsChart, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Submissions per Day',
+                        data: labels.map(l => dateMap[l]),
+                        borderColor: '#34D399',
+                        backgroundColor: 'rgba(52, 211, 153, 0.2)',
+                        fill: true
+                    }]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+
+            // ==================== SUBMISSIONS TABLE WITH BLACKLIST CHECK ====================
+            DOM.submissionsBody.innerHTML = '';
+            DOM.noResults.style.display = submissions.length ? 'none' : 'block';
+
+            submissions.forEach((sub, index) => {
+                const wallet = (sub['Polygon Address'] || '').trim();
+                const telegramRaw = (sub.Telegram || '').trim();
+                const normalizedTelegram = telegramRaw.toLowerCase().replace(/^@/, '');
+                const isBlacklisted = blacklistedSet.has(normalizedTelegram);
+
+                const tr = document.createElement('tr');
+
+                if (index >= totalSlots && totalSlots > 0) {
+                    tr.classList.add('exceeded');
+                }
+                if (isBlacklisted) {
+                    tr.classList.add('blacklisted');
+                }
+
+                let telegramHtml = `<a href="https://t.me/${telegramRaw.replace('@','')}" target="_blank" class="contact-link">${telegramRaw || ''}</a>`;
+                if (isBlacklisted) {
+                    telegramHtml += ` <span class="blacklisted-badge">BLACKLISTED</span>`;
+                }
+
+                tr.innerHTML = `
+                    <td>${sub.Timestamp || ''}</td>
+                    <td><a href="${sub['Proof of Quest'] || '#'}" target="_blank">View Proof</a></td>
+                    <td><a href="${sub['Quest Link'] || '#'}" target="_blank">View Quest</a></td>
+                    <td>${telegramHtml}</td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <a href="${getExplorerUrl(wallet)}" 
+                               target="_blank" 
+                               style="font-family:monospace; word-break:break-all; font-size:15px; color:#e2e8f0; text-decoration:none;">
+                                ${wallet}
+                            </a>
+                            <span class="blockchain-tag ${getBlockchainClass(wallet)}">
+                                ${getBlockchainTag(wallet)}
+                            </span>
+                            <button onclick="copyWallet('${wallet}'); event.stopImmediatePropagation();" 
+                                    class="copy-btn" title="Copy to clipboard">
+                                📋
+                            </button>
+                        </div>
+                    </td>
+                `;
+                DOM.submissionsBody.appendChild(tr);
+            });
+
+            // Attach Export to CSV button (this is the fix) & Bulk Payment List button
+            DOM.exportCsv.onclick = () => exportToCsv(submissions);
+            DOM.bulkPaymentBtn.onclick = () => generateBulkPaymentList(submissions);
+            // =========================================================
         }
-    }
 
-    DOM.insightsGrid.innerHTML = `
-        <div class="insight-card">Total Submissions<div class="insight-number">${count}</div></div>
-        <div class="insight-card">Total Slots<div class="insight-number">${totalSlots}</div></div>
-        <div class="insight-card">Remaining Slots<div class="insight-number">${remaining}</div></div>
-        <div class="insight-card">First Submission<div class="insight-number">${earliest}</div></div>
-        <div class="insight-card">Last Submission<div class="insight-number">${latest}</div></div>
-    `;
+        // ==================== BULK PAYMENT LIST WITH CHAIN SELECTION (Polygon + Solana + Sui) ====================
+        async function generateBulkPaymentList(submissions) {
+            if (!submissions.length) {
+                Swal.fire('Info', 'No submissions to generate payment list.', 'info');
+                return;
+            }
 
-    if (currentChart) currentChart.destroy();
-    const dates = submissions.map(s => parseDate(s.Timestamp).toLocaleDateString());
-    const dateMap = dates.reduce((a, d) => (a[d] = (a[d] || 0) + 1, a), {});
-    const labels = Object.keys(dateMap).sort();
-    currentChart = new Chart(DOM.submissionsChart, {
-        type: 'line',
-        data: {
-            labels,
-            datasets: [{
-                label: 'Submissions per Day',
-                data: labels.map(l => dateMap[l]),
-                borderColor: '#34D399',
-                backgroundColor: 'rgba(52, 211, 153, 0.2)',
-                fill: true
-            }]
-        },
-        options: { responsive: true, scales: { y: { beginAtZero: true } } }
-    });
+            const result = await Swal.fire({
+                title: 'Generate Bulk Payment List',
+                html: `
+                    <div style="text-align:left; margin-bottom:15px;">
+                        <p><strong>Enter amount per wallet:</strong></p>
+                        <input id="swal-amount-input" type="number" value="2500" 
+                               style="width:100%; padding:12px; font-size:18px; border-radius:8px; border:1px solid #ddd; text-align:center;">
+                    </div>
+                    
+                    <div style="text-align:left;">
+                        <p><strong>Select blockchains to include:</strong></p>
+                        <label style="display:block; margin:8px 0;">
+                            <input type="checkbox" id="swal-polygon" checked> Polygon Wallets
+                        </label>
+                        <label style="display:block; margin:8px 0;">
+                            <input type="checkbox" id="swal-solana" checked> Solana Wallets
+                        </label>
+                        <label style="display:block; margin:8px 0;">
+                            <input type="checkbox" id="swal-sui" checked> Sui Wallets
+                        </label>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Generate & Copy',
+                confirmButtonColor: '#6366F1',
+                focusConfirm: false,
+                didOpen: () => {
+                    document.getElementById('swal-amount-input').focus();
+                    document.getElementById('swal-amount-input').select();
+                },
+                preConfirm: () => {
+                    const amount = document.getElementById('swal-amount-input').value.trim();
+                    const includePolygon = document.getElementById('swal-polygon').checked;
+                    const includeSolana  = document.getElementById('swal-solana').checked;
+                    const includeSui     = document.getElementById('swal-sui').checked;
 
-    // ==================== SUBMISSIONS TABLE WITH BLACKLIST CHECK ====================
-    DOM.submissionsBody.innerHTML = '';
-    DOM.noResults.style.display = submissions.length ? 'none' : 'block';
+                    if (!amount || isNaN(amount) || Number(amount) <= 0) {
+                        Swal.showValidationMessage('Please enter a valid amount');
+                        return false;
+                    }
+                    if (!includePolygon && !includeSolana && !includeSui) {
+                        Swal.showValidationMessage('Please select at least one blockchain');
+                        return false;
+                    }
 
-    submissions.forEach((sub, index) => {
-        const wallet = (sub['Polygon Address'] || '').trim();
-        const telegramRaw = (sub.Telegram || '').trim();
-        const normalizedTelegram = telegramRaw.toLowerCase().replace(/^@/, '');
-        const isBlacklisted = blacklistedSet.has(normalizedTelegram);
+                    return { amount, includePolygon, includeSolana, includeSui };
+                }
+            });
 
-        const tr = document.createElement('tr');
+            if (!result.isConfirmed) return;
 
-        // Exceeded slots (original logic)
-        if (index >= totalSlots && totalSlots > 0) {
-            tr.classList.add('exceeded');
-        }
-        // BLACKLISTED → whole row marked red (as you asked)
-        if (isBlacklisted) {
-            tr.classList.add('blacklisted');
-        }
+            const { amount, includePolygon, includeSolana, includeSui } = result.value;
 
-        let telegramHtml = `<a href="https://t.me/${telegramRaw.replace('@','')}" target="_blank" class="contact-link">${telegramRaw || ''}</a>`;
-        if (isBlacklisted) {
-            telegramHtml += ` <span class="blacklisted-badge">BLACKLISTED</span>`;
-        }
+            const walletList = [];
+            const seen = new Set();
 
-        tr.innerHTML = `
-            <td>${sub.Timestamp || ''}</td>
-            <td><a href="${sub['Proof of Quest'] || '#'}" target="_blank">View Proof</a></td>
-            <td><a href="${sub['Quest Link'] || '#'}" target="_blank">View Quest</a></td>
-            <td>${telegramHtml}</td>
-<td>
-    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-        <a href="${getExplorerUrl(wallet)}" 
-           target="_blank" 
-           style="font-family:monospace; word-break:break-all; font-size:15px; color:#e2e8f0; text-decoration:none;">
-            ${wallet}
-        </a>
-        
-        <span class="blockchain-tag ${getBlockchainClass(wallet)}">
-            ${getBlockchainTag(wallet)}
-        </span>
-        
-        <button onclick="copyWallet('${wallet}'); event.stopImmediatePropagation();" 
-                class="copy-btn" title="Copy to clipboard">
-            📋
-        </button>
-    </div>
-</td>
-        `;
-        DOM.submissionsBody.appendChild(tr);
-    });
-    // ===================================================================
-}
+            submissions.forEach(sub => {
+                let wallet = (sub['Polygon Address'] || '').trim();   // Note: Column name is still "Polygon Address" even for Sui
+                let chain = getBlockchainTag(wallet);
+
+                // Skip if not selected
+                if (chain === '[Polygon]' && !includePolygon) return;
+                if (chain === '[Solana]'  && !includeSolana) return;
+                if (chain === '[Sui]'     && !includeSui) return;
+                if (chain === '[Unknown]') return;
+
+                if (wallet && !seen.has(wallet)) {
+                    seen.add(wallet);
+                    walletList.push(`${wallet}, ${amount}`);
+                }
+            });
+
+            if (!walletList.length) {
+                Swal.fire('No matching wallets', 'No wallets found for the selected blockchain(s).', 'info');
+                return;
+            }
+
+            const finalText = walletList.join('\n');
+
+            Swal.fire({
+                title: `Bulk Payment List Ready (${walletList.length} wallets)`,
+                html: `<pre style="text-align:left; background:#f8f9fa; padding:15px; border-radius:8px; font-size:14px; max-height:320px; overflow:auto; white-space:pre-wrap;">${finalText}</pre>`,
+                showCancelButton: true,
+                confirmButtonText: '📋 Copy All to Clipboard',
+                confirmButtonColor: '#10B981',
+                cancelButtonText: 'Close'
+            }).then((copyResult) => {
+                if (copyResult.isConfirmed) {
+                    navigator.clipboard.writeText(finalText).then(() => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Copied to Clipboard!',
+                            text: 'You can now paste it wherever you need.',
+                            timer: 2200,
+                            showConfirmButton: false,
+                            toast: true,
+                            position: 'top-end'
+                        });
+                    });
+                }
+            });
+        }       
 
 function exportToCsv(data) {
             if (!data.length) { Swal.fire('Info', 'No data to export.', 'info'); return; }

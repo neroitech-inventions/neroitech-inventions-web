@@ -568,6 +568,55 @@
     color: white;
     transform: scale(1.08);
 }
+
+        /* Pagination for submissions table */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .pagination-btn {
+            background: #ffffff;
+            border: 1px solid #D1D5DB;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1F2937;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 40px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .pagination-btn:hover {
+            background: linear-gradient(135deg, #F3F4F6, #E5E7EB);
+            border-color: #6366F1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.2);
+        }
+        .pagination-btn.active {
+            background: linear-gradient(135deg, #6366F1, #34D399);
+            color: #ffffff;
+            border: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        .pagination-btn:disabled {
+            background: #E5E7EB;
+            color: #9CA3AF;
+            cursor: not-allowed;
+            border: 1px solid #D1D5DB;
+            transform: none;
+            box-shadow: none;
+        }
+        .pagination-btn.icon {
+            padding: 8px 12px;
+            font-size: 16px;
+        }
     </style>
     <link href="images/icon.png" rel="icon">
 </head>
@@ -624,6 +673,7 @@
                         <tbody id="submissionsBody"></tbody>
                     </table>
                 </div>
+                <div class="pagination" id="submissionsPagination"></div>
                 <p id="noResults" class="no-results" style="display: none;">No submissions found for this wallet address.</p>
             </div>
         </div>
@@ -671,7 +721,8 @@
         const CONFIG = {
             API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
             RESPONSE_ID: '1uI__u1VylTAb6ukduHOuHXkcGX5UwgpAFzD8DY5-_bI',
-            RESPONSE_RANGE: 'Form responses 4!A1:F4000'
+            RESPONSE_RANGE: 'Form responses 4!A1:F4000',
+            SUBMISSIONS_PER_PAGE: 10 
         };
         const DOM = {
             searchInput: document.getElementById('searchInput'),
@@ -686,7 +737,8 @@
             navContainer: document.querySelector('.nav-container'),
             overlay: document.querySelector('.overlay'),
             backToTopButton: document.getElementById('back-to-top'),
-            exportCsv: document.getElementById('exportCsv')
+            exportCsv: document.getElementById('exportCsv'),
+            submissionsPagination: document.getElementById('submissionsPagination')
         };
         let currentChart = null;
         async function fetchSheetData(spreadsheetId, range) {
@@ -792,16 +844,19 @@ function copyWallet(address) {
                 return;
             }
             DOM.noResults.style.display = 'none';
+
             const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
             const recentSubmissions = submissions.filter(s => parseDate(s.Timestamp) >= thirtyDaysAgo);
             const recentCount = recentSubmissions.length;
-            const isQualified = recentCount >= 1; // Assuming qualified if at least 1 submission in last 30 days; adjust threshold as needed
+            const isQualified = recentCount >= 1;
             const shortenedWallet = `${wallet.slice(0, 6)}...${wallet.slice(-4)}`;
+
             DOM.questInfo.innerHTML = `
                 <h2>Airdrop Eligibility for Wallet: ${shortenedWallet}</h2>
                 <p>Submissions in Last 30 Days: ${recentCount}</p>
                 <p>Qualified for Monthly Airdrop: ${isQualified ? 'Yes' : 'No'}</p>
             `;
+
             let earliest = 'N/A', latest = 'N/A';
             if (submissions.length > 0) {
                 const times = submissions.map(s => parseDate(s.Timestamp).getTime()).filter(t => !isNaN(t));
@@ -810,6 +865,7 @@ function copyWallet(address) {
                     latest = new Date(Math.max(...times)).toLocaleDateString();
                 }
             }
+
             DOM.insightsGrid.innerHTML = `
                 <div class="insight-card">Total Submissions<div class="insight-number">${submissions.length}</div></div>
                 <div class="insight-card">Last 30 Days<div class="insight-number">${recentCount}</div></div>
@@ -817,6 +873,7 @@ function copyWallet(address) {
                 <div class="insight-card">First Submission<div class="insight-number">${earliest}</div></div>
                 <div class="insight-card">Last Submission<div class="insight-number">${latest}</div></div>
             `;
+
             if (currentChart) currentChart.destroy();
             const dates = submissions.map(s => parseDate(s.Timestamp).toLocaleDateString());
             const dateMap = dates.reduce((a, d) => (a[d] = (a[d] || 0) + 1, a), {});
@@ -835,8 +892,30 @@ function copyWallet(address) {
                 },
                 options: { responsive: true, scales: { y: { beginAtZero: true } } }
             });
+
+            // === PAGINATION PART (this is the new code) ===
+            window.submissionsInDisplay = submissions;
             DOM.submissionsBody.innerHTML = '';
-            submissions.forEach(sub => {
+            currentSubmissionPage = 1;
+
+            populateSubmissionsTable(submissions, currentSubmissionPage);
+            renderSubmissionPagination(submissions.length, currentSubmissionPage);
+
+            DOM.exportCsv.onclick = () => exportToCsv(submissions);
+        }
+
+        // Pagination for submissions table
+        // Modern Pagination for submissions table (with ellipsis ...)
+        let currentSubmissionPage = 1;
+
+        function populateSubmissionsTable(submissions, page) {
+            const perPage = CONFIG.SUBMISSIONS_PER_PAGE || 10;
+            const start = (page - 1) * perPage;
+            const paginated = submissions.slice(start, start + perPage);
+
+            DOM.submissionsBody.innerHTML = '';
+
+            paginated.forEach(sub => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${sub.Timestamp}</td>
@@ -844,29 +923,122 @@ function copyWallet(address) {
                     <td><a href="${sub['Proof of Quest']}" target="_blank">View Proof</a></td>
                     <td><a href="${sub['Quest Link']}" target="_blank">View Quest</a></td>
                     <td><a href="https://t.me/${sub.Telegram.replace('@','')}" target="_blank" class="contact-link"> ${sub.Telegram}</a></td>
-<td>
-    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-        <a href="${getExplorerUrl(sub['Polygon Address'])}" 
-           target="_blank" 
-           style="font-family:monospace; word-break:break-all; color:#e2e8f0; text-decoration:none; cursor:pointer;">
-            ${sub['Polygon Address'] || ''}
-        </a>
-        
-        <span class="blockchain-tag ${getBlockchainClass(sub['Polygon Address'])}">
-            ${getBlockchainTag(sub['Polygon Address'])}
-        </span>
-        
-        <button onclick="copyWallet('${sub['Polygon Address']}'); event.stopImmediatePropagation();" 
-                class="copy-btn" title="Copy wallet address">
-            📋
-        </button>
-    </div>
-</td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <a href="${getExplorerUrl(sub['Polygon Address'])}" 
+                               target="_blank" 
+                               style="font-family:monospace; word-break:break-all; color:#e2e8f0; text-decoration:none; cursor:pointer;">
+                                ${sub['Polygon Address'] || ''}
+                            </a>
+                            <span class="blockchain-tag ${getBlockchainClass(sub['Polygon Address'])}">
+                                ${getBlockchainTag(sub['Polygon Address'])}
+                            </span>
+                            <button onclick="copyWallet('${sub['Polygon Address']}'); event.stopImmediatePropagation();" 
+                                    class="copy-btn" title="Copy wallet address">
+                                📋
+                            </button>
+                        </div>
+                    </td>
                 `;
                 DOM.submissionsBody.appendChild(tr);
             });
-            DOM.exportCsv.onclick = () => exportToCsv(submissions);
         }
+
+        function renderSubmissionPagination(totalItems, currentPage) {
+            const paginationEl = DOM.submissionsPagination;
+            paginationEl.innerHTML = '';
+
+            const perPage = CONFIG.SUBMISSIONS_PER_PAGE || 10;
+            const totalPages = Math.ceil(totalItems / perPage);
+
+            if (totalPages <= 1) return;
+
+            // Previous button
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'pagination-btn icon';
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => {
+                currentSubmissionPage = Math.max(1, currentPage - 1);
+                populateSubmissionsTable(window.submissionsInDisplay, currentSubmissionPage);
+                renderSubmissionPagination(totalItems, currentSubmissionPage);
+            };
+            paginationEl.appendChild(prevBtn);
+
+            // Smart page numbers with ellipsis
+            const maxVisible = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+            if (endPage - startPage + 1 < maxVisible) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            // First page
+            if (startPage > 1) {
+                const first = document.createElement('button');
+                first.className = 'pagination-btn';
+                first.textContent = '1';
+                first.onclick = () => {
+                    currentSubmissionPage = 1;
+                    populateSubmissionsTable(window.submissionsInDisplay, currentSubmissionPage);
+                    renderSubmissionPagination(totalItems, currentSubmissionPage);
+                };
+                paginationEl.appendChild(first);
+
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'pagination-ellipsis';
+                    ellipsis.textContent = '...';
+                    paginationEl.appendChild(ellipsis);
+                }
+            }
+
+            // Visible pages
+            for (let i = startPage; i <= endPage; i++) {
+                const btn = document.createElement('button');
+                btn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+                btn.textContent = i;
+                btn.onclick = () => {
+                    currentSubmissionPage = i;
+                    populateSubmissionsTable(window.submissionsInDisplay, currentSubmissionPage);
+                    renderSubmissionPagination(totalItems, currentSubmissionPage);
+                };
+                paginationEl.appendChild(btn);
+            }
+
+            // Last page
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'pagination-ellipsis';
+                    ellipsis.textContent = '...';
+                    paginationEl.appendChild(ellipsis);
+                }
+
+                const last = document.createElement('button');
+                last.className = 'pagination-btn';
+                last.textContent = totalPages;
+                last.onclick = () => {
+                    currentSubmissionPage = totalPages;
+                    populateSubmissionsTable(window.submissionsInDisplay, currentSubmissionPage);
+                    renderSubmissionPagination(totalItems, currentSubmissionPage);
+                };
+                paginationEl.appendChild(last);
+            }
+
+            // Next button
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'pagination-btn icon';
+            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => {
+                currentSubmissionPage = Math.min(totalPages, currentPage + 1);
+                populateSubmissionsTable(window.submissionsInDisplay, currentSubmissionPage);
+                renderSubmissionPagination(totalItems, currentSubmissionPage);
+            };
+            paginationEl.appendChild(nextBtn);
+        }       
         function exportToCsv(data) {
             if (!data.length) { Swal.fire('Info', 'No data to export.', 'info'); return; }
             const headers = ['Timestamp', 'Track Code', 'Proof of Quest', 'Quest Link', 'Telegram', 'Polygon Address'];
