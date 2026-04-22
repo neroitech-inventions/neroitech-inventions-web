@@ -1500,6 +1500,8 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                     }
                 }
 
+
+
                 // === 2. NEW: Fetch Live Ad from Google Sheet (A5:B5) ===
                 try {
                     const adUrl = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.AD_ID}/values/${CONFIG.AD_RANGE}?key=${CONFIG.API_KEY}`;
@@ -1558,7 +1560,7 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                             parsedDeadline = deadline;
                         }
                     }
-                    const availability = trackCode && status === 0 ? await getQuestAvailability(trackCode) : { remaining: null, total: 0 };
+                    const availability = trackCode && (status === 0 || status === 4) ? await getQuestAvailability(trackCode) : { remaining: null, total: 0 };
                     
                     return {
                         id: parseInt(quest.ID) || 0,
@@ -1567,9 +1569,10 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                         description: quest.Description || 'No description available',
                         reward: reward,
                         link: quest.Link || '',
-                        status: (status === 0 || status === 2 || status === 3) ? 'active' : 'completed',
+                        status: (status === 0 || status === 2 || status === 3 || status === 4) ? 'active' : 'completed',
                         isGame: status === 2,
                         tapToUnlock: status === 3,
+                        isFeedback: status === 4,
                         trackCode: trackCode,
                         remaining: availability.remaining,
                         total: availability.total,
@@ -1721,7 +1724,7 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                     <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
                     <div style="display: flex; gap: 8px;">
                         ${quest.status === 'active' && quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">${quest.isGame ? 'Play Game' : 'View Quest'}</a>` : ''}
-                        ${quest.status === 'active' && typeof quest.remaining === 'number' && quest.remaining > 0 && showSubmit ? `<button class="submit-btn">Submit</button>` : ''}
+                        ${quest.status === 'active' && (quest.isFeedback || (typeof quest.remaining === 'number' && quest.remaining > 0)) && showSubmit ? `<button class="submit-btn">Submit</button>` : ''}
                         <button class="share-btn"><i class="fas fa-share-alt"></i> Share</button>
                     </div>
                 </div>
@@ -1833,50 +1836,57 @@ function openQuestModal(originalCard) {
 }
         // Open submit modal
                 // Open submit modal
-        function openSubmitModal(trackCode) {
-            DOM.submitQuestForm.querySelector('#trackCode').value = trackCode || '';
-           
-            const quest = quests.find(q => q.trackCode === trackCode);
-            let labelText = 'Polygon';
-            let placeholderText = 'Enter your Polygon Wallet Address';
-            if (quest) {
-                switch(quest.chain) {
-                    case 1:
-                        labelText = 'Solana';
-                        placeholderText = 'Enter your Solana Wallet Address';
-                        break;
-                    case 2:
-                        labelText = 'Sui';
-                        placeholderText = 'Enter your Sui Wallet Address';
-                        break;
-                    case 3: // ← MULTI-CHAIN
-                        labelText = 'Enter';
-                        placeholderText = 'Enter your Wallet Address (auto-detects)';
-                        break;
-                }
-            }
-            const label = DOM.submitQuestForm.querySelector('label[for="twitter"]');
-            const input = DOM.submitQuestForm.querySelector('#twitter');
-            label.textContent = `${labelText} Wallet Address`;
-            input.placeholder = placeholderText;
-            input.value = '';
-            // REAL-TIME AUTO-DETECTION (only for multi-chain quests)
-            if (quest && quest.chain === 3) {
-                input.onkeyup = function() {
-                    const detected = detectChain(this.value);
-                    if (detected) {
-                        label.textContent = `${detected} Wallet Address`;
-                    } else {
-                        label.textContent = 'Wallet Address';
-                    }
-                };
-            } else {
-                input.onkeyup = null; // remove listener for normal quests
-            }
-            DOM.submitQuestModal.style.display = 'block';
-            setTimeout(() => DOM.submitQuestModal.classList.add('active'), 10);
+function openSubmitModal(trackCode) {
+    DOM.submitQuestForm.querySelector('#trackCode').value = trackCode || '';
+    
+    const quest = quests.find(q => q.trackCode === trackCode);
+
+    // === WALLET LABEL LOGIC ===
+    let labelText = 'Polygon';
+    let placeholderText = 'Enter your Polygon Wallet Address';
+    if (quest) {
+        switch(quest.chain) {
+            case 1: labelText = 'Solana'; placeholderText = 'Enter your Solana Wallet Address'; break;
+            case 2: labelText = 'Sui'; placeholderText = 'Enter your Sui Wallet Address'; break;
+            case 3: labelText = 'Enter'; placeholderText = 'Enter your Wallet Address (auto-detects)'; break;
         }
-        // Copy share URL
+    }
+    const label = DOM.submitQuestForm.querySelector('label[for="twitter"]');
+    const input = DOM.submitQuestForm.querySelector('#twitter');
+    label.textContent = `${labelText} Wallet Address`;
+    input.placeholder = placeholderText;
+    input.value = '';
+
+    if (quest && quest.chain === 3) {
+        input.onkeyup = function() {
+            const detected = detectChain(this.value);
+            label.textContent = detected ? `${detected} Wallet Address` : 'Wallet Address';
+        };
+    } else {
+        input.onkeyup = null;
+    }
+
+    // === FEEDBACK QUEST: swap field labels/placeholders ===
+    const proofLabel = DOM.submitQuestForm.querySelector('label[for="proofOfQuest"]');
+    const proofInput = DOM.submitQuestForm.querySelector('#proofOfQuest');
+    const questLinkLabel = DOM.submitQuestForm.querySelector('label[for="questLink"]');
+    const questLinkInput = DOM.submitQuestForm.querySelector('#questLink');
+
+    if (quest && quest.isFeedback === true) {
+        proofLabel.textContent = 'Comment or Feedback';
+        proofInput.placeholder = 'Share your comment or feedback here...';
+        questLinkLabel.textContent = 'Country or Location';
+        questLinkInput.placeholder = 'Enter your country or city (e.g., United States, London)';
+    } else {
+        proofLabel.textContent = 'Link to Your Submission';
+        proofInput.placeholder = 'Make sure this link is accessible by everyone!';
+        questLinkLabel.textContent = 'Anything Else?';
+        questLinkInput.placeholder = 'Add other links or paste your submission link here.';
+    }
+
+    DOM.submitQuestModal.style.display = 'block';
+    setTimeout(() => DOM.submitQuestModal.classList.add('active'), 10);
+}        // Copy share URL
         function copyShareUrl(trackCode) {
             const baseUrl = window.location.href.split('?')[0];
             const url = `${baseUrl}?quest=${trackCode}`;
@@ -2027,7 +2037,8 @@ function handleQuestClick(e) {
                     return;
                 }
                 const urlRegex = /^https?:\/\/[^\s$.?#].[^\s]*$/;
-                if (!urlRegex.test(data.proofOfQuest) || !urlRegex.test(data.questLink)) {
+                const currentQuest = quests.find(q => q.trackCode === data.trackCode);
+if ((!currentQuest?.isFeedback) && (!urlRegex.test(data.proofOfQuest) || !urlRegex.test(data.questLink))) {
                     console.warn('Form validation failed: Invalid URL format for Proof of Quest or Quest Link');
                     Swal.fire({
                         title: 'Error',
