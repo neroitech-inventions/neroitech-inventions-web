@@ -1714,6 +1714,41 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                 if (isExpired) showSubmit = false;
                 deadlineHtml = `<div class="quest-deadline ${isExpired ? 'expired' : ''}" data-expiry="${expiryTime}">Expires in: <span class="countdown">${formatTimeLeft(diff)}</span></div>`;
             }
+
+let canSubmit = true;
+
+// ❌ ALWAYS block invalid quests first (highest priority)
+if (typeof quest.remaining === 'number' && quest.remaining < 0) {
+    canSubmit = false;
+}
+
+// ❌ Block expired quests
+if (!quest.isGame && quest.deadline !== '0') {
+    const expiryTime = new Date(quest.deadline).getTime();
+    if (expiryTime <= Date.now()) {
+        canSubmit = false;
+    }
+}
+
+// ❗ NORMAL quests (non-feedback)
+if (!quest.isFeedback) {
+    if (typeof quest.remaining === 'number' && quest.remaining <= 0) {
+        canSubmit = false;
+    }
+}
+
+// ❗ FEEDBACK quests (IMPORTANT FIX)
+if (quest.isFeedback) {
+    // if it's "invalid quest" or explicitly no reward state → block it
+    if (typeof quest.remaining === 'number' && quest.remaining <= 0) {
+        canSubmit = false;
+    }
+
+    // optional safety: block if backend marks invalid
+    if (statusText === 'Invalid Quest, Please contact an admin') {
+        canSubmit = false;
+    }
+}
             card.innerHTML = `
                 <div class="quest-title">${quest.title}</div>
                 <div class="quest-sponsor">Sponsored by: ${quest.sponsor}</div>
@@ -1724,7 +1759,7 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                     <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
                     <div style="display: flex; gap: 8px;">
                         ${quest.status === 'active' && quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">${quest.isGame ? 'Play Game' : 'View Quest'}</a>` : ''}
-                        ${quest.status === 'active' && (quest.isFeedback || (typeof quest.remaining === 'number' && quest.remaining > 0)) && showSubmit ? `<button class="submit-btn">Submit</button>` : ''}
+${quest.status === 'active' && !quest.isGame && canSubmit ? `<button class="submit-btn">Submit</button>` : ''}
                         <button class="share-btn"><i class="fas fa-share-alt"></i> Share</button>
                     </div>
                 </div>
