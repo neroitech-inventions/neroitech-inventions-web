@@ -613,6 +613,8 @@
     display: inline-block;
     vertical-align: middle;
 }
+
+.swal-wide { max-width: 600px !important; word-break: break-word; }
     </style>
     <link href="images/icon.png" rel="icon">
 </head>
@@ -662,8 +664,8 @@
                         <thead>
                             <tr>
                                 <th>Timestamp</th>
-                                <th>Proof of Quest</th>
-                                <th>Quest Link</th>
+                                <th>Proof of Quest / Feedback</th>
+                                <th>Quest Link / Location</th>
                                 <th>Telegram</th>
                                 <th>Polygon Address</th>
                             </tr>
@@ -903,8 +905,45 @@ async function performSearch() {
             return new Date(y, m-1, d, h, min, s);
         }
 
-        function displayResults(quest, totalSlots, submissions, blacklistedSet = new Set()) {
-            DOM.results.style.display = 'block';
+
+
+function isUrl(str) {
+    try {
+        return str && /^https?:\/\//i.test(str.trim());
+    } catch(e) {
+        return false;
+    }
+}
+
+function expandText(el, encoded) {
+    const text = decodeURIComponent(encoded);
+    Swal.fire({
+        title: 'Submission',
+        html: `<p style="word-break:break-word; text-align:left; font-size:15px; line-height:1.7; color:#1F2937;">${text}</p>`,
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: '📋 Copy',
+        cancelButtonText: 'Close',
+        confirmButtonColor: '#6366F1',
+        cancelButtonColor: '#9CA3AF',
+        customClass: { popup: 'swal-wide' }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            navigator.clipboard.writeText(text).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Copied!',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            });
+        }
+    });
+}
+
+function displayResults(quest, totalSlots, submissions, blacklistedSet = new Set()) {            DOM.results.style.display = 'block';
 
             let rewardDisplay = quest ? (quest.Reward || '0') : '0';
             rewardDisplay = rewardDisplay.replace(/𝕍/g, '<img src="images/verse_logo.svg" alt="𝕍" class="reward-logo" align="absmiddle"> ');
@@ -984,9 +1023,8 @@ async function performSearch() {
 
                 tr.innerHTML = `
                     <td>${sub.Timestamp || ''}</td>
-                    <td><a href="${sub['Proof of Quest'] || '#'}" target="_blank">View Proof</a></td>
-                    <td><a href="${sub['Quest Link'] || '#'}" target="_blank">View Quest</a></td>
-                    <td>${telegramHtml}</td>
+<td>${isUrl(sub['Proof of Quest']) ? `<a href="${sub['Proof of Quest']}" target="_blank">View Proof</a>` : `<span style="cursor:pointer;color:#6366F1;font-weight:600;" onclick="expandText(this, '${encodeURIComponent(sub['Proof of Quest'] || '')}')">📖 Read</span>`}</td>
+<td>${isUrl(sub['Quest Link']) ? `<a href="${sub['Quest Link']}" target="_blank">View Quest</a>` : `<span style="cursor:pointer;color:#6366F1;font-weight:600;" onclick="expandText(this, '${encodeURIComponent(sub['Quest Link'] || '')}')">📖 Read</span>`}</td>                   <td>${telegramHtml}</td>
                     <td>
                         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                             <a href="${getExplorerUrl(wallet)}" 

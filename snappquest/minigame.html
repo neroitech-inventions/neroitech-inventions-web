@@ -568,9 +568,18 @@ html, body {
     <div class="progress-step"><i class="fas fa-check-circle"></i> Step 3</div>
   </div>
 
-  <div class="card">
+<div class="card">
     <div class="step-header"><span class="step-number">1</span> Complete the Quest</div>
-    <p><strong>Most quests are on X (Twitter)</strong>. Here’s what a real quest looks like:</p>
+    <p><strong>There are two types of quests on SnappQuest:</strong></p>
+    <div style="display:flex; gap:12px; margin:1rem 0; flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="showQuestType('engagement')" id="tab-engagement" style="flex:1; min-width:140px; padding:0.7rem 1rem; font-size:1rem;">
+            🐦 Engagement Quest
+        </button>
+        <button class="btn" onclick="showQuestType('feedback')" id="tab-feedback" style="flex:1; min-width:140px; padding:0.7rem 1rem; font-size:1rem; background:linear-gradient(135deg,#6366F1,#4F46E5); color:white; box-shadow:0 8px 20px rgba(99,102,241,0.3);">
+            💬 Feedback Quest
+        </button>
+    </div>
+  <div id="quest-engagement">
     <div class="twitter-post" id="twitter-post">
       <div class="twitter-header">
         <div class="twitter-avatar">🐦</div>
@@ -592,28 +601,79 @@ html, body {
         </button>
       </div>
     </div>
+    </div>
+
+    <div id="quest-feedback" style="display:none;">
+        <div class="highlight">
+            <strong>💬 Feedback Quest</strong> — The sponsor wants your honest opinion!<br>
+            No Twitter needed. Just share your thoughts directly in the submission form.
+        </div>
+        <div style="background:#f8fafc; border-radius:16px; padding:1.5rem; border:2px solid #6366F1; margin-top:1rem;">
+            <p style="font-weight:700; font-size:1.1rem; margin-bottom:1rem;">Example Feedback Quest:</p>
+            <p style="background:#ecfdf5; padding:1rem; border-radius:10px; font-size:1rem; line-height:1.7;">
+                🎯 <strong>Drop an honest review of the SnappQuest website and earn 1,500 VERSE — only 20 spots available!</strong><br>
+                Keep it short and to the point: what you love, what needs work, or any bugs.
+            </p>
+            <p style="margin-top:1rem; color:#6366F1; font-weight:600;">
+                ✅ No link needed — just type your review directly in the form!
+            </p>
+        </div>
+    </div>
     <p style="margin-top:1rem; text-align:center; font-size:0.95rem; color:#10b981;">
       Click the ❤️ and 🔄 buttons above for rewards!
     </p>
   </div>
 
-  <div class="card">
+<div class="card">
     <div class="step-header"><span class="step-number">2</span> Get Your Proof Ready</div>
-    <p>You need to show the sponsor that you really did the task with any of these.</p>
-    <ul style="margin:1.2rem 0; font-size:1.1rem;">
-      <li>🔗 Direct link to your post / reply</li>
-      <li>🔗 Your X (Twitter) profile link</li>
-      <li>📸 Screenshot link (upload to Imgur or free image host)</li>
-    </ul>
-    <p><strong>Tip:</strong> One or more proof is perfect!</p>
+    <div style="display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); margin-top:1rem;">
+        <div style="background:#ecfdf5; border-radius:14px; padding:1.2rem; border-left:5px solid #10b981;">
+            <p style="font-weight:700; font-size:1.05rem; margin-bottom:0.8rem;">🐦 Engagement Quest</p>
+            <p>Show the sponsor you completed the task:</p>
+            <ul style="margin:0.8rem 0 0 1rem; font-size:1rem; line-height:1.8;">
+                <li>🔗 Direct link to your post / reply</li>
+                <li>🔗 Your X (Twitter) profile link</li>
+                <li>📸 Screenshot link (Imgur or any image host)</li>
+            </ul>
+            <p style="margin-top:0.8rem;"><strong>Tip:</strong> One or more proof links is perfect!</p>
+        </div>
+        <div style="background:#ede9fe; border-radius:14px; padding:1.2rem; border-left:5px solid #6366F1;">
+            <p style="font-weight:700; font-size:1.05rem; margin-bottom:0.8rem;">💬 Feedback Quest</p>
+            <p>No links needed! Just:</p>
+            <ul style="margin:0.8rem 0 0 1rem; font-size:1rem; line-height:1.8;">
+                <li>✍️ Type your comment or review directly</li>
+                <li>📍 Enter your country or city</li>
+            </ul>
+            <p style="margin-top:0.8rem;"><strong>Tip:</strong> Keep it honest and to the point!</p>
+        </div>
+    </div>
   </div>
 
   <div class="card" id="interactive-step">
     <div class="step-header"><span class="step-number">3</span> Submit on SnappQuest</div>
     <p style="margin-bottom:1rem;">Just fill the form like this:</p>
-    <div class="input-demo" id="example-proof" contenteditable="true">https://x.com/yourusername/status/1234567890123456789
+<div style="display:flex; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
+        <button onclick="switchDemo('engagement')" id="demo-tab-engagement" class="btn btn-primary" style="flex:1; padding:0.6rem 1rem; font-size:0.95rem;">🐦 Engagement</button>
+        <button onclick="switchDemo('feedback')" id="demo-tab-feedback" class="btn" style="flex:1; padding:0.6rem 1rem; font-size:0.95rem; background:linear-gradient(135deg,#6366F1,#4F46E5); color:white; box-shadow:0 8px 20px rgba(99,102,241,0.3);">💬 Feedback</button>
+    </div>
+
+    <div id="demo-engagement">
+        <div class="input-demo" id="example-proof" contenteditable="true">https://x.com/yourusername/status/1234567890123456789
 https://x.com/yourusername
 https://imgur.com/a/your-proof-screenshot</div>
+    </div>
+
+    <div id="demo-feedback" style="display:none;">
+        <div style="background:#f8fafc; border:3px dashed #6366F1; border-radius:16px; padding:1.5rem; margin:1rem 0; position:relative;">
+            <span style="position:absolute; top:-12px; left:20px; background:white; padding:0 12px; font-size:0.95rem; color:#6366F1; font-weight:600;">✍️ Comment or Feedback</span>
+            <p id="feedback-demo-text" contenteditable="true" style="font-size:1rem; line-height:1.6; min-height:80px; outline:none;">The SnappQuest platform is clean and easy to use. I love the quest cards and reward display. One suggestion: add a dark mode!</p>
+        </div>
+        <div style="background:#f8fafc; border:3px dashed #6366F1; border-radius:16px; padding:1.5rem; margin:1rem 0; position:relative;">
+            <span style="position:absolute; top:-12px; left:20px; background:white; padding:0 12px; font-size:0.95rem; color:#6366F1; font-weight:600;">📍 Country or City</span>
+            <p contenteditable="true" style="font-size:1rem; line-height:1.6; min-height:40px; outline:none;">Canada, Toronto</p>
+        </div>
+    </div>
+
     <p style="margin-top:1.5rem; font-weight:600;">Try it! Edit the box above then click Submit:</p>
     <br>
     <div style="text-align:center;">
@@ -747,6 +807,20 @@ https://imgur.com/a/your-proof-screenshot</div>
   backBtn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  function showQuestType(type) {
+    document.getElementById('quest-engagement').style.display = type === 'engagement' ? 'block' : 'none';
+    document.getElementById('quest-feedback').style.display = type === 'feedback' ? 'block' : 'none';
+    document.getElementById('tab-engagement').style.opacity = type === 'engagement' ? '1' : '0.6';
+    document.getElementById('tab-feedback').style.opacity = type === 'feedback' ? '1' : '0.6';
+  }
+
+  function switchDemo(type) {
+    document.getElementById('demo-engagement').style.display = type === 'engagement' ? 'block' : 'none';
+    document.getElementById('demo-feedback').style.display = type === 'feedback' ? 'block' : 'none';
+    document.getElementById('demo-tab-engagement').style.opacity = type === 'engagement' ? '1' : '0.6';
+    document.getElementById('demo-tab-feedback').style.opacity = type === 'feedback' ? '1' : '0.6';
+  }
 </script>
 </body>
 </html>
