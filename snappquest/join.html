@@ -2050,8 +2050,8 @@ if ((!currentQuest?.isFeedback) && (!urlRegex.test(data.proofOfQuest) || !urlReg
                     submitButton.textContent = 'Submit Quest';
                     return;
                 }
-                const usernameRegex = /^@?[\w]+$/;
-                if (!usernameRegex.test(data.telegram) || !usernameRegex.test(data.twitter)) {
+const usernameRegex = /^@?[\w]+$/;
+if (!usernameRegex.test(data.telegram) || (!currentQuest?.isFeedback && !usernameRegex.test(data.twitter))) {
                     console.warn('Form validation failed: Invalid username format for Telegram or Twitter');
                     Swal.fire({
                         title: 'Error',
