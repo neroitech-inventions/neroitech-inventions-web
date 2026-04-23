@@ -1052,114 +1052,202 @@ function displayResults(quest, totalSlots, submissions, blacklistedSet = new Set
         }
 
         // ==================== BULK PAYMENT LIST WITH CHAIN SELECTION (Polygon + Solana + Sui) ====================
-        async function generateBulkPaymentList(submissions) {
-            if (!submissions.length) {
-                Swal.fire('Info', 'No submissions to generate payment list.', 'info');
-                return;
+async function generateBulkPaymentList(submissions) {
+    if (!submissions.length) {
+        Swal.fire('Info', 'No submissions to generate payment list.', 'info');
+        return;
+    }
+
+    const result = await Swal.fire({
+        title: 'Generate Bulk Payment List',
+        html: `
+            <div style="text-align:left; margin-bottom:15px;">
+                <p><strong>Enter amount per wallet:</strong></p>
+                <input id="swal-amount-input" type="number" value="2500" 
+                       style="width:100%; padding:12px; font-size:18px; border-radius:8px; border:1px solid #ddd; text-align:center;">
+            </div>
+            <div style="text-align:left;">
+                <p><strong>Select blockchains to include:</strong></p>
+                <label style="display:block; margin:8px 0;">
+                    <input type="checkbox" id="swal-polygon" checked> Polygon Wallets
+                </label>
+                <label style="display:block; margin:8px 0;">
+                    <input type="checkbox" id="swal-solana" checked> Solana Wallets
+                </label>
+                <label style="display:block; margin:8px 0;">
+                    <input type="checkbox" id="swal-sui" checked> Sui Wallets
+                </label>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Generate List',
+        confirmButtonColor: '#6366F1',
+        focusConfirm: false,
+        didOpen: () => {
+            document.getElementById('swal-amount-input').focus();
+            document.getElementById('swal-amount-input').select();
+        },
+        preConfirm: () => {
+            const amount = document.getElementById('swal-amount-input').value.trim();
+            const includePolygon = document.getElementById('swal-polygon').checked;
+            const includeSolana  = document.getElementById('swal-solana').checked;
+            const includeSui     = document.getElementById('swal-sui').checked;
+
+            if (!amount || isNaN(amount) || Number(amount) <= 0) {
+                Swal.showValidationMessage('Please enter a valid amount');
+                return false;
             }
 
-            const result = await Swal.fire({
-                title: 'Generate Bulk Payment List',
-                html: `
-                    <div style="text-align:left; margin-bottom:15px;">
-                        <p><strong>Enter amount per wallet:</strong></p>
-                        <input id="swal-amount-input" type="number" value="2500" 
-                               style="width:100%; padding:12px; font-size:18px; border-radius:8px; border:1px solid #ddd; text-align:center;">
-                    </div>
-                    
-                    <div style="text-align:left;">
-                        <p><strong>Select blockchains to include:</strong></p>
-                        <label style="display:block; margin:8px 0;">
-                            <input type="checkbox" id="swal-polygon" checked> Polygon Wallets
-                        </label>
-                        <label style="display:block; margin:8px 0;">
-                            <input type="checkbox" id="swal-solana" checked> Solana Wallets
-                        </label>
-                        <label style="display:block; margin:8px 0;">
-                            <input type="checkbox" id="swal-sui" checked> Sui Wallets
-                        </label>
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Generate & Copy',
-                confirmButtonColor: '#6366F1',
-                focusConfirm: false,
-                didOpen: () => {
-                    document.getElementById('swal-amount-input').focus();
-                    document.getElementById('swal-amount-input').select();
-                },
-                preConfirm: () => {
-                    const amount = document.getElementById('swal-amount-input').value.trim();
-                    const includePolygon = document.getElementById('swal-polygon').checked;
-                    const includeSolana  = document.getElementById('swal-solana').checked;
-                    const includeSui     = document.getElementById('swal-sui').checked;
-
-                    if (!amount || isNaN(amount) || Number(amount) <= 0) {
-                        Swal.showValidationMessage('Please enter a valid amount');
-                        return false;
-                    }
-                    if (!includePolygon && !includeSolana && !includeSui) {
-                        Swal.showValidationMessage('Please select at least one blockchain');
-                        return false;
-                    }
-
-                    return { amount, includePolygon, includeSolana, includeSui };
-                }
-            });
-
-            if (!result.isConfirmed) return;
-
-            const { amount, includePolygon, includeSolana, includeSui } = result.value;
-
-            const walletList = [];
-            const seen = new Set();
-
-            submissions.forEach(sub => {
-                let wallet = (sub['Polygon Address'] || '').trim();   // Note: Column name is still "Polygon Address" even for Sui
-                let chain = getBlockchainTag(wallet);
-
-                // Skip if not selected
-                if (chain === '[Polygon]' && !includePolygon) return;
-                if (chain === '[Solana]'  && !includeSolana) return;
-                if (chain === '[Sui]'     && !includeSui) return;
-                if (chain === '[Unknown]') return;
-
-                if (wallet && !seen.has(wallet)) {
-                    seen.add(wallet);
-                    walletList.push(`${wallet}, ${amount}`);
-                }
-            });
-
-            if (!walletList.length) {
-                Swal.fire('No matching wallets', 'No wallets found for the selected blockchain(s).', 'info');
-                return;
+            if (!includePolygon && !includeSolana && !includeSui) {
+                Swal.showValidationMessage('Please select at least one blockchain');
+                return false;
             }
 
-            const finalText = walletList.join('\n');
+            return { amount: Number(amount), includePolygon, includeSolana, includeSui };
+        }
+    });
 
-            Swal.fire({
-                title: `Bulk Payment List Ready (${walletList.length} wallets)`,
-                html: `<pre style="text-align:left; background:#f8f9fa; padding:15px; border-radius:8px; font-size:14px; max-height:320px; overflow:auto; white-space:pre-wrap;">${finalText}</pre>`,
-                showCancelButton: true,
-                confirmButtonText: '📋 Copy All to Clipboard',
-                confirmButtonColor: '#10B981',
-                cancelButtonText: 'Close'
-            }).then((copyResult) => {
-                if (copyResult.isConfirmed) {
-                    navigator.clipboard.writeText(finalText).then(() => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Copied to Clipboard!',
-                            text: 'You can now paste it wherever you need.',
-                            timer: 2200,
-                            showConfirmButton: false,
-                            toast: true,
-                            position: 'top-end'
-                        });
-                    });
-                }
+    if (!result.isConfirmed) return;
+
+    const { amount, includePolygon, includeSolana, includeSui } = result.value;
+
+    const seen = new Set();
+    const walletEntries = [];
+
+    submissions.forEach((sub) => {
+        let wallet = (sub['Polygon Address'] || '').trim();
+        let chain = getBlockchainTag(wallet);
+
+        if (chain === '[Polygon]' && !includePolygon) return;
+        if (chain === '[Solana]'  && !includeSolana) return;
+        if (chain === '[Sui]'     && !includeSui) return;
+        if (chain === '[Unknown]') return;
+
+        if (wallet && !seen.has(wallet)) {
+            seen.add(wallet);
+            walletEntries.push({
+                wallet,
+                amount,
+                chain: chain.replace('[','').replace(']','')
             });
-        }       
+        }
+    });
+
+    if (!walletEntries.length) {
+        Swal.fire('No matching wallets', 'No wallets found for the selected blockchain(s).', 'info');
+        return;
+    }
+
+    // === KEEP YOUR ORIGINAL UI, JUST ADD AMOUNT INPUT ===
+    const listHTML = walletEntries.map((entry, i) => `
+        <div style="display:flex; align-items:center; gap:10px; padding:8px; border-bottom:1px solid #f0f0f0; font-size:13px;">
+            <input type="checkbox" id="wallet-check-${i}" checked style="width:16px; height:16px; cursor:pointer; flex-shrink:0;">
+            
+            <label for="wallet-check-${i}" style="font-family:monospace; word-break:break-all; cursor:pointer; flex:1; text-align:left;">
+                <span style="font-size:11px; font-weight:700; padding:2px 8px; border-radius:9999px; margin-right:6px;
+                    background:${entry.chain === 'Polygon' ? '#8247E5' : entry.chain === 'Solana' ? '#14F195' : '#6F4CFF'};
+                    color:${entry.chain === 'Solana' ? '#0F172A' : 'white'};">
+                    ${entry.chain}
+                </span>
+                ${entry.wallet}
+            </label>
+
+            <!-- 🔥 SMALL CLEAN INPUT -->
+            <input type="number" id="amount-${i}" value="${entry.amount}" 
+                style="width:65px; padding:4px; border:1px solid #ddd; border-radius:6px; font-size:12px; text-align:center;">
+        </div>
+    `).join('');
+
+    const selectResult = await Swal.fire({
+        title: `Review List (${walletEntries.length} wallets)`,
+        html: `
+            <div style="display:flex; gap:8px; margin-bottom:10px; justify-content:center;">
+                <button onclick="document.querySelectorAll('[id^=wallet-check-]').forEach(c=>c.checked=true); updateSummary();" 
+                    style="padding:6px 14px; border-radius:6px; border:none; background:#10B981; color:white; cursor:pointer; font-weight:600;">
+                    ✅ Select All
+                </button>
+                <button onclick="document.querySelectorAll('[id^=wallet-check-]').forEach(c=>c.checked=false); updateSummary();" 
+                    style="padding:6px 14px; border-radius:6px; border:none; background:#EF4444; color:white; cursor:pointer; font-weight:600;">
+                    ❌ Deselect All
+                </button>
+            </div>
+
+            <!-- 🔥 LIVE STATS -->
+            <div style="text-align:center; font-weight:600; margin-bottom:10px;">
+                Selected: <span id="wallet-count">${walletEntries.length}</span> wallets |
+                Total: <span id="wallet-total">0</span>
+            </div>
+
+            <div style="max-height:350px; overflow-y:auto; border:1px solid #e5e7eb; border-radius:10px; text-align:left;">
+                ${listHTML}
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: '📋 Copy Selected to Clipboard',
+        confirmButtonColor: '#10B981',
+        cancelButtonText: 'Cancel',
+        customClass: { popup: 'swal-wide' },
+
+        didOpen: () => {
+            window.updateSummary = function () {
+                let count = 0;
+                let total = 0;
+
+                walletEntries.forEach((_, i) => {
+                    const checked = document.getElementById(`wallet-check-${i}`).checked;
+                    const amount = Number(document.getElementById(`amount-${i}`).value) || 0;
+
+                    if (checked) {
+                        count++;
+                        total += amount;
+                    }
+                });
+
+                document.getElementById('wallet-count').textContent = count;
+                document.getElementById('wallet-total').textContent = total.toLocaleString();
+            };
+
+            walletEntries.forEach((_, i) => {
+                document.getElementById(`wallet-check-${i}`).addEventListener('change', updateSummary);
+                document.getElementById(`amount-${i}`).addEventListener('input', updateSummary);
+            });
+
+            updateSummary();
+        },
+
+        preConfirm: () => {
+            const selected = walletEntries.filter((_, i) => 
+                document.getElementById(`wallet-check-${i}`).checked
+            ).map((entry, i) => {
+                const amount = document.getElementById(`amount-${i}`).value;
+                return `${entry.wallet}, ${amount}`;
+            });
+
+            if (!selected.length) {
+                Swal.showValidationMessage('Please select at least one wallet');
+                return false;
+            }
+
+            return selected;
+        }
+    });
+
+    if (!selectResult.isConfirmed) return;
+
+    const finalText = selectResult.value.join('\n');
+
+    navigator.clipboard.writeText(finalText).then(() => {
+        Swal.fire({
+            icon: 'success',
+            title: `Copied! (${selectResult.value.length} wallets)`,
+            text: 'Paste it wherever you need.',
+            timer: 2500,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+        });
+    });
+}
 
 function exportToCsv(data) {
             if (!data.length) { Swal.fire('Info', 'No data to export.', 'info'); return; }
