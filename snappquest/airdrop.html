@@ -617,6 +617,8 @@
             padding: 8px 12px;
             font-size: 16px;
         }
+
+        .swal-wide { max-width: 600px !important; word-break: break-word; }
     </style>
     <link href="images/icon.png" rel="icon">
 </head>
@@ -664,8 +666,8 @@
                             <tr>
                                 <th>Timestamp</th>
                                 <th>Track Code</th>
-                                <th>Proof of Quest</th>
-                                <th>Quest Link</th>
+                                <th>Proof of Quest / Feedback</th>
+                                <th>Quest Link / Location</th>
                                 <th>Telegram</th>
                                 <th>Polygon Address</th>
                             </tr>
@@ -833,7 +835,44 @@ function copyWallet(address) {
         Swal.fire('Error', 'Failed to copy address', 'error');
     });
 }
-        function displayResults(wallet, submissions) {
+       
+function isUrl(str) {
+    try {
+        return str && /^https?:\/\//i.test(str.trim());
+    } catch(e) {
+        return false;
+    }
+}
+
+function expandText(el, encoded) {
+    const text = decodeURIComponent(encoded);
+    Swal.fire({
+        title: 'Submission',
+        html: `<p style="word-break:break-word; text-align:left; font-size:15px; line-height:1.7; color:#1F2937;">${text}</p>`,
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: '📋 Copy',
+        cancelButtonText: 'Close',
+        confirmButtonColor: '#6366F1',
+        cancelButtonColor: '#9CA3AF',
+        customClass: { popup: 'swal-wide' }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            navigator.clipboard.writeText(text).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Copied!',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            });
+        }
+    });
+}
+
+function displayResults(wallet, submissions) {
             DOM.results.style.display = 'block';
             if (!submissions.length) {
                 DOM.questInfo.innerHTML = '<p>No submissions found for this wallet address.</p>';
@@ -920,8 +959,16 @@ function copyWallet(address) {
                 tr.innerHTML = `
                     <td>${sub.Timestamp}</td>
                     <td>${sub['Track Code']}</td>
-                    <td><a href="${sub['Proof of Quest']}" target="_blank">View Proof</a></td>
-                    <td><a href="${sub['Quest Link']}" target="_blank">View Quest</a></td>
+<td>${isUrl(sub['Proof of Quest']) 
+    ? `<a href="${sub['Proof of Quest']}" target="_blank">View Proof</a>` 
+    : `<span style="cursor:pointer;color:#6366F1;font-weight:600;" 
+         onclick="expandText(this, '${encodeURIComponent(sub['Proof of Quest'] || '').replace(/'/g, "%27")}')">📖 Read</span>`
+}</td>
+<td>${isUrl(sub['Quest Link']) 
+    ? `<a href="${sub['Quest Link']}" target="_blank">View Quest</a>` 
+    : `<span style="cursor:pointer;color:#6366F1;font-weight:600;" 
+         onclick="expandText(this, '${encodeURIComponent(sub['Quest Link'] || '').replace(/'/g, "%27")}')">📖 Read</span>`
+}</td>
                     <td><a href="https://t.me/${sub.Telegram.replace('@','')}" target="_blank" class="contact-link"> ${sub.Telegram}</a></td>
                     <td>
                         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">

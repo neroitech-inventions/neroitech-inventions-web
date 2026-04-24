@@ -366,10 +366,28 @@ margin-top:10px;
 <input id="bounce" type="number" step="0.1" placeholder="Bounce Rate %">
 <input id="duration" type="number" step="0.1" placeholder="Average Visit Duration (minutes)">
 <button onclick="rateSite()">Rate Verse App</button>
-<div class="result" id="result"></div>
+<div class="result" id="result">Your website stats will appear here...</div>
 <div class="powered-by">
 Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions</a>
 </div>
+</div>
+
+<!-- UTM Generator Tool -->
+<div class="container">
+  <h2>UTM Source Generator</h2>
+
+  <input id="baseUrl" type="text" placeholder="Enter your URL (https://example.com)">
+  
+  <input id="utmSource" type="text" placeholder="Enter UTM Source (e.g. telegram, twitter)">
+  
+  <select id="utmSymbol" style="padding:1rem; border-radius:10px; background:#2a2a4a; color:white; border:1px solid #3a3a5a;">
+    <option value="?">Use ? (for new URL)</option>
+    <option value="&">Use & (for existing params)</option>
+  </select>
+
+  <button onclick="generateUTM()">Generate UTM Link</button>
+
+  <div class="result" id="utmResult">Your generated link will appear here...</div>
 </div>
 
 <!-- Verse Ecosystem Intelligence Analyzer -->
@@ -816,6 +834,53 @@ clearInterval(scanInterval);
 
 });
 
+
+/* ===============================
+   REALTIME UTM GENERATOR
+================================*/
+
+let currentUTM = "";
+
+function updateUTM() {
+  const url = document.getElementById("baseUrl").value.trim();
+  const source = document.getElementById("utmSource").value.trim();
+  const symbol = document.getElementById("utmSymbol").value;
+
+  if (!url || !source) {
+    document.getElementById("utmResult").innerHTML = "Your generated link will appear here...";
+    currentUTM = "";
+    return;
+  }
+
+  let finalSymbol = symbol;
+
+  // Smart override if URL already has params
+  if (url.includes("?")) {
+    finalSymbol = "&";
+  }
+
+  currentUTM = `${url}${finalSymbol}utm_source=${encodeURIComponent(source)}`;
+
+  document.getElementById("utmResult").innerHTML = `
+    <span style="word-break:break-all;">${currentUTM}</span>
+  `;
+}
+
+function copyUTM() {
+  if (!currentUTM) return;
+
+  navigator.clipboard.writeText(currentUTM).then(() => {
+    document.getElementById("utmResult").innerHTML += "<br>Copied ✅";
+  });
+}
+
+/* ===============================
+   LISTENERS (REALTIME)
+================================*/
+
+document.getElementById("baseUrl").addEventListener("input", updateUTM);
+document.getElementById("utmSource").addEventListener("input", updateUTM);
+document.getElementById("utmSymbol").addEventListener("change", updateUTM);
 
 </script>
 </body>
