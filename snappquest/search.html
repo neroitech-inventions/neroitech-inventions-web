@@ -1023,8 +1023,17 @@ function displayResults(quest, totalSlots, submissions, blacklistedSet = new Set
 
                 tr.innerHTML = `
                     <td>${sub.Timestamp || ''}</td>
-<td>${isUrl(sub['Proof of Quest']) ? `<a href="${sub['Proof of Quest']}" target="_blank">View Proof</a>` : `<span style="cursor:pointer;color:#6366F1;font-weight:600;" onclick="expandText(this, '${encodeURIComponent(sub['Proof of Quest'] || '')}')">📖 Read</span>`}</td>
-<td>${isUrl(sub['Quest Link']) ? `<a href="${sub['Quest Link']}" target="_blank">View Quest</a>` : `<span style="cursor:pointer;color:#6366F1;font-weight:600;" onclick="expandText(this, '${encodeURIComponent(sub['Quest Link'] || '')}')">📖 Read</span>`}</td>                   <td>${telegramHtml}</td>
+<td>${isUrl(sub['Proof of Quest']) 
+    ? `<a href="${sub['Proof of Quest']}" target="_blank">View Proof</a>` 
+    : `<span style="cursor:pointer;color:#6366F1;font-weight:600;" 
+         onclick="expandText(this, '${encodeURIComponent(sub['Proof of Quest'] || '').replace(/'/g, "%27")}')">📖 Read</span>`
+}</td>
+
+<td>${isUrl(sub['Quest Link']) 
+    ? `<a href="${sub['Quest Link']}" target="_blank">View Quest</a>` 
+    : `<span style="cursor:pointer;color:#6366F1;font-weight:600;" 
+         onclick="expandText(this, '${encodeURIComponent(sub['Quest Link'] || '').replace(/'/g, "%27")}')">📖 Read</span>`
+}</td>                   <td>${telegramHtml}</td>
                     <td>
                         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                             <a href="${getExplorerUrl(wallet)}" 

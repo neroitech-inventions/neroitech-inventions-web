@@ -382,9 +382,11 @@ Analytics Intelligence Analyzer
 <br>
 <div style="text-align:center;margin-bottom:10px;">
 <select id="dataFilter" style="padding:8px;border-radius:6px;background:#0f172a;color:white;border:1px solid #334155;">
-<option value="verse2" selected>Vibe Coding with Verse 2</option>
+<option value="verse3" selected>Vibe Coding with Verse 3</option>
+<option value="verse2">Vibe Coding with Verse 2</option>
 <option value="verse1">Vibe Coding with Verse 1</option>
 <option value="all">All Time</option>
+</select>
 </select>
 </div>
 <textarea id="verseData" class="verse"></textarea>
@@ -447,6 +449,7 @@ Verse App Analytics is loaded by default from the database. Click the field and 
 
 let verse1Data="";
 let verse2Data="";
+let verse3Data="";
 let verseAllData="";
 
 let verseLines=[];
@@ -465,9 +468,10 @@ try{
 
 verse1Data = await fetch("vcwv-1.txt").then(r=>r.ok?r.text():"");
 verse2Data = await fetch("vcwv-2.txt").then(r=>r.ok?r.text():"");
+verse3Data = await fetch("vcwv-3.txt").then(r=>r.ok?r.text():"");
 verseAllData = await fetch("verse-data.txt").then(r=>r.ok?r.text():"");
 
-loadSelectedData("verse2");
+loadSelectedData("verse3");
 
 }catch(e){
 
@@ -492,6 +496,7 @@ let data="";
 
 if(type==="verse1") data=verse1Data;
 if(type==="verse2") data=verse2Data;
+if(type==="verse3") data=verse3Data;
 if(type==="all") data=verseAllData;
 
 verseLines=data
