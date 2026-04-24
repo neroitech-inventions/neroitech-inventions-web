@@ -378,6 +378,60 @@ Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions</
 
   <input id="baseUrl" type="text" placeholder="Enter your URL (https://example.com)">
   
+
+<div style="margin-bottom:12px;">
+
+  <label style="font-size:13px;color:#a0a0cc;">
+    UTM Source
+  </label>
+
+  <!-- Modern Select -->
+  <div style="
+    position:relative;
+    margin-top:6px;
+  ">
+
+    <select id="utmSourceSelect" onchange="setSourceFromDropdown()" 
+      style="
+        width:100%;
+        padding:12px 14px;
+        border-radius:12px;
+        background:rgba(15,23,42,0.9);
+        color:white;
+        border:1px solid #334155;
+        outline:none;
+        backdrop-filter: blur(10px);
+        font-size:14px;
+        appearance:none;
+        cursor:pointer;
+      ">
+
+      <option value="">Select source...</option>
+      <option value="telegram.org">Telegram</option>
+      <option value="x.com">Twitter (X)</option>
+      <option value="discord.com">Discord</option>
+      <option value="whatsapp.com">WhatsApp</option>
+      <option value="youtube.com">Youtube</option>
+      <option value="facebook.com">Facebook</option>
+      <option value="medium.com">Medium</option>      
+      <option value="custom">➕ Custom Input</option>
+
+    </select>
+
+    <!-- Dropdown arrow -->
+    <div style="
+      position:absolute;
+      right:12px;
+      top:50%;
+      transform:translateY(-50%);
+      pointer-events:none;
+      color:#00e676;
+      font-size:12px;
+    ">▼</div>
+
+  </div>
+</div>
+
   <input id="utmSource" type="text" placeholder="Enter UTM Source (e.g. telegram, twitter)">
   
   <select id="utmSymbol" style="padding:1rem; border-radius:10px; background:#2a2a4a; color:white; border:1px solid #3a3a5a;">
@@ -830,57 +884,144 @@ document.getElementById("verseData").addEventListener("click",()=>{
 stopScan=true;
 clearInterval(scanInterval);
 
+window.addEventListener("DOMContentLoaded", () => {
+  loadUTMHistory();
 });
 
 });
 
+});
 
 /* ===============================
-   REALTIME UTM GENERATOR
+   UTM GENERATOR (IMPROVED UX)
 ================================*/
 
-let currentUTM = "";
-
-function updateUTM() {
+function generateUTM() {
   const url = document.getElementById("baseUrl").value.trim();
   const source = document.getElementById("utmSource").value.trim();
   const symbol = document.getElementById("utmSymbol").value;
 
   if (!url || !source) {
-    document.getElementById("utmResult").innerHTML = "Your generated link will appear here...";
-    currentUTM = "";
+    document.getElementById("utmResult").innerHTML = "Please enter both URL and source.";
     return;
   }
 
   let finalSymbol = symbol;
 
-  // Smart override if URL already has params
+  // Auto-fix: if URL already has ?, force &
   if (url.includes("?")) {
     finalSymbol = "&";
   }
 
-  currentUTM = `${url}${finalSymbol}utm_source=${encodeURIComponent(source)}`;
+  const finalURL = `${url}${finalSymbol}utm_source=${encodeURIComponent(source)}`;
 
   document.getElementById("utmResult").innerHTML = `
-    <span style="word-break:break-all;">${currentUTM}</span>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <strong>Generated Link:</strong>
+      <div style="background:#0f172a; padding:10px; border-radius:8px; word-break:break-all;">
+        ${finalURL}
+      </div>
+      <button id="copyBtn" onclick="copyUTM('${finalURL}')">
+        📋 Copy
+      </button>
+      <div id="copyStatus" style="font-size:13px; color:#00e676;"></div>
+    </div>
   `;
 }
 
-function copyUTM() {
-  if (!currentUTM) return;
+function copyUTM(text) {
+  const btn = document.getElementById("copyBtn");
+  const status = document.getElementById("copyStatus");
 
-  navigator.clipboard.writeText(currentUTM).then(() => {
-    document.getElementById("utmResult").innerHTML += "<br>Copied ✅";
+  if (!btn) return;
+
+  // Prevent spam clicking
+  btn.disabled = true;
+  btn.innerText = "Copying...";
+
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerText = "Copied ✅";
+    status.innerText = "Link copied to clipboard";
+
+    // Reset after 2.5 seconds
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerText = "📋 Copy";
+      status.innerText = "";
+    }, 2500);
   });
 }
 
 /* ===============================
-   LISTENERS (REALTIME)
+   UTM SOURCE HANDLER (MODERN)
 ================================*/
 
-document.getElementById("baseUrl").addEventListener("input", updateUTM);
-document.getElementById("utmSource").addEventListener("input", updateUTM);
-document.getElementById("utmSymbol").addEventListener("change", updateUTM);
+const UTM_HISTORY_KEY = "utm_sources_history";
+
+function setSourceFromDropdown() {
+  const select = document.getElementById("utmSourceSelect");
+  const input = document.getElementById("utmSource");
+
+  if (select.value === "custom") {
+    input.value = "";
+    input.focus();
+    return;
+  }
+
+  input.value = select.value;
+
+  saveUTMHistory(select.value);
+  generateUTM();
+}
+
+/* Sync manual input → dropdown */
+document.getElementById("utmSource").addEventListener("input", function () {
+  const select = document.getElementById("utmSourceSelect");
+
+  const match = [...select.options].find(o => o.value === this.value);
+
+  select.value = match ? this.value : "custom";
+});
+
+/* ===============================
+   SAVE RECENT SOURCES (SMART UX)
+================================*/
+function saveUTMHistory(value) {
+  if (!value || value === "custom") return;
+
+  let history = JSON.parse(localStorage.getItem(UTM_HISTORY_KEY)) || [];
+
+  // remove duplicates
+  history = history.filter(v => v !== value);
+
+  // add to top
+  history.unshift(value);
+
+  // limit to 5
+  history = history.slice(0, 5);
+
+  localStorage.setItem(UTM_HISTORY_KEY, JSON.stringify(history));
+}
+
+/* Optional: load history into dropdown dynamically */
+function loadUTMHistory() {
+  const select = document.getElementById("utmSourceSelect");
+  let history = JSON.parse(localStorage.getItem(UTM_HISTORY_KEY)) || [];
+
+  if (!history.length) return;
+
+  const divider = document.createElement("option");
+  divider.disabled = true;
+  divider.textContent = "──────── Recent ────────";
+  select.insertBefore(divider, select.children[1]);
+
+  history.forEach(src => {
+    const opt = document.createElement("option");
+    opt.value = src;
+    opt.textContent = "⟳ " + src;
+    select.insertBefore(opt, select.children[2]);
+  });
+}
 
 </script>
 </body>
