@@ -1123,24 +1123,25 @@ async function generateBulkPaymentList(submissions) {
     const seen = new Set();
     const walletEntries = [];
 
-    submissions.forEach((sub) => {
-        let wallet = (sub['Polygon Address'] || '').trim();
-        let chain = getBlockchainTag(wallet);
+submissions.forEach((sub) => {
+    let wallet = (sub['Polygon Address'] || '').trim();
+    let chain = getBlockchainTag(wallet);
 
-        if (chain === '[Polygon]' && !includePolygon) return;
-        if (chain === '[Solana]'  && !includeSolana) return;
-        if (chain === '[Sui]'     && !includeSui) return;
-        if (chain === '[Unknown]') return;
+    if (chain === '[Polygon]' && !includePolygon) return;
+    if (chain === '[Solana]'  && !includeSolana) return;
+    if (chain === '[Sui]'     && !includeSui) return;
+    if (chain === '[Unknown]') return;
 
-        if (wallet && !seen.has(wallet)) {
-            seen.add(wallet);
-            walletEntries.push({
-                wallet,
-                amount,
-                chain: chain.replace('[','').replace(']','')
-            });
-        }
-    });
+    if (wallet && !seen.has(wallet)) {
+        seen.add(wallet);
+        walletEntries.push({
+            wallet,
+            amount,
+            chain: chain.replace('[','').replace(']',''),
+            telegram: (sub.Telegram || 'Unknown').trim()  // ← ADD THIS LINE ONLY
+        });
+    }
+});
 
     if (!walletEntries.length) {
         Swal.fire('No matching wallets', 'No wallets found for the selected blockchain(s).', 'info');
@@ -1148,11 +1149,12 @@ async function generateBulkPaymentList(submissions) {
     }
 
     // === KEEP YOUR ORIGINAL UI, JUST ADD AMOUNT INPUT ===
-    const listHTML = walletEntries.map((entry, i) => `
-        <div style="display:flex; align-items:center; gap:10px; padding:8px; border-bottom:1px solid #f0f0f0; font-size:13px;">
-            <input type="checkbox" id="wallet-check-${i}" checked style="width:16px; height:16px; cursor:pointer; flex-shrink:0;">
-            
-            <label for="wallet-check-${i}" style="font-family:monospace; word-break:break-all; cursor:pointer; flex:1; text-align:left;">
+const listHTML = walletEntries.map((entry, i) => `
+    <div style="display:flex; align-items:center; gap:10px; padding:8px; border-bottom:1px solid #f0f0f0; font-size:13px;" title="Telegram: ${entry.telegram}">
+        <input type="checkbox" id="wallet-check-${i}" checked style="width:16px; height:16px; cursor:pointer; flex-shrink:0;">
+        
+        <label for="wallet-check-${i}" style="font-family:monospace; word-break:break-all; cursor:pointer; flex:1; text-align:left;">
+            <div style="font-size:11px; color:#6B7280; margin-bottom:3px;">👤 ${entry.telegram}</div>
                 <span style="font-size:11px; font-weight:700; padding:2px 8px; border-radius:9999px; margin-right:6px;
                     background:${entry.chain === 'Polygon' ? '#8247E5' : entry.chain === 'Solana' ? '#14F195' : '#6F4CFF'};
                     color:${entry.chain === 'Solana' ? '#0F172A' : 'white'};">
