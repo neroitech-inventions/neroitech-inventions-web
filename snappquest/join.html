@@ -1124,6 +1124,22 @@
     <div id="savedSocials" style="margin-top:16px;"></div>
   </div>
 </div>
+
+<!-- NOTES SECTION -->
+<div style="margin-top: 24px; border-top: 1px solid #334155; padding-top: 20px;">
+  <div onclick="toggleNotesSection(event)" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; margin-bottom:16px;">
+    <h3 style="font-size:16px; font-weight:700; color:white; margin:0;">📝 My Note</h3>
+    <span id="notesToggleIcon" style="color:#94A3B8; font-size:18px;">﹢</span>
+  </div>
+
+  <div id="notesSection" style="display:none;">
+<textarea id="userNote" placeholder="Write anything here — reminders, wallet notes, quest tips..." 
+      style="width:100%; padding:12px; background:#334155; border:none; border-radius:8px; color:white; min-height:120px; resize:vertical; font-family:inherit; font-size:14px; line-height:1.6;"></textarea>
+    <button onclick="saveNote()" class="save-wallet-btn" style="margin-top:10px;">Save Note</button>
+    <div id="savedNote" style="margin-top:8px;"></div>
+  </div>
+</div>
+
 </div>
     <div class="overlay"></div>
     <div class="profile-container">
@@ -2433,6 +2449,7 @@ function createSavedWalletHTML(chain, address) {
 window.addEventListener('load', () => {
   renderSavedWallets();
       renderSavedSocials();
+      loadNote()
 });
 // Copy wallet (used by the saved wallets)
 function copyWallet(address) {
@@ -2509,6 +2526,74 @@ async function handleTapToUnlock(card, quest) {
         card.outerHTML = newCardHTML;
     }
 }
+
+function saveNote() {
+    const content = document.getElementById('userNote').value.trim();
+    localStorage.setItem('userNote', content);
+    Swal.fire({
+        icon: 'success',
+        title: content ? 'Note Saved!' : 'Note Cleared!',
+        timer: 1500,
+        showConfirmButton: false,
+        toast: true,
+        position: 'top',
+        background: '#1F2937',
+        color: '#fff'
+    });
+    renderSavedNote();
+}
+
+function loadNote() {
+    const saved = localStorage.getItem('userNote');
+    const el = document.getElementById('userNote');
+    if (el && saved) el.value = saved;
+    renderSavedNote();
+}
+
+function renderSavedNote() {
+    const container = document.getElementById('savedNote');
+    if (!container) return;
+    const content = localStorage.getItem('userNote');
+    if (!content || content.trim() === '') {
+        container.innerHTML = '<p style="color:#CBD5E1;text-align:center;font-size:13px;">No note saved yet.</p>';
+        return;
+    }
+    container.innerHTML = `
+        <div style="background:#334155; border-radius:8px; padding:12px; margin-top:10px;">
+            <p style="color:#94A3B8; font-size:13px; line-height:1.6; margin:0 0 10px 0; word-break:break-word;">${content}</p>
+            <button onclick="copyNote()" class="copy-wallet-btn" style="width:100%;">📋 Copy Note</button>
+        </div>
+    `;
+}
+
+function copyNote() {
+    const content = localStorage.getItem('userNote');
+    if (!content) return;
+    navigator.clipboard.writeText(content).then(() => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Copied!',
+            text: content.length > 60 ? content.substring(0, 60) + '...' : content,
+            timer: 1500,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top',
+            background: '#1F2937',
+            color: '#fff'
+        });
+    });
+}
+
+function toggleNotesSection(e) {
+    if (e) e.stopPropagation();
+    const section = document.getElementById('notesSection');
+    const icon = document.getElementById('notesToggleIcon');
+    const isOpen = section.style.display === 'block';
+    section.style.display = isOpen ? 'none' : 'block';
+    icon.textContent = isOpen ? '﹢' : '﹣';
+}
+
+
     </script>
 </body>
 </html>
