@@ -1086,7 +1086,7 @@
   <div id="savedWallets" class="saved-wallets"></div>
   <!-- SOCIAL LINKS SECTION -->
 <div style="margin-top: 24px; border-top: 1px solid #334155; padding-top: 20px;">
-  <div onclick="toggleSocialSection()" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; margin-bottom:16px;">
+  <div onclick="toggleSocialSection(event)" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; margin-bottom:16px;">
     <h3 style="font-size:16px; font-weight:700; color:white; margin:0;">🔗 My Social Links</h3>
     <span id="socialToggleIcon" style="color:#94A3B8; font-size:18px;">﹢</span>
   </div>
@@ -1096,6 +1096,10 @@
       <label><i class="fa-brands fa-x-twitter" style="width:16px;"></i> Twitter</label>
       <input type="text" id="socialTwitter" placeholder="https://x.com/username">
     </div>
+    <div class="wallet-field">
+  <label><i class="fa-brands fa-telegram" style="width:16px; color:#229ED9;"></i> Telegram</label>
+  <input type="text" id="socialTelegram" placeholder="https://t.me/username">
+</div>
     <div class="wallet-field">
       <label><i class="fa-brands fa-youtube" style="width:16px; color:#FF0000;"></i> YouTube</label>
       <input type="text" id="socialYoutube" placeholder="https://youtube.com/@channel">
@@ -1199,6 +1203,7 @@
                         <li><a href="search.html"><i class="fas fa-search"></i> TrackQuest</a></li>
                         <li><a href="explorer.html"><i class="fas fa-cubes"></i> Explorer</a></li>
                         <li><a href="verse-millionaire.html"><i class="fas fa-coins"></i> VERSE Millionaire</a></li>
+                        <li><a href="game.html"><i class="fas fa-gamepad"></i> VERSE Snake Game</a></li>
                     </ul>
                 </div>
             </div>
@@ -2268,9 +2273,15 @@ function toggleWalletSidebar() {
 }
 function outsideClickHandler(e) {
     const sidebar = document.getElementById('walletSidebar');
-    if (!sidebar.contains(e.target) && !e.target.closest('button[onclick="toggleWalletSidebar()"]')) {
-        sidebar.classList.remove('open');
+    const walletBtn = e.target.closest('button[onclick="toggleWalletSidebar()"]');
+    
+    if (sidebar.contains(e.target) || walletBtn) {
+        // Click is inside sidebar or on the toggle button — re-attach listener
+        document.addEventListener('click', outsideClickHandler, { once: true });
+        return;
     }
+    
+    sidebar.classList.remove('open');
 }
 function saveWallets() {
   const sol = document.getElementById('solanaWallet').value.trim();
@@ -2302,7 +2313,8 @@ function renderSavedWallets() {
   }
 }
 
-function toggleSocialSection() {
+function toggleSocialSection(e) {
+    if (e) e.stopPropagation();
     const section = document.getElementById('socialSection');
     const icon = document.getElementById('socialToggleIcon');
     const isOpen = section.style.display === 'block';
@@ -2313,6 +2325,7 @@ function toggleSocialSection() {
 function saveSocials() {
     const socials = {
         twitter:   document.getElementById('socialTwitter').value.trim(),
+        telegram:  document.getElementById('socialTelegram').value.trim(),
         youtube:   document.getElementById('socialYoutube').value.trim(),
         instagram: document.getElementById('socialInstagram').value.trim(),
         tiktok:    document.getElementById('socialTiktok').value.trim(),
@@ -2339,6 +2352,7 @@ function renderSavedSocials() {
 
     const icons = {
         twitter:   { label: 'Twitter',    icon: 'fa-brands fa-x-twitter',  color: '#ffffff' },
+            telegram:  { label: 'Telegram',     icon: 'fa-brands fa-telegram',   color: '#229ED9' }, 
         youtube:   { label: 'YouTube',         icon: 'fa-brands fa-youtube',     color: '#FF0000' },
         instagram: { label: 'Instagram',       icon: 'fa-brands fa-instagram',   color: '#E1306C' },
         tiktok:    { label: 'TikTok',          icon: 'fa-brands fa-tiktok',      color: '#ffffff' },
