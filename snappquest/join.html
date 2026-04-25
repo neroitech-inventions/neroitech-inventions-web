@@ -990,6 +990,15 @@
   color: white;
   font-family: monospace;
 }
+.social-inputs input {
+  width: 100%;
+  padding: 12px;
+  background: #334155;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-family: monospace;
+}
 .save-wallet-btn {
   width: 100%;
   padding: 14px;
@@ -1075,6 +1084,42 @@
   </div>
   <button onclick="saveWallets()" class="save-wallet-btn">Save Wallets</button>
   <div id="savedWallets" class="saved-wallets"></div>
+  <!-- SOCIAL LINKS SECTION -->
+<div style="margin-top: 24px; border-top: 1px solid #334155; padding-top: 20px;">
+  <div onclick="toggleSocialSection()" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; margin-bottom:16px;">
+    <h3 style="font-size:16px; font-weight:700; color:white; margin:0;">🔗 My Social Links</h3>
+    <span id="socialToggleIcon" style="color:#94A3B8; font-size:18px;">﹢</span>
+  </div>
+
+  <div id="socialSection" style="display:none;" class="social-inputs">
+    <div class="wallet-field">
+      <label><i class="fa-brands fa-x-twitter" style="width:16px;"></i> Twitter</label>
+      <input type="text" id="socialTwitter" placeholder="https://x.com/username">
+    </div>
+    <div class="wallet-field">
+      <label><i class="fa-brands fa-youtube" style="width:16px; color:#FF0000;"></i> YouTube</label>
+      <input type="text" id="socialYoutube" placeholder="https://youtube.com/@channel">
+    </div>
+    <div class="wallet-field">
+      <label><i class="fa-brands fa-instagram" style="width:16px; color:#E1306C;"></i> Instagram</label>
+      <input type="text" id="socialInstagram" placeholder="https://instagram.com/username">
+    </div>
+    <div class="wallet-field">
+      <label><i class="fa-brands fa-tiktok" style="width:16px;"></i> TikTok</label>
+      <input type="text" id="socialTiktok" placeholder="https://tiktok.com/@username">
+    </div>
+    <div class="wallet-field">
+      <label><i class="fa-brands fa-snapchat" style="width:16px; color:#FFFC00;"></i> Snapchat</label>
+      <input type="text" id="socialSnapchat" placeholder="https://snapchat.com/add/username">
+    </div>
+    <div class="wallet-field">
+      <label><i class="fas fa-coins" style="width:16px;"></i> CoinMarketCap</label>
+      <input type="text" id="socialCmc" placeholder="https://coinmarketcap.com/...">
+    </div>
+    <button onclick="saveSocials()" class="save-wallet-btn" style="margin-top:8px;">Save Social Links</button>
+    <div id="savedSocials" style="margin-top:16px;"></div>
+  </div>
+</div>
 </div>
     <div class="overlay"></div>
     <div class="profile-container">
@@ -2256,6 +2301,97 @@ function renderSavedWallets() {
     container.innerHTML = '<p style="color:#CBD5E1;text-align:center;">No wallets saved yet.</p>';
   }
 }
+
+function toggleSocialSection() {
+    const section = document.getElementById('socialSection');
+    const icon = document.getElementById('socialToggleIcon');
+    const isOpen = section.style.display === 'block';
+    section.style.display = isOpen ? 'none' : 'block';
+    icon.textContent = isOpen ? '﹢' : '﹣';
+}
+
+function saveSocials() {
+    const socials = {
+        twitter:   document.getElementById('socialTwitter').value.trim(),
+        youtube:   document.getElementById('socialYoutube').value.trim(),
+        instagram: document.getElementById('socialInstagram').value.trim(),
+        tiktok:    document.getElementById('socialTiktok').value.trim(),
+        snapchat:  document.getElementById('socialSnapchat').value.trim(),
+        cmc:       document.getElementById('socialCmc').value.trim()
+    };
+    localStorage.setItem('userSocials', JSON.stringify(socials));
+    Swal.fire({
+        icon: 'success',
+        title: 'Social Links Saved!',
+        text: 'Your links are stored in the browser.',
+        timer: 2000,
+        showConfirmButton: false
+    });
+    renderSavedSocials();
+}
+
+function renderSavedSocials() {
+    const container = document.getElementById('savedSocials');
+    if (!container) return;
+    const stored = localStorage.getItem('userSocials');
+    if (!stored) { container.innerHTML = ''; return; }
+    const socials = JSON.parse(stored);
+
+    const icons = {
+        twitter:   { label: 'X (Twitter)',    icon: 'fa-brands fa-x-twitter',  color: '#ffffff' },
+        youtube:   { label: 'YouTube',         icon: 'fa-brands fa-youtube',     color: '#FF0000' },
+        instagram: { label: 'Instagram',       icon: 'fa-brands fa-instagram',   color: '#E1306C' },
+        tiktok:    { label: 'TikTok',          icon: 'fa-brands fa-tiktok',      color: '#ffffff' },
+        snapchat:  { label: 'Snapchat',        icon: 'fa-brands fa-snapchat',    color: '#FFFC00' },
+        cmc:       { label: 'CoinMarketCap',   icon: '',                          color: '#ffffff' }
+    };
+
+    // Pre-fill inputs
+    Object.keys(socials).forEach(key => {
+        const el = document.getElementById('social' + key.charAt(0).toUpperCase() + key.slice(1));
+        if (el && socials[key]) el.value = socials[key];
+    });
+
+    const entries = Object.entries(socials).filter(([_, val]) => val);
+    if (!entries.length) {
+        container.innerHTML = '<p style="color:#CBD5E1;text-align:center;font-size:13px;">No social links saved yet.</p>';
+        return;
+    }
+
+    container.innerHTML = entries.map(([key, url]) => {
+        const meta = icons[key] || { label: key, icon: '', color: '#fff' };
+        return `
+            <div class="saved-wallet" style="flex-direction:column; align-items:flex-start; gap:8px;">
+                <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                    <strong style="font-size:13px; color:#94A3B8;">
+                        ${meta.icon ? `<i class="${meta.icon}" style="color:${meta.color}; margin-right:6px;"></i>` : '🪙'} ${meta.label}
+                    </strong>
+                    <div style="display:flex; gap:6px;">
+                        <a href="${url}" target="_blank" style="background:#1E2937; color:#34D399; border:none; padding:4px 10px; border-radius:6px; font-size:12px; text-decoration:none; cursor:pointer;">🔗 Open</a>
+                        <button onclick="copySocial('${url}')" style="background:#1E2937; color:#34D399; border:none; padding:4px 10px; border-radius:6px; font-size:12px; cursor:pointer;">📋 Copy</button>
+                    </div>
+                </div>
+                <span style="font-size:11px; color:#64748B; word-break:break-all;">${url}</span>
+            </div>
+        `;
+    }).join('');
+}
+
+function copySocial(url) {
+    navigator.clipboard.writeText(url).then(() => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Copied!',
+            text: url,
+            timer: 1500,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top',
+            background: '#1F2937',
+            color: '#fff'
+        });
+    });
+}
 function createSavedWalletHTML(chain, address) {
   return `
     <div class="saved-wallet">
@@ -2270,6 +2406,7 @@ function createSavedWalletHTML(chain, address) {
 // Load saved wallets when page opens
 window.addEventListener('load', () => {
   renderSavedWallets();
+      renderSavedSocials();
 });
 // Copy wallet (used by the saved wallets)
 function copyWallet(address) {
