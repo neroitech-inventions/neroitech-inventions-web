@@ -413,6 +413,40 @@
     box-shadow: 0 8px 20px rgba(0,0,0,0.3), 0 0 15px rgba(52,211,153,0.5);
 }
 #back-to-top i { font-size: 24px; }
+
+/* Pause Button - positioned near controls */
+#pauseBtn {
+    background: #1E293B;
+    color: #94A3B8;
+    border: 2px solid #334155;
+    border-radius: 50px;
+    padding: 10px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#pauseBtn:hover {
+    background: #334155;
+    color: #34D399;
+    border-color: #34D399;
+    transform: translateY(-2px);
+}
+
+#pauseBtn.paused {
+    background: #ca8a04;
+    color: white;
+    border-color: #eab308;
+}
+
+#pauseBtn.paused:hover {
+    background: #eab308;
+}
     </style>
 </head>
 <body>
@@ -442,12 +476,12 @@
         </div>
 
         <div id="gameWrap">
-            <div id="topBar">
-                <div class="stat">Score<span id="scoreEl">0</span></div>
-                <div class="stat">VERSE<span id="verseEl">0</span></div>
-                <div class="stat">Best<span id="hiEl">0</span></div>
-                <div class="stat">Level<span id="lvlEl">1</span></div>
-            </div>
+<div id="topBar">
+    <div class="stat">Score<span id="scoreEl">0</span></div>
+    <div class="stat">VERSE<span id="verseEl">0</span></div>
+    <div class="stat">Best<span id="hiEl">0</span></div>
+    <div class="stat">Level<span id="lvlEl">1</span></div>
+</div>
 
             <div id="canvasWrap">
                 <canvas id="gameCanvas" width="400" height="400"></canvas>
@@ -469,6 +503,13 @@
                 <button data-speed="60">Fast</button>
             </div>
 
+            <!-- NEW: Pause button moved here - closer to controls -->
+            <div style="text-align: center; margin: 12px 0 8px;">
+                <button id="pauseBtn" class="pause-btn">
+                    <i class="fas fa-pause"></i> Pause
+                </button>
+            </div>
+
             <div id="controls">
                 <div></div>
                 <div class="dpad" id="dUp">&#9650;</div>
@@ -477,7 +518,6 @@
                 <div class="dpad" id="dDown">&#9660;</div>
                 <div class="dpad" id="dRight">&#9654;</div>
             </div>
-        </div>
 
         <div class="instructions">
             <h3><i class="fas fa-info-circle"></i> How to Play</h3>
@@ -506,83 +546,86 @@
     <i class="fas fa-arrow-up"></i>
 </button>
 
-    <script>
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+<script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    
+    const backToTopButton = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+        backToTopButton.classList.toggle('visible', window.scrollY > 300);
+    });
+    backToTopButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
-        const backToTopButton = document.getElementById('back-to-top');
-window.addEventListener('scroll', () => {
-    backToTopButton.classList.toggle('visible', window.scrollY > 300);
-});
-backToTopButton.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+    // Navigation
+    const hamburger = document.getElementById('hamburger');
+    const navContainer = document.getElementById('navContainer');
+    const overlayNav = document.getElementById('overlayNav');
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navContainer.classList.toggle('active');
+        overlayNav.classList.toggle('active');
+    });
+    overlayNav.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navContainer.classList.remove('active');
+        overlayNav.classList.remove('active');
+    });
 
-        const hamburger = document.getElementById('hamburger');
-        const navContainer = document.getElementById('navContainer');
-        const overlayNav = document.getElementById('overlayNav');
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navContainer.classList.toggle('active');
-            overlayNav.classList.toggle('active');
-        });
-        overlayNav.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navContainer.classList.remove('active');
-            overlayNav.classList.remove('active');
-        });
+    // Game Elements
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const overlay = document.getElementById('overlay');
+    const startBtn = document.getElementById('startBtn');
+    const scoreEl = document.getElementById('scoreEl');
+    const verseEl = document.getElementById('verseEl');
+    const hiEl = document.getElementById('hiEl');
+    const lvlEl = document.getElementById('lvlEl');
+    const pauseBtn = document.getElementById('pauseBtn');   // ← NEW
 
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const overlay = document.getElementById('overlay');
-        const overlayTitle = document.getElementById('overlayTitle');
-        const overlayMsg = document.getElementById('overlayMsg');
-        const startBtn = document.getElementById('startBtn');
-        const scoreEl = document.getElementById('scoreEl');
-        const verseEl = document.getElementById('verseEl');
-        const hiEl = document.getElementById('hiEl');
-        const lvlEl = document.getElementById('lvlEl');
+    const GRID = 20;
+    const COLS = canvas.width / GRID;
+    const ROWS = canvas.height / GRID;
 
-        const GRID = 20;
-        const COLS = canvas.width / GRID;
-        const ROWS = canvas.height / GRID;
+    let snake, dir, nextDir, food, bonusFood, score, verseCount, level, gameLoop, running, speed, highScore, isPaused;
 
-        let snake, dir, nextDir, food, bonusFood, score, verseCount, level, gameLoop, running, speed, highScore;
-        highScore = parseInt(localStorage.getItem('verseSnakeHi') || '0');
+    highScore = parseInt(localStorage.getItem('verseSnakeHi') || '0');
+    hiEl.textContent = highScore;
+    speed = 150;
+    isPaused = false;
+
+    function rand(max) { return Math.floor(Math.random() * max); }
+
+    function freeCell() {
+        let pos;
+        do { pos = { x: rand(COLS), y: rand(ROWS) }; }
+        while (snake.some(s => s.x === pos.x && s.y === pos.y));
+        return pos;
+    }
+
+    function init() {
+        snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+        dir = { x: 1, y: 0 };
+        nextDir = { x: 1, y: 0 };
+        score = 0; verseCount = 0; level = 1;
+        bonusFood = null;
+        isPaused = false;
+        spawnFood();
+        updateHUD();
+    }
+
+    function spawnFood() { food = freeCell(); }
+    function spawnBonus() {
+        bonusFood = freeCell();
+        bonusFood.timer = 80;
+    }
+
+    function updateHUD() {
+        scoreEl.textContent = score;
+        verseEl.textContent = verseCount;
         hiEl.textContent = highScore;
-        speed = 150;
-
-        function rand(max) { return Math.floor(Math.random() * max); }
-
-        function freeCell() {
-            let pos;
-            do { pos = { x: rand(COLS), y: rand(ROWS) }; }
-            while (snake.some(s => s.x === pos.x && s.y === pos.y));
-            return pos;
-        }
-
-        function init() {
-            snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
-            dir = { x: 1, y: 0 };
-            nextDir = { x: 1, y: 0 };
-            score = 0; verseCount = 0; level = 1;
-            bonusFood = null;
-            spawnFood();
-            updateHUD();
-        }
-
-        function spawnFood() { food = freeCell(); }
-
-        function spawnBonus() {
-            bonusFood = freeCell();
-            bonusFood.timer = 80;
-        }
-
-        function updateHUD() {
-            scoreEl.textContent = score;
-            verseEl.textContent = verseCount;
-            hiEl.textContent = highScore;
-            lvlEl.textContent = level;
-        }
+        lvlEl.textContent = level;
+    }
 
         function drawRoundRect(x, y, w, h, r, fill) {
             ctx.beginPath();
@@ -622,137 +665,182 @@ function drawCoin(x, y, color, letter) {
     }
 }
 
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            ctx.strokeStyle = '#1E293B';
-            ctx.lineWidth = 0.5;
-            for (let i = 0; i < COLS; i++) {
-                ctx.beginPath(); ctx.moveTo(i * GRID, 0); ctx.lineTo(i * GRID, canvas.height); ctx.stroke();
-            }
-            for (let j = 0; j < ROWS; j++) {
-                ctx.beginPath(); ctx.moveTo(0, j * GRID); ctx.lineTo(canvas.width, j * GRID); ctx.stroke();
-            }
-
-            snake.forEach((seg, i) => {
-                const x = seg.x * GRID + 1, y = seg.y * GRID + 1, s = GRID - 2;
-                if (i === 0) {
-                    drawRoundRect(x, y, s, s, 6, '#34D399');
-                    ctx.fillStyle = '#0F172A';
-                    const eyeSize = 3;
-                    const ex = dir.x === 1 ? x + s - 7 : dir.x === -1 ? x + 4 : x + s / 2;
-                    const ey = dir.y === 1 ? y + s - 7 : dir.y === -1 ? y + 4 : y + s / 2;
-                    const ox = dir.y !== 0 ? 4 : 0;
-                    const oy = dir.x !== 0 ? 4 : 0;
-                    ctx.beginPath(); ctx.arc(ex + ox, ey - oy, eyeSize, 0, Math.PI * 2); ctx.fill();
-                    ctx.beginPath(); ctx.arc(ex - ox, ey + oy, eyeSize, 0, Math.PI * 2); ctx.fill();
-                } else {
-                    const ratio = 1 - (i / (snake.length * 1.2));
-                    const g = Math.round(180 + ratio * 75);
-                    drawRoundRect(x, y, s, s, 4, `rgb(29,${g},117)`);
-                }
-            });
-
-            drawCoin(food.x, food.y, '#34D399', 'V');
-
-            if (bonusFood) {
-                const pulse = Math.sin(Date.now() / 100) * 0.15 + 0.85;
-                ctx.globalAlpha = pulse;
-                drawCoin(bonusFood.x, bonusFood.y, '#FBBF24', '2x');
-                ctx.globalAlpha = 1;
-                ctx.fillStyle = '#EF4444';
-                ctx.font = '10px Inter,sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText(bonusFood.timer, bonusFood.x * GRID + GRID / 2, bonusFood.y * GRID - 2);
-            }
+function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // grid lines...
+        ctx.strokeStyle = '#1E293B';
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < COLS; i++) {
+            ctx.beginPath(); ctx.moveTo(i * GRID, 0); ctx.lineTo(i * GRID, canvas.height); ctx.stroke();
+        }
+        for (let j = 0; j < ROWS; j++) {
+            ctx.beginPath(); ctx.moveTo(0, j * GRID); ctx.lineTo(canvas.width, j * GRID); ctx.stroke();
         }
 
-        function step() {
-            dir = { ...nextDir };
-            const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-
-            if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) { endGame(); return; }
-            if (snake.some(s => s.x === head.x && s.y === head.y)) { endGame(); return; }
-
-            snake.unshift(head);
-
-            let ate = false;
-            if (head.x === food.x && head.y === food.y) {
-                score += 10 * level;
-                verseCount++;
-                ate = true;
-                spawnFood();
-                if (verseCount % 5 === 0) spawnBonus();
-                if (verseCount % 10 === 0) level++;
-                updateHUD();
-            } else if (bonusFood && head.x === bonusFood.x && head.y === bonusFood.y) {
-                score += 25 * level;
-                verseCount += 2;
-                ate = true;
-                bonusFood = null;
-                updateHUD();
+        // snake
+        snake.forEach((seg, i) => {
+            const x = seg.x * GRID + 1, y = seg.y * GRID + 1, s = GRID - 2;
+            if (i === 0) {
+                drawRoundRect(x, y, s, s, 6, '#34D399');
+                // eyes code...
+                ctx.fillStyle = '#0F172A';
+                const eyeSize = 3;
+                const ex = dir.x === 1 ? x + s - 7 : dir.x === -1 ? x + 4 : x + s / 2;
+                const ey = dir.y === 1 ? y + s - 7 : dir.y === -1 ? y + 4 : y + s / 2;
+                const ox = dir.y !== 0 ? 4 : 0;
+                const oy = dir.x !== 0 ? 4 : 0;
+                ctx.beginPath(); ctx.arc(ex + ox, ey - oy, eyeSize, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(ex - ox, ey + oy, eyeSize, 0, Math.PI * 2); ctx.fill();
+            } else {
+                const ratio = 1 - (i / (snake.length * 1.2));
+                const g = Math.round(180 + ratio * 75);
+                drawRoundRect(x, y, s, s, 4, `rgb(29,${g},117)`);
             }
+        });
 
-            if (!ate) snake.pop();
-
-            if (bonusFood) {
-                bonusFood.timer--;
-                if (bonusFood.timer <= 0) bonusFood = null;
-            }
-
-            draw();
+        drawCoin(food.x, food.y, '#34D399', 'V');
+        if (bonusFood) {
+            const pulse = Math.sin(Date.now() / 100) * 0.15 + 0.85;
+            ctx.globalAlpha = pulse;
+            drawCoin(bonusFood.x, bonusFood.y, '#FBBF24', '2x');
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = '#EF4444';
+            ctx.font = '10px Inter,sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(bonusFood.timer, bonusFood.x * GRID + GRID / 2, bonusFood.y * GRID - 2);
         }
+    }
 
-        function startGame() {
-            init();
-            overlay.style.display = 'none';
-            running = true;
-            if (gameLoop) clearInterval(gameLoop);
-            gameLoop = setInterval(() => { if (running) step(); }, speed);
-        }
+    function step() {
+        if (!running || isPaused) return;
 
-        function endGame() {
-            running = false;
-            clearInterval(gameLoop);
-            if (score > highScore) {
-                highScore = score;
-                localStorage.setItem('verseSnakeHi', highScore);
-            }
-            overlayTitle.textContent = 'Game Over!';
-            overlayMsg.innerHTML = `Score: <strong style="color:#34D399">${score}</strong> &nbsp;|&nbsp; VERSE collected: <strong style="color:#34D399">${verseCount}</strong><br><br>Keep grinding — real quests pay real VERSE!`;
-            startBtn.innerHTML = '<i class="fas fa-redo"></i> Play Again';
-            overlay.style.display = 'flex';
+        dir = { ...nextDir };
+        const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+        if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) { endGame(); return; }
+        if (snake.some(s => s.x === head.x && s.y === head.y)) { endGame(); return; }
+
+        snake.unshift(head);
+        let ate = false;
+
+        if (head.x === food.x && head.y === food.y) {
+            score += 10 * level;
+            verseCount++;
+            ate = true;
+            spawnFood();
+            if (verseCount % 5 === 0) spawnBonus();
+            if (verseCount % 10 === 0) level++;
+            updateHUD();
+        } else if (bonusFood && head.x === bonusFood.x && head.y === bonusFood.y) {
+            score += 25 * level;
+            verseCount += 2;
+            ate = true;
+            bonusFood = null;
             updateHUD();
         }
 
-        document.addEventListener('keydown', e => {
-            if (!running) return;
-            if (e.key === 'ArrowUp' && dir.y !== 1) nextDir = { x: 0, y: -1 };
-            if (e.key === 'ArrowDown' && dir.y !== -1) nextDir = { x: 0, y: 1 };
-            if (e.key === 'ArrowLeft' && dir.x !== 1) nextDir = { x: -1, y: 0 };
-            if (e.key === 'ArrowRight' && dir.x !== -1) nextDir = { x: 1, y: 0 };
-            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) e.preventDefault();
-        });
+        if (!ate) snake.pop();
 
-        document.getElementById('dUp').addEventListener('click', () => { if (dir.y !== 1) nextDir = { x: 0, y: -1 }; });
-        document.getElementById('dDown').addEventListener('click', () => { if (dir.y !== -1) nextDir = { x: 0, y: 1 }; });
-        document.getElementById('dLeft').addEventListener('click', () => { if (dir.x !== 1) nextDir = { x: -1, y: 0 }; });
-        document.getElementById('dRight').addEventListener('click', () => { if (dir.x !== -1) nextDir = { x: 1, y: 0 }; });
+        if (bonusFood) {
+            bonusFood.timer--;
+            if (bonusFood.timer <= 0) bonusFood = null;
+        }
 
-        document.querySelectorAll('#speedRow button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                speed = parseInt(btn.dataset.speed);
-                document.querySelectorAll('#speedRow button').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                if (running) {
-                    clearInterval(gameLoop);
-                    gameLoop = setInterval(() => { if (running) step(); }, speed);
-                }
-            });
-        });
-
-        startBtn.addEventListener('click', startGame);
         draw();
-    </script>
+    }
+
+    function togglePause() {
+        if (!running) return;
+        
+        isPaused = !isPaused;
+        
+        if (isPaused) {
+            pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            pauseBtn.classList.add('paused');
+            overlay.style.display = 'flex';
+            overlayTitle.textContent = 'PAUSED';
+            overlayMsg.textContent = 'Click Pause again or press P to resume';
+            startBtn.style.display = 'none';
+        } else {
+            pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            pauseBtn.classList.remove('paused');
+            overlay.style.display = 'none';
+            startBtn.style.display = 'block';
+        }
+    }
+
+    function startGame() {
+        init();
+        overlay.style.display = 'none';
+        running = true;
+        isPaused = false;
+        if (gameLoop) clearInterval(gameLoop);
+        gameLoop = setInterval(() => { if (running) step(); }, speed);
+        pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        pauseBtn.classList.remove('paused');
+    }
+
+    function endGame() {
+        running = false;
+        clearInterval(gameLoop);
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('verseSnakeHi', highScore);
+        }
+        overlayTitle.textContent = 'Game Over!';
+        overlayMsg.innerHTML = `Score: <strong style="color:#34D399">${score}</strong> &nbsp;|&nbsp; VERSE collected: <strong style="color:#34D399">${verseCount}</strong><br><br>Keep grinding — real quests pay real VERSE!`;
+        startBtn.innerHTML = '<i class="fas fa-redo"></i> Play Again';
+        startBtn.style.display = 'block';
+        overlay.style.display = 'flex';
+        pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        pauseBtn.classList.remove('paused');
+    }
+
+    // Keyboard controls
+    document.addEventListener('keydown', e => {
+        if (!running) return;
+
+        // Pause with P key
+        if (e.key.toLowerCase() === 'p') {
+            togglePause();
+            return;
+        }
+
+        if (isPaused) return;
+
+        if (e.key === 'ArrowUp' && dir.y !== 1) nextDir = { x: 0, y: -1 };
+        if (e.key === 'ArrowDown' && dir.y !== -1) nextDir = { x: 0, y: 1 };
+        if (e.key === 'ArrowLeft' && dir.x !== 1) nextDir = { x: -1, y: 0 };
+        if (e.key === 'ArrowRight' && dir.x !== -1) nextDir = { x: 1, y: 0 };
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) e.preventDefault();
+    });
+
+    // D-pad controls
+    document.getElementById('dUp').addEventListener('click', () => { if (!isPaused && dir.y !== 1) nextDir = { x: 0, y: -1 }; });
+    document.getElementById('dDown').addEventListener('click', () => { if (!isPaused && dir.y !== -1) nextDir = { x: 0, y: 1 }; });
+    document.getElementById('dLeft').addEventListener('click', () => { if (!isPaused && dir.x !== 1) nextDir = { x: -1, y: 0 }; });
+    document.getElementById('dRight').addEventListener('click', () => { if (!isPaused && dir.x !== -1) nextDir = { x: 1, y: 0 }; });
+
+    // Speed buttons
+    document.querySelectorAll('#speedRow button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            speed = parseInt(btn.dataset.speed);
+            document.querySelectorAll('#speedRow button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (running && !isPaused) {
+                clearInterval(gameLoop);
+                gameLoop = setInterval(() => { if (running) step(); }, speed);
+            }
+        });
+    });
+
+    // Pause button click
+    pauseBtn.addEventListener('click', togglePause);
+
+    startBtn.addEventListener('click', startGame);
+
+    // Initial draw
+    draw();
+</script>
 </body>
 </html>
