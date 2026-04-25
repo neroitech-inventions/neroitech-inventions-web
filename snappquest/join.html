@@ -1561,7 +1561,7 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                             parsedDeadline = deadline;
                         }
                     }
-                    const availability = trackCode && (status === 0 || status === 4) ? await getQuestAvailability(trackCode) : { remaining: null, total: 0 };
+                    const availability = trackCode && (status === 0 || status === 4 || status === 6) ? await getQuestAvailability(trackCode) : { remaining: null, total: 0 };
                     
                     return {
                         id: parseInt(quest.ID) || 0,
@@ -1570,10 +1570,10 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                         description: quest.Description || 'No description available',
                         reward: reward,
                         link: quest.Link || '',
-                        status: (status === 0 || status === 2 || status === 3 || status === 4) ? 'active' : 'completed',
-                        isGame: status === 2,
-                        tapToUnlock: status === 3,
-                        isFeedback: status === 4,
+    status: (status === 0 || status === 2 || status === 3 || status === 4 || status === 5 || status === 6) ? 'active' : 'completed',
+    isGame: status === 2 || status === 5,
+    tapToUnlock: status === 3 || status === 5 || status === 6,
+    isFeedback: status === 4 || status === 6,
                         trackCode: trackCode,
                         remaining: availability.remaining,
                         total: availability.total,
