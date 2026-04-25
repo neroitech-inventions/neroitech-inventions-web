@@ -2004,7 +2004,7 @@ function openSubmitModal(trackCode) {
                 }
             }
         }
-// FINAL FIXED handleQuestClick - tapping now works reliably in modal
+// FINAL FIXED handleQuestClick - Direct open for Games, reminder only for normal quests
 function handleQuestClick(e) {
     const target = e.target;
     const card = target.closest('.quest-card');
@@ -2017,7 +2017,7 @@ function handleQuestClick(e) {
             (q.id && q.id === parseInt(card.dataset.questId || 0))
         );
         if (quest && quest.tapToUnlock) {
-            e.stopImmediatePropagation();   // Prevent any other handlers
+            e.stopImmediatePropagation();
             handleTapToUnlock(card, quest);
             return;
         }
@@ -2038,37 +2038,49 @@ function handleQuestClick(e) {
         return;
     }
 
-const completeBtn = target.closest('.complete-btn');
-if (completeBtn) {
-    e.preventDefault();
-    const questLink = completeBtn.href;
-    
-    Swal.fire({
-        title: '📋 Remember to Submit!',
-        html: `
-            <p style="color:#4B5563; font-size:15px; line-height:1.7; margin-bottom:16px;">
-                After completing this quest, come back here and click 
-                <strong style="color:#6366F1;">Submit</strong> to claim your reward.
-            </p>
-            <p style="color:#4B5563; font-size:15px; line-height:1.7;">
-                New to SnappQuest?
-            </p>
-        `,
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonText: '🚀 Got it, Open quest!',
-        cancelButtonText: '📖 How to Submit',
-        confirmButtonColor: '#6366F1',
-        cancelButtonColor: '#34D399',
-    }).then((result) => {
-        if (result.isConfirmed) {
+    // === COMPLETE BUTTON (Play Game / View Quest) ===
+    const completeBtn = target.closest('.complete-btn');
+    if (completeBtn) {
+        e.preventDefault();
+        const questLink = completeBtn.href;
+        
+        // Find the quest object
+        const trackCode = card.dataset.trackCode;
+        const quest = quests.find(q => q.trackCode === trackCode);
+
+        // 🔥 NEW LOGIC: For Games → Open directly (no Swal)
+        if (quest && quest.isGame) {
             window.open(questLink, '_blank');
-        } else if (result.isDismissed && result.dismiss === Swal.DismissReason.cancel) {
-            window.open('minigame.html', '_blank');
+            return;
         }
-    });
-    return;
-}
+
+        // For normal quests → Show the reminder popup
+        Swal.fire({
+            title: '📋 Remember to Submit!',
+            html: `
+                <p style="color:#4B5563; font-size:15px; line-height:1.7; margin-bottom:16px;">
+                    After completing this quest, come back here and click 
+                    <strong style="color:#6366F1;">Submit</strong> to claim your reward.
+                </p>
+                <p style="color:#4B5563; font-size:15px; line-height:1.7;">
+                    New to SnappQuest?
+                </p>
+            `,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: '🚀 Got it, Open quest!',
+            cancelButtonText: '📖 How to Submit',
+            confirmButtonColor: '#6366F1',
+            cancelButtonColor: '#34D399',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.open(questLink, '_blank');
+            } else if (result.isDismissed && result.dismiss === Swal.DismissReason.cancel) {
+                window.open('minigame.html', '_blank');
+            }
+        });
+        return;
+    }
 
     // Only open modal if click is on a normal quest card OUTSIDE modal
     if (!card.closest('.modal') && !card.classList.contains('tap-to-unlock')) {
