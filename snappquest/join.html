@@ -20,6 +20,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="images/icon.png" rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -1036,8 +1037,8 @@
         </div>
         <div class="nav-container">
     <nav class="nav-links">
-        <a href="stats.html"><i class="fas fa-chart-bar"></i> View Stats</a>
-        <a href="leaderboard.html"><i class="fas fa-trophy"></i> View Leaderboard</a>
+        <a href="stats.html"><i class="fas fa-chart-bar"></i> Sponsor Stats</a>
+        <a href="leaderboard.html"><i class="fas fa-trophy"></i> Sponsor Leaderboard</a>
     </nav>
    
     <!-- WALLET BUTTON -->
@@ -1132,8 +1133,8 @@
                     <h3 class="hero-gradient-text">SnappQuest</h3>
                     <p style="color: var(--color-text-secondary); font-size: 14px;">The Engage-to-Earn Business Solution.<br>Building active, incentivized, sustainable communities.</p>
                     <div class="social-icons">
-                        <a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+<a href="https://x.com/SnappQuest" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+<a href="https://t.me/SnappQuest" target="_blank"><i class="fa-brands fa-telegram"></i></a>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -1144,7 +1145,7 @@
                         <li><a href="minigame.html">How to Submit a Quest</a></li>
                         <li><a href="airdrop.html">Airdrop Checker</a></li>
                         <li><a href="hall-of-fame.html">Hall of Fame</a></li>
-                        <li><a href="ad.html">Advertising</a></li>
+                        <li><a href="ad.html">Advertising</a></li>  
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -1987,8 +1988,37 @@ function handleQuestClick(e) {
         return;
     }
 
-    const completeBtn = target.closest('.complete-btn');
-    if (completeBtn) return;
+const completeBtn = target.closest('.complete-btn');
+if (completeBtn) {
+    e.preventDefault();
+    const questLink = completeBtn.href;
+    
+    Swal.fire({
+        title: '📋 Remember to Submit!',
+        html: `
+            <p style="color:#4B5563; font-size:15px; line-height:1.7; margin-bottom:16px;">
+                After completing this quest, come back here and click 
+                <strong style="color:#6366F1;">Submit</strong> to claim your reward.
+            </p>
+            <p style="color:#4B5563; font-size:15px; line-height:1.7;">
+                New to SnappQuest?
+            </p>
+        `,
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: '🚀 Got it, Open quest!',
+        cancelButtonText: '📖 How to Submit',
+        confirmButtonColor: '#6366F1',
+        cancelButtonColor: '#34D399',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.open(questLink, '_blank');
+        } else if (result.isDismissed && result.dismiss === Swal.DismissReason.cancel) {
+            window.open('minigame.html', '_blank');
+        }
+    });
+    return;
+}
 
     // Only open modal if click is on a normal quest card OUTSIDE modal
     if (!card.closest('.modal') && !card.classList.contains('tap-to-unlock')) {

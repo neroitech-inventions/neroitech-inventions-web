@@ -13,6 +13,10 @@ http://www.templatemo.com/tm-509-hydro
     overflow-x: hidden;
   }
 
+html {
+    scroll-behavior: smooth;
+}
+
 
   /*---------------------------------------
      TYPOGRAPHY              
