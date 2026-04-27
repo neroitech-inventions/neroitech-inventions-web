@@ -9,24 +9,25 @@ All Time
 24 Apr - 23 May
 Visitors
 
-1,885
+2,902
 
 Pageviews
 
-5,440
+7,977
 
 Active Apps
 
-33
+38
 
 Custom Events
 
-724
+1,258
 
 Community Trends
 4/24
 4/25
 4/26
+4/27
 0
 700
 1400
@@ -39,38 +40,43 @@ Bot Activity ▾
 Visitors
 Events
 #	App	Visitors	Pages/Visit	Events	Bounce	Depth	Sources	Bot Activity
-1	verse-events-dapp.vercel.app	351	2.9	380	31%	2.9	0	Low
-2	juwel-verse.vercel.app	311	1.7	38	72%	1.7	0	Low
-3	abubakker-cryptoverse.vercel.app	261	3.2	0	21%	3.2	0	Medium
-4	hub.vgdh.io	223	4.6	43	38%	4.6	7	Low
-5	niloy-ahammad.vercel.app	207	1.6	3	71%	1.6	0	Low
-6	shojib-ahmed.vercel.app	165	3.9	4	15%	3.9	1	Low
-7	niti.com.ng	147	4.1	251	6%	4.1	8	Low
-8	ahamed-three.vercel.app	95	2.1	0	39%	2.1	0	NA
-9	naymer.vercel.app	34	1.7	0	79%	1.7	1	NA
-10	press.vgdh.io	25	1.2	0	88%	1.2	3	NA
-11	ais-dev-rswsrp57wqrvuwhvwi6tqj-21246162805.asia-southeast1.run.app	19	3.2	1	37%	3.2	1	NA
-12	zayed-tau.vercel.app	7	1.0	0	100%	1.0	1	NA
-13	ais-pre-rlw3z43sqriqzpcwxsdnlj-478186802263.europe-west2.run.app	5	2.8	1	20%	2.8	0	NA
-14	checkpoint--69c88ff7e1147abc8e5b0b10--69c8928c78cc7f4e17eea671.base44.app	4	1.0	0	100%	1.0	0	NA
-15	checkpoint--69c88ff7e1147abc8e5b0b10--69c8934f4cba3a60d39c57d0.base44.app	4	1.0	0	100%	1.0	0	NA
-16	competent-crimson-uzavhr1mfs.edgeone.app	3	1.0	0	100%	1.0	0	NA
-17	xvdhes1.vercel.app	3	1.0	0	100%	1.0	0	NA
-18	enekaobi.base44.app	3	1.0	0	100%	1.0	0	NA
-19	ais-dev-fhile6fobofkipdkkq5tax-21246162805.asia-southeast1.run.app	2	2.5	0	0%	2.5	1	NA
-20	tradingcards.ink	2	1.5	0	50%	1.5	0	NA
-21	verse-valexia-ai.vercel.app	2	1.5	0	50%	1.5	0	NA
-22	genetic-magenta-l6mhwq8s2h.edgeone.app	2	1.0	0	—	—	0	NA
-23	ais-dev-rlw3z43sqriqzpcwxsdnlj-478186802263.europe-west2.run.app	1	21.0	1	0%	21.0	1	NA
-24	alicelandscallhuntsite-qwjdca33r.vercel.app	1	1.0	0	100%	1.0	0	NA
-25	verselorestory.netlify.app	1	1.0	0	100%	1.0	0	NA
-26	decentralized-architect-copy-af6496a2.base44.app	1	1.0	0	100%	1.0	0	NA
-27	paulina1-theta.vercel.app	1	2.0	0	0%	2.0	0	NA
-28	verse-event-dapp.vercel.app	1	1.0	2	100%	1.0	0	NA
-29	mind-arena-copy-e91f0494.base44.app	1	1.0	0	100%	1.0	1	NA
-30	alicelandscallhuntsite.vercel.app	1	2.0	0	0%	2.0	0	NA
-31	ayobami299.vercel.app	1	2.0	0	0%	2.0	0	NA
-32	preview-sandbox--69ec7a1b88ee1200a1cab07b.base44.app	1	3.0	0	0%	3.0	0	NA
-33	preview--verse-path-guide.base44.app	1	1.0	0	100%	1.0	0	NA
+1	shojib-ahmed.vercel.app	504	2.6	4	32%	2.6	1	Medium
+2	verse-events-dapp.vercel.app	443	3.0	387	29%	3.0	0	Low
+3	abubakker-cryptoverse.vercel.app	354	3.2	0	23%	3.2	0	Medium
+4	niloy-ahammad.vercel.app	342	1.6	4	64%	1.6	0	Low
+5	juwel-verse.vercel.app	313	1.7	38	72%	1.7	0	Low
+6	hub.vgdh.io	268	4.3	44	40%	4.3	8	Low
+7	niti.com.ng	228	4.6	723	5%	4.6	8	Low
+8	trusted-token-verse-dapp.vercel.app	163	1.9	35	44%	1.9	0	Low
+9	ahamed-three.vercel.app	103	2.2	0	41%	2.2	0	Low
+10	naymer.vercel.app	34	1.7	0	79%	1.7	1	NA
+11	press.vgdh.io	32	1.3	3	88%	1.3	3	NA
+12	talashker.vercel.app	29	1.6	8	62%	1.6	2	NA
+13	ais-dev-rswsrp57wqrvuwhvwi6tqj-21246162805.asia-southeast1.run.app	22	4.3	4	32%	4.3	1	NA
+14	checkpoint--69c88ff7e1147abc8e5b0b10--69c8934f4cba3a60d39c57d0.base44.app	8	1.0	0	100%	1.0	0	NA
+15	zayed-tau.vercel.app	7	1.0	0	100%	1.0	1	NA
+16	checkpoint--69c88ff7e1147abc8e5b0b10--69c8928c78cc7f4e17eea671.base44.app	6	1.0	0	100%	1.0	0	NA
+17	ais-pre-rlw3z43sqriqzpcwxsdnlj-478186802263.europe-west2.run.app	5	2.8	1	20%	2.8	0	NA
+18	tradingcards.ink	4	1.3	0	75%	1.3	1	NA
+19	ais-dev-4vm43gxbzggu6lxdfipxhk-761409263925.asia-east1.run.app	4	9.8	0	0%	9.8	1	NA
+20	preview-sandbox--69ec7a1b88ee1200a1cab07b.base44.app	4	3.5	0	25%	3.5	1	NA
+21	preview--verse-path-guide.base44.app	4	1.5	0	50%	1.5	1	NA
+22	competent-crimson-uzavhr1mfs.edgeone.app	4	1.0	0	100%	1.0	0	NA
+23	enekaobi.base44.app	3	1.0	0	100%	1.0	0	NA
+24	xvdhes1.vercel.app	3	1.0	0	100%	1.0	0	NA
+25	genetic-magenta-l6mhwq8s2h.edgeone.app	2	1.0	0	—	—	0	NA
+26	ais-dev-fhile6fobofkipdkkq5tax-21246162805.asia-southeast1.run.app	2	2.5	0	0%	2.5	1	NA
+27	mind-arena-copy-e91f0494.base44.app	2	1.5	0	50%	1.5	1	NA
+28	verse-valexia-ai.vercel.app	2	1.5	0	50%	1.5	0	NA
+29	verse-path-guide.base44.app	2	1.0	4	100%	1.0	0	NA
+30	decentralized-architect-copy-af6496a2.base44.app	1	1.0	0	100%	1.0	0	NA
+31	alicelandscallhuntsite.vercel.app	1	2.0	0	0%	2.0	0	NA
+32	alicelandscallhuntsite-qwjdca33r.vercel.app	1	1.0	0	100%	1.0	0	NA
+33	paulina1-theta.vercel.app	1	2.0	0	0%	2.0	0	NA
+34	ais-pre-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	1	1.0	0	100%	1.0	1	NA
+35	verselorestory.netlify.app	1	1.0	0	100%	1.0	0	NA
+36	ais-dev-rlw3z43sqriqzpcwxsdnlj-478186802263.europe-west2.run.app	1	21.0	1	0%	21.0	1	NA
+37	ayobami299.vercel.app	1	2.0	0	0%	2.0	0	NA
+38	verse-event-dapp.vercel.app	1	1.0	2	100%	1.0	0	NA
 Verse App Analytics
 0
