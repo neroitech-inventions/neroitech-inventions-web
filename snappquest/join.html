@@ -2005,6 +2005,23 @@ function openQuestModal(originalCard) {
     if (shareBtn) shareBtn.remove();
 
     body.appendChild(clone);
+
+// Force QR Code On URL Load for SnappQuest Events (Status 7)
+setTimeout(() => {
+    const qr = clone.querySelector('[id^="qr-"]');
+    if (qr && typeof QRCode !== 'undefined') {
+        qr.innerHTML = ''; // clear if anything exists
+        new QRCode(qr, {
+            text: clone.querySelector('.quest-description')?.textContent.trim() || "https://t.me/GetVerse/177601",
+            width: 190,
+            height: 190,
+            colorDark: "#1F2937",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    }
+}, 100);
+
     modal.style.display = 'block';
     setTimeout(() => modal.classList.add('active'), 10);
 }
