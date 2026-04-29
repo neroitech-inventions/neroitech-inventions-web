@@ -21,6 +21,7 @@
     <link href="images/icon.png" rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -1612,41 +1613,44 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                 const questRows = await fetchSheetData(CONFIG.QUESTS_ID, CONFIG.QUESTS_RANGE);
                 if (!questRows.length) throw new Error('No quests found');
 
-                quests = await Promise.all(questRows.map(async quest => {
-                    const status = parseInt(quest.Status) || 0;
-                    const reward = parseFloat(quest.Reward.replace('𝕍', '')) || 0;
-                    const trackCode = quest['Track Code'] || '';
-                    const deadline = quest.Deadline || '0';
-                    let parsedDeadline = '0';
-                    if (deadline && deadline !== '0') {
-                        const expiryDate = new Date(deadline);
-                        if (isNaN(expiryDate.getTime())) {
-                            console.warn('Invalid deadline:', deadline);
-                            parsedDeadline = '0';
-                        } else {
-                            parsedDeadline = deadline;
-                        }
-                    }
-                    const availability = trackCode && (status === 0 || status === 4 || status === 6) ? await getQuestAvailability(trackCode) : { remaining: null, total: 0 };
-                    
-                    return {
-                        id: parseInt(quest.ID) || 0,
-                        title: quest.Title || 'Untitled Quest',
-                        sponsor: quest.Sponsor || 'Unknown Sponsor',
-                        description: quest.Description || 'No description available',
-                        reward: reward,
-                        link: quest.Link || '',
-    status: (status === 0 || status === 2 || status === 3 || status === 4 || status === 5 || status === 6) ? 'active' : 'completed',
-    isGame: status === 2 || status === 5,
-    tapToUnlock: status === 3 || status === 5 || status === 6,
-    isFeedback: status === 4 || status === 6,
-                        trackCode: trackCode,
-                        remaining: availability.remaining,
-                        total: availability.total,
-                        deadline: parsedDeadline,
-                        chain: parseInt(quest.Chain) || 0
-                    };
-                }));
+quests = await Promise.all(questRows.map(async quest => {
+    const status = parseInt(quest.Status) || 0;
+    const reward = parseFloat(quest.Reward.replace('𝕍', '')) || 0;
+    const trackCode = quest['Track Code'] || '';
+    const deadline = quest.Deadline || '0';
+
+    let parsedDeadline = '0';
+    if (deadline && deadline !== '0') {
+        const expiryDate = new Date(deadline);
+        parsedDeadline = isNaN(expiryDate.getTime()) ? '0' : deadline;
+    }
+
+    const availability = trackCode && (status === 0 || status === 4 || status === 6 || status === 7) 
+        ? await getQuestAvailability(trackCode) 
+        : { remaining: null, total: 0 };
+
+    return {
+        id: parseInt(quest.ID) || 0,
+        title: quest.Title || 'Untitled Quest',
+        sponsor: quest.Sponsor || 'Unknown Sponsor',
+        description: quest.Description || 'No description available',
+        reward: reward,
+        link: quest.Link || '',
+        status: (status === 0 || status === 2 || status === 3 || status === 4 || status === 5 || status === 6 || status === 7) 
+                ? 'active' : 'completed',
+        
+        isGame: status === 2 || status === 5,
+        tapToUnlock: status === 3 || status === 5 || status === 6,
+        isFeedback: status === 4 || status === 6,
+        isSnappEvent: status === 7,           // ← ADD THIS LINE
+
+        trackCode: trackCode,
+        remaining: availability.remaining,
+        total: availability.total,
+        deadline: parsedDeadline,
+        chain: parseInt(quest.Chain) || 0
+    };
+}));
 
                 // Validate track codes for uniqueness
                 const trackCodes = quests.map(q => q.trackCode);
@@ -1716,7 +1720,9 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
         }
         // Create quest card - UPDATED FOR STATUS = 3
         function createQuestElement(quest) {
-            const card = document.createElement('div');
+ const card = document.createElement('div');
+    card.dataset.questId = quest.id;
+    card.dataset.trackCode = quest.trackCode || '';
 
             // === TAP TO UNLOCK QUEST (Status = 3) ===
             if (quest.tapToUnlock === true) {
@@ -1739,6 +1745,66 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
                 card.addEventListener('click', () => handleTapToUnlock(card, quest));
                 return card;
             }
+
+// ====================== SNAPPQUEST EVENTS (Status 7) ======================
+if (quest.isSnappEvent === true) {
+    const hasSlots = typeof quest.remaining === 'number' ? quest.remaining > 0 : true;
+
+    card.className = 'quest-card';
+    card.style.borderLeft = '6px solid #8B5CF6';
+
+    card.innerHTML = `
+        <div class="quest-title">${quest.title}</div>
+        <div class="quest-sponsor">Sponsored by: ${quest.sponsor}</div>
+        <div class="quest-remaining normal">SnappQuest x Verse Event</div>
+
+        ${
+            typeof quest.remaining === 'number' && quest.remaining > 0
+                ? `<div class="quest-remaining normal" style="margin-top:4px;">${quest.remaining} slot${quest.remaining === 1 ? '' : 's'} remaining</div>`
+                : `<div class="quest-remaining low" style="margin-top:4px;">No more slots available</div>`
+        }
+
+        <div style="margin: 24px 0; text-align: center;">
+            <p style="font-size:14px; color:#6B7280; margin-bottom:12px;">Scan QR Code to participate</p>
+            <div id="qr-${quest.id}" style="display:inline-block; padding:12px; background:white; border-radius:16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+        </div>
+
+        <div class="quest-description" style="display:none;">
+            ${quest.description || 'https://t.me/GetVerse/177601'}
+        </div>
+
+        <div class="quest-reward">
+            <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
+
+${
+    hasSlots
+        ? `<button class="submit-btn">Submit Quest</button>`
+        : ``
+}
+
+            <button class="share-btn">
+                <i class="fas fa-share-alt"></i> Share
+            </button>
+        </div>
+    `;
+
+    // Generate QR Code
+    setTimeout(() => {
+        const qrContainer = card.querySelector(`#qr-${quest.id}`);
+        if (qrContainer && typeof QRCode !== 'undefined') {
+            new QRCode(qrContainer, {
+                text: quest.description || "https://t.me/GetVerse/177601",
+                width: 190,
+                height: 190,
+                colorDark: "#1F2937",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+    }, 200);
+
+    return card;
+}
 
             // === ORIGINAL CODE (unchanged) ===
             card.className = `quest-card ${quest.status}-quest`;
@@ -1899,10 +1965,16 @@ ${quest.status === 'active' && !quest.isGame && canSubmit ? `<button class="subm
             paginationEl.appendChild(pageBtn);
         }
         // Close modal function
-        function closeModal(modal) {
-            modal.classList.remove('active');
-            setTimeout(() => modal.style.display = 'none', 400);
-        }
+function closeModal(modal) {
+    // Restore all hidden form fields IMMEDIATELY before animation
+    modal.querySelectorAll('.form-group').forEach(g => g.style.display = '');
+    // Reset telegram label too
+    const telegramLabel = modal.querySelector('label[for="telegram"]');
+    if (telegramLabel) telegramLabel.textContent = 'Telegram Username (e.g., @username)';
+    
+    modal.classList.remove('active');
+    setTimeout(() => modal.style.display = 'none', 400);
+}
 // Clean openQuestModal - no conflict with tap-to-unlock
 function openQuestModal(originalCard) {
     const modal = DOM.questModal;
@@ -1939,6 +2011,10 @@ function openQuestModal(originalCard) {
         // Open submit modal
                 // Open submit modal
 function openSubmitModal(trackCode) {
+    // Always restore all fields first in case SnappEvent left them hidden
+    DOM.submitQuestModal.querySelectorAll('.form-group').forEach(g => g.style.display = '');
+    DOM.submitQuestForm.reset();
+
     DOM.submitQuestForm.querySelector('#trackCode').value = trackCode || '';
     
     const quest = quests.find(q => q.trackCode === trackCode);
@@ -1986,9 +2062,13 @@ function openSubmitModal(trackCode) {
         questLinkInput.placeholder = 'Add other links or paste your submission link here.';
     }
 
+    // Restore telegram label
+    const telegramLabel = DOM.submitQuestForm.querySelector('label[for="telegram"]');
+    telegramLabel.textContent = 'Telegram Username (e.g., @username)';
+
     DOM.submitQuestModal.style.display = 'block';
     setTimeout(() => DOM.submitQuestModal.classList.add('active'), 10);
-}        // Copy share URL
+}       // Copy share URL
         function copyShareUrl(trackCode) {
             const baseUrl = window.location.href.split('?')[0];
             const url = `${baseUrl}?quest=${trackCode}`;
@@ -2040,12 +2120,20 @@ function handleQuestClick(e) {
     }
 
     // === Normal buttons (Submit, Share, etc.) ===
-    const submitBtn = target.closest('.submit-btn');
-    if (submitBtn) {
-        const trackCode = card.dataset.trackCode;
+const submitBtn = target.closest('.submit-btn');
+if (submitBtn) {
+    const trackCode = card.dataset.trackCode;
+
+    const quest = quests.find(q => q.trackCode === trackCode);
+
+    if (quest && quest.isSnappEvent) {
+        openSnappEventSubmitModal(trackCode);
+    } else {
         openSubmitModal(trackCode);
-        return;
     }
+
+    return;
+}
 
     const shareBtn = target.closest('.share-btn');
     if (shareBtn) {
@@ -2166,22 +2254,39 @@ function handleQuestClick(e) {
                     telegram: formData.get('entry.256576255').trim(),
                     twitter: formData.get('entry.1138659293').trim()
                 };
+                
                 // Validate form fields
                 if (!data.trackCode || !data.proofOfQuest || !data.questLink || !data.telegram || !data.twitter) {
-                    console.warn('Form validation failed: All fields are required');
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Please fill in all fields.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Submit Quest';
-                    return;
+const currentQuest = quests.find(q => q.trackCode === data.trackCode);
+
+if (currentQuest?.isSnappEvent) {
+    if (!data.telegram) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Please enter your Telegram username.',
+            icon: 'error'
+        });
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Quest';
+        return;
+    }
+} else {
+    if (!data.trackCode || !data.proofOfQuest || !data.questLink || !data.telegram || !data.twitter) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Please fill in all fields.',
+            icon: 'error'
+        });
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Quest';
+        return;
+    }
+}
                 }
                 const urlRegex = /^https?:\/\/[^\s$.?#].[^\s]*$/;
                 const currentQuest = quests.find(q => q.trackCode === data.trackCode);
-if ((!currentQuest?.isFeedback) && (!urlRegex.test(data.proofOfQuest) || !urlRegex.test(data.questLink))) {
+if ((!currentQuest?.isFeedback && !currentQuest?.isSnappEvent) && 
+    (!urlRegex.test(data.proofOfQuest) || !urlRegex.test(data.questLink))) {
                     console.warn('Form validation failed: Invalid URL format for Proof of Quest or Quest Link');
                     Swal.fire({
                         title: 'Error',
@@ -2194,7 +2299,8 @@ if ((!currentQuest?.isFeedback) && (!urlRegex.test(data.proofOfQuest) || !urlReg
                     return;
                 }
 const usernameRegex = /^@?[\w]+$/;
-if (!usernameRegex.test(data.telegram) || (!currentQuest?.isFeedback && !usernameRegex.test(data.twitter))) {
+if (!usernameRegex.test(data.telegram) || 
+   (!currentQuest?.isFeedback && !currentQuest?.isSnappEvent && !usernameRegex.test(data.twitter))) {
                     console.warn('Form validation failed: Invalid username format for Telegram or Twitter');
                     Swal.fire({
                         title: 'Error',
@@ -2244,14 +2350,33 @@ if (!usernameRegex.test(data.telegram) || (!currentQuest?.isFeedback && !usernam
                     }
                     console.log(`Quest submitted successfully`);
                     DOM.submitQuestModal.classList.remove('active');
-                    setTimeout(() => {
-                        DOM.submitQuestModal.style.display = 'none';
-                        Swal.fire({
-                            title: 'Submitted Successfully!',
-                            text: 'Your quest has been submitted. Awaiting admin approval.',
-                            icon: 'success',
-                            confirmButtonText: 'OK'
-                        });
+setTimeout(() => {
+    DOM.submitQuestModal.style.display = 'none';
+    const submittedQuest = quests.find(q => q.trackCode === data.trackCode);
+    if (submittedQuest?.isSnappEvent) {
+        Swal.fire({
+            title: '🎉 Submitted Successfully!',
+            html: `
+                <p style="color:#4B5563; font-size:15px; line-height:1.7; margin-bottom:20px;">
+                    You're registered! Now join the Verse Telegram to claim your VERSE rewards.
+                </p>
+                <a href="https://t.me/GetVerse/177601" target="_blank" 
+                   style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,#6366F1,#34D399); color:#fff; padding:12px 24px; border-radius:50px; font-size:15px; font-weight:700; text-decoration:none;">
+                    <i class="fa-brands fa-telegram"></i> Claim VERSE Rewards
+                </a>
+            `,
+            icon: 'success',
+            confirmButtonText: 'Done',
+            confirmButtonColor: '#6366F1',
+        });
+    } else {
+        Swal.fire({
+            title: 'Submitted Successfully!',
+            text: 'Your quest has been submitted. Awaiting admin approval.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    }
                         DOM.submitQuestForm.reset();
                         DOM.submitQuestModal.classList.remove('active');
                         DOM.submitQuestModal.style.display = 'none';
@@ -2259,12 +2384,35 @@ if (!usernameRegex.test(data.telegram) || (!currentQuest?.isFeedback && !usernam
                     }, 400);
                 } catch (error) {
                     console.error('Form submission error:', error);
-                    Swal.fire({
-                        title: 'Submitted Successfully!',
-                        text: 'Your quest has been submitted. Awaiting admin approval.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
+
+
+    const submittedQuest = quests.find(q => q.trackCode === data.trackCode);
+    if (submittedQuest?.isSnappEvent) {
+        Swal.fire({
+            title: '🎉 Submitted Successfully!',
+            html: `
+                <p style="color:#4B5563; font-size:15px; line-height:1.7; margin-bottom:20px;">
+                    Now join the Verse Telegram to claim your VERSE rewards.
+                </p>
+                <a href="https://t.me/GetVerse/177601" target="_blank" 
+                   style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,#6366F1,#34D399); color:#fff; padding:12px 24px; border-radius:50px; font-size:15px; font-weight:700; text-decoration:none;">
+                    <i class="fa-brands fa-telegram"></i> Claim VERSE Rewards
+                </a>
+            `,
+            icon: 'success',
+            confirmButtonText: 'No, Thanks',
+            confirmButtonColor: '#6366F1',
+        });
+    } else {
+        Swal.fire({
+            title: 'Submitted Successfully!',
+            text: 'Your quest has been submitted. Awaiting admin approval.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    }                    
+
+
                     DOM.submitQuestForm.reset();
                     DOM.submitQuestModal.classList.remove('active');
                     DOM.submitQuestModal.style.display = 'none';
@@ -2591,6 +2739,34 @@ function toggleNotesSection(e) {
     const isOpen = section.style.display === 'block';
     section.style.display = isOpen ? 'none' : 'block';
     icon.textContent = isOpen ? '﹢' : '﹣';
+}
+
+function openSnappEventSubmitModal(trackCode) {
+    const modal = DOM.submitQuestModal;
+
+    // Always restore all fields first, then selectively hide
+    modal.querySelectorAll('.form-group').forEach(g => g.style.display = '');
+    DOM.submitQuestForm.reset();
+
+    modal.querySelector('#trackCode').value = trackCode || '';
+
+    const proofInput = modal.querySelector('#proofOfQuest');
+    const questLinkInput = modal.querySelector('#questLink');
+    const walletInput = modal.querySelector('#twitter');
+
+    proofInput.value = 'VerseEvent-attendance';
+    questLinkInput.value = 'VerseEvent-attendance';
+    walletInput.value = '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
+
+    proofInput.closest('.form-group').style.display = 'none';
+    questLinkInput.closest('.form-group').style.display = 'none';
+    walletInput.closest('.form-group').style.display = 'none';
+
+    const telegramLabel = modal.querySelector('label[for="telegram"]');
+    telegramLabel.textContent = 'Your Telegram Username (@username)';
+
+    modal.style.display = 'block';
+    setTimeout(() => modal.classList.add('active'), 10);
 }
 
 
