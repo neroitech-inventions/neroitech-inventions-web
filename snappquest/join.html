@@ -2354,11 +2354,12 @@ setTimeout(() => {
     DOM.submitQuestModal.style.display = 'none';
     const submittedQuest = quests.find(q => q.trackCode === data.trackCode);
     if (submittedQuest?.isSnappEvent) {
+        navigator.clipboard.writeText('Verse IRL Event').catch(() => {});
         Swal.fire({
             title: '🎉 Submitted Successfully!',
             html: `
                 <p style="color:#4B5563; font-size:15px; line-height:1.7; margin-bottom:20px;">
-                    You're registered! Now join the Verse Telegram to claim your VERSE rewards.
+                    You're registered! <strong style="color:#34D399;">✓ "Verse IRL Event" copied to clipboard!</strong><br><br>Join the Verse Telegram, paste it in the chat to claim your VERSE rewards.
                 </p>
                 <a href="https://t.me/GetVerse/177601" target="_blank" 
                    style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,#6366F1,#34D399); color:#fff; padding:12px 24px; border-radius:50px; font-size:15px; font-weight:700; text-decoration:none;">
@@ -2388,11 +2389,12 @@ setTimeout(() => {
 
     const submittedQuest = quests.find(q => q.trackCode === data.trackCode);
     if (submittedQuest?.isSnappEvent) {
+        navigator.clipboard.writeText('Verse IRL Event').catch(() => {});
         Swal.fire({
             title: '🎉 Submitted Successfully!',
             html: `
                 <p style="color:#4B5563; font-size:15px; line-height:1.7; margin-bottom:20px;">
-                    Now join the Verse Telegram to claim your VERSE rewards.
+                    <strong style="color:#34D399;">✓ "Verse IRL Event" copied to clipboard!</strong><br><br>Join the Verse Telegram and paste it in the chat to claim your VERSE rewards.
                 </p>
                 <a href="https://t.me/GetVerse/177601" target="_blank" 
                    style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,#6366F1,#34D399); color:#fff; padding:12px 24px; border-radius:50px; font-size:15px; font-weight:700; text-decoration:none;">
@@ -2754,8 +2756,8 @@ function openSnappEventSubmitModal(trackCode) {
     const questLinkInput = modal.querySelector('#questLink');
     const walletInput = modal.querySelector('#twitter');
 
-    proofInput.value = 'VerseEvent-attendance';
-    questLinkInput.value = 'VerseEvent-attendance';
+    proofInput.value = 'Verse IRL Event';
+    questLinkInput.value = 'Verse IRL Event';
     walletInput.value = '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
 
     proofInput.closest('.form-group').style.display = 'none';
