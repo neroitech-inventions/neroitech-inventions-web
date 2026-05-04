@@ -1172,7 +1172,7 @@
                 </div>
                 <div class="stat">
                     <div class="stat-number skeleton" id="totalEarnings">0</div>
-                    <div class="stat-label">Total Earnings</div>
+                    <div class="stat-label">Total Value Earned</div>
                 </div>
             </div>
             <div class="currency-switch">
@@ -1684,7 +1684,7 @@ quests = await Promise.all(questRows.map(async quest => {
         }
         // Initialize profile UI
         function initializeProfile() {
-            DOM.profileName.textContent = 'SnappQuest';
+            DOM.profileName.textContent = 'Welcome back';
             //DOM.profileAvatar.textContent = 'S';
             DOM.availableQuests.textContent = userData.availableQuests.toLocaleString('en-US');
             DOM.completedQuests.textContent = userData.completedQuests.toLocaleString('en-US');
@@ -1697,7 +1697,7 @@ quests = await Promise.all(questRows.map(async quest => {
         }
         // Initialize price toggle
         function initializeToggle() {
-            DOM.profileName.textContent = 'SnappQuest';
+            DOM.profileName.textContent = 'Welcome back';
             //DOM.profileAvatar.textContent = 'S';
             DOM.availableQuests.textContent = userData.availableQuests.toLocaleString('en-US');
             DOM.completedQuests.textContent = userData.completedQuests.toLocaleString('en-US');
