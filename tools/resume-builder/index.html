@@ -111,33 +111,43 @@
     }
 
     @media print {
-      a[href]:after {
-        content: "" !important;
-      }
 
-      a {
-        text-decoration: none !important;
-        color: inherit !important;
-      }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
 
-      @page {
-        margin: 0;
-      }
-      body * {
-        visibility: hidden;
-      }
+  a[href]:after {
+    content: "" !important;
+  }
 
-      #resumeOutput, #resumeOutput * {
-        visibility: visible;
-      }
+  a {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
 
-      #resumeOutput {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-      }
-    }
+  @page {
+    margin: 0;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #resumeOutput,
+  #resumeOutput * {
+    visibility: visible;
+  }
+
+  #resumeOutput {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+}
   </style>
 </head>
 <body class="text-white min-h-screen">
@@ -190,6 +200,22 @@
               <option value="Montserrat, sans-serif">Montserrat</option>
             </select>
           </div>
+
+          <div>
+  <label class="text-sm text-slate-300 block mb-2">
+    Resume Spacing
+  </label>
+
+  <select id="spacingSelector"
+    onchange="generateResume()"
+    class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white">
+
+    <option value="compact">Compact</option>
+    <option value="normal" selected>Normal</option>
+    <option value="spacious">Spacious</option>
+
+  </select>
+</div>
 
           <div>
             <label class="text-sm text-slate-300">Full Name</label>
@@ -335,123 +361,171 @@
 
   <script>
 
-    let activeTemplate = 'modern';
+let activeTemplate = 'modern';
 
-    function changeFont() {
-      const selectedFont = document.getElementById('fontSelector').value;
-      document.getElementById('resumeOutput').style.fontFamily = selectedFont;
-    }
+function changeFont() {
+  const selectedFont = document.getElementById('fontSelector').value;
+  document.getElementById('resumeOutput').style.fontFamily = selectedFont;
+}
 
-    function setTemplate(template) {
-      activeTemplate = template;
+function setTemplate(template) {
+  activeTemplate = template;
+  generateResume();
+  changeFont();
+}
+
+function generateResume() {
+
+  const name = document.getElementById('name').value || 'Your Name';
+  const title = document.getElementById('title').value || 'Your Profession';
+  const email = document.getElementById('email').value || 'your@email.com';
+  const phone = document.getElementById('phone').value || '+234...';
+  const location = document.getElementById('location').value || 'Nigeria';
+  const summary = document.getElementById('summary').value || 'Professional summary goes here.';
+  const skills = document.getElementById('skills').value || 'HTML,CSS,JavaScript';
+  const experience = document.getElementById('experience').value || 'Your experience goes here.';
+  const education = document.getElementById('education').value || 'Your education goes here.';
+
+  const skillsArray = skills.split(',');
+
+  const themeColor = document.getElementById('themeColor').value;
+
+  const spacing = document.getElementById('spacingSelector').value;
+
+  let headerPadding = 'p-14';
+  let sectionSpacing = 'mb-10';
+  let contentPadding = 'p-5 sm:p-8 lg:p-14';
+
+  if(spacing === 'compact') {
+    headerPadding = 'p-6';
+    sectionSpacing = 'mb-5';
+    contentPadding = 'p-4 sm:p-5 lg:p-6';
+  }
+
+  if(spacing === 'normal') {
+    headerPadding = 'p-10';
+    sectionSpacing = 'mb-8';
+    contentPadding = 'p-5 sm:p-8 lg:p-10';
+  }
+
+  if(spacing === 'spacious') {
+    headerPadding = 'p-14';
+    sectionSpacing = 'mb-12';
+    contentPadding = 'p-6 sm:p-10 lg:p-14';
+  }
+
+  let templateClass = '';
+  let headerClass = '';
+  let chipClass = '';
+
+  if(activeTemplate === 'modern') {
+    templateClass = 'bg-white text-black';
+    headerClass = 'text-white';
+    chipClass = 'bg-cyan-100 text-cyan-900';
+  }
+
+  if(activeTemplate === 'dark') {
+    templateClass = 'bg-slate-900 text-white';
+    headerClass = 'bg-black text-white';
+    chipClass = 'bg-slate-700 text-white';
+  }
+
+  if(activeTemplate === 'minimal') {
+    templateClass = 'bg-white text-black';
+    headerClass = 'bg-white text-black border-b';
+    chipClass = 'bg-slate-200 text-black';
+  }
+
+  document.getElementById('resumeOutput').className =
+    `resume-preview rounded-3xl shadow-2xl overflow-hidden ${templateClass}`;
+
+  const imageInput = document.getElementById('profileImage');
+  let profileImageHTML = '';
+
+  if(imageInput.files && imageInput.files[0]) {
+    const imageURL = URL.createObjectURL(imageInput.files[0]);
+
+    profileImageHTML = `
+      <img src="${imageURL}" class="w-28 h-28 rounded-full object-cover border-4 border-white shadow-xl mb-5">
+    `;
+  }
+
+  document.getElementById('resumeOutput').innerHTML = `
+
+    <div class="${headerClass} ${headerPadding}" style="background: linear-gradient(135deg, ${themeColor}, #2563eb)">
+      ${profileImageHTML}
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold break-words">
+        ${name}
+      </h1>
+
+      <p class="text-lg sm:text-xl lg:text-2xl mt-2 opacity-90 break-words">
+        ${title}
+      </p>
+
+      <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-5 mt-6 text-sm break-all">
+        <span>${email}</span>
+        <span>${phone}</span>
+        <span>${location}</span>
+      </div>
+    </div>
+
+    <div class="${contentPadding}">
+
+      <div class="${sectionSpacing}">
+        <h2 class="text-2xl font-bold mb-4">Professional Summary</h2>
+        <p class="leading-8 opacity-80">${summary}</p>
+      </div>
+
+      <div class="${sectionSpacing}">
+        <h2 class="text-2xl font-bold mb-4">Skills</h2>
+
+        <div class="flex flex-wrap gap-2 sm:gap-3">
+          ${skillsArray.map(skill => `
+            <span class="${chipClass} px-3 sm:px-4 py-2 rounded-full font-medium text-sm sm:text-base">
+              ${skill.trim()}
+            </span>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="${sectionSpacing}">
+        <h2 class="text-2xl font-bold mb-4">Experience</h2>
+
+        <div class="leading-8 whitespace-pre-line opacity-90">
+          ${experience}
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4">Education</h2>
+
+        <div class="leading-8 whitespace-pre-line opacity-90">
+          ${education}
+        </div>
+      </div>
+
+    </div>
+
+  `;
+
+  changeFont();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  generateResume();
+
+  const inputs = document.querySelectorAll('input, textarea, select');
+
+  inputs.forEach(input => {
+    input.addEventListener('input', () => {
       generateResume();
-      changeFont();
-    }
+      saveDraft();
+    });
+  });
+});
 
-    function generateResume() {
-
-      const name = document.getElementById('name').value || 'Your Name';
-      const title = document.getElementById('title').value || 'Your Profession';
-      const email = document.getElementById('email').value || 'your@email.com';
-      const phone = document.getElementById('phone').value || '+234...';
-      const location = document.getElementById('location').value || 'Nigeria';
-      const summary = document.getElementById('summary').value || 'Professional summary goes here.';
-      const skills = document.getElementById('skills').value || 'HTML,CSS,JavaScript';
-      const experience = document.getElementById('experience').value || 'Your experience goes here.';
-      const education = document.getElementById('education').value || 'Your education goes here.';
-
-      const skillsArray = skills.split(',');
-
-      const themeColor = document.getElementById('themeColor').value;
-
-      let templateClass = '';
-      let headerClass = '';
-      let chipClass = '';
-
-      if(activeTemplate === 'modern') {
-        templateClass = 'bg-white text-black';
-        headerClass = 'text-white';
-        chipClass = 'bg-cyan-100 text-cyan-900';
-      }
-
-      if(activeTemplate === 'dark') {
-        templateClass = 'bg-slate-900 text-white';
-        headerClass = 'bg-black text-white';
-        chipClass = 'bg-slate-700 text-white';
-      }
-
-      if(activeTemplate === 'minimal') {
-        templateClass = 'bg-white text-black';
-        headerClass = 'bg-white text-black border-b';
-        chipClass = 'bg-slate-200 text-black';
-      }
-
-      document.getElementById('resumeOutput').className =
-        `resume-preview rounded-3xl shadow-2xl overflow-hidden ${templateClass}`;
-
-      const imageInput = document.getElementById('profileImage');
-      let profileImageHTML = '';
-
-      if(imageInput.files && imageInput.files[0]) {
-        const imageURL = URL.createObjectURL(imageInput.files[0]);
-
-        profileImageHTML = `
-          <img src="${imageURL}" class="w-28 h-28 rounded-full object-cover border-4 border-white shadow-xl mb-5">
-        `;
-      }
-
-      document.getElementById('resumeOutput').innerHTML = `
-
-        <div class="${headerClass} p-14" style="background: linear-gradient(135deg, ${themeColor}, #2563eb)">
-          ${profileImageHTML}
-          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold break-words">${name}</h1>
-          <p class="text-lg sm:text-xl lg:text-2xl mt-2 opacity-90 break-words">${title}</p>
-
-          <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-5 mt-6 text-sm break-all">
-            <span>${email}</span>
-            <span>${phone}</span>
-            <span>${location}</span>
-          </div>
-        </div>
-
-        <div class="p-5 sm:p-8 lg:p-14">
-
-          <div class="mb-10">
-            <h2 class="text-2xl font-bold mb-4">Professional Summary</h2>
-            <p class="leading-8 opacity-80">${summary}</p>
-          </div>
-
-          <div class="mb-10">
-            <h2 class="text-2xl font-bold mb-4">Skills</h2>
-            <div class="flex flex-wrap gap-2 sm:gap-3">
-              ${skillsArray.map(skill => `
-                <span class="${chipClass} px-3 sm:px-4 py-2 rounded-full font-medium text-sm sm:text-base">
-                  ${skill}
-                </span>
-              `).join('')}
-            </div>
-          </div>
-
-          <div class="mb-10">
-            <h2 class="text-2xl font-bold mb-4">Experience</h2>
-            <div class="leading-8 whitespace-pre-line opacity-90">
-              ${experience}
-            </div>
-          </div>
-
-          <div>
-            <h2 class="text-2xl font-bold mb-4">Education</h2>
-            <div class="leading-8 whitespace-pre-line opacity-90">
-              ${education}
-            </div>
-          </div>
-
-        </div>
-
-      `;
-    }
-
-  </script>
+</script>
 
   <footer class="text-center text-slate-400 py-8 text-sm px-4">
     © 2026 <a href="https://niti.com.ng/" target="_blank"><b>Neroitech Inventions</b></a>. All rights reserved.
