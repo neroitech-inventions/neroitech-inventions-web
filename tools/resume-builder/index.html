@@ -530,5 +530,44 @@ window.addEventListener('DOMContentLoaded', () => {
   <footer class="text-center text-slate-400 py-8 text-sm px-4">
     © 2026 <a href="https://niti.com.ng/" target="_blank"><b>Neroitech Inventions</b></a>. All rights reserved.
   </footer>
+
+  <footer class="text-center text-slate-400 py-8 text-sm px-4">
+  © 2026 <a href="https://niti.com.ng/" target="_blank"><b>Neroitech Inventions</b></a>. All rights reserved.
+</footer>
+
+<!-- Back To Top Button -->
+<button id="backToTop"
+  onclick="scrollToTop()"
+  class="hidden fixed bottom-6 right-6 bg-cyan-500 hover:bg-cyan-600 text-white w-14 h-14 rounded-full shadow-2xl text-2xl font-bold transition-all duration-300 z-50">
+  ↑
+</button>
+
+<script>
+
+  const backToTopButton = document.getElementById('backToTop');
+
+  window.addEventListener('scroll', () => {
+
+    if (window.scrollY > 300) {
+      backToTopButton.classList.remove('hidden');
+    } else {
+      backToTopButton.classList.add('hidden');
+    }
+
+  });
+
+  function scrollToTop() {
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+  }
+
+</script>
+
+</body>
+</html>
 </body>
 </html>
