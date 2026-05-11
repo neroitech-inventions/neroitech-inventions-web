@@ -3,78 +3,15 @@
 <head>
   <meta charset="UTF-8" />
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N">
-    window.addEventListener('DOMContentLoaded', () => {
-      loadDraft();
-      generateResume();
-    });
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  </script>
-  <script>
-
-    const inputs = document.querySelectorAll('input, textarea, select');
-
-    inputs.forEach(input => {
-      input.addEventListener('input', () => {
-        generateResume();
-        saveDraft();
-      });
-    });
-
-    function saveDraft() {
-      const data = {
-        name: document.getElementById('name').value,
-        title: document.getElementById('title').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        location: document.getElementById('location').value,
-        summary: document.getElementById('summary').value,
-        skills: document.getElementById('skills').value,
-        experience: document.getElementById('experience').value,
-        education: document.getElementById('education').value,
-        font: document.getElementById('fontSelector').value,
-        theme: document.getElementById('themeColor').value
-      };
-
-      localStorage.setItem('eliteResumeDraft', JSON.stringify(data));
-    }
-
-    function loadDraft() {
-      const saved = JSON.parse(localStorage.getItem('eliteResumeDraft'));
-
-      if(!saved) return;
-
-      Object.keys(saved).forEach(key => {
-        const element = document.getElementById(key) || document.getElementById(key + 'Selector');
-        if(element) {
-          element.value = saved[key];
-        }
-      });
-
-      if(saved.font) {
-        document.getElementById('fontSelector').value = saved.font;
-      }
-
-      if(saved.theme) {
-        document.getElementById('themeColor').value = saved.theme;
-      }
-
-      generateResume();
-      changeFont();
-    }
-
-    function toggleMode() {
-      document.body.classList.toggle('bg-white');
-      document.body.classList.toggle('text-black');
-      document.body.classList.toggle('text-white');
-    }
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-QM106YDX6N');
-  </script>
+  gtag('config', 'G-QM106YDX6N');
+</script>
 
   <!-- Verse Analytics -->
   <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
@@ -358,6 +295,67 @@
 
     </div>
   </div>
+
+
+    <script>
+
+    const inputs = document.querySelectorAll('input, textarea, select');
+
+    inputs.forEach(input => {
+      input.addEventListener('input', () => {
+        generateResume();
+        saveDraft();
+      });
+    });
+
+    function saveDraft() {
+      const data = {
+        name: document.getElementById('name').value,
+        title: document.getElementById('title').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        location: document.getElementById('location').value,
+        summary: document.getElementById('summary').value,
+        skills: document.getElementById('skills').value,
+        experience: document.getElementById('experience').value,
+        education: document.getElementById('education').value,
+        font: document.getElementById('fontSelector').value,
+        theme: document.getElementById('themeColor').value
+      };
+
+      localStorage.setItem('eliteResumeDraft', JSON.stringify(data));
+    }
+
+    function loadDraft() {
+      const saved = JSON.parse(localStorage.getItem('eliteResumeDraft'));
+
+      if(!saved) return;
+
+      Object.keys(saved).forEach(key => {
+        const element = document.getElementById(key) || document.getElementById(key + 'Selector');
+        if(element) {
+          element.value = saved[key];
+        }
+      });
+
+      if(saved.font) {
+        document.getElementById('fontSelector').value = saved.font;
+      }
+
+      if(saved.theme) {
+        document.getElementById('themeColor').value = saved.theme;
+      }
+
+      generateResume();
+      changeFont();
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle('bg-white');
+      document.body.classList.toggle('text-black');
+      document.body.classList.toggle('text-white');
+    }
+  </script>
 
   <script>
 
