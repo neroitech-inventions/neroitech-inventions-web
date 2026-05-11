@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N">
+    window.addEventListener('DOMContentLoaded', () => {
+      loadDraft();
+      generateResume();
+    });
+
+  </script>
+  <script>
+
+    const inputs = document.querySelectorAll('input, textarea, select');
+
+    inputs.forEach(input => {
+      input.addEventListener('input', () => {
+        generateResume();
+        saveDraft();
+      });
+    });
+
+    function saveDraft() {
+      const data = {
+        name: document.getElementById('name').value,
+        title: document.getElementById('title').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        location: document.getElementById('location').value,
+        summary: document.getElementById('summary').value,
+        skills: document.getElementById('skills').value,
+        experience: document.getElementById('experience').value,
+        education: document.getElementById('education').value,
+        font: document.getElementById('fontSelector').value,
+        theme: document.getElementById('themeColor').value
+      };
+
+      localStorage.setItem('eliteResumeDraft', JSON.stringify(data));
+    }
+
+    function loadDraft() {
+      const saved = JSON.parse(localStorage.getItem('eliteResumeDraft'));
+
+      if(!saved) return;
+
+      Object.keys(saved).forEach(key => {
+        const element = document.getElementById(key) || document.getElementById(key + 'Selector');
+        if(element) {
+          element.value = saved[key];
+        }
+      });
+
+      if(saved.font) {
+        document.getElementById('fontSelector').value = saved.font;
+      }
+
+      if(saved.theme) {
+        document.getElementById('themeColor').value = saved.theme;
+      }
+
+      generateResume();
+      changeFont();
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle('bg-white');
+      document.body.classList.toggle('text-black');
+      document.body.classList.toggle('text-white');
+    }
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-QM106YDX6N');
+  </script>
+
+  <!-- Verse Analytics -->
+  <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
+  <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.tagged-events.outbound-links.file-downloads.hash.pageview-props.revenue.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elite Resume Builder</title>
+    <!-- Favicon -->
+<link href="images/favicon.ico" rel="icon">
+  <meta name="description" content="Build award-winning resumes with modern templates using Elite Resume Builder.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f172a;
+    }
+
+    .glass {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .resume-preview {
+      width: 100%;
+      min-height: 1120px;
+      transition: all 0.3s ease;
+    }
+
+    .template-card:hover {
+      transform: translateY(-4px);
+    }
+
+    @media print {
+      a[href]:after {
+        content: "" !important;
+      }
+
+      a {
+        text-decoration: none !important;
+        color: inherit !important;
+      }
+
+      @page {
+        margin: 0;
+      }
+      body * {
+        visibility: hidden;
+      }
+
+      #resumeOutput, #resumeOutput * {
+        visibility: visible;
+      }
+
+      #resumeOutput {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body class="text-white min-h-screen">
+
+  <div class="max-w-7xl mx-auto p-6">
+
+    <div class="text-center mb-10">
+      <h1 class="text-5xl font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+        Elite Resume Builder
+      </h1>
+      <p class="text-slate-300 mt-3 text-lg">
+        Build award-winning resumes with beautiful templates.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- FORM -->
+      <div class="lg:col-span-1 glass rounded-3xl p-4 sm:p-6 lg:sticky lg:top-5 h-fit">
+
+        <div class="space-y-5">
+
+          <div class="flex items-center justify-between gap-3">
+            <label class="text-sm text-slate-300">Theme Color</label>
+            <input type="color" id="themeColor" value="#06b6d4" onchange="generateResume()"
+              class="w-14 h-10 rounded-lg border-none bg-transparent cursor-pointer">
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-300">Profile Photo</label>
+            <input id="profileImage" type="file" accept="image/*"
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white">
+          </div>
+
+          <button onclick="toggleMode()"
+            class="w-full bg-slate-800 py-3 rounded-xl font-bold hover:scale-105 transition-all">
+            Toggle Dark/Light Mode
+          </button>
+
+          <div>
+            <label class="text-sm text-slate-300">Choose Font</label>
+            <select id="fontSelector"
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white"
+              onchange="changeFont()">
+              <option value="Inter, sans-serif">Inter</option>
+              <option value="Georgia, serif">Georgia</option>
+              <option value="'Times New Roman', serif">Times New Roman</option>
+              <option value="Arial, sans-serif">Arial</option>
+              <option value="Poppins, sans-serif">Poppins</option>
+              <option value="Montserrat, sans-serif">Montserrat</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-300">Full Name</label>
+            <input id="name" type="text" placeholder="John Doe"
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-300">Job Title</label>
+            <input id="title" type="text" placeholder="Frontend Developer"
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-300">Email</label>
+            <input id="email" type="email" placeholder="john@example.com"
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-300">Phone</label>
+            <input id="phone" type="text" placeholder="+234..."
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-300">Location</label>
+            <input id="location" type="text" placeholder="Lagos, Nigeria"
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-300">Professional Summary</label>
+            <textarea id="summary" rows="5"
+              placeholder="Write a strong professional summary..."
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-300">Skills (comma separated)</label>
+            <textarea id="skills" rows="3"
+              placeholder="HTML, CSS, JavaScript, React"
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-300">Experience</label>
+            <textarea id="experience" rows="6"
+              placeholder="Frontend Developer - Company Name"
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-300">Education</label>
+            <textarea id="education" rows="4"
+              placeholder="B.Sc Computer Science"
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-300 mb-3 block">Choose Template</label>
+
+            <div class="grid grid-cols-3 gap-3">
+
+              <button onclick="setTemplate('modern')"
+                class="template-card bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl h-24 transition-all">
+              </button>
+
+              <button onclick="setTemplate('dark')"
+                class="template-card bg-gradient-to-br from-slate-700 to-black rounded-2xl h-24 transition-all">
+              </button>
+
+              <button onclick="setTemplate('minimal')"
+                class="template-card bg-gradient-to-br from-white to-slate-300 rounded-2xl h-24 transition-all">
+              </button>
+
+            </div>
+          </div>
+
+          <div class="flex gap-3 pt-3">
+            <button onclick="generateResume()"
+              class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 py-3 rounded-xl font-bold hover:scale-105 transition-all">
+              Generate Resume
+            </button>
+
+            <button onclick="window.print()"
+              class="bg-white text-black px-5 rounded-xl font-bold hover:scale-105 transition-all">
+              Print
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- PREVIEW -->
+      <div class="lg:col-span-2 overflow-hidden">
+        <div id="resumeOutput"
+          class="resume-preview bg-white text-black rounded-2xl lg:rounded-3xl shadow-2xl overflow-hidden">
+
+          <div class="p-5 sm:p-8 lg:p-14">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-2 break-words">Your Name</h1>
+            <p class="text-lg sm:text-xl text-slate-600 break-words">Your Profession</p>
+
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h2 class="font-bold text-xl border-b pb-2 mb-3">Contact</h2>
+                <p>Email</p>
+                <p>Phone</p>
+                <p>Location</p>
+              </div>
+
+              <div>
+                <h2 class="font-bold text-xl border-b pb-2 mb-3">Skills</h2>
+                <div class="flex flex-wrap gap-2">
+                  <span class="bg-slate-200 px-3 py-1 rounded-full">Skill</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8">
+              <h2 class="font-bold text-xl border-b pb-2 mb-3">Summary</h2>
+              <p>Your professional summary will appear here.</p>
+            </div>
+
+            <div class="mt-8">
+              <h2 class="font-bold text-xl border-b pb-2 mb-3">Experience</h2>
+              <p>Your experience will appear here.</p>
+            </div>
+
+            <div class="mt-8">
+              <h2 class="font-bold text-xl border-b pb-2 mb-3">Education</h2>
+              <p>Your education will appear here.</p>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+
+    let activeTemplate = 'modern';
+
+    function changeFont() {
+      const selectedFont = document.getElementById('fontSelector').value;
+      document.getElementById('resumeOutput').style.fontFamily = selectedFont;
+    }
+
+    function setTemplate(template) {
+      activeTemplate = template;
+      generateResume();
+      changeFont();
+    }
+
+    function generateResume() {
+
+      const name = document.getElementById('name').value || 'Your Name';
+      const title = document.getElementById('title').value || 'Your Profession';
+      const email = document.getElementById('email').value || 'your@email.com';
+      const phone = document.getElementById('phone').value || '+234...';
+      const location = document.getElementById('location').value || 'Nigeria';
+      const summary = document.getElementById('summary').value || 'Professional summary goes here.';
+      const skills = document.getElementById('skills').value || 'HTML,CSS,JavaScript';
+      const experience = document.getElementById('experience').value || 'Your experience goes here.';
+      const education = document.getElementById('education').value || 'Your education goes here.';
+
+      const skillsArray = skills.split(',');
+
+      const themeColor = document.getElementById('themeColor').value;
+
+      let templateClass = '';
+      let headerClass = '';
+      let chipClass = '';
+
+      if(activeTemplate === 'modern') {
+        templateClass = 'bg-white text-black';
+        headerClass = 'text-white';
+        chipClass = 'bg-cyan-100 text-cyan-900';
+      }
+
+      if(activeTemplate === 'dark') {
+        templateClass = 'bg-slate-900 text-white';
+        headerClass = 'bg-black text-white';
+        chipClass = 'bg-slate-700 text-white';
+      }
+
+      if(activeTemplate === 'minimal') {
+        templateClass = 'bg-white text-black';
+        headerClass = 'bg-white text-black border-b';
+        chipClass = 'bg-slate-200 text-black';
+      }
+
+      document.getElementById('resumeOutput').className =
+        `resume-preview rounded-3xl shadow-2xl overflow-hidden ${templateClass}`;
+
+      const imageInput = document.getElementById('profileImage');
+      let profileImageHTML = '';
+
+      if(imageInput.files && imageInput.files[0]) {
+        const imageURL = URL.createObjectURL(imageInput.files[0]);
+
+        profileImageHTML = `
+          <img src="${imageURL}" class="w-28 h-28 rounded-full object-cover border-4 border-white shadow-xl mb-5">
+        `;
+      }
+
+      document.getElementById('resumeOutput').innerHTML = `
+
+        <div class="${headerClass} p-14" style="background: linear-gradient(135deg, ${themeColor}, #2563eb)">
+          ${profileImageHTML}
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold break-words">${name}</h1>
+          <p class="text-lg sm:text-xl lg:text-2xl mt-2 opacity-90 break-words">${title}</p>
+
+          <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-5 mt-6 text-sm break-all">
+            <span>${email}</span>
+            <span>${phone}</span>
+            <span>${location}</span>
+          </div>
+        </div>
+
+        <div class="p-5 sm:p-8 lg:p-14">
+
+          <div class="mb-10">
+            <h2 class="text-2xl font-bold mb-4">Professional Summary</h2>
+            <p class="leading-8 opacity-80">${summary}</p>
+          </div>
+
+          <div class="mb-10">
+            <h2 class="text-2xl font-bold mb-4">Skills</h2>
+            <div class="flex flex-wrap gap-2 sm:gap-3">
+              ${skillsArray.map(skill => `
+                <span class="${chipClass} px-3 sm:px-4 py-2 rounded-full font-medium text-sm sm:text-base">
+                  ${skill}
+                </span>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="mb-10">
+            <h2 class="text-2xl font-bold mb-4">Experience</h2>
+            <div class="leading-8 whitespace-pre-line opacity-90">
+              ${experience}
+            </div>
+          </div>
+
+          <div>
+            <h2 class="text-2xl font-bold mb-4">Education</h2>
+            <div class="leading-8 whitespace-pre-line opacity-90">
+              ${education}
+            </div>
+          </div>
+
+        </div>
+
+      `;
+    }
+
+  </script>
+
+  <footer class="text-center text-slate-400 py-8 text-sm px-4">
+    © 2026 <a href="https://niti.com.ng/" target="_blank"><b>Neroitech Inventions</b></a>. All rights reserved.
+  </footer>
+</body>
+</html>
