@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="SnappQuest - Explore Quests for Engage-to-Earn Tasks">
     <title>SnappQuest - Explore Quests</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" onerror="console.error('Font Awesome failed to load')">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="images/icon.png" rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -1037,129 +1037,188 @@
   font-size: 14px;
   cursor: pointer;
 }
+
+        /* ── Telegram identity strip ── */
+        .tg-identity-strip {
+            background: linear-gradient(135deg, rgba(34,158,217,0.12), rgba(52,211,153,0.08));
+            border: 1px solid rgba(34,158,217,0.25);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin: 16px 0 4px;
+        }
+        .tg-identity-strip label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #64B5F6;
+            margin-bottom: 8px;
+        }
+        .tg-identity-strip .tg-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .tg-identity-strip input {
+            flex: 1;
+            background: rgba(255,255,255,0.07) !important;
+            border: 1px solid rgba(100,181,246,0.2) !important;
+            border-radius: 8px !important;
+            padding: 9px 12px !important;
+            color: #fff !important;
+            font-size: 14px !important;
+            font-family: monospace !important;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none;
+        }
+        .tg-identity-strip input:focus {
+            border-color: rgba(34,158,217,0.5) !important;
+            box-shadow: 0 0 0 3px rgba(34,158,217,0.1) !important;
+        }
+        .tg-identity-strip input::placeholder { color: #475569; }
+        .tg-status-line {
+            font-size: 11px;
+            margin-top: 7px;
+            min-height: 16px;
+            transition: all 0.3s;
+            color: #94A3B8;
+        }
+        .tg-status-line.saved { color: #34D399; }
+
+        /* ── Submit-button checking spinner ── */
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .checking-spinner {
+            display: inline-block;
+            width: 12px; height: 12px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-stats { gap: 20px; }
+            .quests-grid { grid-template-columns: 1fr; }
+            .profile-header { padding: 24px; }
+            .footer-row { flex-direction: column; gap: 32px; }
+            .modal-content { width: 90%; border-radius: 16px; }
+            .modal-header { font-size: 24px; padding: 20px; }
+            .modal-body { padding: 24px; }
+            .modal-close-btn { padding: 10px 20px; font-size: 14px; }
+            .pagination { flex-wrap: wrap; gap: 8px; }
+            .pagination-btn { padding: 6px 12px; font-size: 12px; }
+            .pagination-info { font-size: 12px; width: 100%; text-align: center; }
+            .currency-switch label { width: 50px; height: 24px; }
+            .currency-switch label::before { width: 20px; height: 20px; top: 2px; left: 2px; }
+            .currency-switch input:checked + label::before { transform: translateX(26px); }
+            .currency-switch span { font-size: 12px; }
+            .form-group label { font-size: 14px; }
+            .form-group input, .form-group textarea { font-size: 12px; padding: 10px; }
+            .modal-submit-btn { padding: 10px 20px; font-size: 14px; margin-right: 12px; }
+        }
     </style>
-    <link href="images/icon.png" rel="icon" onerror="console.error('Favicon failed to load')">
+    <link href="images/icon.png" rel="icon">
 </head>
 <body>
     <header>
         <div class="logo">
-            <a href="index.html"><img src="images/logo.png" alt="SnappQuest Logo" onerror="console.error('Logo image failed to load')"></a>
+            <a href="index.html"><img src="images/logo.png" alt="SnappQuest Logo"></a>
         </div>
         <div class="nav-container">
-    <nav class="nav-links">
-        <a href="join.html"><i class="fas fa-users"></i> Quest</a>
-        <a href="stats.html"><i class="fas fa-chart-bar"></i> Sponsor Stats</a>
-        <a href="leaderboard.html"><i class="fas fa-trophy"></i> Sponsor Leaderboard</a>
-    </nav>
-   
-    <!-- WALLET BUTTON -->
-    <button onclick="toggleWalletSidebar()" style="background:none;border:none;font-size:26px;color:white;cursor:pointer;margin-right:12px;" title="My Wallets">
-        <i class="fas fa-wallet"></i>
-    </button>
-   
-    <button class="disconnect-btn" id="disconnectBtn"><i class="fas fa-sign-out-alt"></i> Home</button>
-</div>
-        <div class="hamburger">
-            <i class="fas fa-bars"></i>
+            <nav class="nav-links">
+                <a href="join.html"><i class="fas fa-users"></i> Quest</a>
+                <a href="stats.html"><i class="fas fa-chart-bar"></i> Sponsor Stats</a>
+                <a href="leaderboard.html"><i class="fas fa-trophy"></i> Sponsor Leaderboard</a>
+            </nav>
+            <button onclick="toggleWalletSidebar()" style="background:none;border:none;font-size:26px;color:white;cursor:pointer;margin-right:12px;" title="My Wallets">
+                <i class="fas fa-wallet"></i>
+            </button>
+            <button class="disconnect-btn" id="disconnectBtn"><i class="fas fa-sign-out-alt"></i> Home</button>
         </div>
+        <div class="hamburger"><i class="fas fa-bars"></i></div>
     </header>
+
     <!-- My Wallets Sidebar -->
-<div id="walletSidebar" class="wallet-sidebar">
-  <div class="sidebar-header">
-    <h3>My Wallets</h3>
-    <span onclick="toggleWalletSidebar()" style="cursor:pointer; font-size:24px;">✕</span>
-  </div>
- 
-  <div class="wallet-inputs">
-    <div class="wallet-field">
-      <label>Solana Address</label>
-      <input type="text" id="solanaWallet" placeholder="Enter Solana wallet">
-    </div>
-    <div class="wallet-field">
-      <label>Polygon Address</label>
-      <input type="text" id="polygonWallet" placeholder="Enter Polygon wallet">
-    </div>
-    <div class="wallet-field">
-      <label>Sui Address</label>
-      <input type="text" id="suiWallet" placeholder="Enter Sui wallet">
-    </div>
-  </div>
-  <button onclick="saveWallets()" class="save-wallet-btn">Save Wallets</button>
-  <div id="savedWallets" class="saved-wallets"></div>
-  <!-- SOCIAL LINKS SECTION -->
-<div style="margin-top: 24px; border-top: 1px solid #334155; padding-top: 20px;">
-  <div onclick="toggleSocialSection(event)" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; margin-bottom:16px;">
-    <h3 style="font-size:16px; font-weight:700; color:white; margin:0;">🔗 My Social Links</h3>
-    <span id="socialToggleIcon" style="color:#94A3B8; font-size:18px;">﹢</span>
-  </div>
+    <div id="walletSidebar" class="wallet-sidebar">
+        <div class="sidebar-header">
+            <h3>My Wallets</h3>
+            <span onclick="toggleWalletSidebar()" style="cursor:pointer;font-size:24px;">✕</span>
+        </div>
 
-  <div id="socialSection" style="display:none;" class="social-inputs">
-    <div class="wallet-field">
-      <label><i class="fa-brands fa-x-twitter" style="width:16px;"></i> Twitter</label>
-      <input type="text" id="socialTwitter" placeholder="https://x.com/username">
-    </div>
-    <div class="wallet-field">
-  <label><i class="fa-brands fa-telegram" style="width:16px; color:#229ED9;"></i> Telegram</label>
-  <input type="text" id="socialTelegram" placeholder="https://t.me/username">
-</div>
-    <div class="wallet-field">
-      <label><i class="fa-brands fa-youtube" style="width:16px; color:#FF0000;"></i> YouTube</label>
-      <input type="text" id="socialYoutube" placeholder="https://youtube.com/@channel">
-    </div>
-    <div class="wallet-field">
-      <label><i class="fa-brands fa-instagram" style="width:16px; color:#E1306C;"></i> Instagram</label>
-      <input type="text" id="socialInstagram" placeholder="https://instagram.com/username">
-    </div>
-    <div class="wallet-field">
-      <label><i class="fa-brands fa-tiktok" style="width:16px;"></i> TikTok</label>
-      <input type="text" id="socialTiktok" placeholder="https://tiktok.com/@username">
-    </div>
-    <div class="wallet-field">
-      <label><i class="fa-brands fa-snapchat" style="width:16px; color:#FFFC00;"></i> Snapchat</label>
-      <input type="text" id="socialSnapchat" placeholder="https://snapchat.com/add/username">
-    </div>
-    <div class="wallet-field">
-      <label><i class="fas fa-coins" style="width:16px;"></i> CoinMarketCap</label>
-      <input type="text" id="socialCmc" placeholder="https://coinmarketcap.com/...">
-    </div>
-    <button onclick="saveSocials()" class="save-wallet-btn" style="margin-top:8px;">Save Social Links</button>
-    <div id="savedSocials" style="margin-top:16px;"></div>
-  </div>
-</div>
+        <div class="wallet-inputs">
+            <div class="wallet-field">
+                <label>Solana Address</label>
+                <input type="text" id="solanaWallet" placeholder="Enter Solana wallet">
+            </div>
+            <div class="wallet-field">
+                <label>Polygon Address</label>
+                <input type="text" id="polygonWallet" placeholder="Enter Polygon wallet">
+            </div>
+            <div class="wallet-field">
+                <label>Sui Address</label>
+                <input type="text" id="suiWallet" placeholder="Enter Sui wallet">
+            </div>
+        </div>
 
-<!-- NOTES SECTION -->
-<div style="margin-top: 24px; border-top: 1px solid #334155; padding-top: 20px;">
-  <div onclick="toggleNotesSection(event)" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; margin-bottom:16px;">
-    <h3 style="font-size:16px; font-weight:700; color:white; margin:0;">📝 My Note</h3>
-    <span id="notesToggleIcon" style="color:#94A3B8; font-size:18px;">﹢</span>
-  </div>
+        <!-- ══ TELEGRAM IDENTITY (saved alongside wallets) ══ -->
+        <div class="tg-identity-strip">
+            <label><i class="fa-brands fa-telegram" style="color:#229ED9;"></i> &nbsp;My Telegram Username</label>
+            <div class="tg-row">
+                <input type="text" id="savedTelegramInput" placeholder="@username" autocomplete="off" spellcheck="false">
+            </div>
+            <div class="tg-status-line" id="tgStatusLine">Saved username auto-fills forms &amp; pre-checks duplicates</div>
+        </div>
 
-  <div id="notesSection" style="display:none;">
-<textarea id="userNote" placeholder="Write anything here — reminders, wallet notes, quest tips..." 
-      style="width:100%; padding:12px; background:#334155; border:none; border-radius:8px; color:white; min-height:120px; resize:vertical; font-family:inherit; font-size:14px; line-height:1.6;"></textarea>
-    <button onclick="saveNote()" class="save-wallet-btn" style="margin-top:10px;">Save Note</button>
-    <div id="savedNote" style="margin-top:8px;"></div>
-  </div>
-</div>
+        <button onclick="saveWallets()" class="save-wallet-btn" style="margin-top:16px;">Save Wallets &amp; Telegram</button>
+        <div id="savedWallets" class="saved-wallets"></div>
 
-</div>
+        <!-- SOCIAL LINKS SECTION -->
+        <div style="margin-top:24px;border-top:1px solid #334155;padding-top:20px;">
+            <div onclick="toggleSocialSection(event)" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:16px;">
+                <h3 style="font-size:16px;font-weight:700;color:white;margin:0;">🔗 My Social Links</h3>
+                <span id="socialToggleIcon" style="color:#94A3B8;font-size:18px;">﹢</span>
+            </div>
+            <div id="socialSection" style="display:none;" class="social-inputs">
+                <div class="wallet-field"><label><i class="fa-brands fa-x-twitter" style="width:16px;"></i> Twitter</label><input type="text" id="socialTwitter" placeholder="https://x.com/username"></div>
+                <div class="wallet-field"><label><i class="fa-brands fa-telegram" style="width:16px;color:#229ED9;"></i> Telegram</label><input type="text" id="socialTelegram" placeholder="https://t.me/username"></div>
+                <div class="wallet-field"><label><i class="fa-brands fa-youtube" style="width:16px;color:#FF0000;"></i> YouTube</label><input type="text" id="socialYoutube" placeholder="https://youtube.com/@channel"></div>
+                <div class="wallet-field"><label><i class="fa-brands fa-instagram" style="width:16px;color:#E1306C;"></i> Instagram</label><input type="text" id="socialInstagram" placeholder="https://instagram.com/username"></div>
+                <div class="wallet-field"><label><i class="fa-brands fa-tiktok" style="width:16px;"></i> TikTok</label><input type="text" id="socialTiktok" placeholder="https://tiktok.com/@username"></div>
+                <div class="wallet-field"><label><i class="fa-brands fa-snapchat" style="width:16px;color:#FFFC00;"></i> Snapchat</label><input type="text" id="socialSnapchat" placeholder="https://snapchat.com/add/username"></div>
+                <div class="wallet-field"><label><i class="fas fa-coins" style="width:16px;"></i> CoinMarketCap</label><input type="text" id="socialCmc" placeholder="https://coinmarketcap.com/..."></div>
+                <button onclick="saveSocials()" class="save-wallet-btn" style="margin-top:8px;">Save Social Links</button>
+                <div id="savedSocials" style="margin-top:16px;"></div>
+            </div>
+        </div>
+
+        <!-- NOTES SECTION -->
+        <div style="margin-top:24px;border-top:1px solid #334155;padding-top:20px;">
+            <div onclick="toggleNotesSection(event)" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:16px;">
+                <h3 style="font-size:16px;font-weight:700;color:white;margin:0;">📝 My Note</h3>
+                <span id="notesToggleIcon" style="color:#94A3B8;font-size:18px;">﹢</span>
+            </div>
+            <div id="notesSection" style="display:none;">
+                <textarea id="userNote" placeholder="Write anything here — reminders, wallet notes, quest tips..." style="width:100%;padding:12px;background:#334155;border:none;border-radius:8px;color:white;min-height:120px;resize:vertical;font-family:inherit;font-size:14px;line-height:1.6;"></textarea>
+                <button onclick="saveNote()" class="save-wallet-btn" style="margin-top:10px;">Save Note</button>
+                <div id="savedNote" style="margin-top:8px;"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="overlay"></div>
+
     <div class="profile-container">
         <div class="profile-header">
             <div class="profile-avatar" id="profileAvatar">
-    <img
-        src="images/degen.png"
-        alt="Profile"
-        style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;"
-        onclick="toggleImage(this)"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-    >
-    <span style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: 48px; color: #ffffff;">S</span>
-</div>
-<!--<div class="profile-avatar" id="profileAvatar">
-    <img src="images/degen.png" alt="Profile">
-    <span class="fallback">S</span>
-</div>-->
+                <img src="images/degen.png" alt="Profile"
+                    style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;"
+                    onclick="toggleImage(this)"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                <span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:48px;color:#ffffff;">S</span>
+            </div>
             <div class="profile-name" id="profileName">Loading...</div>
             <div class="profile-stats">
                 <div class="stat">
@@ -1182,6 +1241,7 @@
                 <span class="VERSE-label">USDC</span>
             </div>
         </div>
+
         <div class="quests-section" id="available-quests">
             <h2 class="section-title"><i class="fas fa-unlock"></i> Available Quests</h2>
             <div class="quests-grid" id="questsGrid"></div>
@@ -1193,15 +1253,16 @@
             <div class="pagination" id="completedPagination"></div>
         </div>
     </div>
+
     <footer>
         <div class="container">
             <div class="footer-row">
-                <div class="footer-col" style="min-width: 250px;">
-                    <h3 class="hero-gradient-text">SnappQuest</h3>
-                    <p style="color: var(--color-text-secondary); font-size: 14px;">The Engage-to-Earn Business Solution.<br>Building active, incentivized, sustainable communities.</p>
+                <div class="footer-col" style="min-width:250px;">
+                    <h3>SnappQuest</h3>
+                    <p style="color:#9CA3AF;font-size:14px;">The Engage-to-Earn Business Solution.<br>Building active, incentivized, sustainable communities.</p>
                     <div class="social-icons">
-<a href="https://x.com/SnappQuest" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
-<a href="https://t.me/SnappQuest" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+                        <a href="https://x.com/SnappQuest" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="https://t.me/SnappQuest" target="_blank"><i class="fa-brands fa-telegram"></i></a>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -1212,7 +1273,7 @@
                         <li><a href="minigame.html">How to Submit a Quest</a></li>
                         <li><a href="airdrop.html">Airdrop Checker</a></li>
                         <li><a href="hall-of-fame.html">Hall of Fame</a></li>
-                        <li><a href="ad.html">Advertising</a></li>  
+                        <li><a href="ad.html">Advertising</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -1227,61 +1288,41 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank"> Neroitech Inventions.</a></p>
+                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions.</a></p>
             </div>
         </div>
     </footer>
-    <button id="back-to-top" title="Back to Top">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-  <div id="learnMoreModal" class="modal">
+
+    <button id="back-to-top" title="Back to Top"><i class="fas fa-arrow-up"></i></button>
+
+    <div id="learnMoreModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2>SnappQuest Overview</h2>
-                <span class="close">&times;</span>
-            </div>
-           <div class="modal-body">
-                <h3>Vision</h3>
-                <p>SnappQuest exists to become the Engage-to-Earn tool for Superteam Nigeria and the Solana ecosystem, rewarding effort, not just outcomes.</p>
-                <h3>Mission</h3>
-                <p>To unlock quick earning opportunities for the SnappQuest community, while providing sponsors with real engagement in return.</p>
-                <h3>The Problem</h3>
-                <p>New projects and the Solana community struggle to gain visibility, while communities show up but often don't get rewarded.</p>
-                <h3>The Solution: SnappQuest</h3>
-                <p>SnappQuest is a tool that incentivizes participation, turning effort into recognition, rewards, and earning opportunities.</p>
-                <h3>How SnappQuest Works</h3>
-                <p>Create your Quest, generate the quote, and after payment, submit the new Quest for admin approval. Admins verify the Quest, if it’s legitimate, they move it to the active Quests for community participation.</p>
-                <h3>Key Features</h3>
-                <ul>
-                    <li>Real engagement</li>
-                    <li>No bots</li>
-                    <li>Community powered</li>
-                </ul>
-                <h3>Long-Term Vision</h3>
-                <p>SnappQuest becomes the go-to tool for engagement across Solana, helping contributors, builders, and communities thrive.</p>
+            <div class="modal-header"><h2>SnappQuest Overview</h2><span class="close">&times;</span></div>
+            <div class="modal-body">
+                <h3>Vision</h3><p>SnappQuest exists to become the Engage-to-Earn tool for Superteam Nigeria and the Solana ecosystem, rewarding effort, not just outcomes.</p>
+                <h3>Mission</h3><p>To unlock quick earning opportunities for the SnappQuest community, while providing sponsors with real engagement in return.</p>
+                <h3>The Problem</h3><p>New projects and the Solana community struggle to gain visibility, while communities show up but often don't get rewarded.</p>
+                <h3>The Solution: SnappQuest</h3><p>SnappQuest is a tool that incentivizes participation, turning effort into recognition, rewards, and earning opportunities.</p>
+                <h3>How SnappQuest Works</h3><p>Create your Quest, generate the quote, and after payment, submit the new Quest for admin approval.</p>
+                <h3>Key Features</h3><ul><li>Real engagement</li><li>No bots</li><li>Community powered</li></ul>
+                <h3>Long-Term Vision</h3><p>SnappQuest becomes the go-to tool for engagement across Solana.</p>
                 <button class="modal-close-btn">Close</button>
             </div>
         </div>
     </div>
+
     <div id="questModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="questModalTitle">Quest Details</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <!-- Cloned quest card content here -->
-            </div>
+            <div class="modal-header"><h2 id="questModalTitle">Quest Details</h2><span class="close">&times;</span></div>
+            <div class="modal-body"></div>
         </div>
     </div>
+
     <div id="submitQuestModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2>Submit Quest</h2>
-                <span class="close">&times;</span>
-            </div>
+            <div class="modal-header"><h2>Submit Quest</h2><span class="close">&times;</span></div>
             <div class="modal-body">
-                <form id="submitQuestForm" onsubmit="handleSubmit(event)">
+                <form id="submitQuestForm">
                     <div class="form-group">
                         <label for="trackCode">Track Code</label>
                         <input type="text" id="trackCode" name="entry.2147360639" readonly required>
@@ -1308,16 +1349,11 @@
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
-        // In initializeProfile() or after DOM is ready
-document.getElementById('profileAvatar').querySelector('img').onerror = function() {
-    this.style.display = 'none';
-    this.nextElementSibling.style.display = 'flex';
-};
-        // Set current year in footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
-        // Configuration
+
         const CONFIG = {
             API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
             STATS_ID: '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w',
@@ -1332,41 +1368,20 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
             QUESTS_PER_PAGE: 3,
             FALLBACK_RATE: 1/0.000057,
             FORM_ACTION: 'https://docs.google.com/forms/d/1ObMPuTI2S1842DmfYePB4uKxfw2cLDtSlFsllUZZ-2I/formResponse',
-            
-            // ADVERT CONFIG (now read from sheet)
-            AD_ID: '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w',            
+            AD_ID: '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w',
             AD_RANGE: 'SnappQuestData!A5:B5'
         };
-        let tapCounts = {}; // tracks how many times each quest has been tapped
-// === WALLET AUTO-DETECTOR (only used for multi-chain quests) ===
-        function isValidEVMAddress(addr) {
-            return /^0x[a-fA-F0-9]{40}$/.test(addr.trim());
-        }
-        function isValidSuiAddress(addr) {
-            return /^0x[a-fA-F0-9]{64}$/.test(addr.trim());
-        }
-        function isValidSolanaAddress(addr) {
-            return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(addr.trim());
-        }
-        function detectChain(address) {
-            if (!address || address.trim() === '') return null;
-            const addr = address.trim();
-            if (isValidEVMAddress(addr)) return 'Polygon';
-            if (isValidSolanaAddress(addr)) return 'Solana';
-            if (isValidSuiAddress(addr)) return 'Sui';
-            return null;
-        }
-        // State
+
+        let tapCounts = {};
         let userData = {};
         let quests = [];
         let availableCurrentPage = 1;
         let completedCurrentPage = 1;
         let currentCurrency = 'VERSE';
         let usdcRate = 0;
-        
-        let AD_IMAGE_URL = 'images/ad.jpg'; // fallback
+        let AD_IMAGE_URL = 'images/ad.jpg';
         let AD_LINK = 'https://niti.com.ng/snappquest/ad.html';
-        // DOM Elements
+
         const DOM = {
             disconnectBtn: document.getElementById('disconnectBtn'),
             profileName: document.getElementById('profileName'),
@@ -1388,306 +1403,549 @@ document.getElementById('profileAvatar').querySelector('img').onerror = function
             submitQuestForm: document.getElementById('submitQuestForm'),
             currencyToggle: document.getElementById('currencyToggle')
         };
-        // Added: Show skeleton placeholders while loading
+
+        // ═══════════════════════════════════════════════════════
+        // TELEGRAM IDENTITY — the core of the feature
+        // ═══════════════════════════════════════════════════════
+
+        /** Returns saved telegram (with @), or '' if none */
+        function getSavedTelegram() {
+            return localStorage.getItem('userTelegram') || '';
+        }
+
+        /** Persist telegram; normalises to @username format */
+        function persistTelegram(raw) {
+            if (!raw || !raw.trim()) return;
+            const clean = raw.trim();
+            const normalised = clean.startsWith('@') ? clean : '@' + clean;
+            localStorage.setItem('userTelegram', normalised);
+            updateTgStatusLine(normalised);
+        }
+
+        /** Keep the sidebar status line in sync */
+        function updateTgStatusLine(username) {
+            const line = document.getElementById('tgStatusLine');
+            if (!line) return;
+            if (username) {
+                line.textContent = '✓ Saved as ' + username + ' — forms auto-fill & duplicates pre-checked';
+                line.className = 'tg-status-line saved';
+            } else {
+                line.textContent = 'Saved username auto-fills forms & pre-checks duplicates';
+                line.className = 'tg-status-line';
+            }
+        }
+
+        /** Load saved values into sidebar inputs on page open */
+        function loadSidebarValues() {
+            const sol  = localStorage.getItem('userSolana')   || '';
+            const poly = localStorage.getItem('userPolygon')  || '';
+            const sui  = localStorage.getItem('userSui')      || '';
+            const tg   = getSavedTelegram();
+
+            document.getElementById('solanaWallet').value         = sol;
+            document.getElementById('polygonWallet').value        = poly;
+            document.getElementById('suiWallet').value            = sui;
+            document.getElementById('savedTelegramInput').value   = tg;
+
+            updateTgStatusLine(tg);
+            renderSavedWallets();
+            renderSavedSocials();
+            loadNote();
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // WALLET SIDEBAR
+        // ═══════════════════════════════════════════════════════
+
+        function toggleWalletSidebar() {
+            const sidebar = document.getElementById('walletSidebar');
+            sidebar.classList.toggle('open');
+            if (sidebar.classList.contains('open')) {
+                setTimeout(() => document.addEventListener('click', outsideClickHandler, { once: true }), 10);
+            }
+        }
+
+        function outsideClickHandler(e) {
+            const sidebar = document.getElementById('walletSidebar');
+            const walletBtn = e.target.closest('button[onclick="toggleWalletSidebar()"]');
+            if (sidebar.contains(e.target) || walletBtn) {
+                document.addEventListener('click', outsideClickHandler, { once: true });
+                return;
+            }
+            sidebar.classList.remove('open');
+        }
+
+        function saveWallets() {
+            const sol  = document.getElementById('solanaWallet').value.trim();
+            const poly = document.getElementById('polygonWallet').value.trim();
+            const sui  = document.getElementById('suiWallet').value.trim();
+            const tg   = document.getElementById('savedTelegramInput').value.trim();
+
+            localStorage.setItem('userSolana',  sol);
+            localStorage.setItem('userPolygon', poly);
+            localStorage.setItem('userSui',     sui);
+
+            // ← THE KEY LINE: actually save telegram
+            if (tg) persistTelegram(tg);
+            else { localStorage.removeItem('userTelegram'); updateTgStatusLine(''); }
+
+            Swal.fire({ icon: 'success', title: 'Saved!', text: tg ? `Wallets & Telegram (${tg.startsWith('@') ? tg : '@'+tg}) stored.` : 'Wallets stored.', timer: 2000, showConfirmButton: false });
+            renderSavedWallets();
+        }
+
+        function renderSavedWallets() {
+            const container = document.getElementById('savedWallets');
+            container.innerHTML = '';
+            const sol  = localStorage.getItem('userSolana')  || '';
+            const poly = localStorage.getItem('userPolygon') || '';
+            const sui  = localStorage.getItem('userSui')     || '';
+            if (sol)  container.innerHTML += createSavedWalletHTML('Solana',  sol);
+            if (poly) container.innerHTML += createSavedWalletHTML('Polygon', poly);
+            if (sui)  container.innerHTML += createSavedWalletHTML('Sui',     sui);
+            if (!container.innerHTML) container.innerHTML = '<p style="color:#CBD5E1;text-align:center;">No wallets saved yet.</p>';
+        }
+
+        function createSavedWalletHTML(chain, address) {
+            return `<div class="saved-wallet"><div><strong>${chain}</strong><br><span>${address}</span></div><button onclick="copyWallet('${address}')" class="copy-wallet-btn">📋 Copy</button></div>`;
+        }
+
+        function copyWallet(address) {
+            if (!address) return;
+            navigator.clipboard.writeText(address).then(() => {
+                Swal.fire({ icon: 'success', title: 'Copied!', text: address, timer: 1500, showConfirmButton: false, toast: true, position: 'top', background: '#1F2937', color: '#fff' });
+            });
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // SUBMIT MODAL — with pre-check wired in
+        // ═══════════════════════════════════════════════════════
+
+        /**
+         * The ACTUAL modal-open logic (no pre-check here).
+         * Always call this after the duplicate check passes.
+         */
+function _openSubmitModalUI(trackCode) {
+    const modal = DOM.submitQuestModal;
+    modal.querySelectorAll('.form-group').forEach(g => g.style.display = '');
+    DOM.submitQuestForm.reset();
+
+    modal.querySelector('#trackCode').value = trackCode || '';
+
+    const quest = quests.find(q => q.trackCode === trackCode);
+    const walletLabel = modal.querySelector('label[for="twitter"]');
+    const walletInput = modal.querySelector('#twitter');
+
+    let labelText = 'Polygon';
+
+    if (quest) {
+        const savedSolana  = localStorage.getItem('userSolana')  || '';
+        const savedPolygon = localStorage.getItem('userPolygon') || '';
+        const savedSui     = localStorage.getItem('userSui')     || '';
+
+        switch(quest.chain) {
+            case 0:
+                labelText = 'Polygon';
+                walletInput.value = savedPolygon;
+                break;
+            case 1:
+                labelText = 'Solana';
+                walletInput.value = savedSolana;
+                break;
+            case 2:
+                labelText = 'Sui';
+                walletInput.value = savedSui;
+                break;
+
+            case 3: // Fancy Modern Selector
+                labelText = 'Choose Wallet';
+                walletInput.style.display = 'none';
+
+                let optionsHTML = `<div class="wallet-options" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:12px; margin:12px 0 16px;">`;
+
+                if (savedPolygon) optionsHTML += createWalletOption('Polygon', savedPolygon, '#4F46E5', '🔷');
+                if (savedSolana)  optionsHTML += createWalletOption('Solana',  savedSolana,  '#22C55E', '🟣');
+                if (savedSui)     optionsHTML += createWalletOption('Sui',     savedSui,     '#A855F7', '🔵');
+
+                optionsHTML += `
+                    <div onclick="selectManualWallet()" class="wallet-option" style="padding:14px; border:2px dashed #9CA3AF; border-radius:12px; cursor:pointer; text-align:center; color:#6B7280;">
+                        <strong>✍️ Enter Manually</strong>
+                    </div>
+                </div>`;
+
+                walletInput.insertAdjacentHTML('beforebegin', optionsHTML);
+                break;
+        }
+    }
+
+    walletLabel.textContent = labelText + ' Wallet Address';
+    walletInput.placeholder = 'Enter wallet address (auto-detects chain)';
+
+    // Real-time chain detection
+    walletInput.onkeyup = function() {
+        const detected = detectChain(this.value);
+        if (detected) walletLabel.textContent = detected + ' Wallet Address (detected)';
+    };
+
+    // ====================== TELEGRAM AUTO-FILL ======================
+    const telegramInput = modal.querySelector('#telegram');
+    telegramInput.value = getSavedTelegram();
+
+    // ====================== FEEDBACK QUEST LOGIC ======================
+    const proofLabel = modal.querySelector('label[for="proofOfQuest"]');
+    const proofInput = modal.querySelector('#proofOfQuest');
+    const questLinkLabel = modal.querySelector('label[for="questLink"]');
+    const questLinkInput = modal.querySelector('#questLink');
+
+    if (quest && quest.isFeedback) {
+        proofLabel.textContent = 'Comment or Feedback';
+        proofInput.placeholder = 'Share your comment or feedback here...';
+        questLinkLabel.textContent = 'Country or Location';
+        questLinkInput.placeholder = 'Enter your country or city';
+    } else {
+        proofLabel.textContent = 'Link to Your Submission';
+        proofInput.placeholder = 'Make sure this link is accessible by everyone!';
+        questLinkLabel.textContent = 'Anything Else?';
+        questLinkInput.placeholder = 'Add other links or paste your submission link here.';
+    }
+
+    modal.style.display = 'block';
+    setTimeout(() => modal.classList.add('active'), 10);
+}
+
+// Helper functions for fancy wallet cards
+function createWalletOption(chain, address, color, emoji) {
+    return `
+        <div onclick="selectSavedWallet(this, '${address}')" class="wallet-option" 
+             style="padding:14px; border:2px solid ${color}; border-radius:12px; background:rgba(255,255,255,0.6); cursor:pointer; transition:all 0.2s;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:22px;">${emoji}</span>
+                <div>
+                    <strong>${chain}</strong><br>
+                    <small style="font-family:monospace; color:#6B7280;">${address.substring(0,14)}...</small>
+                </div>
+            </div>
+        </div>`;
+}
+
+function selectSavedWallet(el, address) {
+    const input = document.getElementById('twitter');
+    input.value = address;
+    input.style.display = 'block';
+
+    document.querySelectorAll('.wallet-option').forEach(opt => {
+        opt.style.borderStyle = 'solid';
+        opt.style.borderColor = '#D1D5DB';
+    });
+    el.style.borderColor = '#10B981';
+}
+
+function selectManualWallet() {
+    const input = document.getElementById('twitter');
+    input.style.display = 'block';
+    input.value = '';
+    input.focus();
+}
+
+        /**
+         * Public entry point called by the Submit button click.
+         * Runs duplicate pre-check if telegram is saved, then opens modal.
+         */
+        async function openSubmitModal(trackCode) {
+            const savedTg = getSavedTelegram();
+
+            if (savedTg) {
+                // Show spinner on the button while checking
+                const btn = document.querySelector(`.quest-card[data-track-code="${trackCode}"] .submit-btn`);
+                let originalHTML = '';
+                if (btn) {
+                    originalHTML = btn.innerHTML;
+                    btn.innerHTML = `<span class="checking-spinner"></span> Checking...`;
+                    btn.disabled = true;
+                }
+
+                let isDupe = false;
+                try {
+                    isDupe = await isDuplicateSubmission(trackCode, savedTg);
+                } catch (err) {
+                    console.warn('Pre-check failed, opening modal anyway:', err);
+                } finally {
+                    if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
+                }
+
+                if (isDupe) {
+    Swal.fire({
+        title: '✅ Already Submitted',
+        html: `
+            <p style="color:#4B5563;font-size:15px;line-height:1.7;margin-bottom:12px;">
+                You already submitted this quest as
+                <strong style="color:#6366F1;">${savedTg}</strong>.
+            </p>
+
+            <p style="color:#6B7280;font-size:13px;">
+                If this is incorrect, contact SnappQuest support below.
+            </p>
+
+            <a href="https://t.me/SnappQuest/42"
+               target="_blank"
+               style="
+                    display:inline-block;
+                    margin-top:14px;
+                    background:#22C55E;
+                    color:white;
+                    padding:10px 16px;
+                    border-radius:8px;
+                    text-decoration:none;
+                    font-size:14px;
+                    font-weight:600;
+               ">
+               Contact Support
+            </a>
+        `,
+        icon: 'info',
+        confirmButtonText: 'Got it',
+        confirmButtonColor: '#6366F1',
+    });
+                    return;
+                }
+            }
+
+            _openSubmitModalUI(trackCode);
+        }
+
+        /** SnappEvent submit modal — also runs pre-check */
+        async function openSnappEventSubmitModal(trackCode) {
+            const savedTg = getSavedTelegram();
+
+            if (savedTg) {
+                const btn = document.querySelector(`.quest-card[data-track-code="${trackCode}"] .submit-btn`);
+                let originalHTML = '';
+                if (btn) { originalHTML = btn.innerHTML; btn.innerHTML = `<span class="checking-spinner"></span> Checking...`; btn.disabled = true; }
+
+                let isDupe = false;
+                try { isDupe = await isDuplicateSubmission(trackCode, savedTg); }
+                catch (err) { console.warn('Pre-check failed:', err); }
+                finally { if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; } }
+
+                if (isDupe) {
+                    Swal.fire({
+                        title: '✅ Already Registered',
+                        html: `<p style="color:#4B5563;font-size:15px;line-height:1.7;">You're already registered for this event as <strong style="color:#6366F1;">${savedTg}</strong>.</p>`,
+                        icon: 'info', confirmButtonText: 'OK', confirmButtonColor: '#6366F1',
+                    });
+                    return;
+                }
+            }
+
+            const modal = DOM.submitQuestModal;
+            modal.querySelectorAll('.form-group').forEach(g => g.style.display = '');
+            DOM.submitQuestForm.reset();
+            modal.querySelector('#trackCode').value = trackCode || '';
+
+            const proofInput     = modal.querySelector('#proofOfQuest');
+            const questLinkInput = modal.querySelector('#questLink');
+            const walletInput    = modal.querySelector('#twitter');
+            proofInput.value     = 'Verse IRL Event';
+            questLinkInput.value = 'Verse IRL Event';
+            walletInput.value    = '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
+            proofInput.closest('.form-group').style.display     = 'none';
+            questLinkInput.closest('.form-group').style.display = 'none';
+            walletInput.closest('.form-group').style.display    = 'none';
+
+            const telegramLabel = modal.querySelector('label[for="telegram"]');
+            const telegramInput = modal.querySelector('#telegram');
+            telegramLabel.textContent = 'Your Telegram Username (@username)';
+            telegramInput.value = savedTg; // ← auto-fill here too
+
+            modal.style.display = 'block';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // CHAIN DETECTION
+        // ═══════════════════════════════════════════════════════
+
+        function isValidEVMAddress(addr)     { return /^0x[a-fA-F0-9]{40}$/.test(addr.trim()); }
+        function isValidSuiAddress(addr)     { return /^0x[a-fA-F0-9]{64}$/.test(addr.trim()); }
+        function isValidSolanaAddress(addr)  { return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(addr.trim()); }
+        function detectChain(address) {
+            if (!address || !address.trim()) return null;
+            const a = address.trim();
+            if (isValidEVMAddress(a))    return 'Polygon';
+            if (isValidSolanaAddress(a)) return 'Solana';
+            if (isValidSuiAddress(a))    return 'Sui';
+            return null;
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // LOADING / DATA FETCH
+        // ═══════════════════════════════════════════════════════
+
         function showLoading() {
-            // Stats
             DOM.availableQuests.textContent = '';
             DOM.completedQuests.textContent = '';
             DOM.earnings.textContent = '';
-            // Quests grids: Add dummy skeleton cards
-            const skeletonCount = CONFIG.QUESTS_PER_PAGE;
             [DOM.questsGrid, DOM.completedGrid].forEach(grid => {
                 grid.innerHTML = '';
-                for (let i = 0; i < skeletonCount; i++) {
-                    const skeletonCard = document.createElement('div');
-                    skeletonCard.className = 'quest-card skeleton';
-                    grid.appendChild(skeletonCard);
+                for (let i = 0; i < CONFIG.QUESTS_PER_PAGE; i++) {
+                    const s = document.createElement('div');
+                    s.className = 'quest-card skeleton';
+                    grid.appendChild(s);
                 }
             });
-            // Disable pagination during loading
             DOM.availablePagination.innerHTML = '';
             DOM.completedPagination.innerHTML = '';
         }
-        // Added: Hide skeletons and show real data
+
         function hideLoading() {
             DOM.availableQuests.classList.remove('skeleton');
             DOM.completedQuests.classList.remove('skeleton');
             DOM.earnings.classList.remove('skeleton');
         }
-        // Log error to backend silently
+
         function logError(message) {
-            const logPayload = {
-                page: "profile",
-                timestamp: new Date().toISOString(),
-                error: message,
-                url: window.location.href,
-                userAgent: navigator.userAgent
-            };
-            fetch('https://httpbin.org/post', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(logPayload)
-            }).catch(() => {}); // Silent, no user impact
+            fetch('https://httpbin.org/post', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: 'profile', timestamp: new Date().toISOString(), error: message, url: window.location.href }) }).catch(() => {});
         }
-        // Fetch data from Google Sheets
+
         async function fetchSheetData(spreadsheetId, range) {
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${CONFIG.API_KEY}`;
             try {
                 const response = await fetch(url);
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`HTTP ${response.status}: ${errorText}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
                 if (data.error) throw new Error(data.error.message);
                 if (!data.values?.length) throw new Error(`No data in ${range}`);
-                if (range === CONFIG.RATE_RANGE) {
-                    const rawValue = data.values[0][0];
-                    console.log(`Raw value from SnappQuestData!D2: "${rawValue}"`);
-                    return rawValue;
-                }
+                if (range === CONFIG.RATE_RANGE) return data.values[0][0];
                 const headers = data.values[0].map(h => h.trim());
-                return data.values.slice(1).map(row => {
-                    const obj = {};
-                    headers.forEach((header, i) => { obj[header] = (row[i] || '').trim(); });
-                    return obj;
-                });
+                return data.values.slice(1).map(row => { const obj = {}; headers.forEach((h, i) => { obj[h] = (row[i] || '').trim(); }); return obj; });
             } catch (error) {
-                logError(`Fetch error for ${range}: ${error.message}`); // Log to backend
-                console.error(`Fetch error for ${range}:`, error); // Keep console for dev
-                if (error.message.includes('403')) {
-                    // Removed Swal.fire
-                } else {
-                    // Removed Swal.fire
-                }
+                logError(`Fetch error for ${range}: ${error.message}`);
+                console.error(`Fetch error for ${range}:`, error);
                 return range === CONFIG.RATE_RANGE ? null : [];
             }
         }
-        // Fetch form responses to check for duplicates or count submissions
-        async function fetchFormResponses() {
-            return await fetchSheetData(CONFIG.RESPONSE_ID, CONFIG.RESPONSE_RANGE);
-        }
-        // Check if submission already exists
+
+        async function fetchFormResponses() { return await fetchSheetData(CONFIG.RESPONSE_ID, CONFIG.RESPONSE_RANGE); }
+
         async function isDuplicateSubmission(trackCode, telegram) {
             const responses = await fetchFormResponses();
             if (!responses.length) return false;
-            const normalizedTrackCode = trackCode.trim().toLowerCase();
-            const normalizedTelegram = telegram.trim().toLowerCase().replace(/^@/, '');
+            const normTC = trackCode.trim().toLowerCase();
+            const normTG = telegram.trim().toLowerCase().replace(/^@/, '');
             return responses.some(row => {
-                const rowTrackCode = row['Track Code'].trim().toLowerCase();
-                const rowTelegram = row['Telegram'].trim().toLowerCase().replace(/^@/, '');
-                return rowTrackCode === normalizedTrackCode && rowTelegram === normalizedTelegram;
+                const rTC = (row['Track Code'] || '').trim().toLowerCase();
+                const rTG = (row['Telegram']   || '').trim().toLowerCase().replace(/^@/, '');
+                return rTC === normTC && rTG === normTG;
             });
         }
-        // Get quest quantity and submission count
+
         async function getQuestAvailability(trackCode) {
             try {
-                // Fetch quantity from QUANTITY_ID (L:L for Track Code, F:F for Quantity)
                 const quantityRows = await fetchSheetData(CONFIG.QUANTITY_ID, CONFIG.QUANTITY_RANGE);
-                const quantityRow = quantityRows.find(row => row['Track Code'] && row['Track Code'].trim().toLowerCase() === trackCode.trim().toLowerCase());
-                const quantity = quantityRow ? parseInt(quantityRow.Quantity) || 0 : 0;
-                // Fetch submission count from RESPONSE_ID (B:B for Track Code)
-                const responses = await fetchFormResponses();
-                const submissionCount = responses.filter(row => row['Track Code'] && row['Track Code'].trim().toLowerCase() === trackCode.trim().toLowerCase()).length;
-                // Calculate remaining submissions
-                const remaining = quantity - submissionCount;
-                console.log(`Track Code: ${trackCode}, Quantity: ${quantity}, Submissions: ${submissionCount}, Remaining: ${remaining}`);
-                return { remaining, total: quantity };
+                const quantityRow  = quantityRows.find(r => r['Track Code'] && r['Track Code'].trim().toLowerCase() === trackCode.trim().toLowerCase());
+                const quantity     = quantityRow ? parseInt(quantityRow.Quantity) || 0 : 0;
+                const responses    = await fetchFormResponses();
+                const count        = responses.filter(r => r['Track Code'] && r['Track Code'].trim().toLowerCase() === trackCode.trim().toLowerCase()).length;
+                return { remaining: quantity - count, total: quantity };
             } catch (error) {
-                console.error(`Error checking availability for track code ${trackCode}:`, error);
                 return { remaining: 'Error checking availability', total: 0 };
             }
         }
-        // Format number with K, M, B abbreviations
+
         function formatNumber(num, decimals = 0) {
-            const absNum = Math.abs(num);
-            if (absNum >= 1_000_000_000) return (num / 1_000_000_000).toFixed(1) + 'B';
-            if (absNum >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M';
-            if (absNum >= 10_000) return (num / 1_000).toFixed(1) + 'K';
+            const a = Math.abs(num);
+            if (a >= 1e9) return (num/1e9).toFixed(1)+'B';
+            if (a >= 1e6) return (num/1e6).toFixed(1)+'M';
+            if (a >= 1e4) return (num/1e3).toFixed(1)+'K';
             return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
         }
-        // Format currency based on currentCurrency
+
         function formatCurrency(amount, currency) {
             const num = parseFloat(amount) || 0;
             if (currency === 'USDC') {
-                if (usdcRate <= 0 || isNaN(usdcRate)) {
-                    console.warn(`Invalid usdcRate: ${usdcRate}. Displaying VERSE instead.`);
-                    return '<img src="images/verse_logo.svg" alt="𝕍" class="currency-logo"> ' + formatNumber(num, 0);
-                }
-                const usdcAmount = num / usdcRate;
-                console.log(`Converting ${num} VERSE to USDC: ${num} / ${usdcRate} = ${usdcAmount}`);
-                return '<img src="images/usdc_logo.svg" alt="$" class="currency-logo"> ' + formatNumber(usdcAmount, 2);
+                if (usdcRate <= 0 || isNaN(usdcRate)) return '<img src="images/verse_logo.svg" alt="𝕍" class="currency-logo"> ' + formatNumber(num, 0);
+                return '<img src="images/usdc_logo.svg" alt="$" class="currency-logo"> ' + formatNumber(num / usdcRate, 2);
             }
             return '<img src="images/verse_logo.svg" alt="𝕍" class="currency-logo"> ' + formatNumber(num, 0);
         }
-        // Format time left for countdown
+
         function formatTimeLeft(ms) {
             if (ms <= 0) return 'Expired';
-            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const mins = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-            const secs = Math.floor((ms % (1000 * 60)) / 1000);
-            return `${days}d ${hours}h ${mins}m ${secs}s`;
+            const d = Math.floor(ms / 86400000), h = Math.floor((ms % 86400000) / 3600000), m = Math.floor((ms % 3600000) / 60000), s = Math.floor((ms % 60000) / 1000);
+            return `${d}d ${h}h ${m}m ${s}s`;
         }
-        // Update countdown timers
+
         function updateCountdowns() {
             document.querySelectorAll('.quest-deadline').forEach(el => {
-                const expiry = parseInt(el.dataset.expiry);
-                const now = Date.now();
-                const diff = expiry - now;
-                const countdownEl = el.querySelector('.countdown');
-                countdownEl.textContent = formatTimeLeft(diff);
+                const diff = parseInt(el.dataset.expiry) - Date.now();
+                el.querySelector('.countdown').textContent = formatTimeLeft(diff);
                 if (diff <= 0) {
                     el.classList.add('expired');
-                    // Remove submit button if present
-                    const card = el.closest('.quest-card');
-                    const submitBtn = card.querySelector('.submit-btn');
+                    const submitBtn = el.closest('.quest-card')?.querySelector('.submit-btn');
                     if (submitBtn) submitBtn.remove();
-                } else {
-                    el.classList.remove('expired');
-                }
+                } else { el.classList.remove('expired'); }
             });
         }
-        // Load and parse data
+
         async function loadData() {
-            showLoading(); // Added: Show skeletons at start
+            showLoading();
             try {
-                // === 1. Fetch VERSE/USDC rate ===
                 const rateData = await fetchSheetData(CONFIG.STATS_ID, CONFIG.RATE_RANGE);
-                if (rateData === null) {
-                    console.warn(`No rate found in SnappQuestData!D2. Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
-                    logError(`No rate found in SnappQuestData!D2. Using fallback rate (${CONFIG.FALLBACK_RATE} VERSE/USDC).`);
-                    usdcRate = CONFIG.FALLBACK_RATE;
-                } else {
-                    const cleanedRate = rateData.toString().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
-                    console.log(`Cleaned rate value: "${cleanedRate}"`);
-                    usdcRate = parseFloat(cleanedRate) || 0;
-                    console.log(`Fetched VERSE/USDC rate from SnappQuestData!D2: ${usdcRate}`);
-                    if (usdcRate <= 0 || isNaN(usdcRate)) {
-                        console.warn(`Invalid VERSE/USDC rate: ${usdcRate} (raw: "${rateData}", cleaned: "${cleanedRate}"). Using fallback rate: ${CONFIG.FALLBACK_RATE}`);
-                        logError(`Invalid rate in SnappQuestData!D2 (${rateData}). Using fallback rate (${CONFIG.FALLBACK_RATE} VERSE/USDC).`);
-                        usdcRate = CONFIG.FALLBACK_RATE;
-                    }
+                if (rateData === null) { usdcRate = CONFIG.FALLBACK_RATE; }
+                else {
+                    const cleaned = rateData.toString().replace(/[^0-9.]/g,'').replace(/(\..*?)\..*/g,'$1');
+                    usdcRate = parseFloat(cleaned) || 0;
+                    if (usdcRate <= 0 || isNaN(usdcRate)) usdcRate = CONFIG.FALLBACK_RATE;
                 }
 
-
-
-                // === 2. NEW: Fetch Live Ad from Google Sheet (A5:B5) ===
                 try {
-                    const adUrl = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.AD_ID}/values/${CONFIG.AD_RANGE}?key=${CONFIG.API_KEY}`;
-                    const adResponse = await fetch(adUrl);
-                    
-                    if (!adResponse.ok) {
-                        throw new Error(`HTTP ${adResponse.status}`);
+                    const adResp = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.AD_ID}/values/${CONFIG.AD_RANGE}?key=${CONFIG.API_KEY}`);
+                    if (adResp.ok) {
+                        const adJson = await adResp.json();
+                        if (adJson.values?.length) { AD_IMAGE_URL = adJson.values[0][0]?.trim() || AD_IMAGE_URL; AD_LINK = adJson.values[0][1]?.trim() || ''; }
                     }
+                } catch (e) { /* fallback ad */ }
 
-                    const adJson = await adResponse.json();
-
-                    if (adJson.values && adJson.values.length > 0) {
-                        const adRow = adJson.values[0];
-                        AD_IMAGE_URL = (adRow[0] || '').trim() || 'images/ad.jpg';
-                        AD_LINK = (adRow[1] || '').trim() || '';
-
-                        console.log(`✅ LIVE AD LOADED successfully from ${CONFIG.AD_RANGE}:`, {
-                            image: AD_IMAGE_URL,
-                            link: AD_LINK || '(no link)'
-                        });
-                    } else {
-                        console.warn('⚠️ No data found in SnappQuestData!A5:B5 — using fallback ad');
-                    }
-                } catch (adError) {
-                    console.warn('⚠️ Could not load ad from Google Sheet (using fallback):', adError.message);
-                    logError(`Ad fetch failed: ${adError.message}`);
-                    // AD_IMAGE_URL and AD_LINK remain on fallback
-                }
-
-                // === 3. Fetch Stats ===
                 const statsRows = await fetchSheetData(CONFIG.STATS_ID, CONFIG.STATS_RANGE);
-                if (!statsRows.length) throw new Error('No stats data found');
+                if (!statsRows.length) throw new Error('No stats data');
+                userData = { availableQuests: parseInt(statsRows[0].AvailableQuests)||0, completedQuests: parseInt(statsRows[0].CompletedQuests)||0, earnings: parseInt(statsRows[0].Earnings)||0 };
 
-                userData = {
-                    availableQuests: parseInt(statsRows[0].AvailableQuests) || 0,
-                    completedQuests: parseInt(statsRows[0].CompletedQuests) || 0,
-                    earnings: parseInt(statsRows[0].Earnings) || 0
-                };
-
-                // === 4. Fetch Quests ===
                 const questRows = await fetchSheetData(CONFIG.QUESTS_ID, CONFIG.QUESTS_RANGE);
                 if (!questRows.length) throw new Error('No quests found');
 
-quests = await Promise.all(questRows.map(async quest => {
-    const status = parseInt(quest.Status) || 0;
-    const reward = parseFloat(quest.Reward.replace('𝕍', '')) || 0;
-    const trackCode = quest['Track Code'] || '';
-    const deadline = quest.Deadline || '0';
+                quests = await Promise.all(questRows.map(async quest => {
+                    const status = parseInt(quest.Status) || 0;
+                    const reward = parseFloat(quest.Reward.replace('𝕍','')) || 0;
+                    const trackCode = quest['Track Code'] || '';
+                    const deadline  = quest.Deadline || '0';
+                    let parsedDeadline = '0';
+                    if (deadline && deadline !== '0') { const d = new Date(deadline); parsedDeadline = isNaN(d.getTime()) ? '0' : deadline; }
+                    const availability = trackCode && (status === 0 || status === 4 || status === 6 || status === 7)
+                        ? await getQuestAvailability(trackCode) : { remaining: null, total: 0 };
+                    return {
+                        id: parseInt(quest.ID)||0, title: quest.Title||'Untitled Quest', sponsor: quest.Sponsor||'Unknown Sponsor',
+                        description: quest.Description||'No description available', reward, link: quest.Link||'',
+                        status: (status===0||status===2||status===3||status===4||status===5||status===6||status===7) ? 'active' : 'completed',
+                        isGame: status===2||status===5, tapToUnlock: status===3||status===5||status===6,
+                        isFeedback: status===4||status===6, isSnappEvent: status===7,
+                        trackCode, remaining: availability.remaining, total: availability.total,
+                        deadline: parsedDeadline, chain: parseInt(quest.Chain)||0
+                    };
+                }));
 
-    let parsedDeadline = '0';
-    if (deadline && deadline !== '0') {
-        const expiryDate = new Date(deadline);
-        parsedDeadline = isNaN(expiryDate.getTime()) ? '0' : deadline;
-    }
-
-    const availability = trackCode && (status === 0 || status === 4 || status === 6 || status === 7) 
-        ? await getQuestAvailability(trackCode) 
-        : { remaining: null, total: 0 };
-
-    return {
-        id: parseInt(quest.ID) || 0,
-        title: quest.Title || 'Untitled Quest',
-        sponsor: quest.Sponsor || 'Unknown Sponsor',
-        description: quest.Description || 'No description available',
-        reward: reward,
-        link: quest.Link || '',
-        status: (status === 0 || status === 2 || status === 3 || status === 4 || status === 5 || status === 6 || status === 7) 
-                ? 'active' : 'completed',
-        
-        isGame: status === 2 || status === 5,
-        tapToUnlock: status === 3 || status === 5 || status === 6,
-        isFeedback: status === 4 || status === 6,
-        isSnappEvent: status === 7,           // ← ADD THIS LINE
-
-        trackCode: trackCode,
-        remaining: availability.remaining,
-        total: availability.total,
-        deadline: parsedDeadline,
-        chain: parseInt(quest.Chain) || 0
-    };
-}));
-
-                // Validate track codes for uniqueness
-                const trackCodes = quests.map(q => q.trackCode);
-                const uniqueTrackCodes = new Set(trackCodes);
-                if (uniqueTrackCodes.size !== trackCodes.length) {
-                    console.warn('Duplicate track codes detected:', trackCodes);
-                    logError('Duplicate track codes found in the Google Sheet.');
-                } else {
-                    console.log('All track codes are unique:', trackCodes);
-                }
-
-                // Log available quests for debugging
-                const availableQuests = quests.filter(q => q.status === 'active');
-                console.log('Available quests with track codes and remaining:', availableQuests.map(q => ({ id: q.id, trackCode: q.trackCode, remaining: q.remaining })));
-
-                hideLoading(); // Hide skeletons after successful fetch
+                hideLoading();
                 initializeProfile();
-
             } catch (error) {
                 logError(`Failed to load data: ${error.message}`);
-                console.error('Error loading data:', error);
-                currentCurrency = 'VERSE';
-                DOM.currencyToggle.checked = false;
-                DOM.currencyToggle.disabled = true;
                 usdcRate = CONFIG.FALLBACK_RATE;
                 hideLoading();
                 initializeProfile();
             }
         }
-        // Initialize profile UI
+
         function initializeProfile() {
             DOM.profileName.textContent = 'Welcome back';
-            //DOM.profileAvatar.textContent = 'S';
-            DOM.availableQuests.textContent = userData.availableQuests.toLocaleString('en-US');
-            DOM.completedQuests.textContent = userData.completedQuests.toLocaleString('en-US');
+            DOM.availableQuests.textContent = userData.availableQuests?.toLocaleString('en-US') || '0';
+            DOM.completedQuests.textContent = userData.completedQuests?.toLocaleString('en-US') || '0';
             DOM.earnings.innerHTML = formatCurrency(userData.earnings, currentCurrency);
             DOM.currencyToggle.checked = currentCurrency === 'USDC';
             populateQuests();
@@ -1695,195 +1953,99 @@ quests = await Promise.all(questRows.map(async quest => {
             setInterval(updateCountdowns, 1000);
             checkUrlParam();
         }
-        // Initialize price toggle
+
         function initializeToggle() {
-            DOM.profileName.textContent = 'Welcome back';
-            //DOM.profileAvatar.textContent = 'S';
-            DOM.availableQuests.textContent = userData.availableQuests.toLocaleString('en-US');
-            DOM.completedQuests.textContent = userData.completedQuests.toLocaleString('en-US');
+            DOM.availableQuests.textContent = userData.availableQuests?.toLocaleString('en-US') || '0';
+            DOM.completedQuests.textContent = userData.completedQuests?.toLocaleString('en-US') || '0';
             DOM.earnings.innerHTML = formatCurrency(userData.earnings, currentCurrency);
             DOM.currencyToggle.checked = currentCurrency === 'USDC';
             populateQuests();
         }
-        // Populate quests
-        function populateQuests() {
-            const availableQuests = quests.filter(q => q.status === 'active');
-            const completedQuests = quests.filter(q => q.status === 'completed');
-            populateQuestGrid(availableQuests, DOM.questsGrid, availableCurrentPage, DOM.availablePagination, true);
-            populateQuestGrid(completedQuests, DOM.completedGrid, completedCurrentPage, DOM.completedPagination, false);
-        }
-        // Populate quest grid with pagination
-        function populateQuestGrid(quests, grid, currentPage, paginationEl, isAvailable) {
-            grid.innerHTML = quests.length ? '' : '<p>No quests available.</p>';
-            const start = (currentPage - 1) * CONFIG.QUESTS_PER_PAGE;
-            const paginatedQuests = quests.slice(start, start + CONFIG.QUESTS_PER_PAGE);
-            paginatedQuests.forEach(quest => grid.appendChild(createQuestElement(quest)));
-            renderPagination(quests.length, currentPage, paginationEl, isAvailable);
-        }
-        // Create quest card - UPDATED FOR STATUS = 3
-        function createQuestElement(quest) {
- const card = document.createElement('div');
-    card.dataset.questId = quest.id;
-    card.dataset.trackCode = quest.trackCode || '';
 
-            // === TAP TO UNLOCK QUEST (Status = 3) ===
-            if (quest.tapToUnlock === true) {
+        function populateQuests() {
+            populateQuestGrid(quests.filter(q => q.status === 'active'),    DOM.questsGrid,    availableCurrentPage, DOM.availablePagination, true);
+            populateQuestGrid(quests.filter(q => q.status === 'completed'), DOM.completedGrid, completedCurrentPage, DOM.completedPagination, false);
+        }
+
+        function populateQuestGrid(qs, grid, currentPage, paginationEl, isAvailable) {
+            grid.innerHTML = qs.length ? '' : '<p>No quests available.</p>';
+            const start = (currentPage - 1) * CONFIG.QUESTS_PER_PAGE;
+            qs.slice(start, start + CONFIG.QUESTS_PER_PAGE).forEach(q => grid.appendChild(createQuestElement(q)));
+            renderPagination(qs.length, currentPage, paginationEl, isAvailable);
+        }
+
+        function createQuestElement(quest) {
+            const card = document.createElement('div');
+            card.dataset.questId   = quest.id;
+            card.dataset.trackCode = quest.trackCode || '';
+
+            if (quest.tapToUnlock) {
                 card.className = 'quest-card tap-to-unlock';
                 card.style.borderLeft = '6px solid #F59E0B';
-                
-                // IMPORTANT: These two lines must be here
-                card.dataset.questId = quest.id;
-                card.dataset.trackCode = quest.trackCode || '';
-
                 card.innerHTML = `
                     <div class="quest-title">Tap to Unlock Quest</div>
                     <div class="quest-sponsor">Sponsored by: ${quest.sponsor}</div>
                     <div class="quest-remaining game">Tap the card 60 times to unlock • 0/60</div>
                     <div class="quest-description">${quest.description}</div>
-                    <div class="quest-reward">
-                        <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
-                    </div>
+                    <div class="quest-reward"><span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span></div>
                 `;
                 card.addEventListener('click', () => handleTapToUnlock(card, quest));
                 return card;
             }
 
-// ====================== SNAPPQUEST EVENTS (Status 7) ======================
-if (quest.isSnappEvent === true) {
-    const hasSlots = typeof quest.remaining === 'number' ? quest.remaining > 0 : true;
+            if (quest.isSnappEvent) {
+                const hasSlots = typeof quest.remaining === 'number' ? quest.remaining > 0 : true;
+                card.className = 'quest-card';
+                card.style.borderLeft = '6px solid #8B5CF6';
+                card.innerHTML = `
+                    <div class="quest-title">${quest.title}</div>
+                    <div class="quest-sponsor">Sponsored by: ${quest.sponsor}</div>
+                    <div class="quest-remaining normal">SnappQuest x Verse Event</div>
+                    ${typeof quest.remaining === 'number' && quest.remaining > 0
+                        ? `<div class="quest-remaining normal" style="margin-top:4px;">${quest.remaining} slot${quest.remaining===1?'':'s'} remaining</div>`
+                        : `<div class="quest-remaining low" style="margin-top:4px;">No more slots available</div>`}
+                    <div style="margin:24px 0;text-align:center;">
+                        <p style="font-size:14px;color:#6B7280;margin-bottom:12px;">Scan QR Code to participate</p>
+                        <div id="qr-${quest.id}" style="display:inline-block;padding:12px;background:white;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.1);"></div>
+                    </div>
+                    <div class="quest-description" style="display:none;">${quest.description||'https://t.me/GetVerse/177601'}</div>
+                    <div class="quest-reward">
+                        <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
+                        ${hasSlots ? `<button class="submit-btn">Submit Quest</button>` : ''}
+                        <button class="share-btn"><i class="fas fa-share-alt"></i> Share</button>
+                    </div>
+                `;
+                setTimeout(() => {
+                    const qrC = card.querySelector(`#qr-${quest.id}`);
+                    if (qrC && typeof QRCode !== 'undefined') new QRCode(qrC, { text: quest.description||'https://t.me/GetVerse/177601', width: 190, height: 190, colorDark: '#1F2937', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+                }, 200);
+                return card;
+            }
 
-    card.className = 'quest-card';
-    card.style.borderLeft = '6px solid #8B5CF6';
-
-    card.innerHTML = `
-        <div class="quest-title">${quest.title}</div>
-        <div class="quest-sponsor">Sponsored by: ${quest.sponsor}</div>
-        <div class="quest-remaining normal">SnappQuest x Verse Event</div>
-
-        ${
-            typeof quest.remaining === 'number' && quest.remaining > 0
-                ? `<div class="quest-remaining normal" style="margin-top:4px;">${quest.remaining} slot${quest.remaining === 1 ? '' : 's'} remaining</div>`
-                : `<div class="quest-remaining low" style="margin-top:4px;">No more slots available</div>`
-        }
-
-        <div style="margin: 24px 0; text-align: center;">
-            <p style="font-size:14px; color:#6B7280; margin-bottom:12px;">Scan QR Code to participate</p>
-            <div id="qr-${quest.id}" style="display:inline-block; padding:12px; background:white; border-radius:16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
-        </div>
-
-        <div class="quest-description" style="display:none;">
-            ${quest.description || 'https://t.me/GetVerse/177601'}
-        </div>
-
-        <div class="quest-reward">
-            <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
-
-${
-    hasSlots
-        ? `<button class="submit-btn">Submit Quest</button>`
-        : ``
-}
-
-            <button class="share-btn">
-                <i class="fas fa-share-alt"></i> Share
-            </button>
-        </div>
-    `;
-
-    // Generate QR Code
-    setTimeout(() => {
-        const qrContainer = card.querySelector(`#qr-${quest.id}`);
-        if (qrContainer && typeof QRCode !== 'undefined') {
-            new QRCode(qrContainer, {
-                text: quest.description || "https://t.me/GetVerse/177601",
-                width: 190,
-                height: 190,
-                colorDark: "#1F2937",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-        }
-    }, 200);
-
-    return card;
-}
-
-            // === ORIGINAL CODE (unchanged) ===
             card.className = `quest-card ${quest.status}-quest`;
-            card.dataset.questId = quest.id;
-            card.dataset.trackCode = quest.trackCode;
-            let statusText = '';
-            let statusClass = '';
-            if (quest.status === 'completed') {
-                statusText = 'Completed';
-                statusClass = 'completed';
-            } else if (quest.isGame) {
-                statusText = 'Game on SnappQuest';
-                statusClass = 'game';
-            } else if (quest.remaining !== null) {
+            let statusText = '', statusClass = '';
+            if (quest.status === 'completed') { statusText = 'Completed'; statusClass = 'completed'; }
+            else if (quest.isGame) { statusText = 'Game on SnappQuest'; statusClass = 'game'; }
+            else if (quest.remaining !== null) {
                 if (typeof quest.remaining === 'number') {
-                    if (quest.remaining < 0) {
-                        statusText = 'Invalid Quest, Please contact an admin';
-                        statusClass = 'low';
-                    } else if (quest.remaining === 0) {
-                        statusText = 'No more rewards for this Quest';
-                        statusClass = 'low';
-                    } else if (quest.total > 0 && quest.remaining === quest.total) {
-                        statusText = 'Yay!!! You will be the first to submit';
-                        statusClass = 'normal';
-                    } else {
-                        statusText = `${quest.remaining} submission${quest.remaining === 1 ? '' : 's'} remaining`;
-                        statusClass = quest.remaining < 3 ? 'low' : 'normal';
-                    }
-                } else {
-                    statusText = quest.remaining;
-                    statusClass = 'low';
-                }
+                    if      (quest.remaining < 0)                                { statusText = 'Invalid Quest, Please contact an admin'; statusClass = 'low'; }
+                    else if (quest.remaining === 0)                              { statusText = 'No more rewards for this Quest'; statusClass = 'low'; }
+                    else if (quest.total > 0 && quest.remaining === quest.total) { statusText = 'Yay!!! You will be the first to submit'; statusClass = 'normal'; }
+                    else { statusText = `${quest.remaining} submission${quest.remaining===1?'':'s'} remaining`; statusClass = quest.remaining < 3 ? 'low' : 'normal'; }
+                } else { statusText = quest.remaining; statusClass = 'low'; }
             }
             let deadlineHtml = '';
-            let showSubmit = true;
             if (!quest.isGame && quest.deadline !== '0') {
-                const expiryTime = new Date(quest.deadline).getTime();
-                const diff = expiryTime - Date.now();
-                const isExpired = diff <= 0;
-                if (isExpired) showSubmit = false;
-                deadlineHtml = `<div class="quest-deadline ${isExpired ? 'expired' : ''}" data-expiry="${expiryTime}">Expires in: <span class="countdown">${formatTimeLeft(diff)}</span></div>`;
+                const exp = new Date(quest.deadline).getTime(), diff = exp - Date.now();
+                deadlineHtml = `<div class="quest-deadline ${diff<=0?'expired':''}" data-expiry="${exp}">Expires in: <span class="countdown">${formatTimeLeft(diff)}</span></div>`;
             }
+            let canSubmit = true;
+            if (typeof quest.remaining === 'number' && quest.remaining < 0) canSubmit = false;
+            if (!quest.isGame && quest.deadline !== '0' && new Date(quest.deadline).getTime() <= Date.now()) canSubmit = false;
+            if (!quest.isFeedback && typeof quest.remaining === 'number' && quest.remaining <= 0) canSubmit = false;
+            if (quest.isFeedback && typeof quest.remaining === 'number' && quest.remaining <= 0) canSubmit = false;
+            if (statusText === 'Invalid Quest, Please contact an admin') canSubmit = false;
 
-let canSubmit = true;
-
-// ❌ ALWAYS block invalid quests first (highest priority)
-if (typeof quest.remaining === 'number' && quest.remaining < 0) {
-    canSubmit = false;
-}
-
-// ❌ Block expired quests
-if (!quest.isGame && quest.deadline !== '0') {
-    const expiryTime = new Date(quest.deadline).getTime();
-    if (expiryTime <= Date.now()) {
-        canSubmit = false;
-    }
-}
-
-// ❗ NORMAL quests (non-feedback)
-if (!quest.isFeedback) {
-    if (typeof quest.remaining === 'number' && quest.remaining <= 0) {
-        canSubmit = false;
-    }
-}
-
-// ❗ FEEDBACK quests (IMPORTANT FIX)
-if (quest.isFeedback) {
-    // if it's "invalid quest" or explicitly no reward state → block it
-    if (typeof quest.remaining === 'number' && quest.remaining <= 0) {
-        canSubmit = false;
-    }
-
-    // optional safety: block if backend marks invalid
-    if (statusText === 'Invalid Quest, Please contact an admin') {
-        canSubmit = false;
-    }
-}
             card.innerHTML = `
                 <div class="quest-title">${quest.title}</div>
                 <div class="quest-sponsor">Sponsored by: ${quest.sponsor}</div>
@@ -1892,374 +2054,152 @@ if (quest.isFeedback) {
                 <div class="quest-description">${quest.description}</div>
                 <div class="quest-reward">
                     <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
-                    <div style="display: flex; gap: 8px;">
-                        ${quest.status === 'active' && quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">${quest.isGame ? 'Play Game' : 'View Quest'}</a>` : ''}
-${quest.status === 'active' && !quest.isGame && canSubmit ? `<button class="submit-btn">Submit</button>` : ''}
+                    <div style="display:flex;gap:8px;">
+                        ${quest.status==='active'&&quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">${quest.isGame?'Play Game':'View Quest'}</a>` : ''}
+                        ${quest.status==='active'&&!quest.isGame&&canSubmit ? `<button class="submit-btn">Submit</button>` : ''}
                         <button class="share-btn"><i class="fas fa-share-alt"></i> Share</button>
                     </div>
                 </div>
             `;
             return card;
         }
-        // Render pagination
-        function renderPagination(totalQuests, currentPage, paginationEl, isAvailable) {
+
+        function renderPagination(total, currentPage, paginationEl, isAvailable) {
             paginationEl.innerHTML = '';
-            const totalPages = Math.ceil(totalQuests / CONFIG.QUESTS_PER_PAGE);
+            const totalPages = Math.ceil(total / CONFIG.QUESTS_PER_PAGE);
             if (totalPages <= 1) return;
-            const maxVisiblePages = 5; // Modern: limit visible numbers
             const prevBtn = document.createElement('button');
             prevBtn.className = 'pagination-btn icon';
             prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
             prevBtn.disabled = currentPage === 1;
-            prevBtn.addEventListener('click', () => {
-                if (isAvailable) availableCurrentPage--; else completedCurrentPage--;
-                populateQuests();
-            });
+            prevBtn.addEventListener('click', () => { if (isAvailable) availableCurrentPage--; else completedCurrentPage--; populateQuests(); });
             paginationEl.appendChild(prevBtn);
-            // Add first page if needed
-            if (currentPage > Math.floor(maxVisiblePages / 2) + 1) {
+            const maxV = 5, start = Math.max(1, currentPage - Math.floor(maxV/2)), end = Math.min(totalPages, start + maxV - 1);
+            if (currentPage > Math.floor(maxV/2)+1) {
                 addPageButton(1, currentPage, paginationEl, isAvailable);
-                if (currentPage > Math.floor(maxVisiblePages / 2) + 2) {
-                    const ellipsis = document.createElement('span');
-                    ellipsis.className = 'pagination-ellipsis';
-                    ellipsis.textContent = '...';
-                    paginationEl.appendChild(ellipsis);
-                }
+                if (currentPage > Math.floor(maxV/2)+2) { const e = document.createElement('span'); e.className='pagination-ellipsis'; e.textContent='...'; paginationEl.appendChild(e); }
             }
-            // Add visible pages around current
-            const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-            const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-            for (let i = startPage; i <= endPage; i++) {
-                addPageButton(i, currentPage, paginationEl, isAvailable);
-            }
-            // Add last page if needed
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
-                    const ellipsis = document.createElement('span');
-                    ellipsis.className = 'pagination-ellipsis';
-                    ellipsis.textContent = '...';
-                    paginationEl.appendChild(ellipsis);
-                }
+            for (let i = start; i <= end; i++) addPageButton(i, currentPage, paginationEl, isAvailable);
+            if (end < totalPages) {
+                if (end < totalPages-1) { const e = document.createElement('span'); e.className='pagination-ellipsis'; e.textContent='...'; paginationEl.appendChild(e); }
                 addPageButton(totalPages, currentPage, paginationEl, isAvailable);
             }
             const nextBtn = document.createElement('button');
             nextBtn.className = 'pagination-btn icon';
             nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
             nextBtn.disabled = currentPage === totalPages;
-            nextBtn.addEventListener('click', () => {
-                if (isAvailable) availableCurrentPage++; else completedCurrentPage++;
-                populateQuests();
-            });
+            nextBtn.addEventListener('click', () => { if (isAvailable) availableCurrentPage++; else completedCurrentPage++; populateQuests(); });
             paginationEl.appendChild(nextBtn);
-            const info = document.createElement('div');
-            info.className = 'pagination-info';
-            info.textContent = `Page ${currentPage} of ${totalPages}`;
-            paginationEl.appendChild(info);
+            const info = document.createElement('div'); info.className = 'pagination-info'; info.textContent = `Page ${currentPage} of ${totalPages}`; paginationEl.appendChild(info);
         }
+
         function addPageButton(page, currentPage, paginationEl, isAvailable) {
-            const pageBtn = document.createElement('button');
-            pageBtn.className = `pagination-btn ${page === currentPage ? 'active' : ''}`;
-            pageBtn.textContent = page;
-            pageBtn.addEventListener('click', () => {
-                if (isAvailable) availableCurrentPage = page; else completedCurrentPage = page;
-                populateQuests();
-            });
-            paginationEl.appendChild(pageBtn);
+            const btn = document.createElement('button');
+            btn.className = `pagination-btn ${page===currentPage?'active':''}`;
+            btn.textContent = page;
+            btn.addEventListener('click', () => { if (isAvailable) availableCurrentPage=page; else completedCurrentPage=page; populateQuests(); });
+            paginationEl.appendChild(btn);
         }
-        // Close modal function
-function closeModal(modal) {
-    // Restore all hidden form fields IMMEDIATELY before animation
-    modal.querySelectorAll('.form-group').forEach(g => g.style.display = '');
-    // Reset telegram label too
-    const telegramLabel = modal.querySelector('label[for="telegram"]');
-    if (telegramLabel) telegramLabel.textContent = 'Telegram Username (e.g., @username)';
-    
-    modal.classList.remove('active');
-    setTimeout(() => modal.style.display = 'none', 400);
-}
-// Clean openQuestModal - no conflict with tap-to-unlock
-function openQuestModal(originalCard) {
-    const modal = DOM.questModal;
-    const titleEl = modal.querySelector('#questModalTitle');
-    titleEl.textContent = originalCard.querySelector('.quest-title').textContent || 'Quest Details';
 
-    const body = modal.querySelector('.modal-body');
-    body.innerHTML = '';
-
-    const clone = originalCard.cloneNode(true);
-
-    // Re-attach tap listener for safety (in case)
-    if (originalCard.classList.contains('tap-to-unlock')) {
-        const quest = quests.find(q => 
-            q.trackCode === originalCard.dataset.trackCode || 
-            q.id === parseInt(originalCard.dataset.questId || 0)
-        );
-        if (quest && quest.tapToUnlock) {
-            clone.addEventListener('click', (e) => {
-                e.stopImmediatePropagation();
-                handleTapToUnlock(clone, quest);
-            });
+        function closeModal(modal) {
+            modal.querySelectorAll('.form-group').forEach(g => g.style.display = '');
+            const tl = modal.querySelector('label[for="telegram"]');
+            if (tl) tl.textContent = 'Telegram Username (e.g., @username)';
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 400);
         }
-    }
 
-    // Remove share button (as you said forget it)
-    const shareBtn = clone.querySelector('.share-btn');
-    if (shareBtn) shareBtn.remove();
-
-    body.appendChild(clone);
-
-// Force QR Code On URL Load for SnappQuest Events (Status 7)
-setTimeout(() => {
-    const qr = clone.querySelector('[id^="qr-"]');
-    if (qr && typeof QRCode !== 'undefined') {
-        qr.innerHTML = ''; // clear if anything exists
-        new QRCode(qr, {
-            text: clone.querySelector('.quest-description')?.textContent.trim() || "https://t.me/GetVerse/177601",
-            width: 190,
-            height: 190,
-            colorDark: "#1F2937",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
-    }
-}, 100);
-
-    modal.style.display = 'block';
-    setTimeout(() => modal.classList.add('active'), 10);
-}
-        // Open submit modal
-                // Open submit modal
-function openSubmitModal(trackCode) {
-    // Always restore all fields first in case SnappEvent left them hidden
-    DOM.submitQuestModal.querySelectorAll('.form-group').forEach(g => g.style.display = '');
-    DOM.submitQuestForm.reset();
-
-    DOM.submitQuestForm.querySelector('#trackCode').value = trackCode || '';
-    
-    const quest = quests.find(q => q.trackCode === trackCode);
-
-    // === WALLET LABEL LOGIC ===
-    let labelText = 'Polygon';
-    let placeholderText = 'Enter your Polygon Wallet Address';
-    if (quest) {
-        switch(quest.chain) {
-            case 1: labelText = 'Solana'; placeholderText = 'Enter your Solana Wallet Address'; break;
-            case 2: labelText = 'Sui'; placeholderText = 'Enter your Sui Wallet Address'; break;
-            case 3: labelText = 'Enter'; placeholderText = 'Enter your Wallet Address (auto-detects)'; break;
-        }
-    }
-    const label = DOM.submitQuestForm.querySelector('label[for="twitter"]');
-    const input = DOM.submitQuestForm.querySelector('#twitter');
-    label.textContent = `${labelText} Wallet Address`;
-    input.placeholder = placeholderText;
-    input.value = '';
-
-    if (quest && quest.chain === 3) {
-        input.onkeyup = function() {
-            const detected = detectChain(this.value);
-            label.textContent = detected ? `${detected} Wallet Address` : 'Wallet Address';
-        };
-    } else {
-        input.onkeyup = null;
-    }
-
-    // === FEEDBACK QUEST: swap field labels/placeholders ===
-    const proofLabel = DOM.submitQuestForm.querySelector('label[for="proofOfQuest"]');
-    const proofInput = DOM.submitQuestForm.querySelector('#proofOfQuest');
-    const questLinkLabel = DOM.submitQuestForm.querySelector('label[for="questLink"]');
-    const questLinkInput = DOM.submitQuestForm.querySelector('#questLink');
-
-    if (quest && quest.isFeedback === true) {
-        proofLabel.textContent = 'Comment or Feedback';
-        proofInput.placeholder = 'Share your comment or feedback here...';
-        questLinkLabel.textContent = 'Country or Location';
-        questLinkInput.placeholder = 'Enter your country or city (e.g., United States, London)';
-    } else {
-        proofLabel.textContent = 'Link to Your Submission';
-        proofInput.placeholder = 'Make sure this link is accessible by everyone!';
-        questLinkLabel.textContent = 'Anything Else?';
-        questLinkInput.placeholder = 'Add other links or paste your submission link here.';
-    }
-
-    // Restore telegram label
-    const telegramLabel = DOM.submitQuestForm.querySelector('label[for="telegram"]');
-    telegramLabel.textContent = 'Telegram Username (e.g., @username)';
-
-    DOM.submitQuestModal.style.display = 'block';
-    setTimeout(() => DOM.submitQuestModal.classList.add('active'), 10);
-}       // Copy share URL
-        function copyShareUrl(trackCode) {
-            const baseUrl = window.location.href.split('?')[0];
-            const url = `${baseUrl}?quest=${trackCode}`;
-            navigator.clipboard.writeText(url).then(() => {
-                Swal.fire({
-                    title: 'Copied!',
-                    text: 'Quest link copied to clipboard.',
-                    icon: 'success',
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000
-                });
-            }).catch(err => {
-                console.error('Failed to copy:', err);
-            });
-        }
-        // Check URL param for quest
-        function checkUrlParam() {
-            const params = new URLSearchParams(window.location.search);
-            const questCode = params.get('quest');
-            if (questCode) {
-                const quest = quests.find(q => q.trackCode === questCode);
-                if (quest) {
-                    const virtualCard = createQuestElement(quest);
-                    openQuestModal(virtualCard);
-                } else {
-                    console.warn('Quest not found for code:', questCode);
+        function openQuestModal(originalCard) {
+            const modal = DOM.questModal;
+            modal.querySelector('#questModalTitle').textContent = originalCard.querySelector('.quest-title')?.textContent || 'Quest Details';
+            const body = modal.querySelector('.modal-body');
+            body.innerHTML = '';
+            const clone = originalCard.cloneNode(true);
+            if (originalCard.classList.contains('tap-to-unlock')) {
+                const quest = quests.find(q => q.trackCode === originalCard.dataset.trackCode || q.id === parseInt(originalCard.dataset.questId||0));
+                if (quest?.tapToUnlock) clone.addEventListener('click', e => { e.stopImmediatePropagation(); handleTapToUnlock(clone, quest); });
+            }
+            clone.querySelector('.share-btn')?.remove();
+            body.appendChild(clone);
+            setTimeout(() => {
+                const qr = clone.querySelector('[id^="qr-"]');
+                if (qr && typeof QRCode !== 'undefined') {
+                    qr.innerHTML = '';
+                    new QRCode(qr, { text: clone.querySelector('.quest-description')?.textContent.trim()||'https://t.me/GetVerse/177601', width: 190, height: 190, colorDark: '#1F2937', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
                 }
+            }, 100);
+            modal.style.display = 'block';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+
+        function copyShareUrl(trackCode) {
+            const url = `${window.location.href.split('?')[0]}?quest=${trackCode}`;
+            navigator.clipboard.writeText(url).then(() => {
+                Swal.fire({ title: 'Copied!', text: 'Quest link copied to clipboard.', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
+            });
+        }
+
+        function checkUrlParam() {
+            const code = new URLSearchParams(window.location.search).get('quest');
+            if (code) {
+                const quest = quests.find(q => q.trackCode === code);
+                if (quest) openQuestModal(createQuestElement(quest));
             }
         }
-// FINAL FIXED handleQuestClick - Direct open for Games, reminder only for normal quests
-function handleQuestClick(e) {
-    const target = e.target;
-    const card = target.closest('.quest-card');
-    if (!card) return;
 
-    // === ALWAYS handle tap-to-unlock first (grid or modal) ===
-    if (card.classList.contains('tap-to-unlock')) {
-        const quest = quests.find(q => 
-            (q.trackCode && q.trackCode === card.dataset.trackCode) ||
-            (q.id && q.id === parseInt(card.dataset.questId || 0))
-        );
-        if (quest && quest.tapToUnlock) {
-            e.stopImmediatePropagation();
-            handleTapToUnlock(card, quest);
-            return;
-        }
-    }
+        function handleQuestClick(e) {
+            const target = e.target;
+            const card = target.closest('.quest-card');
+            if (!card) return;
 
-    // === Normal buttons (Submit, Share, etc.) ===
-const submitBtn = target.closest('.submit-btn');
-if (submitBtn) {
-    const trackCode = card.dataset.trackCode;
-
-    const quest = quests.find(q => q.trackCode === trackCode);
-
-    if (quest && quest.isSnappEvent) {
-        openSnappEventSubmitModal(trackCode);
-    } else {
-        openSubmitModal(trackCode);
-    }
-
-    return;
-}
-
-    const shareBtn = target.closest('.share-btn');
-    if (shareBtn) {
-        const trackCode = card.dataset.trackCode;
-        copyShareUrl(trackCode);
-        return;
-    }
-
-    // === COMPLETE BUTTON (Play Game / View Quest) ===
-    const completeBtn = target.closest('.complete-btn');
-    if (completeBtn) {
-        e.preventDefault();
-        const questLink = completeBtn.href;
-        
-        // Find the quest object
-        const trackCode = card.dataset.trackCode;
-        const quest = quests.find(q => q.trackCode === trackCode);
-
-        // 🔥 NEW LOGIC: For Games → Open directly (no Swal)
-        if (quest && quest.isGame) {
-            window.open(questLink, '_blank');
-            return;
-        }
-
-        // For normal quests → Show the reminder popup
-        Swal.fire({
-            title: '📋 Remember to Submit!',
-            html: `
-                <p style="color:#4B5563; font-size:15px; line-height:1.7; margin-bottom:16px;">
-                    After completing this quest, come back here and click 
-                    <strong style="color:#6366F1;">Submit</strong> to claim your reward.
-                </p>
-                <p style="color:#4B5563; font-size:15px; line-height:1.7;">
-                    New to SnappQuest?
-                </p>
-            `,
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonText: '🚀 Got it, Open quest!',
-            cancelButtonText: '📖 How to Submit',
-            confirmButtonColor: '#6366F1',
-            cancelButtonColor: '#34D399',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.open(questLink, '_blank');
-            } else if (result.isDismissed && result.dismiss === Swal.DismissReason.cancel) {
-                window.open('minigame.html', '_blank');
+            if (card.classList.contains('tap-to-unlock')) {
+                const quest = quests.find(q => q.trackCode === card.dataset.trackCode || q.id === parseInt(card.dataset.questId||0));
+                if (quest?.tapToUnlock) { e.stopImmediatePropagation(); handleTapToUnlock(card, quest); return; }
             }
-        });
-        return;
-    }
 
-    // Only open modal if click is on a normal quest card OUTSIDE modal
-    if (!card.closest('.modal') && !card.classList.contains('tap-to-unlock')) {
-        openQuestModal(card);
-    }
-}
-        // Event listeners
+            const submitBtn = target.closest('.submit-btn');
+            if (submitBtn) {
+                const trackCode = card.dataset.trackCode;
+                const quest = quests.find(q => q.trackCode === trackCode);
+                if (quest?.isSnappEvent) openSnappEventSubmitModal(trackCode);
+                else openSubmitModal(trackCode);  // ← pre-check is inside here
+                return;
+            }
+
+            const shareBtn = target.closest('.share-btn');
+            if (shareBtn) { copyShareUrl(card.dataset.trackCode); return; }
+
+            const completeBtn = target.closest('.complete-btn');
+            if (completeBtn) {
+                e.preventDefault();
+                const quest = quests.find(q => q.trackCode === card.dataset.trackCode);
+                if (quest?.isGame) { window.open(completeBtn.href, '_blank'); return; }
+                Swal.fire({
+                    title: '📋 Remember to Submit!',
+                    html: `<p style="color:#4B5563;font-size:15px;line-height:1.7;margin-bottom:16px;">After completing this quest, come back and click <strong style="color:#6366F1;">Submit</strong> to claim your reward.</p><p style="color:#4B5563;font-size:15px;line-height:1.7;">New to SnappQuest?</p>`,
+                    icon: 'info', showCancelButton: true, confirmButtonText: '🚀 Got it, Open quest!', cancelButtonText: '📖 How to Submit', confirmButtonColor: '#6366F1', cancelButtonColor: '#34D399',
+                }).then(r => { if (r.isConfirmed) window.open(completeBtn.href,'_blank'); else if (r.dismiss===Swal.DismissReason.cancel) window.open('minigame.html','_blank'); });
+                return;
+            }
+
+            if (!card.closest('.modal') && !card.classList.contains('tap-to-unlock')) openQuestModal(card);
+        }
+
         function setupEventListeners() {
-            DOM.disconnectBtn.addEventListener('click', () => {
-                console.log('Disconnect Wallet clicked');
-                window.location.href = 'index.html';
-            });
-            DOM.hamburger.addEventListener('click', () => {
-                console.log('Hamburger menu toggled');
-                DOM.hamburger.classList.toggle('active');
-                DOM.navContainer.classList.toggle('active');
-                DOM.overlay.classList.toggle('active');
-            });
-            DOM.navContainer.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    console.log('Nav link clicked:', link.href);
-                    DOM.hamburger.classList.remove('active');
-                    DOM.navContainer.classList.remove('active');
-                    DOM.overlay.classList.remove('active');
-                });
-            });
-            DOM.overlay.addEventListener('click', () => {
-                console.log('Overlay clicked');
-                DOM.hamburger.classList.remove('active');
-                DOM.navContainer.classList.remove('active');
-                DOM.overlay.classList.remove('active');
-            });
-            const modals = [DOM.learnMoreModal, DOM.questModal, DOM.submitQuestModal];
-            modals.forEach(modal => {
+            DOM.disconnectBtn.addEventListener('click', () => window.location.href = 'index.html');
+            DOM.hamburger.addEventListener('click', () => { DOM.hamburger.classList.toggle('active'); DOM.navContainer.classList.toggle('active'); DOM.overlay.classList.toggle('active'); });
+            DOM.navContainer.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { DOM.hamburger.classList.remove('active'); DOM.navContainer.classList.remove('active'); DOM.overlay.classList.remove('active'); }));
+            DOM.overlay.addEventListener('click', () => { DOM.hamburger.classList.remove('active'); DOM.navContainer.classList.remove('active'); DOM.overlay.classList.remove('active'); });
+            [DOM.learnMoreModal, DOM.questModal, DOM.submitQuestModal].forEach(modal => {
                 if (!modal) return;
-                modal.querySelectorAll('.close, .modal-close-btn').forEach(btn => {
-                    btn.addEventListener('click', () => closeModal(modal));
-                });
-                window.addEventListener('click', (event) => {
-                    if (event.target === modal) closeModal(modal);
-                });
+                modal.querySelectorAll('.close, .modal-close-btn').forEach(btn => btn.addEventListener('click', () => closeModal(modal)));
+                window.addEventListener('click', e => { if (e.target === modal) closeModal(modal); });
             });
-            window.addEventListener('scroll', () => {
-                console.log('Scroll position:', window.scrollY);
-                DOM.backToTopButton.classList.toggle('visible', window.scrollY > 300);
-            });
-            DOM.backToTopButton.addEventListener('click', () => {
-                console.log('Back to top clicked');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-            DOM.currencyToggle.addEventListener('change', () => {
-                currentCurrency = DOM.currencyToggle.checked ? 'USDC' : 'VERSE';
-                console.log(`Currency toggled to: ${currentCurrency}`);
-                initializeToggle()
-            });
+            window.addEventListener('scroll', () => DOM.backToTopButton.classList.toggle('visible', window.scrollY > 300));
+            DOM.backToTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            DOM.currencyToggle.addEventListener('change', () => { currentCurrency = DOM.currencyToggle.checked ? 'USDC' : 'VERSE'; initializeToggle(); });
             document.addEventListener('click', handleQuestClick);
+
             DOM.submitQuestForm.addEventListener('submit', async (event) => {
                 event.preventDefault();
                 const submitButton = DOM.submitQuestForm.querySelector('.modal-submit-btn');
@@ -2267,530 +2207,148 @@ if (submitBtn) {
                 submitButton.textContent = 'Submitting...';
                 const formData = new FormData(DOM.submitQuestForm);
                 const data = {
-                    trackCode: formData.get('entry.2147360639').trim(),
-                    proofOfQuest: formData.get('entry.1526178092').trim(),
-                    questLink: formData.get('entry.884208731').trim(),
-                    telegram: formData.get('entry.256576255').trim(),
-                    twitter: formData.get('entry.1138659293').trim()
+                    trackCode:    (formData.get('entry.2147360639')||'').trim(),
+                    proofOfQuest: (formData.get('entry.1526178092')||'').trim(),
+                    questLink:    (formData.get('entry.884208731') ||'').trim(),
+                    telegram:     (formData.get('entry.256576255') ||'').trim(),
+                    twitter:      (formData.get('entry.1138659293')||'').trim()
                 };
-                
-                // Validate form fields
-                if (!data.trackCode || !data.proofOfQuest || !data.questLink || !data.telegram || !data.twitter) {
-const currentQuest = quests.find(q => q.trackCode === data.trackCode);
 
-if (currentQuest?.isSnappEvent) {
-    if (!data.telegram) {
-        Swal.fire({
-            title: 'Error',
-            text: 'Please enter your Telegram username.',
-            icon: 'error'
-        });
-        submitButton.disabled = false;
-        submitButton.textContent = 'Submit Quest';
-        return;
-    }
-} else {
-    if (!data.trackCode || !data.proofOfQuest || !data.questLink || !data.telegram || !data.twitter) {
-        Swal.fire({
-            title: 'Error',
-            text: 'Please fill in all fields.',
-            icon: 'error'
-        });
-        submitButton.disabled = false;
-        submitButton.textContent = 'Submit Quest';
-        return;
-    }
-}
-                }
-                const urlRegex = /^https?:\/\/[^\s$.?#].[^\s]*$/;
+                // ← AUTO-SAVE telegram whenever user submits
+                if (data.telegram) persistTelegram(data.telegram);
+
                 const currentQuest = quests.find(q => q.trackCode === data.trackCode);
-if ((!currentQuest?.isFeedback && !currentQuest?.isSnappEvent) && 
-    (!urlRegex.test(data.proofOfQuest) || !urlRegex.test(data.questLink))) {
-                    console.warn('Form validation failed: Invalid URL format for Proof of Quest or Quest Link');
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Proof of Quest and Quest Link must be valid URLs.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Submit Quest';
-                    return;
+
+                if (currentQuest?.isSnappEvent) {
+                    if (!data.telegram) { Swal.fire({ title:'Error', text:'Please enter your Telegram username.', icon:'error' }); submitButton.disabled=false; submitButton.textContent='Submit Quest'; return; }
+                } else {
+                    if (!data.trackCode||!data.proofOfQuest||!data.questLink||!data.telegram||!data.twitter) { Swal.fire({ title:'Error', text:'Please fill in all fields.', icon:'error' }); submitButton.disabled=false; submitButton.textContent='Submit Quest'; return; }
                 }
-const usernameRegex = /^@?[\w]+$/;
-if (!usernameRegex.test(data.telegram) || 
-   (!currentQuest?.isFeedback && !currentQuest?.isSnappEvent && !usernameRegex.test(data.twitter))) {
-                    console.warn('Form validation failed: Invalid username format for Telegram or Twitter');
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Telegram and Twitter must be valid usernames (e.g., @username).',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Submit Quest';
-                    return;
+
+                const urlRegex = /^https?:\/\/[^\s$.?#].[^\s]*$/;
+                if (!currentQuest?.isFeedback && !currentQuest?.isSnappEvent && (!urlRegex.test(data.proofOfQuest)||!urlRegex.test(data.questLink))) {
+                    Swal.fire({ title:'Error', text:'Proof of Quest and Quest Link must be valid URLs.', icon:'error' }); submitButton.disabled=false; submitButton.textContent='Submit Quest'; return;
                 }
-                // Check for duplicate submission
+                const usernameRegex = /^@?[\w]+$/;
+                if (!usernameRegex.test(data.telegram)||(!currentQuest?.isFeedback&&!currentQuest?.isSnappEvent&&!usernameRegex.test(data.twitter))) {
+                    Swal.fire({ title:'Error', text:'Telegram must be a valid username (e.g., @username).', icon:'error' }); submitButton.disabled=false; submitButton.textContent='Submit Quest'; return;
+                }
                 try {
-                    const isDuplicate = await isDuplicateSubmission(data.trackCode, data.telegram);
-                    if (isDuplicate) {
-                        console.warn(`Duplicate submission detected for track code: ${data.trackCode} and telegram: ${data.telegram}`);
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'You have already submitted this quest.',
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        });
-                        submitButton.disabled = false;
-                        submitButton.textContent = 'Submit Quest';
-                        return;
-                    }
-                } catch (error) {
-                    console.error('Error checking for duplicate submission:', error);
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Failed to verify submission. Please try again.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Submit Quest';
-                    return;
-                }
-                // Submit the form
+                    const isDupe = await isDuplicateSubmission(data.trackCode, data.telegram);
+                    if (isDupe) { Swal.fire({ title:'Error', text:'You have already submitted this quest.', icon:'error' }); submitButton.disabled=false; submitButton.textContent='Submit Quest'; return; }
+                } catch (error) { Swal.fire({ title:'Error', text:'Failed to verify submission. Please try again.', icon:'error' }); submitButton.disabled=false; submitButton.textContent='Submit Quest'; return; }
+
                 try {
-                    const response = await fetch(CONFIG.FORM_ACTION, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    if (!response.ok) {
-                        throw new Error(`Form submission failed with status ${response.status}`);
-                    }
-                    console.log(`Quest submitted successfully`);
-                    DOM.submitQuestModal.classList.remove('active');
-setTimeout(() => {
-    DOM.submitQuestModal.style.display = 'none';
-    const submittedQuest = quests.find(q => q.trackCode === data.trackCode);
-    if (submittedQuest?.isSnappEvent) {
-        navigator.clipboard.writeText('Verse IRL Event').catch(() => {});
-        Swal.fire({
-            title: '🎉 Submitted Successfully!',
-            html: `
-                <p style="color:#4B5563; font-size:15px; line-height:1.7; margin-bottom:20px;">
-                    You're registered! <strong style="color:#34D399;">✓ "Verse IRL Event" copied to clipboard!</strong><br><br>Join the Verse Telegram, paste it in the chat to claim your VERSE rewards.
-                </p>
-                <a href="https://t.me/GetVerse/177601" target="_blank" 
-                   style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,#6366F1,#34D399); color:#fff; padding:12px 24px; border-radius:50px; font-size:15px; font-weight:700; text-decoration:none;">
-                    <i class="fa-brands fa-telegram"></i> Claim VERSE Rewards
-                </a>
-            `,
-            icon: 'success',
-            confirmButtonText: 'Done',
-            confirmButtonColor: '#6366F1',
-        });
-    } else {
-        Swal.fire({
-            title: 'Submitted Successfully!',
-            text: 'Your quest has been submitted. Awaiting admin approval.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
-    }
-                        DOM.submitQuestForm.reset();
-                        DOM.submitQuestModal.classList.remove('active');
-                        DOM.submitQuestModal.style.display = 'none';
-                        loadData(); // Refresh data to update remaining submissions
-                    }, 400);
-                } catch (error) {
-                    console.error('Form submission error:', error);
+                    await fetch(CONFIG.FORM_ACTION, { method: 'POST', body: formData });
+                } catch (e) { /* CORS error is expected; form still submits */ }
 
-
-    const submittedQuest = quests.find(q => q.trackCode === data.trackCode);
-    if (submittedQuest?.isSnappEvent) {
-        navigator.clipboard.writeText('Verse IRL Event').catch(() => {});
-        Swal.fire({
-            title: '🎉 Submitted Successfully!',
-            html: `
-                <p style="color:#4B5563; font-size:15px; line-height:1.7; margin-bottom:20px;">
-                    <strong style="color:#34D399;">✓ "Verse IRL Event" copied to clipboard!</strong><br><br>Join the Verse Telegram and paste it in the chat to claim your VERSE rewards.
-                </p>
-                <a href="https://t.me/GetVerse/177601" target="_blank" 
-                   style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,#6366F1,#34D399); color:#fff; padding:12px 24px; border-radius:50px; font-size:15px; font-weight:700; text-decoration:none;">
-                    <i class="fa-brands fa-telegram"></i> Claim VERSE Rewards
-                </a>
-            `,
-            icon: 'success',
-            confirmButtonText: 'No, Thanks',
-            confirmButtonColor: '#6366F1',
-        });
-    } else {
-        Swal.fire({
-            title: 'Submitted Successfully!',
-            text: 'Your quest has been submitted. Awaiting admin approval.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
-    }                    
-
-
-                    DOM.submitQuestForm.reset();
-                    DOM.submitQuestModal.classList.remove('active');
+                DOM.submitQuestModal.classList.remove('active');
+                setTimeout(() => {
                     DOM.submitQuestModal.style.display = 'none';
-                } finally {
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Submit Quest';
-                }
+                    if (currentQuest?.isSnappEvent) {
+                        navigator.clipboard.writeText('Verse IRL Event').catch(()=>{});
+                        Swal.fire({ title:'🎉 Submitted Successfully!', html:`<p style="color:#4B5563;font-size:15px;line-height:1.7;margin-bottom:20px;">You're registered! <strong style="color:#34D399;">✓ "Verse IRL Event" copied to clipboard!</strong><br><br>Join the Verse Telegram, paste it in the chat to claim your VERSE rewards.</p><a href="https://t.me/GetVerse/177601" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#6366F1,#34D399);color:#fff;padding:12px 24px;border-radius:50px;font-size:15px;font-weight:700;text-decoration:none;"><i class="fa-brands fa-telegram"></i> Claim VERSE Rewards</a>`, icon:'success', confirmButtonText:'Done', confirmButtonColor:'#6366F1' });
+                    } else {
+                        Swal.fire({ title:'Submitted Successfully!', text:'Your quest has been submitted. Awaiting admin approval.', icon:'success', confirmButtonText:'OK' });
+                    }
+                    DOM.submitQuestForm.reset();
+                    loadData();
+                }, 400);
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Quest';
             });
         }
-function toggleImage(img) {
-    // Change this to your second image path
-    const image1 = "images/degen.png";
-    const image2 = "images/degen2.png";
-    img.src = (img.src.includes(image1)) ? image2 : image1;
-}
-        // Initialize
+
+        // ═══════════════════════════════════════════════════════
+        // TAP TO UNLOCK
+        // ═══════════════════════════════════════════════════════
+
+        async function handleTapToUnlock(card, quest) {
+            const trackCode = quest.trackCode || quest.id.toString();
+            if (!tapCounts[trackCode]) tapCounts[trackCode] = 0;
+            tapCounts[trackCode]++;
+            const done = tapCounts[trackCode], left = Math.max(0, 60 - done);
+            const progressEl = card.querySelector('.quest-remaining');
+            if (progressEl) progressEl.innerHTML = `<span style="color:#F59E0B;font-weight:700;">${done}/60 taps • ${left} more to unlock</span>`;
+            const descEl = card.querySelector('.quest-description');
+            if (descEl) {
+                const orig = descEl.innerHTML;
+                descEl.innerHTML = `<div style="background:#fef3c7;padding:16px;border-radius:12px;text-align:center;margin:12px 0 16px;"><img src="${AD_IMAGE_URL}" style="max-width:100%;height:auto;border-radius:8px;" alt="Sponsor Ad">${AD_LINK?`<br><a href="${AD_LINK}" target="_blank" style="color:#D97706;font-weight:600;margin-top:8px;display:inline-block;">Click for more details →</a>`:''}</div>`;
+                setTimeout(() => { if (descEl && descEl.innerHTML.includes('Sponsor')) descEl.innerHTML = orig; }, 8000);
+            }
+            if (done >= 60) {
+                Swal.fire({ icon:'success', title:'Quest Unlocked!', text:'You can now submit this quest.', timer:2000, showConfirmButton:false });
+                const availability = await getQuestAvailability(trackCode);
+                quest.remaining = availability.remaining; quest.total = availability.total;
+                quest.tapToUnlock = false; quest.status = 'active';
+                card.outerHTML = createQuestElement(quest).outerHTML;
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // SOCIAL LINKS / NOTES
+        // ═══════════════════════════════════════════════════════
+
+        function toggleSocialSection(e) { if(e)e.stopPropagation(); const s=document.getElementById('socialSection'),i=document.getElementById('socialToggleIcon'),o=s.style.display==='block'; s.style.display=o?'none':'block'; i.textContent=o?'﹢':'﹣'; }
+        function toggleNotesSection(e)  { if(e)e.stopPropagation(); const s=document.getElementById('notesSection'), i=document.getElementById('notesToggleIcon'), o=s.style.display==='block'; s.style.display=o?'none':'block'; i.textContent=o?'﹢':'﹣'; }
+
+        function saveSocials() {
+            const socials = { twitter:document.getElementById('socialTwitter').value.trim(), telegram:document.getElementById('socialTelegram').value.trim(), youtube:document.getElementById('socialYoutube').value.trim(), instagram:document.getElementById('socialInstagram').value.trim(), tiktok:document.getElementById('socialTiktok').value.trim(), snapchat:document.getElementById('socialSnapchat').value.trim(), cmc:document.getElementById('socialCmc').value.trim() };
+            localStorage.setItem('userSocials', JSON.stringify(socials));
+            Swal.fire({ icon:'success', title:'Social Links Saved!', text:'Your links are stored in the browser.', timer:2000, showConfirmButton:false });
+            renderSavedSocials();
+        }
+
+        function renderSavedSocials() {
+            const container = document.getElementById('savedSocials');
+            if (!container) return;
+            const stored = localStorage.getItem('userSocials');
+            if (!stored) { container.innerHTML=''; return; }
+            const socials = JSON.parse(stored);
+            const icons = { twitter:{label:'Twitter',icon:'fa-brands fa-x-twitter',color:'#ffffff'}, telegram:{label:'Telegram',icon:'fa-brands fa-telegram',color:'#229ED9'}, youtube:{label:'YouTube',icon:'fa-brands fa-youtube',color:'#FF0000'}, instagram:{label:'Instagram',icon:'fa-brands fa-instagram',color:'#E1306C'}, tiktok:{label:'TikTok',icon:'fa-brands fa-tiktok',color:'#ffffff'}, snapchat:{label:'Snapchat',icon:'fa-brands fa-snapchat',color:'#FFFC00'}, cmc:{label:'CoinMarketCap',icon:'',color:'#ffffff'} };
+            Object.keys(socials).forEach(k => { const el=document.getElementById('social'+k.charAt(0).toUpperCase()+k.slice(1)); if(el&&socials[k])el.value=socials[k]; });
+            const entries = Object.entries(socials).filter(([,v])=>v);
+            if (!entries.length) { container.innerHTML='<p style="color:#CBD5E1;text-align:center;font-size:13px;">No social links saved yet.</p>'; return; }
+            container.innerHTML = entries.map(([k,url]) => { const m=icons[k]||{label:k,icon:'',color:'#fff'}; return `<div class="saved-wallet" style="flex-direction:column;align-items:flex-start;gap:8px;"><div style="display:flex;justify-content:space-between;width:100%;align-items:center;"><strong style="font-size:13px;color:#94A3B8;">${m.icon?`<i class="${m.icon}" style="color:${m.color};margin-right:6px;"></i>`:'🪙'} ${m.label}</strong><div style="display:flex;gap:6px;"><a href="${url}" target="_blank" style="background:#1E2937;color:#34D399;border:none;padding:4px 10px;border-radius:6px;font-size:12px;text-decoration:none;">🔗 Open</a><button onclick="copySocial('${url}')" style="background:#1E2937;color:#34D399;border:none;padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;">📋 Copy</button></div></div><span style="font-size:11px;color:#64748B;word-break:break-all;">${url}</span></div>`; }).join('');
+        }
+
+        function copySocial(url) { navigator.clipboard.writeText(url).then(()=>Swal.fire({icon:'success',title:'Copied!',text:url,timer:1500,showConfirmButton:false,toast:true,position:'top',background:'#1F2937',color:'#fff'})); }
+
+        function saveNote() {
+            const content = document.getElementById('userNote').value.trim();
+            localStorage.setItem('userNote', content);
+            Swal.fire({ icon:'success', title:content?'Note Saved!':'Note Cleared!', timer:1500, showConfirmButton:false, toast:true, position:'top', background:'#1F2937', color:'#fff' });
+            renderSavedNote();
+        }
+
+        function loadNote() {
+            const saved = localStorage.getItem('userNote');
+            const el = document.getElementById('userNote');
+            if (el && saved) el.value = saved;
+            renderSavedNote();
+        }
+
+        function renderSavedNote() {
+            const container = document.getElementById('savedNote');
+            if (!container) return;
+            const content = localStorage.getItem('userNote');
+            if (!content?.trim()) { container.innerHTML='<p style="color:#CBD5E1;text-align:center;font-size:13px;">No note saved yet.</p>'; return; }
+            container.innerHTML = `<div style="background:#334155;border-radius:8px;padding:12px;margin-top:10px;"><p style="color:#94A3B8;font-size:13px;line-height:1.6;margin:0 0 10px 0;word-break:break-word;">${content}</p><button onclick="copyNote()" class="copy-wallet-btn" style="width:100%;">📋 Copy Note</button></div>`;
+        }
+
+        function copyNote() { const c=localStorage.getItem('userNote'); if(!c)return; navigator.clipboard.writeText(c).then(()=>Swal.fire({icon:'success',title:'Copied!',text:c.length>60?c.substring(0,60)+'...':c,timer:1500,showConfirmButton:false,toast:true,position:'top',background:'#1F2937',color:'#fff'})); }
+
+        function toggleImage(img) { const a='images/degen.png',b='images/degen2.png'; img.src=img.src.includes(a)?b:a; }
+
+        // ═══════════════════════════════════════════════════════
+        // INIT
+        // ═══════════════════════════════════════════════════════
+
         window.addEventListener('load', () => {
-            console.log('Page loaded, setting up event listeners');
             setupEventListeners();
+            loadSidebarValues();   // ← loads wallets + telegram + socials + note
             loadData();
         });
-        // Wallet Sidebar Functions
-// Wallet Sidebar Functions
-function toggleWalletSidebar() {
-    const sidebar = document.getElementById('walletSidebar');
-    sidebar.classList.toggle('open');
-   
-    // Close sidebar when clicking anywhere outside it
-    if (sidebar.classList.contains('open')) {
-        setTimeout(() => {
-            document.addEventListener('click', outsideClickHandler, { once: true });
-        }, 10);
-    }
-}
-function outsideClickHandler(e) {
-    const sidebar = document.getElementById('walletSidebar');
-    const walletBtn = e.target.closest('button[onclick="toggleWalletSidebar()"]');
-    
-    if (sidebar.contains(e.target) || walletBtn) {
-        // Click is inside sidebar or on the toggle button — re-attach listener
-        document.addEventListener('click', outsideClickHandler, { once: true });
-        return;
-    }
-    
-    sidebar.classList.remove('open');
-}
-function saveWallets() {
-  const sol = document.getElementById('solanaWallet').value.trim();
-  const poly = document.getElementById('polygonWallet').value.trim();
-  const sui = document.getElementById('suiWallet').value.trim();
-  localStorage.setItem('userSolana', sol);
-  localStorage.setItem('userPolygon', poly);
-  localStorage.setItem('userSui', sui);
-  Swal.fire({
-    icon: 'success',
-    title: 'Wallets Saved!',
-    text: 'Your addresses are now stored in the browser.',
-    timer: 2000,
-    showConfirmButton: false
-  });
-  renderSavedWallets();
-}
-function renderSavedWallets() {
-  const container = document.getElementById('savedWallets');
-  container.innerHTML = '';
-  const sol = localStorage.getItem('userSolana') || '';
-  const poly = localStorage.getItem('userPolygon') || '';
-  const sui = localStorage.getItem('userSui') || '';
-  if (sol) container.innerHTML += createSavedWalletHTML('Solana', sol);
-  if (poly) container.innerHTML += createSavedWalletHTML('Polygon', poly);
-  if (sui) container.innerHTML += createSavedWalletHTML('Sui', sui);
-  if (!container.innerHTML) {
-    container.innerHTML = '<p style="color:#CBD5E1;text-align:center;">No wallets saved yet.</p>';
-  }
-}
-
-function toggleSocialSection(e) {
-    if (e) e.stopPropagation();
-    const section = document.getElementById('socialSection');
-    const icon = document.getElementById('socialToggleIcon');
-    const isOpen = section.style.display === 'block';
-    section.style.display = isOpen ? 'none' : 'block';
-    icon.textContent = isOpen ? '﹢' : '﹣';
-}
-
-function saveSocials() {
-    const socials = {
-        twitter:   document.getElementById('socialTwitter').value.trim(),
-        telegram:  document.getElementById('socialTelegram').value.trim(),
-        youtube:   document.getElementById('socialYoutube').value.trim(),
-        instagram: document.getElementById('socialInstagram').value.trim(),
-        tiktok:    document.getElementById('socialTiktok').value.trim(),
-        snapchat:  document.getElementById('socialSnapchat').value.trim(),
-        cmc:       document.getElementById('socialCmc').value.trim()
-    };
-    localStorage.setItem('userSocials', JSON.stringify(socials));
-    Swal.fire({
-        icon: 'success',
-        title: 'Social Links Saved!',
-        text: 'Your links are stored in the browser.',
-        timer: 2000,
-        showConfirmButton: false
-    });
-    renderSavedSocials();
-}
-
-function renderSavedSocials() {
-    const container = document.getElementById('savedSocials');
-    if (!container) return;
-    const stored = localStorage.getItem('userSocials');
-    if (!stored) { container.innerHTML = ''; return; }
-    const socials = JSON.parse(stored);
-
-    const icons = {
-        twitter:   { label: 'Twitter',    icon: 'fa-brands fa-x-twitter',  color: '#ffffff' },
-            telegram:  { label: 'Telegram',     icon: 'fa-brands fa-telegram',   color: '#229ED9' }, 
-        youtube:   { label: 'YouTube',         icon: 'fa-brands fa-youtube',     color: '#FF0000' },
-        instagram: { label: 'Instagram',       icon: 'fa-brands fa-instagram',   color: '#E1306C' },
-        tiktok:    { label: 'TikTok',          icon: 'fa-brands fa-tiktok',      color: '#ffffff' },
-        snapchat:  { label: 'Snapchat',        icon: 'fa-brands fa-snapchat',    color: '#FFFC00' },
-        cmc:       { label: 'CoinMarketCap',   icon: '',                          color: '#ffffff' }
-    };
-
-    // Pre-fill inputs
-    Object.keys(socials).forEach(key => {
-        const el = document.getElementById('social' + key.charAt(0).toUpperCase() + key.slice(1));
-        if (el && socials[key]) el.value = socials[key];
-    });
-
-    const entries = Object.entries(socials).filter(([_, val]) => val);
-    if (!entries.length) {
-        container.innerHTML = '<p style="color:#CBD5E1;text-align:center;font-size:13px;">No social links saved yet.</p>';
-        return;
-    }
-
-    container.innerHTML = entries.map(([key, url]) => {
-        const meta = icons[key] || { label: key, icon: '', color: '#fff' };
-        return `
-            <div class="saved-wallet" style="flex-direction:column; align-items:flex-start; gap:8px;">
-                <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
-                    <strong style="font-size:13px; color:#94A3B8;">
-                        ${meta.icon ? `<i class="${meta.icon}" style="color:${meta.color}; margin-right:6px;"></i>` : '🪙'} ${meta.label}
-                    </strong>
-                    <div style="display:flex; gap:6px;">
-                        <a href="${url}" target="_blank" style="background:#1E2937; color:#34D399; border:none; padding:4px 10px; border-radius:6px; font-size:12px; text-decoration:none; cursor:pointer;">🔗 Open</a>
-                        <button onclick="copySocial('${url}')" style="background:#1E2937; color:#34D399; border:none; padding:4px 10px; border-radius:6px; font-size:12px; cursor:pointer;">📋 Copy</button>
-                    </div>
-                </div>
-                <span style="font-size:11px; color:#64748B; word-break:break-all;">${url}</span>
-            </div>
-        `;
-    }).join('');
-}
-
-function copySocial(url) {
-    navigator.clipboard.writeText(url).then(() => {
-        Swal.fire({
-            icon: 'success',
-            title: 'Copied!',
-            text: url,
-            timer: 1500,
-            showConfirmButton: false,
-            toast: true,
-            position: 'top',
-            background: '#1F2937',
-            color: '#fff'
-        });
-    });
-}
-function createSavedWalletHTML(chain, address) {
-  return `
-    <div class="saved-wallet">
-      <div>
-        <strong>${chain}</strong><br>
-        <span>${address}</span>
-      </div>
-      <button onclick="copyWallet('${address}')" class="copy-wallet-btn">📋 Copy</button>
-    </div>
-  `;
-}
-// Load saved wallets when page opens
-window.addEventListener('load', () => {
-  renderSavedWallets();
-      renderSavedSocials();
-      loadNote()
-});
-// Copy wallet (used by the saved wallets)
-function copyWallet(address) {
-    if (!address) return;
-    navigator.clipboard.writeText(address).then(() => {
-        Swal.fire({
-            icon: 'success',
-            title: 'Copied!',
-            text: address,
-            timer: 1500,
-            showConfirmButton: false,
-            toast: true,
-            position: 'top', // ← Now appears at the front/top of the sidebar
-            background: '#1F2937',
-            color: '#fff'
-        });
-    });
-}
-// IMPROVED TAP TO UNLOCK - uses live ad from Google Sheet
-async function handleTapToUnlock(card, quest) {
-    const trackCode = quest.trackCode || quest.id.toString();
-    if (!tapCounts[trackCode]) tapCounts[trackCode] = 0;
-
-    tapCounts[trackCode]++;
-    const tapsDone = tapCounts[trackCode];
-    const tapsLeft = Math.max(0, 60 - tapsDone);
-
-    // Update progress
-    const progressEl = card.querySelector('.quest-remaining');
-    if (progressEl) {
-        progressEl.innerHTML = `
-            <span style="color:#F59E0B; font-weight:700;">${tapsDone}/60 taps • ${tapsLeft} more to unlock</span>
-        `;
-    }
-
-    // Show sponsor ad from Google Sheet
-    const descriptionEl = card.querySelector('.quest-description');
-    if (descriptionEl) {
-        const originalDesc = descriptionEl.innerHTML;
-        
-        descriptionEl.innerHTML = `
-            <div style="background:#fef3c7; padding:16px; border-radius:12px; text-align:center; margin:12px 0 16px;">
-                <img src="${AD_IMAGE_URL}" style="max-width:100%; height:auto; border-radius:8px;" alt="Sponsor Ad">
-                ${AD_LINK ? `<br><a href="${AD_LINK}" target="_blank" style="color:#D97706; font-weight:600; margin-top:8px; display:inline-block;">Click for more details →</a>` : ''}
-            </div>
-        `;
-
-        // Keep ad visible for 8 seconds
-        setTimeout(() => {
-            if (descriptionEl && descriptionEl.innerHTML.includes('Sponsor')) {
-                descriptionEl.innerHTML = originalDesc;
-            }
-        }, 8000);
-    }
-
-    // Unlock at 60 taps
-    if (tapsDone >= 60) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Quest Unlocked!',
-            text: 'You can now submit this quest.',
-            timer: 2000,
-            showConfirmButton: false
-        });
-
-        const availability = await getQuestAvailability(trackCode);
-        quest.remaining = availability.remaining;
-        quest.total = availability.total;
-
-        quest.tapToUnlock = false;
-        quest.status = 'active';
-
-        const newCardHTML = createQuestElement(quest).outerHTML;
-        card.outerHTML = newCardHTML;
-    }
-}
-
-function saveNote() {
-    const content = document.getElementById('userNote').value.trim();
-    localStorage.setItem('userNote', content);
-    Swal.fire({
-        icon: 'success',
-        title: content ? 'Note Saved!' : 'Note Cleared!',
-        timer: 1500,
-        showConfirmButton: false,
-        toast: true,
-        position: 'top',
-        background: '#1F2937',
-        color: '#fff'
-    });
-    renderSavedNote();
-}
-
-function loadNote() {
-    const saved = localStorage.getItem('userNote');
-    const el = document.getElementById('userNote');
-    if (el && saved) el.value = saved;
-    renderSavedNote();
-}
-
-function renderSavedNote() {
-    const container = document.getElementById('savedNote');
-    if (!container) return;
-    const content = localStorage.getItem('userNote');
-    if (!content || content.trim() === '') {
-        container.innerHTML = '<p style="color:#CBD5E1;text-align:center;font-size:13px;">No note saved yet.</p>';
-        return;
-    }
-    container.innerHTML = `
-        <div style="background:#334155; border-radius:8px; padding:12px; margin-top:10px;">
-            <p style="color:#94A3B8; font-size:13px; line-height:1.6; margin:0 0 10px 0; word-break:break-word;">${content}</p>
-            <button onclick="copyNote()" class="copy-wallet-btn" style="width:100%;">📋 Copy Note</button>
-        </div>
-    `;
-}
-
-function copyNote() {
-    const content = localStorage.getItem('userNote');
-    if (!content) return;
-    navigator.clipboard.writeText(content).then(() => {
-        Swal.fire({
-            icon: 'success',
-            title: 'Copied!',
-            text: content.length > 60 ? content.substring(0, 60) + '...' : content,
-            timer: 1500,
-            showConfirmButton: false,
-            toast: true,
-            position: 'top',
-            background: '#1F2937',
-            color: '#fff'
-        });
-    });
-}
-
-function toggleNotesSection(e) {
-    if (e) e.stopPropagation();
-    const section = document.getElementById('notesSection');
-    const icon = document.getElementById('notesToggleIcon');
-    const isOpen = section.style.display === 'block';
-    section.style.display = isOpen ? 'none' : 'block';
-    icon.textContent = isOpen ? '﹢' : '﹣';
-}
-
-function openSnappEventSubmitModal(trackCode) {
-    const modal = DOM.submitQuestModal;
-
-    // Always restore all fields first, then selectively hide
-    modal.querySelectorAll('.form-group').forEach(g => g.style.display = '');
-    DOM.submitQuestForm.reset();
-
-    modal.querySelector('#trackCode').value = trackCode || '';
-
-    const proofInput = modal.querySelector('#proofOfQuest');
-    const questLinkInput = modal.querySelector('#questLink');
-    const walletInput = modal.querySelector('#twitter');
-
-    proofInput.value = 'Verse IRL Event';
-    questLinkInput.value = 'Verse IRL Event';
-    walletInput.value = '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
-
-    proofInput.closest('.form-group').style.display = 'none';
-    questLinkInput.closest('.form-group').style.display = 'none';
-    walletInput.closest('.form-group').style.display = 'none';
-
-    const telegramLabel = modal.querySelector('label[for="telegram"]');
-    telegramLabel.textContent = 'Your Telegram Username (@username)';
-
-    modal.style.display = 'block';
-    setTimeout(() => modal.classList.add('active'), 10);
-}
-
-
     </script>
 </body>
 </html>
