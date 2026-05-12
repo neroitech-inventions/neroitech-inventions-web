@@ -79,20 +79,49 @@
             padding:35px;
         }
 
-        .back-btn{
-            display:inline-flex;
-            align-items:center;
-            gap:8px;
-            color:#93C5FD;
-            text-decoration:none;
-            font-weight:600;
-            margin-bottom:30px;
-            transition:0.3s;
-        }
+.back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 22px;
+    margin-bottom:30px;
 
-        .back-btn:hover{
-            opacity:0.8;
-        }
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    backdrop-filter:blur(12px);
+
+    border-radius:18px;
+
+    color:#ffffff;
+    text-decoration:none;
+    font-weight:700;
+    font-size:15px;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+
+    transition:all 0.3s ease;
+}
+
+.back-btn i{
+    font-size:14px;
+    transition:transform 0.3s ease;
+}
+
+.back-btn:hover{
+    transform:translateY(-3px);
+    background:rgba(255,255,255,0.12);
+    border-color:rgba(255,255,255,0.22);
+
+    box-shadow:
+    0 16px 35px rgba(37,99,235,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+}
+
+.back-btn:hover i{
+    transform:translateX(-3px);
+}
 
         .info-grid{
             display:grid;
@@ -123,17 +152,19 @@
         }
 
         .description-box{
-            background:#ffffff;
+            background:white;
             border:1px solid rgba(255,255,255,0.08);
             border-radius:24px;
             padding:30px;
             margin-top:10px;
+            opacity: 1.0;
         }
 
         .description-title{
             font-size:24px;
             font-weight:800;
             margin-bottom:20px;
+            color: #000000;
         }
 
         .description{
@@ -184,7 +215,7 @@
         }
 
         .btn-secondary{
-            background:seagreen;
+            background:#2563EB;
             color:#ffffff;
         }
 
@@ -240,6 +271,17 @@
 
 #backToTop:hover {
     transform: translateY(-3px);
+}
+
+.share-btn{
+    background:orange;
+    color:white;
+    border: none;
+    cursor: pointer;
+}
+
+.share-btn.copied{
+    background:linear-gradient(135deg,#10B981,#059669);
 }
 
     </style>
@@ -371,10 +413,6 @@ async function loadQuest() {
 
                     <div class="description-box">
 
-                        <div class="description-title">
-                            Quest Instructions
-                        </div>
-
                         <div class="description">
                             ${description.replace(/\n/g, '<br><br>')}
                         </div>
@@ -394,18 +432,28 @@ async function loadQuest() {
 
     ` : ''}
 
-    ${submitLink !== '#' ? `
+${submitLink !== '#' ? `
 
-    <a href="${submitLink}"
-       target="_blank"
-       class="btn btn-secondary">
+<a href="${submitLink}"
+   target="_blank"
+   class="btn btn-secondary">
 
-        <i class="fa-solid fa-paper-plane"></i>
-        Submit Quest
+    <i class="fa-solid fa-paper-plane"></i>
+    Submit Quest
 
-    </a>
+</a>
 
-    ` : ''}
+` : ''}
+
+<button
+    onclick="shareQuest(this)"
+    class="btn share-btn"
+    type="button">
+
+    <i class="fa-solid fa-share-nodes"></i>
+    Share
+
+</button>
 
 </div>
 
@@ -419,9 +467,17 @@ async function loadQuest() {
         if (!found) {
 
             document.getElementById('questContent').innerHTML = `
-                <div class="description-box">
-                    Quest not found.
-                </div>
+<div class="description-box" style="text-align:center;">
+
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:12px;color:#111827;">
+        No Quest Found
+    </h2>
+
+    <p style="font-size:16px;color:#6B7280;">
+        The quest you're trying to access does not exist or may have been removed.
+    </p>
+
+</div>
             `;
 
         }
@@ -442,6 +498,37 @@ async function loadQuest() {
 
 
 
+
+async function shareQuest(button) {
+
+    const originalHTML = button.innerHTML;
+
+    try {
+
+        await navigator.clipboard.writeText(window.location.href);
+
+        button.innerHTML = `
+            <i class="fa-solid fa-check"></i>
+            Copied
+        `;
+
+        button.classList.add('copied');
+
+        setTimeout(() => {
+
+            button.innerHTML = originalHTML;
+
+            button.classList.remove('copied');
+
+        }, 2200);
+
+    } catch(err) {
+
+        console.log(err);
+
+    }
+
+}
 
 window.onload = () => {
 
