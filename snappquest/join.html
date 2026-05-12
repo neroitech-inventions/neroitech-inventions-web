@@ -2055,7 +2055,7 @@ function selectManualWallet() {
                 <div class="quest-reward">
                     <span class="reward-amount">${formatCurrency(quest.reward, currentCurrency)}</span>
                     <div style="display:flex;gap:8px;">
-                        ${quest.status==='active'&&quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn">${quest.isGame?'Play Game':'View Quest'}</a>` : ''}
+                        ${quest.status==='active'&&quest.link ? `<a href="${quest.link}" target="_blank" class="complete-btn" style="color:white;">${quest.isGame?'Play Game':'View Quest'}</a>` : ''}
                         ${quest.status==='active'&&!quest.isGame&&canSubmit ? `<button class="submit-btn">Submit</button>` : ''}
                         <button class="share-btn"><i class="fas fa-share-alt"></i> Share</button>
                     </div>
