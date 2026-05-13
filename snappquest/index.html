@@ -625,6 +625,287 @@
         #back-to-top i {
             font-size: 24px;
         }
+
+        #why-snappquest{
+    padding:120px 0;
+    position:relative;
+    overflow:hidden;
+}
+
+#why-snappquest::before{
+    content:'';
+    position:absolute;
+    top:-200px;
+    left:-200px;
+    width:500px;
+    height:500px;
+    background:rgba(99,102,241,0.18);
+    filter:blur(120px);
+    border-radius:50%;
+}
+
+#why-snappquest::after{
+    content:'';
+    position:absolute;
+    bottom:-200px;
+    right:-200px;
+    width:500px;
+    height:500px;
+    background:rgba(52,211,153,0.15);
+    filter:blur(120px);
+    border-radius:50%;
+}
+
+.why-hero{
+    text-align:center;
+    max-width:900px;
+    margin:0 auto 80px;
+    position:relative;
+    z-index:2;
+}
+
+.why-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 18px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.1);
+    margin-bottom:24px;
+    font-weight:600;
+}
+
+.why-hero h2{
+    font-size:64px;
+    line-height:1.1;
+    margin-bottom:24px;
+    font-weight:900;
+    letter-spacing:-2px;
+}
+
+.gradient-text{
+    background:linear-gradient(135deg,#6366F1,#34D399);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.why-hero p{
+    font-size:20px;
+    color:var(--color-text-secondary);
+    line-height:1.8;
+}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:24px;
+    margin-bottom:90px;
+    position:relative;
+    z-index:2;
+}
+
+.stat-card{
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:24px;
+    padding:40px 30px;
+    text-align:center;
+    backdrop-filter:blur(16px);
+
+    box-shadow:
+    0 20px 50px rgba(0,0,0,0.35),
+    0 0 30px rgba(99,102,241,0.08);
+
+    transition:0.3s ease;
+}
+
+.stat-card:hover{
+    transform:translateY(-8px);
+}
+
+.stat-card h3{
+    font-size:46px;
+    margin-bottom:12px;
+    font-weight:900;
+    background:linear-gradient(135deg,#6366F1,#34D399);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.stat-card p{
+    color:var(--color-text-secondary);
+}
+
+.section-title{
+    font-size:40px;
+    font-weight:800;
+    margin-bottom:24px;
+    text-align:center;
+}
+
+.backed-section{
+    max-width:900px;
+    margin:0 auto 100px;
+    text-align:center;
+    position:relative;
+    z-index:2;
+}
+
+.backed-section p{
+    color:var(--color-text-secondary);
+    font-size:18px;
+    line-height:1.9;
+    margin-bottom:20px;
+}
+
+.features-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:28px;
+    margin-top:50px;
+}
+
+.feature-card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:24px;
+    padding:32px;
+    backdrop-filter:blur(14px);
+
+    transition:0.35s ease;
+
+    box-shadow:
+    0 20px 45px rgba(0,0,0,0.3);
+}
+
+.feature-card:hover{
+    transform:translateY(-8px);
+
+    box-shadow:
+    0 25px 60px rgba(0,0,0,0.4),
+    0 0 30px rgba(52,211,153,0.12);
+}
+
+.feature-icon{
+    width:65px;
+    height:65px;
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:24px;
+
+    background:rgba(99,102,241,0.12);
+
+    font-size:28px;
+    color:#6366F1;
+}
+
+.feature-card h3{
+    font-size:24px;
+    margin-bottom:14px;
+}
+
+.feature-card p{
+    color:var(--color-text-secondary);
+    line-height:1.8;
+}
+
+.features-section{
+    margin-bottom:100px;
+    position:relative;
+    z-index:2;
+}
+
+.campaigns-section{
+    margin-bottom:100px;
+    position:relative;
+    z-index:2;
+}
+
+.campaign-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:18px;
+    margin-top:40px;
+}
+
+.campaign-item{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:18px;
+    padding:22px;
+    text-align:center;
+    font-weight:600;
+
+    transition:0.3s ease;
+}
+
+.campaign-item:hover{
+    transform:translateY(-5px);
+    background:rgba(255,255,255,0.08);
+}
+
+.final-cta{
+    text-align:center;
+    max-width:850px;
+    margin:0 auto;
+    position:relative;
+    z-index:2;
+}
+
+.final-cta h2{
+    font-size:58px;
+    line-height:1.1;
+    margin-bottom:24px;
+    font-weight:900;
+}
+
+.final-cta p{
+    font-size:20px;
+    color:var(--color-text-secondary);
+    line-height:1.8;
+    margin-bottom:40px;
+}
+
+@media(max-width:768px){
+
+    #why-snappquest{
+        padding:80px 0;
+    }
+
+    .why-hero h2{
+        font-size:42px;
+    }
+
+    .final-cta h2{
+        font-size:40px;
+    }
+
+    .why-hero p,
+    .final-cta p{
+        font-size:18px;
+    }
+
+    .section-title{
+        font-size:32px;
+    }
+
+    .cta-buttons{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .cta-primary,
+    .cta-secondary{
+        width:100%;
+        max-width:320px;
+    }
+
+}
     </style>
 </head>
 
@@ -699,6 +980,210 @@
             </div>
         </div>
     </section>
+
+    <section id="why-snappquest">
+
+    <div class="container">
+
+        <div class="why-hero">
+
+            <span class="why-badge">
+                <i class="fas fa-bolt"></i>
+                Incentive-Powered Growth
+            </span>
+
+            <h2>
+                Why Host a Quest With
+                <span class="gradient-text">SnappQuest?</span>
+            </h2>
+
+            <p>
+                SnappQuest helps brands transform passive audiences into active ecosystems through reward-driven engagement campaigns.
+                Sponsors gain access to an active crypto-native audience motivated to participate, engage, share content, and onboard into new ecosystems.
+            </p>
+
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <h3>19K+</h3>
+                <p>VERSE Telegram Members</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>3K+</h3>
+                <p>Monthly Ecosystem Views</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>2K+</h3>
+                <p>Interactions in 30 Days</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>100+</h3>
+                <p>Daily Ecosystem Visits</p>
+            </div>
+
+        </div>
+
+        <div class="backed-section">
+
+            <div class="section-title">
+                Powered by VERSE
+            </div>
+
+            <p>
+                SnappQuest is backed by VERSE, the official token ecosystem of
+                <a href="https://www.bitcoin.com/" target="_blank">Bitcoin.com</a>,
+                one of the most recognized brands in the crypto industry.
+            </p>
+
+            <p>
+                Bitcoin.com has helped onboard millions of users into crypto globally,
+                making the ecosystem valuable for projects seeking both experienced crypto users
+                and newcomers entering Web3.
+            </p>
+
+        </div>
+
+        <div class="features-section">
+
+            <div class="section-title">
+                What Sponsors Gain
+            </div>
+
+            <div class="features-grid">
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+
+                    <h3>Engaged Crypto Audience</h3>
+
+                    <p>
+                        Reach active crypto-native users participating in Web3 campaigns and ecosystem growth initiatives.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+
+                    <h3>Incentivized Participation</h3>
+
+                    <p>
+                        Drive meaningful engagement through reward-powered campaigns instead of passive advertising impressions.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+
+                    <h3>Social Visibility</h3>
+
+                    <p>
+                        Expand campaign reach across platforms like X, Telegram, and community partner networks.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+
+                    <h3>Community Activation</h3>
+
+                    <p>
+                        Transform inactive audiences into active participants through quests and ecosystem interaction.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+
+                    <h3>Ecosystem Onboarding</h3>
+
+                    <p>
+                        Help users discover, test, and onboard into your product, protocol, or community.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+
+                    <h3>Flexible Campaigns</h3>
+
+                    <p>
+                        Launch awareness campaigns, bounties, onboarding flows, beta testing, and engagement quests.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="campaigns-section">
+
+            <div class="section-title">
+                Ideal Campaigns
+            </div>
+
+            <div class="campaign-grid">
+
+                <div class="campaign-item">Product Awareness Campaigns</div>
+                <div class="campaign-item">Community Growth</div>
+                <div class="campaign-item">Content & Design Bounties</div>
+                <div class="campaign-item">Airdrop Campaigns</div>
+                <div class="campaign-item">Social Engagement Quests</div>
+                <div class="campaign-item">Beta Testing</div>
+                <div class="campaign-item">Telegram & X Growth</div>
+                <div class="campaign-item">Ecosystem Onboarding</div>
+
+            </div>
+
+        </div>
+
+        <div class="final-cta">
+
+            <h2>
+                Turn Visibility Into
+                <span class="gradient-text">Participation</span>
+            </h2>
+
+            <p>
+                SnappQuest helps brands convert attention into measurable engagement
+                by rewarding users for meaningful participation.
+            </p>
+
+            <div class="cta-buttons">
+
+                <a href="create.html" class="cta-primary">
+                    <i class="fas fa-plus-circle"></i>
+                    Create Quest
+                </a>
+
+                <a href="https://t.me/SnappQuest/1434" target="_blank" class="cta-secondary">
+                    <i class="fab fa-telegram"></i>
+                    Partnerships
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
     <!-- Customize: Update footer content, links, social icons, or copyright info for your project. Comment out columns or add new ones. -->
     <footer>
