@@ -2349,6 +2349,35 @@ function selectManualWallet() {
             loadSidebarValues();   // ← loads wallets + telegram + socials + note
             loadData();
         });
+
+
+        // Add this function globally
+window.checkMagicGuess = function(button) {
+    const container = button.parentElement;
+    const input = container.querySelector('input[type="number"]');
+    const resultEl = container.querySelector('.guessResult');
+    
+    if (!input || !resultEl) return;
+    
+    const guess = parseInt(input.value);
+    
+    if (isNaN(guess) || guess < 1 || guess > 10) {
+        resultEl.style.color = '#ef4444';
+        resultEl.textContent = 'Please enter a number between 1 and 10!';
+        return;
+    }
+    
+    if (guess === 3) {
+        resultEl.style.color = '#10b981';
+        resultEl.innerHTML = '🎉 Correct! The number was <strong>3</strong><br>Please submit your answer as your feedback quest✅';
+    } else if (guess < 3) {
+        resultEl.style.color = '#f59e0b';
+        resultEl.textContent = 'Too low! Try again.';
+    } else {
+        resultEl.style.color = '#f59e0b';
+        resultEl.textContent = 'Too high! Try again.';
+    }
+};
     </script>
 </body>
 </html>
