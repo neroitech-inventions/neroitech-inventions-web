@@ -504,6 +504,10 @@
         successSound.volume = 0.6;
         millionaireSound.volume = 0.7;
 
+        // === GOOGLE SHEETS CONFIG ===
+        const SUBMISSIONS_SHEET_ID = '1uI__u1VylTAb6ukduHOuHXkcGX5UwgpAFzD8DY5-_bI';
+        const API_KEY = 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q';
+
         // Fetch current VERSE price
         async function fetchCurrentPrice() {
             try {
@@ -518,6 +522,7 @@
         }
 
         // Fetch God Mode code from Google Sheets (cell E2 in SnappQuestData)
+                // Fetch God Mode code
         async function fetchGodModeCode() {
             const spreadsheetId = '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w';
             const range = 'SnappQuestData!E2';
@@ -529,13 +534,11 @@
                 const res = await fetch(url);
                 const data = await res.json();
                 if (data.values && data.values[0] && data.values[0][0]) {
-                    godModeCode = parseInt(data.values[0][0], 10);
-                    console.log('God Mode code loaded from Sheets:', godModeCode);
-                } else {
-                    console.warn('No God Mode code found in Sheets cell E2');
+                    godModeCode = String(data.values[0][0]).trim();   // ← Changed to String
+                    console.log('God Mode code loaded:', godModeCode);
                 }
             } catch (e) {
-                console.error('Failed to load God Mode code from Sheets:', e);
+                console.error('Failed to load God Mode code:', e);
             }
         }
 
@@ -591,11 +594,58 @@
             this.setSelectionRange(cursorPos + diff, cursorPos + diff);
         });
 
-        function calculate() {
-            let amount = getCleanNumber(document.getElementById('verseInput').value);
+                // Check if someone already submitted the God Mode code
+        async function checkIfClaimed(trackCode) {
+            if (!trackCode) return false;
+
+            const range = "'Form responses 4'!C:C";
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SUBMISSIONS_SHEET_ID}/values/${range}?key=${API_KEY}`;
+
+            console.log("🔍 [CHECK] Starting check for code:", trackCode);
+            console.log("📡 [CHECK] URL:", url);
+
+            try {
+                const res = await fetch(url);
+                console.log("📡 [CHECK] Response status:", res.status);
+
+                if (!res.ok) {
+                    console.error("❌ HTTP Error:", res.status, await res.text());
+                    return false;
+                }
+
+                const data = await res.json();
+                console.log("📊 [CHECK] Total rows received:", data.values ? data.values.length : 0);
+
+                const values = data.values || [];
+                const searchCode = String(trackCode).trim().toUpperCase();
+
+                for (let i = 1; i < values.length; i++) {   // Skip header
+                    if (values[i] && values[i][0]) {
+                        const submitted = String(values[i][0]).trim().toUpperCase();
+                        console.log(`   Row ${i+1}: "${submitted}"`);
+                        if (submitted === searchCode) {
+                            console.log("🚫 MATCH FOUND! Already claimed.");
+                            return true;
+                        }
+                    }
+                }
+
+                console.log("✅ No match found - Code is still AVAILABLE");
+                return false;
+
+            } catch (e) {
+                console.error("💥 Exception in checkIfClaimed:", e);
+                return false;
+            }
+        }
+
+        async function calculate() {
+            let amountStr = document.getElementById('verseInput').value.replace(/,/g, '').trim();
+            let amount = parseFloat(amountStr) || 0;
+
             if (amount < 0) amount = 0;
 
-            // Always run normal calculation first (so ATH & multiplier show)
+            // Normal calculation first
             const tier = getTier(amount);
             const currentValue = (amount * currentPrice).toFixed(2);
             const athValue = (amount * ATH_PRICE).toFixed(2);
@@ -628,10 +678,32 @@
             }
             document.getElementById('progressText').textContent = `${progress.toFixed(0)}% to VERSE Millionaire • ${progressMessage}`;
 
-            // ────────────────────────────────────────────────
-            // GOD MODE: Override display if triggered
-            // ────────────────────────────────────────────────
-            if (godModeCode !== null && amount === godModeCode) {
+            // ====================== GOD MODE CHECK ======================
+if (godModeCode && amountStr === godModeCode) {
+                console.log("🔥 GOD MODE TRIGGERED with code:", godModeCode);
+
+                const alreadyClaimed = await checkIfClaimed(godModeCode);
+                console.log("📊 Already Claimed Result =", alreadyClaimed);
+
+                if (alreadyClaimed) {
+                    Swal.fire({
+                        title: "GOD MODE UNLOCKED! 🔥",
+                        html: `Someone already claimed the <b style="color:#FBBF24;">50,000 VERSE</b>!<br><br>Congrats, true degen! 🎉`,
+                        icon: "info",
+                        confirmButtonText: "OK",
+                        confirmButtonColor: "#FBBF24",
+                        background: "#0F172A",
+                        color: "#F8FAFC"
+                    });
+
+                    // ← ADD THIS: Play sound for already claimed case
+                    successSound.currentTime = 0;
+                    successSound.play().catch(() => {});
+
+                    return;
+                }
+
+                // Not claimed → Give reward
                 Swal.fire({
                     title: "GOD MODE UNLOCKED! 🔥",
                     html: `You just won <b style="color:#FBBF24; font-size:1.6rem;">50,000 VERSE</b><br><br>Congrats, true degen! 🎉`,
@@ -639,49 +711,32 @@
                     confirmButtonText: "Claim Glory",
                     confirmButtonColor: "#FBBF24",
                     background: "#0F172A",
-                    color: "#F8FAFC",
-                    backdrop: `rgba(15,23,42,0.9)`,
-                    showClass: { popup: 'animate__animated animate__zoomIn' },
-                    hideClass: { popup: 'animate__animated animate__zoomOut' }
+                    color: "#F8FAFC"
                 });
 
-                // Massive confetti
                 confetti({
                     particleCount: 400,
                     spread: 120,
                     origin: { y: 0.6 },
-                    colors: ['#FBBF24', '#34D399', '#6366F1', '#ffffff']
+                    colors: ['#FBBF24', '#34D399', '#6366F1']
                 });
-                setTimeout(() => {
-                    confetti({
-                        particleCount: 300,
-                        spread: 100,
-                        origin: { y: 0.5 }
-                    });
-                }, 400);
+                setTimeout(() => confetti({ particleCount: 300, spread: 100, origin: { y: 0.5 } }), 400);
 
-                // Victory sound full volume
                 millionaireSound.volume = 1.0;
                 millionaireSound.currentTime = 0;
                 millionaireSound.play().catch(() => {});
 
-                // Override display for God Mode flair
                 document.getElementById('tierEmoji').textContent = "⚡";
                 document.getElementById('tierTitle').textContent = "GOD MODE DEGEN";
                 document.getElementById('tierTitle').style.color = "#FBBF24";
-                document.getElementById('progressText').textContent = "GOD MODE ACTIVATED • 25,000 VERSE REWARD CLAIMED";
+                document.getElementById('progressText').textContent = "GOD MODE ACTIVATED • 50,000 VERSE REWARD CLAIMED";
             }
 
-            // Normal sound & confetti (runs regardless of God Mode)
+            // Normal celebration for millionaires
             if (amount >= million) {
                 millionaireSound.currentTime = 0;
                 millionaireSound.play().catch(() => {});
-                confetti({
-                    particleCount: 300,
-                    spread: 100,
-                    origin: { y: 0.6 }
-                });
-                setTimeout(() => confetti({ particleCount: 200, spread: 80, origin: { y: 0.7 } }), 400);
+                confetti({ particleCount: 300, spread: 100, origin: { y: 0.6 } });
             } else {
                 successSound.currentTime = 0;
                 successSound.play().catch(() => {});
