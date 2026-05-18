@@ -906,6 +906,92 @@
     }
 
 }
+/* === MODERN HERO - BALANCED & CLEAN (2026 Standard) === */
+#hero {
+    height: 100vh;
+    min-height: 720px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    background: url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat; /* or replace with a better image */
+    filter: brightness(0.4) contrast(1.2) saturate(0.7);
+    z-index: 1;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(15,23,42,0.82), rgba(15,23,42,0.96));
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    max-width: 1100px;
+    text-align: center;
+    padding: 0 24px;
+    margin-top: -30px;   /* Pull content up a bit */
+}
+
+.hero-title {
+    font-size: 86px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -4.2px;
+    margin-bottom: 18px;
+}
+
+.glow-text {
+    background: linear-gradient(90deg, #6366F1, #34D399, #A855F7, #6366F1);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: ultraGlow 5s ease infinite;
+}
+
+@keyframes ultraGlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.hero-subtitle {
+    font-size: 22px;
+    max-width: 720px;
+    margin: 0 auto 40px;
+    color: #E2E8F0;
+    line-height: 1.45;
+}
+
+
+/* === FLOATING COINS === */
+.floating-token {
+    position: absolute;
+    font-size: 46px;
+    opacity: 0.08;
+    z-index: 5;
+    pointer-events: none;
+    animation: floatToken 34s linear infinite;
+    color: #94A3B8;
+}
+
+.token-1 { top: 25%; left: 10%; animation-duration: 38s; }
+.token-2 { top: 52%; right: 12%; animation-duration: 29s; animation-delay: -10s; }
+.token-3 { bottom: 28%; left: 16%; animation-duration: 45s; animation-delay: -18s; }
+
+@keyframes floatToken {
+    0%   { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-1400px) rotate(360deg); }
+}
+
     </style>
 </head>
 
@@ -920,8 +1006,9 @@
                 <a href="create.html"><i class="fas fa-plus-circle"></i> Create Quests</a>
                 <a class="join-quest-link" onclick="window.location.href='join.html'"><i class="fas fa-users"></i> Join Quest</a>
             </nav>
-            <button class="connect-btn" onclick="window.location.href='search.html'"><i class="fas fa-search"></i> TrackQuest</a></button>
-        </div>
+<button class="connect-btn" onclick="window.location.href='search.html'">
+    <i class="fas fa-search"></i> TrackQuest
+</button>        </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
         </div>
@@ -929,33 +1016,29 @@
     <div class="overlay"></div>
 
     <!-- Customize: Update hero section text, buttons, or background for your project's messaging. Comment out CTAs if not needed. -->
-    <section id="hero">
-        <div class="hero-content">
-            <h1>Incentive <span class="hero-gradient-text">Engagement</span></h1>
-            <p>Transforming passive audiences into active ecosystems</p>
-            <div class="cta-buttons">
-                <a href="create.html" class="cta-primary">
-                    <i class="fas fa-plus-circle"></i> Create Quest
-                </a>
-                <button class="cta-secondary join-quest-link" onclick="window.location.href='join.html'">
-                    <i class="fas fa-users"></i> Join Quests
-                </button>
-            </div>
+<section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    
+    <div class="hero-content">
+        <h1 class="hero-title">
+            Incentivize <span class="glow-text">Engagement</span>
+        </h1>
+        
+        <p class="hero-subtitle">
+            Transforming passive audiences into active, rewarded ecosystems
+        </p>
+        
+        <div class="cta-buttons">
+            <a href="create.html" class="cta-primary">
+                <i class="fas fa-plus-circle"></i> Create Quest
+            </a>
+            <button class="cta-secondary join-quest-link" onclick="window.location.href='join.html'">
+                <i class="fas fa-users"></i> Join Quests
+            </button>
         </div>
-    </section>
-    <!-- Customize: Change partner logos, add/remove chains, or replace with your project's partners/supported features. Comment out the entire section if irrelevant. -->
-    <section id="partners">
-        <div class="container">
-            <h3>Backed by <a href="https://www.getverse.com/" target="_blank">VERSE</a> the official token of <a href="https://www.bitcoin.com/" target="_blank">Bitcoin.com</a></h3>
-           <div class="partner-logos">
-<!--                <img src="images/solana.png" alt="Solana Logo" class="partner-logo" style="width: auto;"> <img src="images/sui.png" alt="Sui Logo" class="partner-logo" style="width: auto;"> <img src="images/polygon.png" alt="Polygon Logo" class="partner-logo" style="width: auto;"> -->
-                                <a href="https://t.me/GetVerse/177601/408758" target="_blank"><img src="images/verse.png" alt="Verse Logo" class="partner-logo" style="width: auto;"></a>
-            </div>
-        </div>
-    </section>
-
-    <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.15), rgba(255,255,255,0)); margin: 40px 0;">
-
+    </div>
+</section>
     <!-- Customize: Modify features section to highlight your project's unique aspects. Add/remove cards, change icons/text as needed. Comment out cards for simplification. -->
     <section id="features">
         <div class="container">
