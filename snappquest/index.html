@@ -588,7 +588,7 @@
             right: 32px;
             z-index: 1000;
             background: var(--color-gradient-primary);
-            color: var(--color-dark-bg);
+            color: var(--color-white-bg);
             width: 56px;
             height: 56px;
             border-radius: 50%;
@@ -907,6 +907,7 @@
 
 }
 /* === MODERN HERO - BALANCED & CLEAN (2026 Standard) === */
+/* === FINAL HERO - MODERN & TIGHT === */
 #hero {
     height: 100vh;
     min-height: 720px;
@@ -920,15 +921,15 @@
 .hero-bg {
     position: absolute;
     inset: 0;
-    background: url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat; /* or replace with a better image */
-    filter: brightness(0.4) contrast(1.2) saturate(0.7);
+    background: url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat;
+    filter: brightness(0.45) contrast(1.15);
     z-index: 1;
 }
 
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(15,23,42,0.82), rgba(15,23,42,0.96));
+    background: linear-gradient(to bottom, rgba(15,23,42,0.78), rgba(15,23,42,0.96));
     z-index: 2;
 }
 
@@ -938,11 +939,10 @@
     max-width: 1100px;
     text-align: center;
     padding: 0 24px;
-    margin-top: -30px;   /* Pull content up a bit */
 }
 
 .hero-title {
-    font-size: 86px;
+    font-size: 88px;
     font-weight: 900;
     line-height: 1.05;
     letter-spacing: -4.2px;
@@ -966,8 +966,8 @@
 .hero-subtitle {
     font-size: 22px;
     max-width: 720px;
-    margin: 0 auto 40px;
-    color: #E2E8F0;
+    margin: 0 auto 42px;
+    color: #CBD5E1;
     line-height: 1.45;
 }
 
@@ -1004,7 +1004,7 @@
         <div class="nav-container">
             <nav class="nav-links">
                 <a href="create.html"><i class="fas fa-plus-circle"></i> Create Quests</a>
-                <a class="join-quest-link" onclick="window.location.href='join.html'"><i class="fas fa-users"></i> Join Quest</a>
+                <a class="join-quest-link" onclick="window.location.href='join.html'"><i class="fas fa-arrow-right-to-bracket"></i> Join Quest</a>
             </nav>
 <button class="connect-btn" onclick="window.location.href='search.html'">
     <i class="fas fa-search"></i> TrackQuest
@@ -1034,7 +1034,7 @@
                 <i class="fas fa-plus-circle"></i> Create Quest
             </a>
             <button class="cta-secondary join-quest-link" onclick="window.location.href='join.html'">
-                <i class="fas fa-users"></i> Join Quests
+                <i class="fas fa-arrow-right-to-bracket"></i> Join Quests
             </button>
         </div>
     </div>
@@ -1051,12 +1051,12 @@
                     <p>Turn passive communities into active ones, create a quest and spark real engagement.</strong></p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-users"></i></div>
+                    <div class="feature-icon"><i class="fas fa-arrow-right-to-bracket"></i></div>
                     <h3>Join Quest</h3>
                     <p>Once a Quest is live, your community can join, participate, and earn rewards through SnappQuest.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-handshake"></i></div>
+                    <div class="feature-icon"><i class="fas fa-people-group"></i></div>
                     <h3>Community Ownership</h3>
                     <p>Every interaction counts, reward your community and drive genuine engagement.</p>
                 </div>
@@ -1090,46 +1090,60 @@
         <div class="stats-grid">
 
             <div class="stat-card">
-                <h3>19K+</h3>
-                <p>VERSE Telegram Members</p>
+                <h3>$4K</h3>
+                <p>Total Value Earned</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>7K+</h3>
+                <p>Ecosystem Views</p>
             </div>
 
             <div class="stat-card">
                 <h3>3K+</h3>
-                <p>Monthly Ecosystem Views</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>2K+</h3>
                 <p>Interactions in 30 Days</p>
             </div>
 
             <div class="stat-card">
-                <h3>100+</h3>
+                <h3>99+</h3>
                 <p>Daily Ecosystem Visits</p>
             </div>
 
         </div>
 
-        <div class="backed-section">
+<div class="backed-section">
 
-            <div class="section-title">
-                Partnership With Verse
-            </div>
+    <div class="section-title">
+        <i class="fas fas fa-handshake" style="color:#34D399; margin-right:12px;"></i>
+        Strategic Partnership
+    </div>
 
-            <p>
-                SnappQuest is backed by VERSE, the official token ecosystem of
-                <a href="https://www.bitcoin.com/" target="_blank">Bitcoin.com</a>,
-                one of the most recognized brands in the crypto industry.
-            </p>
+    <div style="max-width: 820px; margin: 0 auto; text-align: center;">
+        <p style="font-size: 19px; line-height: 1.7; color: #E2E8F0;">
+            SnappQuest is backed by <strong>VERSE</strong>, the official token of 
+            <strong><a href="https://www.bitcoin.com/" target="_blank">Bitcoin.com</a></strong>, one of the most trusted and recognized brands in crypto.
+        </p>
+        
+        <p style="font-size: 18px; line-height: 1.75; color: var(--color-text-secondary); margin-top: 24px;">
+            Bitcoin.com has onboarded millions of users worldwide. This partnership gives you access to 
+            both seasoned crypto natives and high-quality newcomers entering Web3.
+        </p>
+    </div>
 
-            <p>
-                Bitcoin.com has helped onboard millions of users into crypto globally,
-                making the ecosystem valuable for projects seeking both experienced crypto users
-                and newcomers entering Web3.
-            </p>
-
+    <!-- Optional Trust Badges -->
+    <div style="display: flex; justify-content: center; gap: 40px; margin-top: 50px; flex-wrap: wrap; opacity: 0.9;">
+        <div style="text-align:center; font-size:13px; color:#94A3B8;">
+            <i class="fas fa-check-circle"></i><br>Strong Backing
         </div>
+        <div style="text-align:center; font-size:13px; color:#94A3B8;">
+            <i class="fas fa-check-circle"></i><br>Trusted Brand
+        </div>
+        <div style="text-align:center; font-size:13px; color:#94A3B8;">
+            <i class="fas fa-check-circle"></i><br>Wide Reach
+        </div>
+    </div>
+
+</div>
 
         <div class="features-section">
 
@@ -1137,81 +1151,45 @@
                 What Sponsors Gain
             </div>
 
-            <div class="features-grid">
+<div class="features-grid">
 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
+    <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-users"></i></div>
+        <h3>Engaged Crypto Audience</h3>
+        <p>Reach active crypto-native users participating in Web3 campaigns and ecosystem growth initiatives.</p>
+    </div>
 
-                    <h3>Engaged Crypto Audience</h3>
+    <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-gift"></i></div>
+        <h3>Incentivized Participation</h3>
+        <p>Drive meaningful engagement through reward-powered campaigns instead of passive advertising impressions.</p>
+    </div>
 
-                    <p>
-                        Reach active crypto-native users participating in Web3 campaigns and ecosystem growth initiatives.
-                    </p>
-                </div>
+    <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-share-nodes"></i></div>
+        <h3>Social Visibility</h3>
+        <p>Expand campaign reach across platforms like X, Telegram, and community partner networks.</p>
+    </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-gift"></i>
-                    </div>
+    <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+        <h3>Community Activation</h3>
+        <p>Transform inactive audiences into active participants through quests and ecosystem interaction.</p>
+    </div>
 
-                    <h3>Incentivized Participation</h3>
+    <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-arrow-right-to-bracket"></i></div>
+        <h3>Ecosystem Onboarding</h3>
+        <p>Help users discover, test, and onboard into your product, protocol, or community.</p>
+    </div>
 
-                    <p>
-                        Drive meaningful engagement through reward-powered campaigns instead of passive advertising impressions.
-                    </p>
-                </div>
+    <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
+        <h3>Flexible Campaigns</h3>
+        <p>Launch awareness campaigns, bounties, onboarding flows, beta testing, and engagement quests.</p>
+    </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bullhorn"></i>
-                    </div>
-
-                    <h3>Social Visibility</h3>
-
-                    <p>
-                        Expand campaign reach across platforms like X, Telegram, and community partner networks.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-
-                    <h3>Community Activation</h3>
-
-                    <p>
-                        Transform inactive audiences into active participants through quests and ecosystem interaction.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-link"></i>
-                    </div>
-
-                    <h3>Ecosystem Onboarding</h3>
-
-                    <p>
-                        Help users discover, test, and onboard into your product, protocol, or community.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-
-                    <h3>Flexible Campaigns</h3>
-
-                    <p>
-                        Launch awareness campaigns, bounties, onboarding flows, beta testing, and engagement quests.
-                    </p>
-                </div>
-
-            </div>
+</div>
 
         </div>
 
@@ -1323,126 +1301,153 @@
 </div>
     
     <!-- Customize: Adjust JavaScript below for custom behaviors, or add new scripts. Comment out unused functions. -->
-    <script>
-        // Set current year in footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+<script>
+    // Set current year in footer
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Get elements for hamburger menu
-        const hamburger = document.querySelector('.hamburger');
-        const navContainer = document.querySelector('.nav-container');
-        const overlay = document.querySelector('.overlay');
+    // Hamburger Menu & Back to Top (unchanged)
+    const hamburger = document.querySelector('.hamburger');
+    const navContainer = document.querySelector('.nav-container');
+    const overlay = document.querySelector('.overlay');
+    const backToTopButton = document.getElementById('back-to-top');
 
-        // Get back to top button
-        const backToTopButton = document.getElementById('back-to-top');
+    function toggleMobileMenu() {
+        hamburger.classList.toggle('active');
+        navContainer.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
 
-        // Modal Functions
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.add('is-open');
-        }
+    hamburger.addEventListener('click', toggleMobileMenu);
 
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.remove('is-open');
-        }
-
-        // Close modal when clicking outside
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('is-open');
-            }
-        });
-
-        // Toggle hamburger menu
-        function toggleMobileMenu() {
-            hamburger.classList.toggle('active');
-            navContainer.classList.toggle('active');
-            overlay.classList.toggle('active');
-        }
-
-        hamburger.addEventListener('click', toggleMobileMenu);
-
-        // Close hamburger menu when a link is clicked
-        navContainer.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navContainer.classList.remove('active');
-                overlay.classList.remove('active');
-            });
-        });
-
-        // Close hamburger menu when overlay is clicked
-        overlay.addEventListener('click', () => {
+    navContainer.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
             hamburger.classList.remove('active');
             navContainer.classList.remove('active');
             overlay.classList.remove('active');
         });
+    });
 
-        // Back to Top Button Functionality
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTopButton.classList.add('visible');
-            } else {
-                backToTopButton.classList.remove('visible');
-            }
-        });
+    overlay.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navContainer.classList.remove('active');
+        overlay.classList.remove('active');
+    });
 
-        backToTopButton.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // CTA Popup Logic
-        const CONFIG = {
-            API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
-            STATS_ID: '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w',
-            STATS_RANGE: 'SnappQuestData!A1:C2'
-        };
-
-        async function fetchSheetData(spreadsheetId, range) {
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${CONFIG.API_KEY}`;
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const data = await response.json();
-                const headers = data.values[0].map(h => h.trim());
-                return data.values.slice(1).map(row => {
-                    const obj = {};
-                    headers.forEach((header, i) => { obj[header] = (row[i] || '').trim(); });
-                    return obj;
-                });
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                return [];
-            }
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            backToTopButton.classList.add('visible');
+        } else {
+            backToTopButton.classList.remove('visible');
         }
+    });
 
-        function formatNumber(num) {
-            const absNum = Math.abs(num);
-            if (absNum >= 1_000_000_000) return (num / 1_000_000_000).toFixed(1) + 'B';
-            if (absNum >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M';
-            if (absNum >= 10_000) return (num / 1_000).toFixed(1) + 'K';
-            return num.toLocaleString('en-US');
+    backToTopButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // === LIVE STATS FROM GOOGLE SHEETS ===
+    const CONFIG = {
+        API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
+        SPREADSHEET_ID: '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w',
+        RANGE: 'SnappQuestData!A8:D8'   // Updated range
+    };
+
+    async function fetchLiveStats() {
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SPREADSHEET_ID}/values/${CONFIG.RANGE}?key=${CONFIG.API_KEY}`;
+        
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data.values && data.values[0]) {
+                const [totalEarned, views, interactions, visits] = data.values[0];
+
+                // Update Stat Cards
+                document.querySelectorAll('.stat-card h3')[0].textContent = formatNumber(totalEarned || "0");
+                document.querySelectorAll('.stat-card h3')[1].textContent = formatNumber(views || "0") + "+";
+                document.querySelectorAll('.stat-card h3')[2].textContent = formatNumber(interactions || "0") + "+";
+                document.querySelectorAll('.stat-card h3')[3].textContent = formatNumber(visits || "0") + "+";
+                
+            }
+        } catch (error) {
+            console.error("Failed to fetch stats:", error);
+            // Fallback values
+            document.querySelectorAll('.stat-card h3')[0].textContent = "$4K";
         }
-
-async function loadEarnings() {
-    const statsRows = await fetchSheetData(CONFIG.STATS_ID, CONFIG.STATS_RANGE);
-    if (statsRows.length === 0) {
-        console.warn('No stats data found. Using fallback value.');
-        document.getElementById('ctaTitle').innerHTML = '💰 Over 36M VERSE have been paid out as rewards!';
-    } else {
-        const earnings = parseInt(statsRows[0].Earnings) || 0;
-        const formatted = formatNumber(earnings);
-        document.getElementById('ctaTitle').innerHTML = `💰 Over ${formatted} VERSE have been paid out as rewards!`;
     }
-    openModal('ctaModal');
+
+function formatNumber(value) {
+    if (!value) return "0";
+
+    const str = String(value).trim();
+
+    // Respect already formatted values (like 19K, 36M, $4K)
+    if (/[KM]$/i.test(str)) {
+        return str;
+    }
+
+    // Remove currency symbols and commas for calculation
+    let numStr = str.replace(/[€$£¥₹,]/g, '');
+    let num = parseFloat(numStr);
+
+    if (isNaN(num)) return str;
+
+    let formatted;
+
+    if (num >= 1_000_000) {
+        formatted = (num / 1_000_000).toFixed(1) + "M";
+    } else if (num >= 1_000) {
+        formatted = Math.round(num / 1_000) + "K";
+    } else {
+        // For numbers under 1,000 → round to nearest whole number
+        formatted = Math.round(num).toLocaleString('en-US');
+    }
+
+    // Add back currency symbol if it existed
+    const currencyMatch = str.match(/^([€$£¥₹])/);
+    const currency = currencyMatch ? currencyMatch[1] : '';
+
+    return currency + formatted;
 }
 
-        // Load earnings and show popup on page load
-        window.addEventListener('load', loadEarnings);
-    </script>
+function animateCount(el, target, duration = 1800) {
+    let start = 0;
+    const increment = target / (duration / 16);
+    
+    function step() {
+        start += increment;
+        if (start < target) {
+            el.textContent = Math.floor(start) + (target >= 1000 ? "+" : "");
+            requestAnimationFrame(step);
+        } else {
+            el.textContent = target + (target >= 1000 ? "+" : "");
+        }
+    }
+    step();
+}
+
+    // Load stats when page loads
+    window.addEventListener('load', () => {
+        fetchLiveStats();
+    });
+
+    // Modal Functions (kept for now)
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.add('is-open');
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.remove('is-open');
+    }
+
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.classList.remove('is-open');
+        }
+    });
+</script>
 </body>
 
 </html>

@@ -1119,6 +1119,37 @@
             .form-group input, .form-group textarea { font-size: 12px; padding: 10px; }
             .modal-submit-btn { padding: 10px 20px; font-size: 14px; margin-right: 12px; }
         }
+        
+        /* === FANCY LINK STYLING INSIDE DESCRIPTION (Only Links) === */
+.quest-description a,
+.quest-description a:link,
+.quest-description a:visited {
+    color: #6366F1 !important;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: all 0.3s ease;
+}
+
+.quest-description a:hover {
+    color: #34D399 !important;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 2px;
+}
+
+/* === PUSH REWARD/BUTTONS TO BOTTOM === */
+.quest-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.quest-description {
+    flex: 1;
+}
+
+.quest-reward {
+    margin-top: auto !important;
+}
     </style>
     <link href="images/icon.png" rel="icon">
 </head>
