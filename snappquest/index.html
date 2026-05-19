@@ -1294,9 +1294,9 @@
 <div id="ctaModal" class="modal">
     <div class="modal-content">
         <span class="modal-close" onclick="closeModal('ctaModal')">&times;</span>
-        <h3 id="ctaTitle" class="hero-gradient-text">💰 Over 36M VERSE have been paid out as rewards!</h3>
+        <h3 id="ctaTitle" class="hero-gradient-text">💰 Over 70M VERSE have been paid out as rewards!</h3>
         <p>Join Quests Now and Start Earning!</p>
-        <button class="cta-primary" onclick="window.location.href='join.html'">Join Quests</button>
+        <button class="cta-primary" onclick="window.location.href='join.html'"><i class="fas fa-arrow-right-to-bracket"></i> Join Quests</button>
     </div>
 </div>
     
@@ -1352,29 +1352,37 @@
         RANGE: 'SnappQuestData!A8:D8'   // Updated range
     };
 
-    async function fetchLiveStats() {
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SPREADSHEET_ID}/values/${CONFIG.RANGE}?key=${CONFIG.API_KEY}`;
+// === LIVE STATS FROM GOOGLE SHEETS (VERSE from C2) ===
+async function fetchLiveStats() {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SPREADSHEET_ID}/values/SnappQuestData!C2?key=${CONFIG.API_KEY}`;
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
         
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            if (data.values && data.values[0]) {
-                const [totalEarned, views, interactions, visits] = data.values[0];
+        if (data.values && data.values[0]) {
+            const totalVerseEarned = data.values[0][0];   // Pulls from C2
 
-                // Update Stat Cards
-                document.querySelectorAll('.stat-card h3')[0].textContent = formatNumber(totalEarned || "0");
-                document.querySelectorAll('.stat-card h3')[1].textContent = formatNumber(views || "0") + "+";
-                document.querySelectorAll('.stat-card h3')[2].textContent = formatNumber(interactions || "0") + "+";
-                document.querySelectorAll('.stat-card h3')[3].textContent = formatNumber(visits || "0") + "+";
-                
+            // Update Stats Cards (if you still want them)
+            const statEls = document.querySelectorAll('.stat-card h3');
+            if (statEls.length >= 1) {
+                statEls[0].textContent = formatNumber(totalVerseEarned || "0");
             }
-        } catch (error) {
-            console.error("Failed to fetch stats:", error);
-            // Fallback values
-            document.querySelectorAll('.stat-card h3')[0].textContent = "$4K";
+
+            // === UPDATE CTA MODAL ===
+            const modalTitle = document.getElementById('ctaTitle');
+            if (modalTitle) {
+                const formatted = formatNumber(totalVerseEarned || "0");
+                modalTitle.innerHTML = `💰 Over <strong>${formatted}</strong> VERSE have been paid out as rewards!`;
+            }
         }
+    } catch (error) {
+        console.error("Failed to fetch VERSE earnings:", error);
+        // Fallback
+        const modalTitle = document.getElementById('ctaTitle');
+        if (modalTitle) modalTitle.innerHTML = `💰 Over <strong>70M</strong> VERSE have been paid out as rewards!`;
     }
+}
 
 function formatNumber(value) {
     if (!value) return "0";
@@ -1430,6 +1438,25 @@ function animateCount(el, target, duration = 1800) {
     window.addEventListener('load', () => {
         fetchLiveStats();
     });
+    
+
+    // === SHOW EARNINGS CTA POPUP ON PAGE LOAD ===
+function showEarningsCTA() {
+    const modal = document.getElementById('ctaModal');
+    if (modal) {
+        modal.classList.add('is-open');
+    }
+}
+
+// Call it when page loads
+window.addEventListener('load', () => {
+    fetchLiveStats();
+    
+    // Show popup after 2.5 seconds
+    setTimeout(() => {
+        showEarningsCTA();
+    }, 2500);
+});
 
     // Modal Functions (kept for now)
     function openModal(modalId) {
