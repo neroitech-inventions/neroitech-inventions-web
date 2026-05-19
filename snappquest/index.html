@@ -1090,22 +1090,22 @@
         <div class="stats-grid">
 
             <div class="stat-card">
-                <h3>$4K</h3>
+                <h3>$3K</h3>
                 <p>Total Value Earned</p>
             </div>
 
             <div class="stat-card">
-                <h3>7K+</h3>
-                <p>Ecosystem Views</p>
+                <h3>300+</h3>
+                <p>Quest Hosted</p>
             </div>
 
             <div class="stat-card">
-                <h3>3K+</h3>
+                <h3>2K+</h3>
                 <p>Interactions in 30 Days</p>
             </div>
 
             <div class="stat-card">
-                <h3>99+</h3>
+                <h3>90+</h3>
                 <p>Daily Ecosystem Visits</p>
             </div>
 
@@ -1352,22 +1352,27 @@
         RANGE: 'SnappQuestData!A8:D8'   // Updated range
     };
 
-// === LIVE STATS - A8 for Stats Card, C2 for Popup Modal ===
+// === LIVE STATS - A8-D8 for cards, C2 for Popup ===
 async function fetchLiveStats() {
     try {
-        // 1. Get Total Value Earned (A8) for Stats Card
-        const statsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SPREADSHEET_ID}/values/SnappQuestData!A8?key=${CONFIG.API_KEY}`;
+        // 1. Get all stats for the 4 cards (A8:D8)
+        const statsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SPREADSHEET_ID}/values/SnappQuestData!A8:D8?key=${CONFIG.API_KEY}`;
         const statsRes = await fetch(statsUrl);
         const statsData = await statsRes.json();
-        const totalEarned = statsData.values?.[0]?.[0] || "0";
+        
+        if (statsData.values && statsData.values[0]) {
+            const [totalValue, questHosted, interactions, dailyVisits] = statsData.values[0];
 
-        // Update Stats Card
-        const statEls = document.querySelectorAll('.stat-card h3');
-        if (statEls.length >= 1) {
-            statEls[0].textContent = formatNumber(totalEarned);
+            const statEls = document.querySelectorAll('.stat-card h3');
+            if (statEls.length >= 4) {
+                statEls[0].textContent = formatNumber(totalValue || "0");        // A8
+                statEls[1].textContent = formatNumber(questHosted || "0") + "+"; // B8
+                statEls[2].textContent = formatNumber(interactions || "0") + "+"; // C8
+                statEls[3].textContent = formatNumber(dailyVisits || "0") + "+"; // D8
+            }
         }
 
-        // 2. Get VERSE Paid Out (C2) for CTA Popup
+        // 2. Get VERSE Paid Out from C2 for CTA Popup
         const verseUrl = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SPREADSHEET_ID}/values/SnappQuestData!C2?key=${CONFIG.API_KEY}`;
         const verseRes = await fetch(verseUrl);
         const verseData = await verseRes.json();
@@ -1383,12 +1388,17 @@ async function fetchLiveStats() {
     } catch (error) {
         console.error("Failed to fetch stats:", error);
         
-        // Fallbacks
+        // Fallback
         const statEls = document.querySelectorAll('.stat-card h3');
-        if (statEls.length >= 1) statEls[0].textContent = "$4K";
+        if (statEls.length >= 4) {
+            statEls[0].textContent = "$4K";
+            statEls[1].textContent = "400+";
+            statEls[2].textContent = "3K+";
+            statEls[3].textContent = "99+";
+        }
         
         const verseAmount = document.getElementById('verseAmount');
-        if (verseAmount) verseAmount.textContent = "36M";
+        if (verseAmount) verseAmount.textContent = "70M";
     }
 }
 
