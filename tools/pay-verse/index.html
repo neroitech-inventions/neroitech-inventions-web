@@ -8,18 +8,16 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-QM106YDX6N');
 </script>
-
-  <!-- Verse Analytics -->
-  <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
-  <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.tagged-events.outbound-links.file-downloads.hash.pageview-props.revenue.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Verse Analytics -->
+<script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
+<script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.tagged-events.outbound-links.file-downloads.hash.pageview-props.revenue.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>VersePay - Pay with VERSE</title>
-    <!-- Favicon -->
 <link href="images/favicon.ico" rel="icon">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -34,10 +32,15 @@
     --red: #ff4d6d;
     --red-dim: rgba(255,77,109,0.12);
     --yellow: #ffd166;
+    --blue: #3b82f6;
     --text: #e8f0fe;
     --muted: #5a7090;
     --font-display: 'Syne', sans-serif;
     --font-mono: 'DM Mono', monospace;
+  }
+
+  html, body {
+    height: 100%;
   }
 
   body {
@@ -46,13 +49,13 @@
     color: var(--text);
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 16px;
     overflow-x: hidden;
   }
 
-  /* Background grid */
   body::before {
     content: '';
     position: fixed;
@@ -65,7 +68,6 @@
     z-index: 0;
   }
 
-  /* Glow blob */
   body::after {
     content: '';
     position: fixed;
@@ -79,15 +81,16 @@
     z-index: 0;
   }
 
+  /* ── CARD ── */
   .card {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 480px;
+    max-width: 460px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 24px;
-    padding: 36px 32px;
+    padding: 28px 24px;
     box-shadow: 0 0 0 1px rgba(0,229,160,0.05), 0 24px 60px rgba(0,0,0,0.6);
     animation: fadeUp 0.5s ease both;
   }
@@ -97,44 +100,46 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  /* ── HEADER ── */
   .header {
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-bottom: 28px;
+    gap: 12px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
   }
 
   .logo {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 12px;
     background: linear-gradient(135deg, #00e5a0, #00c48c);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 18px;
     flex-shrink: 0;
     box-shadow: 0 0 20px var(--green-glow);
   }
 
   .header-text h2 {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 800;
     letter-spacing: -0.5px;
     line-height: 1.1;
   }
 
   .header-text p {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     color: var(--muted);
     font-family: var(--font-mono);
-    margin-top: 3px;
+    margin-top: 2px;
   }
 
   .network-badge {
     margin-left: auto;
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     padding: 5px 10px;
     border-radius: 20px;
     background: var(--green-dim);
@@ -146,36 +151,234 @@
   .divider {
     height: 1px;
     background: var(--border);
+    margin-bottom: 20px;
+  }
+
+  /* ── WALLET CONNECT MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-overlay.open {
+    display: flex;
+    animation: overlayIn 0.25s ease;
+  }
+
+  @keyframes overlayIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px 24px 0 0;
+    padding: 28px 24px 36px;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  .modal-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  .modal h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .modal-sub {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    text-align: center;
     margin-bottom: 24px;
   }
 
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+
+  .modal-close:hover { color: var(--text); }
+
+  /* Wallet option buttons */
+  .wallet-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    font-family: var(--font-display);
+    color: var(--text);
+    text-align: left;
+  }
+
+  .wallet-option:hover {
+    border-color: var(--green);
+    background: var(--green-dim);
+    transform: translateY(-1px);
+  }
+
+  .wallet-option:active { transform: scale(0.98); }
+
+  .wallet-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .wallet-icon.mm  { background: linear-gradient(135deg, #e2761b, #cd6116); }
+  .wallet-icon.wc  { background: linear-gradient(135deg, #3b99fc, #2b7fd4); }
+  .wallet-icon.cb  { background: linear-gradient(135deg, #1652f0, #0a3dc4); }
+  .wallet-icon.tw  { background: linear-gradient(135deg, #3375bb, #245fa6); }
+
+  .wallet-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+
+  .wallet-desc {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    margin-top: 2px;
+  }
+
+  .wallet-badge {
+    margin-left: auto;
+    font-size: 0.6rem;
+    font-family: var(--font-mono);
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid rgba(0,229,160,0.2);
+    white-space: nowrap;
+  }
+
+  .wallet-badge.blue {
+    background: rgba(59,130,246,0.12);
+    color: #60a5fa;
+    border-color: rgba(59,130,246,0.2);
+  }
+
+  /* QR Modal for WalletConnect */
+  .qr-section {
+    display: none;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .qr-section.show { display: block; }
+
+  .qr-placeholder {
+    width: 180px;
+    height: 180px;
+    background: white;
+    border-radius: 16px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #333;
+    font-family: var(--font-mono);
+    padding: 10px;
+    text-align: center;
+  }
+
+  .qr-back {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    margin-top: 8px;
+  }
+
+  .qr-back:hover { color: var(--text); border-color: var(--text); }
+
+  /* ── FORM ELEMENTS ── */
   label {
     display: block;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-family: var(--font-mono);
     color: var(--muted);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 7px;
   }
 
   .input-wrap {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .input-wrap input {
     width: 100%;
     padding: 14px 16px;
-    padding-right: 80px;
+    padding-right: 76px;
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 14px;
     color: var(--text);
     font-family: var(--font-mono);
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
+    /* Prevent zoom on iOS */
+    font-size: max(16px, 1rem);
   }
 
   .input-wrap input:focus {
@@ -183,7 +386,7 @@
     box-shadow: 0 0 0 3px var(--green-dim);
   }
 
-  .input-wrap input::placeholder { color: var(--muted); font-size: 0.95rem; }
+  .input-wrap input::placeholder { color: var(--muted); }
 
   .input-unit {
     position: absolute;
@@ -191,7 +394,7 @@
     top: 50%;
     transform: translateY(-50%);
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--green);
     font-weight: 500;
     pointer-events: none;
@@ -201,31 +404,34 @@
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 14px;
-    padding: 12px 16px;
-    margin-bottom: 24px;
+    padding: 11px 14px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
+    overflow: hidden;
   }
 
-  .receiver-box .rx-label {
-    font-size: 0.65rem;
+  .rx-label {
+    font-size: 0.62rem;
     font-family: var(--font-mono);
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     white-space: nowrap;
+    flex-shrink: 0;
   }
 
-  .receiver-box .rx-addr {
+  .rx-addr {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     color: var(--text);
-    word-break: break-all;
     opacity: 0.8;
+    word-break: break-all;
+    min-width: 0;
   }
 
-  /* Buttons */
+  /* ── BUTTONS ── */
   .btn {
     width: 100%;
     padding: 15px;
@@ -240,9 +446,11 @@
     transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
     position: relative;
     overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
-  .btn:active { transform: scale(0.98); }
+  .btn:active { transform: scale(0.97); }
 
   .btn:disabled {
     opacity: 0.35;
@@ -272,6 +480,18 @@
     transform: translateY(-1px);
   }
 
+  .btn-pay::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.5s;
+  }
+
+  .btn-pay:not(:disabled):hover::after { left: 160%; }
+
   .btn-disconnect {
     background: var(--red-dim);
     color: var(--red);
@@ -284,35 +504,23 @@
     box-shadow: 0 4px 16px rgba(255,77,109,0.2);
   }
 
-  /* Shimmer on pay button */
-  .btn-pay::after {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 60%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-    transform: skewX(-20deg);
-    transition: left 0.5s;
-  }
-  .btn-pay:not(:disabled):hover::after { left: 160%; }
-
-  /* Result / log area */
+  /* ── RESULT LOG ── */
   .result {
-    margin-top: 6px;
-    padding: 16px;
+    margin-top: 4px;
+    padding: 14px 16px;
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 14px;
-    min-height: 90px;
+    min-height: 80px;
     font-family: var(--font-mono);
-    font-size: 0.8rem;
-    line-height: 1.6;
+    font-size: 0.78rem;
+    line-height: 1.65;
     word-break: break-all;
     color: var(--muted);
     transition: border-color 0.3s;
   }
 
-  .result.active { border-color: rgba(0,229,160,0.3); }
+  .result.active      { border-color: rgba(0,229,160,0.3); }
   .result.error-state { border-color: rgba(255,77,109,0.3); }
 
   .success { color: var(--green); font-weight: 500; }
@@ -324,7 +532,7 @@
     margin-top: 6px;
     color: var(--green);
     opacity: 0.8;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
   }
 
   .tx-hash a {
@@ -335,36 +543,37 @@
 
   .spinner {
     display: inline-block;
-    width: 12px; height: 12px;
+    width: 11px; height: 11px;
     border: 2px solid var(--green-dim);
     border-top-color: var(--green);
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
-    margin-right: 8px;
+    margin-right: 7px;
     vertical-align: middle;
   }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* ── WALLET INFO BAR ── */
   .wallet-info {
-    display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     padding: 10px 14px;
     background: var(--green-dim);
     border: 1px solid rgba(0,229,160,0.2);
     border-radius: 12px;
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: var(--green);
     display: none;
+    overflow: hidden;
   }
 
+  .wallet-info.show { display: flex; }
+
   .wallet-dot {
-    width: 8px; height: 8px;
+    width: 7px; height: 7px;
     border-radius: 50%;
     background: var(--green);
     box-shadow: 0 0 6px var(--green);
@@ -374,12 +583,133 @@
 
   @keyframes pulse-dot {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    50%       { opacity: 0.4; }
+  }
+
+  /* ── DEEP LINK BANNER (mobile only) ── */
+  .deeplink-banner {
+    display: none;
+    margin-bottom: 10px;
+    padding: 12px 14px;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #60a5fa;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 480px) {
+    body { padding: 12px 12px 24px; align-items: flex-end; }
+
+    .card {
+      border-radius: 20px 20px 16px 16px;
+      padding: 22px 18px 24px;
+      max-width: 100%;
+    }
+
+    .header { margin-bottom: 18px; }
+    .header-text h2 { font-size: 1.15rem; }
+    .network-badge { font-size: 0.6rem; padding: 4px 8px; }
+
+    .btn { padding: 16px; font-size: 1rem; }
+
+    .modal {
+      border-radius: 20px 20px 0 0;
+      padding: 24px 18px 40px;
+    }
+
+    .wallet-option { padding: 13px 14px; }
+    .wallet-icon { width: 36px; height: 36px; font-size: 18px; }
+    .wallet-name { font-size: 0.88rem; }
+  }
+
+  @media (min-width: 481px) {
+    .modal-overlay {
+      align-items: center;
+    }
+    .modal {
+      border-radius: 24px;
+      max-width: 400px;
+    }
+    .modal-handle { display: none; }
   }
 </style>
 </head>
 <body>
 
+<!-- ═══════════════════════════════════════════
+     WALLET CONNECT MODAL
+════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="walletModal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" id="modalClose">✕</button>
+
+    <!-- Wallet list view -->
+    <div id="walletList">
+      <h3>Connect Wallet</h3>
+      <p class="modal-sub">Choose your wallet to continue</p>
+
+      <button class="wallet-option" id="metamaskBtn">
+        <div class="wallet-icon mm">🦊</div>
+        <div>
+          <div class="wallet-name">MetaMask</div>
+          <div class="wallet-desc">Browser extension / mobile app</div>
+        </div>
+        <span class="wallet-badge" id="metamaskBadge">Detected</span>
+      </button>
+
+      <button class="wallet-option" id="walletConnectBtn">
+        <div class="wallet-icon wc">🔗</div>
+        <div>
+          <div class="wallet-name">WalletConnect</div>
+          <div class="wallet-desc">Scan QR or use any mobile wallet</div>
+        </div>
+        <span class="wallet-badge blue">Universal</span>
+      </button>
+
+      <button class="wallet-option" id="coinbaseBtn">
+        <div class="wallet-icon cb">🔵</div>
+        <div>
+          <div class="wallet-name">Coinbase Wallet</div>
+          <div class="wallet-desc">Coinbase browser extension</div>
+        </div>
+        <span class="wallet-badge" id="coinbaseBadge" style="display:none">Detected</span>
+      </button>
+
+      <button class="wallet-option" id="trustBtn">
+        <div class="wallet-icon tw">🛡️</div>
+        <div>
+          <div class="wallet-name">Trust Wallet</div>
+          <div class="wallet-desc">Open in Trust Wallet app</div>
+        </div>
+        <span class="wallet-badge blue">Mobile</span>
+      </button>
+    </div>
+
+    <!-- WalletConnect QR view -->
+    <div id="qrView" class="qr-section">
+      <h3>Scan with your wallet</h3>
+      <p class="modal-sub">Open any WalletConnect-compatible wallet and scan</p>
+      <div class="qr-placeholder" id="qrCode">
+        📱 WalletConnect QR<br><br>
+        <small>Integrate WalletConnect SDK<br>for live QR generation</small>
+      </div>
+      <p style="font-size:0.7rem; color:var(--muted); font-family:var(--font-mono); margin-bottom:8px;">
+        Works with MetaMask, Rainbow, Trust, Argent, and 300+ wallets
+      </p>
+      <button class="qr-back" id="qrBack">← Back to wallets</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MAIN CARD
+════════════════════════════════════════════ -->
 <div class="card">
   <div class="header">
     <div class="logo">⬡</div>
@@ -392,239 +722,355 @@
 
   <div class="divider"></div>
 
-  <!-- Connected wallet display -->
-  <div class="wallet-info" id="walletInfo">
-    <div class="wallet-dot"></div>
-    <span id="walletAddr">—</span>
+  <!-- Mobile deep-link info -->
+  <div class="deeplink-banner" id="deeplinkBanner">
+    📱 On mobile? Use <strong>Trust Wallet</strong> or <strong>MetaMask app</strong> built-in browser for best experience.
   </div>
 
-  <!-- Amount input -->
+  <!-- Connected wallet -->
+  <div class="wallet-info" id="walletInfo">
+    <div class="wallet-dot"></div>
+    <span id="walletAddr" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</span>
+  </div>
+
+  <!-- Amount -->
   <label for="amount">Amount</label>
   <div class="input-wrap">
-    <input type="number" id="amount" placeholder="0.0000" step="0.0001" min="0">
+    <input type="number" id="amount" placeholder="0.0000" step="0.0001" min="0" inputmode="decimal">
     <span class="input-unit">VERSE</span>
   </div>
 
-  <!-- Receiver display -->
+  <!-- Receiver -->
   <div class="receiver-box">
     <span class="rx-label">To</span>
-    <span class="rx-addr" id="receiverDisplay">0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB</span>
+    <span class="rx-addr">0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB</span>
   </div>
 
   <button class="btn btn-connect" id="connectBtn">Connect Wallet</button>
   <button class="btn btn-pay" id="payBtn" disabled>Pay Now</button>
   <button class="btn btn-disconnect" id="disconnectBtn" style="display:none;">Disconnect Wallet</button>
 
-  <div class="result" id="result">Waiting to connect wallet...</div>
+  <div class="result" id="result">Choose a wallet to get started.</div>
 </div>
 
-<!-- ethers.js v5 -->
+<!-- ethers v5 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 
 <script>
-  // ─── CONFIG ──────────────────────────────────────────────────────────────────
-  const RECEIVER        = "0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB";
-  const VERSE_TOKEN     = "0xc708D6F2153933DAA50B2D0758955Be0A93A8FEc"; // VERSE on Polygon (verify on Polygonscan)
-  const POLYGON_CHAIN_ID = 137;
+// ═══════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════
+const RECEIVER         = "0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB";
+const VERSE_TOKEN      = "0xc708D6F2153933DAA50B2D0758955Be0A93A8FEc"; // verify on Polygonscan
+const POLYGON_CHAIN_ID = 137;
+const POLYGON_HEX      = "0x89";
 
-  // Full minimal ERC-20 ABI (includes decimals + balanceOf for checks)
-  const ERC20_ABI = [
-    "function transfer(address to, uint256 amount) returns (bool)",
-    "function balanceOf(address owner) view returns (uint256)",
-    "function decimals() view returns (uint8)"
-  ];
+const ERC20_ABI = [
+  "function transfer(address to, uint256 amount) returns (bool)",
+  "function balanceOf(address owner) view returns (uint256)",
+  "function decimals() view returns (uint8)"
+];
 
-  // ─── STATE ───────────────────────────────────────────────────────────────────
-  let userAddress = null;
-  let provider    = null;
-  let signer      = null;
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+let userAddress = null;
+let provider    = null;
+let signer      = null;
+const isMobile  = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
 
-  // ─── ELEMENTS ────────────────────────────────────────────────────────────────
-  const resultDiv      = document.getElementById("result");
-  const connectBtn     = document.getElementById("connectBtn");
-  const payBtn         = document.getElementById("payBtn");
-  const disconnectBtn  = document.getElementById("disconnectBtn");
-  const walletInfo     = document.getElementById("walletInfo");
-  const walletAddr     = document.getElementById("walletAddr");
+// ═══════════════════════════════════════════════════
+// ELEMENTS
+// ═══════════════════════════════════════════════════
+const resultDiv      = document.getElementById("result");
+const connectBtn     = document.getElementById("connectBtn");
+const payBtn         = document.getElementById("payBtn");
+const disconnectBtn  = document.getElementById("disconnectBtn");
+const walletInfo     = document.getElementById("walletInfo");
+const walletAddr     = document.getElementById("walletAddr");
+const modalOverlay   = document.getElementById("modalOverlay");
+const modalClose     = document.getElementById("modalClose");
+const walletList     = document.getElementById("walletList");
+const qrView         = document.getElementById("qrView");
+const qrBack         = document.getElementById("qrBack");
+const metamaskBadge  = document.getElementById("metamaskBadge");
+const coinbaseBadge  = document.getElementById("coinbaseBadge");
+const deeplinkBanner = document.getElementById("deeplinkBanner");
 
-  // ─── HELPERS ─────────────────────────────────────────────────────────────────
-  function setResult(html, type = "") {
-    resultDiv.innerHTML = html;
-    resultDiv.className = "result" + (type ? " " + type : "");
+// ═══════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════
+function setResult(html, type = "") {
+  resultDiv.innerHTML = html;
+  resultDiv.className = "result" + (type ? " " + type : "");
+}
+
+function shortAddr(addr) {
+  return addr.slice(0, 6) + "…" + addr.slice(-4);
+}
+
+function openModal() {
+  modalOverlay.classList.add("open");
+  walletList.style.display = "block";
+  qrView.classList.remove("show");
+
+  // Update detection badges
+  if (window.ethereum?.isMetaMask) {
+    metamaskBadge.textContent = "✓ Detected";
+    metamaskBadge.style.display = "inline-block";
+  } else {
+    metamaskBadge.textContent = isMobile ? "Get App" : "Install";
+    metamaskBadge.style.display = "inline-block";
   }
 
-  function shortAddr(addr) {
-    return addr.slice(0, 6) + "…" + addr.slice(-4);
+  if (window.coinbaseWalletExtension || window.ethereum?.isCoinbaseWallet) {
+    coinbaseBadge.style.display = "inline-block";
   }
+}
 
-  // Switch or add Polygon network to MetaMask
-  async function ensurePolygon() {
-    try {
-      await window.ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x89" }] // 137 in hex
+function closeModal() {
+  modalOverlay.classList.remove("open");
+}
+
+async function ensurePolygon(eth) {
+  try {
+    await eth.request({ method: "wallet_switchEthereumChain", params: [{ chainId: POLYGON_HEX }] });
+  } catch (e) {
+    if (e.code === 4902) {
+      await eth.request({
+        method: "wallet_addEthereumChain",
+        params: [{
+          chainId: POLYGON_HEX,
+          chainName: "Polygon Mainnet",
+          nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
+          rpcUrls: ["https://polygon-rpc.com/"],
+          blockExplorerUrls: ["https://polygonscan.com/"]
+        }]
       });
-    } catch (switchErr) {
-      // Chain not added — add it
-      if (switchErr.code === 4902) {
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [{
-            chainId: "0x89",
-            chainName: "Polygon Mainnet",
-            nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
-            rpcUrls: ["https://polygon-rpc.com/"],
-            blockExplorerUrls: ["https://polygonscan.com/"]
-          }]
-        });
-      } else {
-        throw switchErr;
-      }
+    } else {
+      throw e;
     }
   }
+}
 
-  // ─── CONNECT WALLET ──────────────────────────────────────────────────────────
-  async function connectWallet() {
-    if (!window.ethereum) {
-      setResult(`<span class="error">❌ MetaMask not found.<br>Install it at <a href="https://metamask.io" target="_blank" style="color:var(--green)">metamask.io</a></span>`, "error-state");
-      return;
-    }
+async function finaliseConnection(eth) {
+  closeModal();
+  setResult(`<span class="warn"><span class="spinner"></span>Switching to Polygon...</span>`);
+  await ensurePolygon(eth);
 
+  provider = new ethers.providers.Web3Provider(eth, "any");
+  signer   = provider.getSigner();
+
+  const network = await provider.getNetwork();
+  if (network.chainId !== POLYGON_CHAIN_ID) {
+    setResult(`<span class="error">❌ Please switch to Polygon Mainnet manually.</span>`, "error-state");
+    return;
+  }
+
+  userAddress = await signer.getAddress();
+
+  connectBtn.style.display    = "none";
+  disconnectBtn.style.display = "block";
+  payBtn.disabled             = false;
+  walletInfo.classList.add("show");
+  walletAddr.textContent      = shortAddr(userAddress) + " · Polygon";
+  deeplinkBanner.style.display = "none";
+
+  setResult(`<span class="success">✅ Wallet connected!</span><br>${userAddress}`, "active");
+
+  eth.on("accountsChanged", (accs) => {
+    if (!accs.length) disconnectWallet();
+    else { userAddress = accs[0]; walletAddr.textContent = shortAddr(userAddress) + " · Polygon"; }
+  });
+  eth.on("chainChanged", () => window.location.reload());
+}
+
+// ═══════════════════════════════════════════════════
+// CONNECT HANDLERS
+// ═══════════════════════════════════════════════════
+
+// --- MetaMask ---
+document.getElementById("metamaskBtn").addEventListener("click", async () => {
+  if (window.ethereum?.isMetaMask || window.ethereum) {
     try {
-      setResult(`<span class="warn"><span class="spinner"></span>Requesting wallet access...</span>`);
-
-      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-      userAddress = accounts[0];
-
-      // Switch to Polygon automatically
-      setResult(`<span class="warn"><span class="spinner"></span>Switching to Polygon Mainnet...</span>`);
-      await ensurePolygon();
-
-      // Re-init provider after network switch
-      provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-      signer   = provider.getSigner();
-
-      // Verify chain
-      const network = await provider.getNetwork();
-      if (network.chainId !== POLYGON_CHAIN_ID) {
-        setResult(`<span class="error">❌ Please manually switch to Polygon Mainnet in MetaMask.</span>`, "error-state");
-        return;
-      }
-
-      // UI update
-      connectBtn.style.display    = "none";
-      disconnectBtn.style.display = "block";
-      payBtn.disabled             = false;
-      walletInfo.style.display    = "flex";
-      walletAddr.textContent      = shortAddr(userAddress) + " · Polygon";
-
-      setResult(`<span class="success">✅ Wallet connected!</span><br>${userAddress}`, "active");
-
-      // Listen for account changes
-      window.ethereum.on("accountsChanged", (accs) => {
-        if (accs.length === 0) disconnectWallet();
-        else { userAddress = accs[0]; walletAddr.textContent = shortAddr(userAddress) + " · Polygon"; }
-      });
-
-      window.ethereum.on("chainChanged", () => window.location.reload());
-
-    } catch (err) {
-      if (err.code === 4001) {
-        setResult(`<span class="error">❌ Connection rejected by user.</span>`, "error-state");
-      } else {
-        setResult(`<span class="error">❌ ${err.message || "Connection failed."}</span>`, "error-state");
-      }
+      setResult(`<span class="warn"><span class="spinner"></span>Opening MetaMask...</span>`);
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+      await finaliseConnection(window.ethereum);
+    } catch (e) {
+      if (e.code === 4001) setResult(`<span class="error">❌ Rejected by user.</span>`, "error-state");
+      else setResult(`<span class="error">❌ ${e.message}</span>`, "error-state");
+      closeModal();
     }
+  } else if (isMobile) {
+    // Deep link to MetaMask mobile
+    const url = encodeURIComponent(window.location.href);
+    window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
+  } else {
+    window.open("https://metamask.io/download/", "_blank");
+    closeModal();
+    setResult(`<span class="warn">MetaMask not found. Install it and refresh.</span>`);
   }
+});
 
-  // ─── PAY NOW ─────────────────────────────────────────────────────────────────
-  async function payNow() {
-    if (!userAddress) {
-      setResult(`<span class="error">❌ Connect your wallet first.</span>`, "error-state");
+// --- WalletConnect (QR fallback) ---
+document.getElementById("walletConnectBtn").addEventListener("click", () => {
+  if (isMobile) {
+    // On mobile, try to use existing ethereum if available (e.g. in-app browser)
+    if (window.ethereum) {
+      document.getElementById("metamaskBtn").click();
       return;
     }
+    // Redirect to WalletConnect-compatible app
+    window.open("https://link.trustwallet.com/open_url?coin_id=966&url=" + encodeURIComponent(window.location.href), "_blank");
+    closeModal();
+    setResult(`<span class="warn">Opening in Trust Wallet... If nothing happens, copy this page URL into your wallet's browser.</span>`);
+  } else {
+    // Show QR code view on desktop
+    walletList.style.display = "none";
+    qrView.classList.add("show");
+    setResult(`<span class="warn"><span class="spinner"></span>Waiting for WalletConnect scan...</span>`);
+    // NOTE: For production, integrate @walletconnect/web3-provider here
+    // and render the actual QR URI into #qrCode using a library like qrcode.js
+  }
+});
 
-    const rawAmount = document.getElementById("amount").value;
-    if (!rawAmount || Number(rawAmount) <= 0) {
-      setResult(`<span class="error">❌ Enter a valid VERSE amount.</span>`, "error-state");
-      return;
-    }
-
+// --- Coinbase Wallet ---
+document.getElementById("coinbaseBtn").addEventListener("click", async () => {
+  const coinbaseEth = window.coinbaseWalletExtension || (window.ethereum?.isCoinbaseWallet ? window.ethereum : null);
+  if (coinbaseEth) {
     try {
-      setResult(`<span class="warn"><span class="spinner"></span>Loading token info...</span>`);
+      setResult(`<span class="warn"><span class="spinner"></span>Opening Coinbase Wallet...</span>`);
+      await coinbaseEth.request({ method: "eth_requestAccounts" });
+      await finaliseConnection(coinbaseEth);
+    } catch (e) {
+      setResult(`<span class="error">❌ ${e.message}</span>`, "error-state");
+      closeModal();
+    }
+  } else if (isMobile) {
+    window.location.href = `https://go.cb-w.com/dapp?cb_url=${encodeURIComponent(window.location.href)}`;
+  } else {
+    window.open("https://www.coinbase.com/wallet/downloads", "_blank");
+    closeModal();
+    setResult(`<span class="warn">Coinbase Wallet not found. Install it and refresh.</span>`);
+  }
+});
 
-      // Re-init signer (handles any edge cases after network switch)
-      provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-      signer   = provider.getSigner();
-
-      const token    = new ethers.Contract(VERSE_TOKEN, ERC20_ABI, signer);
-      const decimals = await token.decimals();
-      const value    = ethers.utils.parseUnits(rawAmount, decimals);
-
-      // Balance check
-      setResult(`<span class="warn"><span class="spinner"></span>Checking balance...</span>`);
-      const balance = await token.balanceOf(userAddress);
-
-      if (balance.lt(value)) {
-        const humanBal = ethers.utils.formatUnits(balance, decimals);
-        setResult(`<span class="error">❌ Insufficient VERSE balance.<br>Your balance: ${parseFloat(humanBal).toFixed(4)} VERSE</span>`, "error-state");
-        return;
-      }
-
-      // Send transaction
-      setResult(`<span class="warn"><span class="spinner"></span>Waiting for MetaMask approval...</span>`);
-      const tx = await token.transfer(RECEIVER, value);
-
-      setResult(`<span class="warn"><span class="spinner"></span>Transaction sent! Waiting for confirmation...<br><span class="tx-hash">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${shortAddr(tx.hash)}</a></span></span>`);
-
-      // Wait for 1 confirmation
-      const receipt = await tx.wait(1);
-
-      if (receipt.status === 1) {
-        setResult(
-          `<span class="success">✅ Payment Successful!</span><br>
-          Sent: <strong>${rawAmount} VERSE</strong><br>
-          To: ${shortAddr(RECEIVER)}<br>
-          <span class="tx-hash">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash}</a></span>`,
-          "active"
-        );
-      } else {
-        setResult(`<span class="error">❌ Transaction reverted. Check Polygonscan.<br><span class="tx-hash"><a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash}</a></span></span>`, "error-state");
-      }
-
-    } catch (err) {
-      // User rejected
-      if (err.code === 4001 || err.code === "ACTION_REJECTED") {
-        setResult(`<span class="error">❌ Transaction rejected by user.</span>`, "error-state");
-      } else if (err.code === "INSUFFICIENT_FUNDS") {
-        setResult(`<span class="error">❌ Insufficient MATIC for gas fees.<br>You need MATIC to pay gas on Polygon.</span>`, "error-state");
-      } else {
-        // Show real error for debugging
-        const msg = err.reason || err.data?.message || err.message || "Unknown error";
-        setResult(`<span class="error">❌ Error: ${msg}</span>`, "error-state");
-        console.error("Payment error:", err);
-      }
+// --- Trust Wallet (mobile deep link) ---
+document.getElementById("trustBtn").addEventListener("click", () => {
+  const trustUrl = `https://link.trustwallet.com/open_url?coin_id=966&url=${encodeURIComponent(window.location.href)}`;
+  if (isMobile) {
+    window.location.href = trustUrl;
+  } else {
+    // Desktop: Trust extension
+    if (window.ethereum?.isTrust) {
+      document.getElementById("metamaskBtn").click();
+    } else {
+      window.open("https://trustwallet.com/browser-extension", "_blank");
+      closeModal();
+      setResult(`<span class="warn">Open this page inside the Trust Wallet mobile browser, or install the desktop extension.</span>`);
     }
   }
+});
 
-  // ─── DISCONNECT ───────────────────────────────────────────────────────────────
-  function disconnectWallet() {
-    userAddress = null;
-    provider    = null;
-    signer      = null;
+// QR back button
+qrBack.addEventListener("click", () => {
+  qrView.classList.remove("show");
+  walletList.style.display = "block";
+  setResult("Choose a wallet to get started.");
+});
 
-    connectBtn.style.display    = "block";
-    disconnectBtn.style.display = "none";
-    payBtn.disabled             = true;
-    walletInfo.style.display    = "none";
-
-    setResult("Wallet disconnected. Connect to continue.");
+// ═══════════════════════════════════════════════════
+// PAY NOW
+// ═══════════════════════════════════════════════════
+async function payNow() {
+  if (!userAddress) {
+    setResult(`<span class="error">❌ Connect your wallet first.</span>`, "error-state");
+    return;
   }
 
-  // ─── EVENTS ───────────────────────────────────────────────────────────────────
-  connectBtn.addEventListener("click", connectWallet);
-  payBtn.addEventListener("click", payNow);
-  disconnectBtn.addEventListener("click", disconnectWallet);
+  const rawAmount = document.getElementById("amount").value;
+  if (!rawAmount || Number(rawAmount) <= 0) {
+    setResult(`<span class="error">❌ Enter a valid VERSE amount.</span>`, "error-state");
+    return;
+  }
+
+  try {
+    setResult(`<span class="warn"><span class="spinner"></span>Loading token info...</span>`);
+    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    signer   = provider.getSigner();
+
+    const token    = new ethers.Contract(VERSE_TOKEN, ERC20_ABI, signer);
+    const decimals = await token.decimals();
+    const value    = ethers.utils.parseUnits(rawAmount, decimals);
+
+    setResult(`<span class="warn"><span class="spinner"></span>Checking balance...</span>`);
+    const balance = await token.balanceOf(userAddress);
+
+    if (balance.lt(value)) {
+      const humanBal = ethers.utils.formatUnits(balance, decimals);
+      setResult(`<span class="error">❌ Insufficient VERSE balance.<br>Your balance: ${parseFloat(humanBal).toFixed(4)} VERSE</span>`, "error-state");
+      return;
+    }
+
+    setResult(`<span class="warn"><span class="spinner"></span>Waiting for wallet approval...</span>`);
+    const tx = await token.transfer(RECEIVER, value);
+
+    setResult(`<span class="warn"><span class="spinner"></span>Confirming on-chain...<br>
+      <span class="tx-hash">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${shortAddr(tx.hash)}</a></span></span>`);
+
+    const receipt = await tx.wait(1);
+
+    if (receipt.status === 1) {
+      setResult(
+        `<span class="success">✅ Payment Successful!</span><br>
+        Sent: <strong>${rawAmount} VERSE</strong><br>
+        To: ${shortAddr(RECEIVER)}<br>
+        <span class="tx-hash">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash}</a></span>`,
+        "active"
+      );
+    } else {
+      setResult(`<span class="error">❌ Transaction reverted.<br>
+        <span class="tx-hash"><a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">View on Polygonscan</a></span></span>`, "error-state");
+    }
+  } catch (err) {
+    if (err.code === 4001 || err.code === "ACTION_REJECTED") {
+      setResult(`<span class="error">❌ Transaction rejected by user.</span>`, "error-state");
+    } else if (err.code === "INSUFFICIENT_FUNDS") {
+      setResult(`<span class="error">❌ Not enough MATIC for gas fees.</span>`, "error-state");
+    } else {
+      const msg = err.reason || err.data?.message || err.message || "Unknown error";
+      setResult(`<span class="error">❌ ${msg}</span>`, "error-state");
+      console.error(err);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// DISCONNECT
+// ═══════════════════════════════════════════════════
+function disconnectWallet() {
+  userAddress = null; provider = null; signer = null;
+  connectBtn.style.display    = "block";
+  disconnectBtn.style.display = "none";
+  payBtn.disabled             = true;
+  walletInfo.classList.remove("show");
+  if (isMobile) deeplinkBanner.style.display = "block";
+  setResult("Wallet disconnected. Connect to continue.");
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+connectBtn.addEventListener("click", openModal);
+payBtn.addEventListener("click", payNow);
+disconnectBtn.addEventListener("click", disconnectWallet);
+modalClose.addEventListener("click", closeModal);
+modalOverlay.addEventListener("click", (e) => { if (e.target === modalOverlay) closeModal(); });
+
+// Show mobile deep-link banner
+if (isMobile && !window.ethereum) {
+  deeplinkBanner.style.display = "block";
+}
 </script>
 </body>
 </html>
