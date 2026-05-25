@@ -79,7 +79,6 @@
     z-index: 0;
   }
 
-  /* ── CARD ── */
   .card {
     position: relative;
     z-index: 1;
@@ -98,7 +97,6 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── HEADER ── */
   .header {
     display: flex;
     align-items: center;
@@ -108,8 +106,7 @@
   }
 
   .logo {
-    width: 42px;
-    height: 42px;
+    width: 42px; height: 42px;
     border-radius: 12px;
     background: linear-gradient(135deg, #00e5a0, #00c48c);
     display: flex;
@@ -120,19 +117,8 @@
     box-shadow: 0 0 20px var(--green-glow);
   }
 
-  .header-text h2 {
-    font-size: 1.3rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    line-height: 1.1;
-  }
-
-  .header-text p {
-    font-size: 0.72rem;
-    color: var(--muted);
-    font-family: var(--font-mono);
-    margin-top: 2px;
-  }
+  .header-text h2 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; }
+  .header-text p  { font-size: 0.72rem; color: var(--muted); font-family: var(--font-mono); margin-top: 2px; }
 
   .network-badge {
     margin-left: auto;
@@ -146,11 +132,7 @@
     white-space: nowrap;
   }
 
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin-bottom: 20px;
-  }
+  .divider { height: 1px; background: var(--border); margin-bottom: 20px; }
 
   /* ── MODAL ── */
   .modal-overlay {
@@ -164,21 +146,14 @@
     align-items: flex-end;
   }
 
-  .modal-overlay.open {
-    display: flex;
-    animation: overlayIn 0.22s ease;
-  }
-
-  @keyframes overlayIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
+  .modal-overlay.open { display: flex; animation: overlayIn 0.22s ease; }
+  @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
 
   .modal {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 24px 24px 0 0;
-    padding: 24px 20px 40px;
+    padding: 24px 20px 44px;
     width: 100%;
     max-width: 480px;
     margin: 0 auto;
@@ -194,19 +169,13 @@
   }
 
   .modal-handle {
-    width: 40px;
-    height: 4px;
+    width: 40px; height: 4px;
     background: var(--border);
     border-radius: 2px;
     margin: 0 auto 18px;
   }
 
-  .modal h3 {
-    font-size: 1.1rem;
-    font-weight: 800;
-    margin-bottom: 4px;
-    text-align: center;
-  }
+  .modal h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 4px; text-align: center; }
 
   .modal-sub {
     font-size: 0.7rem;
@@ -218,26 +187,20 @@
 
   .modal-close {
     position: absolute;
-    top: 18px;
-    right: 18px;
+    top: 18px; right: 18px;
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 8px;
     color: var(--muted);
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
     cursor: pointer;
     font-size: 13px;
     transition: color 0.2s;
-    flex-shrink: 0;
   }
 
   .modal-close:hover { color: var(--text); }
 
-  /* Wallet options */
   .wallet-option {
     display: flex;
     align-items: center;
@@ -257,21 +220,13 @@
     touch-action: manipulation;
   }
 
-  .wallet-option:hover {
-    border-color: var(--green);
-    background: var(--green-dim);
-    transform: translateY(-1px);
-  }
-
+  .wallet-option:hover { border-color: var(--green); background: var(--green-dim); transform: translateY(-1px); }
   .wallet-option:active { transform: scale(0.98); }
 
   .wallet-icon {
-    width: 38px;
-    height: 38px;
+    width: 38px; height: 38px;
     border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     font-size: 20px;
     flex-shrink: 0;
   }
@@ -284,23 +239,8 @@
 
   .wallet-info-text { flex: 1; min-width: 0; }
 
-  .wallet-name {
-    font-size: 0.92rem;
-    font-weight: 700;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .wallet-desc {
-    font-size: 0.68rem;
-    color: var(--muted);
-    font-family: var(--font-mono);
-    margin-top: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  .wallet-name { font-size: 0.92rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wallet-desc { font-size: 0.68rem; color: var(--muted); font-family: var(--font-mono); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   .wallet-badge {
     margin-left: auto;
@@ -315,19 +255,9 @@
     flex-shrink: 0;
   }
 
-  .wallet-badge.blue {
-    background: rgba(59,130,246,0.12);
-    color: #60a5fa;
-    border-color: rgba(59,130,246,0.2);
-  }
+  .wallet-badge.blue   { background: rgba(59,130,246,0.12);  color: #60a5fa; border-color: rgba(59,130,246,0.2); }
+  .wallet-badge.orange { background: rgba(247,147,26,0.12); color: #fb923c; border-color: rgba(247,147,26,0.2); }
 
-  .wallet-badge.orange {
-    background: rgba(247,147,26,0.12);
-    color: #fb923c;
-    border-color: rgba(247,147,26,0.2);
-  }
-
-  /* Section label */
   .wallet-section-label {
     font-size: 0.62rem;
     font-family: var(--font-mono);
@@ -336,47 +266,6 @@
     letter-spacing: 0.1em;
     margin: 14px 0 8px;
   }
-
-  /* QR view */
-  .qr-section {
-    display: none;
-    text-align: center;
-    padding: 8px 0;
-  }
-
-  .qr-section.show { display: block; }
-
-  .qr-placeholder {
-    width: 170px;
-    height: 170px;
-    background: white;
-    border-radius: 16px;
-    margin: 0 auto 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    color: #333;
-    font-family: var(--font-mono);
-    padding: 12px;
-    text-align: center;
-    line-height: 1.5;
-  }
-
-  .qr-back {
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--muted);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: color 0.2s, border-color 0.2s;
-    margin-top: 6px;
-  }
-
-  .qr-back:hover { color: var(--text); border-color: var(--text); }
 
   /* ── FORM ── */
   label {
@@ -389,10 +278,7 @@
     margin-bottom: 7px;
   }
 
-  .input-wrap {
-    position: relative;
-    margin-bottom: 16px;
-  }
+  .input-wrap { position: relative; margin-bottom: 16px; }
 
   .input-wrap input {
     width: 100%;
@@ -408,17 +294,12 @@
     transition: border-color 0.2s, box-shadow 0.2s;
   }
 
-  .input-wrap input:focus {
-    border-color: var(--green);
-    box-shadow: 0 0 0 3px var(--green-dim);
-  }
-
+  .input-wrap input:focus { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-dim); }
   .input-wrap input::placeholder { color: var(--muted); }
 
   .input-unit {
     position: absolute;
-    right: 14px;
-    top: 50%;
+    right: 14px; top: 50%;
     transform: translateY(-50%);
     font-family: var(--font-mono);
     font-size: 0.78rem;
@@ -439,111 +320,42 @@
     overflow: hidden;
   }
 
-  .rx-label {
-    font-size: 0.62rem;
-    font-family: var(--font-mono);
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .rx-addr {
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    color: var(--text);
-    opacity: 0.8;
-    word-break: break-all;
-    min-width: 0;
-  }
+  .rx-label { font-size: 0.62rem; font-family: var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; flex-shrink: 0; }
+  .rx-addr  { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text); opacity: 0.8; word-break: break-all; min-width: 0; }
 
   /* ── BUTTONS ── */
   .btn {
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 14px;
-    font-family: var(--font-display);
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    width: 100%; padding: 15px; margin-bottom: 10px;
+    border: none; border-radius: 14px;
+    font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; letter-spacing: 0.02em;
     cursor: pointer;
     transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
 
   .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; }
 
-  .btn:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-    transform: none !important;
-  }
+  .btn-connect { background: linear-gradient(135deg, #00e5a0, #00b87d); color: #061a11; box-shadow: 0 4px 24px rgba(0,229,160,0.3); }
+  .btn-connect:hover:not(:disabled) { box-shadow: 0 6px 32px rgba(0,229,160,0.5); transform: translateY(-1px); }
 
-  .btn-connect {
-    background: linear-gradient(135deg, #00e5a0, #00b87d);
-    color: #061a11;
-    box-shadow: 0 4px 24px rgba(0,229,160,0.3);
-  }
-
-  .btn-connect:hover:not(:disabled) {
-    box-shadow: 0 6px 32px rgba(0,229,160,0.5);
-    transform: translateY(-1px);
-  }
-
-  .btn-pay {
-    background: linear-gradient(135deg, #00e5a0, #00b87d);
-    color: #061a11;
-    box-shadow: 0 4px 24px rgba(0,229,160,0.3);
-  }
-
-  .btn-pay:hover:not(:disabled) {
-    box-shadow: 0 6px 32px rgba(0,229,160,0.5);
-    transform: translateY(-1px);
-  }
-
-  .btn-pay::after {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 60%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-    transform: skewX(-20deg);
-    transition: left 0.5s;
-  }
-
+  .btn-pay { background: linear-gradient(135deg, #00e5a0, #00b87d); color: #061a11; box-shadow: 0 4px 24px rgba(0,229,160,0.3); }
+  .btn-pay:hover:not(:disabled) { box-shadow: 0 6px 32px rgba(0,229,160,0.5); transform: translateY(-1px); }
+  .btn-pay::after { content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transform: skewX(-20deg); transition: left 0.5s; }
   .btn-pay:not(:disabled):hover::after { left: 160%; }
 
-  .btn-disconnect {
-    background: var(--red-dim);
-    color: var(--red);
-    border: 1px solid rgba(255,77,109,0.25);
-    box-shadow: none;
-  }
-
-  .btn-disconnect:hover {
-    background: rgba(255,77,109,0.2);
-    box-shadow: 0 4px 16px rgba(255,77,109,0.2);
-  }
+  .btn-disconnect { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,77,109,0.25); }
+  .btn-disconnect:hover { background: rgba(255,77,109,0.2); box-shadow: 0 4px 16px rgba(255,77,109,0.2); }
 
   /* ── RESULT ── */
   .result {
-    margin-top: 4px;
-    padding: 14px 16px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 14px;
+    margin-top: 4px; padding: 14px 16px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 14px;
     min-height: 80px;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    line-height: 1.65;
-    word-break: break-all;
-    color: var(--muted);
+    font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.65;
+    word-break: break-all; color: var(--muted);
     transition: border-color 0.3s;
   }
 
@@ -554,93 +366,36 @@
   .error   { color: var(--red);   font-weight: 500; }
   .warn    { color: var(--yellow); font-weight: 500; }
 
-  .tx-hash {
-    display: inline-block;
-    margin-top: 6px;
-    color: var(--green);
-    opacity: 0.8;
-    font-size: 0.7rem;
-  }
-
-  .tx-hash a {
-    color: inherit;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
+  .tx-hash { display: inline-block; margin-top: 6px; color: var(--green); opacity: 0.8; font-size: 0.7rem; }
+  .tx-hash a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 
   .spinner {
-    display: inline-block;
-    width: 11px; height: 11px;
-    border: 2px solid var(--green-dim);
-    border-top-color: var(--green);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin-right: 7px;
-    vertical-align: middle;
+    display: inline-block; width: 11px; height: 11px;
+    border: 2px solid var(--green-dim); border-top-color: var(--green);
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+    margin-right: 7px; vertical-align: middle;
   }
 
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── WALLET INFO BAR ── */
   .wallet-info {
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 14px;
-    padding: 10px 14px;
-    background: var(--green-dim);
-    border: 1px solid rgba(0,229,160,0.2);
-    border-radius: 12px;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--green);
-    display: none;
-    overflow: hidden;
+    align-items: center; gap: 8px; margin-bottom: 14px; padding: 10px 14px;
+    background: var(--green-dim); border: 1px solid rgba(0,229,160,0.2); border-radius: 12px;
+    font-family: var(--font-mono); font-size: 0.7rem; color: var(--green);
+    display: none; overflow: hidden;
   }
 
   .wallet-info.show { display: flex; }
 
-  .wallet-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 6px var(--green);
-    flex-shrink: 0;
-    animation: pulse-dot 2s infinite;
-  }
+  .wallet-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); flex-shrink: 0; animation: pulse-dot 2s infinite; }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.4; }
-  }
+  /* WalletConnect Modal override styles */
+  #wcm-modal-container, wcm-modal { z-index: 9999 !important; }
 
-  /* ── DEEP LINK BANNER ── */
-  .deeplink-banner {
-    display: none;
-    margin-bottom: 12px;
-    padding: 11px 14px;
-    background: rgba(247,147,26,0.08);
-    border: 1px solid rgba(247,147,26,0.22);
-    border-radius: 12px;
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    color: #fb923c;
-    line-height: 1.55;
-    text-align: center;
-  }
-
-  /* ── RESPONSIVE ── */
   @media (max-width: 480px) {
-    body { padding: 0; align-items: flex-end; background: var(--bg); }
-
-    .card {
-      border-radius: 20px 20px 0 0;
-      padding: 22px 18px 30px;
-      max-width: 100%;
-      box-shadow: none;
-      border-bottom: none;
-      min-height: auto;
-    }
-
+    body { padding: 0; align-items: flex-end; }
+    .card { border-radius: 20px 20px 0 0; padding: 22px 18px 30px; max-width: 100%; box-shadow: none; border-bottom: none; }
     .header { margin-bottom: 16px; }
     .header-text h2 { font-size: 1.1rem; }
     .network-badge { font-size: 0.6rem; padding: 4px 8px; }
@@ -663,84 +418,63 @@
 
 <!-- ═══════════════════════ WALLET MODAL ═══════════════════════ -->
 <div class="modal-overlay" id="modalOverlay">
-  <div class="modal" id="walletModal">
+  <div class="modal">
     <div class="modal-handle"></div>
     <button class="modal-close" id="modalClose">✕</button>
 
-    <!-- Wallet list -->
-    <div id="walletList">
-      <h3>Connect Wallet</h3>
-      <p class="modal-sub">Choose your wallet to continue</p>
+    <h3>Connect Wallet</h3>
+    <p class="modal-sub">Select a wallet to continue</p>
 
-      <!-- Browser / Extension wallets -->
-      <div class="wallet-section-label">Browser & Extension</div>
+    <div class="wallet-section-label">Browser & Extension</div>
 
-      <button class="wallet-option" id="metamaskBtn">
-        <div class="wallet-icon wi-mm">🦊</div>
-        <div class="wallet-info-text">
-          <div class="wallet-name">MetaMask</div>
-          <div class="wallet-desc">Browser extension · Mobile app</div>
-        </div>
-        <span class="wallet-badge" id="metamaskBadge">Detected</span>
-      </button>
-
-      <button class="wallet-option" id="coinbaseBtn">
-        <div class="wallet-icon wi-cb">🔵</div>
-        <div class="wallet-info-text">
-          <div class="wallet-name">Coinbase Wallet</div>
-          <div class="wallet-desc">Coinbase browser extension</div>
-        </div>
-        <span class="wallet-badge" id="coinbaseBadge" style="display:none">Detected</span>
-      </button>
-
-      <!-- Mobile wallets -->
-      <div class="wallet-section-label">Mobile Wallets</div>
-
-      <button class="wallet-option" id="bitcoincomBtn">
-        <div class="wallet-icon wi-btc">₿</div>
-        <div class="wallet-info-text">
-          <div class="wallet-name">Bitcoin.com Wallet</div>
-          <div class="wallet-desc">Native VERSE support · Polygon</div>
-        </div>
-        <span class="wallet-badge orange">⭐ VERSE</span>
-      </button>
-
-      <button class="wallet-option" id="trustBtn">
-        <div class="wallet-icon wi-tw">🛡️</div>
-        <div class="wallet-info-text">
-          <div class="wallet-name">Trust Wallet</div>
-          <div class="wallet-desc">Open in Trust Wallet app</div>
-        </div>
-        <span class="wallet-badge blue">Mobile</span>
-      </button>
-
-      <!-- Universal -->
-      <div class="wallet-section-label">Universal</div>
-
-      <button class="wallet-option" id="walletConnectBtn">
-        <div class="wallet-icon wi-wc">🔗</div>
-        <div class="wallet-info-text">
-          <div class="wallet-name">WalletConnect</div>
-          <div class="wallet-desc">300+ wallets via QR scan</div>
-        </div>
-        <span class="wallet-badge blue">Any Wallet</span>
-      </button>
-    </div>
-
-    <!-- QR view -->
-    <div id="qrView" class="qr-section">
-      <h3>Scan to Connect</h3>
-      <p class="modal-sub" id="qrSubtitle">Open your wallet app and scan</p>
-      <div class="qr-placeholder" id="qrCode">
-        📱<br><br>
-        <span id="qrLabel">WalletConnect QR</span><br><br>
-        <small>Integrate WalletConnect SDK<br>for live QR generation</small>
+    <button class="wallet-option" id="metamaskBtn">
+      <div class="wallet-icon wi-mm">🦊</div>
+      <div class="wallet-info-text">
+        <div class="wallet-name">MetaMask</div>
+        <div class="wallet-desc">Browser extension · Mobile app</div>
       </div>
-      <p style="font-size:0.68rem; color:var(--muted); font-family:var(--font-mono); margin-bottom:10px; line-height:1.5;">
-        Works with MetaMask, Rainbow, Trust,<br>Bitcoin.com, Argent &amp; 300+ wallets
-      </p>
-      <button class="qr-back" id="qrBack">← Back to wallets</button>
-    </div>
+      <span class="wallet-badge" id="metamaskBadge">Install</span>
+    </button>
+
+    <button class="wallet-option" id="coinbaseBtn">
+      <div class="wallet-icon wi-cb">🔵</div>
+      <div class="wallet-info-text">
+        <div class="wallet-name">Coinbase Wallet</div>
+        <div class="wallet-desc">Coinbase browser extension</div>
+      </div>
+      <span class="wallet-badge" id="coinbaseBadge">Install</span>
+    </button>
+
+    <div class="wallet-section-label">Mobile Wallets</div>
+
+    <button class="wallet-option" id="bitcoincomBtn">
+      <div class="wallet-icon wi-btc">₿</div>
+      <div class="wallet-info-text">
+        <div class="wallet-name">Bitcoin.com Wallet</div>
+        <div class="wallet-desc">Native VERSE support · Polygon</div>
+      </div>
+      <span class="wallet-badge orange">⭐ VERSE</span>
+    </button>
+
+    <button class="wallet-option" id="trustBtn">
+      <div class="wallet-icon wi-tw">🛡️</div>
+      <div class="wallet-info-text">
+        <div class="wallet-name">Trust Wallet</div>
+        <div class="wallet-desc">Open in Trust Wallet app</div>
+      </div>
+      <span class="wallet-badge blue">Mobile</span>
+    </button>
+
+    <div class="wallet-section-label">All Wallets</div>
+
+    <button class="wallet-option" id="walletConnectBtn">
+      <div class="wallet-icon wi-wc">🔗</div>
+      <div class="wallet-info-text">
+        <div class="wallet-name">WalletConnect</div>
+        <div class="wallet-desc">300+ wallets — MetaMask, Rainbow, Trust & more</div>
+      </div>
+      <span class="wallet-badge blue">All Wallets</span>
+    </button>
   </div>
 </div>
 
@@ -757,25 +491,17 @@
 
   <div class="divider"></div>
 
-  <!-- Mobile tip banner -->
-  <div class="deeplink-banner" id="deeplinkBanner">
-    📱 On mobile? Open this page inside the <strong>Bitcoin.com Wallet</strong>, <strong>Trust Wallet</strong>, or <strong>MetaMask</strong> in-app browser for best experience.
-  </div>
-
-  <!-- Connected wallet bar -->
   <div class="wallet-info" id="walletInfo">
     <div class="wallet-dot"></div>
     <span id="walletAddr" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</span>
   </div>
 
-  <!-- Amount -->
   <label for="amount">Amount</label>
   <div class="input-wrap">
     <input type="number" id="amount" placeholder="0.0000" step="0.0001" min="0" inputmode="decimal">
     <span class="input-unit">VERSE</span>
   </div>
 
-  <!-- Receiver -->
   <div class="receiver-box">
     <span class="rx-label">To</span>
     <span class="rx-addr">0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB</span>
@@ -788,12 +514,17 @@
   <div class="result" id="result">Choose a wallet above to get started.</div>
 </div>
 
+<!-- ethers v5 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 
-<script>
+<!-- WalletConnect Web3Modal v3 (AppKit) -->
+<script type="module">
+import { createWeb3Modal, defaultConfig } from 'https://esm.sh/@web3modal/ethers5@4.2.3';
+
 // ═══════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════
+const WC_PROJECT_ID    = "08c159f4699e9b22371f9d0d4ce1aef8";
 const RECEIVER         = "0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB";
 const VERSE_TOKEN      = "0xc708D6F2153933DAA50B2D0758955Be0A93A8FEc";
 const POLYGON_CHAIN_ID = 137;
@@ -805,16 +536,53 @@ const ERC20_ABI = [
   "function decimals() view returns (uint8)"
 ];
 
+const polygon = {
+  chainId: 137,
+  name: "Polygon",
+  currency: "MATIC",
+  explorerUrl: "https://polygonscan.com",
+  rpcUrl: "https://polygon-rpc.com"
+};
+
+const metadata = {
+  name: "VersePay",
+  description: "Pay with VERSE on Polygon",
+  url: window.location.origin,
+  icons: ["https://avatars.githubusercontent.com/u/37784886"]
+};
+
+// Init Web3Modal (AppKit)
+const modal = createWeb3Modal({
+  ethersConfig: defaultConfig({ metadata }),
+  chains: [polygon],
+  projectId: WC_PROJECT_ID,
+  themeMode: "dark",
+  themeVariables: {
+    "--w3m-accent": "#00e5a0",
+    "--w3m-border-radius-master": "12px",
+    "--w3m-font-family": "'Syne', sans-serif",
+    "--w3m-color-mix": "#00e5a0",
+    "--w3m-color-mix-strength": 20
+  },
+  featuredWalletIds: [
+    "c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96", // MetaMask
+    "4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0", // Trust
+    "fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa", // Bitcoin.com
+    "a797aa35c0fadbfc1a53e7f675162ed5226968b44a19ee3d24385c64d1d3c393", // Phantom
+    "1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369", // Rainbow
+  ],
+  enableAnalytics: false
+});
+
 // ═══════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════
 let userAddress = null;
-let provider    = null;
-let signer      = null;
-
-const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
-const pageURL  = encodeURIComponent(window.location.href);
-const pageHost = window.location.host + window.location.pathname;
+let wcProvider  = null;
+let wcSigner    = null;
+const isMobile  = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+const pageHost  = window.location.host + window.location.pathname;
+const pageURL   = encodeURIComponent(window.location.href);
 
 // ═══════════════════════════════════════════
 // ELEMENTS
@@ -826,9 +594,6 @@ const disconnectBtn  = document.getElementById("disconnectBtn");
 const walletInfoBar  = document.getElementById("walletInfo");
 const walletAddrSpan = document.getElementById("walletAddr");
 const modalOverlay   = document.getElementById("modalOverlay");
-const walletList     = document.getElementById("walletList");
-const qrView         = document.getElementById("qrView");
-const deeplinkBanner = document.getElementById("deeplinkBanner");
 
 // ═══════════════════════════════════════════
 // HELPERS
@@ -844,36 +609,16 @@ function shortAddr(addr) {
 
 function openModal() {
   modalOverlay.classList.add("open");
-  walletList.style.display = "block";
-  qrView.classList.remove("show");
-
-  // Detection badges
+  // Update badges
   const mmBadge = document.getElementById("metamaskBadge");
   const cbBadge = document.getElementById("coinbaseBadge");
-
-  if (window.ethereum?.isMetaMask) {
-    mmBadge.textContent = "✓ Detected";
-    mmBadge.style.display = "inline-block";
-  } else {
-    mmBadge.textContent = isMobile ? "Get App" : "Install";
-    mmBadge.style.display = "inline-block";
-  }
-
-  if (window.ethereum?.isCoinbaseWallet || window.coinbaseWalletExtension) {
-    cbBadge.style.display = "inline-block";
-  }
+  if (window.ethereum?.isMetaMask) { mmBadge.textContent = "✓ Detected"; mmBadge.className = "wallet-badge"; }
+  else { mmBadge.textContent = isMobile ? "Get App" : "Install"; }
+  if (window.ethereum?.isCoinbaseWallet || window.coinbaseWalletExtension) { cbBadge.textContent = "✓ Detected"; cbBadge.className = "wallet-badge"; }
+  else { cbBadge.textContent = isMobile ? "Get App" : "Install"; }
 }
 
-function closeModal() {
-  modalOverlay.classList.remove("open");
-}
-
-function showQR(subtitle, label) {
-  walletList.style.display = "none";
-  document.getElementById("qrSubtitle").textContent = subtitle;
-  document.getElementById("qrLabel").textContent    = label;
-  qrView.classList.add("show");
-}
+function closeModal() { modalOverlay.classList.remove("open"); }
 
 async function ensurePolygon(eth) {
   try {
@@ -894,58 +639,83 @@ async function ensurePolygon(eth) {
   }
 }
 
-async function finaliseConnection(eth) {
+async function finaliseInjected(eth) {
   closeModal();
-  setResult(`<span class="warn"><span class="spinner"></span>Switching to Polygon Mainnet...</span>`);
-
+  setResult(`<span class="warn"><span class="spinner"></span>Switching to Polygon...</span>`);
   await ensurePolygon(eth);
 
-  provider = new ethers.providers.Web3Provider(eth, "any");
-  signer   = provider.getSigner();
+  wcProvider = new ethers.providers.Web3Provider(eth, "any");
+  wcSigner   = wcProvider.getSigner();
 
-  const network = await provider.getNetwork();
+  const network = await wcProvider.getNetwork();
   if (network.chainId !== POLYGON_CHAIN_ID) {
     setResult(`<span class="error">❌ Please switch to Polygon Mainnet in your wallet.</span>`, "error-state");
     return;
   }
 
-  userAddress = await signer.getAddress();
+  userAddress = await wcSigner.getAddress();
+  onConnected(shortAddr(userAddress) + " · Polygon");
 
+  eth.on("accountsChanged", (accs) => { if (!accs.length) onDisconnected(); else { userAddress = accs[0]; walletAddrSpan.textContent = shortAddr(userAddress) + " · Polygon"; } });
+  eth.on("chainChanged", () => window.location.reload());
+}
+
+function onConnected(label) {
   connectBtn.style.display    = "none";
   disconnectBtn.style.display = "block";
   payBtn.disabled             = false;
   walletInfoBar.classList.add("show");
-  walletAddrSpan.textContent  = shortAddr(userAddress) + " · Polygon";
-  deeplinkBanner.style.display = "none";
-
+  walletAddrSpan.textContent  = label;
   setResult(`<span class="success">✅ Wallet connected!</span><br>${userAddress}`, "active");
+}
 
-  eth.on("accountsChanged", (accs) => {
-    if (!accs.length) disconnectWallet();
-    else { userAddress = accs[0]; walletAddrSpan.textContent = shortAddr(userAddress) + " · Polygon"; }
-  });
-
-  eth.on("chainChanged", () => window.location.reload());
+function onDisconnected() {
+  userAddress = null; wcProvider = null; wcSigner = null;
+  connectBtn.style.display    = "block";
+  disconnectBtn.style.display = "none";
+  payBtn.disabled             = true;
+  walletInfoBar.classList.remove("show");
+  setResult("Wallet disconnected. Connect to continue.");
 }
 
 // ═══════════════════════════════════════════
-// WALLET HANDLERS
+// WALLETCONNECT (Web3Modal) — opens native modal with all wallets
 // ═══════════════════════════════════════════
+document.getElementById("walletConnectBtn").addEventListener("click", async () => {
+  closeModal();
+  try {
+    await modal.open();
+  } catch(e) {
+    setResult(`<span class="error">❌ ${e.message}</span>`, "error-state");
+  }
+});
 
-// ── MetaMask ──
+// Listen for Web3Modal connection events
+modal.subscribeProvider(({ provider, providerType, address, isConnected, chainId }) => {
+  if (isConnected && provider && address) {
+    wcProvider  = new ethers.providers.Web3Provider(provider, "any");
+    wcSigner    = wcProvider.getSigner();
+    userAddress = address;
+    onConnected(shortAddr(address) + " · " + (providerType || "WalletConnect"));
+  } else if (!isConnected && userAddress) {
+    onDisconnected();
+  }
+});
+
+// ═══════════════════════════════════════════
+// METAMASK
+// ═══════════════════════════════════════════
 document.getElementById("metamaskBtn").addEventListener("click", async () => {
   if (window.ethereum) {
     try {
       setResult(`<span class="warn"><span class="spinner"></span>Opening MetaMask...</span>`);
       await window.ethereum.request({ method: "eth_requestAccounts" });
-      await finaliseConnection(window.ethereum);
+      await finaliseInjected(window.ethereum);
     } catch (e) {
       closeModal();
-      if (e.code === 4001) setResult(`<span class="error">❌ Rejected by user.</span>`, "error-state");
-      else setResult(`<span class="error">❌ ${e.message || "MetaMask error."}</span>`, "error-state");
+      setResult(`<span class="error">❌ ${e.code === 4001 ? "Rejected by user." : e.message}</span>`, "error-state");
     }
   } else if (isMobile) {
-    // Deep link to MetaMask mobile app
     window.location.href = `https://metamask.app.link/dapp/${pageHost}`;
   } else {
     closeModal();
@@ -954,17 +724,19 @@ document.getElementById("metamaskBtn").addEventListener("click", async () => {
   }
 });
 
-// ── Coinbase Wallet ──
+// ═══════════════════════════════════════════
+// COINBASE WALLET
+// ═══════════════════════════════════════════
 document.getElementById("coinbaseBtn").addEventListener("click", async () => {
   const cbEth = window.coinbaseWalletExtension || (window.ethereum?.isCoinbaseWallet ? window.ethereum : null);
   if (cbEth) {
     try {
       setResult(`<span class="warn"><span class="spinner"></span>Opening Coinbase Wallet...</span>`);
       await cbEth.request({ method: "eth_requestAccounts" });
-      await finaliseConnection(cbEth);
+      await finaliseInjected(cbEth);
     } catch (e) {
       closeModal();
-      setResult(`<span class="error">❌ ${e.message || "Coinbase Wallet error."}</span>`, "error-state");
+      setResult(`<span class="error">❌ ${e.message}</span>`, "error-state");
     }
   } else if (isMobile) {
     window.location.href = `https://go.cb-w.com/dapp?cb_url=${pageURL}`;
@@ -975,104 +747,61 @@ document.getElementById("coinbaseBtn").addEventListener("click", async () => {
   }
 });
 
-// ── Bitcoin.com Wallet ──
+// ═══════════════════════════════════════════
+// BITCOIN.COM WALLET
+// ═══════════════════════════════════════════
 document.getElementById("bitcoincomBtn").addEventListener("click", () => {
-  if (isMobile) {
-    // Check if already inside the Bitcoin.com wallet in-app browser
-    if (window.ethereum) {
-      setResult(`<span class="warn"><span class="spinner"></span>Connecting via in-app browser...</span>`);
-      window.ethereum.request({ method: "eth_requestAccounts" })
-        .then(() => finaliseConnection(window.ethereum))
-        .catch((e) => {
-          closeModal();
-          setResult(`<span class="error">❌ ${e.message || "Connection error."}</span>`, "error-state");
-        });
-      return;
-    }
-    // Deep link into Bitcoin.com Wallet dApp browser
-    closeModal();
-    // Try the custom scheme first, fall back to universal link
-    const deepLink = `bitcoincom://browser?url=${pageURL}`;
-    const fallback = `https://wallet.bitcoin.com/`;
-    window.location.href = deepLink;
-    // Fallback after 1.8s if app not installed
-    setTimeout(() => {
-      window.open(fallback, "_blank");
-      setResult(`<span class="warn">📱 Couldn't open Bitcoin.com Wallet automatically.<br>Copy this page's URL and paste it into the wallet's browser tab.</span>`);
-    }, 1800);
-  } else {
-    // Desktop: show QR and instruct user to scan with Bitcoin.com Wallet
-    showQR(
-      "Open Bitcoin.com Wallet → Browser tab → Scan",
-      "Bitcoin.com Wallet QR"
-    );
-    setResult(`<span class="warn"><span class="spinner"></span>Waiting for Bitcoin.com Wallet scan...<br><small>Or install WalletConnect SDK to generate live QR.</small></span>`);
-  }
-});
-
-// ── Trust Wallet ──
-document.getElementById("trustBtn").addEventListener("click", () => {
-  if (isMobile) {
-    if (window.ethereum) {
-      setResult(`<span class="warn"><span class="spinner"></span>Connecting...</span>`);
-      window.ethereum.request({ method: "eth_requestAccounts" })
-        .then(() => finaliseConnection(window.ethereum))
-        .catch((e) => {
-          closeModal();
-          setResult(`<span class="error">❌ ${e.message}</span>`, "error-state");
-        });
-      return;
-    }
-    const trustLink = `https://link.trustwallet.com/open_url?coin_id=966&url=${pageURL}`;
-    closeModal();
-    window.location.href = trustLink;
-    setTimeout(() => {
-      setResult(`<span class="warn">📱 Couldn't open Trust Wallet automatically.<br>Copy this page URL and open it in the Trust Wallet browser.</span>`);
-    }, 1800);
-  } else {
-    if (window.ethereum?.isTrust) {
-      window.ethereum.request({ method: "eth_requestAccounts" })
-        .then(() => finaliseConnection(window.ethereum))
-        .catch((e) => { closeModal(); setResult(`<span class="error">❌ ${e.message}</span>`, "error-state"); });
-    } else {
-      closeModal();
-      window.open("https://trustwallet.com/browser-extension", "_blank");
-      setResult(`<span class="warn">Open this page inside the Trust Wallet mobile browser, or install the desktop extension.</span>`);
-    }
-  }
-});
-
-// ── WalletConnect ──
-document.getElementById("walletConnectBtn").addEventListener("click", () => {
-  if (isMobile && window.ethereum) {
-    // Already in a wallet browser — just connect
+  if (window.ethereum) {
     setResult(`<span class="warn"><span class="spinner"></span>Connecting...</span>`);
     window.ethereum.request({ method: "eth_requestAccounts" })
-      .then(() => finaliseConnection(window.ethereum))
+      .then(() => finaliseInjected(window.ethereum))
       .catch((e) => { closeModal(); setResult(`<span class="error">❌ ${e.message}</span>`, "error-state"); });
     return;
   }
-  // Show generic WalletConnect QR
-  showQR("Open your wallet app and scan", "WalletConnect QR");
-  setResult(`<span class="warn"><span class="spinner"></span>Waiting for wallet scan...<br><small>Integrate @walletconnect/web3-provider for live QR.</small></span>`);
+  if (isMobile) {
+    closeModal();
+    window.location.href = `bitcoincom://browser?url=${pageURL}`;
+    setTimeout(() => {
+      window.open("https://wallet.bitcoin.com/", "_blank");
+      setResult(`<span class="warn">📱 Open this page inside the Bitcoin.com Wallet browser tab to connect.</span>`);
+    }, 1800);
+  } else {
+    // Desktop: open via WalletConnect modal — Bitcoin.com is in the list
+    closeModal();
+    modal.open();
+    setResult(`<span class="warn"><span class="spinner"></span>Select Bitcoin.com Wallet from the list...</span>`);
+  }
 });
 
-// QR back
-document.getElementById("qrBack").addEventListener("click", () => {
-  qrView.classList.remove("show");
-  walletList.style.display = "block";
-  setResult("Choose a wallet above to get started.");
+// ═══════════════════════════════════════════
+// TRUST WALLET
+// ═══════════════════════════════════════════
+document.getElementById("trustBtn").addEventListener("click", () => {
+  if (window.ethereum) {
+    setResult(`<span class="warn"><span class="spinner"></span>Connecting...</span>`);
+    window.ethereum.request({ method: "eth_requestAccounts" })
+      .then(() => finaliseInjected(window.ethereum))
+      .catch((e) => { closeModal(); setResult(`<span class="error">❌ ${e.message}</span>`, "error-state"); });
+    return;
+  }
+  if (isMobile) {
+    closeModal();
+    window.location.href = `https://link.trustwallet.com/open_url?coin_id=966&url=${pageURL}`;
+    setTimeout(() => {
+      setResult(`<span class="warn">📱 Open this page inside the Trust Wallet browser to connect.</span>`);
+    }, 1800);
+  } else {
+    closeModal();
+    window.open("https://trustwallet.com/browser-extension", "_blank");
+    setResult(`<span class="warn">Install the Trust Wallet extension, refresh, and try again.</span>`);
+  }
 });
-
-// Close modal
-document.getElementById("modalClose").addEventListener("click", closeModal);
-modalOverlay.addEventListener("click", (e) => { if (e.target === modalOverlay) closeModal(); });
 
 // ═══════════════════════════════════════════
 // PAY NOW
 // ═══════════════════════════════════════════
 async function payNow() {
-  if (!userAddress) {
+  if (!userAddress || !wcSigner) {
     setResult(`<span class="error">❌ Connect your wallet first.</span>`, "error-state");
     return;
   }
@@ -1086,11 +815,13 @@ async function payNow() {
   try {
     setResult(`<span class="warn"><span class="spinner"></span>Loading token info...</span>`);
 
-    // Re-init provider fresh
-    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    signer   = provider.getSigner();
+    // Refresh provider
+    if (modal.getWalletProvider && typeof modal.getWalletProvider === 'function') {
+      const p = modal.getWalletProvider();
+      if (p) { wcProvider = new ethers.providers.Web3Provider(p, "any"); wcSigner = wcProvider.getSigner(); }
+    }
 
-    const token    = new ethers.Contract(VERSE_TOKEN, ERC20_ABI, signer);
+    const token    = new ethers.Contract(VERSE_TOKEN, ERC20_ABI, wcSigner);
     const decimals = await token.decimals();
     const value    = ethers.utils.parseUnits(rawAmount, decimals);
 
@@ -1099,10 +830,7 @@ async function payNow() {
 
     if (balance.lt(value)) {
       const humanBal = ethers.utils.formatUnits(balance, decimals);
-      setResult(
-        `<span class="error">❌ Insufficient VERSE balance.<br>Your balance: ${parseFloat(humanBal).toFixed(4)} VERSE</span>`,
-        "error-state"
-      );
+      setResult(`<span class="error">❌ Insufficient VERSE balance.<br>Your balance: ${parseFloat(humanBal).toFixed(4)} VERSE</span>`, "error-state");
       return;
     }
 
@@ -1123,18 +851,14 @@ async function payNow() {
         "active"
       );
     } else {
-      setResult(
-        `<span class="error">❌ Transaction reverted on-chain.<br>
-        <span class="tx-hash"><a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">View on Polygonscan ↗</a></span></span>`,
-        "error-state"
-      );
+      setResult(`<span class="error">❌ Transaction reverted.<br><span class="tx-hash"><a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">View on Polygonscan ↗</a></span></span>`, "error-state");
     }
 
   } catch (err) {
     if (err.code === 4001 || err.code === "ACTION_REJECTED") {
       setResult(`<span class="error">❌ Transaction rejected by user.</span>`, "error-state");
     } else if (err.code === "INSUFFICIENT_FUNDS") {
-      setResult(`<span class="error">❌ Not enough MATIC for gas fees.<br>Top up MATIC on Polygon to proceed.</span>`, "error-state");
+      setResult(`<span class="error">❌ Not enough MATIC for gas fees.</span>`, "error-state");
     } else {
       const msg = err.reason || err.data?.message || err.message || "Unknown error";
       setResult(`<span class="error">❌ ${msg}</span>`, "error-state");
@@ -1146,14 +870,9 @@ async function payNow() {
 // ═══════════════════════════════════════════
 // DISCONNECT
 // ═══════════════════════════════════════════
-function disconnectWallet() {
-  userAddress = null; provider = null; signer = null;
-  connectBtn.style.display    = "block";
-  disconnectBtn.style.display = "none";
-  payBtn.disabled             = true;
-  walletInfoBar.classList.remove("show");
-  if (isMobile && !window.ethereum) deeplinkBanner.style.display = "block";
-  setResult("Wallet disconnected. Connect to continue.");
+async function disconnectWallet() {
+  try { await modal.disconnect(); } catch(e) {}
+  onDisconnected();
 }
 
 // ═══════════════════════════════════════════
@@ -1162,10 +881,16 @@ function disconnectWallet() {
 connectBtn.addEventListener("click", openModal);
 payBtn.addEventListener("click", payNow);
 disconnectBtn.addEventListener("click", disconnectWallet);
+document.getElementById("modalClose").addEventListener("click", closeModal);
+modalOverlay.addEventListener("click", (e) => { if (e.target === modalOverlay) closeModal(); });
 
-// Show mobile banner if no injected wallet detected
-if (isMobile && !window.ethereum) {
-  deeplinkBanner.style.display = "block";
+// Restore session if already connected
+const wcAddress = modal.getAddress?.();
+if (wcAddress) {
+  userAddress = wcAddress;
+  const p = modal.getWalletProvider?.();
+  if (p) { wcProvider = new ethers.providers.Web3Provider(p, "any"); wcSigner = wcProvider.getSigner(); }
+  onConnected(shortAddr(wcAddress) + " · Polygon");
 }
 </script>
 </body>
