@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-QM106YDX6N');
+</script>
+
+  <!-- Verse Analytics -->
+  <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
+  <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.tagged-events.outbound-links.file-downloads.hash.pageview-props.revenue.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VersePay - Pay with VERSE</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #080b10;
+    --surface: #0e1420;
+    --surface2: #131b28;
+    --border: #1e2d42;
+    --green: #00e5a0;
+    --green-dim: rgba(0,229,160,0.12);
+    --green-glow: rgba(0,229,160,0.35);
+    --red: #ff4d6d;
+    --red-dim: rgba(255,77,109,0.12);
+    --yellow: #ffd166;
+    --text: #e8f0fe;
+    --muted: #5a7090;
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  body {
+    background: var(--bg);
+    font-family: var(--font-display);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Glow blob */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0,229,160,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 36px 32px;
+    box-shadow: 0 0 0 1px rgba(0,229,160,0.05), 0 24px 60px rgba(0,0,0,0.6);
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #00e5a0, #00c48c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 0 20px var(--green-glow);
+  }
+
+  .header-text h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  .header-text p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    margin-top: 3px;
+  }
+
+  .network-badge {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid rgba(0,229,160,0.2);
+    white-space: nowrap;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 24px;
+  }
+
+  label {
+    display: block;
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .input-wrap {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .input-wrap input {
+    width: 100%;
+    padding: 14px 16px;
+    padding-right: 80px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .input-wrap input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px var(--green-dim);
+  }
+
+  .input-wrap input::placeholder { color: var(--muted); font-size: 0.95rem; }
+
+  .input-unit {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--green);
+    font-weight: 500;
+    pointer-events: none;
+  }
+
+  .receiver-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .receiver-box .rx-label {
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .receiver-box .rx-addr {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text);
+    word-break: break-all;
+    opacity: 0.8;
+  }
+
+  /* Buttons */
+  .btn {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 14px;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn:active { transform: scale(0.98); }
+
+  .btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  .btn-connect {
+    background: linear-gradient(135deg, #00e5a0, #00b87d);
+    color: #061a11;
+    box-shadow: 0 4px 24px rgba(0,229,160,0.3);
+  }
+
+  .btn-connect:hover:not(:disabled) {
+    box-shadow: 0 6px 32px rgba(0,229,160,0.5);
+    transform: translateY(-1px);
+  }
+
+  .btn-pay {
+    background: linear-gradient(135deg, #00e5a0, #00b87d);
+    color: #061a11;
+    box-shadow: 0 4px 24px rgba(0,229,160,0.3);
+  }
+
+  .btn-pay:hover:not(:disabled) {
+    box-shadow: 0 6px 32px rgba(0,229,160,0.5);
+    transform: translateY(-1px);
+  }
+
+  .btn-disconnect {
+    background: var(--red-dim);
+    color: var(--red);
+    border: 1px solid rgba(255,77,109,0.25);
+    box-shadow: none;
+  }
+
+  .btn-disconnect:hover {
+    background: rgba(255,77,109,0.2);
+    box-shadow: 0 4px 16px rgba(255,77,109,0.2);
+  }
+
+  /* Shimmer on pay button */
+  .btn-pay::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.5s;
+  }
+  .btn-pay:not(:disabled):hover::after { left: 160%; }
+
+  /* Result / log area */
+  .result {
+    margin-top: 6px;
+    padding: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    min-height: 90px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.6;
+    word-break: break-all;
+    color: var(--muted);
+    transition: border-color 0.3s;
+  }
+
+  .result.active { border-color: rgba(0,229,160,0.3); }
+  .result.error-state { border-color: rgba(255,77,109,0.3); }
+
+  .success { color: var(--green); font-weight: 500; }
+  .error   { color: var(--red);   font-weight: 500; }
+  .warn    { color: var(--yellow); font-weight: 500; }
+
+  .tx-hash {
+    display: inline-block;
+    margin-top: 6px;
+    color: var(--green);
+    opacity: 0.8;
+    font-size: 0.72rem;
+  }
+
+  .tx-hash a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border: 2px solid var(--green-dim);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .wallet-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: var(--green-dim);
+    border: 1px solid rgba(0,229,160,0.2);
+    border-radius: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--green);
+    display: none;
+  }
+
+  .wallet-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    flex-shrink: 0;
+    animation: pulse-dot 2s infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="header">
+    <div class="logo">⬡</div>
+    <div class="header-text">
+      <h2>VersePay</h2>
+      <p>ERC-20 · Polygon Mainnet</p>
+    </div>
+    <div class="network-badge">⬡ Polygon</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Connected wallet display -->
+  <div class="wallet-info" id="walletInfo">
+    <div class="wallet-dot"></div>
+    <span id="walletAddr">—</span>
+  </div>
+
+  <!-- Amount input -->
+  <label for="amount">Amount</label>
+  <div class="input-wrap">
+    <input type="number" id="amount" placeholder="0.0000" step="0.0001" min="0">
+    <span class="input-unit">VERSE</span>
+  </div>
+
+  <!-- Receiver display -->
+  <div class="receiver-box">
+    <span class="rx-label">To</span>
+    <span class="rx-addr" id="receiverDisplay">0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB</span>
+  </div>
+
+  <button class="btn btn-connect" id="connectBtn">Connect Wallet</button>
+  <button class="btn btn-pay" id="payBtn" disabled>Pay Now</button>
+  <button class="btn btn-disconnect" id="disconnectBtn" style="display:none;">Disconnect Wallet</button>
+
+  <div class="result" id="result">Waiting to connect wallet...</div>
+</div>
+
+<!-- ethers.js v5 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
+<script>
+  // ─── CONFIG ──────────────────────────────────────────────────────────────────
+  const RECEIVER        = "0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB";
+  const VERSE_TOKEN     = "0xc708D6F2153933DAA50B2D0758955Be0A93A8FEc"; // VERSE on Polygon (verify on Polygonscan)
+  const POLYGON_CHAIN_ID = 137;
+
+  // Full minimal ERC-20 ABI (includes decimals + balanceOf for checks)
+  const ERC20_ABI = [
+    "function transfer(address to, uint256 amount) returns (bool)",
+    "function balanceOf(address owner) view returns (uint256)",
+    "function decimals() view returns (uint8)"
+  ];
+
+  // ─── STATE ───────────────────────────────────────────────────────────────────
+  let userAddress = null;
+  let provider    = null;
+  let signer      = null;
+
+  // ─── ELEMENTS ────────────────────────────────────────────────────────────────
+  const resultDiv      = document.getElementById("result");
+  const connectBtn     = document.getElementById("connectBtn");
+  const payBtn         = document.getElementById("payBtn");
+  const disconnectBtn  = document.getElementById("disconnectBtn");
+  const walletInfo     = document.getElementById("walletInfo");
+  const walletAddr     = document.getElementById("walletAddr");
+
+  // ─── HELPERS ─────────────────────────────────────────────────────────────────
+  function setResult(html, type = "") {
+    resultDiv.innerHTML = html;
+    resultDiv.className = "result" + (type ? " " + type : "");
+  }
+
+  function shortAddr(addr) {
+    return addr.slice(0, 6) + "…" + addr.slice(-4);
+  }
+
+  // Switch or add Polygon network to MetaMask
+  async function ensurePolygon() {
+    try {
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0x89" }] // 137 in hex
+      });
+    } catch (switchErr) {
+      // Chain not added — add it
+      if (switchErr.code === 4902) {
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [{
+            chainId: "0x89",
+            chainName: "Polygon Mainnet",
+            nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
+            rpcUrls: ["https://polygon-rpc.com/"],
+            blockExplorerUrls: ["https://polygonscan.com/"]
+          }]
+        });
+      } else {
+        throw switchErr;
+      }
+    }
+  }
+
+  // ─── CONNECT WALLET ──────────────────────────────────────────────────────────
+  async function connectWallet() {
+    if (!window.ethereum) {
+      setResult(`<span class="error">❌ MetaMask not found.<br>Install it at <a href="https://metamask.io" target="_blank" style="color:var(--green)">metamask.io</a></span>`, "error-state");
+      return;
+    }
+
+    try {
+      setResult(`<span class="warn"><span class="spinner"></span>Requesting wallet access...</span>`);
+
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+      userAddress = accounts[0];
+
+      // Switch to Polygon automatically
+      setResult(`<span class="warn"><span class="spinner"></span>Switching to Polygon Mainnet...</span>`);
+      await ensurePolygon();
+
+      // Re-init provider after network switch
+      provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      signer   = provider.getSigner();
+
+      // Verify chain
+      const network = await provider.getNetwork();
+      if (network.chainId !== POLYGON_CHAIN_ID) {
+        setResult(`<span class="error">❌ Please manually switch to Polygon Mainnet in MetaMask.</span>`, "error-state");
+        return;
+      }
+
+      // UI update
+      connectBtn.style.display    = "none";
+      disconnectBtn.style.display = "block";
+      payBtn.disabled             = false;
+      walletInfo.style.display    = "flex";
+      walletAddr.textContent      = shortAddr(userAddress) + " · Polygon";
+
+      setResult(`<span class="success">✅ Wallet connected!</span><br>${userAddress}`, "active");
+
+      // Listen for account changes
+      window.ethereum.on("accountsChanged", (accs) => {
+        if (accs.length === 0) disconnectWallet();
+        else { userAddress = accs[0]; walletAddr.textContent = shortAddr(userAddress) + " · Polygon"; }
+      });
+
+      window.ethereum.on("chainChanged", () => window.location.reload());
+
+    } catch (err) {
+      if (err.code === 4001) {
+        setResult(`<span class="error">❌ Connection rejected by user.</span>`, "error-state");
+      } else {
+        setResult(`<span class="error">❌ ${err.message || "Connection failed."}</span>`, "error-state");
+      }
+    }
+  }
+
+  // ─── PAY NOW ─────────────────────────────────────────────────────────────────
+  async function payNow() {
+    if (!userAddress) {
+      setResult(`<span class="error">❌ Connect your wallet first.</span>`, "error-state");
+      return;
+    }
+
+    const rawAmount = document.getElementById("amount").value;
+    if (!rawAmount || Number(rawAmount) <= 0) {
+      setResult(`<span class="error">❌ Enter a valid VERSE amount.</span>`, "error-state");
+      return;
+    }
+
+    try {
+      setResult(`<span class="warn"><span class="spinner"></span>Loading token info...</span>`);
+
+      // Re-init signer (handles any edge cases after network switch)
+      provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      signer   = provider.getSigner();
+
+      const token    = new ethers.Contract(VERSE_TOKEN, ERC20_ABI, signer);
+      const decimals = await token.decimals();
+      const value    = ethers.utils.parseUnits(rawAmount, decimals);
+
+      // Balance check
+      setResult(`<span class="warn"><span class="spinner"></span>Checking balance...</span>`);
+      const balance = await token.balanceOf(userAddress);
+
+      if (balance.lt(value)) {
+        const humanBal = ethers.utils.formatUnits(balance, decimals);
+        setResult(`<span class="error">❌ Insufficient VERSE balance.<br>Your balance: ${parseFloat(humanBal).toFixed(4)} VERSE</span>`, "error-state");
+        return;
+      }
+
+      // Send transaction
+      setResult(`<span class="warn"><span class="spinner"></span>Waiting for MetaMask approval...</span>`);
+      const tx = await token.transfer(RECEIVER, value);
+
+      setResult(`<span class="warn"><span class="spinner"></span>Transaction sent! Waiting for confirmation...<br><span class="tx-hash">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${shortAddr(tx.hash)}</a></span></span>`);
+
+      // Wait for 1 confirmation
+      const receipt = await tx.wait(1);
+
+      if (receipt.status === 1) {
+        setResult(
+          `<span class="success">✅ Payment Successful!</span><br>
+          Sent: <strong>${rawAmount} VERSE</strong><br>
+          To: ${shortAddr(RECEIVER)}<br>
+          <span class="tx-hash">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash}</a></span>`,
+          "active"
+        );
+      } else {
+        setResult(`<span class="error">❌ Transaction reverted. Check Polygonscan.<br><span class="tx-hash"><a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash}</a></span></span>`, "error-state");
+      }
+
+    } catch (err) {
+      // User rejected
+      if (err.code === 4001 || err.code === "ACTION_REJECTED") {
+        setResult(`<span class="error">❌ Transaction rejected by user.</span>`, "error-state");
+      } else if (err.code === "INSUFFICIENT_FUNDS") {
+        setResult(`<span class="error">❌ Insufficient MATIC for gas fees.<br>You need MATIC to pay gas on Polygon.</span>`, "error-state");
+      } else {
+        // Show real error for debugging
+        const msg = err.reason || err.data?.message || err.message || "Unknown error";
+        setResult(`<span class="error">❌ Error: ${msg}</span>`, "error-state");
+        console.error("Payment error:", err);
+      }
+    }
+  }
+
+  // ─── DISCONNECT ───────────────────────────────────────────────────────────────
+  function disconnectWallet() {
+    userAddress = null;
+    provider    = null;
+    signer      = null;
+
+    connectBtn.style.display    = "block";
+    disconnectBtn.style.display = "none";
+    payBtn.disabled             = true;
+    walletInfo.style.display    = "none";
+
+    setResult("Wallet disconnected. Connect to continue.");
+  }
+
+  // ─── EVENTS ───────────────────────────────────────────────────────────────────
+  connectBtn.addEventListener("click", connectWallet);
+  payBtn.addEventListener("click", payNow);
+  disconnectBtn.addEventListener("click", disconnectWallet);
+</script>
+</body>
+</html>
