@@ -39,9 +39,7 @@
     --font-mono: 'DM Mono', monospace;
   }
 
-  html, body {
-    height: 100%;
-  }
+  html, body { height: 100%; }
 
   body {
     background: var(--bg);
@@ -154,22 +152,21 @@
     margin-bottom: 20px;
   }
 
-  /* ── WALLET CONNECT MODAL ── */
+  /* ── MODAL ── */
   .modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.75);
+    background: rgba(0,0,0,0.78);
     backdrop-filter: blur(6px);
     z-index: 1000;
     justify-content: center;
     align-items: flex-end;
-    padding: 0;
   }
 
   .modal-overlay.open {
     display: flex;
-    animation: overlayIn 0.25s ease;
+    animation: overlayIn 0.22s ease;
   }
 
   @keyframes overlayIn {
@@ -181,12 +178,14 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 24px 24px 0 0;
-    padding: 28px 24px 36px;
+    padding: 24px 20px 40px;
     width: 100%;
     max-width: 480px;
     margin: 0 auto;
-    animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: slideUp 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
     position: relative;
+    max-height: 92vh;
+    overflow-y: auto;
   }
 
   @keyframes slideUp {
@@ -199,28 +198,28 @@
     height: 4px;
     background: var(--border);
     border-radius: 2px;
-    margin: 0 auto 20px;
+    margin: 0 auto 18px;
   }
 
   .modal h3 {
     font-size: 1.1rem;
     font-weight: 800;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     text-align: center;
   }
 
   .modal-sub {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: var(--muted);
     font-family: var(--font-mono);
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
   .modal-close {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 18px;
+    right: 18px;
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -231,28 +230,31 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     transition: color 0.2s;
+    flex-shrink: 0;
   }
 
   .modal-close:hover { color: var(--text); }
 
-  /* Wallet option buttons */
+  /* Wallet options */
   .wallet-option {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 13px;
     width: 100%;
-    padding: 14px 16px;
+    padding: 13px 14px;
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 14px;
     cursor: pointer;
-    margin-bottom: 10px;
+    margin-bottom: 9px;
     transition: border-color 0.2s, background 0.2s, transform 0.15s;
     font-family: var(--font-display);
     color: var(--text);
     text-align: left;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
   .wallet-option:hover {
@@ -264,36 +266,45 @@
   .wallet-option:active { transform: scale(0.98); }
 
   .wallet-icon {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
+    font-size: 20px;
     flex-shrink: 0;
   }
 
-  .wallet-icon.mm  { background: linear-gradient(135deg, #e2761b, #cd6116); }
-  .wallet-icon.wc  { background: linear-gradient(135deg, #3b99fc, #2b7fd4); }
-  .wallet-icon.cb  { background: linear-gradient(135deg, #1652f0, #0a3dc4); }
-  .wallet-icon.tw  { background: linear-gradient(135deg, #3375bb, #245fa6); }
+  .wi-mm  { background: linear-gradient(135deg, #e2761b, #cd6116); }
+  .wi-wc  { background: linear-gradient(135deg, #3b99fc, #2b7fd4); }
+  .wi-cb  { background: linear-gradient(135deg, #1652f0, #0a3dc4); }
+  .wi-tw  { background: linear-gradient(135deg, #3375bb, #245fa6); }
+  .wi-btc { background: linear-gradient(135deg, #f7931a, #e07b10); }
+
+  .wallet-info-text { flex: 1; min-width: 0; }
 
   .wallet-name {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .wallet-desc {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     color: var(--muted);
     font-family: var(--font-mono);
     margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .wallet-badge {
     margin-left: auto;
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     font-family: var(--font-mono);
     padding: 3px 8px;
     border-radius: 20px;
@@ -301,6 +312,7 @@
     color: var(--green);
     border: 1px solid rgba(0,229,160,0.2);
     white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .wallet-badge.blue {
@@ -309,29 +321,46 @@
     border-color: rgba(59,130,246,0.2);
   }
 
-  /* QR Modal for WalletConnect */
+  .wallet-badge.orange {
+    background: rgba(247,147,26,0.12);
+    color: #fb923c;
+    border-color: rgba(247,147,26,0.2);
+  }
+
+  /* Section label */
+  .wallet-section-label {
+    font-size: 0.62rem;
+    font-family: var(--font-mono);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 14px 0 8px;
+  }
+
+  /* QR view */
   .qr-section {
     display: none;
     text-align: center;
-    padding: 10px 0;
+    padding: 8px 0;
   }
 
   .qr-section.show { display: block; }
 
   .qr-placeholder {
-    width: 180px;
-    height: 180px;
+    width: 170px;
+    height: 170px;
     background: white;
     border-radius: 16px;
-    margin: 0 auto 16px;
+    margin: 0 auto 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 10px;
     color: #333;
     font-family: var(--font-mono);
-    padding: 10px;
+    padding: 12px;
     text-align: center;
+    line-height: 1.5;
   }
 
   .qr-back {
@@ -340,16 +369,16 @@
     border-radius: 10px;
     color: var(--muted);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     padding: 8px 16px;
     cursor: pointer;
     transition: color 0.2s, border-color 0.2s;
-    margin-top: 8px;
+    margin-top: 6px;
   }
 
   .qr-back:hover { color: var(--text); border-color: var(--text); }
 
-  /* ── FORM ELEMENTS ── */
+  /* ── FORM ── */
   label {
     display: block;
     font-size: 0.7rem;
@@ -374,11 +403,9 @@
     border-radius: 14px;
     color: var(--text);
     font-family: var(--font-mono);
-    font-size: 1.05rem;
+    font-size: max(16px, 1rem);
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
-    /* Prevent zoom on iOS */
-    font-size: max(16px, 1rem);
   }
 
   .input-wrap input:focus {
@@ -504,7 +531,7 @@
     box-shadow: 0 4px 16px rgba(255,77,109,0.2);
   }
 
-  /* ── RESULT LOG ── */
+  /* ── RESULT ── */
   .result {
     margin-top: 4px;
     padding: 14px 16px;
@@ -586,130 +613,138 @@
     50%       { opacity: 0.4; }
   }
 
-  /* ── DEEP LINK BANNER (mobile only) ── */
+  /* ── DEEP LINK BANNER ── */
   .deeplink-banner {
     display: none;
-    margin-bottom: 10px;
-    padding: 12px 14px;
-    background: rgba(59,130,246,0.1);
-    border: 1px solid rgba(59,130,246,0.25);
+    margin-bottom: 12px;
+    padding: 11px 14px;
+    background: rgba(247,147,26,0.08);
+    border: 1px solid rgba(247,147,26,0.22);
     border-radius: 12px;
     font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: #60a5fa;
-    line-height: 1.5;
+    font-size: 0.68rem;
+    color: #fb923c;
+    line-height: 1.55;
     text-align: center;
   }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 480px) {
-    body { padding: 12px 12px 24px; align-items: flex-end; }
+    body { padding: 0; align-items: flex-end; background: var(--bg); }
 
     .card {
-      border-radius: 20px 20px 16px 16px;
-      padding: 22px 18px 24px;
-      max-width: 100%;
-    }
-
-    .header { margin-bottom: 18px; }
-    .header-text h2 { font-size: 1.15rem; }
-    .network-badge { font-size: 0.6rem; padding: 4px 8px; }
-
-    .btn { padding: 16px; font-size: 1rem; }
-
-    .modal {
       border-radius: 20px 20px 0 0;
-      padding: 24px 18px 40px;
+      padding: 22px 18px 30px;
+      max-width: 100%;
+      box-shadow: none;
+      border-bottom: none;
+      min-height: auto;
     }
 
-    .wallet-option { padding: 13px 14px; }
-    .wallet-icon { width: 36px; height: 36px; font-size: 18px; }
-    .wallet-name { font-size: 0.88rem; }
+    .header { margin-bottom: 16px; }
+    .header-text h2 { font-size: 1.1rem; }
+    .network-badge { font-size: 0.6rem; padding: 4px 8px; }
+    .btn { padding: 16px; font-size: 1rem; }
+    .modal { padding: 22px 16px 44px; }
+    .wallet-option { padding: 12px 12px; gap: 11px; }
+    .wallet-icon { width: 34px; height: 34px; font-size: 17px; border-radius: 8px; }
+    .wallet-name { font-size: 0.85rem; }
+    .wallet-desc { font-size: 0.64rem; }
   }
 
   @media (min-width: 481px) {
-    .modal-overlay {
-      align-items: center;
-    }
-    .modal {
-      border-radius: 24px;
-      max-width: 400px;
-    }
+    .modal-overlay { align-items: center; }
+    .modal { border-radius: 24px; max-width: 400px; }
     .modal-handle { display: none; }
   }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     WALLET CONNECT MODAL
-════════════════════════════════════════════ -->
+<!-- ═══════════════════════ WALLET MODAL ═══════════════════════ -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="walletModal">
     <div class="modal-handle"></div>
     <button class="modal-close" id="modalClose">✕</button>
 
-    <!-- Wallet list view -->
+    <!-- Wallet list -->
     <div id="walletList">
       <h3>Connect Wallet</h3>
       <p class="modal-sub">Choose your wallet to continue</p>
 
+      <!-- Browser / Extension wallets -->
+      <div class="wallet-section-label">Browser & Extension</div>
+
       <button class="wallet-option" id="metamaskBtn">
-        <div class="wallet-icon mm">🦊</div>
-        <div>
+        <div class="wallet-icon wi-mm">🦊</div>
+        <div class="wallet-info-text">
           <div class="wallet-name">MetaMask</div>
-          <div class="wallet-desc">Browser extension / mobile app</div>
+          <div class="wallet-desc">Browser extension · Mobile app</div>
         </div>
         <span class="wallet-badge" id="metamaskBadge">Detected</span>
       </button>
 
-      <button class="wallet-option" id="walletConnectBtn">
-        <div class="wallet-icon wc">🔗</div>
-        <div>
-          <div class="wallet-name">WalletConnect</div>
-          <div class="wallet-desc">Scan QR or use any mobile wallet</div>
-        </div>
-        <span class="wallet-badge blue">Universal</span>
-      </button>
-
       <button class="wallet-option" id="coinbaseBtn">
-        <div class="wallet-icon cb">🔵</div>
-        <div>
+        <div class="wallet-icon wi-cb">🔵</div>
+        <div class="wallet-info-text">
           <div class="wallet-name">Coinbase Wallet</div>
           <div class="wallet-desc">Coinbase browser extension</div>
         </div>
         <span class="wallet-badge" id="coinbaseBadge" style="display:none">Detected</span>
       </button>
 
+      <!-- Mobile wallets -->
+      <div class="wallet-section-label">Mobile Wallets</div>
+
+      <button class="wallet-option" id="bitcoincomBtn">
+        <div class="wallet-icon wi-btc">₿</div>
+        <div class="wallet-info-text">
+          <div class="wallet-name">Bitcoin.com Wallet</div>
+          <div class="wallet-desc">Native VERSE support · Polygon</div>
+        </div>
+        <span class="wallet-badge orange">⭐ VERSE</span>
+      </button>
+
       <button class="wallet-option" id="trustBtn">
-        <div class="wallet-icon tw">🛡️</div>
-        <div>
+        <div class="wallet-icon wi-tw">🛡️</div>
+        <div class="wallet-info-text">
           <div class="wallet-name">Trust Wallet</div>
           <div class="wallet-desc">Open in Trust Wallet app</div>
         </div>
         <span class="wallet-badge blue">Mobile</span>
       </button>
+
+      <!-- Universal -->
+      <div class="wallet-section-label">Universal</div>
+
+      <button class="wallet-option" id="walletConnectBtn">
+        <div class="wallet-icon wi-wc">🔗</div>
+        <div class="wallet-info-text">
+          <div class="wallet-name">WalletConnect</div>
+          <div class="wallet-desc">300+ wallets via QR scan</div>
+        </div>
+        <span class="wallet-badge blue">Any Wallet</span>
+      </button>
     </div>
 
-    <!-- WalletConnect QR view -->
+    <!-- QR view -->
     <div id="qrView" class="qr-section">
-      <h3>Scan with your wallet</h3>
-      <p class="modal-sub">Open any WalletConnect-compatible wallet and scan</p>
+      <h3>Scan to Connect</h3>
+      <p class="modal-sub" id="qrSubtitle">Open your wallet app and scan</p>
       <div class="qr-placeholder" id="qrCode">
-        📱 WalletConnect QR<br><br>
+        📱<br><br>
+        <span id="qrLabel">WalletConnect QR</span><br><br>
         <small>Integrate WalletConnect SDK<br>for live QR generation</small>
       </div>
-      <p style="font-size:0.7rem; color:var(--muted); font-family:var(--font-mono); margin-bottom:8px;">
-        Works with MetaMask, Rainbow, Trust, Argent, and 300+ wallets
+      <p style="font-size:0.68rem; color:var(--muted); font-family:var(--font-mono); margin-bottom:10px; line-height:1.5;">
+        Works with MetaMask, Rainbow, Trust,<br>Bitcoin.com, Argent &amp; 300+ wallets
       </p>
       <button class="qr-back" id="qrBack">← Back to wallets</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     MAIN CARD
-════════════════════════════════════════════ -->
+<!-- ═══════════════════════ MAIN CARD ═══════════════════════ -->
 <div class="card">
   <div class="header">
     <div class="logo">⬡</div>
@@ -722,12 +757,12 @@
 
   <div class="divider"></div>
 
-  <!-- Mobile deep-link info -->
+  <!-- Mobile tip banner -->
   <div class="deeplink-banner" id="deeplinkBanner">
-    📱 On mobile? Use <strong>Trust Wallet</strong> or <strong>MetaMask app</strong> built-in browser for best experience.
+    📱 On mobile? Open this page inside the <strong>Bitcoin.com Wallet</strong>, <strong>Trust Wallet</strong>, or <strong>MetaMask</strong> in-app browser for best experience.
   </div>
 
-  <!-- Connected wallet -->
+  <!-- Connected wallet bar -->
   <div class="wallet-info" id="walletInfo">
     <div class="wallet-dot"></div>
     <span id="walletAddr" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</span>
@@ -750,18 +785,17 @@
   <button class="btn btn-pay" id="payBtn" disabled>Pay Now</button>
   <button class="btn btn-disconnect" id="disconnectBtn" style="display:none;">Disconnect Wallet</button>
 
-  <div class="result" id="result">Choose a wallet to get started.</div>
+  <div class="result" id="result">Choose a wallet above to get started.</div>
 </div>
 
-<!-- ethers v5 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 
 <script>
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // CONFIG
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 const RECEIVER         = "0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB";
-const VERSE_TOKEN      = "0xc708D6F2153933DAA50B2D0758955Be0A93A8FEc"; // verify on Polygonscan
+const VERSE_TOKEN      = "0xc708D6F2153933DAA50B2D0758955Be0A93A8FEc";
 const POLYGON_CHAIN_ID = 137;
 const POLYGON_HEX      = "0x89";
 
@@ -771,35 +805,34 @@ const ERC20_ABI = [
   "function decimals() view returns (uint8)"
 ];
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // STATE
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 let userAddress = null;
 let provider    = null;
 let signer      = null;
-const isMobile  = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
 
-// ═══════════════════════════════════════════════════
+const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+const pageURL  = encodeURIComponent(window.location.href);
+const pageHost = window.location.host + window.location.pathname;
+
+// ═══════════════════════════════════════════
 // ELEMENTS
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 const resultDiv      = document.getElementById("result");
 const connectBtn     = document.getElementById("connectBtn");
 const payBtn         = document.getElementById("payBtn");
 const disconnectBtn  = document.getElementById("disconnectBtn");
-const walletInfo     = document.getElementById("walletInfo");
-const walletAddr     = document.getElementById("walletAddr");
+const walletInfoBar  = document.getElementById("walletInfo");
+const walletAddrSpan = document.getElementById("walletAddr");
 const modalOverlay   = document.getElementById("modalOverlay");
-const modalClose     = document.getElementById("modalClose");
 const walletList     = document.getElementById("walletList");
 const qrView         = document.getElementById("qrView");
-const qrBack         = document.getElementById("qrBack");
-const metamaskBadge  = document.getElementById("metamaskBadge");
-const coinbaseBadge  = document.getElementById("coinbaseBadge");
 const deeplinkBanner = document.getElementById("deeplinkBanner");
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // HELPERS
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 function setResult(html, type = "") {
   resultDiv.innerHTML = html;
   resultDiv.className = "result" + (type ? " " + type : "");
@@ -814,22 +847,32 @@ function openModal() {
   walletList.style.display = "block";
   qrView.classList.remove("show");
 
-  // Update detection badges
+  // Detection badges
+  const mmBadge = document.getElementById("metamaskBadge");
+  const cbBadge = document.getElementById("coinbaseBadge");
+
   if (window.ethereum?.isMetaMask) {
-    metamaskBadge.textContent = "✓ Detected";
-    metamaskBadge.style.display = "inline-block";
+    mmBadge.textContent = "✓ Detected";
+    mmBadge.style.display = "inline-block";
   } else {
-    metamaskBadge.textContent = isMobile ? "Get App" : "Install";
-    metamaskBadge.style.display = "inline-block";
+    mmBadge.textContent = isMobile ? "Get App" : "Install";
+    mmBadge.style.display = "inline-block";
   }
 
-  if (window.coinbaseWalletExtension || window.ethereum?.isCoinbaseWallet) {
-    coinbaseBadge.style.display = "inline-block";
+  if (window.ethereum?.isCoinbaseWallet || window.coinbaseWalletExtension) {
+    cbBadge.style.display = "inline-block";
   }
 }
 
 function closeModal() {
   modalOverlay.classList.remove("open");
+}
+
+function showQR(subtitle, label) {
+  walletList.style.display = "none";
+  document.getElementById("qrSubtitle").textContent = subtitle;
+  document.getElementById("qrLabel").textContent    = label;
+  qrView.classList.add("show");
 }
 
 async function ensurePolygon(eth) {
@@ -847,15 +890,14 @@ async function ensurePolygon(eth) {
           blockExplorerUrls: ["https://polygonscan.com/"]
         }]
       });
-    } else {
-      throw e;
-    }
+    } else throw e;
   }
 }
 
 async function finaliseConnection(eth) {
   closeModal();
-  setResult(`<span class="warn"><span class="spinner"></span>Switching to Polygon...</span>`);
+  setResult(`<span class="warn"><span class="spinner"></span>Switching to Polygon Mainnet...</span>`);
+
   await ensurePolygon(eth);
 
   provider = new ethers.providers.Web3Provider(eth, "any");
@@ -863,7 +905,7 @@ async function finaliseConnection(eth) {
 
   const network = await provider.getNetwork();
   if (network.chainId !== POLYGON_CHAIN_ID) {
-    setResult(`<span class="error">❌ Please switch to Polygon Mainnet manually.</span>`, "error-state");
+    setResult(`<span class="error">❌ Please switch to Polygon Mainnet in your wallet.</span>`, "error-state");
     return;
   }
 
@@ -872,116 +914,163 @@ async function finaliseConnection(eth) {
   connectBtn.style.display    = "none";
   disconnectBtn.style.display = "block";
   payBtn.disabled             = false;
-  walletInfo.classList.add("show");
-  walletAddr.textContent      = shortAddr(userAddress) + " · Polygon";
+  walletInfoBar.classList.add("show");
+  walletAddrSpan.textContent  = shortAddr(userAddress) + " · Polygon";
   deeplinkBanner.style.display = "none";
 
   setResult(`<span class="success">✅ Wallet connected!</span><br>${userAddress}`, "active");
 
   eth.on("accountsChanged", (accs) => {
     if (!accs.length) disconnectWallet();
-    else { userAddress = accs[0]; walletAddr.textContent = shortAddr(userAddress) + " · Polygon"; }
+    else { userAddress = accs[0]; walletAddrSpan.textContent = shortAddr(userAddress) + " · Polygon"; }
   });
+
   eth.on("chainChanged", () => window.location.reload());
 }
 
-// ═══════════════════════════════════════════════════
-// CONNECT HANDLERS
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// WALLET HANDLERS
+// ═══════════════════════════════════════════
 
-// --- MetaMask ---
+// ── MetaMask ──
 document.getElementById("metamaskBtn").addEventListener("click", async () => {
-  if (window.ethereum?.isMetaMask || window.ethereum) {
+  if (window.ethereum) {
     try {
       setResult(`<span class="warn"><span class="spinner"></span>Opening MetaMask...</span>`);
       await window.ethereum.request({ method: "eth_requestAccounts" });
       await finaliseConnection(window.ethereum);
     } catch (e) {
-      if (e.code === 4001) setResult(`<span class="error">❌ Rejected by user.</span>`, "error-state");
-      else setResult(`<span class="error">❌ ${e.message}</span>`, "error-state");
       closeModal();
+      if (e.code === 4001) setResult(`<span class="error">❌ Rejected by user.</span>`, "error-state");
+      else setResult(`<span class="error">❌ ${e.message || "MetaMask error."}</span>`, "error-state");
     }
   } else if (isMobile) {
-    // Deep link to MetaMask mobile
-    const url = encodeURIComponent(window.location.href);
-    window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
+    // Deep link to MetaMask mobile app
+    window.location.href = `https://metamask.app.link/dapp/${pageHost}`;
   } else {
+    closeModal();
     window.open("https://metamask.io/download/", "_blank");
-    closeModal();
-    setResult(`<span class="warn">MetaMask not found. Install it and refresh.</span>`);
+    setResult(`<span class="warn">MetaMask not found. Install it, refresh, and try again.</span>`);
   }
 });
 
-// --- WalletConnect (QR fallback) ---
-document.getElementById("walletConnectBtn").addEventListener("click", () => {
-  if (isMobile) {
-    // On mobile, try to use existing ethereum if available (e.g. in-app browser)
-    if (window.ethereum) {
-      document.getElementById("metamaskBtn").click();
-      return;
-    }
-    // Redirect to WalletConnect-compatible app
-    window.open("https://link.trustwallet.com/open_url?coin_id=966&url=" + encodeURIComponent(window.location.href), "_blank");
-    closeModal();
-    setResult(`<span class="warn">Opening in Trust Wallet... If nothing happens, copy this page URL into your wallet's browser.</span>`);
-  } else {
-    // Show QR code view on desktop
-    walletList.style.display = "none";
-    qrView.classList.add("show");
-    setResult(`<span class="warn"><span class="spinner"></span>Waiting for WalletConnect scan...</span>`);
-    // NOTE: For production, integrate @walletconnect/web3-provider here
-    // and render the actual QR URI into #qrCode using a library like qrcode.js
-  }
-});
-
-// --- Coinbase Wallet ---
+// ── Coinbase Wallet ──
 document.getElementById("coinbaseBtn").addEventListener("click", async () => {
-  const coinbaseEth = window.coinbaseWalletExtension || (window.ethereum?.isCoinbaseWallet ? window.ethereum : null);
-  if (coinbaseEth) {
+  const cbEth = window.coinbaseWalletExtension || (window.ethereum?.isCoinbaseWallet ? window.ethereum : null);
+  if (cbEth) {
     try {
       setResult(`<span class="warn"><span class="spinner"></span>Opening Coinbase Wallet...</span>`);
-      await coinbaseEth.request({ method: "eth_requestAccounts" });
-      await finaliseConnection(coinbaseEth);
+      await cbEth.request({ method: "eth_requestAccounts" });
+      await finaliseConnection(cbEth);
     } catch (e) {
-      setResult(`<span class="error">❌ ${e.message}</span>`, "error-state");
       closeModal();
+      setResult(`<span class="error">❌ ${e.message || "Coinbase Wallet error."}</span>`, "error-state");
     }
   } else if (isMobile) {
-    window.location.href = `https://go.cb-w.com/dapp?cb_url=${encodeURIComponent(window.location.href)}`;
+    window.location.href = `https://go.cb-w.com/dapp?cb_url=${pageURL}`;
   } else {
-    window.open("https://www.coinbase.com/wallet/downloads", "_blank");
     closeModal();
-    setResult(`<span class="warn">Coinbase Wallet not found. Install it and refresh.</span>`);
+    window.open("https://www.coinbase.com/wallet/downloads", "_blank");
+    setResult(`<span class="warn">Coinbase Wallet not found. Install it, refresh, and try again.</span>`);
   }
 });
 
-// --- Trust Wallet (mobile deep link) ---
-document.getElementById("trustBtn").addEventListener("click", () => {
-  const trustUrl = `https://link.trustwallet.com/open_url?coin_id=966&url=${encodeURIComponent(window.location.href)}`;
+// ── Bitcoin.com Wallet ──
+document.getElementById("bitcoincomBtn").addEventListener("click", () => {
   if (isMobile) {
-    window.location.href = trustUrl;
+    // Check if already inside the Bitcoin.com wallet in-app browser
+    if (window.ethereum) {
+      setResult(`<span class="warn"><span class="spinner"></span>Connecting via in-app browser...</span>`);
+      window.ethereum.request({ method: "eth_requestAccounts" })
+        .then(() => finaliseConnection(window.ethereum))
+        .catch((e) => {
+          closeModal();
+          setResult(`<span class="error">❌ ${e.message || "Connection error."}</span>`, "error-state");
+        });
+      return;
+    }
+    // Deep link into Bitcoin.com Wallet dApp browser
+    closeModal();
+    // Try the custom scheme first, fall back to universal link
+    const deepLink = `bitcoincom://browser?url=${pageURL}`;
+    const fallback = `https://wallet.bitcoin.com/`;
+    window.location.href = deepLink;
+    // Fallback after 1.8s if app not installed
+    setTimeout(() => {
+      window.open(fallback, "_blank");
+      setResult(`<span class="warn">📱 Couldn't open Bitcoin.com Wallet automatically.<br>Copy this page's URL and paste it into the wallet's browser tab.</span>`);
+    }, 1800);
   } else {
-    // Desktop: Trust extension
+    // Desktop: show QR and instruct user to scan with Bitcoin.com Wallet
+    showQR(
+      "Open Bitcoin.com Wallet → Browser tab → Scan",
+      "Bitcoin.com Wallet QR"
+    );
+    setResult(`<span class="warn"><span class="spinner"></span>Waiting for Bitcoin.com Wallet scan...<br><small>Or install WalletConnect SDK to generate live QR.</small></span>`);
+  }
+});
+
+// ── Trust Wallet ──
+document.getElementById("trustBtn").addEventListener("click", () => {
+  if (isMobile) {
+    if (window.ethereum) {
+      setResult(`<span class="warn"><span class="spinner"></span>Connecting...</span>`);
+      window.ethereum.request({ method: "eth_requestAccounts" })
+        .then(() => finaliseConnection(window.ethereum))
+        .catch((e) => {
+          closeModal();
+          setResult(`<span class="error">❌ ${e.message}</span>`, "error-state");
+        });
+      return;
+    }
+    const trustLink = `https://link.trustwallet.com/open_url?coin_id=966&url=${pageURL}`;
+    closeModal();
+    window.location.href = trustLink;
+    setTimeout(() => {
+      setResult(`<span class="warn">📱 Couldn't open Trust Wallet automatically.<br>Copy this page URL and open it in the Trust Wallet browser.</span>`);
+    }, 1800);
+  } else {
     if (window.ethereum?.isTrust) {
-      document.getElementById("metamaskBtn").click();
+      window.ethereum.request({ method: "eth_requestAccounts" })
+        .then(() => finaliseConnection(window.ethereum))
+        .catch((e) => { closeModal(); setResult(`<span class="error">❌ ${e.message}</span>`, "error-state"); });
     } else {
-      window.open("https://trustwallet.com/browser-extension", "_blank");
       closeModal();
+      window.open("https://trustwallet.com/browser-extension", "_blank");
       setResult(`<span class="warn">Open this page inside the Trust Wallet mobile browser, or install the desktop extension.</span>`);
     }
   }
 });
 
-// QR back button
-qrBack.addEventListener("click", () => {
-  qrView.classList.remove("show");
-  walletList.style.display = "block";
-  setResult("Choose a wallet to get started.");
+// ── WalletConnect ──
+document.getElementById("walletConnectBtn").addEventListener("click", () => {
+  if (isMobile && window.ethereum) {
+    // Already in a wallet browser — just connect
+    setResult(`<span class="warn"><span class="spinner"></span>Connecting...</span>`);
+    window.ethereum.request({ method: "eth_requestAccounts" })
+      .then(() => finaliseConnection(window.ethereum))
+      .catch((e) => { closeModal(); setResult(`<span class="error">❌ ${e.message}</span>`, "error-state"); });
+    return;
+  }
+  // Show generic WalletConnect QR
+  showQR("Open your wallet app and scan", "WalletConnect QR");
+  setResult(`<span class="warn"><span class="spinner"></span>Waiting for wallet scan...<br><small>Integrate @walletconnect/web3-provider for live QR.</small></span>`);
 });
 
-// ═══════════════════════════════════════════════════
+// QR back
+document.getElementById("qrBack").addEventListener("click", () => {
+  qrView.classList.remove("show");
+  walletList.style.display = "block";
+  setResult("Choose a wallet above to get started.");
+});
+
+// Close modal
+document.getElementById("modalClose").addEventListener("click", closeModal);
+modalOverlay.addEventListener("click", (e) => { if (e.target === modalOverlay) closeModal(); });
+
+// ═══════════════════════════════════════════
 // PAY NOW
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 async function payNow() {
   if (!userAddress) {
     setResult(`<span class="error">❌ Connect your wallet first.</span>`, "error-state");
@@ -996,6 +1085,8 @@ async function payNow() {
 
   try {
     setResult(`<span class="warn"><span class="spinner"></span>Loading token info...</span>`);
+
+    // Re-init provider fresh
     provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     signer   = provider.getSigner();
 
@@ -1003,12 +1094,15 @@ async function payNow() {
     const decimals = await token.decimals();
     const value    = ethers.utils.parseUnits(rawAmount, decimals);
 
-    setResult(`<span class="warn"><span class="spinner"></span>Checking balance...</span>`);
+    setResult(`<span class="warn"><span class="spinner"></span>Checking VERSE balance...</span>`);
     const balance = await token.balanceOf(userAddress);
 
     if (balance.lt(value)) {
       const humanBal = ethers.utils.formatUnits(balance, decimals);
-      setResult(`<span class="error">❌ Insufficient VERSE balance.<br>Your balance: ${parseFloat(humanBal).toFixed(4)} VERSE</span>`, "error-state");
+      setResult(
+        `<span class="error">❌ Insufficient VERSE balance.<br>Your balance: ${parseFloat(humanBal).toFixed(4)} VERSE</span>`,
+        "error-state"
+      );
       return;
     }
 
@@ -1029,45 +1123,47 @@ async function payNow() {
         "active"
       );
     } else {
-      setResult(`<span class="error">❌ Transaction reverted.<br>
-        <span class="tx-hash"><a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">View on Polygonscan</a></span></span>`, "error-state");
+      setResult(
+        `<span class="error">❌ Transaction reverted on-chain.<br>
+        <span class="tx-hash"><a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">View on Polygonscan ↗</a></span></span>`,
+        "error-state"
+      );
     }
+
   } catch (err) {
     if (err.code === 4001 || err.code === "ACTION_REJECTED") {
       setResult(`<span class="error">❌ Transaction rejected by user.</span>`, "error-state");
     } else if (err.code === "INSUFFICIENT_FUNDS") {
-      setResult(`<span class="error">❌ Not enough MATIC for gas fees.</span>`, "error-state");
+      setResult(`<span class="error">❌ Not enough MATIC for gas fees.<br>Top up MATIC on Polygon to proceed.</span>`, "error-state");
     } else {
       const msg = err.reason || err.data?.message || err.message || "Unknown error";
       setResult(`<span class="error">❌ ${msg}</span>`, "error-state");
-      console.error(err);
+      console.error("Payment error:", err);
     }
   }
 }
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // DISCONNECT
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 function disconnectWallet() {
   userAddress = null; provider = null; signer = null;
   connectBtn.style.display    = "block";
   disconnectBtn.style.display = "none";
   payBtn.disabled             = true;
-  walletInfo.classList.remove("show");
-  if (isMobile) deeplinkBanner.style.display = "block";
+  walletInfoBar.classList.remove("show");
+  if (isMobile && !window.ethereum) deeplinkBanner.style.display = "block";
   setResult("Wallet disconnected. Connect to continue.");
 }
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 connectBtn.addEventListener("click", openModal);
 payBtn.addEventListener("click", payNow);
 disconnectBtn.addEventListener("click", disconnectWallet);
-modalClose.addEventListener("click", closeModal);
-modalOverlay.addEventListener("click", (e) => { if (e.target === modalOverlay) closeModal(); });
 
-// Show mobile deep-link banner
+// Show mobile banner if no injected wallet detected
 if (isMobile && !window.ethereum) {
   deeplinkBanner.style.display = "block";
 }
