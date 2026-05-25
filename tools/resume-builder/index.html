@@ -85,6 +85,31 @@
   }
 
 }
+
+@media print {
+
+  .resume-section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .resume-header {
+    page-break-after: avoid;
+  }
+
+  #resumeOutput {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .resume-header {
+    border-radius: 0 !important;
+  }
+
+}
+.page-break {
+  page-break-before: always;
+}
   </style>
 </head>
 <body class="text-white min-h-screen">
@@ -295,7 +320,7 @@
 
     </div>
   </div>
-
+<div class="page-break"></div>
 
     <script>
 
@@ -390,27 +415,49 @@ function generateResume() {
 
   const spacing = document.getElementById('spacingSelector').value;
 
-  let headerPadding = 'p-14';
-  let sectionSpacing = 'mb-10';
-  let contentPadding = 'p-5 sm:p-8 lg:p-14';
+let headerPadding = 'p-14';
+let sectionSpacing = 'mb-10';
+let contentPadding = 'p-5 sm:p-8 lg:p-14';
 
-  if(spacing === 'compact') {
-    headerPadding = 'p-6';
-    sectionSpacing = 'mb-5';
-    contentPadding = 'p-4 sm:p-5 lg:p-6';
-  }
+/* NEW */
+let headingMargin = 'mb-3';
+let textLeading = 'leading-7';
 
-  if(spacing === 'normal') {
-    headerPadding = 'p-10';
-    sectionSpacing = 'mb-8';
-    contentPadding = 'p-5 sm:p-8 lg:p-10';
-  }
+if(spacing === 'compact') {
 
-  if(spacing === 'spacious') {
-    headerPadding = 'p-14';
-    sectionSpacing = 'mb-12';
-    contentPadding = 'p-6 sm:p-10 lg:p-14';
-  }
+  headerPadding = 'p-6';
+  sectionSpacing = 'mb-5';
+  contentPadding = 'p-4 sm:p-5 lg:p-6';
+
+  /* NEW */
+  headingMargin = 'mb-1';
+  textLeading = 'leading-5';
+
+}
+
+if(spacing === 'normal') {
+
+  headerPadding = 'p-10';
+  sectionSpacing = 'mb-8';
+  contentPadding = 'p-5 sm:p-8 lg:p-10';
+
+  /* NEW */
+  headingMargin = 'mb-3';
+  textLeading = 'leading-7';
+
+}
+
+if(spacing === 'spacious') {
+
+  headerPadding = 'p-14';
+  sectionSpacing = 'mb-12';
+  contentPadding = 'p-6 sm:p-10 lg:p-14';
+
+  /* NEW */
+  headingMargin = 'mb-5';
+  textLeading = 'leading-8';
+
+}
 
   let templateClass = '';
   let headerClass = '';
@@ -450,7 +497,7 @@ function generateResume() {
 
   document.getElementById('resumeOutput').innerHTML = `
 
-    <div class="${headerClass} ${headerPadding}" style="background: linear-gradient(135deg, ${themeColor}, #2563eb)">
+    <div class="resume-header ${headerClass} ${headerPadding}" style="background: linear-gradient(135deg, ${themeColor}, #2563eb)">
       ${profileImageHTML}
 
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold break-words">
@@ -470,38 +517,49 @@ function generateResume() {
 
     <div class="${contentPadding}">
 
-      <div class="${sectionSpacing}">
-        <h2 class="text-2xl font-bold mb-4">Professional Summary</h2>
-        <p class="leading-8 opacity-80">${summary}</p>
-      </div>
+<div class="resume-section ${sectionSpacing}">
+  <h2 class="text-2xl font-bold ${headingMargin}">
+    Professional Summary
+  </h2>
 
-      <div class="${sectionSpacing}">
-        <h2 class="text-2xl font-bold mb-4">Skills</h2>
+  <p class="${textLeading} opacity-80">
+    ${summary}
+  </p>
+</div>
 
-        <div class="flex flex-wrap gap-2 sm:gap-3">
-          ${skillsArray.map(skill => `
-            <span class="${chipClass} px-3 sm:px-4 py-2 rounded-full font-medium text-sm sm:text-base">
-              ${skill.trim()}
-            </span>
-          `).join('')}
-        </div>
-      </div>
+<div class="resume-section ${sectionSpacing}">
+  <h2 class="text-2xl font-bold ${headingMargin}">
+    Skills
+  </h2>
 
-      <div class="${sectionSpacing}">
-        <h2 class="text-2xl font-bold mb-4">Experience</h2>
+  <div class="flex flex-wrap gap-2 sm:gap-3">
+    ${skillsArray.map(skill => `
+      <span class="${chipClass} px-3 sm:px-4 py-2 rounded-full font-medium text-sm sm:text-base">
+        ${skill.trim()}
+      </span>
+    `).join('')}
+  </div>
+</div>
 
-        <div class="leading-8 whitespace-pre-line opacity-90">
-          ${experience}
-        </div>
-      </div>
+<div class="resume-section ${sectionSpacing}">
+  <h2 class="text-2xl font-bold ${headingMargin}">
+    Experience
+  </h2>
 
-      <div>
-        <h2 class="text-2xl font-bold mb-4">Education</h2>
+<p class="${textLeading} opacity-90">
+  ${experience.replace(/\n/g, '<br>')}
+</p>
+</div>
 
-        <div class="leading-8 whitespace-pre-line opacity-90">
-          ${education}
-        </div>
-      </div>
+<div>
+  <h2 class="text-2xl font-bold ${headingMargin}">
+    Education
+  </h2>
+
+<p class="${textLeading} opacity-90">
+  ${education.replace(/\n/g, '<br>')}
+</p>
+</div>
 
     </div>
 
