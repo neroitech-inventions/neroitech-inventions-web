@@ -5,15 +5,15 @@ Support
 Overview
 Web3
 All Time
-24 Mar - 23 Apr
 24 Apr - 23 May
+24 May - 23 Jun
 Visitors
 
-28,528
+31,242
 
 Pageviews
 
-95,903
+104,855
 
 Active Apps
 
@@ -21,7 +21,7 @@ Active Apps
 
 Custom Events
 
-21,272
+22,802
 
 Community Trends
 4/24
@@ -66,51 +66,51 @@ Bot Activity ▾
 Visitors
 Events
 #	App	Visitors	Pages/Visit	Events	Bounce	Depth	Sources	Bot Activity
-1	niti.com.ng	3,249	4.7	7,186	2%	4.7	32	Low
-2	hub.vgdh.io	3,076	4.0	326	38%	4.0	34	Low
-3	verse-events-dapp.vercel.app	3,030	2.9	1,531	29%	2.9	2	Low
-4	abubakker-cryptoverse.vercel.app	2,758	2.5	4,286	29%	2.5	3	Low
-5	verse-favee-community.base44.app	2,593	2.7	346	29%	2.7	3	Low
-6	trusted-token-verse-dapp.vercel.app	1,884	4.6	1,225	20%	4.6	0	Low
-7	versefair.vercel.app	1,833	3.4	27	3%	3.4	2	Low
-8	niloy-verse-neon-dapp.vercel.app	983	4.7	312	12%	4.7	1	Low
-9	lockedinearn.vercel.app	828	2.1	94	4%	2.1	2	Medium
-10	ebere0505-beta.vercel.app	649	2.9	3,517	7%	2.9	0	Low
-11	shojib-ahmed.vercel.app	565	3.0	5	35%	3.0	1	Low
-12	verseverse-seven.vercel.app	535	5.6	2	4%	5.6	1	Low
-13	verse-supersrar-football-alpha.vercel.app	528	4.7	176	10%	4.7	0	Low
-14	lingooo.base44.app	469	2.0	473	2%	2.0	17	Medium
-15	v0-grace-zeta.vercel.app	451	3.3	790	0%	3.3	1	Low
-16	niloy-ahammad.vercel.app	366	1.8	4	61%	1.8	0	Low
-17	verse-babul-shooter.vercel.app	324	3.2	1	6%	3.2	0	Low
+1	niti.com.ng	3,323	4.7	7,270	2%	4.7	33	Low
+2	hub.vgdh.io	3,148	4.1	329	37%	4.1	34	Low
+3	verse-events-dapp.vercel.app	3,109	2.9	1,538	29%	2.9	2	Low
+4	abubakker-cryptoverse.vercel.app	2,814	2.5	4,440	29%	2.5	3	Low
+5	verse-favee-community.base44.app	2,602	2.7	348	29%	2.7	3	Low
+6	trusted-token-verse-dapp.vercel.app	2,062	4.5	1,465	19%	4.5	0	Low
+7	versefair.vercel.app	1,921	3.4	27	3%	3.4	2	Low
+8	niloy-verse-neon-dapp.vercel.app	1,142	4.7	326	12%	4.7	1	Low
+9	verseverse-seven.vercel.app	859	4.8	2	3%	4.8	1	Low
+10	verse-supersrar-football-alpha.vercel.app	855	3.9	374	13%	3.9	0	Low
+11	verse-babul-shooter.vercel.app	840	3.0	4	4%	3.0	0	Low
+12	lockedinearn.vercel.app	829	2.1	94	4%	2.1	2	Medium
+13	ebere0505-beta.vercel.app	747	2.9	3,801	6%	2.9	0	Low
+14	v0-grace-zeta.vercel.app	617	3.2	1,248	0%	3.2	1	Low
+15	shojib-ahmed.vercel.app	565	3.0	5	35%	3.0	1	Low
+16	lingooo.base44.app	469	2.0	473	2%	2.0	17	Medium
+17	niloy-ahammad.vercel.app	366	1.8	4	61%	1.8	0	Low
 18	juwel-verse.vercel.app	315	1.7	38	72%	1.7	0	Low
-19	s-aif-al-shammari01.vercel.app	258	2.3	40	8%	2.3	1	Low
-20	v0-crypto-education-system.vercel.app	249	1.9	50	49%	1.9	2	Low
-21	xclips.up.railway.app	239	1.3	229	81%	1.3	2	Low
-22	zayedd.vercel.app	230	3.1	12	18%	3.1	1	Low
-23	zionoluchif4.vercel.app	227	1.7	55	53%	1.7	1	Low
-24	daddy-jas.vercel.app	198	2.6	10	8%	2.6	0	Low
-25	enekaobi.base44.app	196	1.0	0	99%	1.0	0	Medium
-26	verse-block-blast.vercel.app	195	4.4	62	9%	4.4	0	Low
-27	naymerjr.vercel.app	172	3.8	0	27%	3.8	1	Low
-28	paulina-pi-olive.vercel.app	139	2.0	21	37%	2.0	1	Low
-29	xvdhes1.vercel.app	134	1.1	0	89%	1.1	0	Low
-30	ahamed-three.vercel.app	131	2.1	1	44%	2.1	0	Low
-31	verse-kit--digdeepeth.replit.app	130	1.6	80	71%	1.6	0	Low
-32	verse-path-guide.base44.app	130	2.1	81	85%	2.1	0	Low
-33	joancinabd.vercel.app	129	2.8	8	47%	2.8	1	Low
-34	www-versehome-eazy-com.vercel.app	112	4.8	2	4%	4.8	1	Low
-35	press.vgdh.io	95	1.3	5	89%	1.3	5	NA
-36	safe-crypto-link.base44.app	93	2.2	50	39%	2.2	0	NA
-37	verse-safe-guard.base44.app	71	3.6	8	52%	3.6	0	NA
-38	talashker.vercel.app	63	1.4	26	67%	1.4	2	NA
-39	naymer.vercel.app	61	2.1	0	82%	2.1	2	NA
-40	motorcycle-geme.vercel.app	60	9.3	0	10%	9.3	0	NA
-41	verse-path-ai-copy-3bd6140a.base44.app	59	4.5	3	71%	4.5	1	NA
-42	mind-arena-copy-e91f0494.base44.app	55	2.7	0	69%	2.7	1	NA
-43	ais-dev-rswsrp57wqrvuwhvwi6tqj-21246162805.asia-southeast1.run.app	54	4.1	13	20%	4.1	1	NA
+19	zionoluchif4.vercel.app	306	1.7	115	56%	1.7	1	Low
+20	xclips.up.railway.app	258	1.3	244	81%	1.3	2	Low
+21	s-aif-al-shammari01.vercel.app	258	2.3	40	8%	2.3	1	Low
+22	verse-block-blast.vercel.app	250	4.4	62	8%	4.4	0	Low
+23	v0-crypto-education-system.vercel.app	250	1.9	50	49%	1.9	2	Low
+24	zayedd.vercel.app	230	3.1	12	18%	3.1	1	Low
+25	joancinabd.vercel.app	206	2.6	8	37%	2.6	1	Low
+26	daddy-jas.vercel.app	198	2.6	10	8%	2.6	0	Low
+27	enekaobi.base44.app	196	1.0	0	99%	1.0	0	Medium
+28	naymerjr.vercel.app	172	3.8	0	27%	3.8	1	Low
+29	motorcycle-geme.vercel.app	161	4.9	1	7%	4.9	0	Low
+30	verse-safe-guard.base44.app	151	5.2	9	50%	5.2	2	Medium
+31	paulina-pi-olive.vercel.app	140	2.0	21	37%	2.0	1	Low
+32	verse-path-ai-copy-3bd6140a.base44.app	139	4.1	4	70%	4.1	3	Medium
+33	xvdhes1.vercel.app	134	1.1	0	89%	1.1	0	Low
+34	verse-kit--digdeepeth.replit.app	133	1.6	80	71%	1.6	0	Low
+35	ahamed-three.vercel.app	131	2.1	1	44%	2.1	0	Low
+36	verse-path-guide.base44.app	130	2.1	81	85%	2.1	0	Low
+37	www-versehome-eazy-com.vercel.app	114	4.7	2	4%	4.7	1	Low
+38	mind-arena-copy-e91f0494.base44.app	101	3.3	0	67%	3.3	1	Medium
+39	safe-crypto-link.base44.app	100	2.1	55	38%	2.1	0	Low
+40	press.vgdh.io	96	1.3	5	90%	1.3	5	NA
+41	talashker.vercel.app	63	1.4	26	67%	1.4	2	NA
+42	naymer.vercel.app	61	2.1	0	82%	2.1	2	NA
+43	ais-dev-rswsrp57wqrvuwhvwi6tqj-21246162805.asia-southeast1.run.app	55	4.1	13	20%	4.1	1	NA
 44	versehealth.vercel.app	53	1.2	0	87%	1.2	1	NA
-45	mind-adventurous-flow-daily.base44.app	35	3.4	0	37%	3.4	1	NA
+45	mind-adventurous-flow-daily.base44.app	37	3.3	0	41%	3.3	2	NA
 46	verse-skill-training-app.vercel.app	34	2.1	2	65%	2.1	4	NA
 47	tradingcards.ink	26	1.7	0	81%	1.7	6	NA
 48	evmaryswap.vercel.app	21	1.5	0	86%	1.5	0	NA
@@ -119,119 +119,119 @@ Events
 51	bitget-universe--jamorgan694.replit.app	19	1.5	4	84%	1.5	0	NA
 52	aderoju9.github.io	18	1.9	23	44%	1.9	2	NA
 53	checkpoint--69c88ff7e1147abc8e5b0b10--69c8928c78cc7f4e17eea671.base44.app	17	1.0	0	100%	1.0	0	NA
-54	competent-crimson-uzavhr1mfs.edgeone.app	14	1.0	0	100%	1.0	0	NA
-55	verse-valexia-ai.vercel.app	13	1.1	2	92%	1.1	0	NA
-56	ais-dev-fhile6fobofkipdkkq5tax-21246162805.asia-southeast1.run.app	13	1.8	0	54%	1.8	1	NA
-57	625983af-c253-46c3-b5a7-d382cb6ee9b3-00-e3x4mncyht5q.kirk.replit.dev	13	3.7	0	46%	3.7	0	NA
-58	ais-dev-nix7rhbkstfm6feitet4mb-430114424501.europe-west2.run.app	12	2.9	0	42%	2.9	1	NA
-59	lockedin-green.vercel.app	11	4.3	16	9%	4.3	1	NA
-60	alicelandscallhuntsite.vercel.app	11	1.3	0	73%	1.3	0	NA
-61	ais-dev-37rpjttr7fx3u2ha55by7x-478186802263.europe-west2.run.app	11	3.5	0	18%	3.5	1	NA
+54	lockedin-green.vercel.app	14	3.6	16	21%	3.6	1	NA
+55	competent-crimson-uzavhr1mfs.edgeone.app	14	1.0	0	100%	1.0	0	NA
+56	625983af-c253-46c3-b5a7-d382cb6ee9b3-00-e3x4mncyht5q.kirk.replit.dev	13	3.7	0	46%	3.7	0	NA
+57	ais-dev-fhile6fobofkipdkkq5tax-21246162805.asia-southeast1.run.app	13	1.8	0	54%	1.8	1	NA
+58	verse-valexia-ai.vercel.app	13	1.1	2	92%	1.1	0	NA
+59	ais-dev-nix7rhbkstfm6feitet4mb-430114424501.europe-west2.run.app	12	2.9	0	42%	2.9	1	NA
+60	ais-dev-37rpjttr7fx3u2ha55by7x-478186802263.europe-west2.run.app	11	3.5	0	18%	3.5	1	NA
+61	alicelandscallhuntsite.vercel.app	11	1.3	0	73%	1.3	0	NA
 62	asknarmi.base44.app	10	1.7	0	30%	1.7	0	NA
-63	zayed-tau.vercel.app	9	1.0	2	100%	1.0	1	NA
-64	ais-pre-rlw3z43sqriqzpcwxsdnlj-478186802263.europe-west2.run.app	8	2.1	1	50%	2.1	0	NA
-65	preview--safe-crypto-link.base44.app	8	3.4	0	63%	3.4	1	NA
-66	jbn02binance.vercel.app	8	1.6	2	50%	1.6	1	NA
+63	preview--safe-crypto-link.base44.app	10	2.9	0	70%	2.9	1	NA
+64	zayed-tau.vercel.app	9	1.0	2	100%	1.0	1	NA
+65	preview-sandbox--69eccf936236d845a9ae2b44.base44.app	9	2.2	1	33%	2.2	1	NA
+66	jbn02binance.vercel.app	9	1.7	2	44%	1.7	1	NA
 67	evmary33.vercel.app	8	1.0	0	100%	1.0	0	NA
-68	preview-sandbox--69eccf936236d845a9ae2b44.base44.app	7	2.3	1	43%	2.3	1	NA
-69	versehealthcare2.vercel.app	7	1.1	0	86%	1.1	1	NA
-70	desiboii.vercel.app	7	1.4	0	86%	1.4	0	NA
-71	ais-dev-xk7aakqojh3pqzpeubzx4u-37074123815.europe-west1.run.app	7	3.9	31	14%	3.9	1	NA
-72	ais-dev-4vm43gxbzggu6lxdfipxhk-761409263925.asia-east1.run.app	7	6.1	0	29%	6.1	1	NA
-73	ais-pre-gzeieorv7uzsf3zjvah3cw-385042659597.europe-west2.run.app	7	2.3	0	43%	2.3	1	NA
-74	paulina1-theta.vercel.app	7	6.0	8	0%	6.0	0	NA
-75	ariachain12.vercel.app	6	1.8	0	67%	1.8	0	NA
-76	ais-pre-37rpjttr7fx3u2ha55by7x-478186802263.europe-west2.run.app	6	1.3	0	67%	1.3	0	NA
-77	ais-dev-rlw3z43sqriqzpcwxsdnlj-478186802263.europe-west2.run.app	5	9.0	3	0%	9.0	1	NA
-78	ibrahim123.vercel.app	5	1.6	0	60%	1.6	0	NA
-79	ev-kucoin.vercel.app	5	1.2	2	80%	1.2	0	NA
-80	verse-kit.vercel.app	4	8.8	0	25%	8.8	0	NA
-81	ais-dev-gzeieorv7uzsf3zjvah3cw-385042659597.europe-west2.run.app	4	5.5	0	0%	5.5	1	NA
-82	preview--verse-path-guide.base44.app	4	1.5	0	50%	1.5	1	NA
-83	shojibkhan-lovat.vercel.app	4	1.8	0	50%	1.8	0	NA
-84	sammiejay.base44.app	4	1.0	0	100%	1.0	0	NA
-85	preview--bit-quiz-pe-47feb04f.base44.app	4	1.8	0	50%	1.8	0	NA
-86	verse-focus-center-pecky222.base44.app	4	1.8	1	25%	1.8	0	NA
-87	bit-quiz-pe-47feb04f.base44.app	4	2.8	0	50%	2.8	0	NA
-88	preview-sandbox--69ec7a1b88ee1200a1cab07b.base44.app	4	3.5	0	25%	3.5	1	NA
-89	preview-sandbox--6a00cf2905a02b6b47feb04f.base44.app	3	1.7	0	33%	1.7	0	NA
-90	vm-6i6i3di68qebhi9zuze20j7w.vusercontent.net	3	1.3	0	67%	1.3	1	NA
-91	ais-pre-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	3	1.3	0	67%	1.3	1	NA
-92	ais-dev-kwb7mhnona6csxjgq4pjqr-21246162805.asia-southeast1.run.app	3	2.0	0	67%	2.0	1	NA
-93	ais-dev-fks3iau23k2hwyc4hud7ss-21246162805.asia-southeast1.run.app	3	5.0	0	0%	5.0	1	NA
-94	vm-751r9jjh7l12pr1vqlv86gn0.vusercontent.net	3	6.0	0	0%	6.0	1	NA
-95	gracedaniel224-one.vercel.app	3	1.0	0	100%	1.0	0	NA
-96	preview-sandbox--69b96bedc0c1da9113ba9789.base44.app	3	3.0	0	33%	3.0	0	NA
-97	ais-pre-iml6dcbuzrgm4yhnrmnw4v-478186802263.europe-west2.run.app	3	1.0	0	100%	1.0	0	NA
-98	zairemery6.vercel.app	3	1.7	0	67%	1.7	1	NA
-99	lingo-leap-copy-a760df5b.base44.app	3	4.7	7	0%	4.7	0	NA
-100	ais-dev-akwqurgzc7otgjidxqb7a5-37074123815.europe-west1.run.app	3	4.3	3	0%	4.3	1	NA
-101	saifalshammari01.vercel.app	3	1.0	0	100%	1.0	0	NA
-102	versehealthcareweb-pbn9dgaxp-desiboii7-2248s-projects.vercel.app	3	1.0	0	100%	1.0	1	NA
-103	ais-dev-2sgymvumw3ddpjuoehiual-112733715247.europe-west1.run.app	3	15.7	1	0%	15.7	1	NA
-104	aderojuisaac32.vercel.app	3	1.0	0	100%	1.0	1	NA
-105	vm-8bbzd8ej0dcpvwwpm6ubpni8.vusercontent.net	2	2.0	0	50%	2.0	1	NA
-106	vm-8dvzh0gvf5earj3wyf4dcab3.vusercontent.net	2	4.5	0	0%	4.5	1	NA
-107	vcelestine.base44.app	2	3.0	0	0%	3.0	0	NA
-108	preview--quiz-genius-copy-814922db.base44.app	2	2.5	0	0%	2.5	1	NA
-109	preview--enekaobi.base44.app	2	4.5	0	0%	4.5	0	NA
-110	ais-dev-4izmz2y7fe6ziutu3s36ye-478186802263.europe-west2.run.app	2	5.0	0	50%	5.0	1	NA
-111	vm-75eda2ro7d8f0nib284uh6yi.vusercontent.net	2	1.0	0	100%	1.0	1	NA
-112	preview-sandbox--6a0f0cfb15098b58ac46df46.base44.app	2	2.0	1	50%	2.0	0	NA
-113	vm-8f5hnrtc0wi1mwyrdhg3l72n.vusercontent.net	2	1.5	0	50%	1.5	1	NA
-114	preview--mind-adventurous-flow-daily.base44.app	2	2.5	0	50%	2.5	1	NA
-115	emmanuella7890.vercel.app	2	1.0	0	100%	1.0	0	NA
-116	preview-sandbox--6a104c59a47d280a814922db.base44.app	2	2.0	0	0%	2.0	1	NA
-117	preview--verse-favee-community.base44.app	2	40.0	0	0%	40.0	1	NA
-118	preview--verse-path-ai-copy-3bd6140a.base44.app	2	9.5	0	0%	9.5	0	NA
-119	vm-711kst1youn982vs2kk5ujah.vusercontent.net	2	2.5	0	50%	2.5	1	NA
-120	preview-sandbox--6a0205e86e893c543bd6140a.base44.app	2	3.0	0	0%	3.0	0	NA
-121	preview--verse-safe-guard.base44.app	2	3.5	0	0%	3.5	0	NA
-122	preview-sandbox--69fee3304d06e4b26098355e.base44.app	2	2.0	0	50%	2.0	1	NA
-123	ais-dev-rtl3qcdde4jeuryavqaiba-385042659597.europe-west2.run.app	2	1.0	0	100%	1.0	1	NA
-124	vm-8501n8xzkiq8e7nnx42d1qax.vusercontent.net	2	2.5	47	0%	2.5	1	NA
-125	genetic-magenta-l6mhwq8s2h.edgeone.app	2	1.0	0	—	—	0	NA
-126	preview-sandbox--699e9bb5bc092ca2b2a3ec08.base44.app	2	18.0	0	0%	18.0	1	NA
-127	ais-dev-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	2	40.0	0	0%	40.0	0	NA
-128	vm-7hxxkk3lqitk7bne6suvksvs.vusercontent.net	1	2.0	0	0%	2.0	1	NA
-129	vm-8054dyraufafd1gau01q6r00.vusercontent.net	1	1.0	0	100%	1.0	1	NA
-130	vm-7wy2teslbzc8evanx6q0pb2r.vusercontent.net	1	6.0	2	0%	6.0	1	NA
-131	vm-7mii0l14t8nu6sdo27a7640m.vusercontent.net	1	2.0	0	0%	2.0	0	NA
-132	trading-cards-1c38sm5du-ovodos-projects.vercel.app	1	1.0	0	100%	1.0	0	NA
-133	versehealthcare.vercel.app	1	1.0	0	100%	1.0	0	NA
-134	onlyken1.base44.app	1	1.0	0	100%	1.0	0	NA
-135	verselorestory.netlify.app	1	1.0	0	100%	1.0	0	NA
-136	app-arx2latwhmgx-vitesandbox.sandbox.medo.dev	1	1.0	0	100%	1.0	1	NA
-137	vm-7uzhbh1lwwppis0wlwszfbb2.vusercontent.net	1	1.0	0	100%	1.0	1	NA
-138	verse-event-dapp.vercel.app	1	1.0	2	100%	1.0	0	NA
-139	ais-dev-opod4qzujrlrpbpnb4th4o-702881787864.asia-southeast1.run.app	1	2.0	0	0%	2.0	0	NA
-140	be009fa7-ff48-4487-8356-052172aa5043-00-3nykimuy4lqnt.janeway.replit.dev	1	4.0	0	0%	4.0	1	NA
-141	vm-7cpv5muhpe5dr103dmqd5alf.vusercontent.net	1	2.0	0	0%	2.0	1	NA
-142	decentralized-architect-copy-af6496a2.base44.app	1	1.0	0	100%	1.0	0	NA
-143	ais-dev-36fx553lpgtqjm5p2fjxpt-385042659597.europe-west2.run.app	1	2.0	0	0%	2.0	0	NA
-144	versehealthcareweb-cltq8vq4y-desiboii7-2248s-projects.vercel.app	1	1.0	0	100%	1.0	0	NA
-145	verse-boost-click.base44.app	1	1.0	0	100%	1.0	0	NA
-146	ais-dev-uvxtyrdzq7cy6td5glnhrb-37074123815.europe-west1.run.app	1	1.0	0	100%	1.0	0	NA
-147	preview-sandbox--6a10639b31d364c7a760df5b.base44.app	1	30.0	10	0%	30.0	0	NA
-148	ais-pre-rtl3qcdde4jeuryavqaiba-385042659597.europe-west2.run.app	1	1.0	0	100%	1.0	1	NA
-149	vm-83o2h2tsfwgvryfgvaw8anlc.vusercontent.net	1	1.0	0	100%	1.0	1	NA
-150	preview-sandbox--69b97b06e732ff5cad7abbcb.base44.app	1	2.0	0	0%	2.0	0	NA
-151	preview--sammiejay.base44.app	1	2.0	0	0%	2.0	0	NA
-152	interior-azure-i2ufxyqdo2.edgeone.app	1	1.0	0	—	—	0	NA
-153	preview--lingo-leap-copy-a760df5b.base44.app	1	10.0	2	0%	10.0	0	NA
-154	vm-775es973pdt4truytgn37yms.vusercontent.net	1	2.0	0	0%	2.0	1	NA
-155	vm-78zvmmnntjd4tl4l9er5jmuz.vusercontent.net	1	1.0	1	100%	1.0	1	NA
-156	vm-79aczl9kzw4iql41l1e4aidx.vusercontent.net	1	1.0	0	100%	1.0	1	NA
-157	preview--lingooo.base44.app	1	4.0	2	0%	4.0	0	NA
-158	vm-6ncdfhep99v7k6mwqn0bmauz.vusercontent.net	1	1.0	0	100%	1.0	1	NA
-159	ais-dev-ndrqqluwbj4cmz6w4m5mwk-37074123815.europe-west1.run.app	1	5.0	0	0%	5.0	1	NA
-160	versehealthcareweb-amjl9824t-desiboii7-2248s-projects.vercel.app	1	1.0	0	100%	1.0	0	NA
-161	vm-6sxjybtlx2ks5lo0de2a4xfk.vusercontent.net	1	7.0	0	0%	7.0	1	NA
-162	alicelandscallhuntsite-qwjdca33r.vercel.app	1	1.0	0	100%	1.0	0	NA
-163	vm-7njk52416npdvufu01nwbk3y.vusercontent.net	1	2.0	0	0%	2.0	0	NA
-164	www-versehome-eazy-com-c354.vercel.app	1	1.0	0	100%	1.0	1	NA
-165	vm-731h2jps4jj0ux2xz6xqwrds.vusercontent.net	1	3.0	0	0%	3.0	1	NA
-166	ais-dev-rqxdqaondnvipcaqg3hckz-37074123815.europe-west1.run.app	1	5.0	1	0%	5.0	1	NA
-167	www-versehome-eazy-com-sb1s.vercel.app	1	2.0	0	0%	2.0	1	NA
+68	ais-pre-rlw3z43sqriqzpcwxsdnlj-478186802263.europe-west2.run.app	8	2.1	1	50%	2.1	0	NA
+69	ais-dev-4vm43gxbzggu6lxdfipxhk-761409263925.asia-east1.run.app	7	6.1	0	29%	6.1	1	NA
+70	paulina1-theta.vercel.app	7	6.0	8	0%	6.0	0	NA
+71	versehealthcare2.vercel.app	7	1.1	0	86%	1.1	1	NA
+72	ais-pre-gzeieorv7uzsf3zjvah3cw-385042659597.europe-west2.run.app	7	2.3	0	43%	2.3	1	NA
+73	ais-dev-xk7aakqojh3pqzpeubzx4u-37074123815.europe-west1.run.app	7	3.9	31	14%	3.9	1	NA
+74	desiboii.vercel.app	7	1.4	0	86%	1.4	0	NA
+75	ais-pre-37rpjttr7fx3u2ha55by7x-478186802263.europe-west2.run.app	6	1.3	0	67%	1.3	0	NA
+76	ariachain12.vercel.app	6	1.8	0	67%	1.8	0	NA
+77	preview--verse-safe-guard.base44.app	6	2.0	0	50%	2.0	1	NA
+78	ev-kucoin.vercel.app	5	1.2	2	80%	1.2	0	NA
+79	preview-sandbox--6a0f0cfb15098b58ac46df46.base44.app	5	2.4	1	40%	2.4	1	NA
+80	ibrahim123.vercel.app	5	1.6	0	60%	1.6	0	NA
+81	ais-dev-rlw3z43sqriqzpcwxsdnlj-478186802263.europe-west2.run.app	5	9.0	3	0%	9.0	1	NA
+82	sammiejay.base44.app	5	1.0	0	100%	1.0	0	NA
+83	verse-kit.vercel.app	4	8.8	0	25%	8.8	0	NA
+84	preview--bit-quiz-pe-47feb04f.base44.app	4	1.8	0	50%	1.8	0	NA
+85	preview--verse-path-guide.base44.app	4	1.5	0	50%	1.5	1	NA
+86	ais-dev-gzeieorv7uzsf3zjvah3cw-385042659597.europe-west2.run.app	4	5.5	0	0%	5.5	1	NA
+87	verse-focus-center-pecky222.base44.app	4	1.8	1	25%	1.8	0	NA
+88	shojibkhan-lovat.vercel.app	4	1.8	0	50%	1.8	0	NA
+89	preview-sandbox--69ec7a1b88ee1200a1cab07b.base44.app	4	3.5	0	25%	3.5	1	NA
+90	bit-quiz-pe-47feb04f.base44.app	4	2.8	0	50%	2.8	0	NA
+91	gracedaniel224-one.vercel.app	3	1.0	0	100%	1.0	0	NA
+92	ais-pre-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	3	1.3	0	67%	1.3	1	NA
+93	ais-dev-kwb7mhnona6csxjgq4pjqr-21246162805.asia-southeast1.run.app	3	2.0	0	67%	2.0	1	NA
+94	saifalshammari01.vercel.app	3	1.0	0	100%	1.0	0	NA
+95	versehealthcareweb-pbn9dgaxp-desiboii7-2248s-projects.vercel.app	3	1.0	0	100%	1.0	1	NA
+96	aderojuisaac32.vercel.app	3	1.0	0	100%	1.0	1	NA
+97	vm-6i6i3di68qebhi9zuze20j7w.vusercontent.net	3	1.3	0	67%	1.3	1	NA
+98	ais-dev-akwqurgzc7otgjidxqb7a5-37074123815.europe-west1.run.app	3	4.3	3	0%	4.3	1	NA
+99	vm-751r9jjh7l12pr1vqlv86gn0.vusercontent.net	3	6.0	0	0%	6.0	1	NA
+100	zairemery6.vercel.app	3	1.7	0	67%	1.7	1	NA
+101	preview-sandbox--6a00cf2905a02b6b47feb04f.base44.app	3	1.7	0	33%	1.7	0	NA
+102	ais-pre-iml6dcbuzrgm4yhnrmnw4v-478186802263.europe-west2.run.app	3	1.0	0	100%	1.0	0	NA
+103	ais-dev-rtl3qcdde4jeuryavqaiba-385042659597.europe-west2.run.app	3	1.0	0	100%	1.0	1	NA
+104	preview-sandbox--69b96bedc0c1da9113ba9789.base44.app	3	3.0	0	33%	3.0	0	NA
+105	ais-dev-2sgymvumw3ddpjuoehiual-112733715247.europe-west1.run.app	3	15.7	1	0%	15.7	1	NA
+106	lingo-leap-copy-a760df5b.base44.app	3	4.7	7	0%	4.7	0	NA
+107	ais-dev-fks3iau23k2hwyc4hud7ss-21246162805.asia-southeast1.run.app	3	5.0	0	0%	5.0	1	NA
+108	ais-dev-4izmz2y7fe6ziutu3s36ye-478186802263.europe-west2.run.app	2	5.0	0	50%	5.0	1	NA
+109	preview--sammiejay.base44.app	2	2.0	0	0%	2.0	1	NA
+110	emmanuella7890.vercel.app	2	1.0	0	100%	1.0	0	NA
+111	genetic-magenta-l6mhwq8s2h.edgeone.app	2	1.0	0	—	—	0	NA
+112	preview-sandbox--699e9bb5bc092ca2b2a3ec08.base44.app	2	18.0	0	0%	18.0	1	NA
+113	vm-8bbzd8ej0dcpvwwpm6ubpni8.vusercontent.net	2	2.0	0	50%	2.0	1	NA
+114	vm-75eda2ro7d8f0nib284uh6yi.vusercontent.net	2	1.0	0	100%	1.0	1	NA
+115	preview-sandbox--69b97b06e732ff5cad7abbcb.base44.app	2	2.5	0	0%	2.5	1	NA
+116	preview-sandbox--69fee3304d06e4b26098355e.base44.app	2	2.0	0	50%	2.0	1	NA
+117	preview--mind-adventurous-flow-daily.base44.app	2	2.5	0	50%	2.5	1	NA
+118	vm-8501n8xzkiq8e7nnx42d1qax.vusercontent.net	2	2.5	47	0%	2.5	1	NA
+119	ais-dev-2mbezkigxkuk7djoildxy3-392901289473.europe-west2.run.app	2	40.0	0	0%	40.0	0	NA
+120	preview-sandbox--6a104c59a47d280a814922db.base44.app	2	2.0	0	0%	2.0	1	NA
+121	vm-8f5hnrtc0wi1mwyrdhg3l72n.vusercontent.net	2	1.5	0	50%	1.5	1	NA
+122	preview--verse-favee-community.base44.app	2	40.0	0	0%	40.0	1	NA
+123	vm-8dvzh0gvf5earj3wyf4dcab3.vusercontent.net	2	4.5	0	0%	4.5	1	NA
+124	preview--enekaobi.base44.app	2	4.5	0	0%	4.5	0	NA
+125	vcelestine.base44.app	2	3.0	0	0%	3.0	0	NA
+126	preview--quiz-genius-copy-814922db.base44.app	2	2.5	0	0%	2.5	1	NA
+127	preview--verse-path-ai-copy-3bd6140a.base44.app	2	9.5	0	0%	9.5	0	NA
+128	preview-sandbox--6a0205e86e893c543bd6140a.base44.app	2	3.0	0	0%	3.0	0	NA
+129	vm-711kst1youn982vs2kk5ujah.vusercontent.net	2	2.5	0	50%	2.5	1	NA
+130	be009fa7-ff48-4487-8356-052172aa5043-00-3nykimuy4lqnt.janeway.replit.dev	1	4.0	0	0%	4.0	1	NA
+131	preview--lingooo.base44.app	1	4.0	2	0%	4.0	0	NA
+132	alicelandscallhuntsite-qwjdca33r.vercel.app	1	1.0	0	100%	1.0	0	NA
+133	vm-6sxjybtlx2ks5lo0de2a4xfk.vusercontent.net	1	7.0	0	0%	7.0	1	NA
+134	vm-7njk52416npdvufu01nwbk3y.vusercontent.net	1	2.0	0	0%	2.0	0	NA
+135	versehealthcareweb-amjl9824t-desiboii7-2248s-projects.vercel.app	1	1.0	0	100%	1.0	0	NA
+136	vm-7mii0l14t8nu6sdo27a7640m.vusercontent.net	1	2.0	0	0%	2.0	0	NA
+137	decentralized-architect-copy-af6496a2.base44.app	1	1.0	0	100%	1.0	0	NA
+138	onlyken1.base44.app	1	1.0	0	100%	1.0	0	NA
+139	vm-775es973pdt4truytgn37yms.vusercontent.net	1	2.0	0	0%	2.0	1	NA
+140	vm-7cpv5muhpe5dr103dmqd5alf.vusercontent.net	1	2.0	0	0%	2.0	1	NA
+141	ais-dev-rqxdqaondnvipcaqg3hckz-37074123815.europe-west1.run.app	1	5.0	1	0%	5.0	1	NA
+142	verse-event-dapp.vercel.app	1	1.0	2	100%	1.0	0	NA
+143	verse-boost-click.base44.app	1	1.0	0	100%	1.0	0	NA
+144	www-versehome-eazy-com-sb1s.vercel.app	1	2.0	0	0%	2.0	1	NA
+145	app-arx2latwhmgx-vitesandbox.sandbox.medo.dev	1	1.0	0	100%	1.0	1	NA
+146	vm-83o2h2tsfwgvryfgvaw8anlc.vusercontent.net	1	1.0	0	100%	1.0	1	NA
+147	vm-79aczl9kzw4iql41l1e4aidx.vusercontent.net	1	1.0	0	100%	1.0	1	NA
+148	ais-dev-uvxtyrdzq7cy6td5glnhrb-37074123815.europe-west1.run.app	1	1.0	0	100%	1.0	0	NA
+149	vm-7wy2teslbzc8evanx6q0pb2r.vusercontent.net	1	6.0	2	0%	6.0	1	NA
+150	ais-dev-ndrqqluwbj4cmz6w4m5mwk-37074123815.europe-west1.run.app	1	5.0	0	0%	5.0	1	NA
+151	vm-7hxxkk3lqitk7bne6suvksvs.vusercontent.net	1	2.0	0	0%	2.0	1	NA
+152	verselorestory.netlify.app	1	1.0	0	100%	1.0	0	NA
+153	versehealthcare.vercel.app	1	1.0	0	100%	1.0	0	NA
+154	vm-6ncdfhep99v7k6mwqn0bmauz.vusercontent.net	1	1.0	0	100%	1.0	1	NA
+155	trading-cards-1c38sm5du-ovodos-projects.vercel.app	1	1.0	0	100%	1.0	0	NA
+156	preview--lingo-leap-copy-a760df5b.base44.app	1	10.0	2	0%	10.0	0	NA
+157	interior-azure-i2ufxyqdo2.edgeone.app	1	1.0	0	—	—	0	NA
+158	preview-sandbox--6a10639b31d364c7a760df5b.base44.app	1	30.0	10	0%	30.0	0	NA
+159	vm-8054dyraufafd1gau01q6r00.vusercontent.net	1	1.0	0	100%	1.0	1	NA
+160	versehealthcareweb-cltq8vq4y-desiboii7-2248s-projects.vercel.app	1	1.0	0	100%	1.0	0	NA
+161	ais-dev-36fx553lpgtqjm5p2fjxpt-385042659597.europe-west2.run.app	1	2.0	0	0%	2.0	0	NA
+162	ais-pre-rtl3qcdde4jeuryavqaiba-385042659597.europe-west2.run.app	1	1.0	0	100%	1.0	1	NA
+163	ais-dev-opod4qzujrlrpbpnb4th4o-702881787864.asia-southeast1.run.app	1	2.0	0	0%	2.0	0	NA
+164	vm-7uzhbh1lwwppis0wlwszfbb2.vusercontent.net	1	1.0	0	100%	1.0	1	NA
+165	www-versehome-eazy-com-c354.vercel.app	1	1.0	0	100%	1.0	1	NA
+166	vm-731h2jps4jj0ux2xz6xqwrds.vusercontent.net	1	3.0	0	0%	3.0	1	NA
+167	vm-78zvmmnntjd4tl4l9er5jmuz.vusercontent.net	1	1.0	1	100%	1.0	1	NA
 Verse App Analytics
-5/23
+12000

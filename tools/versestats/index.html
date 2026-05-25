@@ -450,14 +450,15 @@ Powered by <a href="https://niti.com.ng/" target="_blank">Neroitech Inventions</
 <img src="images/verse_logo.svg" alt="Verse Logo" class="verse-logo" width="25" height="25">
 Analytics Intelligence Analyzer
 </h2>
-<p style="text-align:center;font-size:14px;color:#a0a0cc">Paste the full Verse dashboard data from <a style="color: #00c853;" href="https://dashboard.vgdh.io/" target="_blank"><b>Verse App Analytics</b></a> below</p>
+<p style="text-align:center;font-size:14px;color:#a0a0cc">Access additional data and ecosystem analytics from <a style="color: #00c853;" href="https://dashboard.vgdh.io/" target="_blank"><b>Verse App Analytics</b></a>.</p>
 <br>
 <div style="text-align:center;margin-bottom:10px;">
 <select id="dataFilter" style="padding:8px;border-radius:6px;background:#0f172a;color:white;border:1px solid #334155;">
-<option value="verse3" selected>Vibe Coding with Verse 3</option>
+<option value="all" selected>Verse Ecosystem</option>
+<option value="verse4">Vibe Coding with Verse 4</option>
+<option value="verse3">Vibe Coding with Verse 3</option>
 <option value="verse2">Vibe Coding with Verse 2</option>
 <option value="verse1">Vibe Coding with Verse 1</option>
-<option value="all">All Time</option>
 </select>
 </select>
 </div>
@@ -522,6 +523,7 @@ Verse App Analytics is loaded by default from the database. Click the field and 
 let verse1Data="";
 let verse2Data="";
 let verse3Data="";
+let verse4Data="";
 let verseAllData="";
 
 let verseLines=[];
@@ -541,9 +543,10 @@ try{
 verse1Data = await fetch("vcwv-1.txt").then(r=>r.ok?r.text():"");
 verse2Data = await fetch("vcwv-2.txt").then(r=>r.ok?r.text():"");
 verse3Data = await fetch("vcwv-3.txt").then(r=>r.ok?r.text():"");
+verse4Data = await fetch("vcwv-4.txt").then(r=>r.ok?r.text():"");
 verseAllData = await fetch("verse-data.txt").then(r=>r.ok?r.text():"");
 
-loadSelectedData("verse3");
+loadSelectedData("all");
 
 }catch(e){
 
@@ -569,6 +572,7 @@ let data="";
 if(type==="verse1") data=verse1Data;
 if(type==="verse2") data=verse2Data;
 if(type==="verse3") data=verse3Data;
+if(type==="verse4") data=verse4Data;
 if(type==="all") data=verseAllData;
 
 verseLines=data
