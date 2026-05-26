@@ -1662,19 +1662,20 @@ window.switchTab=function(tab){
   document.getElementById('content'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display='';
 };
 
+// Replace the entire manual payment section (from verifyManualTransaction to the end of INIT) with this:
+
 async function verifyManualTransaction(userWallet) {
   const logEl = document.getElementById('manualLog');
   logEl.style.display = 'block';
   clearLog(logEl);
   
-  addLog(logEl, `<span class="lg-warn">${sp()}Scanning payments from last 45 minutes...</span>`);
+  addLog(logEl, `<span class="lg-warn">${sp()}Scanning recent payments (last 45 min)...</span>`);
 
   const API_KEY = 'XN9WICY1V7C5A3VBRRR2NTRF7KZ4TCN4Z4';
   const RECEIVER = '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
   const TOKEN = '0xc708D6F2153933DAA50B2D0758955Be0A93A8FEc';
 
   try {
-    // Using V2 endpoint (more reliable)
     const url = `https://api.etherscan.io/v2/api?chainid=137&module=account&action=tokentx&address=${RECEIVER}&contractaddress=${TOKEN}&sort=desc&apikey=${API_KEY}`;
 
     const res = await fetch(url);
@@ -1682,7 +1683,7 @@ async function verifyManualTransaction(userWallet) {
 
     if (data.status === '0') {
       addLog(logEl, `<span class="lg-err">❌ API Error: ${data.message || 'NOTOK'}</span>`);
-      addLog(logEl, `<span class="lg-info">Wait 45-90 seconds after payment, then try again.</span>`);
+      addLog(logEl, `<span class="lg-info">Try again in 30-60 seconds.</span>`);
       return false;
     }
 
@@ -1692,14 +1693,12 @@ async function verifyManualTransaction(userWallet) {
     }
 
     const now = Date.now();
-    const fortyFiveMinAgo = now - (45 * 60 * 1000); // Last 45 minutes
+    const fortyFiveMinAgo = now - (45 * 60 * 1000);
 
     const recentTransfers = data.result.slice(0, 50);
 
     for (const tx of recentTransfers) {
       const txTime = parseInt(tx.timeStamp) * 1000;
-      
-      // Skip if older than 45 minutes
       if (txTime < fortyFiveMinAgo) continue;
 
       const amount = parseFloat(ethers.utils.formatUnits(tx.value, tx.tokenDecimal || 18));
@@ -1708,22 +1707,51 @@ async function verifyManualTransaction(userWallet) {
       if (Math.abs(amount - 1000) < 3 && fromAddr === userWallet.toLowerCase()) {
         const minutesAgo = Math.round((now - txTime) / 60000);
         
-        addLog(logEl, `<span class="lg-ok">✅ Perfect! 1,000 fxVERSE payment found (${minutesAgo} min ago)</span>`);
+        addLog(logEl, `<span class="lg-ok">✅ Found 1,000 VERSE payment (${minutesAgo} min ago)</span>`);
         addLog(logEl, `<span class="lg-info">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash.slice(0,18)}...</a></span>`);
         
         return tx.hash;
       }
     }
 
-    addLog(logEl, `<span class="lg-err">❌ No matching 1,000 VERSE payment from your wallet in the last 45 minutes.</span>`);
-    addLog(logEl, `<span class="lg-info">Make sure you sent exactly 1,000 fxVERSE and wait at least 45 seconds after sending.</span>`);
+    addLog(logEl, `<span class="lg-err">❌ No matching payment found in the last 45 minutes.</span>`);
+    addLog(logEl, `<span class="lg-info">Make sure you sent <strong>exactly 1,000 fxVERSE</strong> and wait ~60 seconds after sending.</span>`);
 
   } catch (e) {
     console.error(e);
-    addLog(logEl, `<span class="lg-err">❌ Network error. Try again.</span>`);
+    addLog(logEl, `<span class="lg-err">❌ Network error. Please try again.</span>`);
   }
   return false;
 }
+
+// Clean listener attachment
+document.getElementById('verifyManualBtn').addEventListener('click', async () => {
+  const tg = (document.getElementById('fldTelegram').value || '').trim();
+  const wallet = (document.getElementById('fldWallet').value || '').trim();
+
+  if (!tg) {
+    return addLog($formLog, '<span class="lg-err">❌ Enter your Telegram username first.</span>');
+  }
+  if (!wallet || !wallet.startsWith('0x')) {
+    return addLog($formLog, '<span class="lg-err">❌ Enter your Polygon wallet address first.</span>');
+  }
+
+  const txHash = await verifyManualTransaction(wallet);
+  
+  if (txHash) {
+    window.verifiedManualTx = txHash;
+
+    addLog($formLog, `<span class="lg-ok">✅ Payment verified! Now click "Submit Prediction Now"</span>`);
+
+    $btnArea.innerHTML = `
+      <button class="btn btn-primary" id="finalManualSubmitBtn">
+        <i class="fas fa-paper-plane"></i> Submit Prediction Now
+      </button>
+    `;
+
+    document.getElementById('finalManualSubmitBtn').addEventListener('click', submitManualPrediction);
+  }
+});
 
 async function handleManualSubmit() {
   const tg = (document.getElementById('fldTelegram').value || '').trim();
