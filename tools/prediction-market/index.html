@@ -59,21 +59,23 @@ body::after{
 }
 header{
   position:sticky;top:0;z-index:200;
-  background:rgba(6,9,16,0.92);
+  background:rgba(6,9,16,0.95);
   backdrop-filter:blur(14px);
   border-bottom:1px solid var(--border);
-  padding:14px 20px;
-  display:flex;align-items:center;gap:14px;
+  padding:12px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
 }
-.hd-logo img{max-width:120px;height:auto;display:block;}
+.hd-left{display:flex;align-items:center;gap:8px;}
 .hd-title{
-  font-size:1rem;font-weight:800;letter-spacing:-0.3px;
+  font-size:1.05rem;font-weight:800;letter-spacing:-0.3px;
   background:linear-gradient(90deg,#00e5a0,#4facfe);
   -webkit-background-clip:text;background-clip:text;color:transparent;
   white-space:nowrap;
 }
+.hd-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
 .hd-pill{
-  margin-left:auto;flex-shrink:0;
   font-family:var(--font-mono);font-size:0.6rem;
   padding:5px 10px;border-radius:20px;
   background:var(--green-dim);color:var(--green);
@@ -81,24 +83,20 @@ header{
 }
 .hd-home{
   background:var(--surface2);border:1px solid var(--border);
-  color:var(--muted);border-radius:8px;padding:8px 14px;
+  color:var(--muted);border-radius:8px;padding:8px 12px;
   font-family:var(--font-display);font-size:0.78rem;font-weight:700;
-  cursor:pointer;text-decoration:none;transition:color .2s,border-color .2s;
+  cursor:pointer;text-decoration:none;transition:all .2s;
   white-space:nowrap;
 }
-.hd-home:hover{color:var(--text);border-color:var(--border2);}
 .wallet-bar{
   display:none;align-items:center;gap:8px;
-  padding:8px 12px;border-radius:10px;
+  padding:6px 10px;border-radius:10px;
   background:var(--green-dim);border:1px solid rgba(0,229,160,0.2);
   font-family:var(--font-mono);font-size:0.65rem;color:var(--green);
-  margin:0 20px 0 0;min-width:0;overflow:hidden;flex-shrink:0;
+  min-width:0;overflow:hidden;flex-shrink:0;
 }
 .wallet-bar.show{display:flex;}
-.w-dot{width:6px;height:6px;border-radius:50%;background:var(--green);
-  box-shadow:0 0 5px var(--green);flex-shrink:0;animation:pdot 2s infinite;}
-@keyframes pdot{0%,100%{opacity:1}50%{opacity:0.3}}
-.w-addr{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px;}
+.w-addr{max-width:110px;}
 .wrap{
   position:relative;z-index:1;
   max-width:900px;margin:0 auto;
@@ -465,6 +463,85 @@ header{
 #backToTop.visible{opacity:1;visibility:visible;}
 #backToTop:hover{transform:translateY(-3px);border-color:var(--green);box-shadow:0 6px 24px var(--green-glow);}
 #backToTop:active{transform:scale(0.93)!important;}
+
+@media(max-width:480px){
+  .share-btn-row .btn{font-size:0.85rem;padding:12px 14px;}
+  #downloadCardBtn .download-text{display:none;}
+  header{padding:10px 12px;}
+  .hd-home{padding:7px 10px;font-size:0.75rem;}
+}
+
+/* Hamburger Menu */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1.6rem;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 61px;
+  left: 0;
+  right: 0;
+  background: rgba(6,9,16,0.98);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  padding: 16px;
+  z-index: 250;
+  flex-direction: column;
+  gap: 12px;
+}
+.mobile-menu.show { display: flex; }
+.mobile-link {
+  padding: 14px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@media(max-width: 768px) {
+  .hamburger { display: block; }
+  .hd-right { display: none; }
+  header { justify-content: space-between; padding: 12px 16px; }
+}
+
+/* Mobile Wallet in Hamburger */
+#mobileWalletContainer {
+  display: none;
+}
+
+.mobile-menu.show #mobileWalletContainer {
+  display: block;
+}
+
+/* Show wallet bar only in mobile hamburger menu */
+.mobile-wallet-bar {
+  display: none;
+}
+
+.mobile-menu.show .mobile-wallet-bar {
+  display: block;
+}
+
+/* Make it look nice */
+@media(max-width: 768px) {
+  .mobile-wallet-bar .wallet-bar {
+    font-size: 0.75rem;
+  }
+  .mobile-wallet-bar .w-addr {
+    max-width: 140px;
+  }
+}
 </style>
 </head>
 <body>
@@ -478,7 +555,7 @@ header{
     <div class="sc-header">
       <div>
         <div class="sc-brand"><span>SnappQuest</span> Prediction Market</div>
-        <div class="sc-subtitle">BTC Tomorrow — Predict &amp; Earn</div>
+        <div class="sc-subtitle">BTC Tomorrow - Predict &amp; Earn</div>
       </div>
       <div class="sc-tag" id="sc-status">🟢 OPEN</div>
     </div>
@@ -580,21 +657,52 @@ header{
 
 <!-- HEADER -->
 <header>
-  <div style="display:flex;align-items:center;gap:8px;margin-left:12px;">
-    <div class="hd-title" style="display:flex;align-items:center;gap:8px;"><img src="img/verse_logo.svg" alt="Verse Logo" class="verse-logo" width="25" height="25"> <span>Prediction Market</span></div>
+  <div class="hd-left">
+    <div class="hd-title" style="display:flex;align-items:center;gap:8px;">
+      <img src="img/verse_logo.svg" alt="Verse Logo" width="25" height="25"> 
+      <span>Prediction Market</span>
+    </div>
   </div>
-  <div class="wallet-bar" id="walletBar">
-    <div class="w-dot"></div>
-    <span class="w-addr" id="walletAddr">—</span>
-    <button class="btn btn-danger" id="discBtn"
-      style="width:30px;height:30px;padding:0;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.65rem;">
-      <i class="fas fa-power-off"></i>
-    </button>
+
+  <div class="hd-right">
+    <div class="wallet-bar" id="walletBar">
+      <div class="w-dot"></div>
+      <span class="w-addr" id="walletAddr">—</span>
+      <button class="btn btn-danger" id="discBtn" style="width:32px;height:32px;padding:0;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.75rem;">
+        <i class="fas fa-power-off"></i>
+      </button>
+    </div>
+    <div class="hd-pill">⬡ Polygon</div>
+    <a href="https://niti.com.ng/snappquest/join.html" class="hd-home"><i class="fas fa-arrow-left"></i> Quests</a>
   </div>
-  <div class="hd-pill">⬡ Polygon</div>
-  <a href="join.html" class="hd-home"><i class="fas fa-arrow-left"></i> Quests</a>
+
+  <!-- Hamburger -->
+  <button class="hamburger" id="hamburgerBtn">
+    <i class="fas fa-bars"></i>
+  </button>
 </header>
 
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="https://niti.com.ng/snappquest/join.html" class="mobile-link">
+    <i class="fas fa-arrow-left"></i> Back to Quests
+  </a>
+
+  <!-- Wallet Bar - Pure CSS Version -->
+  <div class="mobile-wallet-bar">
+    <div class="wallet-bar" style="width:100%; margin:8px 0; background:var(--green-dim); border:1px solid rgba(0,229,160,0.4);">
+      <div style="display:flex; align-items:center; gap:8px; padding:8px 12px;">
+        <div class="w-dot"></div>
+        <span class="w-addr" id="mobileWalletAddr">—</span>
+        <button class="btn btn-danger" id="mobileDiscBtn" style="width:32px;height:32px;padding:0;border-radius:8px;margin-left:auto;">
+          <i class="fas fa-power-off"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="hd-pill" style="align-self:flex-start; margin:8px;">⬡ Polygon</div>
+</div>
 <!-- MAIN -->
 <div class="wrap">
 
@@ -608,7 +716,7 @@ header{
     <div class="hero-inner">
       <div class="hero-icon"><i class="fa-brands fa-bitcoin"></i></div>
       <div class="hero-text">
-        <h1>BTC Tomorrow — Predict &amp; Earn</h1>
+        <h1>BTC Tomorrow - Predict &amp; Earn</h1>
         <p>Analyse live BTC data, make your prediction, pay 1,000 VERSE to enter.<br>Best predictions earn VERSE rewards from the prize pool.</p>
         <div class="hero-badges">
           <span class="badge badge-green" id="questStatus">⏳ Loading quest…</span>
@@ -708,23 +816,23 @@ header{
     </div>
   </div>
 
-  <!-- SHARE SIGNAL -->
-  <div class="sec-label">Share the Market Signal</div>
-  <div class="share-signal-panel">
-    <div style="font-size:0.88rem;font-weight:700;margin-bottom:4px;">📣 Spread the Word</div>
-    <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);line-height:1.6;">
-      Download a card showing today's BTC signal and share it on X to invite others to predict and win VERSE.
-    </div>
-    <div class="share-btn-row">
-      <button class="btn btn-ghost" id="downloadCardBtn" style="flex:1;">
-        <i class="fas fa-download"></i> Download Signal Card
-      </button>
-      <button class="btn btn-x" id="shareXBtn" style="flex:1;">
-        <i class="fa-brands fa-x-twitter"></i> Share on X
-      </button>
-    </div>
-    <div id="shareStatusLog" style="font-family:var(--font-mono);font-size:0.66rem;color:var(--muted);margin-top:10px;min-height:16px;"></div>
+<!-- SHARE SIGNAL -->
+<div class="sec-label">Share the Market Signal</div>
+<div class="share-signal-panel">
+  <div style="font-size:0.88rem;font-weight:700;margin-bottom:4px;">📣 Spread the Word</div>
+  <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);line-height:1.6;">
+    Download a card showing today's BTC signal and share it on X to invite others.
   </div>
+  <div class="share-btn-row">
+    <button class="btn btn-ghost" id="downloadCardBtn" style="flex:1;">
+      <i class="fas fa-download"></i> <span class="download-text">Download Signal</span>
+    </button>
+    <button class="btn btn-x" id="shareXBtn" style="flex:1;">
+      <i class="fa-brands fa-x-twitter"></i> Share Signal
+    </button>
+  </div>
+  <div id="shareStatusLog" style="font-family:var(--font-mono);font-size:0.66rem;color:var(--muted);margin-top:10px;min-height:16px;"></div>
+</div>
 
   <!-- PREDICTION FORM -->
   <div class="sec-label">Submit Your Prediction</div>
@@ -761,11 +869,44 @@ header{
       <label class="field-label">Reasoning (optional — max 280 chars)</label>
       <input class="field-input" type="text" id="fldReason" placeholder="Why do you think this?" maxlength="280" autocomplete="off">
     </div>
-    <div style="margin-top:16px;" id="btnArea">
-      <button class="btn btn-connect" id="connectWalletBtn">
-        <i class="fas fa-wallet"></i> Connect Wallet to Enter
+<!-- Smart Manual Payment Section -->
+<div style="margin-top:20px; padding:18px; background:var(--surface2); border:2px solid var(--border2); border-radius:16px;" id="manualSection">
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+    <div style="font-size:1.4rem;">💰</div>
+    <div>
+      <strong style="font-size:0.95rem; color:var(--green);">Alternative: Manual Payment</strong><br>
+      <span style="font-size:0.7rem; color:var(--muted);">No wallet connection needed</span>
+    </div>
+  </div>
+  
+  <div style="background:var(--surface); padding:14px; border-radius:12px; margin-bottom:14px; border:1px solid var(--border);">
+    <div style="font-size:0.72rem; color:var(--muted); margin-bottom:8px;">
+      Send <strong style="color:var(--text);">exactly 1,000 fxVERSE</strong> to:
+    </div>
+    
+    <div style="display:flex; align-items:center; gap:8px; background:#00000055; padding:10px 12px; border-radius:8px;">
+      <code id="receiverAddr" style="flex:1; font-size:0.78rem; word-break:break-all; font-family:var(--font-mono); color:var(--green);">
+        0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB
+      </code>
+      <button id="copyBtn" 
+              style="padding:8px 14px; background:var(--green-dim); color:var(--green); border:1px solid rgba(0,229,160,0.4); border-radius:6px; font-size:0.78rem; cursor:pointer; flex-shrink:0; transition:all 0.2s;">
+        📋 Copy
       </button>
     </div>
+  </div>
+
+  <button class="btn btn-ghost" id="verifyManualBtn" style="width:100%; padding:14px;">
+    <i class="fas fa-search"></i> Auto-Check Recent Payments
+  </button>
+  
+  <div id="manualLog" class="status-log" style="margin-top:12px; display:none;"></div>
+</div>
+
+<div style="margin-top:16px;" id="btnArea">
+  <button class="btn btn-connect" id="connectWalletBtn">
+    <i class="fas fa-wallet"></i> Connect Wallet (Recommended)
+  </button>
+</div>
     <div class="status-log" id="formLog">Waiting for wallet connection…</div>
   </div>
 
@@ -882,7 +1023,7 @@ const CONFIG_SHEET_ID  = '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w';
 const CONFIG_SHEET_TAB = 'SnappQuestData';
 const TRACK_CODE_CELL  = `${CONFIG_SHEET_TAB}!C11`;
 const FORM_ACTION      = 'https://docs.google.com/forms/d/1ObMPuTI2S1842DmfYePB4uKxfw2cLDtSlFsllUZZ-2I/formResponse';
-const PAGE_URL         = 'https://niti.com.ng/prediction-market.html';
+const PAGE_URL         = 'https://t.me/SnappQuest/7496';
 
 const ERC20_ABI = [
   'function transfer(address to,uint256 amount) returns (bool)',
@@ -957,11 +1098,30 @@ function setDisconnected(){
 }
 function renderBtnArea(){
   if(userAddress){
+    // Wallet connected → Show normal submit button
     $btnArea.innerHTML=`<button class="btn btn-primary" id="submitPredBtn"><i class="fas fa-paper-plane"></i> Submit Prediction (1,000 VERSE)</button>`;
-    document.getElementById('submitPredBtn').addEventListener('click',openConfirm);
+    document.getElementById('submitPredBtn').addEventListener('click', openConfirm);
   } else {
-    $btnArea.innerHTML=`<button class="btn btn-connect" id="connectWalletBtn"><i class="fas fa-wallet"></i> Connect Wallet to Enter</button>`;
-    document.getElementById('connectWalletBtn').addEventListener('click',openWalletModal);
+    // No wallet connected → Only show Connect Wallet button
+    $btnArea.innerHTML = `
+      <button class="btn btn-connect" id="connectWalletBtn">
+        <i class="fas fa-wallet"></i> Connect Wallet (Recommended)
+      </button>
+    `;
+    $btnArea.innerHTML = `
+  <button class="btn btn-connect" id="connectWalletBtn">
+    <i class="fas fa-wallet"></i> Connect Wallet (Recommended)
+  </button>
+  <div style="text-align:center; margin-top:12px; font-size:0.68rem; color:var(--muted);">
+    Or use <strong style="color:var(--green);">Manual Payment</strong> above ↑
+  </div>
+`;
+    
+    // Clean listener to avoid duplicates
+    const connectBtn = document.getElementById('connectWalletBtn');
+    connectBtn.replaceWith(connectBtn.cloneNode(true));
+    
+    document.getElementById('connectWalletBtn').addEventListener('click', openWalletModal);
   }
 }
 function loadIdentity(){
@@ -1027,18 +1187,24 @@ async function fetchActiveTrackCode(){
 }
 
 // ── RENDER QUEST ──
-function renderQuestMeta(quest,entries,quantity){
-  const status=parseInt(quest.Status)||0;
-  const isActive=status===0||status===2;
-  const reward=quest.Reward||'—';
-  const sponsor=quest.Sponsor||'SnappQuest';
-  const trackCode=quest['Track Code']||PREDICTION_TRACK_CODE;
-  const deadline=quest.Deadline||'0';
-  currentReward=reward;
+function renderQuestMeta(quest, entries, quantity){
+  const status = parseInt(quest.Status) || 0;
+  const deadline = quest.Deadline || '0';
+  const expMs = deadline && deadline !== '0' ? new Date(deadline).getTime() : 0;
+  const isExpired = expMs > 0 && Date.now() > expMs;
+  
+  // Expired = treated as closed
+  const isActive = (status === 0 || status === 2) && !isExpired;
+  
+  const reward = quest.Reward || '—';
+  const sponsor = quest.Sponsor || 'SnappQuest';
+  const trackCode = quest['Track Code'] || PREDICTION_TRACK_CODE;
+  currentReward = reward;
 
-  document.getElementById('questStatus').textContent=isActive?'🟢 OPEN':'🔴 CLOSED';
-  document.getElementById('questStatus').className='badge '+(isActive?'badge-green':'badge-red');
-  document.getElementById('rewardBadge').textContent=`🏆 ${reward} Prize`;
+  document.getElementById('questStatus').textContent = isActive ? '🟢 OPEN' : '🔴 CLOSED';
+  document.getElementById('questStatus').className = 'badge ' + (isActive ? 'badge-green' : 'badge-red');
+const formattedReward = Number(reward || 0).toLocaleString('en-US');
+document.getElementById('rewardBadge').textContent=`🏆 ${formattedReward} Prize`;
   document.getElementById('sponsorName').textContent=sponsor;
   document.getElementById('trackCodeDisplay').textContent=trackCode;
 
@@ -1215,9 +1381,10 @@ function updateShareCard(){
   }
 
   document.getElementById('sc-entries').textContent=currentEntryCount||'—';
-  // Strip any existing suffix then re-append VERSE clearly
-  const rawReward=(currentReward||'').replace(/VERSE/gi,'').trim();
-  document.getElementById('sc-prize').textContent=rawReward?`${rawReward} VERSE`:'— VERSE';
+// Strip any existing suffix then re-append VERSE clearly
+const rawReward = (currentReward || '').replace(/VERSE/gi, '').trim();
+const formattedPrize = rawReward ? Number(rawReward).toLocaleString('en-US') : '—';
+document.getElementById('sc-prize').textContent = `${formattedPrize} VERSE`;
 }
 
 // ── SHARE FUNCTIONS ──
@@ -1481,12 +1648,231 @@ window.switchTab=function(tab){
   document.getElementById('content'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display='';
 };
 
+async function verifyManualTransaction(userWallet) {
+  const logEl = document.getElementById('manualLog');
+  logEl.style.display = 'block';
+  clearLog(logEl);
+  
+  addLog(logEl, `<span class="lg-warn">${sp()}Scanning payments from last 45 minutes...</span>`);
+
+  const API_KEY = 'XN9WICY1V7C5A3VBRRR2NTRF7KZ4TCN4Z4';
+  const RECEIVER = '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
+  const TOKEN = '0xc708D6F2153933DAA50B2D0758955Be0A93A8FEc';
+
+  try {
+    // Using V2 endpoint (more reliable)
+    const url = `https://api.etherscan.io/v2/api?chainid=137&module=account&action=tokentx&address=${RECEIVER}&contractaddress=${TOKEN}&sort=desc&apikey=${API_KEY}`;
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.status === '0') {
+      addLog(logEl, `<span class="lg-err">❌ API Error: ${data.message || 'NOTOK'}</span>`);
+      addLog(logEl, `<span class="lg-info">Wait 45-90 seconds after payment, then try again.</span>`);
+      return false;
+    }
+
+    if (!data.result || data.result.length === 0) {
+      addLog(logEl, `<span class="lg-err">❌ No recent transfers found.</span>`);
+      return false;
+    }
+
+    const now = Date.now();
+    const fortyFiveMinAgo = now - (45 * 60 * 1000); // Last 45 minutes
+
+    const recentTransfers = data.result.slice(0, 50);
+
+    for (const tx of recentTransfers) {
+      const txTime = parseInt(tx.timeStamp) * 1000;
+      
+      // Skip if older than 45 minutes
+      if (txTime < fortyFiveMinAgo) continue;
+
+      const amount = parseFloat(ethers.utils.formatUnits(tx.value, tx.tokenDecimal || 18));
+      const fromAddr = tx.from.toLowerCase();
+
+      if (Math.abs(amount - 1000) < 3 && fromAddr === userWallet.toLowerCase()) {
+        const minutesAgo = Math.round((now - txTime) / 60000);
+        
+        addLog(logEl, `<span class="lg-ok">✅ Perfect! 1,000 fxVERSE payment found (${minutesAgo} min ago)</span>`);
+        addLog(logEl, `<span class="lg-info">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash.slice(0,18)}...</a></span>`);
+        
+        return tx.hash;
+      }
+    }
+
+    addLog(logEl, `<span class="lg-err">❌ No matching 1,000 VERSE payment from your wallet in the last 45 minutes.</span>`);
+    addLog(logEl, `<span class="lg-info">Make sure you sent exactly 1,000 fxVERSE and wait at least 45 seconds after sending.</span>`);
+
+  } catch (e) {
+    console.error(e);
+    addLog(logEl, `<span class="lg-err">❌ Network error. Try again.</span>`);
+  }
+  return false;
+}
+
+async function handleManualSubmit() {
+  const tg = (document.getElementById('fldTelegram').value || '').trim();
+  const wallet = (document.getElementById('fldWallet').value || '').trim();
+
+  if (!tg) return addLog($formLog, '<span class="lg-err">❌ Enter Telegram username.</span>');
+  if (!wallet || !wallet.startsWith('0x')) return addLog($formLog, '<span class="lg-err">❌ Enter valid Polygon wallet.</span>');
+
+  const txHash = await verifyManualTransaction(wallet);
+  
+  if (txHash) {
+    // Store the verified txHash temporarily
+    window.verifiedManualTx = txHash;
+    
+    addLog($formLog, `<span class="lg-ok">✅ Payment verified! You can now submit your prediction.</span>`);
+    
+    // Show final submit button (no wallet needed)
+    $btnArea.innerHTML = `
+      <button class="btn btn-primary" id="finalManualSubmitBtn">
+        <i class="fas fa-paper-plane"></i> Submit Prediction Now
+      </button>
+    `;
+    
+    document.getElementById('finalManualSubmitBtn').addEventListener('click', submitManualPrediction);
+  }
+}
+
+async function submitManualPrediction() {
+  const tg = (document.getElementById('fldTelegram').value || '').trim();
+  const wallet = (document.getElementById('fldWallet').value || '').trim();
+  const price = (document.getElementById('fldPrice').value || '').trim();
+  const reason = (document.getElementById('fldReason').value || '').trim();
+
+  if (!tg) return addLog($formLog, '<span class="lg-err">❌ Telegram username is required.</span>');
+  if (!wallet || !wallet.startsWith('0x')) return addLog($formLog, '<span class="lg-err">❌ Polygon wallet is required.</span>');
+  if (!price || isNaN(price)) return addLog($formLog, '<span class="lg-err">❌ Enter a valid BTC price prediction.</span>');
+  if (!selectedDir) return addLog($formLog, '<span class="lg-err">❌ Select UP or DOWN direction.</span>');
+
+  const proof = `${selectedDir.toUpperCase()}|${price}|${reason}`;
+  const txHash = window.verifiedManualTx;
+
+  if (!txHash) return addLog($formLog, '<span class="lg-err">❌ Payment verification expired. Please verify again.</span>');
+
+  const btn = document.getElementById('finalManualSubmitBtn');
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spinner"></span> Submitting...`;
+
+  try {
+    const fd = new FormData();
+    fd.append('entry.2147360639', PREDICTION_TRACK_CODE);
+    fd.append('entry.1526178092', proof);
+    fd.append('entry.884208731', txHash);
+    fd.append('entry.256576255', tg);
+    fd.append('entry.1138659293', wallet);
+
+    await fetch(FORM_ACTION, {method:'POST', body: fd});
+
+    if (tg) localStorage.setItem('userTelegram', tg.startsWith('@') ? tg : '@' + tg);
+
+    // Success UI
+    document.getElementById('predPanel').style.display = 'none';
+    document.getElementById('successPanel').classList.add('show');
+    document.getElementById('successTxLink').href = `https://polygonscan.com/tx/${txHash}`;
+    document.getElementById('successSub').textContent = `Track: ${PREDICTION_TRACK_CODE} · $${fmt(Number(price))} ${selectedDir.toUpperCase()}\nGood luck!`;
+
+    loadQuestData();
+  } catch (e) {
+    console.error(e);
+    addLog($formLog, `<span class="lg-err">❌ Submission failed. Please try again.</span>`);
+    btn.disabled = false;
+    btn.innerHTML = `<i class="fas fa-paper-plane"></i> Submit Prediction Now`;
+  }
+}
+
 // ── INIT ──
 window.addEventListener('load',async()=>{
   renderBtnArea();
   loadBTCData();
   await loadQuestData();
   loadIdentity();
+  updateMobileWalletDisplay();
+setupCopyButton();
+
+
+function updateMobileWallet() {
+  const container = document.getElementById('mobileWalletContainer');
+  const addr = document.getElementById('mobileWalletAddr');
+  
+  if (userAddress) {
+    container.style.display = 'block';
+    addr.textContent = shortAddr(userAddress);
+  } else {
+    container.style.display = 'none';
+  }
+}
+
+// Update these two functions
+function setConnected(label) {
+  $walletBar.classList.add('show');
+  $walletAddr.textContent = label;
+  document.getElementById('fldWallet').value = userAddress || '';
+  
+  const savedTg = localStorage.getItem('userTelegram') || '';
+  if (savedTg && !document.getElementById('fldTelegram').value)
+    document.getElementById('fldTelegram').value = savedTg;
+  
+  renderBtnArea();
+  clearLog($formLog);
+  addLog($formLog, `<span class="lg-ok">✅ Wallet connected — ${label}</span>`);
+  addLog($formLog, `<span class="lg-info">Fill in your prediction and hit Submit.</span>`);
+  
+  updateMobileWalletDisplay();   // ← Added
+}
+
+function setDisconnected(){
+  userAddress = null;
+  ethProvider = null;
+  ethSigner = null;
+  wcProvider = null;
+
+  $walletBar.classList.remove('show');
+  $walletAddr.textContent = '—';
+  document.getElementById('fldWallet').value = localStorage.getItem('userPolygon') || '';
+
+  renderBtnArea();
+  clearLog($formLog);
+  addLog($formLog, `<span class="lg-info">Wallet disconnected successfully.</span>`);
+  
+  updateMobileWalletDisplay();
+}
+
+// Replace the old verifyManualBtn listener with this updated version
+document.getElementById('verifyManualBtn').addEventListener('click', async () => {
+  const tg = (document.getElementById('fldTelegram').value || '').trim();
+  const wallet = (document.getElementById('fldWallet').value || '').trim();
+
+  if (!tg) {
+    return addLog($formLog, '<span class="lg-err">❌ Enter your Telegram username first.</span>');
+  }
+  if (!wallet || !wallet.startsWith('0x')) {
+    return addLog($formLog, '<span class="lg-err">❌ Enter your Polygon wallet address first.</span>');
+  }
+
+  const txHash = await verifyManualTransaction(wallet);
+  
+  if (txHash) {
+    // Store verified tx
+    window.verifiedManualTx = txHash;
+
+    addLog($formLog, `<span class="lg-ok">✅ Payment verified! You can now submit your prediction.</span>`);
+
+    // Show final submit button
+    $btnArea.innerHTML = `
+      <button class="btn btn-primary" id="finalManualSubmitBtn">
+        <i class="fas fa-paper-plane"></i> Submit Prediction Now
+      </button>
+    `;
+
+    document.getElementById('finalManualSubmitBtn').addEventListener('click', submitManualPrediction);
+  
+  }
+});
+
   setInterval(loadBTCData,5*60*1000);
 });
 
@@ -1494,6 +1880,70 @@ window.addEventListener('load',async()=>{
 window.addEventListener('scroll',()=>{
   document.getElementById('backToTop').classList.toggle('visible',window.scrollY>320);
 });
+
+// Hamburger Menu - Clean & Modern
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+
+hamburgerBtn.addEventListener('click', () => {
+  mobileMenu.classList.toggle('show');
+  
+  const icon = hamburgerBtn.querySelector('i');
+  if (mobileMenu.classList.contains('show')) {
+    icon.classList.remove('fa-bars');
+    icon.classList.add('fa-times');
+  } else {
+    icon.classList.add('fa-bars');
+    icon.classList.remove('fa-times');
+  }
+});
+
+// Close menu when tapping outside
+document.addEventListener('click', (e) => {
+  if (mobileMenu.classList.contains('show') && 
+      !mobileMenu.contains(e.target) && 
+      e.target !== hamburgerBtn && 
+      !hamburgerBtn.contains(e.target)) {
+    mobileMenu.classList.remove('show');
+    const icon = hamburgerBtn.querySelector('i');
+    icon.classList.add('fa-bars');
+    icon.classList.remove('fa-times');
+  }
+});
+
+// Copy Receiver Address with nice feedback
+function setupCopyButton() {
+  const copyBtn = document.getElementById('copyBtn');
+  const addrEl = document.getElementById('receiverAddr');
+  
+  if (!copyBtn) return;
+
+  copyBtn.addEventListener('click', async () => {
+    const address = addrEl.textContent.trim();
+    
+    try {
+      await navigator.clipboard.writeText(address);
+      
+      // Visual feedback
+      const originalText = copyBtn.innerHTML;
+      copyBtn.style.background = 'var(--green)';
+      copyBtn.style.color = '#061a11';
+      copyBtn.innerHTML = '✅ Copied!';
+      
+      setTimeout(() => {
+        copyBtn.innerHTML = originalText;
+        copyBtn.style.background = '';
+        copyBtn.style.color = '';
+      }, 2200);
+      
+    } catch (err) {
+      copyBtn.innerHTML = '❌ Failed';
+      setTimeout(() => {
+        copyBtn.innerHTML = '📋 Copy';
+      }, 1500);
+    }
+  });
+}
 </script>
 </body>
 </html>
