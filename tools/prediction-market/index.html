@@ -1136,22 +1136,44 @@ function renderBtnArea(){
     connectBtn.replaceWith(connectBtn.cloneNode(true));
     
     document.getElementById('connectWalletBtn').addEventListener('click', openWalletModal);
+    // Update log message for manual payment
+    if (document.getElementById('manualSection').style.display !== 'none') {
+      clearLog($formLog);
+      addLog($formLog, `<span class="lg-info">Enter your prediction details and make the manual payment.</span>`);
+    } else {
+      clearLog($formLog);
+      addLog($formLog, `<span class="lg-info">Connect wallet to pay and submit your prediction.</span>`);
+    }
   }
 }
-function loadIdentity(){
-  const tg=localStorage.getItem('userTelegram')||'';
-  const poly=localStorage.getItem('userPolygon')||'';
-  console.log('[Identity] userTelegram:',tg,'userPolygon:',poly);
-  const $tg=document.getElementById('fldTelegram');
-  const $wall=document.getElementById('fldWallet');
-  const $note=document.getElementById('identityNotice');
-  if($tg&&tg)$tg.value=tg;
-  if($wall&&poly)$wall.value=poly;
-  if($note){
-    if(tg||poly){
-      $note.style.display='block';
-      $note.innerHTML=`✅ Identity loaded — ${tg?`<strong>${tg}</strong>`:''}${tg&&poly?' · ':''}${poly?`<strong>${poly.slice(0,6)}…${poly.slice(-4)}</strong>`:''}`;
-    } else {$note.style.display='none';}
+function loadIdentity() {
+  const tg = localStorage.getItem('userTelegram') || '';
+  const poly = localStorage.getItem('userPolygon') || '';
+  console.log('[Identity] userTelegram:', tg, 'userPolygon:', poly);
+  const $tg = document.getElementById('fldTelegram');
+  const $wall = document.getElementById('fldWallet');
+  const $note = document.getElementById('identityNotice');
+  
+  if ($tg && tg) {
+    $tg.value = tg;
+    // Clear the "Enter Telegram username first" message if present
+    const $formLog = document.getElementById('formLog');
+    if ($formLog.innerHTML.includes('Enter Telegram username first')) {
+      clearLog($formLog);
+      // Prompt the user to click the "Auto-Check Payment" button again (in green)
+      addLog($formLog, '<span class="lg-ok">✅ Telegram username loaded. Please click the "Auto-Check Payment" button again.</span>');
+    }
+  }
+  
+  if ($wall && poly) $wall.value = poly;
+  
+  if ($note) {
+    if (tg || poly) {
+      $note.style.display = 'block';
+      $note.innerHTML = `✅ Identity loaded — ${tg ? `<strong>${tg}</strong>` : ''}${tg && poly ? ' · ' : ''}${poly ? `<strong>${poly.slice(0, 6)}…${poly.slice(-4)}</strong>` : ''}`;
+    } else {
+      $note.style.display = 'none';
+    }
   }
 }
 
@@ -1465,10 +1487,14 @@ function openConfirm(){
   const wallet=(document.getElementById('fldWallet').value||userAddress||'').trim();
   const price=(document.getElementById('fldPrice').value||'').trim();
   const reason=(document.getElementById('fldReason').value||'').trim();
-  if(!tg){addLog($formLog,'<span class="lg-err">❌ Enter your Telegram username.</span>');return;}
-  if(!price||isNaN(price)||Number(price)<1){addLog($formLog,'<span class="lg-err">❌ Enter a valid BTC price prediction.</span>');return;}
-  if(!selectedDir){addLog($formLog,'<span class="lg-err">❌ Select UP or DOWN direction.</span>');return;}
-  if(!userAddress){addLog($formLog,'<span class="lg-err">❌ Connect your wallet first.</span>');return;}
+  if(!tg){  // Clear previous logs
+  clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Enter your Telegram username.</span>');return;}
+  if(!price||isNaN(price)||Number(price)<1){  // Clear previous logs
+  clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Enter a valid BTC price prediction.</span>');return;}
+  if(!selectedDir){  // Clear previous logs
+  clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Select UP or DOWN direction.</span>');return;}
+  if(!userAddress){  // Clear previous logs
+  clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Connect your wallet first.</span>');return;}
   document.getElementById('confirmRows').innerHTML=`
     <div class="confirm-row"><span>Telegram</span><span>${tg}</span></div>
     <div class="confirm-row"><span>Wallet</span><span>${shortAddr(wallet)}</span></div>
@@ -1662,11 +1688,10 @@ window.switchTab=function(tab){
   document.getElementById('content'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display='';
 };
 
-// ── MANUAL PAYMENT VERIFICATION ──
 async function verifyManualTransaction(userWallet) {
   const logEl = document.getElementById('manualLog');
   logEl.style.display = 'block';
-  clearLog(logEl);                    // ← Clear previous logs first
+  clearLog(logEl);
   
   addLog(logEl, `<span class="lg-warn">${sp()}Scanning recent payments (last 45 min)...</span>`);
 
@@ -1688,7 +1713,6 @@ async function verifyManualTransaction(userWallet) {
 
     const now = Date.now();
     const fortyFiveMinAgo = now - (45 * 60 * 1000);
-    let found = false;
 
     for (const tx of data.result.slice(0, 50)) {
       const txTime = parseInt(tx.timeStamp) * 1000;
@@ -1700,16 +1724,15 @@ async function verifyManualTransaction(userWallet) {
       if (Math.abs(amount - 1000) < 3 && fromAddr === userWallet.toLowerCase()) {
         const minutesAgo = Math.round((now - txTime) / 60000);
         addLog(logEl, `<span class="lg-ok">✅ Found 1,000 VERSE payment (${minutesAgo} min ago)</span>`);
-        addLog(logEl, `<span class="lg-info">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash.slice(0,18)}...</a></span>`);
-        found = true;
-        return tx.hash;           // ← Exit immediately after finding
+        addLog(logEl, `<span class="lg-info">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash.slice(0, 18)}...</a></span>`);
+        clearLog($formLog);
+        addLog($formLog, `<span class="lg-ok">✅ Payment verified! Fill in your prediction details and click "Submit Prediction Now".</span>`);
+        return tx.hash;
       }
     }
 
-    if (!found) {
-      addLog(logEl, `<span class="lg-err">❌ No matching payment found in the last 45 minutes.</span>`);
-      addLog(logEl, `<span class="lg-info">Make sure you sent exactly 1,000 fxVERSE and wait ~60 seconds after sending.</span>`);
-    }
+    addLog(logEl, `<span class="lg-err">❌ No matching payment found in the last 45 minutes.</span>`);
+    addLog(logEl, `<span class="lg-info">Make sure you sent exactly 1,000 fxVERSE and wait ~60 seconds after sending.</span>`);
 
   } catch (e) {
     console.error(e);
@@ -1757,7 +1780,7 @@ if (verifyBtn) {
     
     if (txHash) {
       window.verifiedManualTx = txHash;
-      addLog($formLog, `<span class="lg-ok">✅ Payment verified! Click "Submit Prediction Now" below.</span>`);
+      addLog($formLog, `<span class="lg-ok">✅ Payment verified! Click "Submit Prediction Now".</span>`);
 
       $btnArea.innerHTML = `
         <button class="btn btn-primary" id="finalManualSubmitBtn">
@@ -1827,6 +1850,12 @@ async function submitManualPrediction() {
     return;
   }
 
+    // Check if the reason field is empty
+  if (!reason) {
+    addLog($formLog, '<span class="lg-err">❌ Please enter a reason for your prediction.</span>');
+    return;
+  }
+
   const proof = `${selectedDir.toUpperCase()}|${price}|${reason}`;
   const txHash = window.verifiedManualTx;
 
@@ -1856,7 +1885,7 @@ async function submitManualPrediction() {
       mode: 'no-cors'
     });
 
-    // SUCCESS
+// SUCCESS
     if (tg) localStorage.setItem('userTelegram', tg.startsWith('@') ? tg : '@' + tg);
 
     document.getElementById('predPanel').style.display = 'none';
@@ -1866,7 +1895,8 @@ async function submitManualPrediction() {
 
     $btnArea.innerHTML = `<span class="lg-ok">✅ Successfully Submitted!</span>`;
     
-    addLog($formLog, '<span class="lg-ok">✅ Successfully submitted! Good luck.</span>');
+    clearLog($formLog);
+    addLog($formLog, '<span class="lg-ok">✅ Prediction submitted successfully! Good luck.</span>');
     loadQuestData();
 
   } catch (e) {
@@ -1904,6 +1934,7 @@ function setConnected(label) {
   addLog($formLog, `<span class="lg-ok">✅ Wallet connected — ${label}</span>`);
   addLog($formLog, `<span class="lg-info">Fill in your prediction and hit Submit.</span>`);
   
+    document.getElementById('mobileWalletAddr').textContent = label;
 }
 
 function setDisconnected(){
@@ -1919,7 +1950,14 @@ function setDisconnected(){
   renderBtnArea();
   clearLog($formLog);
   addLog($formLog, `<span class="lg-info">Wallet disconnected successfully.</span>`);
-  
+ 
+    document.getElementById('mobileWalletAddr').textContent = '—';
+
+    // event listener for the mobile disconnect button
+document.getElementById('mobileDiscBtn').addEventListener('click', async () => {
+  try { if (wcProvider?.disconnect) await wcProvider.disconnect(); } catch (_) {}
+  setDisconnected();
+});
 }
 
 // Replace the old verifyManualBtn listener with this updated version
@@ -1928,9 +1966,11 @@ document.getElementById('verifyManualBtn').addEventListener('click', async () =>
   const wallet = (document.getElementById('fldWallet').value || '').trim();
 
   if (!tg) {
+    clearLog($formLog);
     return addLog($formLog, '<span class="lg-err">❌ Enter your Telegram username first.</span>');
   }
   if (!wallet || !wallet.startsWith('0x')) {
+    clearLog($formLog);
     return addLog($formLog, '<span class="lg-err">❌ Enter your Polygon wallet address first.</span>');
   }
 
