@@ -349,7 +349,7 @@
 </head>
 <body>
 
-<!-- ══════════ WALLET MODAL ══════════ -->
+<!-- WALLET MODAL -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="walletModal">
     <div class="modal-drag"></div>
@@ -361,7 +361,7 @@
       <button class="modal-close" id="modalClose">✕</button>
     </div>
 
-    <!-- WalletConnect — at the top, works everywhere -->
+    <!-- WalletConnect -->
     <div class="wsec">All Wallets · Recommended</div>
     <button class="wopt wopt-hero" id="wcBtn">
       <div class="wopt-icon wi-wc">🔗</div>
@@ -372,7 +372,7 @@
       <span class="wbadge blue">Best</span>
     </button>
 
-    <!-- Browser extensions -->
+    <!-- Browser Extensions -->
     <div class="wsec">Browser Extension</div>
     <button class="wopt" id="mmBtn">
       <div class="wopt-icon wi-mm">🦊</div>
@@ -392,17 +392,8 @@
       <span class="wbadge" id="cbBadge">Checking…</span>
     </button>
 
-    <!-- Mobile deep-link wallets -->
+    <!-- Mobile App -->
     <div class="wsec">Mobile App</div>
-    <button class="wopt" id="btcBtn">
-      <div class="wopt-icon wi-btc">₿</div>
-      <div class="wopt-text">
-        <div class="wopt-name">Bitcoin.com Wallet</div>
-        <div class="wopt-desc">Native VERSE support · Polygon</div>
-      </div>
-      <span class="wbadge orange">⭐ VERSE</span>
-    </button>
-
     <button class="wopt" id="twBtn">
       <div class="wopt-icon wi-tw">🛡️</div>
       <div class="wopt-text">
@@ -821,24 +812,6 @@ document.getElementById('cbBtn').addEventListener('click', () => {
     closeMyModal();
     window.open('https://www.coinbase.com/wallet/downloads', '_blank');
     setResult(`<span class="warn">Coinbase Wallet not found. Install it, refresh, and try again.</span>`);
-  }
-});
-
-// Bitcoin.com Wallet
-document.getElementById('btcBtn').addEventListener('click', () => {
-  // If already inside the Bitcoin.com in-app browser
-  if (window.ethereum) { connectInjected(window.ethereum); return; }
-  closeMyModal();
-  if (isMobile) {
-    setResult(`<span class="warn">📱 Opening Bitcoin.com Wallet…</span>`);
-    window.location.href = `bitcoincom://browser?url=${pageURL}`;
-    setTimeout(() => {
-      window.open('https://wallet.bitcoin.com/', '_blank');
-      setResult(`<span class="warn">📱 If the app didn't open, copy this page's URL and paste it into the Bitcoin.com Wallet browser tab.</span>`);
-    }, 2000);
-  } else {
-    // Desktop — use WalletConnect; Bitcoin.com is featured in the picker
-    connectWalletConnect();
   }
 });
 
