@@ -356,6 +356,33 @@
     .modal { border-radius: 24px; max-width: 400px; padding-bottom: 24px; }
     .modal-drag { display: none; }
   }
+  .copy-btn{
+  margin-left:auto;
+  width:34px;
+  height:34px;
+  border:none;
+  border-radius:10px;
+  background: rgba(0,229,160,0.08);
+  border:1px solid rgba(0,229,160,0.18);
+  color: var(--green);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.95rem;
+  transition: all 0.2s ease;
+  flex-shrink:0;
+}
+
+.copy-btn:hover{
+  background: rgba(0,229,160,0.16);
+  transform: translateY(-1px);
+  box-shadow: 0 0 14px rgba(0,229,160,0.18);
+}
+
+.copy-btn:active{
+  transform: scale(0.94);
+}
 </style>
 </head>
 <body>
@@ -405,14 +432,6 @@
 
     <!-- Mobile deep-link wallets -->
     <div class="wsec">Mobile App</div>
-    <button class="wopt" id="btcBtn">
-      <div class="wopt-icon wi-btc">₿</div>
-      <div class="wopt-text">
-        <div class="wopt-name">Bitcoin.com Wallet</div>
-        <div class="wopt-desc">Native VERSE support · Polygon</div>
-      </div>
-      <span class="wbadge orange">⭐ VERSE</span>
-    </button>
 
     <button class="wopt" id="twBtn">
       <div class="wopt-icon wi-tw">🛡️</div>
@@ -450,16 +469,33 @@
     <span class="input-unit">VERSE</span>
   </div>
 
-  <div class="receiver-box">
-    <span class="rx-label">To</span>
-    <span class="rx-addr">0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB</span>
-  </div>
+<div class="receiver-box">
+  <span class="rx-label">To</span>
+
+  <span class="rx-addr" id="walletAddress">
+    0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB
+  </span>
+
+  <button class="copy-btn" id="copyWalletBtn" title="Copy wallet address">
+    📋
+  </button>
+</div>
 
   <button class="btn btn-connect" id="connectBtn">Connect Wallet</button>
   <button class="btn btn-pay"     id="payBtn" disabled>Pay Now</button>
   <button class="btn btn-disconnect" id="disconnectBtn" style="display:none">Disconnect Wallet</button>
 
-  <div class="result" id="result">Choose a wallet above to get started.</div>
+  <div class="result active" id="result" style="
+  background: linear-gradient(135deg, rgba(0,229,160,0.14), rgba(79,172,254,0.10));
+  border: 1px solid rgba(0,229,160,0.35);
+  color: #ffffff;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(0,229,160,0.12);
+">
+Connect your wallet to send <span style="color:var(--green)">VERSE donations</span><br>
+  or transfer <span style="color:#4facfe">any ERC-20 token</span> to the host wallet.
+</div>
 
   <!-- FOOTER -->
 <div style="
@@ -592,7 +628,6 @@ const web3modal = new Web3Modal({
     '--w3m-z-index':                '99999',
   },
   explorerRecommendedWalletIds: [
-    'fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa', // Bitcoin.com
     'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // MetaMask
     '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', // Trust
     '1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369', // Rainbow
@@ -829,24 +864,6 @@ document.getElementById('cbBtn').addEventListener('click', () => {
   }
 });
 
-// Bitcoin.com Wallet
-document.getElementById('btcBtn').addEventListener('click', () => {
-  // If already inside the Bitcoin.com in-app browser
-  if (window.ethereum) { connectInjected(window.ethereum); return; }
-  closeMyModal();
-  if (isMobile) {
-    setResult(`<span class="warn">📱 Opening Bitcoin.com Wallet…</span>`);
-    window.location.href = `bitcoincom://browser?url=${pageURL}`;
-    setTimeout(() => {
-      window.open('https://wallet.bitcoin.com/', '_blank');
-      setResult(`<span class="warn">📱 If the app didn't open, copy this page's URL and paste it into the Bitcoin.com Wallet browser tab.</span>`);
-    }, 2000);
-  } else {
-    // Desktop — use WalletConnect; Bitcoin.com is featured in the picker
-    connectWalletConnect();
-  }
-});
-
 // Trust Wallet
 document.getElementById('twBtn').addEventListener('click', () => {
   if (window.ethereum) { connectInjected(window.ethereum); return; }
@@ -948,6 +965,45 @@ $discBtn.addEventListener('click', disconnectWallet);
 document.getElementById('modalClose').addEventListener('click', closeMyModal);
 $overlay.addEventListener('click', e => { if (e.target === $overlay) closeMyModal(); });
 
+// Copy wallet address
+document.getElementById('copyWalletBtn').addEventListener('click', async () => {
+
+  const wallet =
+    document.getElementById('walletAddress').textContent.trim();
+
+  try {
+    await navigator.clipboard.writeText(wallet);
+
+    const btn = document.getElementById('copyWalletBtn');
+
+    btn.innerHTML = '✓';
+
+    setTimeout(() => {
+      btn.innerHTML = '📋';
+    }, 1600);
+
+const previousMessage = $result.innerHTML;
+const previousClass   = $result.className;
+
+setResult(
+  `<span class="success">✅ Host wallet copied successfully.</span>`,
+  'active'
+);
+
+setTimeout(() => {
+  $result.innerHTML = previousMessage;
+  $result.className = previousClass;
+}, 2200);
+
+  } catch(err) {
+
+    setResult(
+      `<span class="error">❌ Failed to copy wallet address.</span>`,
+      'error-state'
+    );
+
+  }
+});
 </script>
 </body>
 </html>
