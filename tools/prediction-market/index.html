@@ -13,7 +13,6 @@
 
     <!-- Verse tag (VGDH) -->
     <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
-
     <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.tagged-events.outbound-links.file-downloads.hash.pageview-props.revenue.js"></script>  
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -202,6 +201,16 @@ header{
 }
 .field-input:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--green-dim);}
 .field-input::placeholder{color:var(--muted2);}
+
+/* ── SECURITY: locked field style ── */
+.field-input.locked{
+  opacity:0.65;
+  cursor:not-allowed;
+  border-color:rgba(0,229,160,0.4) !important;
+  background:rgba(0,229,160,0.05) !important;
+  box-shadow:0 0 0 2px rgba(0,229,160,0.1) !important;
+}
+
 .dir-row{display:flex;gap:8px;}
 .dir-btn{
   flex:1;padding:12px;border:2px solid var(--border);
@@ -238,7 +247,6 @@ header{
 .btn-connect:hover:not(:disabled){box-shadow:0 6px 24px rgba(79,172,254,0.45);transform:translateY(-1px);}
 .btn-danger{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,109,0.25);}
 .btn-danger:hover:not(:disabled){background:rgba(255,77,109,0.2);}
-/* X share button */
 .btn-x{
   background:linear-gradient(135deg,#000,#1a1a2e);
   color:#fff;border:1px solid rgba(255,255,255,0.15);
@@ -376,35 +384,16 @@ header{
 .share-btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
 .share-btn-row .btn{flex:1;min-width:140px;}
 
-/* ── HIDDEN SHARE CARD (rendered by html2canvas) ── */
+/* ── HIDDEN SHARE CARD ── */
 #shareCard{
-  position:fixed;
-  left:-9999px;top:0;
-  width:1080px;
+  position:fixed;left:-9999px;top:0;width:1080px;
   background:linear-gradient(145deg,#060910 0%,#0c1220 50%,#060910 100%);
-  font-family:'Syne',sans-serif;
-  color:#dde8f5;
-  padding:60px 64px 52px;
-  border-radius:0;
-  overflow:hidden;
+  font-family:'Syne',sans-serif;color:#dde8f5;
+  padding:60px 64px 52px;border-radius:0;overflow:hidden;
 }
-#shareCard .sc-grid-bg{
-  position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(0,229,160,0.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,229,160,0.04) 1px,transparent 1px);
-  background-size:54px 54px;
-}
-#shareCard .sc-glow{
-  position:absolute;top:-200px;left:50%;
-  transform:translateX(-50%);
-  width:900px;height:900px;
-  background:radial-gradient(circle,rgba(0,229,160,0.08) 0%,transparent 60%);
-}
-#shareCard .sc-border-top{
-  position:absolute;top:0;left:0;right:0;height:4px;
-  background:linear-gradient(90deg,#00e5a0,#4facfe,#a78bfa,#00e5a0);
-}
+#shareCard .sc-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,160,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,160,0.04) 1px,transparent 1px);background-size:54px 54px;}
+#shareCard .sc-glow{position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(0,229,160,0.08) 0%,transparent 60%);}
+#shareCard .sc-border-top{position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#00e5a0,#4facfe,#a78bfa,#00e5a0);}
 #shareCard .sc-inner{position:relative;z-index:2;}
 #shareCard .sc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:44px;}
 #shareCard .sc-brand{font-size:28px;font-weight:800;letter-spacing:-1px;}
@@ -412,18 +401,13 @@ header{
 #shareCard .sc-subtitle{font-family:'DM Mono',monospace;font-size:13px;color:#4a6585;margin-top:4px;letter-spacing:0.08em;text-transform:uppercase;}
 #shareCard .sc-tag{font-family:'DM Mono',monospace;font-size:12px;padding:6px 14px;border-radius:20px;background:rgba(0,229,160,0.1);color:#00e5a0;border:1px solid rgba(0,229,160,0.2);}
 #shareCard .sc-main{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:44px;}
-#shareCard .sc-price-block{}
 #shareCard .sc-price-label{font-family:'DM Mono',monospace;font-size:13px;color:#4a6585;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;}
 #shareCard .sc-price{font-size:72px;font-weight:900;letter-spacing:-3px;line-height:1;color:#00e5a0;}
 #shareCard .sc-price.dn{color:#ff4d6d;}
 #shareCard .sc-change{font-family:'DM Mono',monospace;font-size:18px;margin-top:10px;}
 #shareCard .sc-change.up{color:#00e5a0;}
 #shareCard .sc-change.dn{color:#ff4d6d;}
-#shareCard .sc-direction{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:rgba(0,229,160,0.06);border:2px solid rgba(0,229,160,0.2);
-  border-radius:24px;padding:32px;text-align:center;
-}
+#shareCard .sc-direction{display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,229,160,0.06);border:2px solid rgba(0,229,160,0.2);border-radius:24px;padding:32px;text-align:center;}
 #shareCard .sc-direction.dn{background:rgba(255,77,109,0.06);border-color:rgba(255,77,109,0.2);}
 #shareCard .sc-dir-emoji{font-size:64px;line-height:1;margin-bottom:12px;}
 #shareCard .sc-dir-label{font-family:'DM Mono',monospace;font-size:14px;color:#4a6585;text-transform:uppercase;letter-spacing:0.1em;}
@@ -436,20 +420,13 @@ header{
 #shareCard .sc-stat-val.up{color:#00e5a0;}
 #shareCard .sc-stat-val.dn{color:#ff4d6d;}
 #shareCard .sc-stat-val.neu{color:#ffd166;}
-#shareCard .sc-reasoning{
-  background:rgba(79,172,254,0.06);border:1px solid rgba(79,172,254,0.15);
-  border-radius:16px;padding:20px 24px;margin-bottom:36px;
-}
+#shareCard .sc-reasoning{background:rgba(79,172,254,0.06);border:1px solid rgba(79,172,254,0.15);border-radius:16px;padding:20px 24px;margin-bottom:36px;}
 #shareCard .sc-reasoning-label{font-family:'DM Mono',monospace;font-size:11px;color:#4a6585;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;}
 #shareCard .sc-reasoning-text{font-size:18px;color:#dde8f5;line-height:1.5;font-style:italic;}
 #shareCard .sc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:28px;border-top:1px solid rgba(255,255,255,0.07);}
 #shareCard .sc-footer-left{font-family:'DM Mono',monospace;font-size:13px;color:#4a6585;}
 #shareCard .sc-footer-left strong{color:#dde8f5;}
-#shareCard .sc-footer-cta{
-  background:linear-gradient(135deg,#00e5a0,#00b87d);
-  color:#061a11;font-weight:800;font-size:16px;
-  padding:14px 28px;border-radius:12px;letter-spacing:-0.3px;
-}
+#shareCard .sc-footer-cta{background:linear-gradient(135deg,#00e5a0,#00b87d);color:#061a11;font-weight:800;font-size:16px;padding:14px 28px;border-radius:12px;letter-spacing:-0.3px;}
 
 @media(max-width:499px){
   .wrap{padding:16px 10px 60px;}
@@ -485,186 +462,71 @@ header{
   .hd-home{padding:7px 10px;font-size:0.75rem;}
 }
 
-/* Hamburger Menu */
-.hamburger {
-  display: none;
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 1.6rem;
-  padding: 8px 12px;
-  cursor: pointer;
-}
-.mobile-menu {
-  display: none;
-  position: fixed;
-  top: 61px;
-  left: 0;
-  right: 0;
-  background: rgba(6,9,16,0.98);
-  backdrop-filter: blur(16px);
-  border-top: 1px solid var(--border);
-  padding: 16px;
-  z-index: 250;
-  flex-direction: column;
-  gap: 12px;
-}
-.mobile-menu.show { display: flex; }
-.mobile-link {
-  padding: 14px 16px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text);
-  text-decoration: none;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-@media(max-width: 768px) {
-  .hamburger { display: block; }
-  .hd-right { display: none; }
-  header { justify-content: space-between; padding: 12px 16px; }
-}
-
-/* Mobile Wallet in Hamburger */
-#mobileWalletContainer {
-  display: none;
-}
-
-.mobile-menu.show #mobileWalletContainer {
-  display: block;
-}
-
-/* Show wallet bar only in mobile hamburger menu */
-.mobile-wallet-bar {
-  display: none;
-}
-
-.mobile-menu.show .mobile-wallet-bar {
-  display: block;
-}
-
-/* Make it look nice */
-@media(max-width: 768px) {
-  .mobile-wallet-bar .wallet-bar {
-    font-size: 0.75rem;
-  }
-  .mobile-wallet-bar .w-addr {
-    max-width: 140px;
-  }
-}
+.hamburger{display:none;background:none;border:none;color:var(--text);font-size:1.6rem;padding:8px 12px;cursor:pointer;}
+.mobile-menu{display:none;position:fixed;top:61px;left:0;right:0;background:rgba(6,9,16,0.98);backdrop-filter:blur(16px);border-top:1px solid var(--border);padding:16px;z-index:250;flex-direction:column;gap:12px;}
+.mobile-menu.show{display:flex;}
+.mobile-link{padding:14px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);text-decoration:none;font-weight:700;display:flex;align-items:center;gap:10px;}
+@media(max-width:768px){.hamburger{display:block;}.hd-right{display:none;}header{justify-content:space-between;padding:12px 16px;}}
+#mobileWalletContainer{display:none;}
+.mobile-menu.show #mobileWalletContainer{display:block;}
+.mobile-wallet-bar{display:none;}
+.mobile-menu.show .mobile-wallet-bar{display:block;}
+@media(max-width:768px){.mobile-wallet-bar .wallet-bar{font-size:0.75rem;}.mobile-wallet-bar .w-addr{max-width:140px;}}
 </style>
 </head>
 <body>
 
 <!-- HIDDEN SHARE CARD -->
 <div id="shareCard">
-  <div class="sc-grid-bg"></div>
-  <div class="sc-glow"></div>
-  <div class="sc-border-top"></div>
+  <div class="sc-grid-bg"></div><div class="sc-glow"></div><div class="sc-border-top"></div>
   <div class="sc-inner">
     <div class="sc-header">
-      <div>
-        <div class="sc-brand"><span>SnappQuest</span> Prediction Market</div>
-        <div class="sc-subtitle">BTC Tomorrow - Predict &amp; Earn</div>
-      </div>
+      <div><div class="sc-brand"><span>SnappQuest</span> Prediction Market</div><div class="sc-subtitle">BTC Tomorrow - Predict &amp; Earn</div></div>
       <div class="sc-tag" id="sc-status">🟢 OPEN</div>
     </div>
-
     <div class="sc-main">
       <div class="sc-price-block">
         <div class="sc-price-label">BTC Price Now</div>
         <div class="sc-price" id="sc-price">$—</div>
         <div class="sc-change" id="sc-change">—</div>
-        <div style="margin-top:20px;">
-          <div class="sc-price-label">Tomorrow Estimate</div>
-          <div style="font-family:'DM Mono',monospace;font-size:32px;font-weight:500;color:#ffd166;margin-top:6px;" id="sc-pred">$—</div>
-        </div>
+        <div style="margin-top:20px;"><div class="sc-price-label">Tomorrow Estimate</div><div style="font-family:'DM Mono',monospace;font-size:32px;font-weight:500;color:#ffd166;margin-top:6px;" id="sc-pred">$—</div></div>
       </div>
-      <div class="sc-direction" id="sc-dir-box">
-        <div class="sc-dir-emoji" id="sc-dir-emoji">📈</div>
-        <div class="sc-dir-label">Community Prediction</div>
-        <div class="sc-dir-value" id="sc-dir-value">—</div>
-      </div>
+      <div class="sc-direction" id="sc-dir-box"><div class="sc-dir-emoji" id="sc-dir-emoji">📈</div><div class="sc-dir-label">Community Prediction</div><div class="sc-dir-value" id="sc-dir-value">—</div></div>
     </div>
-
     <div class="sc-stats">
-      <div class="sc-stat">
-        <div class="sc-stat-label">Market Phase</div>
-        <div class="sc-stat-val up" id="sc-phase">—</div>
-      </div>
-      <div class="sc-stat">
-        <div class="sc-stat-label">24H Change</div>
-        <div class="sc-stat-val" id="sc-chg">—</div>
-      </div>
-      <div class="sc-stat">
-        <div class="sc-stat-label">Total Entries</div>
-        <div class="sc-stat-val neu" id="sc-entries">—</div>
-      </div>
-      <div class="sc-stat">
-        <div class="sc-stat-label">Prize Pool</div>
-        <div class="sc-stat-val up" id="sc-prize">— VERSE</div>
-      </div>
+      <div class="sc-stat"><div class="sc-stat-label">Market Phase</div><div class="sc-stat-val up" id="sc-phase">—</div></div>
+      <div class="sc-stat"><div class="sc-stat-label">24H Change</div><div class="sc-stat-val" id="sc-chg">—</div></div>
+      <div class="sc-stat"><div class="sc-stat-label">Total Entries</div><div class="sc-stat-val neu" id="sc-entries">—</div></div>
+      <div class="sc-stat"><div class="sc-stat-label">Prize Pool</div><div class="sc-stat-val up" id="sc-prize">— VERSE</div></div>
     </div>
-
-    <div class="sc-reasoning" id="sc-reasoning-wrap" style="display:none;">
-      <div class="sc-reasoning-label">Top Prediction Reasoning</div>
-      <div class="sc-reasoning-text" id="sc-reasoning-text">"—"</div>
-    </div>
-
+    <div class="sc-reasoning" id="sc-reasoning-wrap" style="display:none;"><div class="sc-reasoning-label">Top Prediction Reasoning</div><div class="sc-reasoning-text" id="sc-reasoning-text">"—"</div></div>
     <div class="sc-footer">
-      <div class="sc-footer-left">
-        Join &amp; predict at <strong>t.me/SnappQuest/7496</strong><br>
-        Entry: <strong>1,000 VERSE</strong> · Powered by SnappQuest × Verse
-      </div>
+      <div class="sc-footer-left">Join &amp; predict at <strong>t.me/SnappQuest/7496</strong><br>Entry: <strong>1,000 VERSE</strong> · Powered by SnappQuest × Verse</div>
       <div class="sc-footer-cta">Predict Now →</div>
     </div>
   </div>
 </div>
 
-<!-- WALLET SELECT MODAL -->
+<!-- WALLET MODAL -->
 <div class="modal-overlay" id="walletModal">
   <div class="wallet-modal">
     <div class="modal-drag"></div>
-    <div class="modal-head">
-      <div><h3>Connect Wallet</h3><p>Select how you'd like to connect</p></div>
-      <button class="modal-close" id="modalClose">✕</button>
-    </div>
+    <div class="modal-head"><div><h3>Connect Wallet</h3><p>Select how you'd like to connect</p></div><button class="modal-close" id="modalClose">✕</button></div>
     <div class="wsec">Recommended · All Wallets</div>
-    <button class="wopt wopt-hero" id="wcBtn">
-      <div class="wopt-icon wi-wc">🔗</div>
-      <div class="wopt-text"><div class="wopt-name">WalletConnect</div><div class="wopt-desc">300+ wallets · QR on desktop · App picker on mobile</div></div>
-      <span class="wbadge blue">Best</span>
-    </button>
+    <button class="wopt wopt-hero" id="wcBtn"><div class="wopt-icon wi-wc">🔗</div><div class="wopt-text"><div class="wopt-name">WalletConnect</div><div class="wopt-desc">300+ wallets · QR on desktop · App picker on mobile</div></div><span class="wbadge blue">Best</span></button>
     <div class="wsec">Browser Extension</div>
-    <button class="wopt" id="mmBtn">
-      <div class="wopt-icon wi-mm">🦊</div>
-      <div class="wopt-text"><div class="wopt-name">MetaMask</div><div class="wopt-desc" id="mmDesc">Extension · Mobile app</div></div>
-      <span class="wbadge" id="mmBadge">Checking…</span>
-    </button>
-    <button class="wopt" id="cbBtn">
-      <div class="wopt-icon wi-cb">🔵</div>
-      <div class="wopt-text"><div class="wopt-name">Coinbase Wallet</div><div class="wopt-desc" id="cbDesc">Browser extension</div></div>
-      <span class="wbadge" id="cbBadge">Checking…</span>
-    </button>
+    <button class="wopt" id="mmBtn"><div class="wopt-icon wi-mm">🦊</div><div class="wopt-text"><div class="wopt-name">MetaMask</div><div class="wopt-desc" id="mmDesc">Extension · Mobile app</div></div><span class="wbadge" id="mmBadge">Checking…</span></button>
+    <button class="wopt" id="cbBtn"><div class="wopt-icon wi-cb">🔵</div><div class="wopt-text"><div class="wopt-name">Coinbase Wallet</div><div class="wopt-desc" id="cbDesc">Browser extension</div></div><span class="wbadge" id="cbBadge">Checking…</span></button>
   </div>
 </div>
 
-<!-- CONFIRM PREDICTION MODAL -->
+<!-- CONFIRM MODAL -->
 <div class="confirm-modal-wrap" id="confirmWrap">
   <div class="confirm-modal">
     <div style="font-size:1rem;font-weight:800;margin-bottom:16px;">⚡ Confirm Prediction</div>
     <div id="confirmRows"></div>
-    <div style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:10px;padding:12px;margin:14px 0;font-family:var(--font-mono);font-size:0.68rem;color:var(--purple);">
-      ⚠️ Entry fee of <strong id="confirmFee">1,000 VERSE</strong> will be charged. This is non-refundable.
-    </div>
-    <div style="display:flex;gap:10px;margin-top:4px;">
-      <button class="btn btn-ghost" id="cancelConfirmBtn" style="flex:1;">Cancel</button>
-      <button class="btn btn-primary" id="submitConfirmBtn" style="flex:1;">Pay &amp; Submit</button>
-    </div>
+    <div style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:10px;padding:12px;margin:14px 0;font-family:var(--font-mono);font-size:0.68rem;color:var(--purple);">⚠️ Entry fee of <strong id="confirmFee">1,000 VERSE</strong> will be charged. This is non-refundable.</div>
+    <div style="display:flex;gap:10px;margin-top:4px;"><button class="btn btn-ghost" id="cancelConfirmBtn" style="flex:1;">Cancel</button><button class="btn btn-primary" id="submitConfirmBtn" style="flex:1;">Pay &amp; Submit</button></div>
     <div class="status-log" id="confirmLog" style="margin-top:10px;display:none;"></div>
   </div>
 </div>
@@ -677,53 +539,34 @@ header{
       <span>Prediction Market</span>
     </div>
   </div>
-
   <div class="hd-right">
-    <div class="wallet-bar" id="walletBar">
-      <div class="w-dot"></div>
-      <span class="w-addr" id="walletAddr">—</span>
-      <button class="btn btn-danger" id="discBtn" style="width:32px;height:32px;padding:0;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.75rem;">
-        <i class="fas fa-power-off"></i>
-      </button>
+    <div class="wallet-bar" id="walletBar"><div class="w-dot"></div><span class="w-addr" id="walletAddr">—</span>
+      <button class="btn btn-danger" id="discBtn" style="width:32px;height:32px;padding:0;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.75rem;"><i class="fas fa-power-off"></i></button>
     </div>
     <div class="hd-pill">⬡ Polygon</div>
     <a href="https://niti.com.ng/snappquest/join.html" class="hd-home"><i class="fas fa-arrow-left"></i> Quests</a>
   </div>
-
-  <!-- Hamburger -->
-  <button class="hamburger" id="hamburgerBtn">
-    <i class="fas fa-bars"></i>
-  </button>
+  <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
 </header>
 
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
-  <a href="https://niti.com.ng/snappquest/join.html" class="mobile-link">
-    <i class="fas fa-arrow-left"></i> Back to Quests
-  </a>
-
-  <!-- Wallet Bar - Pure CSS Version -->
+  <a href="https://niti.com.ng/snappquest/join.html" class="mobile-link"><i class="fas fa-arrow-left"></i> Back to Quests</a>
   <div class="mobile-wallet-bar">
-    <div class="wallet-bar" style="width:100%; margin:8px 0; background:var(--green-dim); border:1px solid rgba(0,229,160,0.4);">
-      <div style="display:flex; align-items:center; gap:8px; padding:8px 12px;">
+    <div class="wallet-bar" style="width:100%;margin:8px 0;background:var(--green-dim);border:1px solid rgba(0,229,160,0.4);">
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;">
         <div class="w-dot"></div>
         <span class="w-addr" id="mobileWalletAddr">—</span>
-        <button class="btn btn-danger" id="mobileDiscBtn" style="width:32px;height:32px;padding:0;border-radius:8px;margin-left:auto;">
-          <i class="fas fa-power-off"></i>
-        </button>
+        <button class="btn btn-danger" id="mobileDiscBtn" style="width:32px;height:32px;padding:0;border-radius:8px;margin-left:auto;"><i class="fas fa-power-off"></i></button>
       </div>
     </div>
   </div>
-
-  <div class="hd-pill" style="align-self:flex-start; margin:8px;">⬡ Polygon</div>
+  <div class="hd-pill" style="align-self:flex-start;margin:8px;">⬡ Polygon</div>
 </div>
+
 <!-- MAIN -->
 <div class="wrap">
-
-  <div class="inactive-banner" id="inactiveBanner">
-    <i class="fas fa-lock" style="font-size:24px;margin-bottom:8px;display:block;"></i>
-    This prediction market is currently <strong>closed</strong>. Check back soon for the next round.
-  </div>
+  <div class="inactive-banner" id="inactiveBanner"><i class="fas fa-lock" style="font-size:24px;margin-bottom:8px;display:block;"></i>This prediction market is currently <strong>closed</strong>. Check back soon for the next round.</div>
 
   <!-- HERO -->
   <div class="hero-banner" id="heroBanner">
@@ -750,26 +593,10 @@ header{
   <!-- MARKET INTELLIGENCE -->
   <div class="sec-label">Live BTC Market Intelligence</div>
   <div class="intel-grid">
-    <div class="intel-card">
-      <div class="intel-label">BTC Price</div>
-      <div class="intel-val up loading" id="btcPrice"></div>
-      <div class="intel-sub" id="btcPriceSub">—</div>
-    </div>
-    <div class="intel-card">
-      <div class="intel-label">24H Change</div>
-      <div class="intel-val loading" id="btcChange"></div>
-      <div class="intel-sub">vs yesterday</div>
-    </div>
-    <div class="intel-card">
-      <div class="intel-label">Tomorrow Est.</div>
-      <div class="intel-val neu loading" id="btcPred"></div>
-      <div class="intel-sub">AI momentum model</div>
-    </div>
-    <div class="intel-card">
-      <div class="intel-label">Market Phase</div>
-      <div class="intel-val loading" id="marketPhase"></div>
-      <div class="intel-sub" id="phaseSub">—</div>
-    </div>
+    <div class="intel-card"><div class="intel-label">BTC Price</div><div class="intel-val up loading" id="btcPrice"></div><div class="intel-sub" id="btcPriceSub">—</div></div>
+    <div class="intel-card"><div class="intel-label">24H Change</div><div class="intel-val loading" id="btcChange"></div><div class="intel-sub">vs yesterday</div></div>
+    <div class="intel-card"><div class="intel-label">Tomorrow Est.</div><div class="intel-val neu loading" id="btcPred"></div><div class="intel-sub">AI momentum model</div></div>
+    <div class="intel-card"><div class="intel-label">Market Phase</div><div class="intel-val loading" id="marketPhase"></div><div class="intel-sub" id="phaseSub">—</div></div>
   </div>
 
   <!-- CHART -->
@@ -782,37 +609,20 @@ header{
   <div class="sec-label">Research Before You Predict</div>
   <div class="research-panel">
     <div class="research-tabs">
-      <button class="r-tab active" id="tabNews" onclick="switchTab('news')">
-        <i class="fas fa-newspaper"></i> BTC News
-      </button>
-      <button class="r-tab" id="tabCharts" onclick="switchTab('charts')">
-        <i class="fas fa-chart-candlestick"></i> Charts
-      </button>
-      <button class="r-tab" id="tabLive" onclick="switchTab('live')">
-        <i class="fab fa-youtube" style="color:#ff4444;"></i> Stream
-      </button>
+      <button class="r-tab active" id="tabNews" onclick="switchTab('news')"><i class="fas fa-newspaper"></i> BTC News</button>
+      <button class="r-tab" id="tabCharts" onclick="switchTab('charts')"><i class="fas fa-chart-candlestick"></i> Charts</button>
+      <button class="r-tab" id="tabLive" onclick="switchTab('live')"><i class="fab fa-youtube" style="color:#ff4444;"></i> Stream</button>
     </div>
     <div class="r-content" id="contentNews">
       <a href="https://news.bitcoin.com/" target="_blank" rel="noopener noreferrer" class="r-cover-link">
         <div class="r-cover" style="background-image:url('https://news.bitcoin.com/_next/image/?url=https%3A%2F%2Fstatic.news.bitcoin.com%2Fwp-content%2Fuploads%2F2026%2F04%2Fbitcoin-stalls-below-70k-as-momentum-fades-across-timeframes.png&w=1920&q=75');">
-          <div class="r-cover-overlay">
-            <div class="r-cover-badge"><i class="fas fa-newspaper"></i> Bitcoin.com News</div>
-            <div class="r-cover-title">Latest Bitcoin Headlines</div>
-            <div class="r-cover-sub">Breaking crypto news, market updates &amp; analysis</div>
-            <div class="r-cover-cta"><i class="fas fa-external-link-alt"></i> Read Latest News</div>
-          </div>
+          <div class="r-cover-overlay"><div class="r-cover-badge"><i class="fas fa-newspaper"></i> Bitcoin.com News</div><div class="r-cover-title">Latest Bitcoin Headlines</div><div class="r-cover-sub">Breaking crypto news, market updates &amp; analysis</div><div class="r-cover-cta"><i class="fas fa-external-link-alt"></i> Read Latest News</div></div>
         </div>
       </a>
     </div>
     <div class="r-content" id="contentCharts" style="display:none;">
       <div class="r-frame-wrap">
-        <div class="r-frame-notice">
-          <i class="fas fa-chart-line"></i>
-          <span>Advanced BTC charts from <strong>Bitcoin.com Markets</strong></span>
-          <a href="https://markets.bitcoin.com/crypto/bitcoin" target="_blank" class="r-open-btn">
-            <i class="fas fa-external-link-alt"></i> Open in new tab
-          </a>
-        </div>
+        <div class="r-frame-notice"><i class="fas fa-chart-line"></i><span>Advanced BTC charts from <strong>Bitcoin.com Markets</strong></span><a href="https://markets.bitcoin.com/crypto/bitcoin" target="_blank" class="r-open-btn"><i class="fas fa-external-link-alt"></i> Open in new tab</a></div>
         <iframe src="https://markets.bitcoin.com/crypto/bitcoin" class="r-iframe" id="iframeCharts" title="Bitcoin.com Markets" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
       </div>
     </div>
@@ -830,34 +640,23 @@ header{
     </div>
   </div>
 
-<!-- SHARE SIGNAL -->
-<div class="sec-label">Share the Market Signal</div>
-<div class="share-signal-panel">
-  <div style="font-size:0.88rem;font-weight:700;margin-bottom:4px;">📣 Spread the Word</div>
-  <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);line-height:1.6;">
-    Download a card showing today's BTC signal and share it on X to invite others.
+  <!-- SHARE SIGNAL -->
+  <div class="sec-label">Share the Market Signal</div>
+  <div class="share-signal-panel">
+    <div style="font-size:0.88rem;font-weight:700;margin-bottom:4px;">📣 Spread the Word</div>
+    <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);line-height:1.6;">Download a card showing today's BTC signal and share it on X to invite others.</div>
+    <div class="share-btn-row">
+      <button class="btn btn-ghost" id="downloadCardBtn" style="flex:1;"><i class="fas fa-download"></i> <span class="download-text">Download Signal</span></button>
+      <button class="btn btn-x" id="shareXBtn" style="flex:1;"><i class="fa-brands fa-x-twitter"></i> Share Signal</button>
+    </div>
+    <div id="shareStatusLog" style="font-family:var(--font-mono);font-size:0.66rem;color:var(--muted);margin-top:10px;min-height:16px;"></div>
   </div>
-  <div class="share-btn-row">
-    <button class="btn btn-ghost" id="downloadCardBtn" style="flex:1;">
-      <i class="fas fa-download"></i> <span class="download-text">Download Signal</span>
-    </button>
-    <button class="btn btn-x" id="shareXBtn" style="flex:1;">
-      <i class="fa-brands fa-x-twitter"></i> Share Signal
-    </button>
-  </div>
-  <div id="shareStatusLog" style="font-family:var(--font-mono);font-size:0.66rem;color:var(--muted);margin-top:10px;min-height:16px;"></div>
-</div>
 
   <!-- PREDICTION FORM -->
   <div class="sec-label">Submit Your Prediction</div>
   <div class="pred-panel" id="predPanel">
-    <div class="fee-notice">
-      <i class="fas fa-coins"></i>
-      <span>Entry fee: <strong>1,000 VERSE</strong> per prediction. Connect wallet to pay and submit.</span>
-    </div>
-    <div id="identityNotice" style="display:none;background:var(--green-dim);border:1px solid rgba(0,229,160,0.2);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-family:var(--font-mono);font-size:0.68rem;color:var(--green);">
-      ✅ Identity loaded from browser storage
-    </div>
+    <div class="fee-notice"><i class="fas fa-coins"></i><span>Entry fee: <strong>1,000 VERSE</strong> per prediction. Connect wallet to pay and submit.</span></div>
+    <div id="identityNotice" style="display:none;background:var(--green-dim);border:1px solid rgba(0,229,160,0.2);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-family:var(--font-mono);font-size:0.68rem;color:var(--green);">✅ Identity loaded from browser storage</div>
     <div class="pred-grid">
       <div>
         <label class="field-label">Telegram Username</label>
@@ -883,59 +682,35 @@ header{
       <label class="field-label">Reasoning (optional — max 280 chars)</label>
       <input class="field-input" type="text" id="fldReason" placeholder="Why do you think this?" maxlength="280" autocomplete="off">
     </div>
-<!-- Smart Manual Payment Section -->
-<div style="margin-top:20px; padding:18px; background:var(--surface2); border:2px solid var(--border2); border-radius:16px;" id="manualSection">
-  <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
-    <div style="font-size:1.4rem;">💰</div>
-    <div>
-      <strong style="font-size:0.95rem; color:var(--green);">Alternative: Manual Payment</strong><br>
-      <span style="font-size:0.7rem; color:var(--muted);">No wallet connection needed</span>
-    </div>
-  </div>
-  
-  <div style="background:var(--surface); padding:14px; border-radius:12px; margin-bottom:14px; border:1px solid var(--border);">
-    <div style="font-size:0.72rem; color:var(--muted); margin-bottom:8px;">
-      Send <strong style="color:var(--text);">exactly 1,000 fxVERSE</strong> to:
-    </div>
-    
-    <div style="display:flex; align-items:center; gap:8px; background:#00000055; padding:10px 12px; border-radius:8px;">
-      <code id="receiverAddr" style="flex:1; font-size:0.78rem; word-break:break-all; font-family:var(--font-mono); color:var(--green);">
-        0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB
-      </code>
-      <button id="copyBtn" 
-              style="padding:8px 14px; background:var(--green-dim); color:var(--green); border:1px solid rgba(0,229,160,0.4); border-radius:6px; font-size:0.78rem; cursor:pointer; flex-shrink:0; transition:all 0.2s;">
-        📋 Copy
-      </button>
-    </div>
-  </div>
 
-  <button class="btn btn-ghost" id="verifyManualBtn" style="width:100%; padding:14px;">
-    <i class="fas fa-search"></i> Auto-Check Payments
-  </button>
-  
-  <div id="manualLog" class="status-log" style="margin-top:12px; display:none;"></div>
-</div>
+    <!-- Manual Payment -->
+    <div style="margin-top:20px;padding:18px;background:var(--surface2);border:2px solid var(--border2);border-radius:16px;" id="manualSection">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="font-size:1.4rem;">💰</div>
+        <div><strong style="font-size:0.95rem;color:var(--green);">Alternative: Manual Payment</strong><br><span style="font-size:0.7rem;color:var(--muted);">No wallet connection needed</span></div>
+      </div>
+      <div style="background:var(--surface);padding:14px;border-radius:12px;margin-bottom:14px;border:1px solid var(--border);">
+        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px;">Send <strong style="color:var(--text);">exactly 1,000 fxVERSE</strong> to:</div>
+        <div style="display:flex;align-items:center;gap:8px;background:#00000055;padding:10px 12px;border-radius:8px;">
+          <code id="receiverAddr" style="flex:1;font-size:0.78rem;word-break:break-all;font-family:var(--font-mono);color:var(--green);">0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB</code>
+          <button id="copyBtn" style="padding:8px 14px;background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,0.4);border-radius:6px;font-size:0.78rem;cursor:pointer;flex-shrink:0;transition:all 0.2s;">📋 Copy</button>
+        </div>
+      </div>
+      <button class="btn btn-ghost" id="verifyManualBtn" style="width:100%;padding:14px;"><i class="fas fa-search"></i> Auto-Check Payments</button>
+      <div id="manualLog" class="status-log" style="margin-top:12px;display:none;"></div>
+    </div>
 
-<div style="margin-top:16px;" id="btnArea">
-  <button class="btn btn-connect" id="connectWalletBtn">
-    <i class="fas fa-wallet"></i> Connect Wallet (Recommended)
-  </button>
-</div>
+    <div style="margin-top:16px;" id="btnArea">
+      <button class="btn btn-connect" id="connectWalletBtn"><i class="fas fa-wallet"></i> Connect Wallet (Recommended)</button>
+    </div>
     <div class="status-log" id="formLog">Waiting for wallet connection…</div>
   </div>
 
   <!-- RECENT ENTRIES -->
   <div class="sec-label">Recent Entries</div>
   <div class="pred-table-wrap">
-    <div class="pred-table-head">
-      <span>Telegram</span>
-      <span>Prediction</span>
-      <span>Direction</span>
-      <span>Entry Time</span>
-    </div>
-    <div id="entriesTable">
-      <div style="padding:20px;text-align:center;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);">Loading entries…</div>
-    </div>
+    <div class="pred-table-head"><span>Telegram</span><span>Prediction</span><span>Direction</span><span>Entry Time</span></div>
+    <div id="entriesTable"><div style="padding:20px;text-align:center;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);">Loading entries…</div></div>
   </div>
 
   <!-- SUCCESS -->
@@ -944,76 +719,24 @@ header{
     <div class="success-title">Prediction Submitted!</div>
     <div class="success-sub" id="successSub">Your entry has been recorded.<br>Results announced after the deadline. Good luck!</div>
     <a id="successTxLink" href="#" target="_blank" style="display:inline-block;margin-top:14px;font-family:var(--font-mono);font-size:0.68rem;color:var(--green);">View TX on Polygonscan ↗</a>
-    <!-- Share after success -->
     <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border);">
       <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);margin-bottom:12px;">🎯 You're in! Now tell the world:</div>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-        <button class="btn btn-ghost" onclick="downloadCard()" style="font-size:0.82rem;padding:10px 18px;">
-          <i class="fas fa-download"></i> Download Card
-        </button>
-        <button class="btn btn-x" onclick="shareOnX()" style="font-size:0.82rem;padding:10px 18px;">
-          <i class="fa-brands fa-x-twitter"></i> Share on X
-        </button>
+        <button class="btn btn-ghost" onclick="downloadCard()" style="font-size:0.82rem;padding:10px 18px;"><i class="fas fa-download"></i> Download Card</button>
+        <button class="btn btn-x" onclick="shareOnX()" style="font-size:0.82rem;padding:10px 18px;"><i class="fa-brands fa-x-twitter"></i> Share on X</button>
       </div>
     </div>
   </div>
 
-    <!-- FOOTER -->
-<div style="
-  margin-top: 28px;
-  padding: 16px 20px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  position: relative;
-  overflow: hidden;
-">
-  <!-- shimmer line at top -->
-  <div style="
-    position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(0,229,160,0.4), transparent);
-    background-size: 200% 100%;
-    animation: shimmerBar 2.5s linear infinite;
-  "></div>
-
-  <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;">
-    Powered by
-  </span>
-
-  
-    <a href="https://niti.com.ng"
-    target="_blank"
-    rel="noopener noreferrer"
-    style="
-      font-family: var(--font-display);
-      font-size: 0.82rem;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      background: linear-gradient(90deg, #00e5a0, #4facfe, #00e5a0);
-      background-size: 200% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: shimmerBar 3s linear infinite;
-      text-decoration: none;
-      transition: opacity 0.2s;
-    "
-    onmouseover="this.style.opacity='0.75'"
-    onmouseout="this.style.opacity='1'"
-  >
-    Neroitech Inventions
-  </a>
+  <!-- FOOTER -->
+  <div style="margin-top:28px;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,229,160,0.4),transparent);background-size:200% 100%;animation:shimmerBar 2.5s linear infinite;"></div>
+    <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;">Powered by</span>
+    <a href="https://niti.com.ng" target="_blank" rel="noopener noreferrer" style="font-family:var(--font-display);font-size:0.82rem;font-weight:800;letter-spacing:-0.3px;background:linear-gradient(90deg,#00e5a0,#4facfe,#00e5a0);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmerBar 3s linear infinite;text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">Neroitech Inventions</a>
+  </div>
 </div>
 
-</div><!-- /wrap -->
-
-<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to Top">
-  <i class="fas fa-arrow-up"></i>
-</button>
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to Top"><i class="fas fa-arrow-up"></i></button>
 
 <script type="module">
 import EthereumProvider from 'https://esm.sh/@walletconnect/ethereum-provider@2.17.0?bundle';
@@ -1057,23 +780,23 @@ let questData=null,selectedDir=null,btcChart=null;
 let btcPriceCurrent=0,btcChangePct=0,btcPriceTomorrow=0,btcPhase='';
 let currentEntries=[],currentReward='',currentEntryCount=0;
 let PREDICTION_TRACK_CODE='';
+let isSubmitting=false;
+
+// ── SECURITY: verified session object ──
+// Stores: { txHash, wallet (on-chain sender, lowercase), tg, expiresAt }
+// Set after verification, nulled after use or expiry
+let _verifiedSession = null;
 
 const isMobile=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
 const pageHost=window.location.host+window.location.pathname;
 const pageURL=encodeURIComponent(window.location.href);
 
-// ── WEB3MODAL ──
 const web3modal=new Web3Modal({
   projectId:PROJECT_ID,walletConnectVersion:2,themeMode:'dark',
-  themeVariables:{
-    '--w3m-accent-color':'#00e5a0','--w3m-accent-fill-color':'#061a11',
-    '--w3m-background-color':'#0c1220','--w3m-container-border-radius':'20px',
-    '--w3m-font-family':"'Syne',sans-serif",'--w3m-z-index':'99999',
-  },
+  themeVariables:{'--w3m-accent-color':'#00e5a0','--w3m-accent-fill-color':'#061a11','--w3m-background-color':'#0c1220','--w3m-container-border-radius':'20px','--w3m-font-family':"'Syne',sans-serif",'--w3m-z-index':'99999'},
   explorerExcludedWalletIds:'ALL',
 });
 
-// ── DOM ──
 const $walletBar=document.getElementById('walletBar');
 const $walletAddr=document.getElementById('walletAddr');
 const $walletModal=document.getElementById('walletModal');
@@ -1082,17 +805,49 @@ const $formLog=document.getElementById('formLog');
 const $confirmLog=document.getElementById('confirmLog');
 const $btnArea=document.getElementById('btnArea');
 
-// ── HELPERS ──
 function addLog(el,html){el.innerHTML+=html+'<br>';el.scrollTop=el.scrollHeight;}
 function clearLog(el){el.innerHTML='';}
 function sp(){return`<span class="spinner"></span>`;}
 function shortAddr(a){return a.slice(0,6)+'…'+a.slice(-4);}
 function fmt(n){return Number(n).toLocaleString('en-US');}
 
+// ── SECURITY HELPERS ──
+// Lock a field: readonly + visual indicator, store original value in dataset
+function lockField(id, value) {
+  const f = document.getElementById(id);
+  if (!f) return;
+  f.value = value;
+  f.readOnly = true;
+  f.classList.add('locked');
+  f.title = '🔒 Locked after payment verification';
+}
+
+// Unlock a field: restore editable state
+function unlockField(id) {
+  const f = document.getElementById(id);
+  if (!f) return;
+  f.readOnly = false;
+  f.classList.remove('locked');
+  f.title = '';
+}
+
+// Lock both identity fields immediately after verification
+function lockIdentityFields(wallet, tg) {
+  lockField('fldWallet', wallet);
+  lockField('fldTelegram', tg);
+}
+
+// Unlock both fields (called on session expiry or reset)
+function unlockIdentityFields() {
+  unlockField('fldWallet');
+  unlockField('fldTelegram');
+}
+
 function setConnected(label){
   $walletBar.classList.add('show');
   $walletAddr.textContent=label;
-  document.getElementById('fldWallet').value=userAddress||'';
+  // Lock wallet field to the actual connected signer address
+  lockField('fldWallet', userAddress);
   const savedTg=localStorage.getItem('userTelegram')||'';
   if(savedTg&&!document.getElementById('fldTelegram').value)
     document.getElementById('fldTelegram').value=savedTg;
@@ -1100,80 +855,52 @@ function setConnected(label){
   clearLog($formLog);
   addLog($formLog,`<span class="lg-ok">✅ Wallet connected — ${label}</span>`);
   addLog($formLog,`<span class="lg-info">Fill in your prediction and hit Submit.</span>`);
+  const mAddr=document.getElementById('mobileWalletAddr');
+  if(mAddr) mAddr.textContent=label;
 }
+
 function setDisconnected(){
   userAddress=null;ethProvider=null;ethSigner=null;wcProvider=null;
   $walletBar.classList.remove('show');
   $walletAddr.textContent='—';
+  // Unlock wallet field when wallet disconnected
+  unlockField('fldWallet');
   document.getElementById('fldWallet').value=localStorage.getItem('userPolygon')||'';
   renderBtnArea();
   clearLog($formLog);
-  addLog($formLog,`<span class="lg-info">Connect wallet to pay and submit your prediction.</span>`);
+  addLog($formLog,`<span class="lg-info">Wallet disconnected successfully.</span>`);
+  const mAddr=document.getElementById('mobileWalletAddr');
+  if(mAddr) mAddr.textContent='—';
 }
+
 function renderBtnArea(){
   if(userAddress){
-    // Wallet connected → Show normal submit button
     $btnArea.innerHTML=`<button class="btn btn-primary" id="submitPredBtn"><i class="fas fa-paper-plane"></i> Submit Prediction (1,000 VERSE)</button>`;
-    document.getElementById('submitPredBtn').addEventListener('click', openConfirm);
+    document.getElementById('submitPredBtn').addEventListener('click',openConfirm);
   } else {
-    // No wallet connected → Only show Connect Wallet button
-    $btnArea.innerHTML = `
-      <button class="btn btn-connect" id="connectWalletBtn">
-        <i class="fas fa-wallet"></i> Connect Wallet (Recommended)
-      </button>
-    `;
-    $btnArea.innerHTML = `
-  <button class="btn btn-connect" id="connectWalletBtn">
-    <i class="fas fa-wallet"></i> Connect Wallet (Recommended)
-  </button>
-  <div style="text-align:center; margin-top:12px; font-size:0.68rem; color:var(--muted);">
-    Or use <strong style="color:var(--green);">Manual Payment</strong> above ↑
-  </div>
-`;
-    
-    // Clean listener to avoid duplicates
-    const connectBtn = document.getElementById('connectWalletBtn');
-    connectBtn.replaceWith(connectBtn.cloneNode(true));
-    
-    document.getElementById('connectWalletBtn').addEventListener('click', openWalletModal);
-    // Update log message for manual payment
-    if (document.getElementById('manualSection').style.display !== 'none') {
-      clearLog($formLog);
-      addLog($formLog, `<span class="lg-info">Enter your prediction details and make the manual payment.</span>`);
-    } else {
-      clearLog($formLog);
-      addLog($formLog, `<span class="lg-info">Connect wallet to pay and submit your prediction.</span>`);
-    }
+    $btnArea.innerHTML=`
+      <button class="btn btn-connect" id="connectWalletBtn"><i class="fas fa-wallet"></i> Connect Wallet (Recommended)</button>
+      <div style="text-align:center;margin-top:12px;font-size:0.68rem;color:var(--muted);">Or use <strong style="color:var(--green);">Manual Payment</strong> above ↑</div>`;
+    document.getElementById('connectWalletBtn').addEventListener('click',openWalletModal);
+    clearLog($formLog);
+    addLog($formLog,`<span class="lg-info">Connect wallet to pay and submit your prediction.</span>`);
   }
 }
-function loadIdentity() {
-  const tg = localStorage.getItem('userTelegram') || '';
-  const poly = localStorage.getItem('userPolygon') || '';
-  console.log('[Identity] userTelegram:', tg, 'userPolygon:', poly);
-  const $tg = document.getElementById('fldTelegram');
-  const $wall = document.getElementById('fldWallet');
-  const $note = document.getElementById('identityNotice');
-  
-  if ($tg && tg) {
-    $tg.value = tg;
-    // Clear the "Enter Telegram username first" message if present
-    const $formLog = document.getElementById('formLog');
-    if ($formLog.innerHTML.includes('Enter Telegram username first')) {
-      clearLog($formLog);
-      // Prompt the user to click the "Auto-Check Payment" button again (in green)
-      addLog($formLog, '<span class="lg-ok">✅ Telegram username loaded. Please click the "Auto-Check Payment" button again.</span>');
-    }
-  }
-  
-  if ($wall && poly) $wall.value = poly;
-  
-  if ($note) {
-    if (tg || poly) {
-      $note.style.display = 'block';
-      $note.innerHTML = `✅ Identity loaded — ${tg ? `<strong>${tg}</strong>` : ''}${tg && poly ? ' · ' : ''}${poly ? `<strong>${poly.slice(0, 6)}…${poly.slice(-4)}</strong>` : ''}`;
-    } else {
-      $note.style.display = 'none';
-    }
+
+function loadIdentity(){
+  const tg=localStorage.getItem('userTelegram')||'';
+  const poly=localStorage.getItem('userPolygon')||'';
+  const $tg=document.getElementById('fldTelegram');
+  const $wall=document.getElementById('fldWallet');
+  const $note=document.getElementById('identityNotice');
+  // Only fill if not already locked
+  if($tg&&tg&&!$tg.readOnly) $tg.value=tg;
+  if($wall&&poly&&!$wall.readOnly) $wall.value=poly;
+  if($note){
+    if(tg||poly){
+      $note.style.display='block';
+      $note.innerHTML=`✅ Identity loaded — ${tg?`<strong>${tg}</strong>`:''}${tg&&poly?' · ':''}${poly?`<strong>${poly.slice(0,6)}…${poly.slice(-4)}</strong>`:''}`;
+    } else {$note.style.display='none';}
   }
 }
 
@@ -1185,120 +912,60 @@ window.selectDir=function(dir){
 
 // ── SHEETS ──
 async function fetchQuest(){
-  try{
-    const url=`https://sheets.googleapis.com/v4/spreadsheets/${QUESTS_ID}/values/${QUESTS_RANGE}?key=${API_KEY}`;
-    const res=await fetch(url);const data=await res.json();
-    if(!data.values?.length)return null;
-    const headers=data.values[0].map(h=>h.trim());
-    const rows=data.values.slice(1).map(row=>{const obj={};headers.forEach((h,i)=>{obj[h]=(row[i]||'').trim();});return obj;});
-    return rows.find(r=>(r['Track Code']||'').trim().toUpperCase()===PREDICTION_TRACK_CODE.toUpperCase())||null;
-  }catch(e){return null;}
+  try{const url=`https://sheets.googleapis.com/v4/spreadsheets/${QUESTS_ID}/values/${QUESTS_RANGE}?key=${API_KEY}`;const res=await fetch(url);const data=await res.json();if(!data.values?.length)return null;const headers=data.values[0].map(h=>h.trim());const rows=data.values.slice(1).map(row=>{const obj={};headers.forEach((h,i)=>{obj[h]=(row[i]||'').trim();});return obj;});return rows.find(r=>(r['Track Code']||'').trim().toUpperCase()===PREDICTION_TRACK_CODE.toUpperCase())||null;}catch(e){return null;}
 }
 async function fetchResponses(){
-  try{
-    const url=`https://sheets.googleapis.com/v4/spreadsheets/${RESPONSE_ID}/values/${RESPONSE_RANGE}?key=${API_KEY}`;
-    const res=await fetch(url);const data=await res.json();
-    if(!data.values?.length)return[];
-    const headers=data.values[0].map(h=>h.trim());
-    return data.values.slice(1).map(row=>{const obj={};headers.forEach((h,i)=>{obj[h]=(row[i]||'').trim();});return obj;});
-  }catch(e){return[];}
+  try{const url=`https://sheets.googleapis.com/v4/spreadsheets/${RESPONSE_ID}/values/${RESPONSE_RANGE}?key=${API_KEY}`;const res=await fetch(url);const data=await res.json();if(!data.values?.length)return[];const headers=data.values[0].map(h=>h.trim());return data.values.slice(1).map(row=>{const obj={};headers.forEach((h,i)=>{obj[h]=(row[i]||'').trim();});return obj;});}catch(e){return[];}
 }
 async function fetchQuantity(){
-  try{
-    const url=`https://sheets.googleapis.com/v4/spreadsheets/${QUANTITY_ID}/values/${QUANTITY_RANGE}?key=${API_KEY}`;
-    const res=await fetch(url);const data=await res.json();
-    if(!data.values?.length)return null;
-    const headers=data.values[0].map(h=>h.trim());
-    const rows=data.values.slice(1).map(row=>{const obj={};headers.forEach((h,i)=>{obj[h]=(row[i]||'').trim();});return obj;});
-    const match=rows.find(r=>(r['Track Code']||'').trim().toUpperCase()===PREDICTION_TRACK_CODE.toUpperCase());
-    return match?parseInt(match['Quantity'])||0:null;
-  }catch(e){return null;}
+  try{const url=`https://sheets.googleapis.com/v4/spreadsheets/${QUANTITY_ID}/values/${QUANTITY_RANGE}?key=${API_KEY}`;const res=await fetch(url);const data=await res.json();if(!data.values?.length)return null;const headers=data.values[0].map(h=>h.trim());const rows=data.values.slice(1).map(row=>{const obj={};headers.forEach((h,i)=>{obj[h]=(row[i]||'').trim();});return obj;});const match=rows.find(r=>(r['Track Code']||'').trim().toUpperCase()===PREDICTION_TRACK_CODE.toUpperCase());return match?parseInt(match['Quantity'])||0:null;}catch(e){return null;}
 }
 async function fetchActiveTrackCode(){
-  try{
-    const url=`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG_SHEET_ID}/values/${encodeURIComponent(TRACK_CODE_CELL)}?key=${API_KEY}`;
-    const res=await fetch(url);const data=await res.json();
-    return(data.values?.[0]?.[0]||'').trim()||null;
-  }catch(e){return null;}
+  try{const url=`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG_SHEET_ID}/values/${encodeURIComponent(TRACK_CODE_CELL)}?key=${API_KEY}`;const res=await fetch(url);const data=await res.json();return(data.values?.[0]?.[0]||'').trim()||null;}catch(e){return null;}
 }
 
 // ── RENDER QUEST ──
-function renderQuestMeta(quest, entries, quantity){
-  const status = parseInt(quest.Status) || 0;
-  const deadline = quest.Deadline || '0';
-  const expMs = deadline && deadline !== '0' ? new Date(deadline).getTime() : 0;
-  const isExpired = expMs > 0 && Date.now() > expMs;
-  
-  // Expired = treated as closed
-  const isActive = (status === 0 || status === 2) && !isExpired;
-  
-  const reward = quest.Reward || '—';
-  const sponsor = quest.Sponsor || 'SnappQuest';
-  const trackCode = quest['Track Code'] || PREDICTION_TRACK_CODE;
-  currentReward = reward;
-
-  document.getElementById('questStatus').textContent = isActive ? '🟢 OPEN' : '🔴 CLOSED';
-  document.getElementById('questStatus').className = 'badge ' + (isActive ? 'badge-green' : 'badge-red');
-const formattedReward = Number(reward || 0).toLocaleString('en-US');
-document.getElementById('rewardBadge').textContent=`🏆 ${formattedReward} Prize`;
+function renderQuestMeta(quest,entries,quantity){
+  const status=parseInt(quest.Status)||0;
+  const deadline=quest.Deadline||'0';
+  const expMs=deadline&&deadline!=='0'?new Date(deadline).getTime():0;
+  const isExpired=expMs>0&&Date.now()>expMs;
+  const isActive=(status===0||status===2)&&!isExpired;
+  const reward=quest.Reward||'—';
+  const sponsor=quest.Sponsor||'SnappQuest';
+  const trackCode=quest['Track Code']||PREDICTION_TRACK_CODE;
+  currentReward=reward;
+  document.getElementById('questStatus').textContent=isActive?'🟢 OPEN':'🔴 CLOSED';
+  document.getElementById('questStatus').className='badge '+(isActive?'badge-green':'badge-red');
+  const formattedReward=Number(reward||0).toLocaleString('en-US');
+  document.getElementById('rewardBadge').textContent=`🏆 ${formattedReward} Prize`;
   document.getElementById('sponsorName').textContent=sponsor;
   document.getElementById('trackCodeDisplay').textContent=trackCode;
-
   const relevant=entries.filter(r=>(r['Track Code']||'').trim().toUpperCase()===PREDICTION_TRACK_CODE.toUpperCase());
-  currentEntries=relevant;
-  currentEntryCount=relevant.length;
+  currentEntries=relevant;currentEntryCount=relevant.length;
   const submittedCount=relevant.length;
   const hasQuantity=quantity!==null&&quantity>0;
   const remaining=hasQuantity?quantity-submittedCount:null;
   const isFull=hasQuantity&&remaining<=0;
-
-  if(hasQuantity){
-    document.getElementById('entriesCount').textContent=isFull?`${submittedCount}/${quantity} · FULL`:`${submittedCount}/${quantity} · ${remaining} slot${remaining===1?'':'s'} left`;
-  } else {
-    document.getElementById('entriesCount').textContent=`${submittedCount} entries`;
-  }
-
+  if(hasQuantity){document.getElementById('entriesCount').textContent=isFull?`${submittedCount}/${quantity} · FULL`:`${submittedCount}/${quantity} · ${remaining} slot${remaining===1?'':'s'} left`;}
+  else{document.getElementById('entriesCount').textContent=`${submittedCount} entries`;}
   const shouldLock=!isActive||isFull;
-  if(!isActive){
-    document.getElementById('inactiveBanner').innerHTML=`<i class="fas fa-lock" style="font-size:24px;margin-bottom:8px;display:block;"></i>This prediction market is currently <strong>closed</strong>. Check back soon.`;
-    document.getElementById('inactiveBanner').classList.add('show');
-  }
-  if(isFull){
-    document.getElementById('inactiveBanner').innerHTML=`<i class="fas fa-users" style="font-size:24px;margin-bottom:8px;display:block;"></i>This prediction market is <strong>full</strong> — all ${quantity} slots have been taken.<br><span style="font-size:0.72rem;opacity:0.8;margin-top:4px;display:block;">Results announced after the deadline.</span>`;
-    document.getElementById('inactiveBanner').classList.add('show');
-  }
-  if(shouldLock){
-    document.getElementById('predPanel').style.opacity='0.4';
-    document.getElementById('predPanel').style.pointerEvents='none';
-  }
-  if(hasQuantity&&isActive&&!isFull){
-    const sb=document.createElement('span');
-    sb.className='badge '+(remaining<=5?'badge-red':'badge-blue');
-    sb.textContent=`🎯 ${remaining} slot${remaining===1?'':'s'} left`;
-    document.querySelector('.hero-badges').appendChild(sb);
-  }
+  if(!isActive){document.getElementById('inactiveBanner').innerHTML=`<i class="fas fa-lock" style="font-size:24px;margin-bottom:8px;display:block;"></i>This prediction market is currently <strong>closed</strong>. Check back soon.`;document.getElementById('inactiveBanner').classList.add('show');}
+  if(isFull){document.getElementById('inactiveBanner').innerHTML=`<i class="fas fa-users" style="font-size:24px;margin-bottom:8px;display:block;"></i>This prediction market is <strong>full</strong> — all ${quantity} slots have been taken.<br><span style="font-size:0.72rem;opacity:0.8;margin-top:4px;display:block;">Results announced after the deadline.</span>`;document.getElementById('inactiveBanner').classList.add('show');}
+  if(shouldLock){document.getElementById('predPanel').style.opacity='0.4';document.getElementById('predPanel').style.pointerEvents='none';}
+  if(hasQuantity&&isActive&&!isFull){const sb=document.createElement('span');sb.className='badge '+(remaining<=5?'badge-red':'badge-blue');sb.textContent=`🎯 ${remaining} slot${remaining===1?'':'s'} left`;document.querySelector('.hero-badges').appendChild(sb);}
   if(deadline&&deadline!=='0'){
-    const expMs=new Date(deadline).getTime();
-    function tick(){
-      const diff=expMs-Date.now();
-      const cb=document.getElementById('countdownBadge');
-      if(diff<=0){cb.textContent='⏱ Expired';cb.className='countdown-badge';return;}
-      const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
-      cb.textContent=`⏱ ${d}d ${h}h ${m}m ${s}s`;cb.className='countdown-badge ok';
-    }
+    const expMsT=new Date(deadline).getTime();
+    function tick(){const diff=expMsT-Date.now();const cb=document.getElementById('countdownBadge');if(diff<=0){cb.textContent='⏱ Expired';cb.className='countdown-badge';return;}const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);cb.textContent=`⏱ ${d}d ${h}h ${m}m ${s}s`;cb.className='countdown-badge ok';}
     tick();setInterval(tick,1000);
   } else {document.getElementById('countdownBadge').textContent='⏱ No deadline set';}
-
   renderEntriesTable(relevant);
-  updateShareCard(); // update share card after quest data loads
+  updateShareCard();
 }
 
 function renderEntriesTable(entries){
   const el=document.getElementById('entriesTable');
-  if(!entries.length){
-    el.innerHTML=`<div style="padding:20px;text-align:center;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);">No entries yet — be the first!</div>`;
-    return;
-  }
+  if(!entries.length){el.innerHTML=`<div style="padding:20px;text-align:center;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);">No entries yet — be the first!</div>`;return;}
   const sorted=[...entries].reverse().slice(0,20);
   el.innerHTML=sorted.map(r=>{
     const tg=r['Telegram']||r['Telegram Username']||'—';
@@ -1310,12 +977,7 @@ function renderEntriesTable(entries){
     const dirColor=dir==='UP'?'var(--green)':dir==='DOWN'?'var(--red)':'var(--muted)';
     const shortTg=tg.length>14?tg.slice(0,14)+'…':tg;
     const shortTs=ts.replace(/(\d{4}-\d{2}-\d{2}).*/,'$1');
-    return`<div class="pred-table-row">
-      <span style="color:var(--text);opacity:.85;">${shortTg}</span>
-      <span style="color:var(--yellow);">${price}</span>
-      <span style="color:${dirColor};font-weight:700;">${dir}</span>
-      <span>${shortTs}</span>
-    </div>`;
+    return`<div class="pred-table-row"><span style="color:var(--text);opacity:.85;">${shortTg}</span><span style="color:var(--yellow);">${price}</span><span style="color:${dirColor};font-weight:700;">${dir}</span><span>${shortTs}</span></div>`;
   }).join('');
 }
 
@@ -1325,129 +987,53 @@ async function loadBTCData(){
     const res=await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30&interval=daily');
     const data=await res.json();
     const prices=data.prices.map(p=>({x:p[0],y:p[1]}));
-    const last=prices[prices.length-1].y;
-    const prev=prices[prices.length-2].y;
-    const changePct=((last-prev)/prev)*100;
-    const pred=Math.round(last*(1+changePct/100));
+    const last=prices[prices.length-1].y;const prev=prices[prices.length-2].y;
+    const changePct=((last-prev)/prev)*100;const pred=Math.round(last*(1+changePct/100));
     btcPriceCurrent=last;btcChangePct=changePct;btcPriceTomorrow=pred;
-
     setIntelVal('btcPrice','$'+fmt(Math.round(last)),'up');
     document.getElementById('btcPriceSub').textContent='Live from CoinGecko';
-    const chEl=document.getElementById('btcChange');
-    chEl.textContent=(changePct>=0?'+':'')+changePct.toFixed(2)+'%';
-    chEl.className='intel-val '+(changePct>=0?'up':'dn');
+    const chEl=document.getElementById('btcChange');chEl.textContent=(changePct>=0?'+':'')+changePct.toFixed(2)+'%';chEl.className='intel-val '+(changePct>=0?'up':'dn');
     setIntelVal('btcPred','$'+fmt(pred),'neu');
-
-    const daysSince=Math.floor((Date.now()-new Date('2024-04-20'))/86400000);
-    const phase=daysSince>550?'BEAR':'BULL';
-    btcPhase=phase;
+    const daysSince=Math.floor((Date.now()-new Date('2024-04-20'))/86400000);const phase=daysSince>550?'BEAR':'BULL';btcPhase=phase;
     setIntelVal('marketPhase',phase+' MARKET',phase==='BULL'?'up':'dn');
     document.getElementById('phaseSub').textContent=daysSince+' days since halving';
-
-    if(!document.getElementById('fldPrice').value)
-      document.getElementById('fldPrice').placeholder=`e.g. ${fmt(pred)} (our AI est.)`;
-
-    drawBTCChart(prices);
-    updateShareCard();
-  }catch(e){
-    setIntelVal('btcPrice','Error','dn');
-    setIntelVal('btcChange','—','neu');
-    setIntelVal('btcPred','—','neu');
-    setIntelVal('marketPhase','—','neu');
-  }
+    if(!document.getElementById('fldPrice').value) document.getElementById('fldPrice').placeholder=`e.g. ${fmt(pred)} (our AI est.)`;
+    drawBTCChart(prices);updateShareCard();
+  }catch(e){setIntelVal('btcPrice','Error','dn');setIntelVal('btcChange','—','neu');setIntelVal('btcPred','—','neu');setIntelVal('marketPhase','—','neu');}
 }
 function setIntelVal(id,val,cls){const el=document.getElementById(id);el.textContent=val;el.className='intel-val '+(cls||'neu');}
 function drawBTCChart(prices){
   if(btcChart)btcChart.destroy();
-  btcChart=new Chart(document.getElementById('btcChart'),{
-    type:'line',
-    data:{datasets:[{label:'BTC Price',data:prices,borderColor:'#00e5a0',borderWidth:2.5,tension:0.4,pointRadius:0,pointHoverRadius:5,fill:true,
-      backgroundColor:(ctx)=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,200);g.addColorStop(0,'rgba(0,229,160,0.18)');g.addColorStop(1,'rgba(0,229,160,0.00)');return g;}}]},
-    options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#0c1220',titleColor:'#4a6585',bodyColor:'#dde8f5',padding:10,displayColors:false,callbacks:{label:ctx=>'$'+Math.round(ctx.raw.y).toLocaleString()}}},
-      scales:{x:{type:'time',time:{unit:'day'},grid:{color:'rgba(26,45,68,0.6)'},ticks:{color:'#4a6585',font:{size:10}}},
-        y:{grid:{color:'rgba(26,45,68,0.6)'},ticks:{color:'#4a6585',font:{size:10},callback:v=>'$'+Math.round(v/1000)+'k'}}}}
-  });
+  btcChart=new Chart(document.getElementById('btcChart'),{type:'line',data:{datasets:[{label:'BTC Price',data:prices,borderColor:'#00e5a0',borderWidth:2.5,tension:0.4,pointRadius:0,pointHoverRadius:5,fill:true,backgroundColor:(ctx)=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,200);g.addColorStop(0,'rgba(0,229,160,0.18)');g.addColorStop(1,'rgba(0,229,160,0.00)');return g;}}]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{display:false},tooltip:{backgroundColor:'#0c1220',titleColor:'#4a6585',bodyColor:'#dde8f5',padding:10,displayColors:false,callbacks:{label:ctx=>'$'+Math.round(ctx.raw.y).toLocaleString()}}},scales:{x:{type:'time',time:{unit:'day'},grid:{color:'rgba(26,45,68,0.6)'},ticks:{color:'#4a6585',font:{size:10}}},y:{grid:{color:'rgba(26,45,68,0.6)'},ticks:{color:'#4a6585',font:{size:10},callback:v=>'$'+Math.round(v/1000)+'k'}}}}});
 }
 
-// ── UPDATE SHARE CARD DATA ──
 function updateShareCard(){
-  // Price & change
   if(btcPriceCurrent>0){
-    const sc_price=document.getElementById('sc-price');
-    sc_price.textContent='$'+fmt(Math.round(btcPriceCurrent));
-    sc_price.className='sc-price '+(btcChangePct>=0?'':'dn');
-    const sc_chg=document.getElementById('sc-chg');
-    sc_chg.textContent=(btcChangePct>=0?'+':'')+btcChangePct.toFixed(2)+'%';
-    sc_chg.className='sc-stat-val '+(btcChangePct>=0?'up':'dn');
-    const sc_change=document.getElementById('sc-change');
-    sc_change.textContent=(btcChangePct>=0?'▲ Trending Up':'▼ Trending Down');
-    sc_change.className='sc-change '+(btcChangePct>=0?'up':'dn');
+    const sc_price=document.getElementById('sc-price');sc_price.textContent='$'+fmt(Math.round(btcPriceCurrent));sc_price.className='sc-price '+(btcChangePct>=0?'':'dn');
+    const sc_chg=document.getElementById('sc-chg');sc_chg.textContent=(btcChangePct>=0?'+':'')+btcChangePct.toFixed(2)+'%';sc_chg.className='sc-stat-val '+(btcChangePct>=0?'up':'dn');
+    const sc_change=document.getElementById('sc-change');sc_change.textContent=(btcChangePct>=0?'▲ Trending Up':'▼ Trending Down');sc_change.className='sc-change '+(btcChangePct>=0?'up':'dn');
     document.getElementById('sc-pred').textContent='$'+fmt(btcPriceTomorrow);
     document.getElementById('sc-phase').textContent=btcPhase||'—';
   }
-
-  // Tally community direction from entries
   if(currentEntries.length>0){
     let ups=0,dns=0,lastReason='';
-    currentEntries.forEach(r=>{
-      const proof=r['Proof of Quest']||r['Link to Your Submission']||'';
-      if(proof.includes('|')){
-        const parts=proof.split('|');
-        if((parts[0]||'').toUpperCase()==='UP')ups++;
-        else if((parts[0]||'').toUpperCase()==='DOWN')dns++;
-        if(parts[2]&&parts[2].trim())lastReason=parts[2].trim();
-      }
-    });
-    const totalVotes=ups+dns;
-    const majorDir=ups>=dns?'UP':'DOWN';
-    const majorPct=totalVotes>0?Math.round((Math.max(ups,dns)/totalVotes)*100):0;
-    const dirBox=document.getElementById('sc-dir-box');
-    dirBox.className='sc-direction '+(majorDir==='DOWN'?'dn':'');
+    currentEntries.forEach(r=>{const proof=r['Proof of Quest']||r['Link to Your Submission']||'';if(proof.includes('|')){const parts=proof.split('|');if((parts[0]||'').toUpperCase()==='UP')ups++;else if((parts[0]||'').toUpperCase()==='DOWN')dns++;if(parts[2]&&parts[2].trim())lastReason=parts[2].trim();}});
+    const totalVotes=ups+dns;const majorDir=ups>=dns?'UP':'DOWN';const majorPct=totalVotes>0?Math.round((Math.max(ups,dns)/totalVotes)*100):0;
+    const dirBox=document.getElementById('sc-dir-box');dirBox.className='sc-direction '+(majorDir==='DOWN'?'dn':'');
     document.getElementById('sc-dir-emoji').textContent=majorDir==='UP'?'📈':'📉';
     document.getElementById('sc-dir-value').textContent=`${majorDir} ${majorPct}%`;
-
-    if(lastReason&&lastReason.length>10){
-      document.getElementById('sc-reasoning-wrap').style.display='block';
-      document.getElementById('sc-reasoning-text').textContent=`"${lastReason.slice(0,180)}${lastReason.length>180?'…':''}"`;
-    }
-  } else {
-    document.getElementById('sc-dir-emoji').textContent='⏳';
-    document.getElementById('sc-dir-value').textContent='Awaiting predictions';
-  }
-
+    if(lastReason&&lastReason.length>10){document.getElementById('sc-reasoning-wrap').style.display='block';document.getElementById('sc-reasoning-text').textContent=`"${lastReason.slice(0,180)}${lastReason.length>180?'…':''}"`;} 
+  } else {document.getElementById('sc-dir-emoji').textContent='⏳';document.getElementById('sc-dir-value').textContent='Awaiting predictions';}
   document.getElementById('sc-entries').textContent=currentEntryCount||'—';
-// Strip any existing suffix then re-append VERSE clearly
-const rawReward = (currentReward || '').replace(/VERSE/gi, '').trim();
-const formattedPrize = rawReward ? Number(rawReward).toLocaleString('en-US') : '—';
-document.getElementById('sc-prize').textContent = `${formattedPrize} VERSE`;
+  const rawReward=(currentReward||'').replace(/VERSE/gi,'').trim();
+  const formattedPrize=rawReward?Number(rawReward).toLocaleString('en-US'):'—';
+  document.getElementById('sc-prize').textContent=`${formattedPrize} VERSE`;
 }
 
-// ── SHARE FUNCTIONS ──
 async function downloadCard(){
-  const shareLog=document.getElementById('shareStatusLog');
-  shareLog.textContent='⏳ Generating image…';
-  try{
-    updateShareCard();
-    const card=document.getElementById('shareCard');
-    await new Promise(r=>setTimeout(r,300)); // let fonts settle
-    const canvas=await html2canvas(card,{
-      scale:2,
-      backgroundColor:'#060910',
-      useCORS:true,
-      allowTaint:false,
-      logging:false,
-    });
-    const link=document.createElement('a');
-    link.download=`SnappQuest-BTC-Signal-${new Date().toISOString().slice(0,10)}.png`;
-    link.href=canvas.toDataURL('image/png');
-    link.click();
-    shareLog.textContent='✅ Image downloaded!';
-    setTimeout(()=>{shareLog.textContent='';},3000);
-  }catch(e){
-    console.error(e);
-    shareLog.textContent='❌ Could not generate image. Try opening in new tab.';
-  }
+  const shareLog=document.getElementById('shareStatusLog');shareLog.textContent='⏳ Generating image…';
+  try{updateShareCard();const card=document.getElementById('shareCard');await new Promise(r=>setTimeout(r,300));const canvas=await html2canvas(card,{scale:2,backgroundColor:'#060910',useCORS:true,allowTaint:false,logging:false});const link=document.createElement('a');link.download=`SnappQuest-BTC-Signal-${new Date().toISOString().slice(0,10)}.png`;link.href=canvas.toDataURL('image/png');link.click();shareLog.textContent='✅ Image downloaded!';setTimeout(()=>{shareLog.textContent='';},3000);}
+  catch(e){console.error(e);shareLog.textContent='❌ Could not generate image. Try opening in new tab.';}
 }
 
 function shareOnX(){
@@ -1456,64 +1042,41 @@ function shareOnX(){
   const majority=upCount>=dnCount?'📈 UP':'📉 DOWN';
   const priceStr=btcPriceCurrent>0?`$${fmt(Math.round(btcPriceCurrent))}`:'—';
   const predStr=btcPriceTomorrow>0?`$${fmt(btcPriceTomorrow)}`:'—';
-
-  const text=encodeURIComponent(
-`🔮 SnappQuest BTC Prediction Market is LIVE!
-
-₿ BTC Now: ${priceStr}
-📊 AI Tomorrow Estimate: ${predStr}
-🗳️ Community leans: ${majority}
-
-🏆 Prize: ${currentReward||'VERSE Rewards'}
-💰 Entry: 1,000 VERSE
-
-Can you predict tomorrow's BTC price?
-👇 Join & predict to win VERSE!
-
-${PAGE_URL}
-
-#Bitcoin #BTC #VERSE #SnappQuest #CryptoPrediction`
-  );
+  const text=encodeURIComponent(`🔮 SnappQuest BTC Prediction Market is LIVE!\n\n₿ BTC Now: ${priceStr}\n📊 AI Tomorrow Estimate: ${predStr}\n🗳️ Community leans: ${majority}\n\n🏆 Prize: ${currentReward||'VERSE Rewards'}\n💰 Entry: 1,000 VERSE\n\nCan you predict tomorrow's BTC price?\n👇 Join & predict to win VERSE!\n\n${PAGE_URL}\n\n#Bitcoin #BTC #VERSE #SnappQuest #CryptoPrediction`);
   window.open(`https://twitter.com/intent/tweet?text=${text}`,'_blank');
 }
 
-// expose globally for inline onclick
 window.downloadCard=downloadCard;
 window.shareOnX=shareOnX;
 
 // ── CONFIRM MODAL ──
 function openConfirm(){
   const tg=(document.getElementById('fldTelegram').value||'').trim();
-  const wallet=(document.getElementById('fldWallet').value||userAddress||'').trim();
+  const wallet=userAddress||'';
   const price=(document.getElementById('fldPrice').value||'').trim();
   const reason=(document.getElementById('fldReason').value||'').trim();
-  if(!tg){  // Clear previous logs
-  clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Enter your Telegram username.</span>');return;}
-  if(!price||isNaN(price)||Number(price)<1){  // Clear previous logs
-  clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Enter a valid BTC price prediction.</span>');return;}
-  if(!selectedDir){  // Clear previous logs
-  clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Select UP or DOWN direction.</span>');return;}
-  if(!userAddress){  // Clear previous logs
-  clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Connect your wallet first.</span>');return;}
+  if(!tg){clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Enter your Telegram username.</span>');return;}
+  if(!price||isNaN(price)||Number(price)<1){clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Enter a valid BTC price prediction.</span>');return;}
+  if(!selectedDir){clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Select UP or DOWN direction.</span>');return;}
+  if(!userAddress){clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Connect your wallet first.</span>');return;}
   document.getElementById('confirmRows').innerHTML=`
     <div class="confirm-row"><span>Telegram</span><span>${tg}</span></div>
     <div class="confirm-row"><span>Wallet</span><span>${shortAddr(wallet)}</span></div>
     <div class="confirm-row"><span>BTC Prediction</span><span>$${fmt(Number(price))}</span></div>
     <div class="confirm-row"><span>Direction</span><span>${selectedDir.toUpperCase()}</span></div>
     <div class="confirm-row"><span>Reasoning</span><span>${reason||'(none)'}</span></div>
-    <div class="confirm-row"><span>Entry Fee</span><span style="color:var(--green)">1,000 VERSE</span></div>
-  `;
+    <div class="confirm-row"><span>Entry Fee</span><span style="color:var(--green)">1,000 VERSE</span></div>`;
   $confirmLog.style.display='none';$confirmLog.innerHTML='';
   $confirmWrap.classList.add('open');
 }
 document.getElementById('cancelConfirmBtn').addEventListener('click',()=>$confirmWrap.classList.remove('open'));
 document.getElementById('submitConfirmBtn').addEventListener('click',submitPrediction);
 
-// ── SUBMIT ──
+// ── SUBMIT (wallet path) — always uses userAddress, never fldWallet ──
 async function submitPrediction(){
   if(!userAddress||!ethSigner){addLog($formLog,'<span class="lg-err">❌ Connect wallet first.</span>');$confirmWrap.classList.remove('open');return;}
   const tg=(document.getElementById('fldTelegram').value||'').trim();
-  const wallet=(document.getElementById('fldWallet').value||userAddress).trim();
+  const wallet=userAddress; // SECURITY: always use verified signer address
   const price=(document.getElementById('fldPrice').value||'').trim();
   const reason=(document.getElementById('fldReason').value||'').trim();
   const proof=`${selectedDir.toUpperCase()}|${price}|${reason}`;
@@ -1524,21 +1087,12 @@ async function submitPrediction(){
     addLog($confirmLog,`<span class="lg-warn">${sp()}Verifying slots…</span>`);
     const[liveResponses,liveQty]=await Promise.all([fetchResponses(),fetchQuantity()]);
     const liveCount=liveResponses.filter(r=>(r['Track Code']||'').trim().toUpperCase()===PREDICTION_TRACK_CODE.toUpperCase()).length;
-    if(liveQty!==null&&liveCount>=liveQty){
-      addLog($confirmLog,'<span class="lg-err">❌ Market is now full.</span>');
-      $sub.disabled=false;$sub.textContent='Pay & Submit';
-      setTimeout(()=>{$confirmWrap.classList.remove('open');loadQuestData();},2000);return;
-    }
+    if(liveQty!==null&&liveCount>=liveQty){addLog($confirmLog,'<span class="lg-err">❌ Market is now full.</span>');$sub.disabled=false;$sub.textContent='Pay & Submit';setTimeout(()=>{$confirmWrap.classList.remove('open');loadQuestData();},2000);return;}
     addLog($confirmLog,`<span class="lg-warn">${sp()}Checking VERSE balance…</span>`);
     const token=new ethers.Contract(VERSE_TOKEN,ERC20_ABI,ethSigner);
-    const decimals=await token.decimals();
-    const feeVal=ethers.utils.parseUnits(String(ENTRY_FEE_VERSE),decimals);
+    const decimals=await token.decimals();const feeVal=ethers.utils.parseUnits(String(ENTRY_FEE_VERSE),decimals);
     const balance=await token.balanceOf(userAddress);
-    if(balance.lt(feeVal)){
-      const have=parseFloat(ethers.utils.formatUnits(balance,decimals)).toLocaleString();
-      addLog($confirmLog,`<span class="lg-err">❌ Insufficient VERSE. Have ${have}.</span>`);
-      $sub.disabled=false;$sub.textContent='Pay & Submit';return;
-    }
+    if(balance.lt(feeVal)){const have=parseFloat(ethers.utils.formatUnits(balance,decimals)).toLocaleString();addLog($confirmLog,`<span class="lg-err">❌ Insufficient VERSE. Have ${have}.</span>`);$sub.disabled=false;$sub.textContent='Pay & Submit';return;}
     addLog($confirmLog,`<span class="lg-warn">${sp()}Sending 1,000 VERSE — approve in wallet…</span>`);
     const tx=await token.transfer(FEE_RECEIVER,feeVal,{gasLimit:100000});
     addLog($confirmLog,`<span class="lg-info">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank" style="color:var(--green)">${shortAddr(tx.hash)}</a> — confirming…</span>`);
@@ -1546,11 +1100,7 @@ async function submitPrediction(){
     if(receipt.status!==1){addLog($confirmLog,'<span class="lg-err">❌ TX reverted.</span>');$sub.disabled=false;$sub.textContent='Pay & Submit';return;}
     addLog($confirmLog,`<span class="lg-ok">✅ Fee confirmed! Submitting…</span>`);
     const fd=new FormData();
-    fd.append('entry.2147360639',PREDICTION_TRACK_CODE);
-    fd.append('entry.1526178092',proof);
-    fd.append('entry.884208731',tx.hash);
-    fd.append('entry.256576255',tg);
-    fd.append('entry.1138659293',wallet);
+    fd.append('entry.2147360639',PREDICTION_TRACK_CODE);fd.append('entry.1526178092',proof);fd.append('entry.884208731',tx.hash);fd.append('entry.256576255',tg);fd.append('entry.1138659293',wallet);
     try{await fetch(FORM_ACTION,{method:'POST',body:fd});}catch(_){}
     if(tg)localStorage.setItem('userTelegram',tg.startsWith('@')?tg:'@'+tg);
     addLog($confirmLog,'<span class="lg-ok">🎉 Submitted!</span>');
@@ -1591,13 +1141,12 @@ async function connectInjected(eth){
     await eth.request({method:'eth_requestAccounts'});
     addLog($formLog,`<span class="lg-warn">${sp()}Switching to Polygon…</span>`);
     await ensurePolygon(eth);
-    ethProvider=new ethers.providers.Web3Provider(eth,'any');
-    ethSigner=ethProvider.getSigner();
+    ethProvider=new ethers.providers.Web3Provider(eth,'any');ethSigner=ethProvider.getSigner();
     const net=await ethProvider.getNetwork();
     if(net.chainId!==POLYGON_CHAIN_ID){addLog($formLog,'<span class="lg-err">❌ Switch to Polygon.</span>');return;}
     userAddress=await ethSigner.getAddress();
     setConnected(shortAddr(userAddress)+' · Polygon');
-    eth.on('accountsChanged',a=>{if(!a.length)setDisconnected();else{userAddress=a[0];$walletAddr.textContent=shortAddr(a[0])+' · Polygon';}});
+    eth.on('accountsChanged',a=>{if(!a.length)setDisconnected();else{userAddress=a[0];lockField('fldWallet',a[0]);$walletAddr.textContent=shortAddr(a[0])+' · Polygon';}});
     eth.on('chainChanged',()=>location.reload());
   }catch(e){addLog($formLog,`<span class="lg-err">❌ ${e.code===4001?'Rejected.':(e.message||'Failed.')}</span>`);}
 }
@@ -1605,18 +1154,14 @@ async function connectWC(){
   closeWalletModal();clearLog($formLog);addLog($formLog,`<span class="lg-warn">${sp()}Initialising WalletConnect…</span>`);
   try{
     if(wcProvider){try{await wcProvider.disconnect();}catch(_){}wcProvider=null;}
-    wcProvider=await EthereumProvider.init({
-      projectId:PROJECT_ID,chains:[POLYGON_CHAIN_ID],optionalChains:[POLYGON_CHAIN_ID],showQrModal:false,
-      metadata:{name:'VERSE Prediction Market',description:'Predict BTC price & earn VERSE',url:window.location.origin,icons:['https://avatars.githubusercontent.com/u/37784886']}
-    });
+    wcProvider=await EthereumProvider.init({projectId:PROJECT_ID,chains:[POLYGON_CHAIN_ID],optionalChains:[POLYGON_CHAIN_ID],showQrModal:false,metadata:{name:'VERSE Prediction Market',description:'Predict BTC price & earn VERSE',url:window.location.origin,icons:['https://avatars.githubusercontent.com/u/37784886']}});
     wcProvider.on('display_uri',async uri=>{addLog($formLog,`<span class="lg-warn">${sp()}Opening picker…</span>`);await web3modal.openModal({uri,standaloneChains:[`eip155:${POLYGON_CHAIN_ID}`]});});
     wcProvider.on('connect',()=>web3modal.closeModal());
     wcProvider.on('disconnect',()=>{web3modal.closeModal();setDisconnected();});
-    wcProvider.on('accountsChanged',a=>{if(!a.length)setDisconnected();else{userAddress=a[0];$walletAddr.textContent=shortAddr(a[0])+' · WC';}});
+    wcProvider.on('accountsChanged',a=>{if(!a.length)setDisconnected();else{userAddress=a[0];lockField('fldWallet',a[0]);$walletAddr.textContent=shortAddr(a[0])+' · WC';}});
     addLog($formLog,`<span class="lg-warn">${sp()}Select wallet…</span>`);
     await wcProvider.connect({chains:[POLYGON_CHAIN_ID]});
-    ethProvider=new ethers.providers.Web3Provider(wcProvider,'any');
-    ethSigner=ethProvider.getSigner();
+    ethProvider=new ethers.providers.Web3Provider(wcProvider,'any');ethSigner=ethProvider.getSigner();
     const accounts=await ethProvider.listAccounts();
     if(!accounts.length)throw new Error('No accounts.');
     userAddress=accounts[0];
@@ -1629,442 +1174,203 @@ async function connectWC(){
   }
 }
 
-// ── WIRE ──
 document.getElementById('modalClose').addEventListener('click',closeWalletModal);
 $walletModal.addEventListener('click',e=>{if(e.target===$walletModal)closeWalletModal();});
 document.getElementById('wcBtn').addEventListener('click',connectWC);
-document.getElementById('mmBtn').addEventListener('click',()=>{
-  if(window.ethereum){connectInjected(window.ethereum);return;}
-  closeWalletModal();
-  if(isMobile)window.location.href=`https://metamask.app.link/dapp/${pageHost}`;
-  else window.open('https://metamask.io/download/','_blank');
-});
-document.getElementById('cbBtn').addEventListener('click',()=>{
-  const cbEth=window.coinbaseWalletExtension||(window.ethereum?.isCoinbaseWallet?window.ethereum:null);
-  if(cbEth){connectInjected(cbEth);return;}
-  closeWalletModal();
-  if(isMobile)window.location.href=`https://go.cb-w.com/dapp?cb_url=${pageURL}`;
-  else window.open('https://www.coinbase.com/wallet/downloads','_blank');
-});
-document.getElementById('discBtn').addEventListener('click',async()=>{
-  try{if(wcProvider?.disconnect)await wcProvider.disconnect();}catch(_){}
-  setDisconnected();
-});
+document.getElementById('mmBtn').addEventListener('click',()=>{if(window.ethereum){connectInjected(window.ethereum);return;}closeWalletModal();if(isMobile)window.location.href=`https://metamask.app.link/dapp/${pageHost}`;else window.open('https://metamask.io/download/','_blank');});
+document.getElementById('cbBtn').addEventListener('click',()=>{const cbEth=window.coinbaseWalletExtension||(window.ethereum?.isCoinbaseWallet?window.ethereum:null);if(cbEth){connectInjected(cbEth);return;}closeWalletModal();if(isMobile)window.location.href=`https://go.cb-w.com/dapp?cb_url=${pageURL}`;else window.open('https://www.coinbase.com/wallet/downloads','_blank');});
+document.getElementById('discBtn').addEventListener('click',async()=>{try{if(wcProvider?.disconnect)await wcProvider.disconnect();}catch(_){}setDisconnected();});
+document.getElementById('mobileDiscBtn').addEventListener('click',async()=>{try{if(wcProvider?.disconnect)await wcProvider.disconnect();}catch(_){}setDisconnected();});
 document.getElementById('downloadCardBtn').addEventListener('click',downloadCard);
 document.getElementById('shareXBtn').addEventListener('click',shareOnX);
 
-// ── LOAD QUEST DATA ──
 async function loadQuestData(){
-  document.getElementById('questStatus').textContent='⏳ Loading…';
-  document.getElementById('trackCodeDisplay').textContent='Fetching…';
+  document.getElementById('questStatus').textContent='⏳ Loading…';document.getElementById('trackCodeDisplay').textContent='Fetching…';
   const code=await fetchActiveTrackCode();
-  if(!code){
-    document.getElementById('questStatus').textContent='⚠️ No active market';
-    document.getElementById('questStatus').className='badge badge-red';
-    document.getElementById('trackCodeDisplay').textContent='—';
-    document.getElementById('countdownBadge').textContent='—';
-    document.getElementById('entriesTable').innerHTML=`<div style="padding:20px;text-align:center;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);">No active prediction market found in C11.</div>`;
-    return;
-  }
-  PREDICTION_TRACK_CODE=code;
-  document.getElementById('trackCodeDisplay').textContent=code;
+  if(!code){document.getElementById('questStatus').textContent='⚠️ No active market';document.getElementById('questStatus').className='badge badge-red';document.getElementById('trackCodeDisplay').textContent='—';document.getElementById('countdownBadge').textContent='—';document.getElementById('entriesTable').innerHTML=`<div style="padding:20px;text-align:center;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);">No active prediction market found in C11.</div>`;return;}
+  PREDICTION_TRACK_CODE=code;document.getElementById('trackCodeDisplay').textContent=code;
   const[quest,responses,quantity]=await Promise.all([fetchQuest(),fetchResponses(),fetchQuantity()]);
   if(quest){questData=quest;renderQuestMeta(quest,responses,quantity);}
-  else{
-    document.getElementById('questStatus').textContent='⚠️ Quest not found';
-    document.getElementById('questStatus').className='badge badge-red';
-    document.getElementById('countdownBadge').textContent='—';
-    document.getElementById('entriesTable').innerHTML=`<div style="padding:20px;text-align:center;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);">Track code <strong>${code}</strong> not found in Quests sheet.</div>`;
-  }
+  else{document.getElementById('questStatus').textContent='⚠️ Quest not found';document.getElementById('questStatus').className='badge badge-red';document.getElementById('countdownBadge').textContent='—';document.getElementById('entriesTable').innerHTML=`<div style="padding:20px;text-align:center;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);">Track code <strong>${code}</strong> not found in Quests sheet.</div>`;}
 }
 
-// ── RESEARCH TABS ──
 window.switchTab=function(tab){
-  ['news','charts','live'].forEach(t=>{
-    document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.remove('active');
-    document.getElementById('content'+t.charAt(0).toUpperCase()+t.slice(1)).style.display='none';
-  });
+  ['news','charts','live'].forEach(t=>{document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.remove('active');document.getElementById('content'+t.charAt(0).toUpperCase()+t.slice(1)).style.display='none';});
   document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
   document.getElementById('content'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display='';
 };
 
-async function verifyManualTransaction(userWallet) {
-  const logEl = document.getElementById('manualLog');
-  logEl.style.display = 'block';
-  clearLog(logEl);
-  
-  addLog(logEl, `<span class="lg-warn">${sp()}Scanning recent payments (last 45 min)...</span>`);
-
-  const API_KEY = 'XN9WICY1V7C5A3VBRRR2NTRF7KZ4TCN4Z4';
-  const RECEIVER = '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
-  const TOKEN = '0xc708D6F2153933DAA50B2D0758955Be0A93A8FEc';
-
-  try {
-    const url = `https://api.etherscan.io/v2/api?chainid=137&module=account&action=tokentx&address=${RECEIVER}&contractaddress=${TOKEN}&sort=desc&apikey=${API_KEY}`;
-
-    const res = await fetch(url);
-    const data = await res.json();
-
-    if (data.status === '0' || !data.result) {
-      addLog(logEl, `<span class="lg-err">❌ No recent transfers found.</span>`);
-      addLog(logEl, `<span class="lg-info">Wait ~60 seconds after payment then try again.</span>`);
+// ── MANUAL PAYMENT VERIFICATION ──
+// SECURITY: Locks fldWallet AND fldTelegram immediately after a valid payment is found.
+// Stores on-chain sender address (not what user typed) in _verifiedSession.
+async function verifyManualTransaction(userWalletInput, tgInput) {
+  const logEl=document.getElementById('manualLog');
+  logEl.style.display='block';clearLog(logEl);
+  addLog(logEl,`<span class="lg-warn">${sp()}Scanning recent payments (last 45 min)…</span>`);
+  const POLY_API_KEY='XN9WICY1V7C5A3VBRRR2NTRF7KZ4TCN4Z4';
+  const RECEIVER='0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
+  const TOKEN='0xc708D6F2153933DAA50B2D0758955Be0A93A8FEc';
+  try{
+    const url=`https://api.etherscan.io/v2/api?chainid=137&module=account&action=tokentx&address=${RECEIVER}&contractaddress=${TOKEN}&sort=desc&apikey=${POLY_API_KEY}`;
+    const res=await fetch(url);const data=await res.json();
+    if(data.status==='0'||!data.result){
+      addLog(logEl,`<span class="lg-err">❌ No recent transfers found.</span>`);
+      addLog(logEl,`<span class="lg-info">Wait ~60 seconds after payment then try again.</span>`);
       return false;
     }
+    const now=Date.now();const fortyFiveMin=now-45*60*1000;
+    for(const tx of data.result.slice(0,50)){
+      const txTime=parseInt(tx.timeStamp)*1000;
+      if(txTime<fortyFiveMin)continue;
+      const amount=parseFloat(ethers.utils.formatUnits(tx.value,tx.tokenDecimal||18));
+      // SECURITY: ground truth is the on-chain sender from Polygonscan
+      const onChainSender=tx.from.toLowerCase();
+      if(Math.abs(amount-1000)<3&&onChainSender===userWalletInput.toLowerCase()){
+        const minutesAgo=Math.round((now-txTime)/60000);
+        addLog(logEl,`<span class="lg-ok">✅ Found 1,000 VERSE payment (${minutesAgo} min ago)</span>`);
+        addLog(logEl,`<span class="lg-info">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash.slice(0,18)}…</a></span>`);
+        addLog(logEl,`<span class="lg-ok">🔒 Wallet and Telegram locked to your verified identity.</span>`);
 
-    const now = Date.now();
-    const fortyFiveMinAgo = now - (45 * 60 * 1000);
+        // SECURITY: Lock BOTH fields immediately — cannot be changed after this point
+        lockIdentityFields(tx.from, tgInput);
 
-    for (const tx of data.result.slice(0, 50)) {
-      const txTime = parseInt(tx.timeStamp) * 1000;
-      if (txTime < fortyFiveMinAgo) continue;
+        // SECURITY: Store verified session — on-chain wallet, snapshot tg, 10-min expiry
+        _verifiedSession = {
+          txHash:    tx.hash,
+          wallet:    onChainSender,              // on-chain sender (lowercase)
+          tg:        tgInput,                    // tg at time of verification
+          expiresAt: Date.now() + 10 * 60 * 1000,
+        };
 
-      const amount = parseFloat(ethers.utils.formatUnits(tx.value, tx.tokenDecimal || 18));
-      const fromAddr = tx.from.toLowerCase();
-
-      if (Math.abs(amount - 1000) < 3 && fromAddr === userWallet.toLowerCase()) {
-        const minutesAgo = Math.round((now - txTime) / 60000);
-        addLog(logEl, `<span class="lg-ok">✅ Found 1,000 VERSE payment (${minutesAgo} min ago)</span>`);
-        addLog(logEl, `<span class="lg-info">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash.slice(0, 18)}...</a></span>`);
         clearLog($formLog);
-        addLog($formLog, `<span class="lg-ok">✅ Payment verified! Fill in your prediction details and click "Submit Prediction Now".</span>`);
+        addLog($formLog,`<span class="lg-ok">✅ Payment verified! Fields locked. Fill in your prediction and submit.</span>`);
         return tx.hash;
       }
     }
-
-    addLog(logEl, `<span class="lg-err">❌ No matching payment found in the last 45 minutes.</span>`);
-    addLog(logEl, `<span class="lg-info">Make sure you sent exactly 1,000 fxVERSE and wait ~60 seconds after sending.</span>`);
-
-  } catch (e) {
-    console.error(e);
-    addLog(logEl, `<span class="lg-err">❌ Network error. Please try again.</span>`);
-  }
+    addLog(logEl,`<span class="lg-err">❌ No matching payment from ${userWalletInput.slice(0,10)}… in the last 45 minutes.</span>`);
+    addLog(logEl,`<span class="lg-info">Make sure you sent exactly 1,000 fxVERSE from this wallet and wait ~60 seconds.</span>`);
+  }catch(e){console.error(e);addLog(logEl,`<span class="lg-err">❌ Network error. Please try again.</span>`);}
   return false;
 }
 
-// ONE-TIME CLEAN LISTENER (No duplicates)
-if (!window.manualVerifyListenerAdded) {
-  window.manualVerifyListenerAdded = true;   // ← Protection flag
+// ── MANUAL SUBMIT — reads wallet+tg from _verifiedSession only, never from fields ──
+async function submitManualPrediction(){
+  if(isSubmitting) return;
 
-  const verifyBtn = document.getElementById('verifyManualBtn');
-  if (verifyBtn) {
-    const cleanBtn = verifyBtn.cloneNode(true);
-    verifyBtn.parentNode.replaceChild(cleanBtn, verifyBtn);
-
-    cleanBtn.addEventListener('click', async () => {
-      const tg = (document.getElementById('fldTelegram').value || '').trim();
-      const wallet = (document.getElementById('fldWallet').value || '').trim();
-
-      if (!tg) return addLog($formLog, '<span class="lg-err">❌ Enter Telegram username first.</span>');
-      if (!wallet || !wallet.startsWith('0x')) return addLog($formLog, '<span class="lg-err">❌ Enter Polygon wallet first.</span>');
-
-      await verifyManualTransaction(wallet);
-    });
+  // SECURITY: validate session exists and hasn't expired
+  if(!_verifiedSession){
+    addLog($formLog,'<span class="lg-err">❌ No verified payment. Please verify first.</span>');return;
   }
-}
-
-// Clean single listener for Auto-Check button
-const verifyBtn = document.getElementById('verifyManualBtn');
-if (verifyBtn) {
-  // Remove any old listeners
-  const cleanBtn = verifyBtn.cloneNode(true);
-  verifyBtn.parentNode.replaceChild(cleanBtn, verifyBtn);
-
-  cleanBtn.addEventListener('click', async () => {
-    const tg = (document.getElementById('fldTelegram').value || '').trim();
-    const wallet = (document.getElementById('fldWallet').value || '').trim();
-
-    if (!tg) return addLog($formLog, '<span class="lg-err">❌ Enter Telegram username first.</span>');
-    if (!wallet || !wallet.startsWith('0x')) return addLog($formLog, '<span class="lg-err">❌ Enter Polygon wallet first.</span>');
-
-    const txHash = await verifyManualTransaction(wallet);
-    
-    if (txHash) {
-      window.verifiedManualTx = txHash;
-      addLog($formLog, `<span class="lg-ok">✅ Payment verified! Click "Submit Prediction Now".</span>`);
-
-      $btnArea.innerHTML = `
-        <button class="btn btn-primary" id="finalManualSubmitBtn">
-          <i class="fas fa-paper-plane"></i> Submit Prediction Now
-        </button>
-      `;
-
-      document.getElementById('finalManualSubmitBtn').addEventListener('click', submitManualPrediction);
-    }
-  });
-}
-
-async function handleManualSubmit() {
-  const tg = (document.getElementById('fldTelegram').value || '').trim();
-  const wallet = (document.getElementById('fldWallet').value || '').trim();
-
-  if (!tg) return addLog($formLog, '<span class="lg-err">❌ Enter Telegram username.</span>');
-  if (!wallet || !wallet.startsWith('0x')) return addLog($formLog, '<span class="lg-err">❌ Enter valid Polygon wallet.</span>');
-
-  const txHash = await verifyManualTransaction(wallet);
-  
-  if (txHash) {
-    // Store the verified txHash temporarily
-    window.verifiedManualTx = txHash;
-    
-    addLog($formLog, `<span class="lg-ok">✅ Payment verified! You can now submit your prediction.</span>`);
-    
-    // Show final submit button (no wallet needed)
-    $btnArea.innerHTML = `
-      <button class="btn btn-primary" id="finalManualSubmitBtn">
-        <i class="fas fa-paper-plane"></i> Submit Prediction Now
-      </button>
-    `;
-    
-    document.getElementById('finalManualSubmitBtn').addEventListener('click', submitManualPrediction);
+  if(Date.now() > _verifiedSession.expiresAt){
+    _verifiedSession=null;
+    unlockIdentityFields();
+    addLog($formLog,'<span class="lg-err">❌ Verification expired (10 min). Please verify again.</span>');return;
   }
-}
 
-// Global flag
-let isSubmitting = false;
+  const price=(document.getElementById('fldPrice').value||'').trim();
+  const reason=(document.getElementById('fldReason').value||'').trim();
 
-async function submitManualPrediction() {
-  if (isSubmitting) return;
-  
-  const tg = (document.getElementById('fldTelegram').value || '').trim();
-  const wallet = (document.getElementById('fldWallet').value || '').trim();
-  const price = (document.getElementById('fldPrice').value || '').trim();
-  const reason = (document.getElementById('fldReason').value || '').trim();
+  // SECURITY: pull identity exclusively from session — NOT from input fields
+  const wallet=_verifiedSession.wallet;
+  const tg=_verifiedSession.tg;
+  const txHash=_verifiedSession.txHash;
 
-  // Clear previous logs
   clearLog($formLog);
+  if(!price||isNaN(price)){addLog($formLog,'<span class="lg-err">❌ Enter a valid BTC price prediction.</span>');return;}
+  if(!selectedDir){addLog($formLog,'<span class="lg-err">❌ Select UP or DOWN direction.</span>');return;}
+  if(!reason){addLog($formLog,'<span class="lg-err">❌ Please enter your reasoning.</span>');return;}
 
-  if (!tg) {
-    addLog($formLog, '<span class="lg-err">❌ Telegram username is required.</span>');
-    return;
-  }
-  if (!wallet || !wallet.startsWith('0x')) {
-    addLog($formLog, '<span class="lg-err">❌ Polygon wallet is required.</span>');
-    return;
-  }
-  if (!price || isNaN(price)) {
-    addLog($formLog, '<span class="lg-err">❌ Enter a valid BTC price prediction.</span>');
-    return;
-  }
-  if (!selectedDir) {
-    addLog($formLog, '<span class="lg-err">❌ Select UP or DOWN direction.</span>');
-    return;
-  }
+  const proof=`${selectedDir.toUpperCase()}|${price}|${reason}`;
+  const btn=document.getElementById('finalManualSubmitBtn');
+  if(!btn) return;
 
-    // Check if the reason field is empty
-  if (!reason) {
-    addLog($formLog, '<span class="lg-err">❌ Please enter a reason for your prediction.</span>');
-    return;
-  }
+  isSubmitting=true;btn.disabled=true;btn.innerHTML=`<span class="spinner"></span> Submitting…`;
+  try{
+    const fd=new FormData();
+    fd.append('entry.2147360639',PREDICTION_TRACK_CODE);
+    fd.append('entry.1526178092',proof);
+    fd.append('entry.884208731',txHash);
+    fd.append('entry.256576255',tg);
+    fd.append('entry.1138659293',wallet); // SECURITY: always on-chain address from session
 
-  const proof = `${selectedDir.toUpperCase()}|${price}|${reason}`;
-  const txHash = window.verifiedManualTx;
+    await fetch(FORM_ACTION,{method:'POST',body:fd,mode:'no-cors'});
 
-  if (!txHash) {
-    addLog($formLog, '<span class="lg-err">❌ Payment verification expired. Please verify again.</span>');
-    return;
-  }
+    // SECURITY: Invalidate session immediately — cannot be replayed
+    _verifiedSession=null;
 
-  const btn = document.getElementById('finalManualSubmitBtn');
-  if (!btn) return;
-
-  isSubmitting = true;
-  btn.disabled = true;
-  btn.innerHTML = `<span class="spinner"></span> Submitting...`;
-
-  try {
-    const fd = new FormData();
-    fd.append('entry.2147360639', PREDICTION_TRACK_CODE);
-    fd.append('entry.1526178092', proof);
-    fd.append('entry.884208731', txHash);
-    fd.append('entry.256576255', tg);
-    fd.append('entry.1138659293', wallet);
-
-    await fetch(FORM_ACTION, { 
-      method: 'POST', 
-      body: fd,
-      mode: 'no-cors'
-    });
-
-// SUCCESS
-    if (tg) localStorage.setItem('userTelegram', tg.startsWith('@') ? tg : '@' + tg);
-
-    document.getElementById('predPanel').style.display = 'none';
+    if(tg) localStorage.setItem('userTelegram',tg.startsWith('@')?tg:'@'+tg);
+    document.getElementById('predPanel').style.display='none';
     document.getElementById('successPanel').classList.add('show');
-    document.getElementById('successTxLink').href = `https://polygonscan.com/tx/${txHash}`;
-    document.getElementById('successSub').textContent = `Track: ${PREDICTION_TRACK_CODE} · $${fmt(Number(price))} ${selectedDir.toUpperCase()}\nGood luck!`;
-
-    $btnArea.innerHTML = `<span class="lg-ok">✅ Successfully Submitted!</span>`;
-    
-    clearLog($formLog);
-    addLog($formLog, '<span class="lg-ok">✅ Prediction submitted successfully! Good luck.</span>');
+    document.getElementById('successTxLink').href=`https://polygonscan.com/tx/${txHash}`;
+    document.getElementById('successSub').textContent=`Track: ${PREDICTION_TRACK_CODE} · $${fmt(Number(price))} ${selectedDir.toUpperCase()}\nGood luck!`;
+    $btnArea.innerHTML=`<span class="lg-ok" style="font-family:var(--font-mono);font-size:0.8rem;">✅ Successfully Submitted!</span>`;
+    clearLog($formLog);addLog($formLog,'<span class="lg-ok">✅ Prediction submitted! Good luck.</span>');
     loadQuestData();
+  }catch(e){
+    console.error(e);addLog($formLog,`<span class="lg-err">❌ Submission failed. Please try again.</span>`);
+    if(btn){btn.disabled=false;btn.innerHTML=`<i class="fas fa-paper-plane"></i> Submit Prediction Now`;}
+  }finally{isSubmitting=false;}
+}
 
-  } catch (e) {
-    console.error(e);
-    addLog($formLog, `<span class="lg-err">❌ Submission failed. Please try again.</span>`);
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = `<i class="fas fa-paper-plane"></i> Submit Prediction Now`;
-    }
-  } finally {
-    isSubmitting = false;
+// ── VERIFY BUTTON — single clean listener ──
+document.getElementById('verifyManualBtn').addEventListener('click',async()=>{
+
+const walletField = document.getElementById('fldWallet');
+const telegramField = document.getElementById('fldTelegram');
+
+if (walletField.value.trim() !== '') {
+  walletField.disabled = true;
+}
+
+if (telegramField.value.trim() !== '') {
+  telegramField.disabled = true;
+}
+
+  const tg=(document.getElementById('fldTelegram').value||'').trim();
+  const wallet=(document.getElementById('fldWallet').value||'').trim();
+  if(!tg){clearLog($formLog);return addLog($formLog,'<span class="lg-err">❌ Enter your Telegram username first.</span>');}
+  if(!wallet||!wallet.startsWith('0x')){clearLog($formLog);return addLog($formLog,'<span class="lg-err">❌ Enter your Polygon wallet address first.</span>');}
+  const txHash=await verifyManualTransaction(wallet, tg);
+  if(txHash){
+    $btnArea.innerHTML=`<button class="btn btn-primary" id="finalManualSubmitBtn"><i class="fas fa-paper-plane"></i> Submit Prediction Now</button>`;
+    document.getElementById('finalManualSubmitBtn').addEventListener('click',submitManualPrediction);
   }
+});
+
+// ── COPY BUTTON ──
+function setupCopyButton(){
+  const copyBtn=document.getElementById('copyBtn');const addrEl=document.getElementById('receiverAddr');
+  if(!copyBtn) return;
+  copyBtn.addEventListener('click',async()=>{
+    const address=addrEl.textContent.trim();
+    try{
+      await navigator.clipboard.writeText(address);
+      const originalText=copyBtn.innerHTML;copyBtn.style.background='var(--green)';copyBtn.style.color='#061a11';copyBtn.innerHTML='✅ Copied!';
+      setTimeout(()=>{copyBtn.innerHTML=originalText;copyBtn.style.background='';copyBtn.style.color='';},2200);
+    }catch(err){copyBtn.innerHTML='❌ Failed';setTimeout(()=>{copyBtn.innerHTML='📋 Copy';},1500);}
+  });
 }
 
 // ── INIT ──
 window.addEventListener('load',async()=>{
-  renderBtnArea();
-  loadBTCData();
-  await loadQuestData();
-  loadIdentity();
-setupCopyButton();
-
-// Update these two functions
-function setConnected(label) {
-  $walletBar.classList.add('show');
-  $walletAddr.textContent = label;
-  document.getElementById('fldWallet').value = userAddress || '';
-  
-  const savedTg = localStorage.getItem('userTelegram') || '';
-  if (savedTg && !document.getElementById('fldTelegram').value)
-    document.getElementById('fldTelegram').value = savedTg;
-  
-  renderBtnArea();
-  clearLog($formLog);
-  addLog($formLog, `<span class="lg-ok">✅ Wallet connected — ${label}</span>`);
-  addLog($formLog, `<span class="lg-info">Fill in your prediction and hit Submit.</span>`);
-  
-    document.getElementById('mobileWalletAddr').textContent = label;
-}
-
-function setDisconnected(){
-  userAddress = null;
-  ethProvider = null;
-  ethSigner = null;
-  wcProvider = null;
-
-  $walletBar.classList.remove('show');
-  $walletAddr.textContent = '—';
-  document.getElementById('fldWallet').value = localStorage.getItem('userPolygon') || '';
-
-  renderBtnArea();
-  clearLog($formLog);
-  addLog($formLog, `<span class="lg-info">Wallet disconnected successfully.</span>`);
- 
-    document.getElementById('mobileWalletAddr').textContent = '—';
-
-    // event listener for the mobile disconnect button
-document.getElementById('mobileDiscBtn').addEventListener('click', async () => {
-  try { if (wcProvider?.disconnect) await wcProvider.disconnect(); } catch (_) {}
-  setDisconnected();
-});
-}
-
-// Replace the old verifyManualBtn listener with this updated version
-document.getElementById('verifyManualBtn').addEventListener('click', async () => {
-  const tg = (document.getElementById('fldTelegram').value || '').trim();
-  const wallet = (document.getElementById('fldWallet').value || '').trim();
-
-  if (!tg) {
-    clearLog($formLog);
-    return addLog($formLog, '<span class="lg-err">❌ Enter your Telegram username first.</span>');
-  }
-  if (!wallet || !wallet.startsWith('0x')) {
-    clearLog($formLog);
-    return addLog($formLog, '<span class="lg-err">❌ Enter your Polygon wallet address first.</span>');
-  }
-
-  const txHash = await verifyManualTransaction(wallet);
-  
-  if (txHash) {
-    // Store verified tx
-    window.verifiedManualTx = txHash;
-
-    addLog($formLog, `<span class="lg-ok">✅ Payment verified! You can now submit your prediction.</span>`);
-
-    // Show final submit button
-    $btnArea.innerHTML = `
-      <button class="btn btn-primary" id="finalManualSubmitBtn">
-        <i class="fas fa-paper-plane"></i> Submit Prediction Now
-      </button>
-    `;
-
-    document.getElementById('finalManualSubmitBtn').addEventListener('click', submitManualPrediction);
-  
-  }
-});
-
+  renderBtnArea();loadBTCData();await loadQuestData();loadIdentity();setupCopyButton();
   setInterval(loadBTCData,5*60*1000);
 });
 
-// back to top
-window.addEventListener('scroll',()=>{
-  document.getElementById('backToTop').classList.toggle('visible',window.scrollY>320);
-});
+window.addEventListener('scroll',()=>{document.getElementById('backToTop').classList.toggle('visible',window.scrollY>320);});
 
-// Hamburger Menu - Clean & Modern
-const hamburgerBtn = document.getElementById('hamburgerBtn');
-const mobileMenu = document.getElementById('mobileMenu');
-
-hamburgerBtn.addEventListener('click', () => {
+const hamburgerBtn=document.getElementById('hamburgerBtn');const mobileMenu=document.getElementById('mobileMenu');
+hamburgerBtn.addEventListener('click',()=>{
   mobileMenu.classList.toggle('show');
-  
-  const icon = hamburgerBtn.querySelector('i');
-  if (mobileMenu.classList.contains('show')) {
-    icon.classList.remove('fa-bars');
-    icon.classList.add('fa-times');
-  } else {
-    icon.classList.add('fa-bars');
-    icon.classList.remove('fa-times');
+  const icon=hamburgerBtn.querySelector('i');
+  if(mobileMenu.classList.contains('show')){icon.classList.remove('fa-bars');icon.classList.add('fa-times');}
+  else{icon.classList.add('fa-bars');icon.classList.remove('fa-times');}
+});
+document.addEventListener('click',(e)=>{
+  if(mobileMenu.classList.contains('show')&&!mobileMenu.contains(e.target)&&e.target!==hamburgerBtn&&!hamburgerBtn.contains(e.target)){
+    mobileMenu.classList.remove('show');const icon=hamburgerBtn.querySelector('i');icon.classList.add('fa-bars');icon.classList.remove('fa-times');
   }
 });
-
-// Close menu when tapping outside
-document.addEventListener('click', (e) => {
-  if (mobileMenu.classList.contains('show') && 
-      !mobileMenu.contains(e.target) && 
-      e.target !== hamburgerBtn && 
-      !hamburgerBtn.contains(e.target)) {
-    mobileMenu.classList.remove('show');
-    const icon = hamburgerBtn.querySelector('i');
-    icon.classList.add('fa-bars');
-    icon.classList.remove('fa-times');
-  }
-});
-
-// Copy Receiver Address with nice feedback
-function setupCopyButton() {
-  const copyBtn = document.getElementById('copyBtn');
-  const addrEl = document.getElementById('receiverAddr');
-  
-  if (!copyBtn) return;
-
-  copyBtn.addEventListener('click', async () => {
-    const address = addrEl.textContent.trim();
-    
-    try {
-      await navigator.clipboard.writeText(address);
-      
-      // Visual feedback
-      const originalText = copyBtn.innerHTML;
-      copyBtn.style.background = 'var(--green)';
-      copyBtn.style.color = '#061a11';
-      copyBtn.innerHTML = '✅ Copied!';
-      
-      setTimeout(() => {
-        copyBtn.innerHTML = originalText;
-        copyBtn.style.background = '';
-        copyBtn.style.color = '';
-      }, 2200);
-      
-    } catch (err) {
-      copyBtn.innerHTML = '❌ Failed';
-      setTimeout(() => {
-        copyBtn.innerHTML = '📋 Copy';
-      }, 1500);
-    }
-  });
-}
 </script>
 </body>
 </html>
