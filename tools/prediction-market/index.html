@@ -238,7 +238,6 @@ header{
 .btn-connect:hover:not(:disabled){box-shadow:0 6px 24px rgba(79,172,254,0.45);transform:translateY(-1px);}
 .btn-danger{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,109,0.25);}
 .btn-danger:hover:not(:disabled){background:rgba(255,77,109,0.2);}
-/* X share button */
 .btn-x{
   background:linear-gradient(135deg,#000,#1a1a2e);
   color:#fff;border:1px solid rgba(255,255,255,0.15);
@@ -529,32 +528,21 @@ header{
   header { justify-content: space-between; padding: 12px 16px; }
 }
 
-/* Mobile Wallet in Hamburger */
-#mobileWalletContainer {
-  display: none;
-}
+#mobileWalletContainer { display: none; }
+.mobile-menu.show #mobileWalletContainer { display: block; }
+.mobile-wallet-bar { display: none; }
+.mobile-menu.show .mobile-wallet-bar { display: block; }
 
-.mobile-menu.show #mobileWalletContainer {
-  display: block;
-}
-
-/* Show wallet bar only in mobile hamburger menu */
-.mobile-wallet-bar {
-  display: none;
-}
-
-.mobile-menu.show .mobile-wallet-bar {
-  display: block;
-}
-
-/* Make it look nice */
 @media(max-width: 768px) {
-  .mobile-wallet-bar .wallet-bar {
-    font-size: 0.75rem;
-  }
-  .mobile-wallet-bar .w-addr {
-    max-width: 140px;
-  }
+  .mobile-wallet-bar .wallet-bar { font-size: 0.75rem; }
+  .mobile-wallet-bar .w-addr { max-width: 140px; }
+}
+
+/* SECURITY: locked field style */
+.field-input[readonly]{
+  opacity:0.65;cursor:not-allowed;
+  border-color:rgba(0,229,160,0.3)!important;
+  background:rgba(0,229,160,0.04)!important;
 }
 </style>
 </head>
@@ -573,7 +561,6 @@ header{
       </div>
       <div class="sc-tag" id="sc-status">🟢 OPEN</div>
     </div>
-
     <div class="sc-main">
       <div class="sc-price-block">
         <div class="sc-price-label">BTC Price Now</div>
@@ -590,7 +577,6 @@ header{
         <div class="sc-dir-value" id="sc-dir-value">—</div>
       </div>
     </div>
-
     <div class="sc-stats">
       <div class="sc-stat">
         <div class="sc-stat-label">Market Phase</div>
@@ -609,12 +595,10 @@ header{
         <div class="sc-stat-val up" id="sc-prize">— VERSE</div>
       </div>
     </div>
-
     <div class="sc-reasoning" id="sc-reasoning-wrap" style="display:none;">
       <div class="sc-reasoning-label">Top Prediction Reasoning</div>
       <div class="sc-reasoning-text" id="sc-reasoning-text">"—"</div>
     </div>
-
     <div class="sc-footer">
       <div class="sc-footer-left">
         Join &amp; predict at <strong>t.me/SnappQuest/7496</strong><br>
@@ -677,7 +661,6 @@ header{
       <span>Prediction Market</span>
     </div>
   </div>
-
   <div class="hd-right">
     <div class="wallet-bar" id="walletBar">
       <div class="w-dot"></div>
@@ -689,8 +672,6 @@ header{
     <div class="hd-pill">⬡ Polygon</div>
     <a href="https://niti.com.ng/snappquest/join.html" class="hd-home"><i class="fas fa-arrow-left"></i> Quests</a>
   </div>
-
-  <!-- Hamburger -->
   <button class="hamburger" id="hamburgerBtn">
     <i class="fas fa-bars"></i>
   </button>
@@ -701,8 +682,6 @@ header{
   <a href="https://niti.com.ng/snappquest/join.html" class="mobile-link">
     <i class="fas fa-arrow-left"></i> Back to Quests
   </a>
-
-  <!-- Wallet Bar - Pure CSS Version -->
   <div class="mobile-wallet-bar">
     <div class="wallet-bar" style="width:100%; margin:8px 0; background:var(--green-dim); border:1px solid rgba(0,229,160,0.4);">
       <div style="display:flex; align-items:center; gap:8px; padding:8px 12px;">
@@ -714,9 +693,9 @@ header{
       </div>
     </div>
   </div>
-
   <div class="hd-pill" style="align-self:flex-start; margin:8px;">⬡ Polygon</div>
 </div>
+
 <!-- MAIN -->
 <div class="wrap">
 
@@ -830,23 +809,23 @@ header{
     </div>
   </div>
 
-<!-- SHARE SIGNAL -->
-<div class="sec-label">Share the Market Signal</div>
-<div class="share-signal-panel">
-  <div style="font-size:0.88rem;font-weight:700;margin-bottom:4px;">📣 Spread the Word</div>
-  <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);line-height:1.6;">
-    Download a card showing today's BTC signal and share it on X to invite others.
+  <!-- SHARE SIGNAL -->
+  <div class="sec-label">Share the Market Signal</div>
+  <div class="share-signal-panel">
+    <div style="font-size:0.88rem;font-weight:700;margin-bottom:4px;">📣 Spread the Word</div>
+    <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);line-height:1.6;">
+      Download a card showing today's BTC signal and share it on X to invite others.
+    </div>
+    <div class="share-btn-row">
+      <button class="btn btn-ghost" id="downloadCardBtn" style="flex:1;">
+        <i class="fas fa-download"></i> <span class="download-text">Download Signal</span>
+      </button>
+      <button class="btn btn-x" id="shareXBtn" style="flex:1;">
+        <i class="fa-brands fa-x-twitter"></i> Share Signal
+      </button>
+    </div>
+    <div id="shareStatusLog" style="font-family:var(--font-mono);font-size:0.66rem;color:var(--muted);margin-top:10px;min-height:16px;"></div>
   </div>
-  <div class="share-btn-row">
-    <button class="btn btn-ghost" id="downloadCardBtn" style="flex:1;">
-      <i class="fas fa-download"></i> <span class="download-text">Download Signal</span>
-    </button>
-    <button class="btn btn-x" id="shareXBtn" style="flex:1;">
-      <i class="fa-brands fa-x-twitter"></i> Share Signal
-    </button>
-  </div>
-  <div id="shareStatusLog" style="font-family:var(--font-mono);font-size:0.66rem;color:var(--muted);margin-top:10px;min-height:16px;"></div>
-</div>
 
   <!-- PREDICTION FORM -->
   <div class="sec-label">Submit Your Prediction</div>
@@ -883,44 +862,41 @@ header{
       <label class="field-label">Reasoning (optional — max 280 chars)</label>
       <input class="field-input" type="text" id="fldReason" placeholder="Why do you think this?" maxlength="280" autocomplete="off">
     </div>
-<!-- Smart Manual Payment Section -->
-<div style="margin-top:20px; padding:18px; background:var(--surface2); border:2px solid var(--border2); border-radius:16px;" id="manualSection">
-  <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
-    <div style="font-size:1.4rem;">💰</div>
-    <div>
-      <strong style="font-size:0.95rem; color:var(--green);">Alternative: Manual Payment</strong><br>
-      <span style="font-size:0.7rem; color:var(--muted);">No wallet connection needed</span>
+
+    <!-- Smart Manual Payment Section -->
+    <div style="margin-top:20px; padding:18px; background:var(--surface2); border:2px solid var(--border2); border-radius:16px;" id="manualSection">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <div style="font-size:1.4rem;">💰</div>
+        <div>
+          <strong style="font-size:0.95rem; color:var(--green);">Alternative: Manual Payment</strong><br>
+          <span style="font-size:0.7rem; color:var(--muted);">No wallet connection needed</span>
+        </div>
+      </div>
+      <div style="background:var(--surface); padding:14px; border-radius:12px; margin-bottom:14px; border:1px solid var(--border);">
+        <div style="font-size:0.72rem; color:var(--muted); margin-bottom:8px;">
+          Send <strong style="color:var(--text);">exactly 1,000 fxVERSE</strong> to:
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; background:#00000055; padding:10px 12px; border-radius:8px;">
+          <code id="receiverAddr" style="flex:1; font-size:0.78rem; word-break:break-all; font-family:var(--font-mono); color:var(--green);">
+            0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB
+          </code>
+          <button id="copyBtn" 
+                  style="padding:8px 14px; background:var(--green-dim); color:var(--green); border:1px solid rgba(0,229,160,0.4); border-radius:6px; font-size:0.78rem; cursor:pointer; flex-shrink:0; transition:all 0.2s;">
+            📋 Copy
+          </button>
+        </div>
+      </div>
+      <button class="btn btn-ghost" id="verifyManualBtn" style="width:100%; padding:14px;">
+        <i class="fas fa-search"></i> Auto-Check Payments
+      </button>
+      <div id="manualLog" class="status-log" style="margin-top:12px; display:none;"></div>
     </div>
-  </div>
-  
-  <div style="background:var(--surface); padding:14px; border-radius:12px; margin-bottom:14px; border:1px solid var(--border);">
-    <div style="font-size:0.72rem; color:var(--muted); margin-bottom:8px;">
-      Send <strong style="color:var(--text);">exactly 1,000 fxVERSE</strong> to:
-    </div>
-    
-    <div style="display:flex; align-items:center; gap:8px; background:#00000055; padding:10px 12px; border-radius:8px;">
-      <code id="receiverAddr" style="flex:1; font-size:0.78rem; word-break:break-all; font-family:var(--font-mono); color:var(--green);">
-        0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB
-      </code>
-      <button id="copyBtn" 
-              style="padding:8px 14px; background:var(--green-dim); color:var(--green); border:1px solid rgba(0,229,160,0.4); border-radius:6px; font-size:0.78rem; cursor:pointer; flex-shrink:0; transition:all 0.2s;">
-        📋 Copy
+
+    <div style="margin-top:16px;" id="btnArea">
+      <button class="btn btn-connect" id="connectWalletBtn">
+        <i class="fas fa-wallet"></i> Connect Wallet (Recommended)
       </button>
     </div>
-  </div>
-
-  <button class="btn btn-ghost" id="verifyManualBtn" style="width:100%; padding:14px;">
-    <i class="fas fa-search"></i> Auto-Check Payments
-  </button>
-  
-  <div id="manualLog" class="status-log" style="margin-top:12px; display:none;"></div>
-</div>
-
-<div style="margin-top:16px;" id="btnArea">
-  <button class="btn btn-connect" id="connectWalletBtn">
-    <i class="fas fa-wallet"></i> Connect Wallet (Recommended)
-  </button>
-</div>
     <div class="status-log" id="formLog">Waiting for wallet connection…</div>
   </div>
 
@@ -944,7 +920,6 @@ header{
     <div class="success-title">Prediction Submitted!</div>
     <div class="success-sub" id="successSub">Your entry has been recorded.<br>Results announced after the deadline. Good luck!</div>
     <a id="successTxLink" href="#" target="_blank" style="display:inline-block;margin-top:14px;font-family:var(--font-mono);font-size:0.68rem;color:var(--green);">View TX on Polygonscan ↗</a>
-    <!-- Share after success -->
     <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border);">
       <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);margin-bottom:12px;">🎯 You're in! Now tell the world:</div>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
@@ -958,56 +933,16 @@ header{
     </div>
   </div>
 
-    <!-- FOOTER -->
-<div style="
-  margin-top: 28px;
-  padding: 16px 20px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  position: relative;
-  overflow: hidden;
-">
-  <!-- shimmer line at top -->
-  <div style="
-    position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(0,229,160,0.4), transparent);
-    background-size: 200% 100%;
-    animation: shimmerBar 2.5s linear infinite;
-  "></div>
-
-  <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;">
-    Powered by
-  </span>
-
-  
-    <a href="https://niti.com.ng"
-    target="_blank"
-    rel="noopener noreferrer"
-    style="
-      font-family: var(--font-display);
-      font-size: 0.82rem;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      background: linear-gradient(90deg, #00e5a0, #4facfe, #00e5a0);
-      background-size: 200% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: shimmerBar 3s linear infinite;
-      text-decoration: none;
-      transition: opacity 0.2s;
-    "
-    onmouseover="this.style.opacity='0.75'"
-    onmouseout="this.style.opacity='1'"
-  >
-    Neroitech Inventions
-  </a>
-</div>
+  <!-- FOOTER -->
+  <div style="margin-top:28px;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,229,160,0.4),transparent);background-size:200% 100%;animation:shimmerBar 2.5s linear infinite;"></div>
+    <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;">Powered by</span>
+    <a href="https://niti.com.ng" target="_blank" rel="noopener noreferrer"
+       style="font-family:var(--font-display);font-size:0.82rem;font-weight:800;letter-spacing:-0.3px;background:linear-gradient(90deg,#00e5a0,#4facfe,#00e5a0);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmerBar 3s linear infinite;text-decoration:none;transition:opacity 0.2s;"
+       onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
+      Neroitech Inventions
+    </a>
+  </div>
 
 </div><!-- /wrap -->
 
@@ -1057,6 +992,7 @@ let questData=null,selectedDir=null,btcChart=null;
 let btcPriceCurrent=0,btcChangePct=0,btcPriceTomorrow=0,btcPhase='';
 let currentEntries=[],currentReward='',currentEntryCount=0;
 let PREDICTION_TRACK_CODE='';
+let isSubmitting=false;
 
 const isMobile=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
 const pageHost=window.location.host+window.location.pathname;
@@ -1089,10 +1025,25 @@ function sp(){return`<span class="spinner"></span>`;}
 function shortAddr(a){return a.slice(0,6)+'…'+a.slice(-4);}
 function fmt(n){return Number(n).toLocaleString('en-US');}
 
+// ── SECURITY HELPER: lock/unlock wallet field ──
+function lockWalletField(address){
+  const f=document.getElementById('fldWallet');
+  f.value=address;
+  f.readOnly=true;
+  f.title='🔒 Locked to verified address';
+}
+function unlockWalletField(){
+  const f=document.getElementById('fldWallet');
+  f.readOnly=false;
+  f.title='';
+}
+
+// ── PATCH 1: setConnected — locks wallet field to signer address ──
 function setConnected(label){
   $walletBar.classList.add('show');
   $walletAddr.textContent=label;
-  document.getElementById('fldWallet').value=userAddress||'';
+  // SECURITY: lock wallet field to the actual connected signer — not editable
+  lockWalletField(userAddress);
   const savedTg=localStorage.getItem('userTelegram')||'';
   if(savedTg&&!document.getElementById('fldTelegram').value)
     document.getElementById('fldTelegram').value=savedTg;
@@ -1100,79 +1051,58 @@ function setConnected(label){
   clearLog($formLog);
   addLog($formLog,`<span class="lg-ok">✅ Wallet connected — ${label}</span>`);
   addLog($formLog,`<span class="lg-info">Fill in your prediction and hit Submit.</span>`);
+  const mobileAddr=document.getElementById('mobileWalletAddr');
+  if(mobileAddr) mobileAddr.textContent=label;
 }
+
+// ── PATCH 1: setDisconnected — unlocks wallet field ──
 function setDisconnected(){
   userAddress=null;ethProvider=null;ethSigner=null;wcProvider=null;
   $walletBar.classList.remove('show');
   $walletAddr.textContent='—';
+  // SECURITY: unlock wallet field on disconnect
+  unlockWalletField();
   document.getElementById('fldWallet').value=localStorage.getItem('userPolygon')||'';
   renderBtnArea();
   clearLog($formLog);
-  addLog($formLog,`<span class="lg-info">Connect wallet to pay and submit your prediction.</span>`);
+  addLog($formLog,`<span class="lg-info">Wallet disconnected successfully.</span>`);
+  const mobileAddr=document.getElementById('mobileWalletAddr');
+  if(mobileAddr) mobileAddr.textContent='—';
 }
+
 function renderBtnArea(){
   if(userAddress){
-    // Wallet connected → Show normal submit button
     $btnArea.innerHTML=`<button class="btn btn-primary" id="submitPredBtn"><i class="fas fa-paper-plane"></i> Submit Prediction (1,000 VERSE)</button>`;
-    document.getElementById('submitPredBtn').addEventListener('click', openConfirm);
+    document.getElementById('submitPredBtn').addEventListener('click',openConfirm);
   } else {
-    // No wallet connected → Only show Connect Wallet button
-    $btnArea.innerHTML = `
+    $btnArea.innerHTML=`
       <button class="btn btn-connect" id="connectWalletBtn">
         <i class="fas fa-wallet"></i> Connect Wallet (Recommended)
       </button>
-    `;
-    $btnArea.innerHTML = `
-  <button class="btn btn-connect" id="connectWalletBtn">
-    <i class="fas fa-wallet"></i> Connect Wallet (Recommended)
-  </button>
-  <div style="text-align:center; margin-top:12px; font-size:0.68rem; color:var(--muted);">
-    Or use <strong style="color:var(--green);">Manual Payment</strong> above ↑
-  </div>
-`;
-    
-    // Clean listener to avoid duplicates
-    const connectBtn = document.getElementById('connectWalletBtn');
-    connectBtn.replaceWith(connectBtn.cloneNode(true));
-    
-    document.getElementById('connectWalletBtn').addEventListener('click', openWalletModal);
-    // Update log message for manual payment
-    if (document.getElementById('manualSection').style.display !== 'none') {
-      clearLog($formLog);
-      addLog($formLog, `<span class="lg-info">Enter your prediction details and make the manual payment.</span>`);
-    } else {
-      clearLog($formLog);
-      addLog($formLog, `<span class="lg-info">Connect wallet to pay and submit your prediction.</span>`);
-    }
+      <div style="text-align:center;margin-top:12px;font-size:0.68rem;color:var(--muted);">
+        Or use <strong style="color:var(--green);">Manual Payment</strong> above ↑
+      </div>`;
+    document.getElementById('connectWalletBtn').addEventListener('click',openWalletModal);
+    clearLog($formLog);
+    addLog($formLog,`<span class="lg-info">Connect wallet to pay and submit your prediction.</span>`);
   }
 }
-function loadIdentity() {
-  const tg = localStorage.getItem('userTelegram') || '';
-  const poly = localStorage.getItem('userPolygon') || '';
-  console.log('[Identity] userTelegram:', tg, 'userPolygon:', poly);
-  const $tg = document.getElementById('fldTelegram');
-  const $wall = document.getElementById('fldWallet');
-  const $note = document.getElementById('identityNotice');
-  
-  if ($tg && tg) {
-    $tg.value = tg;
-    // Clear the "Enter Telegram username first" message if present
-    const $formLog = document.getElementById('formLog');
-    if ($formLog.innerHTML.includes('Enter Telegram username first')) {
-      clearLog($formLog);
-      // Prompt the user to click the "Auto-Check Payment" button again (in green)
-      addLog($formLog, '<span class="lg-ok">✅ Telegram username loaded. Please click the "Auto-Check Payment" button again.</span>');
-    }
-  }
-  
-  if ($wall && poly) $wall.value = poly;
-  
-  if ($note) {
-    if (tg || poly) {
-      $note.style.display = 'block';
-      $note.innerHTML = `✅ Identity loaded — ${tg ? `<strong>${tg}</strong>` : ''}${tg && poly ? ' · ' : ''}${poly ? `<strong>${poly.slice(0, 6)}…${poly.slice(-4)}</strong>` : ''}`;
+
+function loadIdentity(){
+  const tg=localStorage.getItem('userTelegram')||'';
+  const poly=localStorage.getItem('userPolygon')||'';
+  const $tg=document.getElementById('fldTelegram');
+  const $wall=document.getElementById('fldWallet');
+  const $note=document.getElementById('identityNotice');
+  if($tg&&tg) $tg.value=tg;
+  // Only fill wallet if not already locked by a connected wallet
+  if($wall&&poly&&!$wall.readOnly) $wall.value=poly;
+  if($note){
+    if(tg||poly){
+      $note.style.display='block';
+      $note.innerHTML=`✅ Identity loaded — ${tg?`<strong>${tg}</strong>`:''}${tg&&poly?' · ':''}${poly?`<strong>${poly.slice(0,6)}…${poly.slice(-4)}</strong>`:''}`;
     } else {
-      $note.style.display = 'none';
+      $note.style.display='none';
     }
   }
 }
@@ -1223,27 +1153,22 @@ async function fetchActiveTrackCode(){
 }
 
 // ── RENDER QUEST ──
-function renderQuestMeta(quest, entries, quantity){
-  const status = parseInt(quest.Status) || 0;
-  const deadline = quest.Deadline || '0';
-  const expMs = deadline && deadline !== '0' ? new Date(deadline).getTime() : 0;
-  const isExpired = expMs > 0 && Date.now() > expMs;
-  
-  // Expired = treated as closed
-  const isActive = (status === 0 || status === 2) && !isExpired;
-  
-  const reward = quest.Reward || '—';
-  const sponsor = quest.Sponsor || 'SnappQuest';
-  const trackCode = quest['Track Code'] || PREDICTION_TRACK_CODE;
-  currentReward = reward;
-
-  document.getElementById('questStatus').textContent = isActive ? '🟢 OPEN' : '🔴 CLOSED';
-  document.getElementById('questStatus').className = 'badge ' + (isActive ? 'badge-green' : 'badge-red');
-const formattedReward = Number(reward || 0).toLocaleString('en-US');
-document.getElementById('rewardBadge').textContent=`🏆 ${formattedReward} Prize`;
+function renderQuestMeta(quest,entries,quantity){
+  const status=parseInt(quest.Status)||0;
+  const deadline=quest.Deadline||'0';
+  const expMs=deadline&&deadline!=='0'?new Date(deadline).getTime():0;
+  const isExpired=expMs>0&&Date.now()>expMs;
+  const isActive=(status===0||status===2)&&!isExpired;
+  const reward=quest.Reward||'—';
+  const sponsor=quest.Sponsor||'SnappQuest';
+  const trackCode=quest['Track Code']||PREDICTION_TRACK_CODE;
+  currentReward=reward;
+  document.getElementById('questStatus').textContent=isActive?'🟢 OPEN':'🔴 CLOSED';
+  document.getElementById('questStatus').className='badge '+(isActive?'badge-green':'badge-red');
+  const formattedReward=Number(reward||0).toLocaleString('en-US');
+  document.getElementById('rewardBadge').textContent=`🏆 ${formattedReward} Prize`;
   document.getElementById('sponsorName').textContent=sponsor;
   document.getElementById('trackCodeDisplay').textContent=trackCode;
-
   const relevant=entries.filter(r=>(r['Track Code']||'').trim().toUpperCase()===PREDICTION_TRACK_CODE.toUpperCase());
   currentEntries=relevant;
   currentEntryCount=relevant.length;
@@ -1251,13 +1176,11 @@ document.getElementById('rewardBadge').textContent=`🏆 ${formattedReward} Priz
   const hasQuantity=quantity!==null&&quantity>0;
   const remaining=hasQuantity?quantity-submittedCount:null;
   const isFull=hasQuantity&&remaining<=0;
-
   if(hasQuantity){
     document.getElementById('entriesCount').textContent=isFull?`${submittedCount}/${quantity} · FULL`:`${submittedCount}/${quantity} · ${remaining} slot${remaining===1?'':'s'} left`;
   } else {
     document.getElementById('entriesCount').textContent=`${submittedCount} entries`;
   }
-
   const shouldLock=!isActive||isFull;
   if(!isActive){
     document.getElementById('inactiveBanner').innerHTML=`<i class="fas fa-lock" style="font-size:24px;margin-bottom:8px;display:block;"></i>This prediction market is currently <strong>closed</strong>. Check back soon.`;
@@ -1278,9 +1201,9 @@ document.getElementById('rewardBadge').textContent=`🏆 ${formattedReward} Priz
     document.querySelector('.hero-badges').appendChild(sb);
   }
   if(deadline&&deadline!=='0'){
-    const expMs=new Date(deadline).getTime();
+    const expMsT=new Date(deadline).getTime();
     function tick(){
-      const diff=expMs-Date.now();
+      const diff=expMsT-Date.now();
       const cb=document.getElementById('countdownBadge');
       if(diff<=0){cb.textContent='⏱ Expired';cb.className='countdown-badge';return;}
       const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
@@ -1288,9 +1211,8 @@ document.getElementById('rewardBadge').textContent=`🏆 ${formattedReward} Priz
     }
     tick();setInterval(tick,1000);
   } else {document.getElementById('countdownBadge').textContent='⏱ No deadline set';}
-
   renderEntriesTable(relevant);
-  updateShareCard(); // update share card after quest data loads
+  updateShareCard();
 }
 
 function renderEntriesTable(entries){
@@ -1330,23 +1252,19 @@ async function loadBTCData(){
     const changePct=((last-prev)/prev)*100;
     const pred=Math.round(last*(1+changePct/100));
     btcPriceCurrent=last;btcChangePct=changePct;btcPriceTomorrow=pred;
-
     setIntelVal('btcPrice','$'+fmt(Math.round(last)),'up');
     document.getElementById('btcPriceSub').textContent='Live from CoinGecko';
     const chEl=document.getElementById('btcChange');
     chEl.textContent=(changePct>=0?'+':'')+changePct.toFixed(2)+'%';
     chEl.className='intel-val '+(changePct>=0?'up':'dn');
     setIntelVal('btcPred','$'+fmt(pred),'neu');
-
     const daysSince=Math.floor((Date.now()-new Date('2024-04-20'))/86400000);
     const phase=daysSince>550?'BEAR':'BULL';
     btcPhase=phase;
     setIntelVal('marketPhase',phase+' MARKET',phase==='BULL'?'up':'dn');
     document.getElementById('phaseSub').textContent=daysSince+' days since halving';
-
     if(!document.getElementById('fldPrice').value)
       document.getElementById('fldPrice').placeholder=`e.g. ${fmt(pred)} (our AI est.)`;
-
     drawBTCChart(prices);
     updateShareCard();
   }catch(e){
@@ -1370,9 +1288,7 @@ function drawBTCChart(prices){
   });
 }
 
-// ── UPDATE SHARE CARD DATA ──
 function updateShareCard(){
-  // Price & change
   if(btcPriceCurrent>0){
     const sc_price=document.getElementById('sc-price');
     sc_price.textContent='$'+fmt(Math.round(btcPriceCurrent));
@@ -1386,8 +1302,6 @@ function updateShareCard(){
     document.getElementById('sc-pred').textContent='$'+fmt(btcPriceTomorrow);
     document.getElementById('sc-phase').textContent=btcPhase||'—';
   }
-
-  // Tally community direction from entries
   if(currentEntries.length>0){
     let ups=0,dns=0,lastReason='';
     currentEntries.forEach(r=>{
@@ -1406,7 +1320,6 @@ function updateShareCard(){
     dirBox.className='sc-direction '+(majorDir==='DOWN'?'dn':'');
     document.getElementById('sc-dir-emoji').textContent=majorDir==='UP'?'📈':'📉';
     document.getElementById('sc-dir-value').textContent=`${majorDir} ${majorPct}%`;
-
     if(lastReason&&lastReason.length>10){
       document.getElementById('sc-reasoning-wrap').style.display='block';
       document.getElementById('sc-reasoning-text').textContent=`"${lastReason.slice(0,180)}${lastReason.length>180?'…':''}"`;
@@ -1415,12 +1328,10 @@ function updateShareCard(){
     document.getElementById('sc-dir-emoji').textContent='⏳';
     document.getElementById('sc-dir-value').textContent='Awaiting predictions';
   }
-
   document.getElementById('sc-entries').textContent=currentEntryCount||'—';
-// Strip any existing suffix then re-append VERSE clearly
-const rawReward = (currentReward || '').replace(/VERSE/gi, '').trim();
-const formattedPrize = rawReward ? Number(rawReward).toLocaleString('en-US') : '—';
-document.getElementById('sc-prize').textContent = `${formattedPrize} VERSE`;
+  const rawReward=(currentReward||'').replace(/VERSE/gi,'').trim();
+  const formattedPrize=rawReward?Number(rawReward).toLocaleString('en-US'):'—';
+  document.getElementById('sc-prize').textContent=`${formattedPrize} VERSE`;
 }
 
 // ── SHARE FUNCTIONS ──
@@ -1430,14 +1341,8 @@ async function downloadCard(){
   try{
     updateShareCard();
     const card=document.getElementById('shareCard');
-    await new Promise(r=>setTimeout(r,300)); // let fonts settle
-    const canvas=await html2canvas(card,{
-      scale:2,
-      backgroundColor:'#060910',
-      useCORS:true,
-      allowTaint:false,
-      logging:false,
-    });
+    await new Promise(r=>setTimeout(r,300));
+    const canvas=await html2canvas(card,{scale:2,backgroundColor:'#060910',useCORS:true,allowTaint:false,logging:false});
     const link=document.createElement('a');
     link.download=`SnappQuest-BTC-Signal-${new Date().toISOString().slice(0,10)}.png`;
     link.href=canvas.toDataURL('image/png');
@@ -1456,7 +1361,6 @@ function shareOnX(){
   const majority=upCount>=dnCount?'📈 UP':'📉 DOWN';
   const priceStr=btcPriceCurrent>0?`$${fmt(Math.round(btcPriceCurrent))}`:'—';
   const predStr=btcPriceTomorrow>0?`$${fmt(btcPriceTomorrow)}`:'—';
-
   const text=encodeURIComponent(
 `🔮 SnappQuest BTC Prediction Market is LIVE!
 
@@ -1477,24 +1381,20 @@ ${PAGE_URL}
   window.open(`https://twitter.com/intent/tweet?text=${text}`,'_blank');
 }
 
-// expose globally for inline onclick
 window.downloadCard=downloadCard;
 window.shareOnX=shareOnX;
 
 // ── CONFIRM MODAL ──
 function openConfirm(){
   const tg=(document.getElementById('fldTelegram').value||'').trim();
-  const wallet=(document.getElementById('fldWallet').value||userAddress||'').trim();
+  // SECURITY: always use userAddress, not the field value
+  const wallet=userAddress||'';
   const price=(document.getElementById('fldPrice').value||'').trim();
   const reason=(document.getElementById('fldReason').value||'').trim();
-  if(!tg){  // Clear previous logs
-  clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Enter your Telegram username.</span>');return;}
-  if(!price||isNaN(price)||Number(price)<1){  // Clear previous logs
-  clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Enter a valid BTC price prediction.</span>');return;}
-  if(!selectedDir){  // Clear previous logs
-  clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Select UP or DOWN direction.</span>');return;}
-  if(!userAddress){  // Clear previous logs
-  clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Connect your wallet first.</span>');return;}
+  if(!tg){clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Enter your Telegram username.</span>');return;}
+  if(!price||isNaN(price)||Number(price)<1){clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Enter a valid BTC price prediction.</span>');return;}
+  if(!selectedDir){clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Select UP or DOWN direction.</span>');return;}
+  if(!userAddress){clearLog($formLog);addLog($formLog,'<span class="lg-err">❌ Connect your wallet first.</span>');return;}
   document.getElementById('confirmRows').innerHTML=`
     <div class="confirm-row"><span>Telegram</span><span>${tg}</span></div>
     <div class="confirm-row"><span>Wallet</span><span>${shortAddr(wallet)}</span></div>
@@ -1509,11 +1409,12 @@ function openConfirm(){
 document.getElementById('cancelConfirmBtn').addEventListener('click',()=>$confirmWrap.classList.remove('open'));
 document.getElementById('submitConfirmBtn').addEventListener('click',submitPrediction);
 
-// ── SUBMIT ──
+// ── PATCH 2: submitPrediction — always uses userAddress, never fldWallet ──
 async function submitPrediction(){
   if(!userAddress||!ethSigner){addLog($formLog,'<span class="lg-err">❌ Connect wallet first.</span>');$confirmWrap.classList.remove('open');return;}
   const tg=(document.getElementById('fldTelegram').value||'').trim();
-  const wallet=(document.getElementById('fldWallet').value||userAddress).trim();
+  // SECURITY: always use the verified signer address — NEVER read from fldWallet input
+  const wallet=userAddress;
   const price=(document.getElementById('fldPrice').value||'').trim();
   const reason=(document.getElementById('fldReason').value||'').trim();
   const proof=`${selectedDir.toUpperCase()}|${price}|${reason}`;
@@ -1550,7 +1451,7 @@ async function submitPrediction(){
     fd.append('entry.1526178092',proof);
     fd.append('entry.884208731',tx.hash);
     fd.append('entry.256576255',tg);
-    fd.append('entry.1138659293',wallet);
+    fd.append('entry.1138659293',wallet); // SECURITY: always userAddress
     try{await fetch(FORM_ACTION,{method:'POST',body:fd});}catch(_){}
     if(tg)localStorage.setItem('userTelegram',tg.startsWith('@')?tg:'@'+tg);
     addLog($confirmLog,'<span class="lg-ok">🎉 Submitted!</span>');
@@ -1597,7 +1498,7 @@ async function connectInjected(eth){
     if(net.chainId!==POLYGON_CHAIN_ID){addLog($formLog,'<span class="lg-err">❌ Switch to Polygon.</span>');return;}
     userAddress=await ethSigner.getAddress();
     setConnected(shortAddr(userAddress)+' · Polygon');
-    eth.on('accountsChanged',a=>{if(!a.length)setDisconnected();else{userAddress=a[0];$walletAddr.textContent=shortAddr(a[0])+' · Polygon';}});
+    eth.on('accountsChanged',a=>{if(!a.length)setDisconnected();else{userAddress=a[0];lockWalletField(a[0]);$walletAddr.textContent=shortAddr(a[0])+' · Polygon';}});
     eth.on('chainChanged',()=>location.reload());
   }catch(e){addLog($formLog,`<span class="lg-err">❌ ${e.code===4001?'Rejected.':(e.message||'Failed.')}</span>`);}
 }
@@ -1612,7 +1513,7 @@ async function connectWC(){
     wcProvider.on('display_uri',async uri=>{addLog($formLog,`<span class="lg-warn">${sp()}Opening picker…</span>`);await web3modal.openModal({uri,standaloneChains:[`eip155:${POLYGON_CHAIN_ID}`]});});
     wcProvider.on('connect',()=>web3modal.closeModal());
     wcProvider.on('disconnect',()=>{web3modal.closeModal();setDisconnected();});
-    wcProvider.on('accountsChanged',a=>{if(!a.length)setDisconnected();else{userAddress=a[0];$walletAddr.textContent=shortAddr(a[0])+' · WC';}});
+    wcProvider.on('accountsChanged',a=>{if(!a.length)setDisconnected();else{userAddress=a[0];lockWalletField(a[0]);$walletAddr.textContent=shortAddr(a[0])+' · WC';}});
     addLog($formLog,`<span class="lg-warn">${sp()}Select wallet…</span>`);
     await wcProvider.connect({chains:[POLYGON_CHAIN_ID]});
     ethProvider=new ethers.providers.Web3Provider(wcProvider,'any');
@@ -1647,6 +1548,10 @@ document.getElementById('cbBtn').addEventListener('click',()=>{
   else window.open('https://www.coinbase.com/wallet/downloads','_blank');
 });
 document.getElementById('discBtn').addEventListener('click',async()=>{
+  try{if(wcProvider?.disconnect)await wcProvider.disconnect();}catch(_){}
+  setDisconnected();
+});
+document.getElementById('mobileDiscBtn').addEventListener('click',async()=>{
   try{if(wcProvider?.disconnect)await wcProvider.disconnect();}catch(_){}
   setDisconnected();
 });
@@ -1688,227 +1593,155 @@ window.switchTab=function(tab){
   document.getElementById('content'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display='';
 };
 
-async function verifyManualTransaction(userWallet) {
-  const logEl = document.getElementById('manualLog');
-  logEl.style.display = 'block';
+// ── PATCH 3: verifyManualTransaction — locks wallet field to on-chain sender ──
+async function verifyManualTransaction(userWalletInput){
+  const logEl=document.getElementById('manualLog');
+  logEl.style.display='block';
   clearLog(logEl);
-  
-  addLog(logEl, `<span class="lg-warn">${sp()}Scanning recent payments (last 45 min)...</span>`);
-
-  const API_KEY = 'XN9WICY1V7C5A3VBRRR2NTRF7KZ4TCN4Z4';
-  const RECEIVER = '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
-  const TOKEN = '0xc708D6F2153933DAA50B2D0758955Be0A93A8FEc';
-
-  try {
-    const url = `https://api.etherscan.io/v2/api?chainid=137&module=account&action=tokentx&address=${RECEIVER}&contractaddress=${TOKEN}&sort=desc&apikey=${API_KEY}`;
-
-    const res = await fetch(url);
-    const data = await res.json();
-
-    if (data.status === '0' || !data.result) {
-      addLog(logEl, `<span class="lg-err">❌ No recent transfers found.</span>`);
-      addLog(logEl, `<span class="lg-info">Wait ~60 seconds after payment then try again.</span>`);
+  addLog(logEl,`<span class="lg-warn">${sp()}Scanning recent payments (last 45 min)…</span>`);
+  const POLY_API_KEY='XN9WICY1V7C5A3VBRRR2NTRF7KZ4TCN4Z4';
+  const RECEIVER='0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
+  const TOKEN='0xc708D6F2153933DAA50B2D0758955Be0A93A8FEc';
+  try{
+    const url=`https://api.etherscan.io/v2/api?chainid=137&module=account&action=tokentx&address=${RECEIVER}&contractaddress=${TOKEN}&sort=desc&apikey=${POLY_API_KEY}`;
+    const res=await fetch(url);
+    const data=await res.json();
+    if(data.status==='0'||!data.result){
+      addLog(logEl,`<span class="lg-err">❌ No recent transfers found.</span>`);
+      addLog(logEl,`<span class="lg-info">Wait ~60 seconds after payment then try again.</span>`);
       return false;
     }
-
-    const now = Date.now();
-    const fortyFiveMinAgo = now - (45 * 60 * 1000);
-
-    for (const tx of data.result.slice(0, 50)) {
-      const txTime = parseInt(tx.timeStamp) * 1000;
-      if (txTime < fortyFiveMinAgo) continue;
-
-      const amount = parseFloat(ethers.utils.formatUnits(tx.value, tx.tokenDecimal || 18));
-      const fromAddr = tx.from.toLowerCase();
-
-      if (Math.abs(amount - 1000) < 3 && fromAddr === userWallet.toLowerCase()) {
-        const minutesAgo = Math.round((now - txTime) / 60000);
-        addLog(logEl, `<span class="lg-ok">✅ Found 1,000 VERSE payment (${minutesAgo} min ago)</span>`);
-        addLog(logEl, `<span class="lg-info">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash.slice(0, 18)}...</a></span>`);
+    const now=Date.now();
+    const fortyFiveMin=now-45*60*1000;
+    for(const tx of data.result.slice(0,50)){
+      const txTime=parseInt(tx.timeStamp)*1000;
+      if(txTime<fortyFiveMin)continue;
+      const amount=parseFloat(ethers.utils.formatUnits(tx.value,tx.tokenDecimal||18));
+      // SECURITY: pull sender from chain — this is the ground truth
+      const onChainSender=tx.from.toLowerCase();
+      if(Math.abs(amount-1000)<3&&onChainSender===userWalletInput.toLowerCase()){
+        const minutesAgo=Math.round((now-txTime)/60000);
+        addLog(logEl,`<span class="lg-ok">✅ Found 1,000 VERSE payment (${minutesAgo} min ago)</span>`);
+        addLog(logEl,`<span class="lg-info">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash.slice(0,18)}…</a></span>`);
+        // SECURITY: lock wallet field to the verified on-chain sender address
+        lockWalletField(tx.from);
+        // SECURITY: store session with expiry + wallet binding — NOT window.verifiedManualTx
+        window.verifiedManualSession={
+          txHash:tx.hash,
+          wallet:onChainSender,       // on-chain address, lowercase
+          expiresAt:Date.now()+10*60000, // 10-minute window
+        };
         clearLog($formLog);
-        addLog($formLog, `<span class="lg-ok">✅ Payment verified! Fill in your prediction details and click "Submit Prediction Now".</span>`);
+        addLog($formLog,`<span class="lg-ok">✅ Payment verified! Wallet locked to <strong>${tx.from.slice(0,8)}…${tx.from.slice(-5)}</strong></span>`);
+        addLog($formLog,`<span class="lg-info">Complete your prediction and submit.</span>`);
         return tx.hash;
       }
     }
-
-    addLog(logEl, `<span class="lg-err">❌ No matching payment found in the last 45 minutes.</span>`);
-    addLog(logEl, `<span class="lg-info">Make sure you sent exactly 1,000 fxVERSE and wait ~60 seconds after sending.</span>`);
-
-  } catch (e) {
+    addLog(logEl,`<span class="lg-err">❌ No matching payment from <strong>${userWalletInput.slice(0,10)}…</strong> in the last 45 minutes.</span>`);
+    addLog(logEl,`<span class="lg-info">Make sure you sent exactly 1,000 fxVERSE from this wallet and wait ~60 seconds.</span>`);
+  }catch(e){
     console.error(e);
-    addLog(logEl, `<span class="lg-err">❌ Network error. Please try again.</span>`);
+    addLog(logEl,`<span class="lg-err">❌ Network error. Please try again.</span>`);
   }
   return false;
 }
 
-// ONE-TIME CLEAN LISTENER (No duplicates)
-if (!window.manualVerifyListenerAdded) {
-  window.manualVerifyListenerAdded = true;   // ← Protection flag
-
-  const verifyBtn = document.getElementById('verifyManualBtn');
-  if (verifyBtn) {
-    const cleanBtn = verifyBtn.cloneNode(true);
-    verifyBtn.parentNode.replaceChild(cleanBtn, verifyBtn);
-
-    cleanBtn.addEventListener('click', async () => {
-      const tg = (document.getElementById('fldTelegram').value || '').trim();
-      const wallet = (document.getElementById('fldWallet').value || '').trim();
-
-      if (!tg) return addLog($formLog, '<span class="lg-err">❌ Enter Telegram username first.</span>');
-      if (!wallet || !wallet.startsWith('0x')) return addLog($formLog, '<span class="lg-err">❌ Enter Polygon wallet first.</span>');
-
-      await verifyManualTransaction(wallet);
-    });
+// ── PATCH 3: submitManualPrediction — uses session wallet, never fldWallet ──
+async function submitManualPrediction(){
+  if(isSubmitting)return;
+  // SECURITY: validate session exists, not expired, wallet hasn't been tampered
+  const session=window.verifiedManualSession;
+  if(!session){
+    addLog($formLog,'<span class="lg-err">❌ No verified payment session. Please verify your payment first.</span>');
+    return;
+  }
+  if(Date.now()>session.expiresAt){
+    window.verifiedManualSession=null;
+    // Unlock field so they can re-verify
+    unlockWalletField();
+    addLog($formLog,'<span class="lg-err">❌ Verification expired (10 min limit). Please verify your payment again.</span>');
+    return;
+  }
+  const tg=(document.getElementById('fldTelegram').value||'').trim();
+  const price=(document.getElementById('fldPrice').value||'').trim();
+  const reason=(document.getElementById('fldReason').value||'').trim();
+  // SECURITY: always use the on-chain verified wallet from session, not the input field
+  const wallet=session.wallet;
+  const txHash=session.txHash;
+  clearLog($formLog);
+  if(!tg){addLog($formLog,'<span class="lg-err">❌ Telegram username is required.</span>');return;}
+  if(!price||isNaN(price)){addLog($formLog,'<span class="lg-err">❌ Enter a valid BTC price prediction.</span>');return;}
+  if(!selectedDir){addLog($formLog,'<span class="lg-err">❌ Select UP or DOWN direction.</span>');return;}
+  if(!reason){addLog($formLog,'<span class="lg-err">❌ Please enter your reasoning.</span>');return;}
+  const proof=`${selectedDir.toUpperCase()}|${price}|${reason}`;
+  const btn=document.getElementById('finalManualSubmitBtn');
+  if(!btn)return;
+  isSubmitting=true;
+  btn.disabled=true;
+  btn.innerHTML=`<span class="spinner"></span> Submitting…`;
+  try{
+    const fd=new FormData();
+    fd.append('entry.2147360639',PREDICTION_TRACK_CODE);
+    fd.append('entry.1526178092',proof);
+    fd.append('entry.884208731',txHash);
+    fd.append('entry.256576255',tg);
+    fd.append('entry.1138659293',wallet); // SECURITY: always on-chain address
+    await fetch(FORM_ACTION,{method:'POST',body:fd,mode:'no-cors'});
+    // SECURITY: invalidate session immediately after successful use
+    window.verifiedManualSession=null;
+    if(tg)localStorage.setItem('userTelegram',tg.startsWith('@')?tg:'@'+tg);
+    document.getElementById('predPanel').style.display='none';
+    document.getElementById('successPanel').classList.add('show');
+    document.getElementById('successTxLink').href=`https://polygonscan.com/tx/${txHash}`;
+    document.getElementById('successSub').textContent=`Track: ${PREDICTION_TRACK_CODE} · $${fmt(Number(price))} ${selectedDir.toUpperCase()}\nGood luck!`;
+    $btnArea.innerHTML=`<span class="lg-ok">✅ Successfully Submitted!</span>`;
+    clearLog($formLog);
+    addLog($formLog,'<span class="lg-ok">✅ Prediction submitted successfully! Good luck.</span>');
+    loadQuestData();
+  }catch(e){
+    console.error(e);
+    addLog($formLog,`<span class="lg-err">❌ Submission failed. Please try again.</span>`);
+    if(btn){btn.disabled=false;btn.innerHTML=`<i class="fas fa-paper-plane"></i> Submit Prediction Now`;}
+  }finally{
+    isSubmitting=false;
   }
 }
 
-// Clean single listener for Auto-Check button
-const verifyBtn = document.getElementById('verifyManualBtn');
-if (verifyBtn) {
-  // Remove any old listeners
-  const cleanBtn = verifyBtn.cloneNode(true);
-  verifyBtn.parentNode.replaceChild(cleanBtn, verifyBtn);
-
-  cleanBtn.addEventListener('click', async () => {
-    const tg = (document.getElementById('fldTelegram').value || '').trim();
-    const wallet = (document.getElementById('fldWallet').value || '').trim();
-
-    if (!tg) return addLog($formLog, '<span class="lg-err">❌ Enter Telegram username first.</span>');
-    if (!wallet || !wallet.startsWith('0x')) return addLog($formLog, '<span class="lg-err">❌ Enter Polygon wallet first.</span>');
-
-    const txHash = await verifyManualTransaction(wallet);
-    
-    if (txHash) {
-      window.verifiedManualTx = txHash;
-      addLog($formLog, `<span class="lg-ok">✅ Payment verified! Click "Submit Prediction Now".</span>`);
-
-      $btnArea.innerHTML = `
-        <button class="btn btn-primary" id="finalManualSubmitBtn">
-          <i class="fas fa-paper-plane"></i> Submit Prediction Now
-        </button>
-      `;
-
-      document.getElementById('finalManualSubmitBtn').addEventListener('click', submitManualPrediction);
-    }
-  });
-}
-
-async function handleManualSubmit() {
-  const tg = (document.getElementById('fldTelegram').value || '').trim();
-  const wallet = (document.getElementById('fldWallet').value || '').trim();
-
-  if (!tg) return addLog($formLog, '<span class="lg-err">❌ Enter Telegram username.</span>');
-  if (!wallet || !wallet.startsWith('0x')) return addLog($formLog, '<span class="lg-err">❌ Enter valid Polygon wallet.</span>');
-
-  const txHash = await verifyManualTransaction(wallet);
-  
-  if (txHash) {
-    // Store the verified txHash temporarily
-    window.verifiedManualTx = txHash;
-    
-    addLog($formLog, `<span class="lg-ok">✅ Payment verified! You can now submit your prediction.</span>`);
-    
-    // Show final submit button (no wallet needed)
-    $btnArea.innerHTML = `
+// ── VERIFY BUTTON ──
+document.getElementById('verifyManualBtn').addEventListener('click',async()=>{
+  const tg=(document.getElementById('fldTelegram').value||'').trim();
+  const wallet=(document.getElementById('fldWallet').value||'').trim();
+  if(!tg){clearLog($formLog);return addLog($formLog,'<span class="lg-err">❌ Enter your Telegram username first.</span>');}
+  if(!wallet||!wallet.startsWith('0x')){clearLog($formLog);return addLog($formLog,'<span class="lg-err">❌ Enter your Polygon wallet address first.</span>');}
+  const txHash=await verifyManualTransaction(wallet);
+  if(txHash){
+    $btnArea.innerHTML=`
       <button class="btn btn-primary" id="finalManualSubmitBtn">
         <i class="fas fa-paper-plane"></i> Submit Prediction Now
-      </button>
-    `;
-    
-    document.getElementById('finalManualSubmitBtn').addEventListener('click', submitManualPrediction);
+      </button>`;
+    document.getElementById('finalManualSubmitBtn').addEventListener('click',submitManualPrediction);
   }
-}
+});
 
-// Global flag
-let isSubmitting = false;
-
-async function submitManualPrediction() {
-  if (isSubmitting) return;
-  
-  const tg = (document.getElementById('fldTelegram').value || '').trim();
-  const wallet = (document.getElementById('fldWallet').value || '').trim();
-  const price = (document.getElementById('fldPrice').value || '').trim();
-  const reason = (document.getElementById('fldReason').value || '').trim();
-
-  // Clear previous logs
-  clearLog($formLog);
-
-  if (!tg) {
-    addLog($formLog, '<span class="lg-err">❌ Telegram username is required.</span>');
-    return;
-  }
-  if (!wallet || !wallet.startsWith('0x')) {
-    addLog($formLog, '<span class="lg-err">❌ Polygon wallet is required.</span>');
-    return;
-  }
-  if (!price || isNaN(price)) {
-    addLog($formLog, '<span class="lg-err">❌ Enter a valid BTC price prediction.</span>');
-    return;
-  }
-  if (!selectedDir) {
-    addLog($formLog, '<span class="lg-err">❌ Select UP or DOWN direction.</span>');
-    return;
-  }
-
-    // Check if the reason field is empty
-  if (!reason) {
-    addLog($formLog, '<span class="lg-err">❌ Please enter a reason for your prediction.</span>');
-    return;
-  }
-
-  const proof = `${selectedDir.toUpperCase()}|${price}|${reason}`;
-  const txHash = window.verifiedManualTx;
-
-  if (!txHash) {
-    addLog($formLog, '<span class="lg-err">❌ Payment verification expired. Please verify again.</span>');
-    return;
-  }
-
-  const btn = document.getElementById('finalManualSubmitBtn');
-  if (!btn) return;
-
-  isSubmitting = true;
-  btn.disabled = true;
-  btn.innerHTML = `<span class="spinner"></span> Submitting...`;
-
-  try {
-    const fd = new FormData();
-    fd.append('entry.2147360639', PREDICTION_TRACK_CODE);
-    fd.append('entry.1526178092', proof);
-    fd.append('entry.884208731', txHash);
-    fd.append('entry.256576255', tg);
-    fd.append('entry.1138659293', wallet);
-
-    await fetch(FORM_ACTION, { 
-      method: 'POST', 
-      body: fd,
-      mode: 'no-cors'
-    });
-
-// SUCCESS
-    if (tg) localStorage.setItem('userTelegram', tg.startsWith('@') ? tg : '@' + tg);
-
-    document.getElementById('predPanel').style.display = 'none';
-    document.getElementById('successPanel').classList.add('show');
-    document.getElementById('successTxLink').href = `https://polygonscan.com/tx/${txHash}`;
-    document.getElementById('successSub').textContent = `Track: ${PREDICTION_TRACK_CODE} · $${fmt(Number(price))} ${selectedDir.toUpperCase()}\nGood luck!`;
-
-    $btnArea.innerHTML = `<span class="lg-ok">✅ Successfully Submitted!</span>`;
-    
-    clearLog($formLog);
-    addLog($formLog, '<span class="lg-ok">✅ Prediction submitted successfully! Good luck.</span>');
-    loadQuestData();
-
-  } catch (e) {
-    console.error(e);
-    addLog($formLog, `<span class="lg-err">❌ Submission failed. Please try again.</span>`);
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = `<i class="fas fa-paper-plane"></i> Submit Prediction Now`;
+// ── COPY BUTTON ──
+function setupCopyButton(){
+  const copyBtn=document.getElementById('copyBtn');
+  const addrEl=document.getElementById('receiverAddr');
+  if(!copyBtn)return;
+  copyBtn.addEventListener('click',async()=>{
+    const address=addrEl.textContent.trim();
+    try{
+      await navigator.clipboard.writeText(address);
+      const originalText=copyBtn.innerHTML;
+      copyBtn.style.background='var(--green)';
+      copyBtn.style.color='#061a11';
+      copyBtn.innerHTML='✅ Copied!';
+      setTimeout(()=>{copyBtn.innerHTML=originalText;copyBtn.style.background='';copyBtn.style.color='';},2200);
+    }catch(err){
+      copyBtn.innerHTML='❌ Failed';
+      setTimeout(()=>{copyBtn.innerHTML='📋 Copy';},1500);
     }
-  } finally {
-    isSubmitting = false;
-  }
+  });
 }
 
 // ── INIT ──
@@ -1917,154 +1750,31 @@ window.addEventListener('load',async()=>{
   loadBTCData();
   await loadQuestData();
   loadIdentity();
-setupCopyButton();
-
-// Update these two functions
-function setConnected(label) {
-  $walletBar.classList.add('show');
-  $walletAddr.textContent = label;
-  document.getElementById('fldWallet').value = userAddress || '';
-  
-  const savedTg = localStorage.getItem('userTelegram') || '';
-  if (savedTg && !document.getElementById('fldTelegram').value)
-    document.getElementById('fldTelegram').value = savedTg;
-  
-  renderBtnArea();
-  clearLog($formLog);
-  addLog($formLog, `<span class="lg-ok">✅ Wallet connected — ${label}</span>`);
-  addLog($formLog, `<span class="lg-info">Fill in your prediction and hit Submit.</span>`);
-  
-    document.getElementById('mobileWalletAddr').textContent = label;
-}
-
-function setDisconnected(){
-  userAddress = null;
-  ethProvider = null;
-  ethSigner = null;
-  wcProvider = null;
-
-  $walletBar.classList.remove('show');
-  $walletAddr.textContent = '—';
-  document.getElementById('fldWallet').value = localStorage.getItem('userPolygon') || '';
-
-  renderBtnArea();
-  clearLog($formLog);
-  addLog($formLog, `<span class="lg-info">Wallet disconnected successfully.</span>`);
- 
-    document.getElementById('mobileWalletAddr').textContent = '—';
-
-    // event listener for the mobile disconnect button
-document.getElementById('mobileDiscBtn').addEventListener('click', async () => {
-  try { if (wcProvider?.disconnect) await wcProvider.disconnect(); } catch (_) {}
-  setDisconnected();
-});
-}
-
-// Replace the old verifyManualBtn listener with this updated version
-document.getElementById('verifyManualBtn').addEventListener('click', async () => {
-  const tg = (document.getElementById('fldTelegram').value || '').trim();
-  const wallet = (document.getElementById('fldWallet').value || '').trim();
-
-  if (!tg) {
-    clearLog($formLog);
-    return addLog($formLog, '<span class="lg-err">❌ Enter your Telegram username first.</span>');
-  }
-  if (!wallet || !wallet.startsWith('0x')) {
-    clearLog($formLog);
-    return addLog($formLog, '<span class="lg-err">❌ Enter your Polygon wallet address first.</span>');
-  }
-
-  const txHash = await verifyManualTransaction(wallet);
-  
-  if (txHash) {
-    // Store verified tx
-    window.verifiedManualTx = txHash;
-
-    addLog($formLog, `<span class="lg-ok">✅ Payment verified! You can now submit your prediction.</span>`);
-
-    // Show final submit button
-    $btnArea.innerHTML = `
-      <button class="btn btn-primary" id="finalManualSubmitBtn">
-        <i class="fas fa-paper-plane"></i> Submit Prediction Now
-      </button>
-    `;
-
-    document.getElementById('finalManualSubmitBtn').addEventListener('click', submitManualPrediction);
-  
-  }
-});
-
+  setupCopyButton();
   setInterval(loadBTCData,5*60*1000);
 });
 
-// back to top
+// ── BACK TO TOP ──
 window.addEventListener('scroll',()=>{
   document.getElementById('backToTop').classList.toggle('visible',window.scrollY>320);
 });
 
-// Hamburger Menu - Clean & Modern
-const hamburgerBtn = document.getElementById('hamburgerBtn');
-const mobileMenu = document.getElementById('mobileMenu');
-
-hamburgerBtn.addEventListener('click', () => {
+// ── HAMBURGER MENU ──
+const hamburgerBtn=document.getElementById('hamburgerBtn');
+const mobileMenu=document.getElementById('mobileMenu');
+hamburgerBtn.addEventListener('click',()=>{
   mobileMenu.classList.toggle('show');
-  
-  const icon = hamburgerBtn.querySelector('i');
-  if (mobileMenu.classList.contains('show')) {
-    icon.classList.remove('fa-bars');
-    icon.classList.add('fa-times');
-  } else {
-    icon.classList.add('fa-bars');
-    icon.classList.remove('fa-times');
-  }
+  const icon=hamburgerBtn.querySelector('i');
+  if(mobileMenu.classList.contains('show')){icon.classList.remove('fa-bars');icon.classList.add('fa-times');}
+  else{icon.classList.add('fa-bars');icon.classList.remove('fa-times');}
 });
-
-// Close menu when tapping outside
-document.addEventListener('click', (e) => {
-  if (mobileMenu.classList.contains('show') && 
-      !mobileMenu.contains(e.target) && 
-      e.target !== hamburgerBtn && 
-      !hamburgerBtn.contains(e.target)) {
+document.addEventListener('click',(e)=>{
+  if(mobileMenu.classList.contains('show')&&!mobileMenu.contains(e.target)&&e.target!==hamburgerBtn&&!hamburgerBtn.contains(e.target)){
     mobileMenu.classList.remove('show');
-    const icon = hamburgerBtn.querySelector('i');
-    icon.classList.add('fa-bars');
-    icon.classList.remove('fa-times');
+    const icon=hamburgerBtn.querySelector('i');
+    icon.classList.add('fa-bars');icon.classList.remove('fa-times');
   }
 });
-
-// Copy Receiver Address with nice feedback
-function setupCopyButton() {
-  const copyBtn = document.getElementById('copyBtn');
-  const addrEl = document.getElementById('receiverAddr');
-  
-  if (!copyBtn) return;
-
-  copyBtn.addEventListener('click', async () => {
-    const address = addrEl.textContent.trim();
-    
-    try {
-      await navigator.clipboard.writeText(address);
-      
-      // Visual feedback
-      const originalText = copyBtn.innerHTML;
-      copyBtn.style.background = 'var(--green)';
-      copyBtn.style.color = '#061a11';
-      copyBtn.innerHTML = '✅ Copied!';
-      
-      setTimeout(() => {
-        copyBtn.innerHTML = originalText;
-        copyBtn.style.background = '';
-        copyBtn.style.color = '';
-      }, 2200);
-      
-    } catch (err) {
-      copyBtn.innerHTML = '❌ Failed';
-      setTimeout(() => {
-        copyBtn.innerHTML = '📋 Copy';
-      }, 1500);
-    }
-  });
-}
 </script>
 </body>
 </html>
