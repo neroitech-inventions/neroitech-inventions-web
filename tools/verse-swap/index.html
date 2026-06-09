@@ -21,7 +21,7 @@
 <title>VERSE Swap - DEX on Polygon</title>
     <!-- Favicon -->
 <link href="images/favicon.ico" rel="icon">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -100,7 +100,7 @@
   .slip-lbl{font-family:var(--font-mono);font-size:.62rem;color:var(--muted)}
   .slip-btn{padding:5px 10px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);font-family:var(--font-mono);font-size:.62rem;color:var(--muted);cursor:pointer;transition:border-color .15s,color .15s,background .15s;-webkit-tap-highlight-color:transparent}
   .slip-btn.active{border-color:var(--green);color:var(--green);background:var(--green-dim)}
-  .slip-custom-wrap{position:relative;width:72px}
+  .slip-custom-wrap{position:relative;width:78px}
   .slip-custom{width:100%;padding:5px 20px 5px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font-mono);font-size:.62rem;outline:none;-webkit-appearance:none}
   .slip-custom:focus{border-color:var(--green)}
   .slip-pct{position:absolute;right:7px;top:50%;transform:translateY(-50%);font-size:.58rem;color:var(--muted);pointer-events:none;font-family:var(--font-mono)}
@@ -236,7 +236,7 @@
       <div class="wopt-text"><div class="wopt-name">Coinbase Wallet</div><div class="wopt-desc">Browser extension</div></div>
       <span class="wbadge" id="cbBadge">Checking…</span>
     </button>
-    <div class="wsec">Mobile App</div>
+    <div class="wsec" style="display: none;">Mobile App</div>
     <button class="wopt" id="btcBtn" style="display: none;">
       <div class="wopt-icon wi-btc">₿</div>
       <div class="wopt-text"><div class="wopt-name">Bitcoin.com Wallet</div><div class="wopt-desc">Native VERSE support · Polygon</div></div>
@@ -259,7 +259,7 @@
     </div>
     <div class="top-title">
       <h1>VERSE Swap</h1>
-      <p>Uniswap V3 · Polygon Mainnet</p>
+      <p>Polygon Mainnet</p>
     </div>
     <div class="network-pill">⬡ Polygon</div>
   </div>
@@ -339,7 +339,7 @@
     </div>
 
     <div class="swap-mid">
-      <div class="flip-btn" id="flipBtn"><i class="fa-solid fa-arrow-up-arrow-down"></i></div>
+      <div class="flip-btn" id="flipBtn"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
     </div>
 
     <!-- YOU RECEIVE -->
