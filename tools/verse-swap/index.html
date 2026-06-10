@@ -335,7 +335,8 @@
           <span class="tok-name">VERSE</span>
         </div>
       </div>
-      <div class="usd-hint" id="fromUSD"></div>
+         <div class="usd-hint" id="fromUSD"></div>
+      <div id="maxLimitWarning" style="font-size:0.65rem;color:#ffd166;margin-top:6px;display:none"></div>
     </div>
 
     <div class="swap-mid">
@@ -527,6 +528,14 @@ let quoteTimer  = null;
 let isSending   = false;
 let recentTxs   = [];
 
+// MAX SWAP LIMITS
+const MAX_VERSE_TO_USDT = 140000;
+const MAX_VERSE_TO_POL  = 5000;
+
+function getCurrentMaxLimit() {
+  return outputToken === 'USDT' ? MAX_VERSE_TO_USDT : MAX_VERSE_TO_POL;
+}
+
 // Gate state
 let isUnlocked     = false;
 let feeAmountVerse = 0;
@@ -714,6 +723,32 @@ function sp()         { return `<span class="spinner"></span>`; }
 function shortAddr(a) { return a.slice(0,6)+'…'+a.slice(-4); }
 function readProvider(){ return ethProvider || new ethers.providers.JsonRpcProvider(RPC_URL); }
 
+
+function enforceMaxLimit() {
+  let val = parseFloat($fromAmt.value);
+  if (!val) return;
+
+  const maxLimit = getCurrentMaxLimit();
+  if (val > maxLimit) {
+    $fromAmt.value = maxLimit;
+    showMaxWarning(maxLimit);
+  } else {
+    showMaxWarning(null);
+  }
+}
+
+function showMaxWarning(maxLimit) {
+  let warningEl = document.getElementById('maxLimitWarning');
+  if (!warningEl) return;
+  
+  if (maxLimit) {
+    warningEl.textContent = `⚠️ Maximum allowed: ${maxLimit.toLocaleString()} VERSE`;
+    warningEl.style.display = 'block';
+  } else {
+    warningEl.style.display = 'none';
+  }
+}
+
 // ──────────────────────────────────────────────────────
 //  BALANCES
 // ──────────────────────────────────────────────────────
@@ -748,10 +783,22 @@ function switchOutput(tok) {
   document.querySelectorAll('.out-opt').forEach(o => o.classList.toggle('active', o.dataset.out === tok));
   const iconEl = document.getElementById('toIconEl');
   const nameEl = document.getElementById('toNameEl');
-  if (tok === 'USDT') { iconEl.className='tok-icon tok-usdt'; iconEl.textContent='💲'; nameEl.textContent='USDT'; }
-  else               { iconEl.className='tok-icon tok-pol';  iconEl.textContent='⬡'; nameEl.textContent='POL'; }
-  $toAmt.value=''; quoteData=null; $routeBox.classList.remove('show');
-  updateBals(); scheduleQuote(); updateSwapBtn();
+  if (tok === 'USDT') { 
+    iconEl.className='tok-icon tok-usdt'; 
+    iconEl.textContent='💲'; 
+    nameEl.textContent='USDT'; 
+  } else { 
+    iconEl.className='tok-icon tok-pol';  
+    iconEl.textContent='⬡'; 
+    nameEl.textContent='POL'; 
+  }
+  $toAmt.value=''; 
+  quoteData=null; 
+  $routeBox.classList.remove('show');
+  updateBals(); 
+  scheduleQuote(); 
+  updateSwapBtn();
+  setTimeout(enforceMaxLimit, 100);
 }
 document.querySelectorAll('.out-opt').forEach(o => o.addEventListener('click', () => switchOutput(o.dataset.out)));
 
@@ -837,6 +884,14 @@ async function runSwap() {
   if (isSending || !userAddress || !ethSigner || !quoteData) return;
   const raw = parseFloat($fromAmt.value);
   if (!raw || raw <= 0) return;
+
+    const maxLimit = getCurrentMaxLimit();
+  if (raw > maxLimit) {
+    addLog(`<span class="lg-err">❌ Maximum allowed is ${maxLimit.toLocaleString()} VERSE for ${outputToken}</span>`);
+    isSending = false;
+    updateSwapBtn();
+    return;
+  }
 
   isSending = true;
   $swapBtn.disabled = true;
@@ -1054,13 +1109,26 @@ function closeWalletModal(){$walletModal.classList.remove('open');}
 // ──────────────────────────────────────────────────────
 //  WIRE UP
 // ──────────────────────────────────────────────────────
-$fromAmt.addEventListener('input',()=>{quoteData=null;$toAmt.value='';$routeBox.classList.remove('show');scheduleQuote();});
+$fromAmt.addEventListener('input', () => {
+  quoteData = null;
+  $toAmt.value = '';
+  $routeBox.classList.remove('show');
+  enforceMaxLimit();
+  scheduleQuote();
+});
 
-document.getElementById('maxBtn').addEventListener('click',()=>{
-  if(!$fromBal.dataset.raw) return;
-  const raw=ethers.BigNumber.from($fromBal.dataset.raw);
-  $fromAmt.value=parseFloat(ethers.utils.formatUnits(raw,18)).toFixed(2);
-  quoteData=null; scheduleQuote();
+document.getElementById('maxBtn').addEventListener('click', () => {
+  if (!$fromBal.dataset.raw) return;
+  const raw = ethers.BigNumber.from($fromBal.dataset.raw);
+  let usable = parseFloat(ethers.utils.formatUnits(raw, 18));
+
+  const maxLimit = getCurrentMaxLimit();
+  usable = Math.min(usable, maxLimit);
+
+  $fromAmt.value = usable.toFixed(2);
+  quoteData = null;
+  showMaxWarning(null);
+  scheduleQuote();
 });
 
 document.getElementById('flipBtn').addEventListener('click',()=>{
