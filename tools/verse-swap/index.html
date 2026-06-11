@@ -232,9 +232,13 @@
     <div class="network-pill">⬡ Polygon</div>
   </div>
 
-  <div class="wallet-bar" id="walletBar">
+<div class="wallet-bar" id="walletBar">
     <div class="w-dot"></div>
     <span id="walletAddr" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">—</span>
+    <a id="trackWalletBtn" href="#" target="_blank" rel="noopener"
+      style="font-size:.6rem;color:#60bfff;text-decoration:none;background:rgba(79,172,254,.10);border:1px solid rgba(79,172,254,.22);border-radius:7px;padding:4px 8px;flex-shrink:0;display:none">
+      <i class="fa-solid fa-magnifying-glass" style="font-size:9px"></i> Track
+    </a>
     <button id="discBtn" style="background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,109,.25);border-radius:8px;padding:6px 10px;font-size:.62rem;font-family:var(--font-mono);cursor:pointer;flex-shrink:0">Disconnect</button>
   </div>
 
@@ -618,16 +622,49 @@ function readProvider(){ return ethProvider || new ethers.providers.JsonRpcProvi
 function enforceMaxLimit() {
   const val = parseFloat($fromAmt.value);
   if (!val) return;
+
+  // 1. Hard cap at maximum
   const maxLimit = getCurrentMaxLimit();
-  if (val > maxLimit) { $fromAmt.value = maxLimit; showMaxWarning(maxLimit); }
-  else showMaxWarning(null);
+  if (val > maxLimit) {
+    $fromAmt.value = maxLimit;
+    showMaxWarning('max', maxLimit);
+    return;
+  }
+
+  // 2. Exceeds wallet balance — clamp to balance
+  if ($fromBal.dataset.raw) {
+    const dec    = parseInt($fromBal.dataset.dec || '18');
+    const native = $fromBal.dataset.native === '1';
+    let walletBal = parseFloat(ethers.utils.formatUnits(
+      ethers.BigNumber.from($fromBal.dataset.raw), dec
+    ));
+    // Keep gas buffer for native POL
+    if (native) walletBal = Math.max(0, walletBal - 0.01);
+    if (val > walletBal && walletBal > 0) {
+      $fromAmt.value = walletBal.toFixed(dec >= 18 ? 4 : 2);
+      showMaxWarning('bal', walletBal, dec);
+      return;
+    }
+  }
+
+  showMaxWarning(null);
 }
 
-function showMaxWarning(maxLimit) {
+function showMaxWarning(type, value, dec) {
   const el = document.getElementById('maxLimitWarning');
   if (!el) return;
-  if (maxLimit) { el.textContent = `⚠️ Maximum allowed: ${maxLimit.toLocaleString()} ${swapDir === 'pol-verse' ? 'POL' : 'VERSE'}`; el.style.display = 'block'; }
-  else el.style.display = 'none';
+  if (!type) { el.style.display = 'none'; return; }
+
+  const token = swapDir === 'pol-verse' ? 'POL' : 'VERSE';
+  if (type === 'max') {
+    el.textContent = `⚠️ Maximum allowed: ${value.toLocaleString()} ${token}`;
+  } else if (type === 'bal') {
+    const fmt = (dec || 18) >= 18
+      ? value.toLocaleString(undefined, {maximumFractionDigits: 4})
+      : value.toLocaleString(undefined, {maximumFractionDigits: 2});
+    el.textContent = `⚠️ Exceeds your balance: ${fmt} ${token}`;
+  }
+  el.style.display = 'block';
 }
 
 // ── DIRECTION SWITCH ──────────────────────────────────
@@ -994,6 +1031,10 @@ async function ensurePolygon(eth) {
 function setConnected(label) {
   $walletBar.classList.add('show'); $walletAddr.textContent=label;
   $connectBtn.style.display='none'; $swapBtn.style.display='';
+  // Set Polygonscan wallet tracker link
+  const trackBtn = document.getElementById('trackWalletBtn');
+  trackBtn.href = `https://polygonscan.com/address/${userAddress}`;
+  trackBtn.style.display = '';
   updateGateWalletUI(); updateBals(); updateSwapBtn();
 }
 function setDisconnected() {
@@ -1001,6 +1042,7 @@ function setDisconnected() {
   $walletBar.classList.remove('show'); $connectBtn.style.display=''; $swapBtn.style.display='none';
   quoteData=null; $routeBox.classList.remove('show');
   $fromBal.textContent='Balance: —'; $toBal.textContent='Balance: —';
+  document.getElementById('trackWalletBtn').style.display = 'none';
   updateGateWalletUI(); clearLog();
 }
 
@@ -1071,13 +1113,17 @@ document.getElementById('maxBtn').addEventListener('click', () => {
   if (!$fromBal.dataset.raw) return;
   const dec    = parseInt($fromBal.dataset.dec || '18');
   const native = $fromBal.dataset.native === '1';
-  let usable = parseFloat(ethers.utils.formatUnits(ethers.BigNumber.from($fromBal.dataset.raw), dec));
-  // For native POL, leave a small buffer for gas
-  if (native) usable = Math.max(0, usable - 0.01);
-  usable = Math.min(usable, getCurrentMaxLimit());
+  let walletBal = parseFloat(ethers.utils.formatUnits(ethers.BigNumber.from($fromBal.dataset.raw), dec));
+  // Keep gas buffer for native POL
+  if (native) walletBal = Math.max(0, walletBal - 0.01);
+  // Cap at whichever is lower: wallet balance OR the max limit
+  const maxLimit = getCurrentMaxLimit();
+  const usable = Math.min(walletBal, maxLimit);
   if (usable <= 0) return;
   $fromAmt.value = usable.toFixed(dec >= 18 ? 4 : 2);
-  quoteData=null; showMaxWarning(null); scheduleQuote();
+  quoteData = null;
+  showMaxWarning(null); // clear any existing warning — value is now valid
+  scheduleQuote();
 });
 
 $connectBtn.addEventListener('click', openWalletModal);

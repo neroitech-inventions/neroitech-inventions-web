@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-QM106YDX6N');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Cross-Chain Bridge — Polygon → Solana</title>
+<link href="images/favicon.ico" rel="icon">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#060910;--surface:#0c1220;--surface2:#101828;--surface3:#141f32;
+    --border:#1a2d44;--border2:#243a55;
+    --green:#00e5a0;--gdim:rgba(0,229,160,.10);--gglow:rgba(0,229,160,.28);
+    --red:#ff4d6d;--rdim:rgba(255,77,109,.12);
+    --yellow:#ffd166;--purple:#9945ff;--pdim:rgba(153,69,255,.12);
+    --blue:#4facfe;--bdim:rgba(79,172,254,.10);
+    --text:#dde8f5;--muted:#4a6585;--muted2:#2e4560;
+    --font:'Syne',sans-serif;--mono:'DM Mono',monospace;
+  }
+  html,body{min-height:100%;background:var(--bg)}
+  body{font-family:var(--font);color:var(--text);display:flex;flex-direction:column;align-items:center;padding:20px 12px 60px;overflow-x:hidden;-webkit-text-size-adjust:100%}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,160,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,160,.02) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;z-index:0}
+  body::after{content:'';position:fixed;top:-240px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(153,69,255,.05) 0%,transparent 65%);pointer-events:none;z-index:0}
+  .wrap{position:relative;z-index:1;width:100%;max-width:500px}
+
+  /* TOP BAR */
+  .top-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;animation:fadeDown .5s ease both}
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
+  .logo-box{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,#9945ff,#7b35e0);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;flex-shrink:0;box-shadow:0 0 28px var(--pdim)}
+  .top-title h1{font-size:1.3rem;font-weight:800;letter-spacing:-.4px;line-height:1}
+  .top-title p{font-size:.6rem;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  .mode-pill{margin-left:auto;flex-shrink:0;font-family:var(--mono);font-size:.58rem;padding:5px 10px;border-radius:20px;background:rgba(153,69,255,.15);color:#bf7fff;border:1px solid rgba(153,69,255,.25)}
+
+  /* WALLET BAR */
+  .wallet-bar{display:none;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;background:var(--gdim);border:1px solid rgba(0,229,160,.2);font-family:var(--mono);font-size:.68rem;color:var(--green);margin-bottom:14px}
+  .wallet-bar.show{display:flex}
+  .w-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);flex-shrink:0;animation:pdot 2s infinite}
+  @keyframes pdot{0%,100%{opacity:1}50%{opacity:.3}}
+
+  /* GATE PANEL */
+  .gate-panel{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:14px;animation:fadeUp .5s ease both;position:relative;overflow:hidden}
+  .gate-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#9945ff,#00e5a0,#4facfe,#9945ff);background-size:200%;animation:shimmer 2.5s linear infinite}
+  @keyframes shimmer{0%{background-position:200%}100%{background-position:-200%}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  .gate-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .gate-icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:var(--pdim);border:1px solid rgba(153,69,255,.25);display:flex;align-items:center;justify-content:center;font-size:16px}
+  .gate-title{font-size:.9rem;font-weight:800;line-height:1}
+  .gate-sub{font-size:.62rem;font-family:var(--mono);color:var(--muted);margin-top:2px}
+  .fee-box{background:var(--surface2);border:1px solid rgba(153,69,255,.2);border-radius:12px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .fee-label{font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+  .fee-amount{font-family:var(--mono);font-size:1.2rem;font-weight:500;color:var(--green)}
+  .fee-btns{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+  .gate-btn{padding:10px 16px;border-radius:10px;font-family:var(--font);font-size:.8rem;font-weight:700;cursor:pointer;transition:transform .12s,opacity .15s;-webkit-tap-highlight-color:transparent;white-space:nowrap;border:none}
+  .gate-btn:active{transform:scale(.97)}
+  .gate-btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
+  .gate-btn-connect{background:var(--surface3);color:var(--text);border:1px solid var(--border)}
+  .gate-btn-connect:hover{border-color:var(--green);color:var(--green)}
+  .gate-btn-pay{background:linear-gradient(135deg,#9945ff,#7b35e0);color:#fff;box-shadow:0 4px 16px var(--pdim)}
+  .gate-btn-pay:hover:not(:disabled){box-shadow:0 6px 24px rgba(153,69,255,.4)}
+  .gate-wallet-status{display:none;align-items:center;gap:8px;padding:8px 12px;background:var(--gdim);border:1px solid rgba(0,229,160,.2);border-radius:10px;margin-bottom:14px;font-family:var(--mono);font-size:.68rem;color:var(--green)}
+  .gate-wallet-status.show{display:flex}
+  .gate-divider{display:flex;align-items:center;gap:10px;margin:14px 0;font-family:var(--mono);font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+  .gate-divider::before,.gate-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+  .code-row{display:flex;gap:8px;margin-bottom:10px}
+  .code-input-wrap{position:relative;flex:1;min-width:0}
+  .code-input-wrap input{width:100%;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:var(--mono);font-size:max(16px,.85rem);outline:none;-webkit-appearance:none;transition:border-color .2s,box-shadow .2s}
+  .code-input-wrap input:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--gdim)}
+  .code-input-wrap input.valid{border-color:var(--green)}
+  .code-input-wrap input.invalid{border-color:var(--red)}
+  .gate-status{font-family:var(--mono);font-size:.68rem;padding:8px 12px;border-radius:8px;display:none}
+  .gate-status.show{display:block}
+  .gate-status.ok{background:var(--gdim);color:var(--green);border:1px solid rgba(0,229,160,.2)}
+  .gate-status.err{background:var(--rdim);color:var(--red);border:1px solid rgba(255,77,109,.2)}
+  .unlocked-badge{display:none;align-items:center;gap:8px;padding:10px 14px;background:var(--gdim);border:1px solid rgba(0,229,160,.25);border-radius:12px;margin-bottom:12px;font-family:var(--mono);font-size:.7rem;color:var(--green)}
+  .unlocked-badge.show{display:flex}
+
+  /* BRIDGE CARD */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:20px;position:relative;overflow:hidden;margin-bottom:12px;animation:fadeUp .5s .1s ease both}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#9945ff,#00e5a0,#4facfe,#9945ff);background-size:200%;animation:shimmer 3s linear infinite}
+  .card-lbl{font-size:.6rem;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.1em;display:flex;align-items:center;gap:7px;margin-bottom:16px}
+  .card-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+
+  /* CHAIN ROW */
+  .chain-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .chain-box{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:13px;padding:11px 13px;display:flex;align-items:center;gap:9px}
+  .chain-ico{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+  .ci-pol{background:linear-gradient(135deg,#8247e5,#6033c4)}
+  .ci-sol{background:linear-gradient(135deg,#9945ff,#7b35e0)}
+  .chain-name{font-size:.78rem;font-weight:700;line-height:1}
+  .chain-sub{font-size:.57rem;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  .bridge-arrow{width:32px;height:32px;border-radius:9px;background:var(--surface3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;flex-shrink:0}
+
+  /* TOKEN BOXES */
+  .token-box{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;transition:border-color .2s,box-shadow .2s}
+  .token-box:focus-within{border-color:var(--green);box-shadow:0 0 0 3px var(--gdim)}
+  .tb-top{display:flex;justify-content:space-between;font-size:.6rem;font-family:var(--mono);color:var(--muted);margin-bottom:9px}
+  .max-btn{background:var(--gdim);color:var(--green);border:1px solid rgba(0,229,160,.2);border-radius:6px;padding:2px 8px;font-size:.57rem;font-family:var(--mono);cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .input-row{display:flex;align-items:center;gap:10px}
+  .amt-input{flex:1;min-width:0;background:none;border:none;outline:none;color:var(--text);font-family:var(--mono);font-size:clamp(1.2rem,4vw,1.8rem);font-weight:500;-webkit-appearance:none;width:100%}
+  .amt-input::placeholder{color:var(--muted2)}
+  .amt-input::-webkit-outer-spin-button,.amt-input::-webkit-inner-spin-button{-webkit-appearance:none}
+  .token-badge{display:flex;align-items:center;gap:7px;background:var(--surface3);border:1px solid var(--border2);border-radius:24px;padding:6px 12px 6px 8px;flex-shrink:0}
+  .tok-ico{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px}
+  .ti-usdt{background:linear-gradient(135deg,#26a17b,#1a7a5e);color:#fff}
+  .tok-name{font-size:.82rem;font-weight:700}
+  .usd-hint{font-size:.62rem;font-family:var(--mono);color:var(--muted);margin-top:6px;min-height:15px}
+
+  /* LIMIT BADGE */
+  .limit-badge{font-family:var(--mono);font-size:.6rem;color:var(--muted);background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:5px 10px;margin-bottom:10px;text-align:center;display:none}
+
+  /* SOLANA ADDRESS */
+  .sol-box{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;transition:border-color .2s,box-shadow .2s}
+  .sol-box:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px var(--pdim)}
+  .sol-lbl{font-size:.6rem;font-family:var(--mono);color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .sol-lbl span{color:#bf7fff}
+  .sol-input{width:100%;background:none;border:none;outline:none;color:var(--text);font-family:var(--mono);font-size:.75rem;-webkit-appearance:none;word-break:break-all}
+  .sol-input::placeholder{color:var(--muted2)}
+  .sol-valid{font-size:.6rem;font-family:var(--mono);margin-top:6px;min-height:14px}
+  .sol-valid.ok{color:var(--green)}
+  .sol-valid.err{color:var(--red)}
+
+  /* ROUTE BOX */
+  .route-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:12px;font-family:var(--mono);font-size:.65rem;display:none}
+  .route-box.show{display:block}
+  .r-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;gap:8px}
+  .r-key{color:var(--muted)}
+  .r-val{color:var(--text);text-align:right}
+  .r-val.g{color:var(--green)}.r-val.p{color:#bf7fff}.r-val.y{color:var(--yellow)}
+  .r-div{height:1px;background:var(--border);margin:6px 0}
+
+  /* BUTTONS */
+  .action-btn{width:100%;padding:15px;border:none;border-radius:14px;font-family:var(--font);font-size:.95rem;font-weight:700;cursor:pointer;transition:transform .12s,box-shadow .15s,opacity .15s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;margin-top:2px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .action-btn:active:not(:disabled){transform:scale(.98)}
+  .action-btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
+  .btn-primary{background:linear-gradient(135deg,#9945ff,#7b35e0);color:#fff;box-shadow:0 4px 20px var(--pdim)}
+  .btn-primary:hover:not(:disabled){box-shadow:0 6px 28px rgba(153,69,255,.45);transform:translateY(-1px)}
+  .btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+  .btn-ghost:hover:not(:disabled){border-color:var(--green);color:var(--green)}
+
+  /* LOG */
+  .log{margin-top:12px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;max-height:200px;overflow-y:auto;font-family:var(--mono);font-size:.67rem;line-height:1.8;scrollbar-width:thin;scrollbar-color:var(--border) transparent;word-break:break-all;display:none}
+  .log.show{display:block}
+  .lg-ok{color:var(--green)}.lg-err{color:var(--red)}.lg-warn{color:var(--yellow)}.lg-info{color:var(--muted)}
+  .sp{display:inline-block;width:10px;height:10px;border:2px solid var(--gdim);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* STEPS */
+  .steps{display:none;margin-top:12px}
+  .steps.show{display:block}
+  .step-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:.65rem}
+  .step-row:last-child{border-bottom:none}
+  .step-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .sd-wait{background:var(--muted2)}.sd-active{background:var(--yellow);animation:pdot 1s infinite}.sd-done{background:var(--green);box-shadow:0 0 6px var(--green)}.sd-err{background:var(--red)}
+
+  /* TX TRACKER CARD */
+  .tx-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;display:none;animation:fadeUp .4s ease both}
+  .tx-card.show{display:block}
+
+  /* INFO BOX */
+  .info-box{background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:12px 14px;font-family:var(--mono);font-size:.63rem;color:var(--muted);line-height:1.7;margin-bottom:12px}
+  .info-box strong{color:var(--text)}
+
+  /* WALLET MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);z-index:1000;justify-content:center;align-items:flex-end}
+  .modal-overlay.open{display:flex;animation:olIn .2s ease}
+  @keyframes olIn{from{opacity:0}to{opacity:1}}
+  .modal{background:var(--surface);border:1px solid var(--border);border-radius:24px 24px 0 0;padding:20px 20px env(safe-area-inset-bottom,32px);width:100%;max-width:440px;margin:0 auto;animation:slUp .3s cubic-bezier(.34,1.4,.64,1);max-height:90vh;overflow-y:auto}
+  @keyframes slUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-drag{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+  .modal-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px}
+  .modal-head h3{font-size:1rem;font-weight:800}
+  .modal-head p{font-size:.66rem;color:var(--muted);font-family:var(--mono);margin-top:3px}
+  .modal-close{width:28px;height:28px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .wsec{font-size:.58rem;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:12px 0 7px}
+  .wopt{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:13px;cursor:pointer;margin-bottom:8px;font-family:var(--font);color:var(--text);text-align:left;transition:border-color .18s,background .18s,transform .12s;-webkit-tap-highlight-color:transparent}
+  .wopt:hover{border-color:var(--green);background:var(--gdim);transform:translateY(-1px)}
+  .wopt-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .wi-mm{background:linear-gradient(135deg,#e2761b,#cd6116)}.wi-wc{background:linear-gradient(135deg,#3b99fc,#2b7fd4)}.wi-btc{background:linear-gradient(135deg,#f7931a,#e07b10)}.wi-tw{background:linear-gradient(135deg,#3375bb,#245fa6)}
+  .wopt-text{flex:1;min-width:0}
+  .wopt-name{font-size:.85rem;font-weight:700}
+  .wopt-desc{font-size:.62rem;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  .wbadge{font-size:.54rem;font-family:var(--mono);padding:3px 7px;border-radius:20px;flex-shrink:0;background:var(--gdim);color:var(--green);border:1px solid rgba(0,229,160,.2)}
+  .wbadge.blue{background:var(--bdim);color:#60bfff;border-color:rgba(79,172,254,.22)}
+  .wbadge.orange{background:rgba(247,147,26,.12);color:#fb923c;border-color:rgba(247,147,26,.22)}
+
+  .footer{margin-top:16px;padding:14px 20px;background:var(--surface);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden}
+  .footer::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(153,69,255,.4),transparent);background-size:200%;animation:shimmer 2.5s linear infinite}
+  a{color:var(--green);text-decoration:underline;text-underline-offset:2px}
+
+  @media(min-width:500px){.modal-overlay{align-items:center}.modal{border-radius:24px;max-width:400px;padding-bottom:24px}.modal-drag{display:none}}
+  @media(max-width:499px){body{padding:16px 10px 80px}.card{padding:16px 14px}.action-btn{font-size:.88rem}}
+</style>
+</head>
+<body>
+
+<!-- WALLET MODAL -->
+<div class="modal-overlay" id="walletModal">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-head">
+      <div><h3>Connect Wallet</h3><p>Choose how you'd like to connect</p></div>
+      <button class="modal-close" id="walletModalClose">✕</button>
+    </div>
+    <div class="wsec">Recommended · All Wallets</div>
+    <button class="wopt wopt-hero" id="wcBtn">
+      <div class="wopt-icon wi-wc">🔗</div>
+      <div class="wopt-text"><div class="wopt-name">WalletConnect</div><div class="wopt-desc">300+ wallets · QR on desktop · App picker on mobile</div></div>
+      <span class="wbadge blue">Best</span>
+    </button>
+    <div class="wsec">Browser Extension</div>
+    <button class="wopt" id="mmBtn">
+      <div class="wopt-icon wi-mm">🦊</div>
+      <div class="wopt-text"><div class="wopt-name">MetaMask</div><div class="wopt-desc" id="mmDesc">Extension · Mobile app</div></div>
+      <span class="wbadge" id="mmBadge">Checking…</span>
+    </button>
+    <button class="wopt" id="cbBtn" style="display:none">
+      <div class="wopt-icon wi-cb">🔵</div>
+      <div class="wopt-text"><div class="wopt-name">Coinbase Wallet</div><div class="wopt-desc">Browser extension</div></div>
+      <span class="wbadge" id="cbBadge">Checking…</span>
+    </button>
+    <div class="wsec" style="display:none">Mobile App</div>
+    <button class="wopt" id="btcBtn" style="display:none">
+      <div class="wopt-icon wi-btc">₿</div>
+      <div class="wopt-text"><div class="wopt-name">Bitcoin.com Wallet</div><div class="wopt-desc">Native VERSE support · Polygon</div></div>
+      <span class="wbadge orange">⭐ VERSE</span>
+    </button>
+    <button class="wopt" id="twBtn" style="display:none">
+      <div class="wopt-icon wi-tw">🛡️</div>
+      <div class="wopt-text"><div class="wopt-name">Trust Wallet</div><div class="wopt-desc">Opens Trust Wallet app browser</div></div>
+      <span class="wbadge blue">Mobile</span>
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="wrap">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="logo-box"><img src="images/verse_logo.svg" alt="Verse Logo" class="verse-logo" width="25" height="25"></div>
+    <div class="top-title">
+      <h1>Cross-Chain Bridge</h1>
+      <p>Polygon → Solana</p>
+    </div>
+    <div class="mode-pill">⬡ Polygon</div>
+  </div>
+
+  <!-- WALLET BAR -->
+  <div class="wallet-bar" id="walletBar">
+    <div class="w-dot"></div>
+    <span id="walletAddr" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">—</span>
+    <a id="lifiScanBtn" href="#" target="_blank" rel="noopener" style="font-size:.6rem;color:#bf7fff;text-decoration:none;background:var(--pdim);border:1px solid rgba(153,69,255,.25);border-radius:7px;padding:4px 8px;flex-shrink:0;display:none">
+      <i class="fa-solid fa-magnifying-glass" style="font-size:9px"></i> Track
+    </a>
+    <button id="discBtn" style="background:var(--rdim);color:var(--red);border:1px solid rgba(255,77,109,.25);border-radius:8px;padding:5px 10px;font-size:.6rem;font-family:var(--mono);cursor:pointer;flex-shrink:0">Disconnect</button>
+  </div>
+
+  <!-- GATE PANEL -->
+  <div class="gate-panel" id="gatePanel">
+    <div class="gate-header">
+      <div class="gate-icon">🔐</div>
+      <div>
+        <div class="gate-title">Unlock Bridge</div>
+        <div class="gate-sub">Pay the access fee or enter a free code</div>
+      </div>
+    </div>
+    <div class="fee-box">
+      <div>
+        <div class="fee-label">Access Fee</div>
+        <div class="fee-amount" id="feeDisplay"><span style="font-size:.72rem;color:var(--muted)">Loading…</span></div>
+      </div>
+      <div class="fee-btns">
+        <button class="gate-btn gate-btn-connect" id="gateConnectBtn">🔌 Connect Wallet</button>
+        <button class="gate-btn gate-btn-pay" id="payFeeBtn" disabled>💳 Pay Fee</button>
+      </div>
+    </div>
+    <div class="gate-wallet-status" id="gateWalletStatus">
+      <div class="w-dot"></div>
+      <span id="gateWalletAddr" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">—</span>
+      <button id="gateDiscBtn" style="background:var(--rdim);color:var(--red);border:1px solid rgba(255,77,109,.25);border-radius:6px;padding:4px 10px;font-size:.6rem;font-family:var(--mono);cursor:pointer">Disconnect</button>
+    </div>
+    <div class="gate-divider">or use a free code</div>
+    <div class="code-row">
+      <div class="code-input-wrap">
+        <input type="text" id="accessCode" placeholder="Enter access code…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </div>
+      <button class="gate-btn gate-btn-connect" id="redeemCodeBtn" style="flex-shrink:0;padding:12px 18px">Redeem</button>
+    </div>
+    <div class="gate-status" id="gateStatus"></div>
+  </div>
+
+  <!-- UNLOCKED BADGE -->
+  <div class="unlocked-badge" id="unlockedBadge">
+    <span>✅</span><span id="unlockedMsg">Access granted</span>
+  </div>
+
+  <!-- BRIDGE CARD -->
+  <div class="card" id="bridgeCard" style="display:none">
+    <div class="card-lbl">Bridge</div>
+
+    <!-- Chain direction -->
+    <div class="chain-row">
+      <div class="chain-box">
+        <div class="chain-ico ci-pol">⬡</div>
+        <div><div class="chain-name">Polygon</div><div class="chain-sub">Source chain</div></div>
+      </div>
+      <div class="bridge-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+      <div class="chain-box">
+        <div class="chain-ico ci-sol">◎</div>
+        <div><div class="chain-name">Solana</div><div class="chain-sub">Destination</div></div>
+      </div>
+    </div>
+
+    <!-- You send -->
+    <div class="token-box">
+      <div class="tb-top">
+        <span>You Send (Polygon USDT)</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span id="fromBal">Balance: —</span>
+          <button class="max-btn" id="maxBtn">MAX</button>
+        </div>
+      </div>
+      <div class="input-row">
+        <input class="amt-input" type="number" id="fromAmt" placeholder="0.00" min="0" step="any" inputmode="decimal" autocomplete="off">
+        <div class="token-badge">
+          <div class="tok-ico ti-usdt">₮</div>
+          <span class="tok-name">USDT</span>
+        </div>
+      </div>
+<div class="usd-hint" id="fromUSD"></div>
+      <div id="limitWarn" style="font-size:0.65rem;color:#ffd166;margin-top:6px;display:none"></div>
+    </div>
+
+    <!-- Limit badge shown below token box -->
+    <div class="limit-badge" id="limitBadge"></div>
+
+    <!-- You receive -->
+    <div class="token-box" style="opacity:.85">
+      <div class="tb-top"><span>You Receive (Solana USDT)</span><span id="toNet" style="color:var(--muted)"></span></div>
+      <div class="input-row">
+        <input class="amt-input" type="number" id="toAmt" placeholder="0.00" readonly style="opacity:.7;cursor:default">
+        <div class="token-badge">
+          <div class="tok-ico ti-usdt">₮</div>
+          <span class="tok-name">USDT</span>
+        </div>
+      </div>
+      <div class="usd-hint" id="toUSD"></div>
+    </div>
+
+    <!-- Solana destination address -->
+    <div class="sol-box">
+      <div class="sol-lbl"><span>◎</span> Solana Destination Address</div>
+      <input class="sol-input" id="solAddr" placeholder="Your Phantom / Solflare / Backpack address" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <div class="sol-valid" id="solValid"></div>
+    </div>
+
+    <!-- Route info -->
+    <div class="route-box" id="routeBox">
+      <div class="r-row"><span class="r-key">Bridge</span><span class="r-val p" id="routeBridge">—</span></div>
+      <div class="r-row"><span class="r-key">Est. Time</span><span class="r-val y" id="routeTime">—</span></div>
+      <div class="r-row"><span class="r-key">Bridge Fee</span><span class="r-val" id="routeFee">—</span></div>
+      <div class="r-div"></div>
+      <div class="r-row"><span class="r-key">You Receive</span><span class="r-val g" id="routeReceive">—</span></div>
+      <div class="r-row"><span class="r-key">Rate</span><span class="r-val" id="routeRate">—</span></div>
+    </div>
+
+    <button class="action-btn btn-ghost" id="connectBtn" onclick="openWalletModal()">
+      <i class="fa-solid fa-wallet"></i> Connect Wallet to Bridge
+    </button>
+    <button class="action-btn btn-primary" id="bridgeBtn" style="display:none;margin-top:10px" disabled>
+      <i class="fa-solid fa-bridge"></i> <span id="bridgeBtnLabel">Bridge USDT → Solana</span>
+    </button>
+
+    <div class="log" id="log"></div>
+
+    <!-- Step tracker -->
+    <div class="steps" id="steps">
+      <div class="step-row"><div class="step-dot sd-wait" id="s1dot"></div><span id="s1txt">Approve USDT spend</span></div>
+      <div class="step-row"><div class="step-dot sd-wait" id="s2dot"></div><span id="s2txt">Bridge transaction</span></div>
+      <div class="step-row"><div class="step-dot sd-wait" id="s3dot"></div><span id="s3txt">Confirming on Solana</span></div>
+    </div>
+  </div>
+
+  <!-- TX TRACKER CARD — shown after successful bridge -->
+  <div class="tx-card" id="txCard">
+    <div class="card-lbl">Track Your Bridge</div>
+    <div style="font-family:var(--mono);font-size:.68rem;color:var(--muted);line-height:1.8" id="txCardBody"></div>
+  </div>
+
+  <!-- INFO BOX -->
+  <div class="info-box" id="infoBox" style="display:none">
+    <strong>How it works:</strong> Li.Fi finds the best bridge route (Allbridge, Meson, or Wormhole) to move USDT from your Polygon wallet to your Solana address. You sign once on Polygon; USDT arrives on Solana automatically.<br><br>
+    <strong>⏱ Time:</strong> ~2–10 min &nbsp;·&nbsp; <strong>Fees:</strong> ~$0.50–2 &nbsp;·&nbsp;
+    <a href="#" id="trackWalletLink" target="_blank" rel="noopener" style="color:#bf7fff">🔍 Track all my transactions on Li.Fi ↗</a>
+  </div>
+
+  <div class="footer">
+    <span style="font-family:var(--mono);font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em">Powered by</span>
+    <a href="https://li.fi" target="_blank" rel="noopener" style="font-family:var(--font);font-size:.82rem;font-weight:800;letter-spacing:-.3px;background:linear-gradient(90deg,#9945ff,#4facfe,#9945ff);background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 3s linear infinite;text-decoration:none">Li.Fi</a>
+    <span style="color:var(--muted2)">·</span>
+    <a href="https://niti.com.ng" target="_blank" rel="noopener" style="font-family:var(--font);font-size:.82rem;font-weight:800;letter-spacing:-.3px;background:linear-gradient(90deg,#00e5a0,#4facfe,#00e5a0);background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 3s linear infinite;text-decoration:none">Neroitech Inventions</a>
+  </div>
+
+</div><!-- /wrap -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+<script type="module">
+import EthereumProvider from 'https://esm.sh/@walletconnect/ethereum-provider@2.17.0?bundle';
+import { Web3Modal }    from 'https://esm.sh/@web3modal/standalone@2.4.3?bundle';
+
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const PROJECT_ID       = '08c159f4699e9b22371f9d0d4ce1aef8';
+const POLYGON_CHAIN_ID = 137;
+const POLYGON_HEX      = '0x89';
+const RPC_URL          = 'https://polygon-rpc.com/';
+const LIFI_API         = 'https://li.quest/v1';
+const LIFI_SCAN        = 'https://scan.li.fi';
+
+const USDT_POLYGON = '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'; // 6 decimals
+const USDT_SOLANA  = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
+const LIFI_POL_CHAIN = 137;
+const LIFI_SOL_CHAIN = 1151111081099710;
+
+// ── GOOGLE SHEETS CONFIG ──────────────────────────────────────────────────────
+// Same pattern as VERSE Swap. Only 2 columns used:
+//   A12 = Access fee in USDT  (number e.g. "5", or "FREE" to open without fee/code)
+//   B12 = Access code         (e.g. "BRIDGE2025")
+const SHEETS_API_KEY = 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q';
+const SHEETS_ID      = '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w';
+const SHEETS_TAB     = 'SnappQuestData';
+const SHEETS_RANGE   = `${SHEETS_TAB}!A11:B11`;
+const FEE_RECEIVER   = '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
+
+// ── BRIDGE LIMITS — hardcoded, same pattern as VERSE Swap ─────────────────────
+// Edit these two lines whenever you want to change the min/max bridge amount.
+// Same approach as MAX_VERSE_TO_USDT / MAX_POL_TO_VERSE in the swap page.
+const MIN_BRIDGE_USDT = 1;    // Minimum USDT per bridge transaction
+const MAX_BRIDGE_USDT = 5000;  // Maximum USDT per bridge transaction (bridge pool cap)
+
+const POLYGON_RPC_PARAMS = {
+  chainId:POLYGON_HEX, chainName:'Polygon Mainnet',
+  nativeCurrency:{name:'POL',symbol:'POL',decimals:18},
+  rpcUrls:[RPC_URL], blockExplorerUrls:['https://polygonscan.com/'],
+};
+
+const ERC20_ABI = [
+  'function balanceOf(address) view returns (uint256)',
+  'function allowance(address,address) view returns (uint256)',
+  'function approve(address,uint256) returns (bool)',
+  'function transfer(address,uint256) returns (bool)',
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let userAddress=null, ethProvider=null, ethSigner=null, wcProvider=null;
+let quoteData=null, quoteTimer=null, isBridging=false;
+let isUnlocked=false, feeAmountUSDT=0, validCode='';
+const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+const pageHost = window.location.host + window.location.pathname;
+const pageURL  = encodeURIComponent(window.location.href);
+
+// ── DOM REFS ──────────────────────────────────────────────────────────────────
+const $fromAmt    = document.getElementById('fromAmt');
+const $toAmt      = document.getElementById('toAmt');
+const $solAddr    = document.getElementById('solAddr');
+const $log        = document.getElementById('log');
+const $gatePanel  = document.getElementById('gatePanel');
+const $bridgeCard = document.getElementById('bridgeCard');
+const $feeDisplay = document.getElementById('feeDisplay');
+const $payFeeBtn  = document.getElementById('payFeeBtn');
+const $gateStatus = document.getElementById('gateStatus');
+const $gateWalletSt   = document.getElementById('gateWalletStatus');
+const $gateWalletAddr = document.getElementById('gateWalletAddr');
+const $unlockedBadge  = document.getElementById('unlockedBadge');
+const $unlockedMsg    = document.getElementById('unlockedMsg');
+const $walletBar  = document.getElementById('walletBar');
+const $walletAddr = document.getElementById('walletAddr');
+const $connectBtn = document.getElementById('connectBtn');
+const $bridgeBtn  = document.getElementById('bridgeBtn');
+
+// ── LOG HELPERS ───────────────────────────────────────────────────────────────
+function addLog(html) { $log.classList.add('show'); $log.innerHTML += html+'<br>'; $log.scrollTop=$log.scrollHeight; }
+function clearLog()   { $log.innerHTML=''; $log.classList.remove('show'); }
+function sp()         { return '<span class="sp"></span>'; }
+function shortAddr(a) { return a.slice(0,6)+'…'+a.slice(-4); }
+function readProvider(){ return ethProvider || new ethers.providers.JsonRpcProvider(RPC_URL); }
+
+// ── LI.FI SCAN LINKS ─────────────────────────────────────────────────────────
+// After any wallet connects, set the "Track" links to scan.li.fi/wallet/<address>
+// After a bridge TX, set them to scan.li.fi/tx/<hash>
+function setLifiScanWallet(address) {
+  const url = `${LIFI_SCAN}/wallet/${address}`;
+  document.getElementById('lifiScanBtn').href = url;
+  document.getElementById('lifiScanBtn').style.display = '';
+  const trackLink = document.getElementById('trackWalletLink');
+  if (trackLink) { trackLink.href = url; }
+}
+
+function setLifiScanTx(txHash) {
+  const url = `${LIFI_SCAN}/tx/${txHash}`;
+  // Show tx tracker card
+  const card = document.getElementById('txCard');
+  const body = document.getElementById('txCardBody');
+  card.classList.add('show');
+  body.innerHTML = `
+    <div style="margin-bottom:8px">✅ Bridge transaction submitted!</div>
+    <div style="margin-bottom:6px">📍 <strong style="color:var(--text)">TX Hash:</strong> <a href="https://polygonscan.com/tx/${txHash}" target="_blank" style="color:var(--green)">${shortAddr(txHash)} ↗</a></div>
+    <div style="margin-bottom:12px">🔍 <strong style="color:var(--text)">Track bridge progress:</strong><br>
+      <a href="${url}" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;margin-top:6px;padding:8px 14px;background:var(--pdim);border:1px solid rgba(153,69,255,.3);border-radius:10px;color:#bf7fff;text-decoration:none;font-size:.68rem;font-weight:700">
+        <i class="fa-solid fa-magnifying-glass"></i> Open Li.Fi Scan ↗
+      </a>
+    </div>
+    <div style="color:var(--muted)">Your USDT will arrive on Solana within 2–10 minutes. The Li.Fi scan page shows live status of the bridge.</div>
+  `;
+}
+
+// ── GOOGLE SHEETS — GATE CONFIG ───────────────────────────────────────────────
+// Row 12 columns:
+//   A = Access fee in USDT  (e.g. "5")
+//       Write "FREE" (exact, case-insensitive) to make it free with no fee.
+//       Leave empty or 0 = gate stays LOCKED until code is entered or fee paid.
+//   B = Access code         (e.g. "BRIDGE2025")
+//   C = Min bridge amount   (e.g. "10")
+//   D = Max bridge amount   (e.g. "5000")
+async function loadGateConfig() {
+  // Show loading state — gate stays locked until we get a valid response
+  $feeDisplay.innerHTML = `<span style="font-size:.72rem;color:var(--muted)">Loading…</span>`;
+  $payFeeBtn.disabled = true;
+
+  try {
+    const url  = `https://sheets.googleapis.com/v4/spreadsheets/${SHEETS_ID}/values/${encodeURIComponent(SHEETS_RANGE)}?key=${SHEETS_API_KEY}`;
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error(`Sheets HTTP ${res.status}`);
+    const data = await res.json();
+    const row  = data.values?.[0] || [];
+
+    const rawFee  = (row[0] || '').toString().trim();
+    validCode     = (row[1] || '').trim();
+
+    // Only auto-unlock if admin explicitly wrote "FREE" in cell A12
+    if (rawFee.toUpperCase() === 'FREE') {
+      feeAmountUSDT = 0;
+      $feeDisplay.innerHTML = `<span style="color:var(--green)">Free</span>`;
+      unlockGate('free');
+    } else {
+      // Treat blank, 0, or any non-positive value as "must pay or use code"
+      feeAmountUSDT = parseFloat(rawFee);
+      if (!feeAmountUSDT || feeAmountUSDT <= 0) {
+        // No fee set — but also not marked FREE.
+        // Gate stays locked; user must enter the access code.
+        feeAmountUSDT = 0;
+        $feeDisplay.innerHTML = `<span style="color:var(--muted);font-size:.8rem">Use access code below</span>`;
+        // Hide the pay fee button since there's no fee to pay
+        $payFeeBtn.style.display = 'none';
+      } else {
+        $feeDisplay.innerHTML = `<span style="color:var(--green);font-size:1.2rem;font-weight:500">${feeAmountUSDT.toLocaleString()} VERSE</span>`;
+      }
+      updateGateWalletUI();
+    }
+
+    // Update limit badge with admin values
+    updateLimitBadge();
+
+  } catch(e) {
+    console.error('Sheets error:', e);
+    // On ANY error — keep gate LOCKED, show error, require manual refresh
+    $feeDisplay.innerHTML = `<span style="color:var(--red);font-size:.72rem">⚠️ Could not load config — please refresh</span>`;
+    $payFeeBtn.disabled   = true;
+    $payFeeBtn.style.display = 'none';
+    gateMsg('Could not reach config server. Please refresh the page.', 'err');
+    // Do NOT call unlockGate() — stay locked
+    updateLimitBadge();
+  }
+}
+
+function updateLimitBadge() {
+  const el = document.getElementById('limitBadge');
+  el.textContent = `Min: $${MIN_BRIDGE_USDT.toLocaleString()} USDT  ·  Max: $${MAX_BRIDGE_USDT.toLocaleString()} USDT`;
+  el.style.display = '';
+}
+
+// ── GATE LOGIC ────────────────────────────────────────────────────────────────
+function updateGateWalletUI() {
+  if (isUnlocked) return;
+  if (userAddress) {
+    $gateWalletSt.classList.add('show');
+    $gateWalletAddr.textContent = shortAddr(userAddress);
+    document.getElementById('gateConnectBtn').style.display = 'none';
+    if (feeAmountUSDT > 0) $payFeeBtn.disabled = false;
+  } else {
+    $gateWalletSt.classList.remove('show');
+    document.getElementById('gateConnectBtn').style.display = '';
+    $payFeeBtn.disabled = true;
+  }
+}
+
+function unlockGate(method) {
+  isUnlocked = true;
+  $gatePanel.style.display = 'none';
+  $unlockedBadge.classList.add('show');
+  $bridgeCard.style.display = '';
+  document.getElementById('infoBox').style.display = '';
+  if      (method === 'code') $unlockedMsg.textContent = '🎟️ Access code accepted — bridge unlocked!';
+  else if (method === 'fee')  $unlockedMsg.textContent = '💳 Fee paid — bridge unlocked!';
+  else                        $unlockedMsg.textContent = '✅ Access granted — bridge unlocked!';
+  updateLimitBadge();
+}
+
+function gateMsg(text, type) {
+  $gateStatus.textContent = text;
+  $gateStatus.className = `gate-status show ${type}`;
+}
+
+document.getElementById('redeemCodeBtn').addEventListener('click', () => {
+  const entered = document.getElementById('accessCode').value.trim();
+  if (!entered) { gateMsg('Please enter an access code.', 'err'); return; }
+
+  // If Sheets hasn't loaded yet (validCode is still empty string)
+  // AND feeAmountUSDT is 0 — we don't know the real code yet, block it
+  if (!validCode) {
+    gateMsg('No access code is configured. Please pay the fee or refresh the page.', 'err');
+    return;
+  }
+
+  if (entered === validCode) {
+    document.getElementById('accessCode').classList.add('valid');
+    document.getElementById('accessCode').classList.remove('invalid');
+    gateMsg('✅ Code accepted! Unlocking…', 'ok');
+    setTimeout(() => unlockGate('code'), 700);
+  } else {
+    document.getElementById('accessCode').classList.add('invalid');
+    document.getElementById('accessCode').classList.remove('valid');
+    gateMsg('❌ Invalid code. Check and try again.', 'err');
+  }
+});
+document.getElementById('accessCode').addEventListener('input', () => {
+  document.getElementById('accessCode').classList.remove('valid','invalid');
+  $gateStatus.classList.remove('show');
+});
+
+$payFeeBtn.addEventListener('click', async () => {
+  if (!userAddress || !ethSigner) { gateMsg('Connect your wallet first.', 'err'); return; }
+  if (feeAmountUSDT <= 0) { unlockGate('free'); return; }
+  $payFeeBtn.disabled = true;
+  $payFeeBtn.textContent = 'Sending…';
+  gateMsg('⏳ Waiting for wallet approval…', 'ok');
+  try {
+    const usdtContract = new ethers.Contract(USDT_POLYGON, ERC20_ABI, ethSigner);
+    const feeValue     = ethers.utils.parseUnits(String(feeAmountUSDT), 6);
+    const balance      = await usdtContract.balanceOf(userAddress);
+    if (balance.lt(feeValue)) {
+      const have = parseFloat(ethers.utils.formatUnits(balance, 6)).toLocaleString();
+      gateMsg(`❌ Insufficient USDT. Need $${feeAmountUSDT}, have $${have}.`, 'err');
+      $payFeeBtn.disabled = false; $payFeeBtn.textContent = '💳 Pay Fee'; return;
+    }
+    gateMsg('⏳ Confirm the fee transfer in your wallet…', 'ok');
+    const tx      = await usdtContract.transfer(FEE_RECEIVER, feeValue, { gasLimit: 100000 });
+    gateMsg(`⏳ TX submitted — confirming… (${shortAddr(tx.hash)})`, 'ok');
+    const receipt = await tx.wait(1);
+    if (receipt.status === 1) {
+      gateMsg('✅ Fee confirmed! Unlocking…', 'ok');
+      setTimeout(() => unlockGate('fee'), 700);
+    } else {
+      gateMsg('❌ Transaction reverted. Please try again.', 'err');
+      $payFeeBtn.disabled = false; $payFeeBtn.textContent = '💳 Pay Fee';
+    }
+  } catch(e) {
+    const isRejected = e.code===4001||e.code==='ACTION_REJECTED'||(e.message||'').toLowerCase().includes('user rejected');
+    gateMsg(isRejected ? '❌ Rejected by user.' : `❌ ${e.reason||e.message||'Error paying fee.'}`, 'err');
+    $payFeeBtn.disabled = false; $payFeeBtn.textContent = '💳 Pay Fee';
+  }
+});
+
+document.getElementById('gateConnectBtn').addEventListener('click', openWalletModal);
+document.getElementById('gateDiscBtn').addEventListener('click', async () => {
+  try { if(wcProvider?.disconnect) await wcProvider.disconnect(); } catch(_) {}
+  setDisconnected();
+});
+
+// ── SOLANA ADDRESS VALIDATION ─────────────────────────────────────────────────
+function isValidSolanaAddr(addr) {
+  return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test((addr||'').trim());
+}
+$solAddr.addEventListener('input', () => {
+  const v = $solAddr.value.trim();
+  const el = document.getElementById('solValid');
+  if (!v)                  { el.textContent=''; el.className='sol-valid'; }
+  else if (isValidSolanaAddr(v)) { el.textContent='✓ Valid Solana address'; el.className='sol-valid ok'; }
+  else                     { el.textContent='✗ Invalid Solana address'; el.className='sol-valid err'; }
+  scheduleQuote();
+});
+
+// ── BALANCE ───────────────────────────────────────────────────────────────────
+async function updateBalance() {
+  if (!userAddress) { document.getElementById('fromBal').textContent='Balance: —'; return; }
+  try {
+    const c   = new ethers.Contract(USDT_POLYGON, ERC20_ABI, readProvider());
+    const raw = await c.balanceOf(userAddress);
+    const bal = parseFloat(ethers.utils.formatUnits(raw, 6));
+    document.getElementById('fromBal').textContent = `Balance: $${bal.toLocaleString(undefined,{maximumFractionDigits:2})}`;
+    document.getElementById('fromBal').dataset.raw = raw.toString();
+  } catch { document.getElementById('fromBal').textContent = 'Balance: —'; }
+}
+
+document.getElementById('maxBtn').addEventListener('click', () => {
+  const raw = document.getElementById('fromBal').dataset.raw;
+  if (!raw) return;
+  const walletBal = parseFloat(ethers.utils.formatUnits(ethers.BigNumber.from(raw), 6));
+  if (walletBal <= 0) return;
+  // Cap at whichever is lower: wallet balance OR max limit
+  const usable = Math.min(walletBal, MAX_BRIDGE_USDT);
+  // If wallet balance is below minimum, warn and don't populate
+  const el = document.getElementById('limitWarn');
+  if (walletBal < MIN_BRIDGE_USDT) {
+    el.textContent = `⚠️ Your balance ($${walletBal.toFixed(2)} USDT) is below the minimum of $${MIN_BRIDGE_USDT.toLocaleString()} USDT`;
+    el.style.display = 'block';
+    return;
+  }
+  $fromAmt.value = usable.toFixed(2);
+  el.style.display = 'none'; // clear warning — value is valid
+  quoteData = null;
+  scheduleQuote();
+});
+
+// ── LIMIT + BALANCE ENFORCEMENT ──────────────────────────────────────────────
+// Called on every keystroke — same pattern as VERSE Swap's enforceMaxLimit()
+function enforceAmountLimits() {
+  const val  = parseFloat($fromAmt.value);
+  const el   = document.getElementById('limitWarn');
+
+  if (!val || val <= 0) { el.style.display = 'none'; return; }
+
+  // Hard cap at MAX — clamp immediately
+  if (val > MAX_BRIDGE_USDT) {
+    $fromAmt.value = MAX_BRIDGE_USDT;
+    el.textContent = `⚠️ Maximum allowed: $${MAX_BRIDGE_USDT.toLocaleString()} USDT`;
+    el.style.display = 'block';
+    return;
+  }
+
+  // Below minimum
+  if (val < MIN_BRIDGE_USDT) {
+    el.textContent = `⚠️ Minimum allowed: $${MIN_BRIDGE_USDT.toLocaleString()} USDT`;
+    el.style.display = 'block';
+    return;
+  }
+
+  // Exceeds wallet balance — clamp to balance
+  const rawBal = document.getElementById('fromBal').dataset.raw;
+  if (rawBal) {
+    const walletBal = parseFloat(ethers.utils.formatUnits(ethers.BigNumber.from(rawBal), 6));
+    if (val > walletBal) {
+      $fromAmt.value = walletBal.toFixed(2);
+      el.textContent = `⚠️ Exceeds balance: $${walletBal.toLocaleString(undefined,{maximumFractionDigits:2})} USDT`;
+      el.style.display = 'block';
+      return;
+    }
+  }
+
+  el.style.display = 'none';
+}
+
+$fromAmt.addEventListener('input', () => {
+  quoteData = null;
+  $toAmt.value = '';
+  document.getElementById('routeBox').classList.remove('show');
+  enforceAmountLimits();
+  scheduleQuote();
+});
+
+// On blur — final clamp pass (catches paste, autofill, etc.)
+$fromAmt.addEventListener('blur', enforceAmountLimits);
+
+// ── QUOTE ─────────────────────────────────────────────────────────────────────
+function scheduleQuote() { clearTimeout(quoteTimer); quoteTimer=setTimeout(fetchQuote, 800); }
+
+async function fetchQuote() {
+  const amt     = parseFloat($fromAmt.value);
+  const solDest = $solAddr.value.trim();
+
+  if (!amt || amt <= 0 || !isValidSolanaAddr(solDest) || amt < MIN_BRIDGE_USDT || amt > MAX_BRIDGE_USDT) {
+    $toAmt.value=''; document.getElementById('routeBox').classList.remove('show');
+    updateBridgeBtn(); return;
+  }
+
+  const amountIn = ethers.utils.parseUnits(String(amt), 6).toString();
+  addLog(`<span class="lg-warn">${sp()}Finding best route for $${amt} USDT…</span>`);
+
+  try {
+    const params = new URLSearchParams({
+      fromChain:   LIFI_POL_CHAIN,
+      toChain:     LIFI_SOL_CHAIN,
+      fromToken:   USDT_POLYGON,
+      toToken:     USDT_SOLANA,
+      fromAmount:  amountIn,
+      fromAddress: userAddress || '0x0000000000000000000000000000000000000001',
+      toAddress:   solDest,
+      integrator:  'neroitech-web3',
+    });
+
+    const res  = await fetch(`${LIFI_API}/quote?${params}`);
+    const data = await res.json();
+
+    if (!res.ok || data.message) {
+      // Try to parse min/max from error message
+      const msg = data.message || '';
+      const minMatch = msg.match(/min(?:imum)?[:\s]+(\d+)/i);
+      const maxMatch = msg.match(/max(?:imum)?[:\s]+(\d+)/i);
+      // (limits are hardcoded constants — see MIN_BRIDGE_USDT / MAX_BRIDGE_USDT)
+      throw new Error(data.message || `API error ${res.status}`);
+    }
+
+    quoteData = data;
+
+    const toAmtHuman  = parseFloat(data.estimate?.toAmount ? ethers.utils.formatUnits(data.estimate.toAmount, 6) : 0);
+    const feeCosts    = data.estimate?.feeCosts || [];
+    const totalFeeUSD = feeCosts.reduce((s,f) => s + parseFloat(f.amountUSD||0), 0);
+    const execTime    = data.estimate?.executionDuration || 0;
+    const bridgeName  = data.tool || data.steps?.[0]?.tool || 'Best Route';
+    const bridgeCap   = bridgeName.charAt(0).toUpperCase() + bridgeName.slice(1);
+
+    $toAmt.value = toAmtHuman.toFixed(4);
+    document.getElementById('routeBridge').textContent  = bridgeCap;
+    document.getElementById('routeTime').textContent    = execTime >= 60 ? `~${Math.round(execTime/60)} min` : `~${execTime}s`;
+    document.getElementById('routeFee').textContent     = totalFeeUSD > 0 ? `~$${totalFeeUSD.toFixed(2)}` : 'Minimal';
+    document.getElementById('routeReceive').textContent = `${toAmtHuman.toFixed(4)} USDT`;
+    document.getElementById('routeRate').textContent    = `$1 → ${(toAmtHuman/amt).toFixed(4)} USDT`;
+    document.getElementById('toNet').textContent        = `via ${bridgeCap}`;
+    document.getElementById('routeBox').classList.add('show');
+
+    addLog(`<span class="lg-ok">✅ Route: $${amt} USDT → ${toAmtHuman.toFixed(4)} USDT via ${bridgeCap} (~${execTime>=60?Math.round(execTime/60)+'min':execTime+'s'})</span>`);
+  } catch(e) {
+    addLog(`<span class="lg-err">❌ ${e.message}</span>`);
+    quoteData = null;
+    $toAmt.value=''; document.getElementById('routeBox').classList.remove('show');
+  }
+  updateBridgeBtn();
+}
+
+// ── BRIDGE BUTTON STATE ───────────────────────────────────────────────────────
+function updateBridgeBtn() {
+  const amt     = parseFloat($fromAmt.value);
+  const inRange = amt >= MIN_BRIDGE_USDT && amt <= MAX_BRIDGE_USDT;
+  // Also check balance
+  const rawBal  = document.getElementById('fromBal').dataset.raw;
+  const walletBal = rawBal ? parseFloat(ethers.utils.formatUnits(ethers.BigNumber.from(rawBal), 6)) : Infinity;
+  const withinBal = amt <= walletBal;
+  const ready   = !!(userAddress && quoteData && amt > 0 && inRange && withinBal && isValidSolanaAddr($solAddr.value) && !isBridging);
+  $bridgeBtn.disabled = !ready;
+  document.getElementById('bridgeBtnLabel').textContent = isBridging ? 'Bridging…' : 'Bridge USDT → Solana';
+}
+
+// ── BRIDGE EXECUTION ──────────────────────────────────────────────────────────
+async function executeBridge() {
+  if (isBridging || !userAddress || !ethSigner || !quoteData) return;
+  const amt     = parseFloat($fromAmt.value);
+  const solDest = $solAddr.value.trim();
+  if (!amt || !isValidSolanaAddr(solDest)) return;
+
+  // Final checks: min/max + balance
+  if (amt < MIN_BRIDGE_USDT) { addLog(`<span class="lg-err">❌ Minimum is $${MIN_BRIDGE_USDT.toLocaleString()} USDT.</span>`); isBridging=false; updateBridgeBtn(); return; }
+  if (amt > MAX_BRIDGE_USDT) { addLog(`<span class="lg-err">❌ Maximum is $${MAX_BRIDGE_USDT.toLocaleString()} USDT.</span>`); isBridging=false; updateBridgeBtn(); return; }
+
+  // Balance check — prevent submitting if wallet has insufficient USDT
+  const rawBal = document.getElementById('fromBal').dataset.raw;
+  if (rawBal) {
+    const walletBal = parseFloat(ethers.utils.formatUnits(ethers.BigNumber.from(rawBal), 6));
+    if (amt > walletBal) {
+      addLog(`<span class="lg-err">❌ Insufficient balance. You have $${walletBal.toLocaleString(undefined,{maximumFractionDigits:2})} USDT, trying to bridge $${amt}.</span>`);
+      isBridging=false; updateBridgeBtn(); return;
+    }
+  }
+
+  isBridging = true; updateBridgeBtn(); clearLog();
+
+  const steps = document.getElementById('steps');
+  steps.classList.add('show');
+  function setStep(n, state, txt) {
+    document.getElementById(`s${n}dot`).className = `step-dot sd-${state}`;
+    if (txt) document.getElementById(`s${n}txt`).textContent = txt;
+  }
+  setStep(1,'active'); setStep(2,'wait'); setStep(3,'wait');
+
+  try {
+    const amountIn     = ethers.utils.parseUnits(String(amt), 6);
+    const usdtContract = new ethers.Contract(USDT_POLYGON, ERC20_ABI, ethSigner);
+    const spender      = quoteData.estimate?.approvalAddress || quoteData.transactionRequest?.to;
+
+    // Step 1 — Approve
+    const allowance = await usdtContract.allowance(userAddress, spender);
+    if (allowance.lt(amountIn)) {
+      addLog(`<span class="lg-warn">${sp()}Approving USDT spend in your wallet…</span>`);
+      const appTx = await usdtContract.approve(spender, ethers.constants.MaxUint256, { gasLimit: 80000 });
+      addLog(`<span class="lg-info">  Approval TX: <a href="https://polygonscan.com/tx/${appTx.hash}" target="_blank" style="color:var(--green)">${shortAddr(appTx.hash)} ↗</a></span>`);
+      const appR = await appTx.wait(1);
+      if (appR.status !== 1) throw new Error('Approval reverted');
+      addLog(`<span class="lg-ok">  ✅ USDT approved!</span>`);
+    } else {
+      addLog(`<span class="lg-ok">  ✅ Allowance already set.</span>`);
+    }
+    setStep(1,'done'); setStep(2,'active');
+
+    // Step 2 — Bridge TX
+    const txReq = quoteData.transactionRequest;
+    if (!txReq) throw new Error('No transaction data. Please re-fetch the quote.');
+
+    addLog(`<span class="lg-warn">${sp()}Confirm bridge transaction in your wallet…</span>`);
+    const tx = await ethSigner.sendTransaction({
+      to:       txReq.to,
+      data:     txReq.data,
+      value:    txReq.value || '0x0',
+      gasLimit: txReq.gasLimit || 400000,
+      gasPrice: txReq.gasPrice,
+    });
+    addLog(`<span class="lg-info">  Bridge TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank" style="color:var(--green)">${shortAddr(tx.hash)} ↗</a> — waiting…</span>`);
+
+    const receipt = await tx.wait(1);
+    if (receipt.status !== 1) throw new Error('Bridge transaction reverted');
+
+    setStep(2,'done'); setStep(3,'active');
+    addLog(`<span class="lg-ok">🎉 Polygon TX confirmed! USDT is being bridged to Solana…</span>`);
+    addLog(`<span class="lg-info">  Destination: ${solDest.slice(0,6)}…${solDest.slice(-4)}</span>`);
+
+    // ── Show Li.Fi scan link for this specific TX ──────────────────────────
+    const txScanURL = `${LIFI_SCAN}/tx/${tx.hash}`;
+    addLog(`<span class="lg-ok">  🔍 <a href="${txScanURL}" target="_blank" rel="noopener" style="color:#bf7fff;font-weight:700">Track on Li.Fi Scan ↗</a></span>`);
+    setLifiScanTx(tx.hash);
+
+    // Step 3 — Poll status
+    addLog(`<span class="lg-info">${sp()}Polling bridge status…</span>`);
+    const finalStatus = await pollBridgeStatus(tx.hash);
+    if (finalStatus === 'DONE') {
+      setStep(3,'done');
+      addLog(`<span class="lg-ok">✅ Bridge complete! USDT has arrived on Solana.</span>`);
+    } else if (finalStatus === 'FAILED') {
+      setStep(3,'err');
+      addLog(`<span class="lg-err">❌ Bridge reported failure. Check Li.Fi Scan for details.</span>`);
+    } else {
+      setStep(3,'done');
+      addLog(`<span class="lg-warn">⏳ Still processing — check <a href="${txScanURL}" target="_blank" rel="noopener" style="color:#bf7fff">Li.Fi Scan</a> for live status.</span>`);
+    }
+
+    // Reset inputs
+    $fromAmt.value=''; $toAmt.value=''; quoteData=null;
+    document.getElementById('routeBox').classList.remove('show');
+    updateBalance();
+
+  } catch(e) {
+    const m = (e.message||'').toLowerCase();
+    if (e.code===4001||e.code==='ACTION_REJECTED'||m.includes('user rejected')||m.includes('denied')) {
+      addLog(`<span class="lg-err">❌ Rejected by user.</span>`);
+    } else if (m.includes('insufficient funds')) {
+      addLog(`<span class="lg-err">❌ Insufficient POL for gas.</span>`);
+    } else {
+      addLog(`<span class="lg-err">❌ ${e.reason||e.message||'Unknown error'}</span>`);
+    }
+    setStep(1,'wait'); setStep(2,'wait'); setStep(3,'wait');
+    steps.classList.remove('show');
+  }
+
+  isBridging = false; updateBridgeBtn();
+}
+
+// ── POLL LI.FI STATUS ─────────────────────────────────────────────────────────
+async function pollBridgeStatus(txHash) {
+  for (let i = 0; i < 24; i++) {
+    await new Promise(r => setTimeout(r, 5000));
+    try {
+      const res  = await fetch(`${LIFI_API}/status?txHash=${txHash}&fromChain=${LIFI_POL_CHAIN}&toChain=${LIFI_SOL_CHAIN}`);
+      const data = await res.json();
+      const s    = (data.status||'').toUpperCase();
+      if (s === 'DONE')   return 'DONE';
+      if (s === 'FAILED') return 'FAILED';
+    } catch { /* keep polling */ }
+  }
+  return 'PENDING'; // timed out — still likely completing
+}
+
+// ── WALLET CONNECTION ─────────────────────────────────────────────────────────
+const web3modal = new Web3Modal({
+  projectId:PROJECT_ID, walletConnectVersion:2, themeMode:'dark',
+  themeVariables:{'--w3m-accent-color':'#9945ff','--w3m-accent-fill-color':'#fff','--w3m-background-color':'#0c1220','--w3m-container-border-radius':'20px','--w3m-font-family':"'Syne',sans-serif",'--w3m-z-index':'99999'},
+  explorerRecommendedWalletIds:['fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa','c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96','4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0'],
+  explorerExcludedWalletIds:'ALL',
+});
+
+async function ensurePolygon(eth) {
+  try { await eth.request({method:'wallet_switchEthereumChain',params:[{chainId:POLYGON_HEX}]}); }
+  catch(e) { if(e.code===4902) await eth.request({method:'wallet_addEthereumChain',params:[POLYGON_RPC_PARAMS]}); else throw e; }
+}
+
+function setConnected(label) {
+  $walletBar.classList.add('show');
+  $walletAddr.textContent = label;
+  $connectBtn.style.display = 'none';
+  $bridgeBtn.style.display  = '';
+  setLifiScanWallet(userAddress);
+  updateGateWalletUI();
+  updateBalance();
+  updateBridgeBtn();
+  // Update the "track wallet" info link
+  const tl = document.getElementById('trackWalletLink');
+  if (tl) tl.href = `${LIFI_SCAN}/wallet/${userAddress}`;
+}
+
+function setDisconnected() {
+  userAddress=null; ethProvider=null; ethSigner=null; wcProvider=null; isBridging=false;
+  $walletBar.classList.remove('show');
+  $connectBtn.style.display = '';
+  $bridgeBtn.style.display  = 'none';
+  quoteData=null;
+  document.getElementById('routeBox').classList.remove('show');
+  document.getElementById('fromBal').textContent = 'Balance: —';
+  document.getElementById('lifiScanBtn').style.display = 'none';
+  updateGateWalletUI();
+  clearLog();
+}
+
+async function connectInjected(eth) {
+  closeWalletModal(); clearLog();
+  try {
+    addLog(`<span class="lg-warn">${sp()}Requesting wallet access…</span>`);
+    await eth.request({method:'eth_requestAccounts'});
+    await ensurePolygon(eth);
+    ethProvider = new ethers.providers.Web3Provider(eth,'any');
+    ethSigner   = ethProvider.getSigner();
+    const net   = await ethProvider.getNetwork();
+    if (net.chainId !== POLYGON_CHAIN_ID) { addLog(`<span class="lg-err">❌ Switch to Polygon Mainnet.</span>`); return; }
+    userAddress = await ethSigner.getAddress();
+    setConnected(shortAddr(userAddress)+' · Polygon');
+    eth.on('accountsChanged', a => { if(!a.length) setDisconnected(); else { userAddress=a[0]; $walletAddr.textContent=shortAddr(a[0])+' · Polygon'; setLifiScanWallet(a[0]); updateBalance(); } });
+    eth.on('chainChanged', () => location.reload());
+  } catch(e) { addLog(`<span class="lg-err">❌ ${e.code===4001?'Rejected.':(e.message||'Failed.')}</span>`); }
+}
+
+async function connectWC() {
+  closeWalletModal(); clearLog();
+  addLog(`<span class="lg-warn">${sp()}Initialising WalletConnect…</span>`);
+  try {
+    if (wcProvider) { try{await wcProvider.disconnect();}catch(_){} wcProvider=null; }
+    wcProvider = await EthereumProvider.init({
+      projectId:PROJECT_ID, chains:[POLYGON_CHAIN_ID], optionalChains:[POLYGON_CHAIN_ID], showQrModal:false,
+      metadata:{name:'Cross-Chain Bridge',description:'Polygon → Solana USDT Bridge',url:window.location.origin,icons:[]}
+    });
+    wcProvider.on('display_uri', async uri => { await web3modal.openModal({uri,standaloneChains:[`eip155:${POLYGON_CHAIN_ID}`]}); });
+    wcProvider.on('connect',    () => web3modal.closeModal());
+    wcProvider.on('disconnect', () => { web3modal.closeModal(); setDisconnected(); });
+    await wcProvider.connect({chains:[POLYGON_CHAIN_ID]});
+    ethProvider = new ethers.providers.Web3Provider(wcProvider,'any');
+    ethSigner   = ethProvider.getSigner();
+    const accounts = await ethProvider.listAccounts();
+    if (!accounts.length) throw new Error('No accounts returned.');
+    userAddress = accounts[0];
+    setConnected(shortAddr(userAddress)+' · WalletConnect');
+  } catch(e) {
+    web3modal.closeModal();
+    const m=(e.message||'').toLowerCase();
+    if (m.includes('user rejected')||m.includes('cancelled')||m.includes('closed')||e.code===4001)
+      addLog(`<span class="lg-err">❌ Connection cancelled.</span>`);
+    else addLog(`<span class="lg-err">❌ WalletConnect: ${e.message||'Failed.'}</span>`);
+  }
+}
+
+function openWalletModal() {
+  document.getElementById('walletModal').classList.add('open');
+  const mmBadge=document.getElementById('mmBadge'), mmDesc=document.getElementById('mmDesc');
+  if (window.ethereum?.isMetaMask) { mmBadge.textContent='✓ Detected'; mmBadge.className='wbadge'; mmDesc.textContent='Click to connect'; }
+  else if (isMobile) { mmBadge.textContent='Open App'; mmBadge.className='wbadge blue'; }
+  else { mmBadge.textContent='Install'; mmBadge.className='wbadge'; }
+}
+function closeWalletModal() { document.getElementById('walletModal').classList.remove('open'); }
+window.openWalletModal  = openWalletModal;
+window.closeWalletModal = closeWalletModal;
+
+document.getElementById('walletModalClose').addEventListener('click', closeWalletModal);
+document.getElementById('walletModal').addEventListener('click', e => { if(e.target===document.getElementById('walletModal')) closeWalletModal(); });
+document.getElementById('wcBtn').addEventListener('click', connectWC);
+document.getElementById('mmBtn').addEventListener('click', () => {
+  if (window.ethereum) { connectInjected(window.ethereum); return; }
+  closeWalletModal();
+  if (isMobile) window.location.href=`https://metamask.app.link/dapp/${pageHost}`;
+  else window.open('https://metamask.io/download/','_blank');
+});
+document.getElementById('btcBtn').addEventListener('click', () => {
+  if (window.ethereum) { connectInjected(window.ethereum); return; }
+  closeWalletModal();
+  if (isMobile) { window.location.href=`bitcoincom://browser?url=${pageURL}`; setTimeout(()=>window.open('https://wallet.bitcoin.com/','_blank'),2000); }
+  else connectWC();
+});
+document.getElementById('twBtn').addEventListener('click', () => {
+  if (window.ethereum) { connectInjected(window.ethereum); return; }
+  closeWalletModal();
+  if (isMobile) window.location.href=`https://link.trustwallet.com/open_url?coin_id=966&url=${pageURL}`;
+  else window.open('https://trustwallet.com/browser-extension','_blank');
+});
+
+document.getElementById('discBtn').addEventListener('click', async () => {
+  try { if(wcProvider?.disconnect) await wcProvider.disconnect(); } catch(_) {}
+  setDisconnected();
+});
+
+document.getElementById('bridgeBtn').addEventListener('click', executeBridge);
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+loadGateConfig();
+updateBridgeBtn();
+</script>
+</body>
+</html>
