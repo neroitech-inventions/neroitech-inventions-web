@@ -3,9 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-QM106YDX6N');</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QM106YDX6N');
+</script>
+<script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
+<script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.tagged-events.outbound-links.file-downloads.hash.pageview-props.revenue.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Cross-Chain Bridge — Polygon → Solana</title>
+<title>Cross-Chain Bridge: Polygon → Solana</title>
 <link href="images/favicon.ico" rel="icon">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -424,8 +431,8 @@ const USDT_SOLANA  = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
 const LIFI_POL_CHAIN = 137;
 const LIFI_SOL_CHAIN = 1151111081099710;
 
-// ── GOOGLE SHEETS CONFIG ──────────────────────────────────────────────────────
-// Same pattern as VERSE Swap. Only 2 columns used:
+// ── SHEETS CONFIG ──────────────────────────────────────────────────────
+// Same pattern as VERSE Swap. 2 columns used:
 //   A12 = Access fee in USDT  (number e.g. "5", or "FREE" to open without fee/code)
 //   B12 = Access code         (e.g. "BRIDGE2025")
 const SHEETS_API_KEY = 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q';
