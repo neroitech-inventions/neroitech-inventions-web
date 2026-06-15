@@ -214,6 +214,28 @@
         }
         .submissions-table tr:hover { background: #F9FAFB; }
 
+        /* BLACKLIST STYLES */
+.submissions-table tr.blacklisted {
+    background: #fee2e2 !important;
+    color: #b91c1c !important;
+}
+.submissions-table tr.blacklisted td,
+.submissions-table tr.blacklisted a {
+    color: #b91c1c !important;
+}
+.blacklisted-badge {
+    background: #b91c1c;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    margin-left: 8px;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+}
+
         .rank { font-weight: 700; font-size: 20px; color: #6366F1; text-align: center; }
         .sub-count { font-size: 24px; font-weight: 700; color: #34D399; text-align: center; }
 
@@ -240,6 +262,23 @@
             border: none;
         }
         .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+
+        .export-btn {
+    background: linear-gradient(135deg, #10B981, #34D399);
+    color: #ffffff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.export-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
 
 /* ==================== MODERN LOADER - RESPONSIVE ==================== */
 #loadingOverlay {
@@ -521,6 +560,13 @@
     </div>
 </div>
 
+<div style="text-align:center; margin: 20px 0;">
+    <button id="bulkAirdropBtn" class="export-btn" 
+            style="background: linear-gradient(135deg, #6366F1, #4F46E5); padding: 12px 28px; font-size: 16px;">
+        💰 Generate Bulk Airdrop List
+    </button>
+</div>
+
         <div class="submissions-section">
             <h2 id="leaderboard-title" style="text-align:center; margin:30px 0 20px; font-size:28px;">All-Time Hall of Fame 🏆</h2>
             
@@ -602,7 +648,8 @@
         const CONFIG = {
             API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
             RESPONSE_ID: '1uI__u1VylTAb6ukduHOuHXkcGX5UwgpAFzD8DY5-_bI',
-            RESPONSE_RANGE: 'Form responses 4!A1:F10000'
+            RESPONSE_RANGE: 'Form responses 4!A1:F10000',
+            BLACKLIST_ID: '1D6NaJ0I1kLNUSUqWRjy4aaY1pE-we1PqpTmCytG5ass'
         };
 
         let allTimeLeaders = [];
@@ -642,6 +689,25 @@
             const [_, d, m, y, h, min, s] = parts;
             return new Date(y, m-1, d, h, min, s);
         }
+
+        // ==================== BLACKLIST LOADING ====================
+async function loadBlacklist() {
+    try {
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.BLACKLIST_ID}/values/NaughtyList!A:A?key=${CONFIG.API_KEY}`;
+        const res = await fetch(url);
+        if (!res.ok) return;
+
+        const data = await res.json();
+        const values = data.values || [];
+        blacklistedSet = new Set(
+            values
+                .map(row => (row[0] || '').toString().trim().toLowerCase().replace(/^@/, '').trim())
+                .filter(val => val.length > 0)
+        );
+    } catch (e) {
+        console.warn('Blacklist could not be loaded:', e);
+    }
+}
 
         function getBlockchainTag(wallet) {
             if (!wallet) return '[Unknown]';
@@ -691,6 +757,7 @@
             loader.style.opacity = '1';
 
             try {
+                await loadBlacklist();
                 const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.RESPONSE_ID}/values/${CONFIG.RESPONSE_RANGE}?key=${CONFIG.API_KEY}`;
                 const res = await fetch(url);
                 const data = await res.json();
@@ -800,11 +867,18 @@ function renderPage(leaders) {
     DOM.noLeaders.style.display = 'none';
 
     pageLeaders.forEach((item, idx) => {
-        const globalRank = start + idx + 1;           // This was the old line
-        // NEW: Show the real overall rank from the full list
         const overallRank = leaders.indexOf(item) + 1;
-
         const tr = document.createElement('tr');
+
+        // Blacklist Check
+        const telegramRaw = (item.telegram || '').trim();
+        const normalizedTelegram = telegramRaw.toLowerCase().replace(/^@/, '');
+        const isBlacklisted = blacklistedSet.has(normalizedTelegram);
+
+        if (isBlacklisted) {
+            tr.classList.add('blacklisted');
+        }
+
         const walletShort = shortenWallet(item.wallet);
         const explorer = getExplorerUrl(item.wallet);
         const tag = getBlockchainTag(item.wallet);
@@ -815,11 +889,15 @@ function renderPage(leaders) {
             const tg = item.telegram.replace('@','');
             contributorHTML += `<a href="https://t.me/${tg}" target="_blank" style="display:block;margin-bottom:8px;font-weight:600;color:#6366F1;"><i class="fab fa-telegram-plane"></i> ${item.telegram}</a>`;
         }
+
+        let badge = isBlacklisted ? ` <span class="blacklisted-badge">BLACKLISTED</span>` : '';
+
         contributorHTML += `
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                 <a href="${explorer}" target="_blank" style="font-family:monospace;color:#1F2937;text-decoration:none;">${walletShort}</a>
                 <span class="blockchain-tag ${tagClass}">${tag}</span>
                 <button onclick="copyWallet('${item.wallet}');event.stopImmediatePropagation()" class="copy-btn" title="Copy">📋</button>
+                ${badge}
             </div>`;
 
         const count = currentTab === 0 ? item.submissions : item.recent;
@@ -898,10 +976,173 @@ function renderPage(leaders) {
             DOM.backToTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
         }
 
+// ==================== BULK AIRDROP LIST (with Select All + Total Payout) ====================
+async function generateBulkAirdrop() {
+    const leaders = currentTab === 0 ? allTimeLeaders : thirtyLeaders;
+    const totalContributors = leaders.length;
+    
+    if (!totalContributors) {
+        Swal.fire('Info', 'No contributors yet.', 'info');
+        return;
+    }
+
+    const result = await Swal.fire({
+        title: 'Bulk Airdrop List',
+        html: `
+            <div style="text-align:left; margin-bottom:15px;">
+                <p><strong>Amount per wallet (VERSE or USDC):</strong></p>
+                <input id="swal-amount-input" type="number" value="2500" 
+                       style="width:100%; padding:12px; font-size:18px; border-radius:8px; border:1px solid #ddd; text-align:center;">
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Continue →',
+        confirmButtonColor: '#6366F1',
+        preConfirm: () => {
+            const amount = document.getElementById('swal-amount-input').value.trim();
+            if (!amount || isNaN(amount) || Number(amount) <= 0) {
+                Swal.showValidationMessage('Please enter a valid amount');
+                return false;
+            }
+            return Number(amount);
+        }
+    });
+
+    if (!result.isConfirmed) return;
+    const defaultAmount = result.value;
+
+    let blacklistedCount = 0;
+    const walletEntries = [];
+
+    leaders.forEach(item => {
+        const telegramRaw = (item.telegram || '').trim();
+        const normalizedTelegram = telegramRaw.toLowerCase().replace(/^@/, '');
+
+        if (blacklistedSet.has(normalizedTelegram)) {
+            blacklistedCount++;
+            return;
+        }
+
+        walletEntries.push({
+            wallet: item.wallet,
+            telegram: telegramRaw || 'No TG',
+            amount: defaultAmount
+        });
+    });
+
+    const validCount = walletEntries.length;
+
+    const listHTML = walletEntries.map((entry, i) => `
+        <div style="display:flex; align-items:center; gap:10px; padding:8px; border-bottom:1px solid #f0f0f0;">
+            <input type="checkbox" id="check-${i}" checked style="width:18px;height:18px;">
+            <div style="flex:1; font-size:14px;">
+                <div style="color:#6B7280;">${entry.telegram}</div>
+                <div style="font-family:monospace;">${entry.wallet}</div>
+            </div>
+            <input type="number" id="amt-${i}" value="${entry.amount}" style="width:85px; padding:6px; text-align:center; border-radius:6px;">
+        </div>
+    `).join('');
+
+    const selectResult = await Swal.fire({
+        title: `Bulk Airdrop List (${totalContributors} total contributors)`,
+        html: `
+            <div style="text-align:center; margin-bottom:12px; font-weight:600; color:#1F2937;">
+                ${validCount} valid • 
+                ${blacklistedCount > 0 ? `<span style="color:#b91c1c;">${blacklistedCount} blacklisted skipped</span><br>` : ''}
+                <span id="total-payout" style="color:#10B981; font-size:18px;">Total: 0 VERSE</span>
+            </div>
+
+            <div style="display:flex; gap:8px; margin-bottom:12px; justify-content:center;">
+                <button onclick="selectAllWallets()" 
+                    style="padding:8px 16px; border-radius:6px; border:none; background:#10B981; color:white; cursor:pointer; font-weight:600;">
+                    ✅ Select All
+                </button>
+                <button onclick="deselectAllWallets()" 
+                    style="padding:8px 16px; border-radius:6px; border:none; background:#EF4444; color:white; cursor:pointer; font-weight:600;">
+                    ❌ Deselect All
+                </button>
+            </div>
+
+            <div style="max-height:420px; overflow-y:auto; border:1px solid #e5e7eb; border-radius:12px; padding:8px;">
+                ${listHTML}
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: '📋 Copy Selected List',
+        confirmButtonColor: '#10B981',
+        didOpen: () => {
+            window.selectAllWallets = () => {
+                walletEntries.forEach((_, i) => {
+                    const chk = document.getElementById(`check-${i}`);
+                    if (chk) chk.checked = true;
+                });
+                updateTotalPayout();
+            };
+
+            window.deselectAllWallets = () => {
+                walletEntries.forEach((_, i) => {
+                    const chk = document.getElementById(`check-${i}`);
+                    if (chk) chk.checked = false;
+                });
+                updateTotalPayout();
+            };
+
+            const updateTotalPayout = () => {
+                let total = 0;
+                walletEntries.forEach((_, i) => {
+                    const checked = document.getElementById(`check-${i}`)?.checked;
+                    const amt = parseFloat(document.getElementById(`amt-${i}`)?.value) || 0;
+                    if (checked) total += amt;
+                });
+                document.getElementById('total-payout').textContent = `Total: ${total.toLocaleString()} VERSE`;
+            };
+
+            // Attach listeners
+            walletEntries.forEach((_, i) => {
+                const chk = document.getElementById(`check-${i}`);
+                const amtInput = document.getElementById(`amt-${i}`);
+                if (chk) chk.addEventListener('change', updateTotalPayout);
+                if (amtInput) amtInput.addEventListener('input', updateTotalPayout);
+            });
+
+            updateTotalPayout(); // Initial total
+        },
+        preConfirm: () => {
+            const selected = [];
+            walletEntries.forEach((entry, i) => {
+                const chk = document.getElementById(`check-${i}`);
+                if (chk && chk.checked) {
+                    const amt = document.getElementById(`amt-${i}`).value || defaultAmount;
+                    selected.push(`${entry.wallet}, ${amt}`);
+                }
+            });
+            if (selected.length === 0) {
+                Swal.showValidationMessage('Please select at least one wallet');
+                return false;
+            }
+            return selected;
+        }
+    });
+
+    if (selectResult.isConfirmed) {
+        navigator.clipboard.writeText(selectResult.value.join('\n')).then(() => {
+            Swal.fire({
+                icon: 'success',
+                title: `${selectResult.value.length} wallets copied!`,
+                timer: 2200,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end'
+            });
+        });
+    }
+}
+
         window.addEventListener('load', () => {
             setupListeners();
             setupSearch();
             loadLeaderboard();
+            document.getElementById('bulkAirdropBtn').addEventListener('click', generateBulkAirdrop);
         });
     </script>
 </body>
