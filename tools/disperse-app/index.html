@@ -23,6 +23,8 @@
 <link href="images/favicon.ico" rel="icon">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1086,11 +1088,36 @@ async function runDisperse() {
   const validRecips = recipients.filter(r => r.valid);
   if (!validRecips.length) { addLog(`<span class="lg-err">❌ No valid recipients.</span>`); return; }
 
-  const invalidCount = recipients.length - validRecips.length;
-  if (invalidCount > 0) {
-    const go = confirm(`⚠️ ${invalidCount} invalid row(s) will be skipped. Continue with ${validRecips.length} valid recipients?`);
-    if (!go) return;
-  }
+// ── FANCY INVALID / SKIPPED WALLET PROMPT ─────────────────────
+const invalidCount = recipients.length - validRecips.length;
+if (invalidCount > 0) {
+    const result = await Swal.fire({
+        title: '⚠️ Invalid Entries Detected',
+        html: `
+            <div style="text-align:left; font-size:15px;">
+                <p><strong>${invalidCount} row(s)</strong> have invalid addresses or amounts and will be <strong>skipped</strong>.</p>
+                <p style="margin-top:12px;">Proceed with <strong>${validRecips.length} valid recipients</strong>?</p>
+            </div>
+        `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Continue',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#00e5a0',
+        cancelButtonColor: '#ff4d6d',
+        customClass: {
+            popup: 'swal-wide'
+        }
+    });
+
+    if (!result.isConfirmed) {
+        addLog(`<span class="lg-err">❌ Operation cancelled by user.</span>`);
+        isSending = false;
+        checkReadyState();
+        resetProgress();
+        return;
+    }
+}
 
   isSending = true;
   get$disperseBtn().disabled = true;

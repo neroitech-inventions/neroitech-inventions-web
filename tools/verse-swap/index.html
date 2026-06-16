@@ -329,7 +329,7 @@
       <div class="input-row">
         <input class="amt-input" type="number" id="toAmt" placeholder="0.00" readonly style="opacity:.7;cursor:default">
         <div class="token-badge">
-          <div class="tok-icon tok-usdt" id="toIconEl">💲</div>
+          <div class="tok-icon tok-usdt" id="toIconEl"><img src="images/usdt.png" width="20" height="20" align="absmiddle"></div>
           <span class="tok-name" id="toNameEl">USDT</span>
         </div>
       </div>
@@ -338,7 +338,7 @@
 
     <!-- OUTPUT SELECTOR (only shown in verse-out mode) -->
     <div class="out-selector" id="outSelector">
-      <div class="out-opt active" data-out="USDT"><div class="oi tok-usdt">💲</div> USDT</div>
+      <div class="out-opt active" data-out="USDT"><div class="oi tok-usdt"><img src="images/usdt.png" width="20" height="20" align="absmiddle"></div> USDT</div>
       <div class="out-opt" data-out="POL"><div class="oi tok-pol"><img src="images/polygon.png" alt="Polygon"  class="verse-logo" width="20" height="20" align="absmiddle"></div> POL</div>
     </div>
 
@@ -681,7 +681,7 @@ function applyDirectionUI() {
   if (isPolVerse) {
     // FROM: POL
     document.getElementById('fromIconEl').className = 'tok-icon tok-pol';
-    document.getElementById('fromIconEl').innerHTML = '⬡';
+    document.getElementById('fromIconEl').innerHTML = '<img src="images/polygon.png" width="20" height="20" align="absmiddle">';
     document.getElementById('fromNameEl').textContent = 'POL';
     // TO: VERSE
     document.getElementById('toIconEl').className = 'tok-icon tok-verse';
@@ -696,7 +696,7 @@ function applyDirectionUI() {
     // TO: depends on outputToken
     const isUSDT = outputToken === 'USDT';
     document.getElementById('toIconEl').className = isUSDT ? 'tok-icon tok-usdt' : 'tok-icon tok-pol';
-    document.getElementById('toIconEl').textContent = isUSDT ? '💲' : '⬡';
+    document.getElementById('toIconEl').innerHTML = isUSDT ? '<img src="images/usdt.png" width="20" height="20" align="absmiddle">' : '<img src="images/polygon.png" width="20" height="20" align="absmiddle">';
     document.getElementById('toNameEl').textContent = isUSDT ? 'USDT' : 'POL';
     $cardLabel.textContent = 'Swap VERSE';
   }
@@ -778,8 +778,8 @@ function switchOutput(tok) {
   outputToken = tok;
   document.querySelectorAll('.out-opt').forEach(o => o.classList.toggle('active', o.dataset.out === tok));
   const iconEl = document.getElementById('toIconEl'), nameEl = document.getElementById('toNameEl');
-  if (tok === 'USDT') { iconEl.className='tok-icon tok-usdt'; iconEl.textContent='💲'; nameEl.textContent='USDT'; }
-  else                { iconEl.className='tok-icon tok-pol';  iconEl.textContent='⬡'; nameEl.textContent='POL'; }
+  if (tok === 'USDT') { iconEl.className='tok-icon tok-usdt'; iconEl.innerHTML = '<img src="images/usdt.png" width="20" height="20" align="absmiddle">'; nameEl.textContent='USDT'; }
+  else                { iconEl.className='tok-icon tok-pol';  iconEl.innerHTML = '<img src="images/polygon.png" width="20" height="20" align="absmiddle">'; nameEl.textContent='POL'; }
   $toAmt.value=''; quoteData=null; $routeBox.classList.remove('show');
   updateBals(); scheduleQuote(); updateSwapBtn();
   setTimeout(enforceMaxLimit, 100);
@@ -1058,6 +1058,8 @@ async function connectInjected(eth) {
     if (net.chainId !== POLYGON_CHAIN_ID) { addLog(`<span class="lg-err">❌ Switch to Polygon Mainnet.</span>`); return; }
     userAddress = await ethSigner.getAddress();
     setConnected(shortAddr(userAddress)+' · Polygon');
+    clearLog();
+    addLog(`<span class="lg-ok">✅ Connected: ${shortAddr(userAddress)}</span>`);
     eth.on('accountsChanged', a => { if(!a.length) setDisconnected(); else { userAddress=a[0]; $walletAddr.textContent=shortAddr(a[0])+' · Polygon'; updateBals(); } });
     eth.on('chainChanged', () => location.reload());
   } catch(e) { addLog(`<span class="lg-err">❌ ${e.code===4001?'Rejected.':(e.message||'Failed.')}</span>`); }
