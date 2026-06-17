@@ -385,10 +385,12 @@
       </div>
       <div class="input-row">
         <input class="amt-input" type="number" id="fromAmt" placeholder="0.00" min="0" step="any" inputmode="decimal" autocomplete="off">
-        <div class="token-badge">
-          <div class="tok-ico ti-usdt"><img src="images/usdt.png" width="20" height="20" align="absmiddle"></div>
-          <span class="tok-name">USDT</span>
-        </div>
+<div class="token-badge">
+  <div class="tok-ico" id="fromTokenIcon">
+    <img src="images/usdt.png" width="20" height="20" align="absmiddle">
+  </div>
+  <span class="tok-name" id="fromTokenName">USDT</span>
+</div>
       </div>
       <div class="usd-hint" id="fromUSD"></div>
       <div id="limitWarn" style="font-size:0.65rem;color:#ffd166;margin-top:6px;display:none"></div>
@@ -401,10 +403,12 @@
       <div class="tb-top"><span id="receiveLabel">You Receive (Solana USDT)</span><span id="toNet" style="color:var(--muted)"></span></div>
       <div class="input-row">
         <input class="amt-input" type="number" id="toAmt" placeholder="0.00" readonly style="opacity:.7;cursor:default">
-        <div class="token-badge">
-          <div class="tok-ico ti-usdt"><img src="images/usdt.png" width="20" height="20" align="absmiddle"></div>
-          <span class="tok-name">USDT</span>
-        </div>
+<div class="token-badge">
+  <div class="tok-ico" id="toTokenIcon">
+    <img src="images/usdt.png" width="20" height="20" align="absmiddle">
+  </div>
+  <span class="tok-name" id="toTokenName">USDT</span>
+</div>
       </div>
       <div class="usd-hint" id="toUSD"></div>
     </div>
@@ -490,12 +494,17 @@
 <!-- Solana Web3.js -->
 <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
 <script type="module">
-import EthereumProvider from 'https://esm.sh/@walletconnect/ethereum-provider@2.17.0?bundle';
-import { Web3Modal }    from 'https://esm.sh/@web3modal/standalone@2.4.3?bundle';
+import EthereumProvider from 'https://esm.sh/@walletconnect/ethereum-provider@2.18.0';
+import { Web3Modal } from 'https://esm.sh/@web3modal/standalone@2.4.3';
 
 // ── CONFIG ─────────────────────────────────────────────────────────────────
 const solanaWeb3 = window.solanaWeb3;
 const SOL_RPC = "https://solana-rpc.publicnode.com";
+
+const solConnection = new solanaWeb3.Connection(
+    SOL_RPC,
+    "confirmed"
+);
 const PROJECT_ID       = '08c159f4699e9b22371f9d0d4ce1aef8';
 const POLYGON_CHAIN_ID = 137;
 const POLYGON_HEX      = '0x89';
@@ -534,6 +543,7 @@ const ERC20_ABI = [
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let direction = 'pol-sol'; // 'pol-sol' | 'sol-pol'
+
 
 // EVM state (Polygon→Solana)
 let evmAddress=null, ethProvider=null, ethSigner=null, wcProvider=null;
@@ -637,107 +647,229 @@ document.getElementById('sendLabel').textContent =
   document.getElementById('solWalletBar').style.display = (!polSol && solAddress) ? 'flex' : 'none';
 
   // Balance
-  updateBalance();
+if (direction === "pol-sol") {
+    updateBalance();
+} else {
+    if (
+        !document.getElementById("fromBal").dataset.rawSol
+    ) {
+        updateBalance();
+    }
+}
   updateBridgeBtn();
 
   // Reload gate config when direction changes
   loadGateConfig();
 };
 
-// ── FINAL SOLANA BALANCE FIX (Dynamic Load) ─────────────────────
+// Prevent typing while loading
+$fromAmt.addEventListener('focus', () => {
+    if (isBalanceLoading) {
+        $fromAmt.blur();
+        // Optional: show a small toast
+        // addLog('<span class="lg-info">Please wait for balance to load...</span>');
+    }
+});
+
+// ── SMART BALANCE LOADER WITH LIVE ELAPSED + COUNTDOWN ─────────────────────
+let isBalanceLoading = false;
+let balanceTimeout = null;
+let waitInterval = null;
+let cachedSolBalance = null;
+let cachedSolBalanceTime = 0;
+let cachedTokenSym = '';
+
 async function updateBalance() {
     const el = document.getElementById('fromBal');
-    el.textContent = 'Balance: —';
+    const amtInput = document.getElementById('fromAmt');
+    const maxBtn = document.getElementById('maxBtn');
+
     delete el.dataset.raw;
     delete el.dataset.rawSol;
 
-    if (direction === 'pol-sol') {
-        if (!evmAddress) return;
-        try {
-            const provider = ethProvider || new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
-            const c = new ethers.Contract(USDT_POLYGON, ERC20_ABI, provider);
-            const raw = await c.balanceOf(evmAddress);
-            const bal = parseFloat(ethers.utils.formatUnits(raw, 6));
-            el.textContent = `Balance: $${bal.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
-            el.dataset.raw = raw.toString();
-        } catch(e) {
-            console.error("Polygon balance error:", e);
-            el.textContent = 'Balance: —';
-        }
-        return;
-    }
+    el.innerHTML = '<span class="sp"></span> <span style="color:var(--muted)">Loading balance…</span>';
+    isBalanceLoading = true;
+    amtInput.disabled = true;
+    maxBtn.disabled = true;
 
-// === SOLANA SIDE ===
-if (!solAddress) {
-    el.textContent = 'Balance: —';
-    return;
-}
+    if (balanceTimeout) clearTimeout(balanceTimeout);
+    if (waitInterval) clearInterval(waitInterval);
 
-try {
-const connection = new solanaWeb3.Connection(
-    SOL_RPC,
-    "confirmed"
-);
-
-    const owner = new solanaWeb3.PublicKey(solAddress);
-
-    const tokenAccounts =
-        await connection.getParsedTokenAccountsByOwner(
-            owner,
-            { mint: new solanaWeb3.PublicKey(USDT_SOLANA) }
-        );
-
-    let balance = 0;
-
-    for (const acc of tokenAccounts.value) {
-        balance += Number(
-            acc.account.data.parsed.info.tokenAmount.uiAmount || 0
-        );
-    }
-
-    el.textContent =
-        `Balance: ${balance.toLocaleString(undefined,{
-            maximumFractionDigits: 6
-        })} USDT`;
-
-    el.dataset.rawSol = Math.round(balance * 1e6).toString();
-
-} catch (err) {
-    console.error("Solana balance error:", err);
+    const polSol = direction === 'pol-sol';
 
     try {
-        const connection = new solanaWeb3.Connection(
-            "https://solana-rpc.publicnode.com"
-        );
+        if (polSol) {
+            // Polygon - fast
+            if (!evmAddress) {
+                el.textContent = 'Balance: —';
+                return;
+            }
+            const tk = fromTok();
+            const provider = ethProvider || new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
+            const c = new ethers.Contract(tk.addr, ERC20_ABI, provider);
+            const raw = await c.balanceOf(evmAddress);
+            const bal = parseFloat(ethers.utils.formatUnits(raw, tk.decimals));
+            el.textContent = `Balance: $${bal.toLocaleString(undefined, {maximumFractionDigits: 2})} ${fromTokenSym}`;
+            el.dataset.raw = raw.toString();
+        } else {
+            // Solana
+            if (!solAddress) {
+                el.textContent = 'Balance: —';
+                return;
+            }
 
-        const owner = new solanaWeb3.PublicKey(solAddress);
+            const tk = fromTok();
+            if (!tk) throw new Error("Token config missing");
 
-        const tokenAccounts =
-            await connection.getParsedTokenAccountsByOwner(
-                owner,
-                { mint: new solanaWeb3.PublicKey(USDT_SOLANA) }
-            );
+            if (cachedTokenSym !== fromTokenSym) {
+                cachedSolBalance = null;
+                cachedTokenSym = fromTokenSym;
+            }
 
-        let balance = 0;
+            if (cachedSolBalance !== null && Date.now() - cachedSolBalanceTime < 30000) {
+                el.textContent = `Balance: ${cachedSolBalance.toLocaleString(undefined,{maximumFractionDigits:6})} ${fromTokenSym}`;
+                el.dataset.rawSol = Math.round(cachedSolBalance * 1e6).toString();
+                return;
+            }
 
-        for (const acc of tokenAccounts.value) {
-            balance += Number(
-                acc.account.data.parsed.info.tokenAmount.uiAmount || 0
-            );
+            console.log(`🚀 Fetching ${fromTokenSym} on Solana...`);
+
+            // Show wait options after 4 seconds
+            balanceTimeout = setTimeout(() => {
+                if (!isBalanceLoading) return;
+
+                el.innerHTML = `
+                    <span style="color:var(--yellow)">⚠️ Solana network is slow</span><br>
+                    <small style="color:var(--muted);display:block;margin:6px 0 8px">Choose max wait time:</small>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap">
+                        <button onclick="waitForBalance(15)" style="font-size:0.65rem;padding:6px 10px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">15s</button>
+                        <button onclick="waitForBalance(30)" style="font-size:0.65rem;padding:6px 10px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">30s</button>
+                        <button onclick="waitForBalance(60)" style="font-size:0.65rem;padding:6px 10px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">60s</button>
+                        <button onclick="waitForBalance(90)" style="font-size:0.65rem;padding:6px 10px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">90s</button>
+                        <button onclick="refreshSolBalance()" style="font-size:0.65rem;padding:6px 12px;background:var(--green);color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:700">🔄 Now</button>
+                    </div>
+                `;
+            }, 4000);
+
+            // Try fetch immediately
+            const rpcList = ["https://solana-rpc.publicnode.com"];
+            let balance = 0;
+
+            for (const rpc of rpcList) {
+                try {
+                    const conn = new solanaWeb3.Connection(rpc, { commitment: "confirmed" });
+                    const owner = new solanaWeb3.PublicKey(solAddress);
+                    const mint = new solanaWeb3.PublicKey(tk.addr);
+                    const res = await conn.getParsedTokenAccountsByOwner(owner, { mint });
+                    for (const acc of res.value) {
+                        balance += Number(acc.account.data.parsed.info.tokenAmount.uiAmount || 0);
+                    }
+                    if (balance > 0) break;
+                } catch (e) {}
+            }
+
+            clearTimeout(balanceTimeout);
+
+            cachedSolBalance = balance;
+            cachedSolBalanceTime = Date.now();
+            cachedTokenSym = fromTokenSym;
+
+            el.textContent = `Balance: ${balance.toLocaleString(undefined, {maximumFractionDigits: 6})} ${fromTokenSym}`;
+            el.dataset.rawSol = Math.round(balance * Math.pow(10, tk.decimals)).toString();
+        }
+    } catch (err) {
+        console.error("Balance fetch failed:", err);
+        el.textContent = `Balance: (check wallet - ${fromTokenSym})`;
+    } finally {
+        isBalanceLoading = false;
+        amtInput.disabled = false;
+        maxBtn.disabled = false;
+    }
+}
+
+// Replace the waitForBalance and refreshSolBalance with this:
+
+window.waitForBalance = function(seconds) {
+    const el = document.getElementById('fromBal');
+    let remaining = seconds;
+    let elapsed = 0;
+
+    el.innerHTML = `
+        <span class="sp"></span> 
+        <span style="color:var(--muted)">Trying Solana RPC...</span><br>
+        <small style="color:var(--yellow);font-family:var(--mono)">
+            Elapsed: <span id="elapsed">0</span>s &nbsp; | &nbsp; 
+            Remaining: <span id="remaining">${remaining}</span>s
+        </small>
+    `;
+
+    if (waitInterval) clearInterval(waitInterval);
+
+    // Auto-retry every 8 seconds while user is waiting
+    waitInterval = setInterval(() => {
+        elapsed++;
+        remaining--;
+        
+        const elapsedEl = document.getElementById('elapsed');
+        const remainingEl = document.getElementById('remaining');
+        
+        if (elapsedEl) elapsedEl.textContent = elapsed;
+        if (remainingEl) remainingEl.textContent = remaining;
+
+        // Try fetching balance every 8 seconds
+        if (elapsed % 8 === 0) {
+            tryReconnectBalance();
         }
 
-        el.textContent =
-            `Balance: ${balance.toLocaleString(undefined,{
-                maximumFractionDigits: 6
-            })} USDT`;
+        if (remaining <= 0) {
+            clearInterval(waitInterval);
+            refreshSolBalance();
+        }
+    }, 1000);
+};
 
-        el.dataset.rawSol = Math.round(balance * 1e6).toString();
+// Background retry attempt
+async function tryReconnectBalance() {
+    const el = document.getElementById('fromBal');
+    // Silently try once in background
+    try {
+        const tk = fromTok();
+const rpcList = [
+    "https://solana-rpc.publicnode.com",   // Most reliable for browser
+    "https://solana.publicnode.com",       // Alternative publicnode
+    "https://api.mainnet-beta.solana.com", // Official fallback
+    "https://rpc.ankr.com/solana"          // Keep as last option
+];
+        
+        let balance = 0;
+        for (const rpc of rpcList) {
+            try {
+                const conn = new solanaWeb3.Connection(rpc, { commitment: "confirmed" });
+                const owner = new solanaWeb3.PublicKey(solAddress);
+                const mint = new solanaWeb3.PublicKey(tk.addr);
+                const res = await conn.getParsedTokenAccountsByOwner(owner, { mint });
+                for (const acc of res.value) {
+                    balance += Number(acc.account.data.parsed.info.tokenAmount.uiAmount || 0);
+                }
+                if (balance > 0) break;
+            } catch(e){}
+        }
 
-    } catch (e) {
-        console.error("Fallback RPC failed:", e);
-        el.textContent = "Balance: 0 USDT";
-    }
-}}
+        if (balance > 0) {
+            clearInterval(waitInterval);
+            cachedSolBalance = balance;
+            cachedSolBalanceTime = Date.now();
+            el.textContent = `Balance: ${balance.toLocaleString(undefined, {maximumFractionDigits: 6})} ${fromTokenSym}`;
+            document.getElementById('fromBal').dataset.rawSol = Math.round(balance * Math.pow(10, tk.decimals)).toString();
+        }
+    } catch(e) {}
+}
+
+window.refreshSolBalance = function() {
+    if (balanceTimeout) clearTimeout(balanceTimeout);
+    if (waitInterval) clearInterval(waitInterval);
+    updateBalance();
+};
 
 document.getElementById('maxBtn').addEventListener('click', () => {
     let wb = 0;
@@ -873,11 +1005,11 @@ const params = new URLSearchParams({
     document.getElementById('routeBridge').textContent  = bridgeCap;
     document.getElementById('routeTime').textContent    = execTime>=60?`~${Math.round(execTime/60)} min`:`~${execTime}s`;
     document.getElementById('routeFee').textContent     = totalFee>0?`~$${totalFee.toFixed(2)}`:'Minimal';
-    document.getElementById('routeReceive').textContent = `${toAmtH.toFixed(4)} USDT`;
+    document.getElementById('routeReceive').textContent = `${toAmtH.toFixed(4)} ${toTokenSym}`;
     document.getElementById('routeRate').textContent    = `$1 \u2192 ${(toAmtH/amt).toFixed(4)} USDT`;
     document.getElementById('toNet').textContent        = `via ${bridgeCap}`;
     document.getElementById('routeBox').classList.add('show');
-    addLog(`<span class="lg-ok">\u2705 Route: $${amt} \u2192 ${toAmtH.toFixed(4)} USDT via ${bridgeCap}</span>`);
+addLog(`<span class="lg-ok">\u2705 Route: $${amt} ${fromTokenSym} \u2192 ${toAmtH.toFixed(4)} ${toTokenSym} via ${bridgeCap}</span>`);
   } catch(e) {
     addLog(`<span class="lg-err">\u274C ${e.message}</span>`);
     quoteData=null; $toAmt.value='';
@@ -1293,30 +1425,58 @@ async function connectInjectedEvm(eth){
 }
 
 async function connectWC(){
-  closeEvmModal(); clearLog();
-  addLog(`<span class="lg-warn">${sp()}Initialising WalletConnect\u2026</span>`);
+  closeEvmModal(); 
+  clearLog();
+  addLog(`<span class="lg-warn">${sp()}Opening WalletConnect...</span>`);
+
   try {
-    if(wcProvider){ try{await wcProvider.disconnect();}catch(_){} wcProvider=null; }
-    wcProvider=await EthereumProvider.init({
-      projectId:PROJECT_ID,chains:[POLYGON_CHAIN_ID],optionalChains:[POLYGON_CHAIN_ID],showQrModal:false,
-      metadata:{name:'Cross-Chain Bridge',description:'Polygon \u2194 Solana USDT Bridge',url:window.location.origin,icons:[]}
+    if (wcProvider) {
+      try { await wcProvider.disconnect(); } catch(_) {}
+      wcProvider = null;
+    }
+
+    wcProvider = await EthereumProvider.init({
+      projectId: PROJECT_ID,
+      chains: [POLYGON_CHAIN_ID],
+      optionalChains: [POLYGON_CHAIN_ID],
+      showQrModal: true,
+      qrModalOptions: {
+        themeMode: 'dark',
+        themeVariables: {
+          '--w3m-z-index': '99999'
+        }
+      },
+      metadata: {
+        name: 'Cross-Chain Bridge',
+        description: 'Polygon ↔ Solana Bridge',
+        url: window.location.origin,
+        icons: []
+      }
     });
-    wcProvider.on('display_uri',async uri=>{ await web3modal.openModal({uri,standaloneChains:[`eip155:${POLYGON_CHAIN_ID}`]}); });
-    wcProvider.on('connect',()=>web3modal.closeModal());
-    wcProvider.on('disconnect',()=>{ web3modal.closeModal(); setEvmDisconnected(); });
-    await wcProvider.connect({chains:[POLYGON_CHAIN_ID]});
-    ethProvider=new ethers.providers.Web3Provider(wcProvider,'any');
-    ethSigner=ethProvider.getSigner();
-    const accounts=await ethProvider.listAccounts();
-    if(!accounts.length) throw new Error('No accounts returned.');
-    evmAddress=accounts[0];
-    setEvmConnected(shortAddr(evmAddress)+' \u00B7 WalletConnect');
-  } catch(e){
-    web3modal.closeModal();
-    const m=(e.message||'').toLowerCase();
-    addLog(m.includes('user rejected')||m.includes('cancelled')||e.code===4001
-      ?`<span class="lg-err">\u274C Cancelled.</span>`
-      :`<span class="lg-err">\u274C WC: ${e.message||'Failed.'}</span>`);
+
+    wcProvider.on('disconnect', () => setEvmDisconnected());
+
+    await wcProvider.connect({ chains: [POLYGON_CHAIN_ID] });
+
+    ethProvider = new ethers.providers.Web3Provider(wcProvider, 'any');
+    ethSigner = ethProvider.getSigner();
+    const accounts = await ethProvider.listAccounts();
+
+    if (!accounts.length) throw new Error('No accounts returned');
+
+    evmAddress = accounts[0];
+    setEvmConnected(shortAddr(evmAddress) + ' · WalletConnect');
+    addLog(`<span class="lg-ok">✅ WalletConnect connected successfully</span>`);
+
+  } catch(e) {
+    console.error("WalletConnect Error:", e);
+    const msg = (e.message || '').toLowerCase();
+
+    if (msg.includes('reset') || msg.includes('cancelled') || msg.includes('user rejected') || e.code === 4001) {
+      addLog(`<span class="lg-err">❌ Connection was cancelled or reset. Please try again.</span>`);
+    } else {
+      addLog(`<span class="lg-err">❌ WalletConnect failed: ${e.message || 'Unknown error'}</span>`);
+    }
   }
 }
 
@@ -1436,6 +1596,455 @@ document.getElementById('solDiscBtn').addEventListener('click',()=>{
   try{ if(solWallet?.disconnect) solWallet.disconnect(); } catch(_){}
   setSolDisconnected();
 });
+
+// ══════════════════════════════════════════════════════════════════════
+// TOKEN SELECTOR PATCH (USDT ↔ USDC, both chains, both directions)
+// ══════════════════════════════════════════════════════════════════════
+
+const TOKENS = {
+  polygon: {
+    USDT: { addr: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', decimals: 6 },
+    USDC: { addr: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359', decimals: 6 },
+  },
+  solana: {
+    USDT: { addr: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', decimals: 6 },
+    USDC: { addr: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', decimals: 6 },
+  }
+};
+
+let fromTokenSym = 'USDT';
+let toTokenSym   = 'USDT';
+const srcChain = () => direction === 'pol-sol' ? 'polygon' : 'solana';
+const dstChain = () => direction === 'pol-sol' ? 'solana'  : 'polygon';
+const fromTok  = () => TOKENS[srcChain()][fromTokenSym];
+const toTok    = () => TOKENS[dstChain()][toTokenSym];
+
+// 2) Inject CSS for token pills
+(function injectTokenCss(){
+  const css = `
+    .tok-pill{background:var(--surface3);color:var(--muted);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:.65rem;font-family:var(--mono);font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s}
+    .tok-pill:hover{color:var(--text);border-color:var(--border2)}
+    .tok-pill.active{background:linear-gradient(135deg,rgba(0,229,160,.18),rgba(79,172,254,.10));color:var(--green);border-color:rgba(0,229,160,.35);box-shadow:0 0 12px rgba(0,229,160,.12)}
+    .tok-selector-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-family:var(--mono);font-size:.6rem}
+    .tok-selector-row > div{flex:1;display:flex;align-items:center;gap:6px}
+    .tok-selector-row .arrow{color:var(--muted2);font-size:11px;flex:none}
+    .tok-selector-row .lbl{color:var(--muted);min-width:34px}
+  `;
+  const s = document.createElement('style');
+  s.textContent = css;
+  document.head.appendChild(s);
+})();
+
+// 3) Inject token selector HTML right after the chain-row
+(function injectTokenSelector(){
+  const chainRow = document.querySelector('#chainRow');
+  if (!chainRow) { console.warn('chainRow not found, cannot inject token selector'); return; }
+  const wrapper = document.createElement('div');
+  wrapper.className = 'tok-selector-row';
+  wrapper.innerHTML = `
+    <div>
+      <span class="lbl">From:</span>
+      <button class="tok-pill active" id="tokFromUSDT" type="button">USDT</button>
+      <button class="tok-pill" id="tokFromUSDC" type="button">USDC</button>
+    </div>
+    <span class="arrow">&#x2192;</span>
+    <div style="justify-content:flex-end">
+      <span class="lbl">To:</span>
+      <button class="tok-pill active" id="tokToUSDT" type="button">USDT</button>
+      <button class="tok-pill" id="tokToUSDC" type="button">USDC</button>
+    </div>
+  `;
+  chainRow.parentNode.insertBefore(wrapper, chainRow.nextSibling);
+
+  document.getElementById('tokFromUSDT').onclick = () => setFromToken('USDT');
+  document.getElementById('tokFromUSDC').onclick = () => setFromToken('USDC');
+  document.getElementById('tokToUSDT').onclick   = () => setToToken('USDT');
+  document.getElementById('tokToUSDC').onclick   = () => setToToken('USDC');
+})();
+
+function refreshTokenPills(){
+  document.getElementById('tokFromUSDT').className = 'tok-pill' + (fromTokenSym==='USDT' ? ' active' : '');
+  document.getElementById('tokFromUSDC').className = 'tok-pill' + (fromTokenSym==='USDC' ? ' active' : '');
+  document.getElementById('tokToUSDT').className   = 'tok-pill' + (toTokenSym==='USDT'   ? ' active' : '');
+  document.getElementById('tokToUSDC').className   = 'tok-pill' + (toTokenSym==='USDC'   ? ' active' : '');
+}
+
+function refreshTokenLabels(){
+  const polSol = direction === 'pol-sol';
+  const srcName = polSol ? 'Polygon' : 'Solana';
+  const dstName = polSol ? 'Solana'  : 'Polygon';
+
+  // Main labels
+  const sl = document.getElementById('sendLabel');
+  const rl = document.getElementById('receiveLabel');
+  if (sl) sl.textContent = `You Send (${srcName} ${fromTokenSym})`;
+  if (rl) rl.textContent = `You Receive (${dstName} ${toTokenSym})`;
+
+  // From (Source) badge
+  const fromNameEl = document.getElementById('fromTokenName');
+  const fromIconEl = document.getElementById('fromTokenIcon');
+  if (fromNameEl) fromNameEl.textContent = fromTokenSym;
+  if (fromIconEl) {
+    fromIconEl.innerHTML = `<img src="images/${fromTokenSym.toLowerCase()}.png" width="20" height="20" align="absmiddle">`;
+  }
+
+  // To (Destination) badge
+  const toNameEl = document.getElementById('toTokenName');
+  const toIconEl = document.getElementById('toTokenIcon');
+  if (toNameEl) toNameEl.textContent = toTokenSym;
+  if (toIconEl) {
+    toIconEl.innerHTML = `<img src="images/${toTokenSym.toLowerCase()}.png" width="20" height="20" align="absmiddle">`;
+  }
+
+  refreshTokenPills();
+}
+
+window.setFromToken = function(sym){
+  if (fromTokenSym === sym) return;
+  fromTokenSym = sym;
+  quoteData = null;
+  document.getElementById('toAmt').value = '';
+  document.getElementById('routeBox').classList.remove('show');
+  refreshTokenPills(); refreshTokenLabels();
+  updateBalance();
+  scheduleQuote();
+  updateBridgeBtn();
+};
+
+window.setToToken = function(sym){
+  if (toTokenSym === sym) return;
+  toTokenSym = sym;
+  quoteData = null;
+  document.getElementById('toAmt').value = '';
+  document.getElementById('routeBox').classList.remove('show');
+  refreshTokenPills(); refreshTokenLabels();
+  scheduleQuote();
+  updateBridgeBtn();
+};
+
+/*
+
+// 4) Monkey-patch updateBalance: use the SELECTED from-token
+const _origUpdateBalance = updateBalance;
+updateBalance = async function(){
+  const el = document.getElementById('fromBal');
+  el.textContent = 'Balance: \u2014';
+  delete el.dataset.raw;
+  delete el.dataset.rawSol;
+
+  if (direction === 'pol-sol') {
+    if (!evmAddress) return;
+    try {
+      const tk = fromTok();
+      const provider = ethProvider || new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
+      const c = new ethers.Contract(tk.addr, ERC20_ABI, provider);
+      const raw = await c.balanceOf(evmAddress);
+      const bal = parseFloat(ethers.utils.formatUnits(raw, tk.decimals));
+      el.textContent = `Balance: $${bal.toLocaleString(undefined,{maximumFractionDigits:2})} ${fromTokenSym}`;
+      el.dataset.raw = raw.toString();
+    } catch(e) {
+      console.error('Polygon balance error:', e);
+      el.textContent = 'Balance: \u2014';
+    }
+    return;
+  }
+
+  // Solana side
+  if (!solAddress) { el.textContent = 'Balance: \u2014'; return; }
+  const rpcs = [
+    'https://solana-rpc.publicnode.com',
+    'https://api.mainnet-beta.solana.com',
+  ];
+  for (const rpc of rpcs) {
+    try {
+      const conn = new solanaWeb3.Connection(rpc, 'confirmed');
+      const owner = new solanaWeb3.PublicKey(solAddress);
+      const accs = await conn.getParsedTokenAccountsByOwner(owner, {
+        mint: new solanaWeb3.PublicKey(fromTok().addr)
+      });
+      let bal = 0;
+      for (const a of accs.value) {
+        bal += Number(a.account.data.parsed.info.tokenAmount.uiAmount || 0);
+      }
+      el.textContent = `Balance: ${bal.toLocaleString(undefined,{maximumFractionDigits:6})} ${fromTokenSym}`;
+      el.dataset.rawSol = Math.round(bal * 1e6).toString();
+      return;
+    } catch(e){ console.warn('RPC failed:', rpc, e); }
+  }
+  el.textContent = `Balance: 0 ${fromTokenSym}`;
+};
+
+*/
+
+// 5) Monkey-patch fetchQuote: override the token addresses in the URL
+const _origFetch = window.fetch;
+window.fetch = function(input, init){
+  try {
+    if (typeof input === 'string' && input.includes('/v1/quote?')) {
+      const u = new URL(input);
+      // Only rewrite if this is OUR quote (params present)
+      if (u.searchParams.has('fromToken') && u.searchParams.has('toToken')) {
+        u.searchParams.set('fromToken', fromTok().addr);
+        u.searchParams.set('toToken',   toTok().addr);
+        input = u.toString();
+      }
+    }
+  } catch(_) {}
+  return _origFetch.call(this, input, init);
+};
+
+// 6) Monkey-patch executeBridgeEvm to use the selected from-token contract
+const _origExec = executeBridgeEvm;
+executeBridgeEvm = async function(){
+  // Temporarily shadow USDT_POLYGON via a wrapper Contract — easier: replace
+  // before call & restore. But cleaner: patch the call inline.
+  // Since _origExec hardcodes USDT_POLYGON, we redefine the contract there:
+  // Easiest path → reimplement minimal version using the selected token.
+  if (isBridging || !evmAddress || !ethSigner || !quoteData) return;
+  const $fromAmtEl = document.getElementById('fromAmt');
+  const $destAddrEl = document.getElementById('destAddr');
+  const amt = parseFloat($fromAmtEl.value);
+  const dest = $destAddrEl.value.trim();
+  if (!amt || !isValidSolAddr(dest)) return;
+  if (amt < MIN_BRIDGE_USDT) { addLog(`<span class="lg-err">\u274C Min $${MIN_BRIDGE_USDT}.</span>`); return; }
+  if (amt > MAX_BRIDGE_USDT) { addLog(`<span class="lg-err">\u274C Max $${MAX_BRIDGE_USDT}.</span>`); return; }
+
+  const rawBal = document.getElementById('fromBal').dataset.raw;
+  if (rawBal) {
+    const wb = parseFloat(ethers.utils.formatUnits(ethers.BigNumber.from(rawBal), 6));
+    if (amt > wb) { addLog(`<span class="lg-err">\u274C Insufficient balance ($${wb.toFixed(2)} ${fromTokenSym}).</span>`); return; }
+  }
+
+  isBridging = true; updateBridgeBtn(); clearLog();
+  document.getElementById('steps').classList.add('show');
+  setStep(1,'active'); setStep(2,'wait'); setStep(3,'wait');
+
+  try {
+    const tk = fromTok();
+    const amountIn = ethers.utils.parseUnits(String(amt), tk.decimals);
+    const tokenContract = new ethers.Contract(tk.addr, ERC20_ABI, ethSigner);
+    const spender = quoteData.estimate?.approvalAddress || quoteData.transactionRequest?.to;
+
+    const allowance = await tokenContract.allowance(evmAddress, spender);
+    if (allowance.lt(amountIn)) {
+      addLog(`<span class="lg-warn">${sp()}Approving ${fromTokenSym}\u2026</span>`);
+      const a = await tokenContract.approve(spender, ethers.constants.MaxUint256, { gasLimit: 80000 });
+      await a.wait(1);
+      addLog(`<span class="lg-ok">  \u2705 ${fromTokenSym} approved!</span>`);
+    } else {
+      addLog(`<span class="lg-ok">  \u2705 Allowance OK.</span>`);
+    }
+    setStep(1,'done'); setStep(2,'active');
+
+    const txReq = quoteData.transactionRequest;
+    if (!txReq) throw new Error('No transaction data. Refresh quote.');
+    addLog(`<span class="lg-warn">${sp()}Confirm bridge in wallet\u2026</span>`);
+    const tx = await ethSigner.sendTransaction({
+      to: txReq.to, data: txReq.data,
+      value: txReq.value || '0x0',
+      gasLimit: txReq.gasLimit || 400000,
+      gasPrice: txReq.gasPrice,
+    });
+    addLog(`<span class="lg-info">TX: <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank" style="color:var(--green)">${shortAddr(tx.hash)} \u2197</a></span>`);
+    const receipt = await tx.wait(1);
+    if (receipt.status !== 1) throw new Error('Bridge TX reverted');
+    setStep(2,'done'); setStep(3,'active');
+    addLog(`<span class="lg-ok">\uD83C\uDF89 Polygon TX confirmed! Bridging ${fromTokenSym} \u2192 ${toTokenSym} on Solana\u2026</span>`);
+    setLifiScanTx(tx.hash);
+    const st = await pollBridgeStatus(tx.hash, LIFI_POL_CHAIN, LIFI_SOL_CHAIN);
+    setStep(3, st==='DONE'?'done':st==='FAILED'?'err':'done');
+    addLog(st==='DONE' ? `<span class="lg-ok">\u2705 Done! ${toTokenSym} arrived on Solana.</span>` :
+           st==='FAILED' ? `<span class="lg-err">\u274C Bridge failed.</span>` :
+           `<span class="lg-warn">\u23F3 Still processing.</span>`);
+    $fromAmtEl.value = ''; document.getElementById('toAmt').value = ''; quoteData = null;
+    document.getElementById('routeBox').classList.remove('show');
+    updateBalance();
+  } catch(e) {
+    const m = (e.message||'').toLowerCase();
+    addLog(e.code===4001 || m.includes('user rejected') || m.includes('denied')
+      ? `<span class="lg-err">\u274C Rejected.</span>`
+      : m.includes('insufficient funds')
+      ? `<span class="lg-err">\u274C Insufficient POL for gas.</span>`
+      : `<span class="lg-err">\u274C ${e.reason||e.message}</span>`);
+    setStep(1,'wait'); setStep(2,'wait'); setStep(3,'wait');
+    document.getElementById('steps').classList.remove('show');
+  }
+  isBridging = false; updateBridgeBtn();
+};
+// Re-bind the click handler (the original one closed over the old reference)
+document.getElementById('bridgeEvmBtn').onclick = executeBridgeEvm;
+
+// 7) Hook into setDirection so labels stay correct after direction switch
+const _origSetDirection = window.setDirection;
+window.setDirection = function(dir){
+  _origSetDirection(dir);
+  refreshTokenLabels();
+  updateBalance();
+};
+
+
+// CSS — make disabled state visually unmistakable
+(function strictPillCss(){
+  const s = document.createElement('style');
+  s.textContent = `
+    .tok-pill[disabled],
+    .tok-pill.disabled{
+      opacity:.28 !important;
+      cursor:not-allowed !important;
+      pointer-events:none !important;
+      background:var(--surface3) !important;
+      color:var(--muted2) !important;
+      border-color:var(--border) !important;
+      box-shadow:none !important;
+      filter:grayscale(.6);
+    }
+    .tok-pill[disabled].active,
+    .tok-pill.disabled.active{
+      background:var(--surface3) !important;
+      color:var(--muted2) !important;
+      box-shadow:none !important;
+    }
+  `;
+  document.head.appendChild(s);
+})();
+ 
+// Single source of truth — what's allowed for each side, given direction
+function isTokenAllowed(side, sym){
+  const polSol = direction === 'pol-sol';
+  if (side === 'from') {
+    // FROM = source. When source chain is Polygon (pol-sol), USDC is NOT allowed.
+    if (polSol && sym === 'USDC') return false;
+    return true;
+  }
+  if (side === 'to') {
+    // TO = destination. When dest chain is Polygon (sol-pol), USDC is NOT allowed.
+    if (!polSol && sym === 'USDC') return false;
+    return true;
+  }
+  return true;
+}
+ 
+// Snap a selection to a legal value
+function legalToken(side, currentSym){
+  return isTokenAllowed(side, currentSym) ? currentSym : 'USDT';
+}
+ 
+// Apply the disabled attribute AND class to the actual buttons
+function paintDisabledState(){
+  const polSol = direction === 'pol-sol';
+  const fromUSDC = document.getElementById('tokFromUSDC');
+  const toUSDC   = document.getElementById('tokToUSDC');
+  const fromUSDT = document.getElementById('tokFromUSDT');
+  const toUSDT   = document.getElementById('tokToUSDT');
+ 
+  const fromUSDCDisabled = !isTokenAllowed('from', 'USDC');
+  const toUSDCDisabled   = !isTokenAllowed('to',   'USDC');
+ 
+  fromUSDC.disabled = fromUSDCDisabled;
+  fromUSDC.classList.toggle('disabled', fromUSDCDisabled);
+  toUSDC.disabled = toUSDCDisabled;
+  toUSDC.classList.toggle('disabled', toUSDCDisabled);
+ 
+  // USDT is always allowed — make sure it's never stuck disabled by an earlier patch
+  fromUSDT.disabled = false; fromUSDT.classList.remove('disabled');
+  toUSDT.disabled   = false; toUSDT.classList.remove('disabled');
+ 
+  // Tooltips so users know why
+  fromUSDC.title = fromUSDCDisabled ? 'USDC on Polygon is not supported as source' : '';
+  toUSDC.title   = toUSDCDisabled   ? 'USDC on Polygon is not supported as destination' : '';
+}
+ 
+// Force token state to be legal RIGHT NOW (resets symbol if illegal)
+function enforceLegalTokens(){
+  let changed = false;
+  const newFrom = legalToken('from', fromTokenSym);
+  const newTo   = legalToken('to',   toTokenSym);
+  if (newFrom !== fromTokenSym) { fromTokenSym = newFrom; changed = true; }
+  if (newTo   !== toTokenSym)   { toTokenSym   = newTo;   changed = true; }
+ 
+  paintDisabledState();
+  refreshTokenPills();
+  refreshTokenLabels();
+ 
+  if (changed) {
+    quoteData = null;
+    document.getElementById('toAmt').value = '';
+    document.getElementById('routeBox').classList.remove('show');
+    updateBalance();
+    scheduleQuote();
+    updateBridgeBtn();
+  }
+}
+ 
+// Replace setFromToken / setToToken with strict, validating versions.
+// Any call to these (including the existing pill click handlers) is now gated.
+window.setFromToken = function(sym){
+  if (!isTokenAllowed('from', sym)) {
+    console.warn(`setFromToken: ${sym} not allowed for current direction (${direction}) — ignored.`);
+    return;
+  }
+  if (fromTokenSym === sym) return;
+  fromTokenSym = sym;
+  quoteData = null;
+  document.getElementById('toAmt').value = '';
+  document.getElementById('routeBox').classList.remove('show');
+  refreshTokenPills(); refreshTokenLabels();
+  updateBalance(); scheduleQuote(); updateBridgeBtn();
+};
+ 
+window.setToToken = function(sym){
+  if (!isTokenAllowed('to', sym)) {
+    console.warn(`setToToken: ${sym} not allowed for current direction (${direction}) — ignored.`);
+    return;
+  }
+  if (toTokenSym === sym) return;
+  toTokenSym = sym;
+  quoteData = null;
+  document.getElementById('toAmt').value = '';
+  document.getElementById('routeBox').classList.remove('show');
+  refreshTokenPills(); refreshTokenLabels();
+  scheduleQuote(); updateBridgeBtn();
+};
+ 
+// Re-bind the click handlers to the new strict versions (in case the older
+// patches captured the previous function references).
+document.getElementById('tokFromUSDT').onclick = () => window.setFromToken('USDT');
+document.getElementById('tokFromUSDC').onclick = () => window.setFromToken('USDC');
+document.getElementById('tokToUSDT').onclick   = () => window.setToToken('USDT');
+document.getElementById('tokToUSDC').onclick   = () => window.setToToken('USDC');
+ 
+// Wrap setDirection one more time so enforcement runs SYNCHRONOUSLY after
+// every direction switch — before any quote/balance work uses the symbols.
+const _strictSetDirPrev = window.setDirection;
+window.setDirection = function(dir){
+  _strictSetDirPrev(dir);
+  enforceLegalTokens();
+};
+ 
+// Also guard against any disabled token slipping into a quote: if the
+// rewritten URL ever references a disallowed pair, drop the request.
+const _strictFetch = window.fetch;
+window.fetch = function(input, init){
+  try {
+    if (typeof input === 'string' && input.includes('/v1/quote?')) {
+      if (!isTokenAllowed('from', fromTokenSym) || !isTokenAllowed('to', toTokenSym)) {
+        console.warn('Blocking quote — illegal token combo:', fromTokenSym, '→', toTokenSym, 'in', direction);
+        // Return a fake "no quote" so the existing error path handles it cleanly
+        return Promise.resolve(new Response(JSON.stringify({
+          message: 'Token combination not supported for this direction.'
+        }), { status: 400, headers: { 'Content-Type': 'application/json' } }));
+      }
+    }
+  } catch(_) {}
+  return _strictFetch.call(this, input, init);
+};
+ 
+// Initial enforcement on load
+enforceLegalTokens();
+
+// 8) Initial paint
+refreshTokenPills();
+refreshTokenLabels();
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 loadGateConfig();
