@@ -210,6 +210,197 @@
 
   @media(min-width:500px){.modal-overlay{align-items:center}.modal{border-radius:24px;max-width:400px;padding-bottom:24px}.modal-drag{display:none}}
   @media(max-width:499px){body{padding:16px 10px 80px}.card{padding:16px 14px}.action-btn{font-size:.88rem}}
+
+/* ═══════════════════════ ADDRESS BOOK ═══════════════════════ */
+.ab-modal{
+  padding:0;border-radius:24px 24px 0 0;
+  max-height:88vh;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.ab-modal .modal-drag{margin:12px auto 0}
+.ab-header{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  padding:12px 20px 0;flex-shrink:0;
+}
+.ab-title{
+  font-size:1.05rem;font-weight:800;
+  background:linear-gradient(90deg,var(--green),#4facfe);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  line-height:1.2;
+}
+.ab-sub{font-size:.6rem;color:var(--muted);font-family:var(--mono);margin-top:3px}
+
+/* Tabs */
+.ab-tabs-row{
+  display:flex;gap:4px;
+  background:var(--surface2);border:1px solid var(--border);border-radius:14px;
+  padding:4px;margin:14px 20px 0;flex-shrink:0;
+}
+.ab-tab{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:9px 8px;border:none;background:none;
+  color:var(--muted);font-family:var(--font);font-size:.74rem;font-weight:700;
+  border-radius:11px;cursor:pointer;transition:all .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.ab-tab.active{
+  background:var(--surface);color:var(--text);
+  border:1px solid var(--border2);
+  box-shadow:0 2px 10px rgba(0,0,0,.35);
+}
+.ab-count{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:18px;height:18px;padding:0 5px;
+  background:var(--surface3);color:var(--muted);
+  border:1px solid var(--border);border-radius:20px;
+  font-size:.55rem;font-family:var(--mono);font-weight:700;
+  transition:all .2s;
+}
+.ab-tab.active .ab-count{
+  background:rgba(0,229,160,.12);color:var(--green);
+  border-color:rgba(0,229,160,.3);
+}
+
+/* Add Form */
+.ab-form-wrap{
+  padding:16px 20px 14px;
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.ab-form-title{
+  font-size:.58rem;font-family:var(--mono);color:var(--muted);
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;
+}
+.ab-input{
+  width:100%;padding:11px 14px;
+  background:var(--surface2);border:1px solid var(--border);border-radius:12px;
+  color:var(--text);font-family:var(--mono);font-size:max(16px,.76rem);
+  outline:none;-webkit-appearance:none;transition:border-color .2s,box-shadow .2s;
+  display:block;
+}
+.ab-input:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--gdim)}
+.ab-addr-input{margin-top:8px;word-break:break-all}
+.ab-hint{
+  min-height:16px;font-size:.6rem;font-family:var(--mono);
+  color:var(--red);padding:3px 2px 0;
+}
+.ab-save-btn{
+  width:100%;margin-top:8px;padding:12px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,var(--green),#4facfe);
+  color:#000;font-family:var(--font);font-size:.85rem;font-weight:800;
+  cursor:pointer;transition:opacity .15s,transform .12s;
+  -webkit-tap-highlight-color:transparent;
+}
+.ab-save-btn:active{transform:scale(.98)}
+.ab-save-btn.saved{background:var(--gdim);color:var(--green);border:1px solid rgba(0,229,160,.3)}
+
+/* Divider */
+.ab-divider{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 20px 4px;flex-shrink:0;
+}
+.ab-divider::before,.ab-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.ab-divider span{font-size:.58rem;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+
+/* List */
+.ab-list{overflow-y:auto;flex:1;padding:10px 20px 24px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+
+/* Address Card */
+.ab-card{
+  background:var(--surface3);border:1px solid var(--border);
+  border-radius:14px;padding:14px;margin-bottom:10px;
+  transition:border-color .2s,box-shadow .2s;
+  animation:fadeUp .25s ease both;
+}
+.ab-card:hover{border-color:var(--border2);box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.ab-card-top{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.ab-avatar{
+  width:38px;height:38px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.05rem;font-weight:800;flex-shrink:0;
+  letter-spacing:0;
+}
+.ab-avatar-sol{
+  background:linear-gradient(135deg,rgba(153,69,255,.18),rgba(153,69,255,.08));
+  border:1px solid rgba(153,69,255,.3);color:#bf7fff;
+}
+.ab-avatar-pol{
+  background:linear-gradient(135deg,rgba(130,71,229,.18),rgba(130,71,229,.08));
+  border:1px solid rgba(130,71,229,.3);color:#b08aff;
+}
+.ab-info{flex:1;min-width:0}
+.ab-name{
+  font-size:.84rem;font-weight:700;color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.ab-addr-row{display:flex;align-items:center;gap:5px;margin-top:3px}
+.ab-short{font-family:var(--mono);font-size:.62rem;color:var(--muted)}
+.ab-net-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:var(--mono);font-size:.54rem;font-weight:700;
+  padding:3px 9px;border-radius:20px;flex-shrink:0;
+}
+.ab-net-sol{
+  background:rgba(153,69,255,.12);color:#bf7fff;
+  border:1px solid rgba(153,69,255,.25);
+}
+.ab-net-pol{
+  background:rgba(130,71,229,.12);color:#b08aff;
+  border:1px solid rgba(130,71,229,.25);
+}
+.ab-actions{display:flex;gap:7px}
+.ab-btn-use{
+  flex:1;padding:9px 0;border:none;border-radius:10px;
+  font-family:var(--font);font-size:.76rem;font-weight:700;
+  cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.ab-btn-use-sol{
+  background:linear-gradient(135deg,#9945ff,#7b35e0);color:#fff;
+  box-shadow:0 3px 12px rgba(153,69,255,.25);
+}
+.ab-btn-use-pol{
+  background:linear-gradient(135deg,#8247e5,#6033c4);color:#fff;
+  box-shadow:0 3px 12px rgba(130,71,229,.25);
+}
+.ab-btn-use-ghost{
+  background:var(--surface2);color:var(--muted);
+  border:1px solid var(--border);font-size:.72rem;
+}
+.ab-btn-use:active{transform:scale(.97)}
+.ab-btn-icon{
+  width:36px;height:36px;border-radius:10px;border:none;
+  font-size:.88rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .15s;-webkit-tap-highlight-color:transparent;flex-shrink:0;
+}
+.ab-btn-copy{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+.ab-btn-copy:hover{color:var(--text);border-color:var(--border2)}
+.ab-btn-copy.copied{color:var(--green);border-color:rgba(0,229,160,.4);background:var(--gdim)}
+.ab-btn-del{background:var(--rdim);color:var(--red);border:1px solid rgba(255,77,109,.18)}
+.ab-btn-del:hover{background:rgba(255,77,109,.2);border-color:rgba(255,77,109,.35)}
+
+/* Delete Confirm Overlay on card */
+.ab-del-confirm{
+  background:var(--rdim);border:1px solid rgba(255,77,109,.3);
+  border-radius:14px;padding:14px;margin-bottom:10px;
+  animation:fadeUp .2s ease both;
+}
+.ab-del-msg{font-size:.8rem;font-weight:700;color:var(--red);margin-bottom:5px}
+.ab-del-addr{font-family:var(--mono);font-size:.6rem;color:var(--muted);word-break:break-all;margin-bottom:12px}
+.ab-del-btns{display:flex;gap:8px}
+.ab-del-yes{flex:1;padding:10px;background:var(--red);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:.78rem}
+.ab-del-no{flex:1;padding:10px;background:var(--surface3);color:var(--text);border:1px solid var(--border);border-radius:10px;font-weight:700;cursor:pointer;font-size:.78rem}
+
+/* Empty state */
+.ab-empty{text-align:center;padding:36px 20px}
+.ab-empty-icon{font-size:2.4rem;margin-bottom:12px}
+.ab-empty-title{font-weight:700;color:var(--text);margin-bottom:6px;font-size:.9rem}
+.ab-empty-sub{font-family:var(--mono);font-size:.62rem;color:var(--muted);line-height:1.6}
+
+@media(min-width:500px){
+  .ab-modal{border-radius:24px;max-width:420px}
+  .ab-modal .modal-drag{display:none}
+}
+
 </style>
 </head>
 <body>
@@ -261,6 +452,57 @@
       <div class="wopt-text"><div class="wopt-name">Backpack</div><div class="wopt-desc">xNFT wallet</div></div>
       <span class="wbadge purple" id="backpackBadge">Checking&hellip;</span>
     </button>
+  </div>
+</div>
+
+<!-- IMPROVED ADDRESS BOOK MODAL -->
+<div class="modal-overlay" id="addressBookModal">
+  <div class="modal ab-modal">
+
+    <div class="modal-drag"></div>
+
+    <!-- Header -->
+    <div class="ab-header">
+      <div>
+        <h3 class="ab-title">📖 Address Book</h3>
+        <p class="ab-sub">Save &amp; reuse your wallet addresses</p>
+      </div>
+      <button class="modal-close" onclick="closeAddressBookModal()">✕</button>
+    </div>
+
+    <!-- Network Tabs -->
+    <div class="ab-tabs-row">
+      <button class="ab-tab" id="abTabSol" onclick="switchAbTab('sol')">
+        <img src="images/solana.png" width="13" height="13"> Solana
+        <span class="ab-count" id="abCountSol">0</span>
+      </button>
+      <button class="ab-tab" id="abTabPol" onclick="switchAbTab('pol')">
+        <img src="images/polygon.png" width="14" height="14"> Polygon
+        <span class="ab-count" id="abCountPol">0</span>
+      </button>
+    </div>
+
+    <!-- Add Form -->
+    <div class="ab-form-wrap">
+      <div class="ab-form-title">＋ New Address</div>
+      <input  class="ab-input" type="text" id="abName" maxlength="30"
+              placeholder="Label  (e.g. My Phantom Wallet)"
+              autocomplete="off" spellcheck="false">
+      <div class="ab-hint" id="abNameHint"></div>
+      <input  class="ab-input ab-addr-input" type="text" id="abAddr"
+              placeholder="Wallet address…"
+              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <div class="ab-hint" id="abAddrHint"></div>
+      <button class="ab-save-btn" id="abSaveBtn" onclick="addNewAddress()">
+        <span id="abSaveTxt">Save Address</span>
+      </button>
+    </div>
+
+    <div class="ab-divider"><span>Saved</span></div>
+
+    <!-- List -->
+    <div id="abList" class="ab-list"></div>
+
   </div>
 </div>
 
@@ -360,7 +602,14 @@
   <!-- BRIDGE CARD -->
   <div class="card" id="bridgeCard" style="display:none">
     <div class="card-lbl" id="cardLbl">Bridge</div>
-
+    
+    <!-- Beta Warning for Solana → Polygon -->
+<div id="betaWarning" style="display:none; background:rgba(255,209,102,0.12); border:1px solid #ffd166; color:#ffd166; padding:12px 14px; border-radius:12px; font-size:0.75rem; margin-bottom:14px;">
+    <strong>⚠️ Beta Mode</strong><br>
+    Solana → Polygon bridge is in testing phase.<br>
+    It may be slow or fail occasionally. Use at your own risk.
+    <button onclick="this.parentElement.style.display='none'" style="float:right; background:none; border:none; color:#ffd166; font-size:1.1rem; cursor:pointer; margin-top:-4px;">&times;</button>
+</div>
     <!-- Chain direction row (updated by setDirection) -->
     <div class="chain-row" id="chainRow">
       <div class="chain-box" id="fromChainBox">
@@ -421,6 +670,11 @@
       </div>
       <input class="addr-input" id="destAddr" placeholder="Your Phantom / Solflare / Backpack address" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <div class="addr-valid" id="addrValid"></div>
+      <div style="margin-top:10px">
+  <button onclick="showAddressBook()" style="font-size:0.7rem;padding:4px 10px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">
+    📖 Address Book
+  </button>
+</div>
     </div>
 
     <!-- Solana wallet connect prompt (reverse mode only) -->
@@ -655,6 +909,12 @@ if (direction === "pol-sol") {
     ) {
         updateBalance();
     }
+}
+
+// Beta warning for Solana → Polygon
+const betaWarning = document.getElementById('betaWarning');
+if (betaWarning) {
+    betaWarning.style.display = (!polSol) ? 'block' : 'none';
 }
   updateBridgeBtn();
 
@@ -1018,23 +1278,28 @@ addLog(`<span class="lg-ok">\u2705 Route: $${amt} ${fromTokenSym} \u2192 ${toAmt
   updateBridgeBtn();
 }
 
-// ── BRIDGE BUTTON STATE ────────────────────────────────────────────────────
+// ── BRIDGE BUTTON STATE (Dynamic Token Names) ────────────────────────────────────────────────────
 function updateBridgeBtn() {
   const amt   = parseFloat($fromAmt.value);
   const dest  = $destAddr.value.trim();
-  const inR   = amt>=MIN_BRIDGE_USDT&&amt<=MAX_BRIDGE_USDT;
+  const inR   = amt>=MIN_BRIDGE_USDT && amt<=MAX_BRIDGE_USDT;
   const polSol= direction==='pol-sol';
   const validDest = polSol ? isValidSolAddr(dest) : isValidEvmAddr(dest);
 
   let walletOk = polSol ? !!evmAddress : !!solAddress;
-  const ready  = !!(walletOk&&quoteData&&amt>0&&inR&&validDest&&!isBridging);
+  const ready  = !!(walletOk && quoteData && amt>0 && inR && validDest && !isBridging);
+
+  const fromSym = fromTokenSym || 'USDT';
+  const toSym   = toTokenSym   || 'USDT';
 
   if (polSol) {
     document.getElementById('bridgeEvmBtn').disabled = !ready;
-    document.getElementById('bridgeEvmLabel').textContent = isBridging?'Bridging\u2026':'Bridge USDT \u2192 Solana';
+    document.getElementById('bridgeEvmLabel').textContent = 
+      isBridging ? 'Bridging…' : `Bridge ${fromSym} → ${toSym}`;
   } else {
     document.getElementById('bridgeSolBtn').disabled = !ready;
-    document.getElementById('bridgeSolLabel').textContent = isBridging?'Bridging\u2026':'Bridge USDT \u2192 Polygon';
+    document.getElementById('bridgeSolLabel').textContent = 
+      isBridging ? 'Bridging…' : `Bridge ${fromSym} → ${toSym}`;
   }
 }
 
@@ -1929,43 +2194,57 @@ function legalToken(side, currentSym){
   return isTokenAllowed(side, currentSym) ? currentSym : 'USDT';
 }
  
-// Apply the disabled attribute AND class to the actual buttons
 function paintDisabledState(){
   const polSol = direction === 'pol-sol';
+  
   const fromUSDC = document.getElementById('tokFromUSDC');
   const toUSDC   = document.getElementById('tokToUSDC');
   const fromUSDT = document.getElementById('tokFromUSDT');
   const toUSDT   = document.getElementById('tokToUSDT');
- 
-  const fromUSDCDisabled = !isTokenAllowed('from', 'USDC');
-  const toUSDCDisabled   = !isTokenAllowed('to',   'USDC');
- 
-  fromUSDC.disabled = fromUSDCDisabled;
-  fromUSDC.classList.toggle('disabled', fromUSDCDisabled);
-  toUSDC.disabled = toUSDCDisabled;
-  toUSDC.classList.toggle('disabled', toUSDCDisabled);
- 
-  // USDT is always allowed — make sure it's never stuck disabled by an earlier patch
-  fromUSDT.disabled = false; fromUSDT.classList.remove('disabled');
-  toUSDT.disabled   = false; toUSDT.classList.remove('disabled');
- 
-  // Tooltips so users know why
-  fromUSDC.title = fromUSDCDisabled ? 'USDC on Polygon is not supported as source' : '';
-  toUSDC.title   = toUSDCDisabled   ? 'USDC on Polygon is not supported as destination' : '';
+  const arrow    = document.querySelector('.tok-selector-row .arrow');
+
+  const hideFromUSDC = !isTokenAllowed('from', 'USDC');
+  const hideToUSDC   = !isTokenAllowed('to',   'USDC');
+
+  // Hide/show pills
+  if (fromUSDC) fromUSDC.style.display = hideFromUSDC ? 'none' : 'inline-flex';
+  if (toUSDC)   toUSDC.style.display   = hideToUSDC   ? 'none' : 'inline-flex';
+
+  // Always show USDT
+  if (fromUSDT) fromUSDT.style.display = 'inline-flex';
+  if (toUSDT)   toUSDT.style.display   = 'inline-flex';
+
+  // Hide arrow when one side has only 1 pill
+  const fromVisible = !hideFromUSDC ? 2 : 1;
+  const toVisible   = !hideToUSDC   ? 2 : 1;
+  
+  if (arrow) {
+    arrow.style.display = (fromVisible === 1 || toVisible === 1) ? 'none' : 'inline';
+  }
+
+  // Tooltips
+  if (fromUSDC) fromUSDC.title = hideFromUSDC ? 'USDC not available on Polygon' : '';
+  if (toUSDC)   toUSDC.title   = hideToUSDC   ? 'USDC not available on Polygon' : '';
 }
  
-// Force token state to be legal RIGHT NOW (resets symbol if illegal)
 function enforceLegalTokens(){
   let changed = false;
   const newFrom = legalToken('from', fromTokenSym);
   const newTo   = legalToken('to',   toTokenSym);
-  if (newFrom !== fromTokenSym) { fromTokenSym = newFrom; changed = true; }
-  if (newTo   !== toTokenSym)   { toTokenSym   = newTo;   changed = true; }
- 
+
+  if (newFrom !== fromTokenSym) { 
+    fromTokenSym = newFrom; 
+    changed = true; 
+  }
+  if (newTo !== toTokenSym) { 
+    toTokenSym = newTo;   
+    changed = true; 
+  }
+
   paintDisabledState();
   refreshTokenPills();
   refreshTokenLabels();
- 
+
   if (changed) {
     quoteData = null;
     document.getElementById('toAmt').value = '';
@@ -2045,6 +2324,262 @@ enforceLegalTokens();
 // 8) Initial paint
 refreshTokenPills();
 refreshTokenLabels();
+
+// ── ADDRESS BOOK ────────────────────────────────────────────────────────────
+let addressBook = { solana: [], polygon: [] };
+let abCurrentTab = 'sol';
+let abPendingDelete = null;
+
+function loadAddressBook() {
+  try {
+    const raw = localStorage.getItem('abv3');
+    if (raw) addressBook = JSON.parse(raw);
+    // migrate old keys
+    ['bridgeAddressBook','bridgeAddressBook_v2'].forEach(k => {
+      try {
+        const old = JSON.parse(localStorage.getItem(k) || 'null');
+        if (old) {
+          (old.solana  || []).forEach(e => { if (!addressBook.solana.find(x=>x.addr===e.addr))  addressBook.solana.push(e);  });
+          (old.polygon || []).forEach(e => { if (!addressBook.polygon.find(x=>x.addr===e.addr)) addressBook.polygon.push(e); });
+        }
+      } catch(_){}
+    });
+    _abSave();
+  } catch(_) { addressBook = { solana:[], polygon:[] }; }
+}
+
+function _abSave()  { localStorage.setItem('abv3', JSON.stringify(addressBook)); }
+function _abKey()   { return abCurrentTab === 'sol' ? 'solana' : 'polygon'; }
+function _abNet()   { return abCurrentTab === 'sol'; }
+
+function _abShort(a) {
+  return a.length > 18 ? a.slice(0,9) + '…' + a.slice(-6) : a;
+}
+
+function _abUpdateCounts() {
+  const sc = document.getElementById('abCountSol');
+  const pc = document.getElementById('abCountPol');
+  if (sc) sc.textContent = addressBook.solana.length;
+  if (pc) pc.textContent = addressBook.polygon.length;
+}
+
+function _abUpdateTabs() {
+  ['Sol','Pol'].forEach(t => {
+    const tab = document.getElementById('abTab'+t);
+    if (tab) tab.className = 'ab-tab' + (abCurrentTab === t.toLowerCase() ? ' active' : '');
+  });
+  const isSol = _abNet();
+  const addrInput = document.getElementById('abAddr');
+  if (addrInput) addrInput.placeholder = isSol
+    ? 'Solana address (Base58…)'
+    : 'Polygon address (0x…)';
+}
+
+function _abRender() {
+  const el    = document.getElementById('abList');
+  if (!el) return;
+  const list  = addressBook[_abKey()] || [];
+  const isSol = _abNet();
+
+  _abUpdateCounts();
+  _abUpdateTabs();
+
+  if (!list.length) {
+    el.innerHTML = `
+      <div class="ab-empty">
+        <div class="ab-empty-icon">${isSol ? '<img src="images/solana.png" width="11" height="11">' : '<img src="images/polygon.png" width="13" height="13">'}</div>
+        <div class="ab-empty-title">No ${isSol ? 'Solana' : 'Polygon'} addresses yet</div>
+        <div class="ab-empty-sub">Fill the form above to save<br>your first address here.</div>
+      </div>`;
+    return;
+  }
+
+  const netCls  = isSol ? 'ab-net-sol'     : 'ab-net-pol';
+  const avCls   = isSol ? 'ab-avatar-sol'  : 'ab-avatar-pol';
+  const useCls  = isSol ? 'ab-btn-use-sol' : 'ab-btn-use-pol';
+  const netImg  = isSol ? 'images/solana.png' : 'images/polygon.png';
+  const netSz   = isSol ? 11 : 13;
+  const netLbl  = isSol ? 'Solana' : 'Polygon';
+
+  // Does the current bridge direction match this tab?
+  const dirMatch = (direction === 'pol-sol' && isSol) || (direction === 'sol-pol' && !isSol);
+
+  let html = '';
+  list.forEach((item, i) => {
+    const initial = item.name.charAt(0).toUpperCase();
+
+    if (abPendingDelete === i) {
+      html += `
+        <div class="ab-del-confirm">
+          <div class="ab-del-msg">⚠ Delete "${_esc(item.name)}"?</div>
+          <div class="ab-del-addr">${_esc(item.addr)}</div>
+          <div class="ab-del-btns">
+            <button class="ab-del-yes" onclick="_abDoDelete(${i})">🗑 Yes, Delete</button>
+            <button class="ab-del-no"  onclick="_abCancelDel()">Cancel</button>
+          </div>
+        </div>`;
+    } else {
+      html += `
+        <div class="ab-card" id="abCard${i}">
+          <div class="ab-card-top">
+            <div class="ab-avatar ${avCls}">${initial}</div>
+            <div class="ab-info">
+              <div class="ab-name" title="${_esc(item.name)}">${_esc(item.name)}</div>
+              <div class="ab-addr-row">
+                <img src="${netImg}" width="${netSz}" height="${netSz}">
+                <span class="ab-short">${_abShort(item.addr)}</span>
+              </div>
+            </div>
+            <span class="ab-net-badge ${netCls}">
+              <img src="${netImg}" width="${netSz}" height="${netSz}"> ${netLbl}
+            </span>
+          </div>
+          <div class="ab-actions">
+            ${dirMatch
+              ? `<button class="ab-btn-use ${useCls}" onclick="_abUse(${i})">↗ Use</button>`
+              : `<button class="ab-btn-use ab-btn-use-ghost" onclick="_abSwitchUse(${i})">⇄ Switch &amp; Use</button>`
+            }
+            <button class="ab-btn-icon ab-btn-copy" id="abCopyBtn${i}"
+                    title="Copy address" onclick="_abCopy(${i},this)">⎘</button>
+            <button class="ab-btn-icon ab-btn-del"
+                    title="Delete" onclick="_abConfirmDel(${i})">🗑</button>
+          </div>
+        </div>`;
+    }
+  });
+  el.innerHTML = html;
+}
+
+function _esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── public actions ──
+window._abUse = function(i) {
+  const item = addressBook[_abKey()][i];
+  if (!item) return;
+  document.getElementById('destAddr').value = item.addr;
+  document.getElementById('destAddr').dispatchEvent(new Event('input'));
+  closeAddressBookModal();
+  scheduleQuote();
+};
+
+window._abSwitchUse = function(i) {
+  const isSol = _abNet();
+  const item  = addressBook[_abKey()][i];
+  if (!item) return;
+  closeAddressBookModal();
+  setDirection(isSol ? 'pol-sol' : 'sol-pol');
+  setTimeout(() => {
+    document.getElementById('destAddr').value = item.addr;
+    document.getElementById('destAddr').dispatchEvent(new Event('input'));
+    scheduleQuote();
+  }, 250);
+};
+
+window._abCopy = function(i, btn) {
+  const item = addressBook[_abKey()][i];
+  if (!item) return;
+  const text = item.addr;
+  (navigator.clipboard?.writeText(text) || Promise.reject()).catch(() => {
+    const t = document.createElement('textarea');
+    t.value = text; document.body.appendChild(t); t.select();
+    document.execCommand('copy'); document.body.removeChild(t);
+  });
+  if (btn) {
+    const prev = btn.textContent;
+    btn.textContent = '✓'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '⎘'; btn.classList.remove('copied'); }, 1400);
+  }
+};
+
+window._abConfirmDel = function(i) {
+  abPendingDelete = i;
+  _abRender();
+};
+window._abCancelDel = function() {
+  abPendingDelete = null;
+  _abRender();
+};
+window._abDoDelete = function(i) {
+  addressBook[_abKey()].splice(i, 1);
+  _abSave();
+  abPendingDelete = null;
+  _abRender();
+};
+
+window.addNewAddress = function() {
+  const nameEl  = document.getElementById('abName');
+  const addrEl  = document.getElementById('abAddr');
+  const nameH   = document.getElementById('abNameHint');
+  const addrH   = document.getElementById('abAddrHint');
+  const isSol   = _abNet();
+
+  nameH.textContent = '';
+  addrH.textContent = '';
+
+  const name = nameEl.value.trim();
+  const addr = addrEl.value.trim();
+
+  if (!name)        { nameH.textContent = '⚠ Enter a label'; nameEl.focus(); return; }
+  if (name.length > 30) { nameH.textContent = '⚠ Max 30 characters'; return; }
+
+  const valid = isSol ? isValidSolAddr(addr) : isValidEvmAddr(addr);
+  if (!valid) {
+    addrH.textContent = `⚠ Invalid ${isSol ? 'Solana' : 'Polygon'} address`;
+    addrEl.focus(); return;
+  }
+
+  const key = _abKey();
+  if (addressBook[key].some(a => a.addr.toLowerCase() === addr.toLowerCase())) {
+    addrH.textContent = '⚠ Address already saved'; return;
+  }
+
+  addressBook[key].push({ name, addr, ts: Date.now() });
+  _abSave();
+
+  nameEl.value = ''; addrEl.value = '';
+
+  const btn = document.getElementById('abSaveBtn');
+  const txt = document.getElementById('abSaveTxt');
+  if (btn && txt) {
+    txt.textContent = '✓ Saved!';
+    btn.classList.add('saved');
+    setTimeout(() => { txt.textContent = 'Save Address'; btn.classList.remove('saved'); }, 1500);
+  }
+  abPendingDelete = null;
+  _abRender();
+};
+
+window.switchAbTab = function(tab) {
+  abCurrentTab = tab;
+  abPendingDelete = null;
+  document.getElementById('abName').value = '';
+  document.getElementById('abAddr').value = '';
+  document.getElementById('abNameHint').textContent = '';
+  document.getElementById('abAddrHint').textContent = '';
+  _abRender();
+};
+
+window.showAddressBook = function() {
+  // Auto-match tab to current bridge direction
+  abCurrentTab  = direction === 'pol-sol' ? 'sol' : 'pol';
+  abPendingDelete = null;
+  _abRender();
+  document.getElementById('addressBookModal').classList.add('open');
+};
+
+window.closeAddressBookModal = function() {
+  document.getElementById('addressBookModal').classList.remove('open');
+  abPendingDelete = null;
+};
+
+// Close on backdrop click
+document.getElementById('addressBookModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('addressBookModal')) closeAddressBookModal();
+});
+
+loadAddressBook();
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 loadGateConfig();
