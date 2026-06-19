@@ -409,6 +409,24 @@
     .fee-amount { font-size: 1rem; }
     .code-row { flex-direction: column; }
   }
+
+  /* GAS TANK */
+.gas-meter{display:none;align-items:center;gap:10px;padding:9px 13px;border-radius:12px;background:var(--surface);border:1px solid var(--border);font-family:var(--font-mono);font-size:.65rem;margin-bottom:14px;position:relative;overflow:hidden}
+.gas-meter::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,229,160,.35),transparent)}
+.gas-meter.show{display:flex}
+.gas-meter.warn{border-color:rgba(255,77,109,.25);background:rgba(255,77,109,.04)}
+.gas-meter.low{border-color:rgba(255,209,102,.22);background:rgba(255,209,102,.04)}
+.gm-icon{font-size:16px;flex-shrink:0}
+.gm-wrap{flex:1;min-width:0}
+.gm-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.gm-label{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.gm-val{font-size:.7rem;font-weight:500;font-family:var(--font-mono);transition:color .3s}
+.gm-track{width:100%;height:5px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-bottom:3px}
+.gm-fill{height:100%;border-radius:3px;transition:width .7s ease,background .4s ease}
+.gm-status{font-size:.57rem;color:var(--muted)}
+.gm-val-warn{color:var(--red)!important}
+.gm-val-low{color:var(--yellow)!important}
+.gm-val-ok{color:var(--green)!important}
 </style>
 </head>
 <body>
@@ -465,7 +483,7 @@
       <h1>Disperse App</h1>
       <p>Bulk ERC-20 · Polygon Mainnet</p>
     </div>
-    <div class="network-pill">⬡ Polygon</div>
+    <div class="network-pill"><img src="images/polygon.png" alt="Polygon"  class="verse-logo" width="25" height="25" align="absmiddle"> Polygon</div>
   </div>
 
   <div class="wallet-bar" id="walletBar">
@@ -484,6 +502,19 @@
         <div class="stat-box"><div class="stat-val" id="statTotal">0</div><div class="stat-key">Total VERSE</div></div>
         <div class="stat-box"><div class="stat-val" id="statValid">—</div><div class="stat-key">Status</div></div>
       </div>
+
+      <!-- GAS TANK -->
+<div class="gas-meter" id="gasMeter">
+  <span class="gm-icon">&#x26FD;</span>
+  <div class="gm-wrap">
+    <div class="gm-row">
+      <span class="gm-label">Gas Tank</span>
+      <span class="gm-val" id="gmVal">&mdash;</span>
+    </div>
+    <div class="gm-track"><div class="gm-fill" id="gmFill" style="width:0%;background:var(--green)"></div></div>
+    <div class="gm-status" id="gmStatus">&mdash;</div>
+  </div>
+</div>
     </div>
 
     <div class="panel">
@@ -898,6 +929,7 @@ function setConnected(label) {
   const cb = get$connectBtn();
   if (cb) cb.style.display = 'none';
   $walletBar.classList.add('show');
+  updateGasMeter();   // ← add this
   $walletAddr.textContent = label;
   updateGateWalletStatus();
   clearLog();
@@ -912,6 +944,7 @@ function setDisconnected() {
   const cb = get$connectBtn();
   if (cb) cb.style.display = '';
   $walletBar.classList.remove('show');
+  document.getElementById('gasMeter')?.classList.remove('show','warn','low');   // ← add this
   const db = get$disperseBtn(); if (db) db.disabled = true;
   updateGateWalletStatus();
   resetProgress();
@@ -1247,6 +1280,29 @@ if (invalidCount > 0) {
 
   isSending = false;
   checkReadyState();
+}
+
+async function updateGasMeter() {
+  const el = document.getElementById('gasMeter');
+  if (!userAddress) { el?.classList.remove('show','warn','low'); return; }
+  try {
+    const provider = ethProvider || new ethers.providers.JsonRpcProvider('https://polygon-bor-rpc.publicnode.com');
+    const raw = await provider.getBalance(userAddress);
+    const pol = parseFloat(ethers.utils.formatEther(raw));
+    const pct = Math.min(pol / 2 * 100, 100);
+    document.getElementById('gmFill').style.width = pct + '%';
+    document.getElementById('gmFill').style.background = pct<20 ? 'var(--red)' : pct<50 ? 'var(--yellow)' : 'var(--green)';
+    const val = document.getElementById('gmVal');
+    val.textContent = pol.toFixed(4) + ' POL';
+    val.className = 'gm-val ' + (pct<20 ? 'gm-val-warn' : pct<50 ? 'gm-val-low' : 'gm-val-ok');
+    document.getElementById('gmStatus').textContent =
+      pct<5  ? '⚠ Out of gas — cannot disperse!' :
+      pct<20 ? '⚠ Very low — top up soon' :
+      pct<50 ? 'Low — consider topping up' : '✓ Ready to disperse';
+    el.classList.add('show');
+    el.classList.toggle('warn', pct<20);
+    el.classList.toggle('low', pct>=20 && pct<50);
+  } catch(e) {}
 }
 
 // ── MODAL ────────────────────────────────────

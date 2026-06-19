@@ -472,6 +472,25 @@ header{
 .mobile-wallet-bar{display:none;}
 .mobile-menu.show .mobile-wallet-bar{display:block;}
 @media(max-width:768px){.mobile-wallet-bar .wallet-bar{font-size:0.75rem;}.mobile-wallet-bar .w-addr{max-width:140px;}}
+
+/* GAS TANK */
+.gas-meter{display:none;align-items:center;gap:10px;padding:9px 13px;border-radius:12px;background:var(--surface);border:1px solid var(--border);font-family:var(--font-mono);font-size:.65rem;margin-bottom:16px;position:relative;overflow:hidden}
+.gas-meter::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,229,160,.35),transparent)}
+.gas-meter.show{display:flex}
+.gas-meter.warn{border-color:rgba(255,77,109,.25);background:rgba(255,77,109,.04)}
+.gas-meter.low{border-color:rgba(255,209,102,.22);background:rgba(255,209,102,.04)}
+.gm-icon{font-size:16px;flex-shrink:0}
+.gm-wrap{flex:1;min-width:0}
+.gm-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.gm-label{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.gm-val{font-size:.7rem;font-weight:500;font-family:var(--font-mono);transition:color .3s}
+.gm-track{width:100%;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:3px}
+.gm-fill{height:100%;border-radius:3px;transition:width .7s ease,background .4s ease}
+.gm-status{font-size:.57rem;color:var(--muted)}
+.gm-val-warn{color:var(--red)!important}
+.gm-val-low{color:var(--yellow)!important}
+.gm-val-ok{color:var(--green)!important}
+
 </style>
 </head>
 <body>
@@ -516,7 +535,7 @@ header{
     <button class="wopt wopt-hero" id="wcBtn"><div class="wopt-icon wi-wc">🔗</div><div class="wopt-text"><div class="wopt-name">WalletConnect</div><div class="wopt-desc">300+ wallets · QR on desktop · App picker on mobile</div></div><span class="wbadge blue">Best</span></button>
     <div class="wsec">Browser Extension</div>
     <button class="wopt" id="mmBtn"><div class="wopt-icon wi-mm">🦊</div><div class="wopt-text"><div class="wopt-name">MetaMask</div><div class="wopt-desc" id="mmDesc">Extension · Mobile app</div></div><span class="wbadge" id="mmBadge">Checking…</span></button>
-    <button class="wopt" id="cbBtn"><div class="wopt-icon wi-cb">🔵</div><div class="wopt-text"><div class="wopt-name">Coinbase Wallet</div><div class="wopt-desc" id="cbDesc">Browser extension</div></div><span class="wbadge" id="cbBadge">Checking…</span></button>
+    <button class="wopt" id="cbBtn" style="display: none;"><div class="wopt-icon wi-cb">🔵</div><div class="wopt-text"><div class="wopt-name">Coinbase Wallet</div><div class="wopt-desc" id="cbDesc">Browser extension</div></div><span class="wbadge" id="cbBadge">Checking…</span></button>
   </div>
 </div>
 
@@ -543,7 +562,7 @@ header{
     <div class="wallet-bar" id="walletBar"><div class="w-dot"></div><span class="w-addr" id="walletAddr">—</span>
       <button class="btn btn-danger" id="discBtn" style="width:32px;height:32px;padding:0;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.75rem;"><i class="fas fa-power-off"></i></button>
     </div>
-    <div class="hd-pill">⬡ Polygon</div>
+    <div class="hd-pill"><img src="img/polygon.png" alt="Polygon"  class="verse-logo" width="25" height="25" align="absmiddle"> Polygon</div>
     <a href="https://niti.com.ng/snappquest/join.html" class="hd-home"><i class="fas fa-arrow-left"></i> Quests</a>
   </div>
   <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
@@ -566,6 +585,20 @@ header{
 
 <!-- MAIN -->
 <div class="wrap">
+
+<!-- GAS TANK -->
+<div class="gas-meter" id="gasMeter">
+  <span class="gm-icon">&#x26FD;</span>
+  <div class="gm-wrap">
+    <div class="gm-row">
+      <span class="gm-label">Gas Tank</span>
+      <span class="gm-val" id="gmVal">&mdash;</span>
+    </div>
+    <div class="gm-track"><div class="gm-fill" id="gmFill" style="width:0%;background:var(--green)"></div></div>
+    <div class="gm-status" id="gmStatus">&mdash;</div>
+  </div>
+</div>
+
   <div class="inactive-banner" id="inactiveBanner"><i class="fas fa-lock" style="font-size:24px;margin-bottom:8px;display:block;"></i>This prediction market is currently <strong>closed</strong>. Check back soon for the next round.</div>
 
   <!-- HERO -->
@@ -845,6 +878,7 @@ function unlockIdentityFields() {
 
 function setConnected(label){
   $walletBar.classList.add('show');
+  updateGasMeter();   // ← add this
   $walletAddr.textContent=label;
   // Lock wallet field to the actual connected signer address
   lockField('fldWallet', userAddress);
@@ -862,6 +896,7 @@ function setConnected(label){
 function setDisconnected(){
   userAddress=null;ethProvider=null;ethSigner=null;wcProvider=null;
   $walletBar.classList.remove('show');
+  document.getElementById('gasMeter')?.classList.remove('show','warn','low');   // ← add this
   $walletAddr.textContent='—';
   // Unlock wallet field when wallet disconnected
   unlockField('fldWallet');
@@ -1349,6 +1384,29 @@ function setupCopyButton(){
       setTimeout(()=>{copyBtn.innerHTML=originalText;copyBtn.style.background='';copyBtn.style.color='';},2200);
     }catch(err){copyBtn.innerHTML='❌ Failed';setTimeout(()=>{copyBtn.innerHTML='📋 Copy';},1500);}
   });
+}
+
+async function updateGasMeter() {
+  const el = document.getElementById('gasMeter');
+  if (!userAddress) { el?.classList.remove('show','warn','low'); return; }
+  try {
+    const provider = ethProvider || new ethers.providers.JsonRpcProvider('https://polygon-bor-rpc.publicnode.com');
+    const raw = await provider.getBalance(userAddress);
+    const pol = parseFloat(ethers.utils.formatEther(raw));
+    const pct = Math.min(pol / 2 * 100, 100);
+    document.getElementById('gmFill').style.width = pct + '%';
+    document.getElementById('gmFill').style.background = pct<20 ? 'var(--red)' : pct<50 ? 'var(--yellow)' : 'var(--green)';
+    const val = document.getElementById('gmVal');
+    val.textContent = pol.toFixed(4) + ' POL';
+    val.className = 'gm-val ' + (pct<20 ? 'gm-val-warn' : pct<50 ? 'gm-val-low' : 'gm-val-ok');
+    document.getElementById('gmStatus').textContent =
+      pct<5  ? '⚠ Out of gas — cannot submit prediction!' :
+      pct<20 ? '⚠ Very low — top up soon' :
+      pct<50 ? 'Low — consider topping up' : '✓ Ready to submit';
+    el.classList.add('show');
+    el.classList.toggle('warn', pct<20);
+    el.classList.toggle('low', pct>=20 && pct<50);
+  } catch(e) {}
 }
 
 // ── INIT ──

@@ -176,6 +176,23 @@
   a{color:var(--green);text-decoration:underline;text-underline-offset:2px}
   @media(min-width:500px){.modal-overlay{align-items:center}.modal{border-radius:24px;max-width:400px;padding-bottom:24px}.modal-drag{display:none}}
   @media(max-width:499px){body{padding:16px 10px 80px}.top-title h1{font-size:1.15rem}.swap-card{padding:16px 14px}.action-btn{font-size:.88rem}}
+/* GAS METER */
+.gas-meter{display:none;align-items:center;gap:10px;padding:9px 13px;border-radius:12px;background:var(--surface);border:1px solid var(--border);font-family:var(--font-mono);font-size:.65rem;margin-bottom:14px;position:relative;overflow:hidden}
+.gas-meter::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,229,160,.35),transparent)}
+.gas-meter.show{display:flex}
+.gas-meter.warn{border-color:rgba(255,77,109,.25);background:rgba(255,77,109,.04)}
+.gas-meter.low{border-color:rgba(255,209,102,.22);background:rgba(255,209,102,.04)}
+.gm-icon{font-size:16px;flex-shrink:0}
+.gm-wrap{flex:1;min-width:0}
+.gm-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.gm-label{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.gm-val{font-size:.7rem;font-weight:500;font-family:var(--font-mono);transition:color .3s}
+.gm-track{width:100%;height:5px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-bottom:3px}
+.gm-fill{height:100%;border-radius:3px;transition:width .7s ease,background .4s ease}
+.gm-status{font-size:.57rem;color:var(--muted)}
+.gm-val-warn{color:var(--red)!important}
+.gm-val-low{color:var(--yellow)!important}
+.gm-val-ok{color:var(--green)!important}
 </style>
 </head>
 <body>
@@ -241,6 +258,19 @@
     </a>
     <button id="discBtn" style="background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,109,.25);border-radius:8px;padding:6px 10px;font-size:.62rem;font-family:var(--font-mono);cursor:pointer;flex-shrink:0">Disconnect</button>
   </div>
+
+  <!-- GAS METER -->
+<div class="gas-meter" id="gasMeter">
+  <span class="gm-icon">&#x26FD;</span>
+  <div class="gm-wrap">
+    <div class="gm-row">
+      <span class="gm-label">POL Gas Tank</span>
+      <span class="gm-val" id="gmVal">&mdash;</span>
+    </div>
+    <div class="gm-track"><div class="gm-fill" id="gmFill" style="width:0%;background:var(--green)"></div></div>
+    <div class="gm-status" id="gmStatus">&mdash;</div>
+  </div>
+</div>
 
   <!-- PAYWALL GATE -->
   <div class="gate-panel" id="gatePanel">
@@ -856,6 +886,29 @@ async function updateQuote() {
 
 function scheduleQuote() { clearTimeout(quoteTimer); quoteTimer = setTimeout(updateQuote, 700); }
 
+async function updateGasMeter() {
+  const el = document.getElementById('gasMeter');
+  if (!userAddress) { el.classList.remove('show','warn','low'); return; }
+  try {
+    const raw = await readProvider().getBalance(userAddress);
+    const pol = parseFloat(ethers.utils.formatEther(raw));
+    const pct = Math.min(pol / 2 * 100, 100); // 2 POL = full tank
+    document.getElementById('gmFill').style.width = pct + '%';
+    document.getElementById('gmFill').style.background = pct<20 ? 'var(--red)' : pct<50 ? 'var(--yellow)' : 'var(--green)';
+    const val = document.getElementById('gmVal');
+    val.textContent = pol.toFixed(4) + ' POL';
+    val.className = 'gm-val ' + (pct<20 ? 'gm-val-warn' : pct<50 ? 'gm-val-low' : 'gm-val-ok');
+    document.getElementById('gmStatus').textContent =
+      pct<5  ? '⚠ Out of gas — cannot send transactions!' :
+      pct<20 ? '⚠ Very low — top up POL soon' :
+      pct<50 ? 'Low — consider topping up' : '✓ Good to go';
+    el.classList.add('show');
+    el.classList.toggle('warn', pct<20);
+    el.classList.toggle('low', pct>=20 && pct<50);
+  } catch(e) {}
+}
+
+
 // ── SWAP BUTTON STATE ─────────────────────────────────
 function updateSwapBtn() {
   const ready = !!(userAddress && quoteData && parseFloat($fromAmt.value) > 0 && !isSending);
@@ -1035,7 +1088,7 @@ function setConnected(label) {
   const trackBtn = document.getElementById('trackWalletBtn');
   trackBtn.href = `https://polygonscan.com/address/${userAddress}`;
   trackBtn.style.display = '';
-  updateGateWalletUI(); updateBals(); updateSwapBtn();
+updateGateWalletUI(); updateBals(); updateGasMeter(); updateSwapBtn();
 }
 function setDisconnected() {
   userAddress=null; ethProvider=null; ethSigner=null; wcProvider=null; isSending=false;
@@ -1043,7 +1096,8 @@ function setDisconnected() {
   quoteData=null; $routeBox.classList.remove('show');
   $fromBal.textContent='Balance: —'; $toBal.textContent='Balance: —';
   document.getElementById('trackWalletBtn').style.display = 'none';
-  updateGateWalletUI(); clearLog();
+  document.getElementById('gasMeter').classList.remove('show','warn','low');
+updateGateWalletUI(); clearLog();
 }
 
 async function connectInjected(eth) {
