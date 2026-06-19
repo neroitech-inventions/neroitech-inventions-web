@@ -272,6 +272,46 @@ body::after{content:'';position:fixed;bottom:-100px;left:50%;transform:translate
 
 @media(min-width:500px){.modal-overlay{align-items:center}.modal{border-radius:24px;max-width:400px;padding-bottom:24px}.modal-drag{display:none}}
 @media(max-width:499px){body{padding:14px 10px 80px}.swap-card{padding:16px 14px}.gauge-value{font-size:1.6rem}.ge-grid{grid-template-columns:1fr 1fr 1fr}}
+
+/* ── GATE / PAYWALL ── */
+.gate-panel{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:22px;padding:20px;margin-bottom:14px;
+  position:relative;overflow:hidden;animation:slideUp .5s ease both;
+}
+.gate-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--verse),var(--full),var(--verse));background-size:200%;animation:shimmer 3s linear infinite}
+.gate-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.gate-icon{width:40px;height:40px;border-radius:12px;flex-shrink:0;background:var(--verse-dim);border:1px solid rgba(124,93,245,.25);display:flex;align-items:center;justify-content:center;font-size:18px}
+.gate-title{font-size:.95rem;font-weight:700;line-height:1}
+.gate-sub{font-size:.6rem;font-family:var(--mono);color:var(--muted);margin-top:3px}
+.fee-box{background:var(--surface2);border:1px solid rgba(124,93,245,.2);border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.fee-label{font-family:var(--mono);font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.fee-amount{font-family:var(--mono);font-size:1.3rem;font-weight:600;color:var(--verse-light)}
+.fee-btns{display:flex;flex-direction:column;gap:7px;flex-shrink:0}
+.gate-btn{padding:9px 16px;border-radius:10px;font-family:var(--font);font-size:.8rem;font-weight:700;cursor:pointer;transition:transform .12s,opacity .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent;white-space:nowrap;border:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.gate-btn:active{transform:scale(.97)}
+.gate-btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
+.gate-btn-connect{background:var(--surface3);color:var(--text);border:1px solid var(--border2)}
+.gate-btn-connect:hover{border-color:var(--full);color:var(--full)}
+.gate-btn-pay{background:linear-gradient(135deg,#5b3de8,#7c5df5);color:#fff;box-shadow:0 4px 16px rgba(91,61,232,.3)}
+.gate-btn-pay:hover:not(:disabled){box-shadow:0 6px 24px rgba(91,61,232,.5)}
+.gate-wallet-status{display:none;align-items:center;gap:8px;padding:8px 12px;background:rgba(0,240,181,.06);border:1px solid rgba(0,240,181,.18);border-radius:10px;margin-bottom:12px;font-family:var(--mono);font-size:.65rem;color:var(--full)}
+.gate-wallet-status.show{display:flex}
+.gate-divider{display:flex;align-items:center;gap:10px;margin:14px 0;font-family:var(--mono);font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.gate-divider::before,.gate-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.code-row{display:flex;gap:8px;margin-bottom:12px}
+.code-input{flex:1;min-width:0;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:var(--mono);font-size:max(16px,.85rem);outline:none;-webkit-appearance:none;letter-spacing:.06em;transition:border-color .2s,box-shadow .2s}
+.code-input:focus{border-color:var(--verse-light);box-shadow:0 0 0 3px var(--verse-dim)}
+.code-input.valid{border-color:var(--good)}
+.code-input.invalid{border-color:var(--empty)}
+.redeem-btn{padding:11px 16px;border-radius:12px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:var(--font);font-size:.8rem;font-weight:700;cursor:pointer;flex-shrink:0;transition:border-color .15s,color .15s;-webkit-tap-highlight-color:transparent}
+.redeem-btn:hover{border-color:var(--full);color:var(--full)}
+.gate-status{font-family:var(--mono);font-size:.65rem;padding:8px 12px;border-radius:9px;margin-bottom:4px;display:none}
+.gate-status.show{display:block}
+.gate-status.ok{background:rgba(34,217,138,.08);color:var(--good);border:1px solid rgba(34,217,138,.2)}
+.gate-status.err{background:rgba(255,58,92,.08);color:var(--empty);border:1px solid rgba(255,58,92,.2)}
+.unlocked-badge{display:none;align-items:center;gap:8px;padding:10px 14px;background:rgba(34,217,138,.07);border:1px solid rgba(34,217,138,.22);border-radius:12px;margin-bottom:14px;font-family:var(--mono);font-size:.7rem;color:var(--good)}
+.unlocked-badge.show{display:flex}
 </style>
 </head>
 <body>
@@ -288,7 +328,7 @@ body::after{content:'';position:fixed;bottom:-100px;left:50%;transform:translate
     <button class="wopt" id="wcBtn">
       <div class="wopt-icon wi-wc">🔗</div>
       <div><div class="wopt-name">WalletConnect</div><div class="wopt-desc">300+ wallets · QR code or mobile</div></div>
-      <span class="wbadge blue">Best</span>
+      <span class="wbadge blue">Scan QR</span>
     </button>
     <div class="wsec">Browser Extension</div>
     <button class="wopt" id="mmBtn">
@@ -309,6 +349,50 @@ body::after{content:'';position:fixed;bottom:-100px;left:50%;transform:translate
       <p>Your VERSE Polygon gas station</p>
     </div>
     <div class="net-badge"><img src="images/polygon.png" alt="Polygon" width="25" height="25" align="absmiddle"> Polygon</div>
+  </div>
+
+  <!-- ── GATE / PAYWALL ── -->
+  <div class="gate-panel" id="gatePanel">
+    <div class="gate-header">
+      <div class="gate-icon">🔐</div>
+      <div>
+        <div class="gate-title">Unlock GasMe Terminal</div>
+        <div class="gate-sub">Pay the access fee or enter a free code to use the swap</div>
+      </div>
+    </div>
+
+    <!-- Fee box -->
+    <div class="fee-box">
+      <div>
+        <div class="fee-label">Access Fee</div>
+        <div class="fee-amount" id="feeDisplay"><span style="font-size:.72rem;color:var(--muted);animation:blink 1.4s infinite;display:inline-block">Loading…</span></div>
+      </div>
+      <div class="fee-btns">
+        <button class="gate-btn gate-btn-connect" id="gateConnectBtn">🔌 Connect Wallet</button>
+        <button class="gate-btn gate-btn-pay" id="payFeeBtn" disabled>💳 Pay Fee</button>
+      </div>
+    </div>
+
+    <!-- Connected wallet inside gate -->
+    <div class="gate-wallet-status" id="gateWalletStatus">
+      <div class="pulse"></div>
+      <span id="gateWalletAddr" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">—</span>
+      <button id="gateDiscBtn" style="background:rgba(255,58,92,.1);color:#ff3a5c;border:1px solid rgba(255,58,92,.22);border-radius:7px;padding:4px 10px;font-size:.58rem;font-family:var(--mono);cursor:pointer">Disconnect</button>
+    </div>
+
+    <div class="gate-divider">or use a free code</div>
+
+    <!-- Access code -->
+    <div class="code-row">
+      <input class="code-input" type="text" id="accessCode" placeholder="Enter access code…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <button class="redeem-btn" id="redeemCodeBtn">Redeem</button>
+    </div>
+    <div class="gate-status" id="gateStatus"></div>
+  </div>
+
+  <!-- Unlocked badge shown after gate clears -->
+  <div class="unlocked-badge" id="unlockedBadge">
+    <span>✅</span><span id="unlockedMsg">Access granted — swap unlocked!</span>
   </div>
 
   <!-- FEATURE #1 & #7 — LIVE PRICE BAR -->
@@ -438,7 +522,7 @@ body::after{content:'';position:fixed;bottom:-100px;left:50%;transform:translate
   </div>
 
   <!-- SWAP CARD -->
-  <div class="swap-card" id="swapCard">
+  <div class="swap-card" id="swapCard" style="display:none">
     <div class="card-lbl">Swap VERSE → POL Gas</div>
 
     <div class="pol-notice" id="polNotice">
@@ -546,7 +630,11 @@ body::after{content:'';position:fixed;bottom:-100px;left:50%;transform:translate
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
-<script>
+<script type="module">
+import EthereumProvider from 'https://esm.sh/@walletconnect/ethereum-provider@2.17.0?bundle';
+import { Web3Modal }    from 'https://esm.sh/@web3modal/standalone@2.4.3?bundle';
+
+const PROJECT_ID = '08c159f4699e9b22371f9d0d4ce1aef8';
 // ═══════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════
@@ -561,6 +649,13 @@ const WMATIC = '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270';
 const QUOTER = '0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6';
 const ROUTER = '0xE592427A0AEce92De3Edee1F18E0157C05861564';
 const POOL_FEE = 3000;
+
+// ── GATE CONFIG ──
+const SHEETS_API_KEY = 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q';
+const SHEETS_ID      = '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w';
+const SHEETS_TAB     = 'SnappQuestData';
+const SHEETS_RANGE   = `${SHEETS_TAB}!A11:B11`;
+const FEE_RECEIVER   = '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB';
 
 // Gas cost estimates in POL (approximate Polygon mainnet averages)
 const GAS_COSTS = { send: 0.002, swap: 0.005, mint: 0.008 };
@@ -577,12 +672,31 @@ const ROUTER_ABI = ['function exactInputSingle(tuple(address tokenIn,address tok
 // ═══════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════
-let userAddress=null, ethProvider=null, ethSigner=null;
+let userAddress=null, ethProvider=null, ethSigner=null, wcProvider=null;
 let verseBal=0, polBal=0, quoteData=null, quoteTimer=null;
 let isBusy=false, slippage=0.5;
 let polUSD=0, verseUSD=0, liveRate=0;
 let refreshTimer=null, refreshCountdown=30;
 const isMobile=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+
+// Gate state
+let isUnlocked=false, feeAmountVerse=0, validCode='';
+
+// Web3Modal instance for WalletConnect QR
+const web3modal = new Web3Modal({
+  projectId: PROJECT_ID, walletConnectVersion: 2, themeMode: 'dark',
+  themeVariables: {
+    '--w3m-accent-color': '#00f0b5', '--w3m-accent-fill-color': '#050a0e',
+    '--w3m-background-color': '#0a1520', '--w3m-container-border-radius': '20px',
+    '--w3m-z-index': '99999',
+  },
+  explorerRecommendedWalletIds: [
+    'fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa',
+    'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
+    '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0',
+  ],
+  explorerExcludedWalletIds: 'ALL',
+});
 
 const TX_HISTORY_KEY = 'gasme_tx_history';
 
@@ -602,6 +716,127 @@ function addLog(h){$log.classList.add('show');$log.innerHTML+=h+'<br>';$log.scro
 function clearLog(){$log.innerHTML='';$log.classList.remove('show')}
 function sp(){return '<span class="sp"></span>'}
 function short(a){return a.slice(0,6)+'…'+a.slice(-4)}
+
+// ═══════════════════════════════════════════
+// GATE — LOAD CONFIG FROM SHEETS
+// ═══════════════════════════════════════════
+async function loadGateConfig() {
+  try {
+    const url  = `https://sheets.googleapis.com/v4/spreadsheets/${SHEETS_ID}/values/${encodeURIComponent(SHEETS_RANGE)}?key=${SHEETS_API_KEY}`;
+    const res  = await fetch(url);
+    const data = await res.json();
+    const row  = data.values?.[0] || [];
+    feeAmountVerse = parseFloat(row[0]) || 0;
+    validCode      = (row[1] || '').trim();
+    if (feeAmountVerse > 0) {
+      document.getElementById('feeDisplay').innerHTML =
+        `<span style="color:var(--verse-light);font-size:1.3rem;font-weight:600">${feeAmountVerse.toLocaleString()} VERSE</span>`;
+    } else {
+      document.getElementById('feeDisplay').innerHTML =
+        `<span style="color:var(--good)">Free Access</span>`;
+      unlockGate('free');
+    }
+    updateGateWalletUI();
+  } catch(e) {
+    document.getElementById('feeDisplay').innerHTML =
+      `<span style="font-size:.7rem;color:var(--empty)">Could not load — refresh to try again</span>`;
+    console.error('Gate config error:', e);
+  }
+}
+
+function updateGateWalletUI() {
+  if (isUnlocked) return;
+  const statusEl = document.getElementById('gateWalletStatus');
+  const connectBtn = document.getElementById('gateConnectBtn');
+  const payBtn = document.getElementById('payFeeBtn');
+  if (userAddress) {
+    statusEl.classList.add('show');
+    document.getElementById('gateWalletAddr').textContent = short(userAddress);
+    connectBtn.style.display = 'none';
+    if (feeAmountVerse > 0) payBtn.disabled = false;
+  } else {
+    statusEl.classList.remove('show');
+    connectBtn.style.display = '';
+    payBtn.disabled = true;
+  }
+}
+
+function unlockGate(method) {
+  isUnlocked = true;
+  document.getElementById('gatePanel').style.display = 'none';
+  document.getElementById('unlockedBadge').classList.add('show');
+  document.getElementById('swapCard').style.display = '';
+  const msgs = { code:'🎟️ Code accepted — swap unlocked!', fee:'💳 Fee paid — swap unlocked!', free:'✅ Access granted — swap unlocked!' };
+  document.getElementById('unlockedMsg').textContent = msgs[method] || msgs.free;
+}
+
+function gateMsg(text, type) {
+  const el = document.getElementById('gateStatus');
+  el.textContent = text;
+  el.className = `gate-status show ${type}`;
+}
+
+// Pay fee button
+document.getElementById('payFeeBtn').addEventListener('click', async () => {
+  if (!userAddress || !ethSigner) { gateMsg('Connect your wallet first.', 'err'); return; }
+  if (feeAmountVerse <= 0) { unlockGate('free'); return; }
+  const payBtn = document.getElementById('payFeeBtn');
+  payBtn.disabled = true; payBtn.textContent = 'Sending…';
+  gateMsg('⏳ Waiting for wallet approval…', 'ok');
+  try {
+    const provider = ethProvider || new ethers.providers.JsonRpcProvider(RPC_URL);
+    const tokenContract = new ethers.Contract(VERSE, ERC20_ABI, ethSigner);
+    const feeValue = ethers.utils.parseUnits(String(feeAmountVerse), 18);
+    const balance  = await tokenContract.balanceOf(userAddress);
+    if (balance.lt(feeValue)) {
+      const have = parseFloat(ethers.utils.formatUnits(balance, 18)).toLocaleString(undefined, {maximumFractionDigits:2});
+      gateMsg(`❌ Not enough VERSE. Need ${feeAmountVerse.toLocaleString()}, have ${have}.`, 'err');
+      payBtn.disabled = false; payBtn.textContent = '💳 Pay Fee'; return;
+    }
+    gateMsg('⏳ Confirm the transfer in your wallet…', 'ok');
+    const tx = await tokenContract.transfer(FEE_RECEIVER, feeValue, { gasLimit: 100000 });
+    gateMsg(`⏳ Confirming… (${short(tx.hash)})`, 'ok');
+    const receipt = await tx.wait(1);
+    if (receipt.status === 1) {
+      gateMsg('✅ Fee confirmed! Unlocking…', 'ok');
+      setTimeout(() => unlockGate('fee'), 700);
+    } else {
+      gateMsg('❌ Transaction reverted. Please try again.', 'err');
+      payBtn.disabled = false; payBtn.textContent = '💳 Pay Fee';
+    }
+  } catch(e) {
+    const isRejected = e.code === 4001 || (e.message||'').toLowerCase().includes('user rejected');
+    gateMsg(isRejected ? '❌ Rejected.' : `❌ ${e.reason || e.message || 'Error paying fee.'}`, 'err');
+    payBtn.disabled = false; payBtn.textContent = '💳 Pay Fee';
+  }
+});
+
+// Redeem code button
+document.getElementById('redeemCodeBtn').addEventListener('click', () => {
+  const entered = document.getElementById('accessCode').value.trim();
+  const codeEl  = document.getElementById('accessCode');
+  if (!entered) { gateMsg('Please enter an access code.', 'err'); return; }
+  if (!validCode) { gateMsg('No code configured — please pay the fee instead.', 'err'); return; }
+  if (entered === validCode) {
+    codeEl.classList.add('valid'); codeEl.classList.remove('invalid');
+    gateMsg('✅ Code accepted! Unlocking…', 'ok');
+    setTimeout(() => unlockGate('code'), 700);
+  } else {
+    codeEl.classList.add('invalid'); codeEl.classList.remove('valid');
+    gateMsg('❌ Invalid code. Check and try again.', 'err');
+  }
+});
+document.getElementById('accessCode').addEventListener('input', () => {
+  document.getElementById('accessCode').classList.remove('valid', 'invalid');
+  document.getElementById('gateStatus').classList.remove('show');
+});
+
+// Gate connect button
+document.getElementById('gateConnectBtn').addEventListener('click', () => window.openModal());
+document.getElementById('gateDiscBtn').addEventListener('click', async () => {
+  try { if (wcProvider?.disconnect) await wcProvider.disconnect(); } catch(_) {}
+  setDisconnected();
+});
 
 // ═══════════════════════════════════════════
 // FEATURE #1 & #7 — LIVE PRICES (CoinGecko)
@@ -980,6 +1215,7 @@ window.setQuick = function(v) {
   $fromAmt.value = Math.min(Math.max(v,1), MAX_VERSE_SWAP);
   enforceMaxLimit(); scheduleQuote();
 };
+
 document.getElementById('maxBtn').addEventListener('click', () => {
   if (!document.getElementById('fromBalLbl').dataset.raw) return;
   let bal = parseFloat(ethers.utils.formatUnits(ethers.BigNumber.from(document.getElementById('fromBalLbl').dataset.raw), 18));
@@ -1094,7 +1330,7 @@ document.getElementById('copyAddrBtn').addEventListener('click', async () => {
 // ═══════════════════════════════════════════
 // WALLET CONNECTION
 // ═══════════════════════════════════════════
-window.openModal = function() {
+window.openModal = function openModal() {
   document.getElementById('walletModal').classList.add('open');
   const badge=document.getElementById('mmBadge'), desc=document.getElementById('mmDesc');
   if (window.ethereum?.isMetaMask) { badge.textContent='✓ Detected'; desc.textContent='Click to connect'; }
@@ -1119,14 +1355,15 @@ function setConnected(label) {
   const sl = document.getElementById('scanLink');
   sl.href = `https://polygonscan.com/address/${userAddress}`;
   sl.style.display = '';
+  updateGateWalletUI(); // keep gate in sync
   updateBalances();
   updateSwapBtn();
   renderTxHistory();
-  startAutoRefresh(); // Feature #4
+  startAutoRefresh();
 }
 
 function setDisconnected() {
-  userAddress=null; ethProvider=null; ethSigner=null;
+  userAddress=null; ethProvider=null; ethSigner=null; wcProvider=null;
   document.getElementById('walletBar').classList.remove('show');
   document.getElementById('connectBtn').style.display = '';
   $swapBtn.style.display = 'none';
@@ -1150,6 +1387,9 @@ function setDisconnected() {
   document.getElementById('statusTitle').textContent='What is gas?';
   document.getElementById('statusBody').textContent='Connect your wallet to check your POL gas level.';
   updateRefreshLabel();
+  updateGateWalletUI(); // keep gate connect button in sync
+  // If gate not yet passed, re-lock the swap card
+  if (!isUnlocked) document.getElementById('swapCard').style.display = 'none';
 }
 
 async function connectInjected(eth) {
@@ -1198,19 +1438,60 @@ document.getElementById('mmBtn').addEventListener('click', () => {
   if (isMobile) window.location.href=`https://metamask.app.link/dapp/${location.host}${location.pathname}`;
   else window.open('https://metamask.io/download/','_blank');
 });
-document.getElementById('wcBtn').addEventListener('click', () => {
-  closeModal();
-  addLog(`<span class="li">💡 For WalletConnect: install MetaMask or use the MetaMask mobile app, then connect with the MetaMask option.</span>`);
-  $log.classList.add('show');
+document.getElementById('wcBtn').addEventListener('click', connectWC);
+document.getElementById('discBtn').addEventListener('click', async () => {
+  try { if (wcProvider?.disconnect) await wcProvider.disconnect(); } catch(_) {}
+  setDisconnected();
 });
-document.getElementById('discBtn').addEventListener('click', setDisconnected);
+
+async function connectWC() {
+  closeModal(); clearLog();
+  addLog(`<span class="lw">${sp()}Initialising WalletConnect…</span>`);
+  try {
+    if (wcProvider) { try { await wcProvider.disconnect(); } catch(_) {} wcProvider = null; }
+    wcProvider = await EthereumProvider.init({
+      projectId: PROJECT_ID,
+      chains: [POLYGON_CHAIN_ID],
+      optionalChains: [POLYGON_CHAIN_ID],
+      showQrModal: false,
+      metadata: {
+        name: 'GasMe Terminal',
+        description: 'Your VERSE Polygon gas station',
+        url: window.location.origin,
+        icons: ['https://avatars.githubusercontent.com/u/37784886'],
+      },
+    });
+    wcProvider.on('display_uri', async uri => {
+      await web3modal.openModal({ uri, standaloneChains: [`eip155:${POLYGON_CHAIN_ID}`] });
+    });
+    wcProvider.on('connect',    () => web3modal.closeModal());
+    wcProvider.on('disconnect', () => { web3modal.closeModal(); setDisconnected(); });
+
+    await wcProvider.connect({ chains: [POLYGON_CHAIN_ID] });
+    ethProvider = new ethers.providers.Web3Provider(wcProvider, 'any');
+    ethSigner   = ethProvider.getSigner();
+    const accounts = await ethProvider.listAccounts();
+    if (!accounts.length) throw new Error('No accounts returned');
+    userAddress = accounts[0];
+    setConnected(short(userAddress) + ' · WalletConnect');
+    clearLog();
+  } catch(e) {
+    web3modal.closeModal();
+    const m = (e.message || '').toLowerCase();
+    if (m.includes('user rejected') || m.includes('cancelled') || m.includes('closed') || e.code === 4001)
+      addLog(`<span class="le">✗ Connection cancelled.</span>`);
+    else
+      addLog(`<span class="le">✗ WalletConnect: ${e.message || 'Failed'}</span>`);
+  }
+}
 
 // ═══════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════
 updateSwapBtn();
 updateRefreshLabel();
-fetchPrices(); // Load prices immediately on page load
+loadGateConfig();     // Load fee + code from Sheets
+fetchPrices();        // Load prices immediately on page load
 setInterval(fetchPrices, 60000); // Refresh prices every 60s
 
 if (window.ethereum?.selectedAddress) {
