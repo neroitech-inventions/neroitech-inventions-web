@@ -616,24 +616,18 @@ const $overlay    = document.getElementById('modalOverlay');
 // WEB3MODAL (standalone — just the UI shell)
 // ─────────────────────────────────────────
 const web3modal = new Web3Modal({
-  projectId: PROJECT_ID,
-  walletConnectVersion: 2,
-  themeMode: 'dark',
-  themeVariables: {
-    '--w3m-accent-color':           '#00e5a0',
-    '--w3m-accent-fill-color':      '#061a11',
-    '--w3m-background-color':       '#0e1420',
-    '--w3m-container-border-radius':'20px',
-    '--w3m-font-family':            "'Syne', sans-serif",
-    '--w3m-z-index':                '99999',
-  },
-  explorerRecommendedWalletIds: [
-    'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // MetaMask
-    '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', // Trust
+  projectId:PROJECT_ID, walletConnectVersion:2, themeMode:'dark',
+  themeVariables:{'--w3m-accent-color':'#00e5a0','--w3m-accent-fill-color':'#061a11','--w3m-background-color':'#0c1220','--w3m-container-border-radius':'20px','--w3m-font-family':"'Syne',sans-serif",'--w3m-z-index':'99999'},
+  explorerRecommendedWalletIds:[
+    'fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa', // MetaMask
+    'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // Coinbase
+    '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', // Trust Wallet
+    '8a0ee50d1f22f6651afcae7eb4253e52a3310b90af5daef78a8c4929a9bb99d4', // Binance Web3
+    '38f5d18bd8522c244bdd70cb4a68e0e718865155811c043f052fb9f1c51de662',  // Bitget
+    'a7f416de6fb4b2368cf503c2e71c30776b814f9ad8690277b9a3e966f22621b3', // Bitcoin.com Wallet
     '1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369', // Rainbow
-    'a797aa35c0fadbfc1a53e7f675162ed5226968b44a19ee3d24385c64d1d3c393', // Phantom
   ],
-  explorerExcludedWalletIds: 'ALL', // show only recommended
+  // NO explorerExcludedWalletIds — full wallet list + search enabled
 });
 
 // ─────────────────────────────────────────
