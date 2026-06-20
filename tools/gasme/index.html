@@ -324,76 +324,18 @@ body::after{content:'';position:fixed;bottom:-100px;left:50%;transform:translate
       <div><h3>Connect Wallet</h3><p style="font-size:.64rem;color:var(--muted);font-family:var(--mono);margin-top:2px">Polygon mainnet required</p></div>
       <button class="modal-close" id="modalClose">✕</button>
     </div>
-
-    <!-- SEARCH (shown in WC flow) -->
-    <div id="wcSearchSection" style="display:none;margin-bottom:12px">
-      <input id="walletSearch" type="text" placeholder="🔍 Search wallets…"
-        style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:var(--mono);font-size:.85rem;outline:none;-webkit-appearance:none"
-        autocomplete="off" autocorrect="off" spellcheck="false">
-    </div>
-
-    <!-- QR code panel (desktop WalletConnect) -->
-    <div id="wcQrSection" style="display:none;text-align:center;padding:8px 0 12px">
-      <p style="font-size:.6rem;font-family:var(--mono);color:var(--muted);margin-bottom:10px">Scan with your mobile wallet app</p>
-      <canvas id="wcQrCanvas" style="border-radius:12px;max-width:220px;width:100%"></canvas>
-      <p style="font-size:.58rem;font-family:var(--mono);color:var(--muted2);margin-top:8px">Or copy the link below</p>
-      <div style="display:flex;gap:6px;margin-top:6px">
-        <input id="wcUriInput" readonly style="flex:1;min-width:0;padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:var(--mono);font-size:.55rem;outline:none">
-        <button id="wcCopyUri" style="padding:7px 12px;background:var(--verse-dim);color:var(--verse-light);border:1px solid rgba(124,93,245,.25);border-radius:8px;font-family:var(--mono);font-size:.6rem;cursor:pointer;flex-shrink:0">Copy</button>
-      </div>
-      <button id="wcQrBack" style="margin-top:12px;padding:8px 18px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:var(--mono);font-size:.65rem;cursor:pointer">← Back to wallets</button>
-    </div>
-
-    <!-- Wallet list (default view) -->
-    <div id="wcWalletList">
-      <div class="wsec">Injected / Extension</div>
-      <button class="wopt" id="mmBtn">
-        <div class="wopt-icon wi-mm">🦊</div>
-        <div><div class="wopt-name">MetaMask</div><div class="wopt-desc" id="mmDesc">Extension or mobile app</div></div>
-        <span class="wbadge" id="mmBadge">Check…</span>
-      </button>
-
-      <div class="wsec" id="mobileWalletsSec">Mobile Wallets</div>
-      <div id="mobileWallets">
-        <button class="wopt wallet-mobile-btn" data-uri-scheme="metamask" data-fallback="https://metamask.app.link/dapp/">
-          <div class="wopt-icon wi-mm">🦊</div>
-          <div><div class="wopt-name">MetaMask App</div><div class="wopt-desc">Opens MetaMask mobile</div></div>
-          <span class="wbadge blue">Deep Link</span>
-        </button>
-        <button class="wopt wallet-mobile-btn" data-uri-scheme="trust" data-fallback="https://link.trustwallet.com/open_url?coin_id=966&url=">
-          <div class="wopt-icon" style="background:linear-gradient(135deg,#3375bb,#245fa6)">🛡️</div>
-          <div><div class="wopt-name">Trust Wallet</div><div class="wopt-desc">Opens Trust Wallet mobile</div></div>
-          <span class="wbadge blue">Deep Link</span>
-        </button>
-        <button class="wopt wallet-mobile-btn" data-uri-scheme="coinbasewallet" data-fallback="https://go.cb-w.com/dapp?cb_url=">
-          <div class="wopt-icon" style="background:linear-gradient(135deg,#1652f0,#0a3dc4)">🔵</div>
-          <div><div class="wopt-name">Coinbase Wallet</div><div class="wopt-desc">Opens Coinbase Wallet mobile</div></div>
-          <span class="wbadge blue">Deep Link</span>
-        </button>
-        <button class="wopt wallet-mobile-btn" data-uri-scheme="okex" data-fallback="https://www.okx.com/download">
-          <div class="wopt-icon" style="background:linear-gradient(135deg,#333,#111)">⬛</div>
-          <div><div class="wopt-name">OKX Wallet</div><div class="wopt-desc">Opens OKX Wallet mobile</div></div>
-          <span class="wbadge blue">Deep Link</span>
-        </button>
-        <button class="wopt wallet-mobile-btn" data-uri-scheme="rainbow" data-fallback="https://rainbow.me">
-          <div class="wopt-icon" style="background:linear-gradient(135deg,#f97316,#a855f7)">🌈</div>
-          <div><div class="wopt-name">Rainbow</div><div class="wopt-desc">Opens Rainbow mobile</div></div>
-          <span class="wbadge blue">Deep Link</span>
-        </button>
-        <button class="wopt wallet-mobile-btn" data-uri-scheme="bitkeep" data-fallback="https://bitkeep.com">
-          <div class="wopt-icon" style="background:linear-gradient(135deg,#7c3aed,#5b21b6)">⚡</div>
-          <div><div class="wopt-name">Bitget Wallet</div><div class="wopt-desc">Opens Bitget Wallet mobile</div></div>
-          <span class="wbadge blue">Deep Link</span>
-        </button>
-      </div>
-
-      <div class="wsec">Other / Desktop</div>
-      <button class="wopt" id="wcQrBtn">
-        <div class="wopt-icon wi-wc">🔗</div>
-        <div><div class="wopt-name">WalletConnect QR</div><div class="wopt-desc">Scan with any compatible wallet</div></div>
-        <span class="wbadge blue">QR Code</span>
-      </button>
-    </div>
+    <div class="wsec">All Wallets</div>
+    <button class="wopt" id="wcBtn">
+      <div class="wopt-icon wi-wc">🔗</div>
+      <div><div class="wopt-name">WalletConnect</div><div class="wopt-desc">300+ wallets · QR code or mobile</div></div>
+      <span class="wbadge blue">Scan QR</span>
+    </button>
+    <div class="wsec">Browser Extension</div>
+    <button class="wopt" id="mmBtn">
+      <div class="wopt-icon wi-mm">🦊</div>
+      <div><div class="wopt-name">MetaMask</div><div class="wopt-desc" id="mmDesc">Extension or mobile</div></div>
+      <span class="wbadge" id="mmBadge">Check…</span>
+    </button>
   </div>
 </div>
 
@@ -690,7 +632,7 @@ body::after{content:'';position:fixed;bottom:-100px;left:50%;transform:translate
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 <script type="module">
 import EthereumProvider from 'https://esm.sh/@walletconnect/ethereum-provider@2.17.0?bundle';
-import QRCode from 'https://esm.sh/qrcode@1.5.3?bundle';
+import { Web3Modal }    from 'https://esm.sh/@web3modal/standalone@2.4.3?bundle';
 
 const PROJECT_ID = '08c159f4699e9b22371f9d0d4ce1aef8';
 // ═══════════════════════════════════════════
@@ -741,8 +683,24 @@ const isMobile=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(na
 let isUnlocked=false, feeAmountVerse=0, validCode='';
 
 // Web3Modal instance for WalletConnect QR
-// ── WALLETCONNECT URI (set when WC initialises) ──
-let wcUri = null;
+const web3modal = new Web3Modal({
+  projectId: PROJECT_ID, walletConnectVersion: 2, themeMode: 'dark',
+  themeVariables: {
+    '--w3m-accent-color': '#00f0b5', '--w3m-accent-fill-color': '#050a0e',
+    '--w3m-background-color': '#0a1520', '--w3m-container-border-radius': '20px',
+    '--w3m-z-index': '99999',
+  },
+  // Pin these wallets at top — full list + search still available below
+  explorerRecommendedWalletIds: [
+    'fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa', // MetaMask
+    'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // Coinbase
+    '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', // Trust Wallet
+    '8a0ee50d1f22f6651afcae7eb4253e52a3310b90af5daef78a8c4929a9bb99d4', // Binance Web3
+    '38f5d18bd8522c244bdd70cb4a68e0e718865155811c043f052fb9f1c51de662',  // Bitget
+    '1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369', // Rainbow
+  ],
+  // NO explorerExcludedWalletIds — users can search and browse all 300+ wallets
+});
 
 const TX_HISTORY_KEY = 'gasme_tx_history';
 
@@ -1377,176 +1335,13 @@ document.getElementById('copyAddrBtn').addEventListener('click', async () => {
 // WALLET CONNECTION
 // ═══════════════════════════════════════════
 window.openModal = function openModal() {
-  const modal = document.getElementById('walletModal');
-  modal.classList.add('open');
-  // Reset to wallet list view
-  showWalletList();
-  // Detect MetaMask
-  const badge = document.getElementById('mmBadge'), desc = document.getElementById('mmDesc');
+  document.getElementById('walletModal').classList.add('open');
+  const badge=document.getElementById('mmBadge'), desc=document.getElementById('mmDesc');
   if (window.ethereum?.isMetaMask) { badge.textContent='✓ Detected'; desc.textContent='Click to connect'; }
-  else if (isMobile) { badge.textContent='Not found'; badge.className='wbadge'; }
-  else { badge.textContent='Install'; badge.className='wbadge'; }
-  // On mobile hide the extension section header, show mobile wallets
-  document.getElementById('mobileWalletsSec').style.display = isMobile ? '' : 'none';
-  document.getElementById('mobileWallets').style.display    = isMobile ? '' : 'none';
+  else if (isMobile) { badge.textContent='Open App'; badge.className='wbadge blue'; }
+  else { badge.textContent='Install'; }
 };
-
-function closeModal() { document.getElementById('walletModal').classList.remove('open'); }
-
-function showWalletList() {
-  document.getElementById('wcWalletList').style.display  = '';
-  document.getElementById('wcQrSection').style.display   = 'none';
-  document.getElementById('wcSearchSection').style.display = 'none';
-}
-
-function showQR(uri) {
-  document.getElementById('wcWalletList').style.display  = 'none';
-  document.getElementById('wcQrSection').style.display   = '';
-  document.getElementById('wcSearchSection').style.display = 'none';
-  // Render QR
-  const canvas = document.getElementById('wcQrCanvas');
-  QRCode.toCanvas(canvas, uri, { width: 220, margin: 2, color: { dark:'#d0e8f5', light:'#0a1520' } }, ()=>{});
-  // Copy URI
-  document.getElementById('wcUriInput').value = uri;
-}
-
-// Copy URI button
-document.getElementById('wcCopyUri').addEventListener('click', async () => {
-  const uri = document.getElementById('wcUriInput').value;
-  try { await navigator.clipboard.writeText(uri); document.getElementById('wcCopyUri').textContent = '✓ Copied!'; setTimeout(()=>document.getElementById('wcCopyUri').textContent='Copy',2000); } catch {}
-});
-
-// Back button
-document.getElementById('wcQrBack').addEventListener('click', showWalletList);
-
-// Wallet search filter
-document.getElementById('walletSearch').addEventListener('input', e => {
-  const q = e.target.value.toLowerCase();
-  document.querySelectorAll('.wallet-mobile-btn').forEach(btn => {
-    const name = btn.querySelector('.wopt-name').textContent.toLowerCase();
-    btn.style.display = name.includes(q) ? '' : 'none';
-  });
-});
-
-// Modal close handlers
-document.getElementById('walletModal').addEventListener('click', e => { if(e.target===document.getElementById('walletModal')) closeModal(); });
-document.getElementById('modalClose').addEventListener('click', closeModal);
-
-// MetaMask (injected)
-document.getElementById('mmBtn').addEventListener('click', () => {
-  if (window.ethereum) { connectInjected(window.ethereum); return; }
-  closeModal();
-  if (isMobile) window.location.href = `https://metamask.app.link/dapp/${location.host}${location.pathname}`;
-  else window.open('https://metamask.io/download/', '_blank');
-});
-
-// QR button (desktop "scan with any wallet")
-document.getElementById('wcQrBtn').addEventListener('click', async () => {
-  if (wcUri) { showQR(wcUri); return; } // reuse existing URI
-  await initWC(false); // init but don't auto-open app
-});
-
-// Mobile wallet deep link buttons
-document.querySelectorAll('.wallet-mobile-btn').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    closeModal();
-    if (!wcUri) {
-      addLog(`<span class="lw">${sp()}Preparing WalletConnect…</span>`);
-      await initWC(true, btn.dataset.uriScheme, btn.dataset.fallback);
-    } else {
-      openWalletDeepLink(btn.dataset.uriScheme, btn.dataset.fallback, wcUri);
-    }
-  });
-});
-
-function openWalletDeepLink(scheme, fallback, uri) {
-  const encoded = encodeURIComponent(uri);
-  const pageUrl = encodeURIComponent(window.location.href);
-  let deepLink;
-  switch(scheme) {
-    case 'metamask':      deepLink = `metamask://wc?uri=${encoded}`; break;
-    case 'trust':         deepLink = `trust://wc?uri=${encoded}`; break;
-    case 'coinbasewallet':deepLink = `cbwallet://wc?uri=${encoded}`; break;
-    case 'okex':          deepLink = `okex://main/wc?uri=${encoded}`; break;
-    case 'rainbow':       deepLink = `rainbow://wc?uri=${encoded}`; break;
-    case 'bitkeep':       deepLink = `bitkeep://wc?uri=${encoded}`; break;
-    default:              deepLink = null;
-  }
-  if (deepLink) {
-    window.location.href = deepLink;
-    // Fallback after 2s if app not installed
-    setTimeout(() => window.open(fallback + pageUrl, '_blank'), 2000);
-  } else {
-    window.open(fallback + pageUrl, '_blank');
-  }
-}
-
-// Disconnect
-document.getElementById('discBtn').addEventListener('click', async () => {
-  try { if (wcProvider?.disconnect) await wcProvider.disconnect(); } catch(_) {}
-  setDisconnected();
-});
-
-// ── WalletConnect init ─────────────────────────────────
-async function initWC(mobileFlow = false, scheme = null, fallback = null) {
-  clearLog();
-  addLog(`<span class="lw">${sp()}Initialising WalletConnect…</span>`);
-  try {
-    if (wcProvider) { try { await wcProvider.disconnect(); } catch(_) {} wcProvider = null; }
-    wcUri = null;
-
-    wcProvider = await EthereumProvider.init({
-      projectId: PROJECT_ID,
-      chains: [POLYGON_CHAIN_ID],
-      optionalChains: [POLYGON_CHAIN_ID],
-      showQrModal: false,
-      metadata: {
-        name: 'GasMe Terminal',
-        description: 'Your VERSE Polygon gas station',
-        url: window.location.origin,
-        icons: ['https://avatars.githubusercontent.com/u/37784886'],
-      },
-    });
-
-    wcProvider.on('display_uri', uri => {
-      wcUri = uri;
-      if (mobileFlow && scheme) {
-        // Deep link directly into the wallet app
-        openWalletDeepLink(scheme, fallback, uri);
-      } else {
-        // Desktop: show QR inside our modal
-        document.getElementById('walletModal').classList.add('open');
-        showQR(uri);
-      }
-    });
-
-    wcProvider.on('disconnect', () => { wcUri=null; setDisconnected(); });
-
-    const connectPromise = wcProvider.connect({ chains: [POLYGON_CHAIN_ID] });
-
-    connectPromise.then(async () => {
-      ethProvider = new ethers.providers.Web3Provider(wcProvider, 'any');
-      ethSigner   = ethProvider.getSigner();
-      const accounts = await ethProvider.listAccounts();
-      if (!accounts.length) throw new Error('No accounts returned');
-      userAddress = accounts[0];
-      closeModal();
-      setConnected(short(userAddress) + ' · WalletConnect');
-      clearLog();
-    }).catch(e => {
-      wcUri = null;
-      const m = (e.message || '').toLowerCase();
-      if (!m.includes('user rejected') && !m.includes('cancelled') && !m.includes('closed'))
-        addLog(`<span class="le">✗ WalletConnect: ${e.message || 'Failed'}</span>`);
-    });
-
-  } catch(e) {
-    wcUri = null;
-    addLog(`<span class="le">✗ WalletConnect init failed: ${e.message || 'Unknown error'}</span>`);
-  }
-}
-
-async function connectWC() { await initWC(false); }
+function closeModal(){document.getElementById('walletModal').classList.remove('open')}
 
 async function ensurePolygon(eth) {
   try { await eth.request({method:'wallet_switchEthereumChain',params:[{chainId:POLYGON_HEX}]}); }
@@ -1564,12 +1359,15 @@ function setConnected(label) {
   const sl = document.getElementById('scanLink');
   sl.href = `https://polygonscan.com/address/${userAddress}`;
   sl.style.display = '';
-  updateGateWalletUI();
-  updateBalances(); updateSwapBtn(); renderTxHistory(); startAutoRefresh();
+  updateGateWalletUI(); // keep gate in sync
+  updateBalances();
+  updateSwapBtn();
+  renderTxHistory();
+  startAutoRefresh();
 }
 
 function setDisconnected() {
-  userAddress=null; ethProvider=null; ethSigner=null; wcProvider=null; wcUri=null;
+  userAddress=null; ethProvider=null; ethSigner=null; wcProvider=null;
   document.getElementById('walletBar').classList.remove('show');
   document.getElementById('connectBtn').style.display = '';
   $swapBtn.style.display = 'none';
@@ -1592,7 +1390,9 @@ function setDisconnected() {
   strip.className='status-strip strip-good';
   document.getElementById('statusTitle').textContent='What is gas?';
   document.getElementById('statusBody').textContent='Connect your wallet to check your POL gas level.';
-  updateRefreshLabel(); updateGateWalletUI();
+  updateRefreshLabel();
+  updateGateWalletUI(); // keep gate connect button in sync
+  // If gate not yet passed, re-lock the swap card
   if (!isUnlocked) document.getElementById('swapCard').style.display = 'none';
 }
 
@@ -1629,6 +1429,64 @@ function showMaxWarning(type) {
   if (!type) { w.style.display='none'; return; }
   w.textContent = type==='min' ? '⚠️ Minimum allowed: 1 VERSE' : `⚠️ Maximum allowed: ${MAX_VERSE_SWAP.toLocaleString()} VERSE per swap`;
   w.style.display='block';
+}
+
+// ═══════════════════════════════════════════
+// EVENT LISTENERS
+// ═══════════════════════════════════════════
+document.getElementById('walletModal').addEventListener('click', e=>{ if(e.target===document.getElementById('walletModal')) closeModal(); });
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('mmBtn').addEventListener('click', () => {
+  if (window.ethereum) { connectInjected(window.ethereum); return; }
+  closeModal();
+  if (isMobile) window.location.href=`https://metamask.app.link/dapp/${location.host}${location.pathname}`;
+  else window.open('https://metamask.io/download/','_blank');
+});
+document.getElementById('wcBtn').addEventListener('click', connectWC);
+document.getElementById('discBtn').addEventListener('click', async () => {
+  try { if (wcProvider?.disconnect) await wcProvider.disconnect(); } catch(_) {}
+  setDisconnected();
+});
+
+async function connectWC() {
+  closeModal(); clearLog();
+  addLog(`<span class="lw">${sp()}Initialising WalletConnect…</span>`);
+  try {
+    if (wcProvider) { try { await wcProvider.disconnect(); } catch(_) {} wcProvider = null; }
+    wcProvider = await EthereumProvider.init({
+      projectId: PROJECT_ID,
+      chains: [POLYGON_CHAIN_ID],
+      optionalChains: [POLYGON_CHAIN_ID],
+      showQrModal: false,
+      metadata: {
+        name: 'GasMe Terminal',
+        description: 'Your VERSE Polygon gas station',
+        url: window.location.origin,
+        icons: ['https://avatars.githubusercontent.com/u/37784886'],
+      },
+    });
+    wcProvider.on('display_uri', async uri => {
+      await web3modal.openModal({ uri, standaloneChains: [`eip155:${POLYGON_CHAIN_ID}`] });
+    });
+    wcProvider.on('connect',    () => web3modal.closeModal());
+    wcProvider.on('disconnect', () => { web3modal.closeModal(); setDisconnected(); });
+
+    await wcProvider.connect({ chains: [POLYGON_CHAIN_ID] });
+    ethProvider = new ethers.providers.Web3Provider(wcProvider, 'any');
+    ethSigner   = ethProvider.getSigner();
+    const accounts = await ethProvider.listAccounts();
+    if (!accounts.length) throw new Error('No accounts returned');
+    userAddress = accounts[0];
+    setConnected(short(userAddress) + ' · WalletConnect');
+    clearLog();
+  } catch(e) {
+    web3modal.closeModal();
+    const m = (e.message || '').toLowerCase();
+    if (m.includes('user rejected') || m.includes('cancelled') || m.includes('closed') || e.code === 4001)
+      addLog(`<span class="le">✗ Connection cancelled.</span>`);
+    else
+      addLog(`<span class="le">✗ WalletConnect: ${e.message || 'Failed'}</span>`);
+  }
 }
 
 // ═══════════════════════════════════════════
