@@ -22,8 +22,7 @@
   <meta name="description" content="Create stunning professional resumes with Elite Resume Builder by Neroitech Inventions.">
   
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;500;600;700&family=Lato:wght@400;700&family=Source+Sans+3:wght@400;600;700&family=Raleway:wght@400;500;600;700&family=Nunito:wght@400;600;700&family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
@@ -104,17 +103,34 @@
               class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white">
           </div>
 
-          <div>
-            <label class="text-sm text-slate-300">Choose Font</label>
-            <select id="fontSelector" class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white" onchange="changeFont()">
-              <option value="Inter, sans-serif">Inter</option>
-              <option value="Georgia, serif">Georgia</option>
-              <option value="'Times New Roman', serif">Times New Roman</option>
-              <option value="Arial, sans-serif">Arial</option>
-              <option value="Poppins, sans-serif">Poppins</option>
-              <option value="Montserrat, sans-serif">Montserrat</option>
-            </select>
-          </div>
+<div>
+  <label class="text-sm text-slate-300">Choose Font</label>
+  <select id="fontSelector" 
+    class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white" 
+    onchange="changeFont()">
+    
+    <optgroup label="Sans-Serif (Modern)">
+      <option value="Inter, sans-serif">Inter</option>
+      <option value="Poppins, sans-serif">Poppins</option>
+      <option value="Montserrat, sans-serif">Montserrat</option>
+      <option value="Roboto, sans-serif">Roboto</option>
+      <option value="'Open Sans', sans-serif">Open Sans</option>
+      <option value="Lato, sans-serif">Lato</option>
+      <option value="'Source Sans 3', sans-serif">Source Sans 3</option>
+      <option value="Raleway, sans-serif">Raleway</option>
+      <option value="Nunito, sans-serif">Nunito</option>
+      <option value="Arial, sans-serif">Arial</option>
+    </optgroup>
+
+    <optgroup label="Serif (Classic)">
+      <option value="Georgia, serif">Georgia</option>
+      <option value="'Times New Roman', serif">Times New Roman</option>
+      <option value="Merriweather, serif">Merriweather</option>
+      <option value="'Playfair Display', serif">Playfair Display</option>
+    </optgroup>
+
+  </select>
+</div>
 
           <div>
             <label class="text-sm text-slate-300 block mb-2">Resume Spacing</label>
