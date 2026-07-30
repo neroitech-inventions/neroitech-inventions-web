@@ -144,11 +144,6 @@
               class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white">
           </div>
 
-          <button onclick="toggleMode()"
-            class="w-full bg-slate-800 py-3 rounded-xl font-bold hover:scale-105 transition-all">
-            Toggle Dark/Light Mode
-          </button>
-
           <div>
             <label class="text-sm text-slate-300">Choose Font</label>
             <select id="fontSelector"
@@ -386,12 +381,6 @@
       generateResume();
       changeFont();
     }
-
-    function toggleMode() {
-      document.body.classList.toggle('bg-white');
-      document.body.classList.toggle('text-black');
-      document.body.classList.toggle('text-white');
-    }
   </script>
 
 <script>
@@ -527,12 +516,6 @@ function confirmClearDraft() {
     generateResume();
     changeFont();
     saveDraft();
-  }
-
-  function toggleMode() {
-    document.body.classList.toggle('bg-white');
-    document.body.classList.toggle('text-black');
-    document.body.classList.toggle('text-white');
   }
 
   // ---------- GENERATE RESUME ----------
