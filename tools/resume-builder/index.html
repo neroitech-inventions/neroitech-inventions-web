@@ -3,28 +3,29 @@
 <head>
   <meta charset="UTF-8" />
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-QM106YDX6N');
-</script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QM106YDX6N');
+  </script>
 
   <!-- Verse Analytics -->
   <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
   <script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.tagged-events.outbound-links.file-downloads.hash.pageview-props.revenue.js"></script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Elite Resume Builder</title>
-    <!-- Favicon -->
-<link href="images/favicon.ico" rel="icon">
-<meta name="description" content="Create stunning professional resumes with Elite Resume Builder by Neroitech Inventions. Choose beautiful templates, customize fonts and colors, upload profile photos, and export mobile-friendly ATS-ready resumes in minutes.">
+  <link href="images/favicon.ico" rel="icon">
+  <meta name="description" content="Create stunning professional resumes with Elite Resume Builder by Neroitech Inventions. Choose beautiful templates, customize fonts and colors, upload profile photos, and export mobile-friendly ATS-ready resumes in minutes.">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -48,68 +49,60 @@
     }
 
     @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
 
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    color-adjust: exact !important;
-  }
+      a[href]:after {
+        content: "" !important;
+      }
 
-  a[href]:after {
-    content: "" !important;
-  }
+      a {
+        text-decoration: none !important;
+        color: inherit !important;
+      }
 
-  a {
-    text-decoration: none !important;
-    color: inherit !important;
-  }
+      @page {
+        margin: 0;
+      }
 
-  @page {
-    margin: 0;
-  }
+      body * {
+        visibility: hidden;
+      }
 
-  body * {
-    visibility: hidden;
-  }
+      #resumeOutput,
+      #resumeOutput * {
+        visibility: visible;
+      }
 
-  #resumeOutput,
-  #resumeOutput * {
-    visibility: visible;
-  }
+      #resumeOutput {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
 
-  #resumeOutput {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-  }
+      .resume-section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
 
-}
+      .resume-header {
+        page-break-after: avoid;
+        border-radius: 0 !important;
+      }
 
-@media print {
+      #resumeOutput {
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+    }
 
-  .resume-section {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  .resume-header {
-    page-break-after: avoid;
-  }
-
-  #resumeOutput {
-    border-radius: 0 !important;
-    box-shadow: none !important;
-  }
-
-  .resume-header {
-    border-radius: 0 !important;
-  }
-
-}
-.page-break {
-  page-break-before: always;
-}
+    .page-break {
+      page-break-before: always;
+    }
   </style>
 </head>
 <body class="text-white min-h-screen">
@@ -159,20 +152,14 @@
           </div>
 
           <div>
-  <label class="text-sm text-slate-300 block mb-2">
-    Resume Spacing
-  </label>
-
-  <select id="spacingSelector"
-    onchange="generateResume()"
-    class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white">
-
-    <option value="compact">Compact</option>
-    <option value="normal" selected>Normal</option>
-    <option value="spacious">Spacious</option>
-
-  </select>
-</div>
+            <label class="text-sm text-slate-300 block mb-2">Resume Spacing</label>
+            <select id="spacingSelector" onchange="generateResume()"
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white">
+              <option value="compact">Compact</option>
+              <option value="normal" selected>Normal</option>
+              <option value="spacious">Spacious</option>
+            </select>
+          </div>
 
           <div>
             <label class="text-sm text-slate-300">Full Name</label>
@@ -205,56 +192,64 @@
           </div>
           
           <div>
-  <label class="text-sm text-slate-300">LinkedIn</label>
-  <input id="linkedin" type="url" placeholder="https://linkedin.com/in/yourname"
-    class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
-</div>
+            <label class="text-sm text-slate-300">LinkedIn</label>
+            <input id="linkedin" type="url" placeholder="https://linkedin.com/in/yourname"
+              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
+          </div>
 
           <div>
             <label class="text-sm text-slate-300">Professional Summary</label>
+            <p class="text-xs text-slate-500 mt-1 mb-1">Tip: Use **text** to make anything bold</p>
             <textarea id="summary" rows="5"
-              placeholder="Write a strong professional summary..."
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
+              placeholder="Experienced frontend developer with 4+ years building modern web apps...
+Example: Use **double asterisks** around important words"
+              class="w-full mt-1 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
           </div>
 
           <div>
             <label class="text-sm text-slate-300">Skills (comma separated)</label>
             <textarea id="skills" rows="3"
-              placeholder="HTML, CSS, JavaScript, React"
+              placeholder="HTML, CSS, JavaScript, React, Tailwind"
               class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
           </div>
 
           <div>
             <label class="text-sm text-slate-300">Experience</label>
-            <textarea id="experience" rows="6"
-              placeholder="Frontend Developer - Company Name"
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
+            <p class="text-xs text-slate-500 mt-1 mb-1">Tip: Use **text** to make job titles bold</p>
+            <textarea id="experience" rows="7"
+              placeholder="**Frontend Developer** - Neroitech Inventions
+Jan 2023 – Present
+- Built Elite Resume Builder
+- Improved page speed by 40%
+
+**Junior Developer** - Previous Company
+2021 – 2022
+- Developed company website"
+              class="w-full mt-1 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
           </div>
 
           <div>
             <label class="text-sm text-slate-300">Education</label>
+            <p class="text-xs text-slate-500 mt-1 mb-1">Tip: Use **text** to make degree bold</p>
             <textarea id="education" rows="4"
-              placeholder="B.Sc Computer Science"
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
+              placeholder="**B.Sc Computer Science** - University of Lagos
+2018 – 2022
+Second Class Upper"
+              class="w-full mt-1 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
           </div>
 
           <div>
             <label class="text-sm text-slate-300 mb-3 block">Choose Template</label>
-
             <div class="grid grid-cols-3 gap-3">
-
               <button onclick="setTemplate('modern')"
                 class="template-card bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl h-24 transition-all">
               </button>
-
               <button onclick="setTemplate('dark')"
                 class="template-card bg-gradient-to-br from-slate-700 to-black rounded-2xl h-24 transition-all">
               </button>
-
               <button onclick="setTemplate('minimal')"
                 class="template-card bg-gradient-to-br from-white to-slate-300 rounded-2xl h-24 transition-all">
               </button>
-
             </div>
           </div>
 
@@ -263,31 +258,26 @@
               class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 py-3 rounded-xl font-bold hover:scale-105 transition-all">
               Generate
             </button>
-
             <button onclick="window.print()"
               class="bg-white text-black px-5 rounded-xl font-bold hover:scale-105 transition-all">
               Print
             </button>
-            
             <button onclick="clearDraft()"
-  class="flex-1 bg-red-600/80 py-3 rounded-xl font-bold hover:scale-105 transition-all">
-  Clear 
-</button>
+              class="flex-1 bg-red-600/80 py-3 rounded-xl font-bold hover:scale-105 transition-all">
+              Clear 
+            </button>
           </div>
 
         </div>
       </div>
 
-
       <!-- PREVIEW -->
       <div class="lg:col-span-2 overflow-hidden">
         <div id="resumeOutput"
           class="resume-preview bg-white text-black rounded-2xl lg:rounded-3xl shadow-2xl overflow-hidden">
-
           <div class="p-5 sm:p-8 lg:p-14">
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-2 break-words">Your Name</h1>
             <p class="text-lg sm:text-xl text-slate-600 break-words">Your Profession</p>
-
             <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h2 class="font-bold text-xl border-b pb-2 mb-3">Contact</h2>
@@ -295,7 +285,6 @@
                 <p>Phone</p>
                 <p>Location</p>
               </div>
-
               <div>
                 <h2 class="font-bold text-xl border-b pb-2 mb-3">Skills</h2>
                 <div class="flex flex-wrap gap-2">
@@ -303,44 +292,69 @@
                 </div>
               </div>
             </div>
-
             <div class="mt-8">
               <h2 class="font-bold text-xl border-b pb-2 mb-3">Summary</h2>
               <p>Your professional summary will appear here.</p>
             </div>
-
             <div class="mt-8">
               <h2 class="font-bold text-xl border-b pb-2 mb-3">Experience</h2>
               <p>Your experience will appear here.</p>
             </div>
-
             <div class="mt-8">
               <h2 class="font-bold text-xl border-b pb-2 mb-3">Education</h2>
               <p>Your education will appear here.</p>
             </div>
-
           </div>
-
         </div>
       </div>
 
     </div>
   </div>
-<div class="page-break"></div>
 
-    <script>
+  <div class="page-break"></div>
 
-    const inputs = document.querySelectorAll('input, textarea, select');
+  <script>
+    let activeTemplate = 'modern';
 
-    inputs.forEach(input => {
-      input.addEventListener('input', () => {
-        generateResume();
-        saveDraft();
-      });
-    });
+    // ---------- FORMAT TEXT (supports **bold**) ----------
+    function formatText(text) {
+      if (!text) return '';
+      return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
 
+    // ---------- SAVE / LOAD ----------
     function saveDraft() {
-      const data = {
+      const imageInput = document.getElementById('profileImage');
+      let imageData = null;
+
+      const existing = localStorage.getItem('eliteResumeDraft');
+      if (existing) {
+        try {
+          const parsed = JSON.parse(existing);
+          imageData = parsed.imageData || null;
+        } catch (e) {}
+      }
+
+      if (imageInput.files && imageInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const data = collectFormData();
+          data.imageData = e.target.result;
+          localStorage.setItem('eliteResumeDraft', JSON.stringify(data));
+        };
+        reader.readAsDataURL(imageInput.files[0]);
+        return;
+      }
+
+      const data = collectFormData();
+      data.imageData = imageData;
+      localStorage.setItem('eliteResumeDraft', JSON.stringify(data));
+    }
+
+    function collectFormData() {
+      return {
         name: document.getElementById('name').value,
         title: document.getElementById('title').value,
         email: document.getElementById('email').value,
@@ -352,386 +366,285 @@
         experience: document.getElementById('experience').value,
         education: document.getElementById('education').value,
         font: document.getElementById('fontSelector').value,
-        theme: document.getElementById('themeColor').value
+        theme: document.getElementById('themeColor').value,
+        spacing: document.getElementById('spacingSelector').value,
+        template: activeTemplate
       };
-
-      localStorage.setItem('eliteResumeDraft', JSON.stringify(data));
     }
 
     function loadDraft() {
-      const saved = JSON.parse(localStorage.getItem('eliteResumeDraft'));
+      const raw = localStorage.getItem('eliteResumeDraft');
+      if (!raw) return;
 
-      if(!saved) return;
+      let saved;
+      try {
+        saved = JSON.parse(raw);
+      } catch (e) {
+        return;
+      }
 
-      Object.keys(saved).forEach(key => {
-        const element = document.getElementById(key) || document.getElementById(key + 'Selector');
-        if(element) {
-          element.value = saved[key];
-        }
+      ['name', 'title', 'email', 'phone', 'location', 'linkedin', 'summary', 'skills', 'experience', 'education'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && saved[id] !== undefined) el.value = saved[id];
       });
 
-      if(saved.font) {
-        document.getElementById('fontSelector').value = saved.font;
-      }
-
-      if(saved.theme) {
-        document.getElementById('themeColor').value = saved.theme;
-      }
+      if (saved.font) document.getElementById('fontSelector').value = saved.font;
+      if (saved.theme) document.getElementById('themeColor').value = saved.theme;
+      if (saved.spacing) document.getElementById('spacingSelector').value = saved.spacing;
+      if (saved.template) activeTemplate = saved.template;
+      if (saved.imageData) window._savedProfileImage = saved.imageData;
 
       generateResume();
       changeFont();
     }
-  </script>
 
-<script>
-  let activeTemplate = 'modern';
-
-  // ---------- SAVE / LOAD ----------
-  function saveDraft() {
-    const imageInput = document.getElementById('profileImage');
-    let imageData = null;
-
-    // Keep the last saved image if the user hasn’t picked a new one this session
-    const existing = localStorage.getItem('eliteResumeDraft');
-    if (existing) {
-      try {
-        const parsed = JSON.parse(existing);
-        imageData = parsed.imageData || null;
-      } catch (e) {}
+    function clearDraft() {
+      const modal = document.getElementById('clearModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
     }
 
-    // If a new file is selected, convert it to base64
-    if (imageInput.files && imageInput.files[0]) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const data = collectFormData();
-        data.imageData = e.target.result;
-        localStorage.setItem('eliteResumeDraft', JSON.stringify(data));
-      };
-      reader.readAsDataURL(imageInput.files[0]);
-      return; // save will finish in the onload
+    function closeClearModal() {
+      const modal = document.getElementById('clearModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
     }
 
-    const data = collectFormData();
-    data.imageData = imageData;
-    localStorage.setItem('eliteResumeDraft', JSON.stringify(data));
-  }
+    function confirmClearDraft() {
+      localStorage.removeItem('eliteResumeDraft');
+      window._savedProfileImage = null;
 
-  function collectFormData() {
-    return {
-      name: document.getElementById('name').value,
-      title: document.getElementById('title').value,
-      email: document.getElementById('email').value,
-      phone: document.getElementById('phone').value,
-      location: document.getElementById('location').value,
-      linkedin: document.getElementById('linkedin').value,
-      summary: document.getElementById('summary').value,
-      skills: document.getElementById('skills').value,
-      experience: document.getElementById('experience').value,
-      education: document.getElementById('education').value,
-      font: document.getElementById('fontSelector').value,
-      theme: document.getElementById('themeColor').value,
-      spacing: document.getElementById('spacingSelector').value,
-      template: activeTemplate
-    };
-  }
+      document.querySelectorAll('input[type="text"], input[type="email"], input[type="url"], textarea').forEach(el => {
+        el.value = '';
+      });
 
-  function loadDraft() {
-    const raw = localStorage.getItem('eliteResumeDraft');
-    if (!raw) return;
+      document.getElementById('profileImage').value = '';
+      document.getElementById('themeColor').value = '#06b6d4';
+      document.getElementById('fontSelector').value = 'Inter, sans-serif';
+      document.getElementById('spacingSelector').value = 'normal';
+      activeTemplate = 'modern';
 
-    let saved;
-    try {
-      saved = JSON.parse(raw);
-    } catch (e) {
-      return;
+      generateResume();
+      changeFont();
+      closeClearModal();
     }
 
-    // Simple fields
-    ['name', 'title', 'email', 'phone', 'location', 'linkedin', 'summary', 'skills', 'experience', 'education'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el && saved[id] !== undefined) el.value = saved[id];
-    });
-
-    if (saved.font) document.getElementById('fontSelector').value = saved.font;
-    if (saved.theme) document.getElementById('themeColor').value = saved.theme;
-    if (saved.spacing) document.getElementById('spacingSelector').value = saved.spacing;
-
-    // Restore template
-    if (saved.template) {
-      activeTemplate = saved.template;
+    // ---------- UI helpers ----------
+    function changeFont() {
+      const selectedFont = document.getElementById('fontSelector').value;
+      document.getElementById('resumeOutput').style.fontFamily = selectedFont;
     }
 
-    // Restore profile image (base64)
-    if (saved.imageData) {
-      // We keep it in memory so generateResume can use it
-      window._savedProfileImage = saved.imageData;
+    function setTemplate(template) {
+      activeTemplate = template;
+      generateResume();
+      changeFont();
+      saveDraft();
     }
 
-    generateResume();
-    changeFont();
-  }
+    // ---------- GENERATE RESUME ----------
+    function generateResume() {
+      const name = document.getElementById('name').value || 'Your Name';
+      const title = document.getElementById('title').value || 'Your Profession';
+      const email = document.getElementById('email').value || 'your@email.com';
+      const phone = document.getElementById('phone').value || '+234...';
+      const location = document.getElementById('location').value || 'Nigeria';
+      const linkedin = document.getElementById('linkedin').value || 'https://ng.linkedin.com/in/your-name';
+      const summary = document.getElementById('summary').value || 'Professional summary goes here.';
+      const skills = document.getElementById('skills').value || 'HTML,CSS,JavaScript';
+      const experience = document.getElementById('experience').value || 'Your experience goes here.';
+      const education = document.getElementById('education').value || 'Your education goes here.';
+      const skillsArray = skills.split(',');
+      const themeColor = document.getElementById('themeColor').value;
+      const spacing = document.getElementById('spacingSelector').value;
 
-function clearDraft() {
-  // Just open the modern modal
-  const modal = document.getElementById('clearModal');
-  modal.classList.remove('hidden');
-  modal.classList.add('flex');
-}
+      let headerPadding = 'p-14';
+      let sectionSpacing = 'mb-10';
+      let contentPadding = 'p-5 sm:p-8 lg:p-14';
+      let headingMargin = 'mb-3';
+      let textLeading = 'leading-7';
 
-function closeClearModal() {
-  const modal = document.getElementById('clearModal');
-  modal.classList.add('hidden');
-  modal.classList.remove('flex');
-}
+      if (spacing === 'compact') {
+        headerPadding = 'p-6';
+        sectionSpacing = 'mb-5';
+        contentPadding = 'p-4 sm:p-5 lg:p-6';
+        headingMargin = 'mb-1';
+        textLeading = 'leading-5';
+      }
+      if (spacing === 'normal') {
+        headerPadding = 'p-10';
+        sectionSpacing = 'mb-8';
+        contentPadding = 'p-5 sm:p-8 lg:p-10';
+        headingMargin = 'mb-3';
+        textLeading = 'leading-7';
+      }
+      if (spacing === 'spacious') {
+        headerPadding = 'p-14';
+        sectionSpacing = 'mb-12';
+        contentPadding = 'p-6 sm:p-10 lg:p-14';
+        headingMargin = 'mb-5';
+        textLeading = 'leading-8';
+      }
 
-function confirmClearDraft() {
-  // Actual clear logic
-  localStorage.removeItem('eliteResumeDraft');
-  window._savedProfileImage = null;
+      let templateClass = '';
+      let headerClass = '';
+      let chipClass = '';
 
-  document.querySelectorAll('input[type="text"], input[type="email"], input[type="url"], textarea').forEach(el => {
-    el.value = '';
-  });
+      if (activeTemplate === 'modern') {
+        templateClass = 'bg-white text-black';
+        headerClass = 'text-white';
+        chipClass = 'bg-cyan-100 text-cyan-900';
+      }
+      if (activeTemplate === 'dark') {
+        templateClass = 'bg-slate-900 text-white';
+        headerClass = 'bg-black text-white';
+        chipClass = 'bg-slate-700 text-white';
+      }
+      if (activeTemplate === 'minimal') {
+        templateClass = 'bg-white text-black';
+        headerClass = 'bg-white text-black border-b';
+        chipClass = 'bg-slate-200 text-black';
+      }
 
-  document.getElementById('profileImage').value = '';
-  document.getElementById('themeColor').value = '#06b6d4';
-  document.getElementById('fontSelector').value = 'Inter, sans-serif';
-  document.getElementById('spacingSelector').value = 'normal';
-  activeTemplate = 'modern';
+      document.getElementById('resumeOutput').className =
+        `resume-preview rounded-3xl shadow-2xl overflow-hidden ${templateClass}`;
 
-  generateResume();
-  changeFont();
-  closeClearModal();
-}
+      let profileImageHTML = '';
+      const imageInput = document.getElementById('profileImage');
 
-  // ---------- UI helpers ----------
-  function changeFont() {
-    const selectedFont = document.getElementById('fontSelector').value;
-    document.getElementById('resumeOutput').style.fontFamily = selectedFont;
-  }
+      if (imageInput.files && imageInput.files[0]) {
+        const imageURL = URL.createObjectURL(imageInput.files[0]);
+        profileImageHTML = `
+          <img src="${imageURL}" class="w-28 h-28 rounded-full object-cover border-4 border-white shadow-xl mb-5">
+        `;
+      } else if (window._savedProfileImage) {
+        profileImageHTML = `
+          <img src="${window._savedProfileImage}" class="w-28 h-28 rounded-full object-cover border-4 border-white shadow-xl mb-5">
+        `;
+      }
 
-  function setTemplate(template) {
-    activeTemplate = template;
-    generateResume();
-    changeFont();
-    saveDraft();
-  }
-
-  // ---------- GENERATE RESUME ----------
-  function generateResume() {
-    const name = document.getElementById('name').value || 'Your Name';
-    const title = document.getElementById('title').value || 'Your Profession';
-    const email = document.getElementById('email').value || 'your@email.com';
-    const phone = document.getElementById('phone').value || '+234...';
-    const location = document.getElementById('location').value || 'Nigeria';
-    const linkedin = document.getElementById('linkedin').value || 'https://ng.linkedin.com/in/your-name';
-    const summary = document.getElementById('summary').value || 'Professional summary goes here.';
-    const skills = document.getElementById('skills').value || 'HTML,CSS,JavaScript';
-    const experience = document.getElementById('experience').value || 'Your experience goes here.';
-    const education = document.getElementById('education').value || 'Your education goes here.';
-    const skillsArray = skills.split(',');
-    const themeColor = document.getElementById('themeColor').value;
-    const spacing = document.getElementById('spacingSelector').value;
-
-    let headerPadding = 'p-14';
-    let sectionSpacing = 'mb-10';
-    let contentPadding = 'p-5 sm:p-8 lg:p-14';
-    let headingMargin = 'mb-3';
-    let textLeading = 'leading-7';
-
-    if (spacing === 'compact') {
-      headerPadding = 'p-6';
-      sectionSpacing = 'mb-5';
-      contentPadding = 'p-4 sm:p-5 lg:p-6';
-      headingMargin = 'mb-1';
-      textLeading = 'leading-5';
-    }
-    if (spacing === 'normal') {
-      headerPadding = 'p-10';
-      sectionSpacing = 'mb-8';
-      contentPadding = 'p-5 sm:p-8 lg:p-10';
-      headingMargin = 'mb-3';
-      textLeading = 'leading-7';
-    }
-    if (spacing === 'spacious') {
-      headerPadding = 'p-14';
-      sectionSpacing = 'mb-12';
-      contentPadding = 'p-6 sm:p-10 lg:p-14';
-      headingMargin = 'mb-5';
-      textLeading = 'leading-8';
-    }
-
-    let templateClass = '';
-    let headerClass = '';
-    let chipClass = '';
-
-    if (activeTemplate === 'modern') {
-      templateClass = 'bg-white text-black';
-      headerClass = 'text-white';
-      chipClass = 'bg-cyan-100 text-cyan-900';
-    }
-    if (activeTemplate === 'dark') {
-      templateClass = 'bg-slate-900 text-white';
-      headerClass = 'bg-black text-white';
-      chipClass = 'bg-slate-700 text-white';
-    }
-    if (activeTemplate === 'minimal') {
-      templateClass = 'bg-white text-black';
-      headerClass = 'bg-white text-black border-b';
-      chipClass = 'bg-slate-200 text-black';
-    }
-
-    document.getElementById('resumeOutput').className =
-      `resume-preview rounded-3xl shadow-2xl overflow-hidden ${templateClass}`;
-
-    // Profile image: prefer newly selected file, otherwise use saved base64
-    let profileImageHTML = '';
-    const imageInput = document.getElementById('profileImage');
-
-    if (imageInput.files && imageInput.files[0]) {
-      const imageURL = URL.createObjectURL(imageInput.files[0]);
-      profileImageHTML = `
-        <img src="${imageURL}" class="w-28 h-28 rounded-full object-cover border-4 border-white shadow-xl mb-5">
-      `;
-    } else if (window._savedProfileImage) {
-      profileImageHTML = `
-        <img src="${window._savedProfileImage}" class="w-28 h-28 rounded-full object-cover border-4 border-white shadow-xl mb-5">
-      `;
-    }
-
-    document.getElementById('resumeOutput').innerHTML = `
-      <div class="resume-header ${headerClass} ${headerPadding}" style="background: linear-gradient(135deg, ${themeColor}, #2563eb)">
-        ${profileImageHTML}
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold break-words">
-          ${name}
-        </h1>
-        <p class="text-lg sm:text-xl lg:text-2xl mt-2 opacity-90 break-words">
-          ${title}
-        </p>
-        <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-5 mt-6 text-sm break-all">
-          <span>${email}</span>
-          <span>${phone}</span>
-          <span>${location}</span>
-          ${linkedin ? `<a href="${linkedin.startsWith('http') ? linkedin : 'https://' + linkedin}" target="_blank" class="underline opacity-90 hover:opacity-100">${linkedin.replace(/^https?:\/\/(www\.)?/, '')}</a>` : ''}
-        </div>
-      </div>
-      <div class="${contentPadding}">
-        <div class="resume-section ${sectionSpacing}">
-          <h2 class="text-2xl font-bold ${headingMargin}">Professional Summary</h2>
-          <p class="${textLeading} opacity-80">${summary}</p>
-        </div>
-        <div class="resume-section ${sectionSpacing}">
-          <h2 class="text-2xl font-bold ${headingMargin}">Skills</h2>
-          <div class="flex flex-wrap gap-2 sm:gap-3">
-            ${skillsArray.map(skill => `
-              <span class="${chipClass} px-3 sm:px-4 py-2 rounded-full font-medium text-sm sm:text-base">
-                ${skill.trim()}
-              </span>
-            `).join('')}
+      document.getElementById('resumeOutput').innerHTML = `
+        <div class="resume-header ${headerClass} ${headerPadding}" style="background: linear-gradient(135deg, ${themeColor}, #2563eb)">
+          ${profileImageHTML}
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold break-words">
+            ${name}
+          </h1>
+          <p class="text-lg sm:text-xl lg:text-2xl mt-2 opacity-90 break-words">
+            ${title}
+          </p>
+          <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-5 mt-6 text-sm break-all">
+            <span>${email}</span>
+            <span>${phone}</span>
+            <span>${location}</span>
+            ${linkedin ? `<a href="${linkedin.startsWith('http') ? linkedin : 'https://' + linkedin}" target="_blank" class="underline opacity-90 hover:opacity-100">${linkedin.replace(/^https?:\/\/(www\.)?/, '')}</a>` : ''}
           </div>
         </div>
-        <div class="resume-section ${sectionSpacing}">
-          <h2 class="text-2xl font-bold ${headingMargin}">Experience</h2>
-          <p class="${textLeading} opacity-90">${experience.replace(/\n/g, '<br>')}</p>
+        <div class="${contentPadding}">
+          <div class="resume-section ${sectionSpacing}">
+            <h2 class="text-2xl font-bold ${headingMargin}">Professional Summary</h2>
+            <p class="${textLeading} opacity-80">${formatText(summary)}</p>
+          </div>
+          <div class="resume-section ${sectionSpacing}">
+            <h2 class="text-2xl font-bold ${headingMargin}">Skills</h2>
+            <div class="flex flex-wrap gap-2 sm:gap-3">
+              ${skillsArray.map(skill => `
+                <span class="${chipClass} px-3 sm:px-4 py-2 rounded-full font-medium text-sm sm:text-base">
+                  ${skill.trim()}
+                </span>
+              `).join('')}
+            </div>
+          </div>
+          <div class="resume-section ${sectionSpacing}">
+            <h2 class="text-2xl font-bold ${headingMargin}">Experience</h2>
+            <p class="${textLeading} opacity-90">${formatText(experience)}</p>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold ${headingMargin}">Education</h2>
+            <p class="${textLeading} opacity-90">${formatText(education)}</p>
+          </div>
         </div>
-        <div>
-          <h2 class="text-2xl font-bold ${headingMargin}">Education</h2>
-          <p class="${textLeading} opacity-90">${education.replace(/\n/g, '<br>')}</p>
-        </div>
-      </div>
-    `;
-    changeFont();
-  }
+      `;
+      changeFont();
+    }
 
-  // ---------- INIT ----------
-  window.addEventListener('DOMContentLoaded', () => {
-    loadDraft();          // ← this was missing before
-    generateResume();
+    // ---------- INIT ----------
+    window.addEventListener('DOMContentLoaded', () => {
+      loadDraft();
+      generateResume();
 
-    // Live update + auto-save
-    const inputs = document.querySelectorAll('input, textarea, select');
-    inputs.forEach(input => {
-      input.addEventListener('input', () => {
-        generateResume();
-        saveDraft();
-      });
-      // also catch color & file changes
-      input.addEventListener('change', () => {
-        generateResume();
-        saveDraft();
+      const inputs = document.querySelectorAll('input, textarea, select');
+      inputs.forEach(input => {
+        input.addEventListener('input', () => {
+          generateResume();
+          saveDraft();
+        });
+        input.addEventListener('change', () => {
+          generateResume();
+          saveDraft();
+        });
       });
     });
-  });
-</script>
+  </script>
 
   <footer class="text-center text-slate-400 py-8 text-sm px-4">
-  © 2026 <a href="https://niti.com.ng/" target="_blank"><b>Neroitech Inventions</b></a>. All rights reserved.
-</footer>
+    © 2026 <a href="https://niti.com.ng/" target="_blank"><b>Neroitech Inventions</b></a>. All rights reserved.
+  </footer>
 
-<!-- Back To Top Button -->
-<button id="backToTop"
-  onclick="scrollToTop()"
-  class="hidden fixed bottom-6 right-6 bg-cyan-500 hover:bg-cyan-600 text-white w-14 h-14 rounded-full shadow-2xl text-2xl font-bold transition-all duration-300 z-50">
-  ↑
-</button>
+  <!-- Back To Top Button -->
+  <button id="backToTop"
+    onclick="scrollToTop()"
+    class="hidden fixed bottom-6 right-6 bg-cyan-500 hover:bg-cyan-600 text-white w-14 h-14 rounded-full shadow-2xl text-2xl font-bold transition-all duration-300 z-50">
+    ↑
+  </button>
 
-<script>
-  // Back to top
-  const backToTopButton = document.getElementById('backToTop');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-      backToTopButton.classList.remove('hidden');
-    } else {
-      backToTopButton.classList.add('hidden');
+  <script>
+    const backToTopButton = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopButton.classList.remove('hidden');
+      } else {
+        backToTopButton.classList.add('hidden');
+      }
+    });
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  });
-  function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-</script>
+  </script>
 
-<!-- Modern Clear Confirmation Modal -->
-<div id="clearModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
-  <!-- Backdrop -->
-  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeClearModal()"></div>
-
-  <!-- Modal card -->
-  <div class="relative glass rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-white/10 animate-[fadeIn_0.2s_ease]">
-    <div class="text-center">
-      <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-red-500/20 flex items-center justify-center">
-        <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-        </svg>
-      </div>
-
-      <h3 class="text-xl font-bold text-white mb-2">Clear all progress?</h3>
-      <p class="text-slate-300 text-sm mb-8 leading-relaxed">
-        This will permanently delete your saved resume data, photo, and settings. This action cannot be undone.
-      </p>
-
-      <div class="flex gap-3">
-        <button onclick="closeClearModal()"
-          class="flex-1 py-3 rounded-xl font-semibold bg-slate-700 hover:bg-slate-600 transition-all">
-          Cancel
-        </button>
-        <button onclick="confirmClearDraft()"
-          class="flex-1 py-3 rounded-xl font-semibold bg-red-600 hover:bg-red-500 transition-all">
-          Yes, Clear Everything
-        </button>
+  <!-- Clear Confirmation Modal -->
+  <div id="clearModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeClearModal()"></div>
+    <div class="relative glass rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-white/10 animate-[fadeIn_0.2s_ease]">
+      <div class="text-center">
+        <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-red-500/20 flex items-center justify-center">
+          <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Clear all progress?</h3>
+        <p class="text-slate-300 text-sm mb-8 leading-relaxed">
+          This will permanently delete your saved resume data, photo, and settings. This action cannot be undone.
+        </p>
+        <div class="flex gap-3">
+          <button onclick="closeClearModal()"
+            class="flex-1 py-3 rounded-xl font-semibold bg-slate-700 hover:bg-slate-600 transition-all">
+            Cancel
+          </button>
+          <button onclick="confirmClearDraft()"
+            class="flex-1 py-3 rounded-xl font-semibold bg-red-600 hover:bg-red-500 transition-all">
+            Yes, Clear Everything
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<style>
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-</style>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+  </style>
 
-</body>
-</html>
 </body>
 </html>
