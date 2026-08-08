@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+
+  <title>ZeroConnect – Generate Your Payment Widget</title>
+
+<link href="images/favicon.ico" rel="icon">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#06080f;
+      --surface:#0c1019;
+      --surface2:#121826;
+      --surface3:#1a2235;
+      --border:rgba(255,255,255,0.07);
+      --border2:rgba(255,255,255,0.12);
+      --green:#22c55e;
+      --green-dim:rgba(34,197,94,0.12);
+      --green-glow:rgba(34,197,94,0.28);
+      --red:#ef4444;
+      --yellow:#eab308;
+      --blue:#3b82f6;
+      --purple:#8b5cf6;
+      --text:#f1f5f9;
+      --muted:#64748b;
+      --muted2:#475569;
+      --font:'Inter',system-ui,sans-serif;
+      --mono:'JetBrains Mono',monospace;
+    }
+    html,body{min-height:100%;}
+    body{
+      background:var(--bg);
+      font-family:var(--font);
+      color:var(--text);
+      line-height:1.55;
+      -webkit-font-smoothing:antialiased;
+    }
+    body::before{
+      content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+      background:
+        radial-gradient(ellipse 90% 50% at 50% -15%,rgba(34,197,94,0.09),transparent),
+        radial-gradient(ellipse 50% 40% at 100% 80%,rgba(59,130,246,0.05),transparent);
+    }
+    .page{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:32px 20px 64px;}
+
+    .top{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:36px;flex-wrap:wrap;gap:12px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;}
+    .brand-mark{
+      width:42px;height:42px;border-radius:12px;
+      background:linear-gradient(135deg,#22c55e,#16a34a);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 4px 20px var(--green-glow);font-size:18px;color:#052e16;
+    }
+    .brand-name{font-size:1.25rem;font-weight:800;letter-spacing:-0.4px;}
+    .brand-name span{color:var(--green);}
+    .brand-tag{font-size:0.72rem;color:var(--muted);margin-top:1px;}
+    .oss-badge{
+      font-family:var(--mono);font-size:0.62rem;font-weight:500;
+      padding:5px 12px;border-radius:20px;
+      background:rgba(139,92,246,0.1);color:var(--purple);
+      border:1px solid rgba(139,92,246,0.25);
+    }
+    .top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+    .nav-link{
+      font-size:0.78rem;color:var(--muted);text-decoration:none;
+      padding:7px 14px;border-radius:8px;border:1px solid var(--border);
+      transition:all .15s;font-weight:500;
+    }
+    .nav-link:hover{color:var(--text);border-color:var(--border2);}
+    .nav-link.primary{
+      background:var(--green-dim);color:var(--green);
+      border-color:rgba(34,197,94,0.25);
+    }
+    .nav-link.primary:hover{background:rgba(34,197,94,0.2);}
+
+    .hero{text-align:center;margin-bottom:36px;}
+    .hero h1{
+      font-size:clamp(1.6rem,4vw,2.1rem);font-weight:800;
+      letter-spacing:-0.6px;line-height:1.15;margin-bottom:10px;
+    }
+    .hero h1 em{font-style:normal;color:var(--green);}
+    .hero p{font-size:0.95rem;color:var(--muted);max-width:480px;margin:0 auto;}
+
+    .card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:28px 24px;
+      box-shadow:0 12px 40px rgba(0,0,0,0.35);
+      margin-bottom:20px;
+    }
+    .card-head{
+      display:flex;align-items:center;gap:10px;margin-bottom:22px;
+    }
+    .card-head .num{
+      width:28px;height:28px;border-radius:8px;
+      background:var(--green-dim);color:var(--green);
+      font-size:0.78rem;font-weight:700;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .card-head h2{font-size:1rem;font-weight:700;}
+
+    .field{margin-bottom:16px;}
+    .field-label{
+      font-size:0.7rem;font-weight:600;color:var(--muted);
+      text-transform:uppercase;letter-spacing:0.05em;margin-bottom:7px;display:block;
+    }
+    .field-input,.field-select{
+      width:100%;padding:12px 14px;
+      background:var(--surface2);border:1px solid var(--border);
+      border-radius:11px;color:var(--text);
+      font-family:var(--mono);font-size:0.85rem;
+      outline:none;transition:border-color .2s,box-shadow .2s;
+    }
+    .field-input:focus,.field-select:focus{
+      border-color:rgba(34,197,94,0.5);
+      box-shadow:0 0 0 3px var(--green-dim);
+    }
+    .field-input::placeholder{color:var(--muted2);}
+    .field-hint{font-size:0.65rem;color:var(--muted2);margin-top:5px;}
+    .field-input.valid{border-color:rgba(34,197,94,0.6)!important;}
+    .field-input.invalid{border-color:rgba(239,68,68,0.6)!important;}
+    .field-status{display:inline-flex;align-items:center;gap:4px;font-size:0.65rem;margin-top:5px;height:16px;}
+    .field-status.valid{color:var(--green);}
+    .field-status.invalid{color:var(--red);}
+    .field-status.hidden{display:none;}
+    .row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    @media(max-width:520px){.row-2{grid-template-columns:1fr;}}
+
+    .btn{
+      padding:15px 22px;border:none;border-radius:12px;
+      font-family:var(--font);font-size:0.92rem;font-weight:700;
+      cursor:pointer;transition:all .18s;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      width:100%;
+    }
+    .btn:active{transform:scale(0.98);}
+    .btn-primary{
+      background:linear-gradient(135deg,#22c55e,#16a34a);
+      color:#052e16;box-shadow:0 4px 22px var(--green-glow);
+    }
+    .btn-primary:hover{box-shadow:0 6px 28px rgba(34,197,94,0.4);transform:translateY(-1px);}
+    .btn-ghost{
+      background:var(--surface2);color:var(--muted);border:1px solid var(--border);
+    }
+    .btn-ghost:hover{color:var(--text);border-color:var(--border2);}
+
+    .output{display:none;}
+    .output.show{display:block;}
+    .output-actions{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+    .output-actions .btn{width:auto;flex:1;min-width:140px;padding:12px 16px;font-size:0.85rem;}
+    .code-wrap{
+      background:#0a0d14;border:1px solid var(--border);
+      border-radius:14px;overflow:hidden;position:relative;
+    }
+    .code-bar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border);
+      font-family:var(--mono);font-size:0.68rem;color:var(--muted);
+    }
+    #generatedCode{
+      display:block;width:100%;min-height:220px;max-height:360px;
+      padding:16px;background:transparent;border:none;resize:vertical;
+      color:#94a3b8;font-family:var(--mono);font-size:0.72rem;line-height:1.6;
+      outline:none;white-space:pre;overflow:auto;
+    }
+    .success-toast{
+      display:none;align-items:center;gap:8px;
+      background:var(--green-dim);border:1px solid rgba(34,197,94,0.3);
+      color:var(--green);border-radius:10px;padding:10px 14px;
+      font-size:0.8rem;font-weight:600;margin-bottom:14px;
+    }
+    .success-toast.show{display:flex;}
+
+    .features{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px;
+    }
+    @media(max-width:560px){.features{grid-template-columns:1fr;}}
+    .feat{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:14px;padding:16px;text-align:center;
+    }
+    .feat i{font-size:1.2rem;color:var(--green);margin-bottom:8px;}
+    .feat h3{font-size:0.82rem;font-weight:700;margin-bottom:4px;}
+    .feat p{font-size:0.68rem;color:var(--muted);line-height:1.4;}
+
+    .footer{
+      margin-top:40px;text-align:center;font-size:0.7rem;color:var(--muted2);
+    }
+    .footer a{color:var(--muted);text-decoration:none;}
+    .footer a:hover{color:var(--green);}
+    .warn{
+      background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.25);
+      border-radius:10px;padding:12px 14px;font-size:0.72rem;color:var(--yellow);
+      margin-bottom:18px;line-height:1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <div class="top">
+      <div class="brand">
+        <div class="brand-mark"><i class="fas fa-wallet"></i></div>
+        <div>
+          <div class="brand-name">Zero<span>Connect</span></div>
+          <div class="brand-tag">Open-source USDT payment widget</div>
+        </div>
+      </div>
+      <div class="top-right">
+        <a class="nav-link primary" href="zeroconnect-demo.html"><i class="fas fa-play"></i> Live Demo</a>
+        <div class="oss-badge"><i class="fab fa-github"></i> Open Source</div>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1>Generate your <em>no-wallet</em> payment page</h1>
+      <p>Enter your keys once. Get a clean HTML widget ready to host. Customers never see your API keys or addresses.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="num">1</div>
+        <h2>Your merchant settings</h2>
+      </div>
+
+      <div class="warn">
+        <i class="fas fa-lock"></i> These values are baked into the generated file. They will <strong>not</strong> appear as editable fields for your customers.
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label class="field-label">Polygon receiver address</label>
+          <input class="field-input" id="inPoly" type="text" placeholder="0x…" spellcheck="false">
+          <div class="field-status hidden" id="statusPoly"></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Solana receiver address</label>
+          <input class="field-input" id="inSol" type="text" placeholder="Base58 wallet…" spellcheck="false">
+          <div class="field-status hidden" id="statusSol"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Success redirect URL</label>
+        <input class="field-input" id="inUrl" type="url" placeholder="https://yoursite.com/payment-success">
+        <div class="field-hint">Customer is sent here after a successful payment (with tx, amount, chain params)</div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label class="field-label">Etherscan API key</label>
+          <input class="field-input" id="inEtherscan" type="text" placeholder="Your free key from etherscan.io" spellcheck="false">
+        </div>
+        <div class="field">
+          <label class="field-label">Helius API key</label>
+          <input class="field-input" id="inHelius" type="text" placeholder="Your key from helius.dev" spellcheck="false">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="num">2</div>
+        <h2>Generate widget</h2>
+      </div>
+      <button class="btn btn-primary" id="genBtn">
+        <i class="fas fa-magic"></i> Generate payment page
+      </button>
+    </div>
+
+    <div class="card output" id="outputCard">
+      <div class="card-head">
+        <div class="num">3</div>
+        <h2>Your generated file</h2>
+      </div>
+
+      <div class="success-toast" id="toast">
+        <i class="fas fa-check-circle"></i> Generated successfully — keys are hidden from customers
+      </div>
+
+      <div class="output-actions">
+        <button class="btn btn-primary" id="downloadBtn"><i class="fas fa-download"></i> Download HTML</button>
+        <button class="btn btn-ghost" id="copyBtn"><i class="fas fa-copy"></i> Copy code</button>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-bar">
+          <span>zeroconnect-payment.html</span>
+          <span style="color:var(--green);">Ready to host</span>
+        </div>
+        <textarea id="generatedCode" readonly></textarea>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feat">
+        <i class="fas fa-eye-slash"></i>
+        <h3>Keys stay private</h3>
+        <p>No config panel for end users. Values are baked into JS only.</p>
+      </div>
+      <div class="feat">
+        <i class="fas fa-bolt"></i>
+        <h3>No wallet connect</h3>
+        <p>Customers just send USDT and click verify. Zero friction.</p>
+      </div>
+      <div class="feat">
+        <i class="fas fa-code"></i>
+        <h3>Open source</h3>
+        <p>Fork it, improve it, ship it. Single HTML file, no backend needed.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      ZeroConnect · Open source · <a href="zeroconnect-demo.html">Live Demo</a> · <a href="https://niti.com.ng" target="_blank">Powered by Neroitech Inventions</a>
+    </div>
+  </div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function esc(str) {
+  return String(str || '')
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n');
+}
+
+function isValidPolygonAddress(addr) {
+  if (!addr || typeof addr !== 'string') return false;
+  const a = addr.trim();
+  if (!a.startsWith('0x')) return false;
+  if (a.length !== 42) return false;
+  return /^0x[0-9a-fA-F]{40}$/.test(a);
+}
+
+function isValidSolanaAddress(addr) {
+  if (!addr || typeof addr !== 'string') return false;
+  const a = addr.trim();
+  if (a.startsWith('0x')) return false;
+  if (a.length < 32 || a.length > 44) return false;
+  return /^[1-9A-HJ-NP-Za-km-z]+$/.test(a);
+}
+
+function updateAddressStatus(inputId, statusId, isValid, chain) {
+  const input = $(inputId);
+  const status = $(statusId);
+  const val = input.value.trim();
+  
+  if (!val) {
+    input.classList.remove('valid', 'invalid');
+    status.classList.add('hidden');
+    return;
+  }
+  
+  status.classList.remove('hidden');
+  
+  if (isValid) {
+    input.classList.remove('invalid');
+    input.classList.add('valid');
+    status.classList.remove('invalid');
+    status.classList.add('valid');
+    status.innerHTML = '<i class="fas fa-check-circle"></i> Valid ' + chain + ' address';
+  } else {
+    input.classList.remove('valid');
+    input.classList.add('invalid');
+    status.classList.remove('valid');
+    status.classList.add('invalid');
+    status.innerHTML = '<i class="fas fa-exclamation-circle"></i> Invalid ' + chain + ' address';
+  }
+}
+
+function buildWidget(cfg) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Pay with USDT – ZeroConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"><\/script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#07090f;--surface:#0e1320;--surface2:#151c2c;--surface3:#1a2336;
+      --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.10);
+      --green:#22c55e;--green-dim:rgba(34,197,94,0.12);--green-glow:rgba(34,197,94,0.25);
+      --red:#ef4444;--yellow:#eab308;--purple:#8b5cf6;
+      --text:#f1f5f9;--muted:#64748b;--muted2:#475569;
+      --font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+    }
+    html,body{min-height:100%;}
+    body{background:var(--bg);font-family:var(--font);color:var(--text);overflow-x:hidden;line-height:1.5;}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(34,197,94,0.08),transparent),radial-gradient(ellipse 60% 40% at 100% 100%,rgba(59,130,246,0.05),transparent);pointer-events:none;z-index:0;}
+    .wrap{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:24px 16px 48px;}
+    .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding:0 4px;}
+    .logo{display:flex;align-items:center;gap:10px;}
+    .logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 4px 16px var(--green-glow);color:#052e16;}
+    .logo-text{font-size:1.05rem;font-weight:700;letter-spacing:-0.3px;}
+    .logo-text span{color:var(--green);}
+    .badge-live{font-family:var(--mono);font-size:0.6rem;font-weight:500;padding:4px 10px;border-radius:20px;background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,0.2);display:flex;align-items:center;gap:5px;}
+    .badge-live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px 24px;box-shadow:0 8px 32px rgba(0,0,0,0.3);}
+    .card-title{font-size:1.25rem;font-weight:700;letter-spacing:-0.4px;margin-bottom:4px;}
+    .card-sub{font-size:0.8rem;color:var(--muted);margin-bottom:24px;}
+    .chain-tabs{display:flex;background:var(--surface2);border-radius:12px;padding:4px;margin-bottom:24px;border:1px solid var(--border);}
+    .chain-tab{flex:1;padding:10px 12px;border:none;border-radius:9px;background:transparent;color:var(--muted);font-family:var(--font);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;}
+    .chain-tab:hover{color:var(--text);}
+    .chain-tab.active{background:var(--surface3);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,0.25);}
+    .chain-tab.active.poly{color:var(--green);}
+    .chain-tab.active.sol{color:var(--purple);}
+    .field{margin-bottom:18px;}
+    .field-label{font-size:0.7rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;display:block;}
+    .field-input{width:100%;padding:13px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:var(--mono);font-size:0.9rem;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;}
+    .field-input:focus{border-color:rgba(34,197,94,0.5);box-shadow:0 0 0 3px var(--green-dim);}
+    .field-input::placeholder{color:var(--muted2);}
+    .field-input.locked{opacity:0.65;cursor:not-allowed;border-color:rgba(34,197,94,0.35)!important;background:rgba(34,197,94,0.04)!important;}
+    .field-input.valid{border-color:rgba(34,197,94,0.6)!important;}
+    .field-input.invalid{border-color:rgba(239,68,68,0.6)!important;}
+    .field-status{display:inline-flex;align-items:center;gap:4px;font-size:0.65rem;margin-top:5px;height:16px;}
+    .field-status.valid{color:var(--green);}
+    .field-status.invalid{color:var(--red);}
+    .field-status.hidden{display:none;}
+    .pay-box{background:linear-gradient(160deg,var(--surface2),var(--surface3));border:1px solid var(--border2);border-radius:16px;padding:20px;margin:20px 0 16px;}
+    .pay-amount{font-size:2rem;font-weight:700;color:var(--green);letter-spacing:-1.5px;text-align:center;line-height:1.1;}
+    .pay-network{font-family:var(--mono);font-size:0.68rem;color:var(--muted);text-align:center;margin-top:4px;margin-bottom:18px;}
+    .addr-row{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.3);padding:12px 14px;border-radius:10px;margin-bottom:14px;border:1px solid var(--border);}
+    .addr-text{flex:1;font-family:var(--mono);font-size:0.72rem;word-break:break-all;color:var(--green);line-height:1.4;}
+    .copy-btn{padding:8px 12px;background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,0.25);border-radius:8px;font-size:0.72rem;font-weight:600;cursor:pointer;flex-shrink:0;transition:all .2s;font-family:var(--font);}
+    .copy-btn:hover{background:rgba(34,197,94,0.2);}
+    #qrcode{display:flex;justify-content:center;margin:4px 0 8px;}
+    #qrcode canvas{border-radius:12px;background:#fff;padding:10px;}
+    .pay-hint{font-size:0.68rem;color:var(--muted);text-align:center;line-height:1.5;margin-top:8px;}
+    .btn{padding:15px 20px;border:none;border-radius:12px;font-family:var(--font);font-size:0.9rem;font-weight:600;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;-webkit-tap-highlight-color:transparent;}
+    .btn:active{transform:scale(0.98);}
+    .btn:disabled{opacity:0.35;cursor:not-allowed;pointer-events:none;}
+    .btn-primary{background:linear-gradient(135deg,#22c55e,#16a34a);color:#052e16;box-shadow:0 4px 20px var(--green-glow);}
+    .btn-primary:hover:not(:disabled){box-shadow:0 6px 28px rgba(34,197,94,0.4);transform:translateY(-1px);}
+    .status-log{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;min-height:52px;max-height:150px;overflow-y:auto;font-family:var(--mono);font-size:0.7rem;line-height:1.75;word-break:break-all;margin-top:16px;color:var(--muted);}
+    .lg-ok{color:var(--green);}.lg-err{color:var(--red);}.lg-warn{color:var(--yellow);}.lg-info{color:var(--muted);}
+    .spinner{display:inline-block;width:10px;height:10px;border:2px solid var(--green-dim);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .sol-note{background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:10px;padding:10px 14px;font-size:0.68rem;color:var(--purple);margin-top:12px;display:none;line-height:1.5;}
+    .footer{margin-top:28px;text-align:center;font-size:0.65rem;color:var(--muted2);}
+    @media(max-width:400px){.wrap{padding:16px 12px 40px;}.card{padding:22px 18px;}.pay-amount{font-size:1.7rem;}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-mark"><i class="fas fa-wallet"><\/i><\/div>
+        <div class="logo-text">Zero<span>Connect<\/span><\/div>
+      <\/div>
+      <div class="badge-live">Live<\/div>
+    <\/div>
+
+    <div class="card">
+      <div class="card-title">Pay with USDT<\/div>
+      <div class="card-sub">Send from any wallet — no connection required<\/div>
+
+      <div class="chain-tabs">
+        <button class="chain-tab poly active" id="btnPoly" onclick="selectChain('polygon')"><i class="fas fa-hexagon" style="font-size:0.75rem;"><\/i> Polygon<\/button>
+        <button class="chain-tab sol" id="btnSol" onclick="selectChain('solana')"><i class="fas fa-sun" style="font-size:0.75rem;"><\/i> Solana<\/button>
+      <\/div>
+
+      <div class="field">
+        <label class="field-label">Amount (USDT)<\/label>
+        <input class="field-input" type="number" id="fldAmount" placeholder="25.00" step="0.01" min="0.01" inputmode="decimal">
+      <\/div>
+      <div class="field">
+        <label class="field-label">Your sending wallet<\/label>
+        <input class="field-input" type="text" id="fldWallet" placeholder="0x… or Solana address" spellcheck="false" autocomplete="off">
+        <div class="field-status hidden" id="statusWallet"><\/div>
+      <\/div>
+      <div class="field">
+        <label class="field-label">Reference / Order ID <span style="opacity:0.5;font-weight:400;">(optional)<\/span><\/label>
+        <input class="field-input" type="text" id="fldRef" placeholder="Order #12345" maxlength="64">
+      <\/div>
+
+      <div id="payInstructions" style="display:none;">
+        <div class="pay-box">
+          <div class="pay-amount" id="displayAmount">—<\/div>
+          <div class="pay-network" id="displayNetwork">USDT on Polygon<\/div>
+          <div class="addr-row">
+            <code class="addr-text" id="displayAddr">—<\/code>
+            <button class="copy-btn" id="copyAddrBtn">Copy<\/button>
+          <\/div>
+          <div id="qrcode"><\/div>
+          <div class="pay-hint">Send exactly this amount from the wallet above.<br>Wait 30–60 seconds, then verify.<\/div>
+        <\/div>
+        <button class="btn btn-primary" id="checkBtn"><i class="fas fa-check-circle"><\/i> I paid — Verify payment<\/button>
+        <div class="sol-note" id="solNote">Solana verification uses Helius indexer.<\/div>
+      <\/div>
+
+      <div class="status-log" id="log">Enter amount and wallet address to begin.<\/div>
+    <\/div>
+
+    <div class="footer">ZeroConnect · Manual USDT payments<\/div>
+  <\/div>
+
+<script>
+const CONFIG = {
+  USDT_POLYGON: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+  USDT_SOLANA:  'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+  receiverPolygon: '${esc(cfg.poly)}',
+  receiverSolana:  '${esc(cfg.sol)}',
+  successUrl:      '${esc(cfg.url)}',
+  etherscanKey:    '${esc(cfg.etherscan)}',
+  heliusKey:       '${esc(cfg.helius)}',
+  timeWindowMin:   45,
+  amountTolerance: 0.05
+};
+
+let selectedChain = 'polygon';
+const $ = id => document.getElementById(id);
+function log(html){const el=$('log');el.innerHTML+=html+'<br>';el.scrollTop=el.scrollHeight;}
+function clearLog(){$('log').innerHTML='';}
+function sp(){return '<span class="spinner"><\/span>';}
+function short(a){return a?a.slice(0,6)+'…'+a.slice(-4):'—';}
+
+function isValidPolygonAddress(addr){
+  if(!addr||typeof addr!=='string')return false;
+  const a=addr.trim();
+  if(!a.startsWith('0x'))return false;
+  if(a.length!==42)return false;
+  return /^0x[0-9a-fA-F]{40}$/.test(a);
+}
+
+function isValidSolanaAddress(addr){
+  if(!addr||typeof addr!=='string')return false;
+  const a=addr.trim();
+  if(a.startsWith('0x'))return false;
+  if(a.length<32||a.length>44)return false;
+  return /^[1-9A-HJ-NP-Za-km-z]+$/.test(a);
+}
+
+function validateWallet(wallet,chain){
+  return chain==='polygon'?isValidPolygonAddress(wallet):isValidSolanaAddress(wallet);
+}
+
+function selectChain(chain){
+  selectedChain=chain;
+  $('btnPoly').classList.toggle('active',chain==='polygon');
+  $('btnSol').classList.toggle('active',chain==='solana');
+  $('solNote').style.display=chain==='solana'?'block':'none';
+  updateUI();
+}
+
+function updateUI(){
+  const amount=parseFloat($('fldAmount').value);
+  const wallet=$('fldWallet').value.trim();
+  const receiver=selectedChain==='polygon'?CONFIG.receiverPolygon:CONFIG.receiverSolana;
+  const walletInput=$('fldWallet');
+  const statusEl=$('statusWallet');
+  
+  if(!wallet){
+    walletInput.classList.remove('valid','invalid');
+    statusEl.classList.add('hidden');
+  }else{
+    const isValid=validateWallet(wallet,selectedChain);
+    if(isValid){
+      walletInput.classList.remove('invalid');
+      walletInput.classList.add('valid');
+      statusEl.classList.remove('hidden','invalid');
+      statusEl.classList.add('valid');
+      statusEl.innerHTML='<i class="fas fa-check-circle"><\/i> Valid address';
+    }else{
+      walletInput.classList.remove('valid');
+      walletInput.classList.add('invalid');
+      statusEl.classList.remove('hidden','valid');
+      statusEl.classList.add('invalid');
+      statusEl.innerHTML='<i class="fas fa-exclamation-circle"><\/i> Invalid address';
+    }
+  }
+  
+  const show=amount>0&&wallet&&receiver&&validateWallet(wallet,selectedChain);
+  $('payInstructions').style.display=show?'block':'none';
+  if(!show)return;
+  $('displayAmount').textContent=(amount||0).toFixed(2)+' USDT';
+  $('displayNetwork').textContent='USDT on '+(selectedChain==='polygon'?'Polygon':'Solana');
+  $('displayAddr').textContent=receiver;
+  const qrEl=$('qrcode');qrEl.innerHTML='';
+  try{
+    QRCode.toCanvas(document.createElement('canvas'),receiver,{width:148,margin:1,color:{dark:'#0e1320',light:'#ffffff'}},(err,canvas)=>{if(!err)qrEl.appendChild(canvas);});
+  }catch(e){}
+}
+
+['fldAmount','fldWallet'].forEach(id=>$(id).addEventListener('input',updateUI));
+
+$('copyAddrBtn').addEventListener('click',async()=>{
+  try{
+    await navigator.clipboard.writeText($('displayAddr').textContent);
+    const btn=$('copyAddrBtn');const old=btn.textContent;
+    btn.textContent='Copied';btn.style.background='var(--green)';btn.style.color='#052e16';
+    setTimeout(()=>{btn.textContent=old;btn.style.background='';btn.style.color='';},1800);
+  }catch(e){alert('Copy failed');}
+});
+
+async function verifyPolygon(userWallet,expectedAmount){
+  if(!CONFIG.etherscanKey){log('<span class="lg-err">❌ Etherscan key missing.<\/span>');return null;}
+  const receiver=CONFIG.receiverPolygon.toLowerCase();
+  const userLower=userWallet.toLowerCase();
+  const token=CONFIG.USDT_POLYGON.toLowerCase();
+  log('<span class="lg-warn">'+sp()+'Scanning Polygon…<\/span>');
+  try{
+    const url='https://api.etherscan.io/v2/api?chainid=137&module=account&action=tokentx&address='+encodeURIComponent(receiver)+'&contractaddress='+encodeURIComponent(token)+'&page=1&offset=100&sort=desc&apikey='+encodeURIComponent(CONFIG.etherscanKey);
+    const res=await fetch(url);
+    if(!res.ok)throw new Error('API error');
+    const data=await res.json();
+    if(data.status!=='1'||!Array.isArray(data.result)||data.result.length===0){
+      log('<span class="lg-err">❌ No recent transfers found.<\/span>');
+      return null;
+    }
+    const now=Date.now();
+    const windowMs=CONFIG.timeWindowMin*60*1000;
+    for(const tx of data.result){
+      try{
+        const txTime=parseInt(tx.timeStamp,10)*1000;
+        if(txTime<now-windowMs)continue;
+        const from=(tx.from||'').toLowerCase();
+        const to=(tx.to||'').toLowerCase();
+        if(to!==receiver||from!==userLower)continue;
+        const amount=Math.floor(parseFloat(tx.value)/1e6*100)/100;
+        if(Math.abs(amount-expectedAmount)<=CONFIG.amountTolerance){
+          const minsAgo=Math.round((now-txTime)/60000);
+          log('<span class="lg-ok">✅ Matched '+amount.toFixed(2)+' USDT ('+minsAgo+' min ago)<\/span>');
+          log('<span class="lg-info"><a href="https://polygonscan.com/tx/'+tx.hash+'" target="_blank" style="color:var(--green)">View on PolygonScan<\/a><\/span>');
+          return{txHash:tx.hash,amount};
+        }
+      }catch(e){continue;}
+    }
+    log('<span class="lg-err">❌ No matching payment found.<\/span>');
+    log('<span class="lg-info">Check amount & wallet. Try again in 30s.<\/span>');
+    return null;
+  }catch(e){
+    log('<span class="lg-err">❌ '+e.message+'<\/span>');
+    return null;
+  }
+}
+
+async function verifySolana(userWallet,expectedAmount){
+  if(!CONFIG.heliusKey){log('<span class="lg-err">❌ Helius API key required.<\/span>');return null;}
+  const receiver=CONFIG.receiverSolana.trim();
+  const fromWallet=(userWallet||'').trim();
+  if(!receiver){log('<span class="lg-err">❌ Solana receiver not set.<\/span>');return null;}
+  if(!isValidSolanaAddress(receiver)){log('<span class="lg-err">❌ Receiver is not valid Solana address.<\/span>');return null;}
+  if(!isValidSolanaAddress(fromWallet)){log('<span class="lg-err">❌ Your wallet not valid Solana address.<\/span>');return null;}
+  log('<span class="lg-warn">'+sp()+'Scanning Solana via Helius…<\/span>');
+  log('<span class="lg-info">'+short(receiver)+' ← '+short(fromWallet)+'<\/span>');
+  try{
+    const rpcUrl='https://mainnet.helius-rpc.com/?api-key='+CONFIG.heliusKey;
+    const nowSec=Math.floor(Date.now()/1000);
+    const windowSec=CONFIG.timeWindowMin*60;
+    const body={
+      jsonrpc:'2.0',
+      id:'zeroconnect',
+      method:'getTransfersByAddress',
+      params:[receiver,{
+        mint:CONFIG.USDT_SOLANA,
+        direction:'in',
+        with:fromWallet,
+        limit:30,
+        sortOrder:'desc',
+        filters:{blockTime:{gte:nowSec-windowSec}}
+      }]
+    };
+    const res=await fetch(rpcUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const data=await res.json();
+    if(data.error){
+      const msg=data.error.message||JSON.stringify(data.error);
+      log('<span class="lg-err">❌ Helius: '+msg+'<\/span>');
+      if(/base58|invalid param/i.test(msg)){log('<span class="lg-info">Check both receiver and wallet addresses.<\/span>');}else if(/credit|plan|unauthorized/i.test(msg)){log('<span class="lg-info">getTransfersByAddress may need paid Helius plan.<\/span>');}
+      return null;
+    }
+    const transfers=data.result&&data.result.data?data.result.data:(data.result||[]);
+    if(!Array.isArray(transfers)||transfers.length===0){log('<span class="lg-err">❌ No recent USDT transfers found.<\/span>');log('<span class="lg-info">Wait 30–60s after sending, then retry.<\/span>');return null;}
+    for(const t of transfers){
+      let amount=null;
+      if(t.uiAmount!=null)amount=parseFloat(t.uiAmount);
+      else if(t.amount!=null&&t.decimals!=null)amount=parseFloat(t.amount)/Math.pow(10,t.decimals);
+      else if(t.amount!=null)amount=parseFloat(t.amount);
+      if(amount==null||isNaN(amount))continue;
+      if(Math.abs(amount-expectedAmount)<=CONFIG.amountTolerance){
+        const sig=t.signature||t.txHash||t.hash||'unknown';
+        const minsAgo=t.timestamp?Math.round((Date.now()/1000-t.timestamp)/60):'?';
+        log('<span class="lg-ok">✅ Matched '+amount.toFixed(2)+' USDT ('+minsAgo+' min ago)<\/span>');
+        log('<span class="lg-info"><a href="https://solscan.io/tx/'+sig+'" target="_blank" style="color:var(--green)">'+short(sig)+'<\/a><\/span>');
+        return{txHash:sig,amount};
+      }
+    }
+    log('<span class="lg-err">❌ No matching amount among '+transfers.length+' transfer(s).<\/span>');
+    return null;
+  }catch(e){
+    console.error(e);
+    log('<span class="lg-err">❌ '+e.message+'<\/span>');
+    return null;
+  }
+}
+
+$('checkBtn').addEventListener('click',async()=>{
+  clearLog();
+  const amount=parseFloat($('fldAmount').value);
+  const wallet=$('fldWallet').value.trim();
+  if(!amount||amount<=0){log('<span class="lg-err">❌ Enter valid amount.<\/span>');return;}
+  if(!wallet){log('<span class="lg-err">❌ Enter your wallet.<\/span>');return;}
+  $('checkBtn').disabled=true;
+  const result=selectedChain==='polygon'?await verifyPolygon(wallet,amount):await verifySolana(wallet,amount);
+  if(result){
+    log('<span class="lg-ok">🔒 Verified. Redirecting…<\/span>');
+    setTimeout(()=>{
+      const url=new URL(CONFIG.successUrl);
+      url.searchParams.set('tx',result.txHash);
+      url.searchParams.set('amount',result.amount.toFixed(2));
+      url.searchParams.set('chain',selectedChain);
+      url.searchParams.set('wallet',wallet);
+      const ref=$('fldRef').value.trim();
+      if(ref)url.searchParams.set('ref',ref);
+      window.location.href=url.toString();
+    },1500);
+  }else{
+    $('checkBtn').disabled=false;
+  }
+});
+
+updateUI();
+log('<span class="lg-info">Enter amount + wallet, send USDT, then verify.<\/span>');
+<\/script>
+<\/body>
+<\/html>`;''
+}
+
+$('genBtn').addEventListener('click', () => {
+  const cfg = {
+    poly: $('inPoly').value.trim(),
+    sol: $('inSol').value.trim(),
+    url: $('inUrl').value.trim(),
+    etherscan: $('inEtherscan').value.trim(),
+    helius: $('inHelius').value.trim()
+  };
+
+  if (!cfg.poly && !cfg.sol) {
+    alert('Enter at least one receiver address (Polygon or Solana).');
+    return;
+  }
+  if (!cfg.url) {
+    alert('Enter a success redirect URL.');
+    return;
+  }
+  if (cfg.poly && !cfg.etherscan) {
+    alert('Polygon requires an Etherscan API key.');
+    return;
+  }
+  if (cfg.sol && !cfg.helius) {
+    alert('Solana requires a Helius API key.');
+    return;
+  }
+
+  const html = buildWidget(cfg);
+  $('generatedCode').value = html;
+  $('outputCard').classList.add('show');
+  $('toast').classList.add('show');
+  setTimeout(() => $('toast').classList.remove('show'), 4000);
+  $('outputCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+$('downloadBtn').addEventListener('click', () => {
+  const code = $('generatedCode').value;
+  if (!code) return;
+  const blob = new Blob([code], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'zeroconnect-payment.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+$('copyBtn').addEventListener('click', async () => {
+  const code = $('generatedCode').value;
+  if (!code) return;
+  try {
+    await navigator.clipboard.writeText(code);
+    const btn = $('copyBtn');
+    const old = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i> Copied';
+    setTimeout(() => { btn.innerHTML = old; }, 2000);
+  } catch (e) {
+    alert('Copy failed');
+  }
+});
+
+$('inPoly').addEventListener('input', () => {
+  const addr = $('inPoly').value.trim();
+  if (!addr) {
+    $('inPoly').classList.remove('valid', 'invalid');
+    $('statusPoly').classList.add('hidden');
+    return;
+  }
+  const isValid = isValidPolygonAddress(addr);
+  updateAddressStatus('inPoly', 'statusPoly', isValid, 'Polygon');
+});
+
+$('inSol').addEventListener('input', () => {
+  const addr = $('inSol').value.trim();
+  if (!addr) {
+    $('inSol').classList.remove('valid', 'invalid');
+    $('statusSol').classList.add('hidden');
+    return;
+  }
+  const isValid = isValidSolanaAddress(addr);
+  updateAddressStatus('inSol', 'statusSol', isValid, 'Solana');
+});
+</script>
+</body>
+</html>

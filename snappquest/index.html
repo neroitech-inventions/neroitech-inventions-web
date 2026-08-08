@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
+
+     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -11,1489 +12,1045 @@
   gtag('config', 'G-QM106YDX6N');
 </script>
 
-<!-- Verse tag (VGDH) -->
-<script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
-
-<script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.tagged-events.outbound-links.file-downloads.hash.pageview-props.revenue.js"></script>
-
-<!-- SnappQuest Framework - Version 1.0: This is the initial rollout designed as a customizable template for projects to build an Engage-to-Earn tool. Feel free to modify sections as needed to fit your project's branding and functionality. Comment out or replace elements for customization. -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SnappQuest — The Engage-to-Earn Business Solution for Incentivizing Growth and Engagement.">
-    <title>SnappQuest — Engage-to-Earn Tool</title>
-   <!-- Customize: Update to the latest Font Awesome CDN for new icons like X (formerly Twitter). -->
-    <link href="images/icon.png" rel="icon">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        /* --- Utilities & Base Styles --- */
-        /* Customize: Adjust color variables below to match your project's theme. You can add or remove variables as needed. */
-        :root {
-            --color-dark-bg: #0F172A; /* Slate 900 */
-            --color-light-bg: #1E293B; /* Slate 800 */
-            --color-text-primary: #F8FAFC; /* Slate 50 */
-            --color-text-secondary: #94A3B8; /* Slate 400 */
-            --color-indigo: #6366F1; /* Indigo 500 */
-            --color-teal: #34D399; /* Teal 400 */
-            --color-gradient-primary: linear-gradient(135deg, var(--color-indigo), var(--color-teal));
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-
-        body {
-            background-color: var(--color-dark-bg);
-            color: var(--color-text-primary);
-            line-height: 1.6;
-            font-size: 16px;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        a {
-            text-decoration: none;
-            color: var(--color-teal);
-            transition: color 0.3s ease;
-        }
-
-        /* --- Navbar --- */
-        header {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 18px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .logo a {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: var(--color-gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .logo img {
-            max-width: 140px;
-            height: auto;
-            display: block;
-        }
-
-        .nav-container {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .nav-links a {
-            color: var(--color-text-secondary);
-            font-size: 16px;
-            font-weight: 500;
-            transition: color 0.3s ease, transform 0.2s ease;
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-links a:hover {
-            color: var(--color-text-primary);
-            transform: translateY(-1px);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -6px;
-            left: 0;
-            background: var(--color-gradient-primary);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .connect-btn {
-            background: var(--color-gradient-primary);
-            color: var(--color-dark-bg);
-            border: none;
-            padding: 10px 24px;
-            border-radius: 999px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(52, 211, 153, 0.4);
-        }
-
-        .connect-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 211, 153, 0.6);
-        }
-
-        .hamburger {
-            display: none;
-            font-size: 24px;
-            color: var(--color-text-primary);
-            cursor: pointer;
-            z-index: 1001;
-            transition: transform 0.3s ease;
-        }
-
-        .hamburger.active {
-            transform: rotate(90deg);
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 999;
-        }
-
-        .overlay.active {
-            display: block;
-        }
-
-        @media (max-width: 900px) {
-            .logo img {
-                max-width: 120px;
-            }
-            .nav-container {
-                display: none;
-                flex-direction: column;
-                position: fixed;
-                top: 0;
-                right: 0;
-                height: 100vh;
-                width: 280px;
-                background: rgba(15, 23, 42, 0.95);
-                backdrop-filter: blur(10px);
-                padding: 80px 24px 24px;
-                transform: translateX(100%);
-                transition: transform 0.3s ease-in-out;
-                box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
-            }
-
-            .nav-container.active {
-                display: flex;
-                transform: translateX(0);
-            }
-
-            .nav-links {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .nav-links a {
-                font-size: 18px;
-                padding: 16px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                width: 100%;
-                color: var(--color-text-primary);
-                transition: background-color 0.3s ease, transform 0.3s ease;
-            }
-
-            .nav-links a:hover {
-                background: rgba(255, 255, 255, 0.1);
-                transform: translateX(4px);
-            }
-
-            .connect-btn {
-                margin-top: 24px;
-                width: 100%;
-                padding: 16px;
-                font-size: 18px;
-            }
-
-            .hamburger {
-                display: block;
-            }
-        }
-
-        /* --- Hero Section --- */
-        #hero {
-            padding: 160px 0 120px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80vw;
-            height: 80vh;
-            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
-            z-index: 0;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        #hero h1 {
-            font-size: 72px;
-            font-weight: 900;
-            margin-bottom: 24px;
-            line-height: 1.1;
-            letter-spacing: -1.5px;
-        }
-
-        .hero-gradient-text {
-            background: var(--color-gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        #hero p {
-            font-size: 20px;
-            margin-bottom: 48px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            color: var(--color-text-secondary);
-        }
-
-        .cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .cta-primary {
-            background: var(--color-gradient-primary);
-            color: var(--color-dark-bg);
-            padding: 16px 36px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            border: none;
-            box-shadow: 0 8px 30px rgba(52, 211, 153, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .cta-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 40px rgba(52, 211, 153, 0.7);
-        }
-
-        .cta-secondary {
-            background: transparent;
-            color: var(--color-teal);
-            border: 2px solid var(--color-teal);
-            padding: 16px 36px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .cta-secondary:hover {
-            background: rgba(52, 211, 153, 0.1);
-            transform: translateY(-3px);
-            color: var(--color-teal);
-            border-color: var(--color-teal);
-            cursor: pointer;
-        }
-        .join-quest-link {
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            #hero { padding: 120px 0 80px; }
-            #hero h1 { font-size: 48px; letter-spacing: -1px; }
-            #hero p { font-size: 18px; }
-            .cta-buttons { flex-direction: column; align-items: center; }
-            .cta-primary, .cta-secondary { width: 100%; max-width: 300px; padding: 14px 20px; }
-        }
-
-        /* --- Features Section --- */
-        #features {
-            padding: 80px 0;
-            background-color: var(--color-light-bg);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        #features h2 {
-            font-size: 40px;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 20px;
-            letter-spacing: -0.5px;
-        }
-
-        #features p.subtitle {
-            text-align: center;
-            font-size: 18px;
-            color: var(--color-text-secondary);
-            max-width: 700px;
-            margin: 0 auto 60px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 32px;
-        }
-
-        .feature-card {
-            background-color: var(--color-dark-bg);
-            padding: 32px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.3), 0 0 15px rgba(52, 211, 153, 0.3);
-        }
-
-        .feature-icon {
-            font-size: 36px;
-            margin-bottom: 20px;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            background: rgba(99, 102, 241, 0.15);
-            color: var(--color-indigo);
-        }
-
-        .feature-card h3 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--color-teal);
-        }
-
-        .feature-card p {
-            font-size: 16px;
-            color: var(--color-text-secondary);
-        }
-
-        /* --- Partners Section --- */
-        #partners {
-            padding: 60px 0;
-            text-align: center;
-        }
-
-        #partners h3 {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--color-text-secondary);
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .partner-logos {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 40px;
-        }
-
-        .partner-logo {
-            filter: grayscale(100%) brightness(150%);
-            opacity: 0.6;
-            height: 30px;
-            transition: opacity 0.3s ease;
-        }
-
-        .partner-logo:hover {
-            opacity: 1;
-            filter: none;
-        }
-
-        @media (max-width: 768px) {
-            #features h2 { font-size: 32px; }
-            .feature-grid { grid-template-columns: 1fr; }
-            .partner-logo { height: 25px; }
-        }
-
-        /* --- Footer --- */
-        footer {
-            background-color: var(--color-light-bg);
-            padding: 60px 0 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-col {
-            min-width: 150px;
-        }
-
-        .footer-col h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: var(--color-text-primary);
-        }
-
-        .footer-link li {
-            margin-bottom: 10px;
-            list-style: none;
-        }
-
-        .footer-link a {
-            color: var(--color-text-secondary);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .footer-link a:hover {
-            color: var(--color-teal);
-            transform: translateX(3px);
-        }
-
-        .social-icons a {
-            font-size: 20px;
-            margin-right: 15px;
-            color: var(--color-text-secondary);
-        }
-
-        .social-icons a:hover {
-            color: var(--color-indigo);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-bottom p {
-            font-size: 12px;
-            color: var(--color-text-secondary);
-            margin: 0;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.is-open {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: var(--color-light-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            position: relative;
-        }
-
-        .modal-content h3 {
-            color: var(--color-teal);
-            margin-bottom: 15px;
-        }
-
-        .modal-content p {
-            color: var(--color-text-secondary);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            color: var(--color-text-secondary);
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .modal-close:hover {
-            color: var(--color-text-primary);
-        }
-
-        /* Back to Top Button */
-        #back-to-top {
-            position: fixed;
-            bottom: 32px;
-            right: 32px;
-            z-index: 1000;
-            background: var(--color-gradient-primary);
-            color: var(--color-white-bg);
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-            cursor: pointer;
-            animation: pulseButton 2s ease-in-out infinite;
-        }
-
-        @keyframes pulseButton {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-        }
-
-        #back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        #back-to-top:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(52, 211, 153, 0.5);
-        }
-
-        #back-to-top i {
-            font-size: 24px;
-        }
-
-        #why-snappquest{
-    padding:120px 0;
-    position:relative;
-    overflow:hidden;
-}
-
-#why-snappquest::before{
-    content:'';
-    position:absolute;
-    top:-200px;
-    left:-200px;
-    width:500px;
-    height:500px;
-    background:rgba(99,102,241,0.18);
-    filter:blur(120px);
-    border-radius:50%;
-}
-
-#why-snappquest::after{
-    content:'';
-    position:absolute;
-    bottom:-200px;
-    right:-200px;
-    width:500px;
-    height:500px;
-    background:rgba(52,211,153,0.15);
-    filter:blur(120px);
-    border-radius:50%;
-}
-
-.why-hero{
-    text-align:center;
-    max-width:900px;
-    margin:0 auto 80px;
-    position:relative;
-    z-index:2;
-}
-
-.why-badge{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:12px 18px;
-    border-radius:999px;
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.1);
-    margin-bottom:24px;
-    font-weight:600;
-}
-
-.why-hero h2{
-    font-size:64px;
-    line-height:1.1;
-    margin-bottom:24px;
-    font-weight:900;
-    letter-spacing:-2px;
-}
-
-.gradient-text{
-    background:linear-gradient(135deg,#6366F1,#34D399);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-}
-
-.why-hero p{
-    font-size:20px;
-    color:var(--color-text-secondary);
-    line-height:1.8;
-}
-
-.stats-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:24px;
-    margin-bottom:90px;
-    position:relative;
-    z-index:2;
-}
-
-.stat-card{
-    background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:24px;
-    padding:40px 30px;
-    text-align:center;
-    backdrop-filter:blur(16px);
-
-    box-shadow:
-    0 20px 50px rgba(0,0,0,0.35),
-    0 0 30px rgba(99,102,241,0.08);
-
-    transition:0.3s ease;
-}
-
-.stat-card:hover{
-    transform:translateY(-8px);
-}
-
-.stat-card h3{
-    font-size:46px;
-    margin-bottom:12px;
-    font-weight:900;
-    background:linear-gradient(135deg,#6366F1,#34D399);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-}
-
-.stat-card p{
-    color:var(--color-text-secondary);
-}
-
-.section-title{
-    font-size:40px;
-    font-weight:800;
-    margin-bottom:24px;
-    text-align:center;
-}
-
-.backed-section{
-    max-width:900px;
-    margin:0 auto 100px;
-    text-align:center;
-    position:relative;
-    z-index:2;
-}
-
-.backed-section p{
-    color:var(--color-text-secondary);
-    font-size:18px;
-    line-height:1.9;
-    margin-bottom:20px;
-}
-
-.features-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:28px;
-    margin-top:50px;
-}
-
-.feature-card{
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:24px;
-    padding:32px;
-    backdrop-filter:blur(14px);
-
-    transition:0.35s ease;
-
-    box-shadow:
-    0 20px 45px rgba(0,0,0,0.3);
-}
-
-.feature-card:hover{
-    transform:translateY(-8px);
-
-    box-shadow:
-    0 25px 60px rgba(0,0,0,0.4),
-    0 0 30px rgba(52,211,153,0.12);
-}
-
-.feature-icon{
-    width:65px;
-    height:65px;
-    border-radius:18px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-bottom:24px;
-
-    background:rgba(99,102,241,0.12);
-
-    font-size:28px;
-    color:#6366F1;
-}
-
-.feature-card h3{
-    font-size:24px;
-    margin-bottom:14px;
-}
-
-.feature-card p{
-    color:var(--color-text-secondary);
-    line-height:1.8;
-}
-
-.features-section{
-    margin-bottom:100px;
-    position:relative;
-    z-index:2;
-}
-
-.campaigns-section{
-    margin-bottom:100px;
-    position:relative;
-    z-index:2;
-}
-
-.campaign-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:18px;
-    margin-top:40px;
-}
-
-.campaign-item{
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:18px;
-    padding:22px;
-    text-align:center;
-    font-weight:600;
-
-    transition:0.3s ease;
-}
-
-.campaign-item:hover{
-    transform:translateY(-5px);
-    background:rgba(255,255,255,0.08);
-}
-
-.final-cta{
-    text-align:center;
-    max-width:850px;
-    margin:0 auto;
-    position:relative;
-    z-index:2;
-}
-
-.final-cta h2{
-    font-size:58px;
-    line-height:1.1;
-    margin-bottom:24px;
-    font-weight:900;
-}
-
-.final-cta p{
-    font-size:20px;
-    color:var(--color-text-secondary);
-    line-height:1.8;
-    margin-bottom:40px;
-}
-
-@media(max-width:768px){
-
-    #why-snappquest{
-        padding:80px 0;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SnappQuest - Every promotion is a quest</title>
+  <link href="images/icon.png" rel="icon">
+  <meta name="description" content="Promote any project for free. Boost for $0.50 USDT. Discover startups, AI, crypto & communities.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#07080f;--surface:rgba(18,20,36,0.78);--surface2:rgba(28,32,56,0.92);
+      --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+      --text:#f1f5f9;--muted:#94a3b8;--muted2:#64748b;
+      --purple:#a78bfa;--blue:#60a5fa;--cyan:#22d3ee;--green:#34d399;--red:#f87171;--yellow:#fbbf24;
+      --grad:linear-gradient(135deg,#a78bfa,#60a5fa,#22d3ee);
+      --grad-text:linear-gradient(135deg,#c4b5fd,#67e8f9);
+      --font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+      --radius:18px;--shadow:0 12px 40px rgba(0,0,0,0.4);
     }
-
-    .why-hero h2{
-        font-size:42px;
-    }
-
-    .final-cta h2{
-        font-size:40px;
-    }
-
-    .why-hero p,
-    .final-cta p{
-        font-size:18px;
-    }
-
-    .section-title{
-        font-size:32px;
-    }
-
-    .cta-buttons{
-        flex-direction:column;
-        align-items:center;
-    }
-
-    .cta-primary,
-    .cta-secondary{
-        width:100%;
-        max-width:320px;
-    }
-
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100%;padding-bottom:92px;}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 50% at 20% -10%,rgba(167,139,250,0.18),transparent),radial-gradient(ellipse 60% 40% at 90% 10%,rgba(34,211,238,0.1),transparent);}
+    .page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 16px;}
+    .nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 0;backdrop-filter:blur(16px);background:rgba(7,8,15,0.82);border-bottom:1px solid var(--border);margin:0 -16px;padding-left:16px;padding-right:16px;}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);}
+    .logo-mark{width:36px;height:36px;border-radius:11px;overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(167,139,250,0.3);background:var(--grad);}
+    .logo-mark img{width:100%;height:100%;object-fit:cover;display:block;}
+    .logo-text{font-size:1.05rem;font-weight:800;}.logo-text span{background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .nav-btn{padding:8px 14px;border-radius:10px;font-size:0.78rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--font);}
+    .nav-btn.primary{background:var(--grad);color:#0b0d18;border:none;}
+    .hero{text-align:center;padding:28px 0 20px;}
+    .hero-badge{display:inline-flex;gap:6px;align-items:center;font-size:0.68rem;font-weight:600;padding:5px 12px;border-radius:20px;background:rgba(167,139,250,0.12);color:var(--purple);border:1px solid rgba(167,139,250,0.25);margin-bottom:14px;}
+    .hero h1{font-size:clamp(1.7rem,5.5vw,2.15rem);font-weight:800;letter-spacing:-0.6px;line-height:1.15;margin-bottom:10px;}
+    .hero h1 em{font-style:normal;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .hero p{font-size:0.9rem;color:var(--muted);max-width:340px;margin:0 auto 18px;}
+    .hero-cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+    .btn{padding:12px 18px;border-radius:12px;font-size:0.86rem;font-weight:700;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font);text-decoration:none;transition:all .15s;}
+    .btn:active{transform:scale(0.97);}
+    .btn-grad{background:var(--grad);color:#0b0d18;box-shadow:0 6px 20px rgba(96,165,250,0.3);}
+    .btn-ghost{background:var(--surface);color:var(--text);border:1px solid var(--border2);}
+    .btn-sm{padding:9px 12px;font-size:0.76rem;border-radius:10px;}
+    .btn-full{width:100%;}
+    .btn:disabled{opacity:0.4;pointer-events:none;}
+    .section{margin-bottom:24px;}
+    .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+    .section-title{font-size:0.95rem;font-weight:700;}
+    .cats{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+    .cats::-webkit-scrollbar{display:none;}
+    .cat{flex-shrink:0;padding:8px 12px;border-radius:11px;background:var(--surface);border:1px solid var(--border);font-size:0.75rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;font-family:var(--font);}
+    .cat.active{color:var(--text);border-color:rgba(167,139,250,0.45);background:rgba(167,139,250,0.12);}
+    .quest-grid{display:flex;flex-direction:column;gap:12px;}
+    .quest-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+    .quest-card.featured{border-color:rgba(167,139,250,0.4);}
+    .quest-cover{height:100px;position:relative;background:linear-gradient(135deg,#1e1b4b,#0f172a);display:flex;align-items:center;justify-content:center;font-size:2rem;}
+    .badge-feat{position:absolute;top:8px;left:8px;font-size:0.58rem;font-weight:700;padding:3px 8px;border-radius:7px;background:var(--grad);color:#0b0d18;}
+    .badge-pend{position:absolute;top:8px;right:8px;font-size:0.58rem;font-weight:700;padding:3px 8px;border-radius:7px;background:rgba(251,191,36,0.2);color:var(--yellow);border:1px solid rgba(251,191,36,0.35);}
+    .quest-body{padding:12px 14px 14px;}
+    .quest-meta{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+    .quest-cat{font-size:0.6rem;font-weight:600;padding:2px 7px;border-radius:6px;background:rgba(96,165,250,0.12);color:var(--blue);}
+    .quest-stats{margin-left:auto;font-size:0.62rem;color:var(--muted2);}
+    .quest-name{font-size:0.98rem;font-weight:700;margin-bottom:3px;}
+    .quest-desc{font-size:0.76rem;color:var(--muted);line-height:1.4;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .quest-actions{display:flex;gap:8px;}
+    .quest-actions .btn{flex:1;}
+    .boost-banner{background:linear-gradient(135deg,rgba(167,139,250,0.14),rgba(34,211,238,0.08));border:1px solid rgba(167,139,250,0.28);border-radius:var(--radius);padding:16px;text-align:center;margin-bottom:20px;}
+    .boost-price{font-size:1.4rem;font-weight:800;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:8px 0;}
+    .overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:all .25s;}
+    .overlay.show{opacity:1;visibility:visible;}
+    .modal{background:#0e1020;border:1px solid var(--border2);border-radius:22px 22px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;padding:16px 16px 28px;transform:translateY(36px);transition:transform .25s;}
+    .overlay.show .modal{transform:translateY(0);}
+    .modal-handle{width:40px;height:4px;border-radius:4px;background:var(--border2);margin:0 auto 12px;}
+    .modal-title{font-size:1.1rem;font-weight:800;margin-bottom:2px;}
+    .modal-sub{font-size:0.76rem;color:var(--muted);margin-bottom:14px;}
+    .field{margin-bottom:11px;}
+    .field label{display:block;font-size:0.66rem;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.04em;}
+    .field input,.field textarea,.field select{width:100%;padding:11px 12px;border-radius:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:0.86rem;outline:none;}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(167,139,250,0.5);}
+    .field textarea{min-height:72px;resize:vertical;}
+    .field select{appearance:none;cursor:pointer;}
+    .modal-actions{display:flex;flex-direction:column;gap:8px;margin-top:6px;}
+    .pay-box{background:linear-gradient(160deg,var(--surface2),#151c2c);border:1px solid var(--border2);border-radius:14px;padding:14px;margin:10px 0;}
+    .pay-amount{font-size:1.6rem;font-weight:700;color:var(--green);text-align:center;}
+    .pay-net{font-family:var(--mono);font-size:0.62rem;color:var(--muted);text-align:center;margin:2px 0 10px;}
+    .addr-row{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.35);padding:10px;border-radius:10px;margin-bottom:8px;border:1px solid var(--border);}
+    .addr-text{flex:1;font-family:var(--mono);font-size:0.66rem;word-break:break-all;color:var(--green);}
+    .copy-btn{padding:6px 10px;background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.25);border-radius:8px;font-size:0.68rem;font-weight:600;cursor:pointer;font-family:var(--font);}
+    #payQr{display:flex;justify-content:center;margin:4px 0;}
+    #payQr canvas{border-radius:10px;background:#fff;padding:8px;}
+    .pay-hint{font-size:0.62rem;color:var(--muted);text-align:center;}
+    .status-log{background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:10px;min-height:40px;max-height:110px;overflow-y:auto;font-family:var(--mono);font-size:0.66rem;line-height:1.65;margin-top:10px;color:var(--muted);}
+    .lg-ok{color:var(--green);}.lg-err{color:var(--red);}.lg-warn{color:var(--yellow);}.lg-info{color:var(--muted);}
+    .spinner{display:inline-block;width:9px;height:9px;border:2px solid rgba(52,211,153,0.2);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin-right:4px;vertical-align:middle;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .chain-tabs{display:flex;background:var(--surface2);border-radius:11px;padding:3px;margin-bottom:10px;border:1px solid var(--border);}
+    .chain-tab{flex:1;padding:8px;border:none;border-radius:8px;background:transparent;color:var(--muted);font-family:var(--font);font-size:0.76rem;font-weight:600;cursor:pointer;}
+    .chain-tab.active{background:#1a2235;color:var(--text);}
+    .chain-tab.active.poly{color:var(--green);}
+    .chain-tab.active.sol{color:var(--purple);}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:90;background:rgba(10,12,22,0.94);backdrop-filter:blur(18px);border-top:1px solid var(--border);padding:8px 0 calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;align-items:center;}
+    .bn-item{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:0.58rem;font-weight:600;color:var(--muted2);background:none;border:none;cursor:pointer;font-family:var(--font);padding:6px 8px;}
+    .bn-item i{font-size:1.05rem;}.bn-item.active{color:var(--cyan);}
+    .bn-fab{width:48px;height:48px;border-radius:14px;margin-top:-18px;background:var(--grad);color:#0b0d18;border:none;display:flex;align-items:center;justify-content:center;font-size:1.15rem;box-shadow:0 6px 22px rgba(96,165,250,0.4);cursor:pointer;}
+    .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:10px 14px;font-size:0.78rem;font-weight:600;z-index:300;opacity:0;visibility:hidden;transition:all .25s;max-width:90%;text-align:center;}
+    .toast.show{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}
+    .empty{text-align:center;padding:32px 14px;color:var(--muted);font-size:0.86rem;}
+    .empty i{font-size:1.6rem;margin-bottom:8px;opacity:0.4;display:block;}
+    .loading{text-align:center;padding:24px;color:var(--muted);font-size:0.82rem;}
+    .track-code{font-family:var(--mono);font-size:0.8rem;color:var(--cyan);}
+    .search-bar{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:14px;}
+    .search-bar input{flex:1;border:none;background:transparent;color:var(--text);font-size:0.86rem;outline:none;font-family:var(--font);}
+    .search-bar i{color:var(--muted2);}
+    .pager{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;flex-wrap:wrap;}
+    .pager .btn{min-width:36px;padding:8px 10px;}
+    .pager .btn.page-num{min-width:34px;font-variant-numeric:tabular-nums;}
+    .pager .btn.page-num.active{background:var(--grad);color:#0b0d18;border:none;font-weight:700;}
+    .pager-info{font-size:0.7rem;color:var(--muted);font-weight:600;width:100%;text-align:center;margin-bottom:2px;}
+    .pager-dots{color:var(--muted2);font-size:0.75rem;padding:0 2px;user-select:none;}
+  /* Centered modern confirm dialog */
+.overlay.center {
+  align-items: center;
+  padding: 20px;
 }
-/* === MODERN HERO - BALANCED & CLEAN (2026 Standard) === */
-/* === FINAL HERO - MODERN & TIGHT === */
-#hero {
-    height: 100vh;
-    min-height: 720px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+.overlay.center .modal {
+  border-radius: 20px;
+  transform: scale(0.92) translateY(12px);
+  max-width: 340px;
+  width: 100%;
+  padding: 22px 20px 20px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.55);
 }
-
-.hero-bg {
-    position: absolute;
-    inset: 0;
-    background: url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat;
-    filter: brightness(0.45) contrast(1.15);
-    z-index: 1;
+.overlay.center.show .modal {
+  transform: scale(1) translateY(0);
 }
-
-.hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(15,23,42,0.78), rgba(15,23,42,0.96));
-    z-index: 2;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 10;
-    max-width: 1100px;
-    text-align: center;
-    padding: 0 24px;
-}
-
-.hero-title {
-    font-size: 88px;
-    font-weight: 900;
-    line-height: 1.05;
-    letter-spacing: -4.2px;
-    margin-bottom: 18px;
-}
-
-.glow-text {
-    background: linear-gradient(90deg, #6366F1, #34D399, #A855F7, #6366F1);
-    background-size: 300% 300%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: ultraGlow 5s ease infinite;
-}
-
-@keyframes ultraGlow {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-.hero-subtitle {
-    font-size: 22px;
-    max-width: 720px;
-    margin: 0 auto 42px;
-    color: #CBD5E1;
-    line-height: 1.45;
-}
-
-
-/* === FLOATING COINS === */
-.floating-token {
-    position: absolute;
-    font-size: 46px;
-    opacity: 0.08;
-    z-index: 5;
-    pointer-events: none;
-    animation: floatToken 34s linear infinite;
-    color: #94A3B8;
-}
-
-.token-1 { top: 25%; left: 10%; animation-duration: 38s; }
-.token-2 { top: 52%; right: 12%; animation-duration: 29s; animation-delay: -10s; }
-.token-3 { bottom: 28%; left: 16%; animation-duration: 45s; animation-delay: -18s; }
-
-@keyframes floatToken {
-    0%   { transform: translateY(0) rotate(0deg); }
-    100% { transform: translateY(-1400px) rotate(360deg); }
-}
-
-    </style>
+  </style>
 </head>
-
 <body>
-    <!-- Customize: Modify the header section below to change logo, navigation links, or buttons for your project. Comment out unused links or add new ones. -->
-    <header>
-        <div class="logo">
-            <a href="#"><img src="images/logo.png" alt="SnappQuest Logo"></a>
+  <div class="page">
+    <nav class="nav">
+      <a href="#" class="logo" onclick="showView('discover');return false;">
+        <div class="logo-mark"><img src="images/icon.png" alt="SnappQuest"></div>
+        <div class="logo-text">Snapp<span>Quest</span></div>
+      </a>
+      <div style="display:flex;gap:8px;">
+        <button class="nav-btn" onclick="showView('pending')">Pending</button>
+        <button class="nav-btn primary" onclick="openLaunch()">Launch</button>
+      </div>
+    </nav>
+
+    <div id="view-discover">
+      <section class="hero">
+        <div class="hero-badge"><i class="fas fa-sparkles"></i> Discover & Promote</div>
+        <h1>Every promotion<br>is a <em>quest</em>.</h1>
+        <p>Post your project free, or boost for $0.50 and hit the featured feed for more reach.</p>
+        <div class="hero-cta">
+          <button class="btn btn-grad" onclick="openLaunch()"><i class="fas fa-rocket"></i> Launch Quest</button>
+          <button class="btn btn-ghost" onclick="document.getElementById('feed').scrollIntoView({behavior:'smooth'})"><i class="fas fa-compass"></i> Explore Quests</button>
         </div>
-        <div class="nav-container">
-            <nav class="nav-links">
-                <a href="create.html"><i class="fas fa-plus-circle"></i> Create Quests</a>
-                <a class="join-quest-link" onclick="window.location.href='join.html'"><i class="fas fa-arrow-right-to-bracket"></i> Join Quest</a>
-            </nav>
-<button class="connect-btn" onclick="window.location.href='search.html'">
-    <i class="fas fa-search"></i> TrackQuest
-</button>        </div>
-        <div class="hamburger">
-            <i class="fas fa-bars"></i>
+      </section>
+      <div class="boost-banner">
+        <div style="font-weight:700;margin-bottom:4px;">Boost = Featured on feed</div>
+        <div style="font-size:0.76rem;color:var(--muted);">Pay 0.50 USDT (Polygon/Solana) via ZeroConnect</div>
+        <div class="boost-price">$0.50 USDT</div>
+        <button class="btn btn-grad btn-sm" onclick="openLaunch(true)">Boost a Quest</button>
+      </div>
+      <section class="section">
+        <div class="section-head"><div class="section-title">Categories</div></div>
+        <div class="cats" id="catBar">
+          <button class="cat active" data-cat="all">✨ All</button>
+          <button class="cat" data-cat="Engagement">💬 Engagement</button>
+          <button class="cat" data-cat="Feedback">📝 Feedback</button>
+          <button class="cat" data-cat="Bounty">🎁 Bounty</button>
+          <button class="cat" data-cat="Crypto">💰 Crypto</button>
+          <button class="cat" data-cat="AI">🤖 AI</button>
+          <button class="cat" data-cat="Social">📱 Social</button>
+          <button class="cat" data-cat="Games">🎮 Games</button>
+          <button class="cat" data-cat="YouTube">📺 YouTube</button>
+          <button class="cat" data-cat="Telegram">✈️ Telegram</button>
+          <button class="cat" data-cat="NFT">🖼 NFT</button>
+          <button class="cat" data-cat="Apps">📲 Apps</button>
+          <button class="cat" data-cat="Websites">🌐 Websites</button>
+          <button class="cat" data-cat="Communities">👥 Communities</button>
+          <button class="cat" data-cat="Other">🔹 Other</button>
         </div>
-    </header>
-    <div class="overlay"></div>
+      </section>
 
-    <!-- Customize: Update hero section text, buttons, or background for your project's messaging. Comment out CTAs if not needed. -->
-<section id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
-    
-    <div class="hero-content">
-        <h1 class="hero-title">
-            Incentivize <span class="glow-text">Engagement</span>
-        </h1>
-        
-        <p class="hero-subtitle">
-            Transforming passive audiences into active, rewarded ecosystems
-        </p>
-        
-        <div class="cta-buttons">
-            <a href="create.html" class="cta-primary">
-                <i class="fas fa-plus-circle"></i> Create Quest
-            </a>
-            <button class="cta-secondary join-quest-link" onclick="window.location.href='join.html'">
-                <i class="fas fa-arrow-right-to-bracket"></i> Join Quests
-            </button>
+      <section class="section" id="feed">
+        <div class="section-head"><div class="section-title">Featured Quests</div>
+          <button class="btn btn-ghost btn-sm" onclick="loadLiveQuests()"><i class="fas fa-sync"></i></button>
         </div>
-    </div>
-</section>
-    <!-- Customize: Modify features section to highlight your project's unique aspects. Add/remove cards, change icons/text as needed. Comment out cards for simplification. -->
-    <section id="features">
-        <div class="container">
-            <h2>The Power of Incentives</h2>
-            <p class="subtitle">SnappQuest enables you to turn passive audiences into active ecosystems through incentives. Create a Quest and let the community join in.</p>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-plus-circle"></i></div>
-                    <h3>Create a Quest</h3>
-                    <p>Turn passive communities into active ones, create a quest and spark real engagement.</strong></p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-arrow-right-to-bracket"></i></div>
-                    <h3>Join Quest</h3>
-                    <p>Once a Quest is live, your community can join, participate, and earn rewards through SnappQuest.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-people-group"></i></div>
-                    <h3>Community Ownership</h3>
-                    <p>Every interaction counts, reward your community and drive genuine engagement.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="why-snappquest">
-
-    <div class="container">
-
-        <div class="why-hero">
-
-            <span class="why-badge">
-                <i class="fas fa-bolt"></i>
-                Incentive-Powered Growth
-            </span>
-
-            <h2>
-                Why Host a Quest With
-                <span class="gradient-text">SnappQuest?</span>
-            </h2>
-
-            <p>
-                SnappQuest helps brands transform passive audiences into active ecosystems through reward-driven engagement campaigns.
-                Sponsors gain access to an active crypto-native audience motivated to participate, engage, share content, and onboard into new ecosystems.
-            </p>
-
-        </div>
-
-        <div class="stats-grid">
-
-            <div class="stat-card">
-                <h3>$3K</h3>
-                <p>Total Value Earned</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>300+</h3>
-                <p>Total Quest Hosted</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>2K+</h3>
-                <p>Interactions in 30 Days</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>90+</h3>
-                <p>Daily Ecosystem Visits</p>
-            </div>
-
-        </div>
-
-<div class="backed-section">
-
-    <div class="section-title">
-        <i class="fas fas fa-handshake" style="color:#34D399; margin-right:12px;"></i>
-        Trusted by Leading Brands
+        <div class="search-bar"><i class="fas fa-search"></i><input type="text" id="liveSearch" placeholder="Search quest or track code" oninput="filterLive()"></div>
+        <div class="quest-grid" id="questFeed"><div class="loading"><span class="spinner"></span> Loading featured quests…</div></div>
+        <div class="pager" id="livePager" style="display:none;"></div>
+      </section>
     </div>
 
-    <div style="max-width: 820px; margin: 0 auto; text-align: center;">
-        <p style="font-size: 19px; line-height: 1.7; color: #E2E8F0;">
-            SnappQuest has partnered with prominent projects including VERSE (Bitcoin.com), Koyn, BAOBAO, and SurfCash to design and execute high-impact community, content, and engagement quests.
-        </p>
-        
-        <p style="font-size: 18px; line-height: 1.75; color: var(--color-text-secondary); margin-top: 24px;">
-            To date, the platform has delivered over 9,000 interactions through these collaborative quests.
-        </p>
+    <div id="view-pending" style="display:none;padding-top:18px;">
+      <div class="section-head">
+        <div class="section-title"><i class="fas fa-hourglass-half" style="color:var(--yellow);margin-right:6px;"></i> Pending Quests</div>
+        <button class="btn btn-ghost btn-sm" onclick="loadPending()"><i class="fas fa-sync"></i></button>
+      </div>
+      <p style="font-size:0.76rem;color:var(--muted);margin-bottom:12px;">Share track code in <a href="https://t.me/SnappQuest/134" target="_blank" style="color:var(--cyan);">Pending Telegram</a>.</p>
+      <div class="search-bar"><i class="fas fa-search"></i><input type="text" id="pendingSearch" placeholder="Search sponsor or track code" oninput="filterPending()"></div>
+      <div class="quest-grid" id="pendingFeed"><div class="loading"><span class="spinner"></span> Loading pending…</div></div>
     </div>
 
-    <!-- Optional Trust Badges -->
-    <div style="display: flex; justify-content: center; gap: 40px; margin-top: 50px; flex-wrap: wrap; opacity: 0.9;">
-        <div style="text-align:center; font-size:13px; color:#94A3B8;">
-            <i class="fas fa-check-circle"></i><br>Proven Results
-        </div>
-        <div style="text-align:center; font-size:13px; color:#94A3B8;">
-            <i class="fas fa-check-circle"></i><br>Trusted Brand
-        </div>
-        <div style="text-align:center; font-size:13px; color:#94A3B8;">
-            <i class="fas fa-check-circle"></i><br>Wide Reach
-        </div>
+    <div id="view-boost" style="display:none;padding-top:22px;">
+      <div style="text-align:center;margin-bottom:16px;">
+        <div class="hero-badge"><i class="fas fa-star"></i> Boost</div>
+        <h2 style="font-size:1.35rem;font-weight:800;margin:10px 0 6px;">Boost your Quest</h2>
+        <p style="color:var(--muted);font-size:0.86rem;">$0.50 USDT · auto-verify on-chain</p>
+      </div>
+      <div class="boost-banner" style="text-align:left;">
+        <div class="boost-price" style="text-align:center;">$0.50</div>
+        <ul style="list-style:none;font-size:0.84rem;color:var(--muted);margin:12px 0 16px;">
+          <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Featured on homepage</li>
+          <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Category spotlight</li>
+          <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Polygon or Solana USDT</li>
+        </ul>
+        <button class="btn btn-grad btn-full" onclick="openLaunch(true)"><i class="fas fa-bolt"></i> Launch & Boost</button>
+      </div>
     </div>
 
+<div id="view-bounties" style="display:none;padding-top:18px;">
+  <div class="section-head">
+    <div class="section-title"><i class="fas fa-gift" style="color:var(--green);margin-right:6px;"></i> Bounties</div>
+    <button class="btn btn-ghost btn-sm" onclick="loadBounties()"><i class="fas fa-sync"></i></button>
+  </div>
+  <p style="font-size:0.76rem;color:var(--muted);margin-bottom:12px;">Complete these bounties to earn rewards.</p>
+  <div class="search-bar">
+    <i class="fas fa-search"></i>
+    <input type="text" id="bountySearch" placeholder="Search bounty or track code" oninput="filterBounties()">
+  </div>
+<div class="quest-grid" id="bountyFeed">
+  <div class="loading"><span class="spinner"></span> Loading bounties…</div>
+</div>
+<div class="pager" id="bountyPager" style="display:none;"></div>
 </div>
 
-        <div class="features-section">
+  <!-- LAUNCH MODAL -->
+  <div class="overlay" id="launchOverlay">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title" id="launchTitle">Launch a Quest</div>
+      <div class="modal-sub" id="launchSub">Free means share your link on Telegram with limited reach, while Boost means pay $0.50 USDT first, then submit for more reach.</div>
 
-            <div class="section-title">
-                What Sponsors Gain
-            </div>
+      <div id="launchForm">
+        <div class="field"><label>Email</label><input type="email" id="qEmail" placeholder="you@email.com"></div>
+        <div class="field"><label>Project / Quest title</label><input type="text" id="qName" placeholder="e.g. Nova AI" maxlength="80"></div>
+        <div class="field"><label>Sponsor name</label><input type="text" id="qSponsor" placeholder="Your name or brand"></div>
+        <div class="field"><label>Description</label><textarea id="qDesc" placeholder="What should Explorers do?" maxlength="400"></textarea></div>
+        <div class="field">
+  <label>Twitter / X post link</label>
+  <input type="url" id="qWeb" placeholder="https://x.com/username/status/… or https://twitter.com/…">
+</div>
+        <div class="field"><label>Telegram</label><input type="text" id="qTg" placeholder="@handle or t.me/…"></div>
+        <div class="field"><label>Twitter / X</label><input type="text" id="qX" placeholder="@handle"></div>
+        <div class="modal-actions">
+          <button class="btn btn-grad btn-full" onclick="launchFree()"><i class="fas fa-paper-plane"></i> Launch Free (Telegram)</button>
+          <button class="btn btn-ghost btn-full" onclick="startLaunch(true)"><i class="fas fa-star"></i> Boost for $0.50 USDT</button>
+          <button class="btn btn-ghost btn-full" style="color:var(--muted2);" onclick="closeLaunch()">Cancel</button>
+        </div>
+      </div>
 
-<div class="features-grid">
-
-    <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-users"></i></div>
-        <h3>Engaged Crypto Audience</h3>
-        <p>Reach active crypto-native users participating in Web3 campaigns and ecosystem growth initiatives.</p>
+      <div id="payStep" style="display:none;">
+        <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Send exactly <strong style="color:var(--green);">0.50 USDT</strong>, then verify.</p>
+        <div class="chain-tabs">
+          <button class="chain-tab poly active" id="btnPoly" onclick="selectPayChain('polygon')">Polygon</button>
+          <button class="chain-tab sol" id="btnSol" onclick="selectPayChain('solana')">Solana</button>
+        </div>
+        <div class="field"><label>Your sending wallet</label><input type="text" id="payWallet" placeholder="0x… or Solana address" spellcheck="false"></div>
+        <div class="pay-box">
+          <div class="pay-amount">0.50 USDT</div>
+          <div class="pay-net" id="payNet">on Polygon</div>
+          <div class="addr-row"><code class="addr-text" id="payAddr">—</code><button class="copy-btn" id="payCopy">Copy</button></div>
+          <div id="payQr"></div>
+          <div class="pay-hint">Send from the wallet above. Wait 30–60s, then verify.</div>
+        </div>
+        <button class="btn btn-grad btn-full" id="verifyBtn" onclick="verifyBoostPayment()"><i class="fas fa-check-circle"></i> I Paid, Verify</button>
+        <button class="btn btn-ghost btn-full" style="margin-top:8px;color:var(--muted2);" onclick="backToForm()">← Back</button>
+        <div class="status-log" id="payLog">Enter wallet, send 0.50 USDT, verify.</div>
+      </div>
     </div>
-
-    <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-gift"></i></div>
-        <h3>Incentivized Participation</h3>
-        <p>Drive meaningful engagement through reward-powered campaigns instead of passive advertising impressions.</p>
+  
+<!-- FREE LAUNCH CONFIRM -->
+<div class="overlay center" id="freeConfirmOverlay">
+  <div class="modal">
+    <div class="modal-title" style="text-align:center;margin-bottom:6px;">Launch Free</div>
+    <div class="modal-sub" style="text-align:center;margin-bottom:20px;line-height:1.5;">
+      You’ll be taken to Telegram to share your<br>
+      <strong style="color:var(--text);">Twitter / X post link</strong>.<br>
+      No form needed, just paste your link there.
     </div>
-
-    <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-share-nodes"></i></div>
-        <h3>Social Visibility</h3>
-        <p>Expand campaign reach across platforms like X, Telegram, and community partner networks.</p>
+    <div class="modal-actions">
+      <button class="btn btn-grad btn-full" onclick="confirmFreeLaunch()">
+        <i class="fab fa-telegram"></i> Open Telegram
+      </button>
+      <button class="btn btn-ghost btn-full" style="color:var(--muted2);" onclick="closeFreeConfirm()">
+        Cancel
+      </button>
     </div>
-
-    <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-rocket"></i></div>
-        <h3>Community Activation</h3>
-        <p>Transform inactive audiences into active participants through quests and ecosystem interaction.</p>
-    </div>
-
-    <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-arrow-right-to-bracket"></i></div>
-        <h3>Ecosystem Onboarding</h3>
-        <p>Help users discover, test, and onboard into your product, protocol, or community.</p>
-    </div>
-
-    <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
-        <h3>Flexible Campaigns</h3>
-        <p>Launch awareness campaigns, bounties, onboarding flows, beta testing, and engagement quests.</p>
-    </div>
-
+  </div>
 </div>
 
-        </div>
-
-        <div class="campaigns-section">
-
-            <div class="section-title">
-                Ideal Campaigns
-            </div>
-
-            <div class="campaign-grid">
-
-                <div class="campaign-item">Product Awareness Campaigns</div>
-                <div class="campaign-item">Community Growth</div>
-                <div class="campaign-item">Content & Design Bounties</div>
-                <div class="campaign-item">Airdrop Campaigns</div>
-                <div class="campaign-item">Social Engagement Quests</div>
-                <div class="campaign-item">Beta Testing</div>
-                <div class="campaign-item">Telegram & X Growth</div>
-                <div class="campaign-item">Ecosystem Onboarding</div>
-
-            </div>
-
-        </div>
-
-        <div class="final-cta">
-
-            <h2>
-                Turn Visibility Into
-                <span class="gradient-text">Participation</span>
-            </h2>
-
-            <p>
-                SnappQuest helps brands convert attention into measurable engagement
-                by rewarding users for meaningful participation.
-            </p>
-
-            <div class="cta-buttons">
-
-                <a href="create.html" class="cta-primary">
-                    <i class="fas fa-plus-circle"></i>
-                    Create Quest
-                </a>
-
-                <a href="https://t.me/SnappQuest/1434" target="_blank" class="cta-secondary">
-                    <i class="fab fa-telegram"></i>
-                    Partnerships
-                </a>
-
-            </div>
-
-        </div>
-
+<!-- TX ALREADY USED CONFIRM -->
+<div class="overlay center" id="txUsedOverlay">
+  <div class="modal">
+    <div class="modal-title" style="text-align:center;margin-bottom:6px;">Transaction already used</div>
+    <div class="modal-sub" style="text-align:center;margin-bottom:20px;line-height:1.5;">
+      This payment was already used for another quest.<br>
+      Please contact an admin on Telegram for support.
     </div>
-
-</section>
-
-    <!-- Customize: Update footer content, links, social icons, or copyright info for your project. Comment out columns or add new ones. -->
-    <footer>
-        <div class="container">
-            <div class="footer-row">
-                <div class="footer-col" style="min-width: 250px;">
-                    <h3 class="hero-gradient-text">SnappQuest</h3>
-                    <p style="color: var(--color-text-secondary); font-size: 14px;">The Engage-to-Earn Business Solution.<br>Building active, incentivized, sustainable communities.</p>
-                    <div class="social-icons">
-<a href="https://x.com/SnappQuest" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
-<a href="https://t.me/SnappQuest" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h3>Explore</h3>
-                    <ul class="footer-link">
-                        <li><a href="#hero">Home</a></li>
-                        <li><a href="create.html">Create Quest</a></li>
-                        <li><a href="minigame.html">How to Submit a Quest</a></li>
-                        <li><a href="airdrop.html">Airdrop Checker</a></li>
-                        <li><a href="hall-of-fame.html">Hall of Fame</a></li>
-                        <li><a href="ad.html">Advertising</a></li>
-                        <li><a href="https://niti.com.ng/tools/pay-verse/">Donate to SnappQuest</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3>Other Tools</h3>
-                    <ul class="footer-link">
-                        <li><a href="search.html"><i class="fas fa-search"></i> TrackQuest</a></li>
-                        <li><a href="explorer.html"><i class="fas fa-cubes"></i> Explorer</a></li>
-                        <li><a href="verse-millionaire.html"><i class="fas fa-coins"></i> VERSE Millionaire</a></li>
-                        <li><a href="https://niti.com.ng/tools/prediction-market/"><i class="fa-solid fa-chart-line"></i> Prediction Market</a></li>
-                        <li><a href="https://niti.com.ng/tools/verse-swap/"><i class="fas fa-arrows-rotate"></i> VERSE Swap</a></li>
-                        <li><a href="https://niti.com.ng/tools/cross-chain"><i class="fas fa-right-left"></i> Cross-Chain Bridge</a></li>
-                        <li><a href="https://niti.com.ng/tools/disperse-app/"><i class="fas fa-share-nodes"></i> VERSE Disperse App</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; <span id="currentYear"></span> SnappQuest. All rights reserved. Powered by <a href="https://niti.com.ng/" target="_blank"> Neroitech Inventions.</a></p>
-            </div>
-        </div>
-    </footer>
-
-    <button id="back-to-top" title="Back to Top">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
-<!-- CTA Popup Modal -->
-<div id="ctaModal" class="modal">
-    <div class="modal-content">
-        <span class="modal-close" onclick="closeModal('ctaModal')">&times;</span>
-        <h3 id="ctaTitle" class="hero-gradient-text">💰 Over <strong id="verseAmount">70M</strong> VERSE have been paid out as rewards!</h3>
-        <p>Join Quests Now and Start Earning!</p>
-        <button class="cta-primary" onclick="window.location.href='join.html'" style="cursor: pointer;"><i class="fas fa-arrow-right-to-bracket"></i> Join Quests</button>
+    <div class="modal-actions">
+      <button class="btn btn-grad btn-full" onclick="confirmTxSupport()">
+        <i class="fab fa-telegram"></i> Contact Admin
+      </button>
+      <button class="btn btn-ghost btn-full" style="color:var(--muted2);" onclick="closeTxUsed()">
+        Cancel
+      </button>
     </div>
+  </div>
 </div>
-    
-    <!-- Customize: Adjust JavaScript below for custom behaviors, or add new scripts. Comment out unused functions. -->
+
+</div>
+  <nav class="bottom-nav">
+    <button class="bn-item active" data-view="discover" onclick="showView('discover')"><i class="fas fa-home"></i> Discover</button>
+    <button class="bn-item" data-view="pending" onclick="showView('pending')"><i class="fas fa-hourglass-half"></i> Pending</button>
+    <button class="bn-fab" onclick="openLaunch()"><i class="fas fa-plus"></i></button>
+    <button class="bn-item" data-view="boost" onclick="showView('boost')"><i class="fas fa-star"></i> Boost</button>
+    <button class="bn-item" data-view="bounties" onclick="showView('bounties')"><i class="fas fa-gift"></i> Bounties</button>
+  </nav>
+  <div class="toast" id="toast"></div>
+
 <script>
-    // Set current year in footer
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
+// ═══ SAME SHEETS AS join.html + explorer.html ═══
+const SHEETS = {
+  API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
+  QUESTS_ID: '1wY8FlSvSsYPCGo2qYsl20w4kcPqx9Z4CqzA2MeQozGo',
+  QUESTS_RANGE: 'Quests!A1:I1000',
+  PENDING_ID: '1o_kkpaYmp56mq_May0bBdbmdXK669DGOYY3YHZpdh7E',
+  PENDING_RANGE: 'Form responses 3!A1:L8000',
+  LISTED_ID: '1wY8FlSvSsYPCGo2qYsl20w4kcPqx9Z4CqzA2MeQozGo',
+  LISTED_RANGE: 'Quests!A1:G1000',
+  // create.html form
+  CREATE_FORM: 'https://docs.google.com/forms/d/e/1FAIpQLSe9lmAvmoScW5kuVpZprjVq5rF7TLYQTU_PJYKnN1SRQXAI5Q/formResponse'
+};
 
-    // Hamburger Menu & Back to Top (unchanged)
-    const hamburger = document.querySelector('.hamburger');
-    const navContainer = document.querySelector('.nav-container');
-    const overlay = document.querySelector('.overlay');
-    const backToTopButton = document.getElementById('back-to-top');
+// ═══ SAME PAY AS pay-plugin-v1.html ═══
+const PAY = {
+  USDT_POLYGON: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+  USDT_SOLANA: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+  receiverPolygon: '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB',
+  receiverSolana: 'HFUZVFgtSXwKTJuwo8t4NuGWvwkns5c3MmZBM8BCgWMG',
+  etherscanKey: 'XN9WICY1V7C5A3VBRRR2NTRF7KZ4TCN4Z4',
+  heliusKey: 'a822542b-adaf-4bd1-898e-eaea64abea66',
+  amount: 0.50,
+  tolerance: 0.02,
+  timeWindowMin: 45,
+  telegramPending: 'https://t.me/SnappQuest/134'
+};
 
-    function toggleMobileMenu() {
-        hamburger.classList.toggle('active');
-        navContainer.classList.toggle('active');
-        overlay.classList.toggle('active');
-    }
+let liveQuests = [];
+let pendingQuests = [];
+let listedCodes = new Set();
+let payChain = 'polygon';
+let draft = null;
+let activeCat = 'all';
+let livePage = 1;
+let bountyQuests = [];
+let bountyPage = 1;
 
-    hamburger.addEventListener('click', toggleMobileMenu);
+// Featured Quests: how many cards to show per page (change this number anytime)
 
-    navContainer.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navContainer.classList.remove('active');
-            overlay.classList.remove('active');
-        });
-    });
+const PAGE_SIZE = 3;
 
-    overlay.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navContainer.classList.remove('active');
-        overlay.classList.remove('active');
-    });
-
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            backToTopButton.classList.add('visible');
-        } else {
-            backToTopButton.classList.remove('visible');
-        }
-    });
-
-    backToTopButton.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // === LIVE STATS FROM GOOGLE SHEETS ===
-    const CONFIG = {
-        API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
-        SPREADSHEET_ID: '1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w',
-        RANGE: 'SnappQuestData!A8:D8'   // Updated range
-    };
-
-// === LIVE STATS - A8-D8 for cards, C2 for Popup ===
-async function fetchLiveStats() {
-    try {
-        // 1. Get all stats for the 4 cards (A8:D8)
-        const statsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SPREADSHEET_ID}/values/SnappQuestData!A8:D8?key=${CONFIG.API_KEY}`;
-        const statsRes = await fetch(statsUrl);
-        const statsData = await statsRes.json();
-        
-        if (statsData.values && statsData.values[0]) {
-            const [totalValue, questHosted, interactions, dailyVisits] = statsData.values[0];
-
-            const statEls = document.querySelectorAll('.stat-card h3');
-            if (statEls.length >= 4) {
-                statEls[0].textContent = formatNumber(totalValue || "0");        // A8
-                statEls[1].textContent = formatNumber(questHosted || "0") + "+"; // B8
-                statEls[2].textContent = formatNumber(interactions || "0") + "+"; // C8
-                statEls[3].textContent = formatNumber(dailyVisits || "0") + "+"; // D8
-            }
-        }
-
-        // 2. Get VERSE Paid Out from C2 for CTA Popup
-        const verseUrl = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SPREADSHEET_ID}/values/SnappQuestData!C2?key=${CONFIG.API_KEY}`;
-        const verseRes = await fetch(verseUrl);
-        const verseData = await verseRes.json();
-        const totalVerse = verseData.values?.[0]?.[0] || "70M";
-
-        // Update CTA Modal
-        const verseAmount = document.getElementById('verseAmount');
-        if (verseAmount) {
-            const formatted = formatNumber(totalVerse);
-            verseAmount.textContent = formatted;
-        }
-
-    } catch (error) {
-        console.error("Failed to fetch stats:", error);
-        
-        // Fallback
-        const statEls = document.querySelectorAll('.stat-card h3');
-        if (statEls.length >= 4) {
-            statEls[0].textContent = "$4K";
-            statEls[1].textContent = "400+";
-            statEls[2].textContent = "3K+";
-            statEls[3].textContent = "99+";
-        }
-        
-        const verseAmount = document.getElementById('verseAmount');
-        if (verseAmount) verseAmount.textContent = "70M";
-    }
+// Keyword → category (title first, then description). Short keys use word boundaries.
+function hasWord(text, word) {
+  // whole-word match so "ai" does not hit "claim" / "said" / "email"
+  const re = new RegExp('(?:^|[^a-z0-9])' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:[^a-z0-9]|$)', 'i');
+  return re.test(text);
+}
+function hasAny(text, keys) {
+  return keys.some(k => k.includes(' ') ? text.includes(k) : hasWord(text, k));
 }
 
-function formatNumber(value) {
-    if (!value) return "0";
+function classifyQuest(title, description) {
+  const titleL = (title || '').toLowerCase();
+  const descL = (description || '').toLowerCase();
+  const combined = titleL + ' ' + descL;
 
-    const str = String(value).trim();
+  // Priority order matters — Engagement / Feedback / Bounty first
+  const rules = [
+    { cat: 'Engagement', keys: ['engagement', 'engage', 'like', 'comment', 'retweet', 'repost', 'follow', 'share', 'react', 'interaction'] },
+    { cat: 'Feedback', keys: ['feedback', 'review', 'testimonial', 'survey', 'rate', 'rating', 'opinion'] },
+    { cat: 'Bounty', keys: ['bounty', 'reward', 'prize', 'earn', 'payout', 'claim reward'] },
+    { cat: 'AI', keys: ['ai', 'artificial intelligence', 'chatgpt', 'openai', 'midjourney', 'claude', 'gemini', 'machine learning', 'llm', 'gpt', 'neural'] },
+    { cat: 'Crypto', keys: ['crypto', 'bitcoin', 'btc', 'ethereum', 'eth', 'defi', 'web3', 'blockchain', 'token', 'wallet', 'swap', 'dex', 'airdrop', 'verse', 'usdt', 'solana', 'polygon'] },
+    { cat: 'NFT', keys: ['nft', 'opensea', 'mint', 'pfp', 'collectible', 'collection'] },
+    { cat: 'Games', keys: ['game', 'gaming', 'minigame', 'play-to-earn', 'p2e', 'steam', 'unity'] },
+    { cat: 'YouTube', keys: ['youtube', 'subscribe', 'youtu.be', 'channel', 'streamer'] },
+    { cat: 'Telegram', keys: ['telegram', 't.me'] },
+    { cat: 'Social', keys: ['twitter', 'x.com', 'instagram', 'tiktok', 'facebook', 'social'] },
+    { cat: 'Apps', keys: ['android', 'ios', 'mobile app', 'download', 'apk', 'play store', 'app store'] },
+    { cat: 'Websites', keys: ['website', 'landing', 'webpage', 'domain'] },
+    { cat: 'Communities', keys: ['community', 'discord', 'dao', 'forum', 'members', 'club'] }
+  ];
 
-    // Respect already formatted values (like 19K, 36M, $4K)
-    if (/[KM]$/i.test(str)) {
-        return str;
-    }
-
-    // Remove currency symbols and commas for calculation
-    let numStr = str.replace(/[€$£¥₹,]/g, '');
-    let num = parseFloat(numStr);
-
-    if (isNaN(num)) return str;
-
-    let formatted;
-
-    if (num >= 1_000_000) {
-        formatted = (num / 1_000_000).toFixed(1) + "M";
-    } else if (num >= 1_000) {
-        formatted = Math.round(num / 1_000) + "K";
-    } else {
-        // For numbers under 1,000 → round to nearest whole number
-        formatted = Math.round(num).toLocaleString('en-US');
-    }
-
-    // Add back currency symbol if it existed
-    const currencyMatch = str.match(/^([€$£¥₹])/);
-    const currency = currencyMatch ? currencyMatch[1] : '';
-
-    return currency + formatted;
+  // Prefer title matches
+  for (const r of rules) {
+    if (hasAny(titleL, r.keys)) return r.cat;
+  }
+  for (const r of rules) {
+    if (hasAny(descL, r.keys)) return r.cat;
+  }
+  // Explicit title patterns
+  if (/\bengagement\b/i.test(titleL)) return 'Engagement';
+  if (/\bfeedback\b/i.test(titleL)) return 'Feedback';
+  if (/\bbounty\b/i.test(titleL)) return 'Bounty';
+  return 'Other';
 }
 
-function animateCount(el, target, duration = 1800) {
-    let start = 0;
-    const increment = target / (duration / 16);
-    
-    function step() {
-        start += increment;
-        if (start < target) {
-            el.textContent = Math.floor(start) + (target >= 1000 ? "+" : "");
-            requestAnimationFrame(step);
-        } else {
-            el.textContent = target + (target >= 1000 ? "+" : "");
-        }
+const CAT_EMOJI = {
+  Engagement: '💬', Feedback: '📝', Bounty: '🎁',
+  AI: '🤖', Crypto: '💰', NFT: '🖼', Games: '🎮', YouTube: '📺',
+  Telegram: '✈️', Social: '📱', Apps: '📲', Websites: '🌐',
+  Communities: '👥', Other: '🔹'
+};
+
+const $ = id => document.getElementById(id);
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function trackCode(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let r='';for(let i=0;i<8;i++)r+=c[Math.floor(Math.random()*c.length)];return r;}
+function short(a){return a?a.slice(0,6)+'…'+a.slice(-4):'—';}
+
+async function isTxAlreadyUsed(txHash){
+  if(!txHash) return false;
+  const hash = String(txHash).trim().toLowerCase();
+  try{
+    const [pending, listed] = await Promise.all([
+      fetchSheet(SHEETS.PENDING_ID, SHEETS.PENDING_RANGE),
+      fetchSheet(SHEETS.QUESTS_ID, SHEETS.QUESTS_RANGE)
+    ]);
+
+    const allRows = [...pending, ...listed];
+    for(const row of allRows){
+      // Check every field in the row for this tx hash / link
+      for(const key of Object.keys(row)){
+        const val = String(row[key] || '').toLowerCase();
+        if(val && val.includes(hash)) return true;
+      }
     }
-    step();
+    return false;
+  }catch(e){
+    console.error('TX check failed', e);
+    return false; // fail open so a sheet error doesn't block everyone
+  }
 }
 
-    // Load stats when page loads
-    window.addEventListener('load', () => {
-        fetchLiveStats();
-    });
-    
-
-    // === SHOW EARNINGS CTA POPUP ON PAGE LOAD ===
-function showEarningsCTA() {
-    const modal = document.getElementById('ctaModal');
-    if (modal) {
-        modal.classList.add('is-open');
-    }
+function normalizeTwitterUrl(url){
+  if(!url) return '';
+  let u = String(url).trim().toLowerCase();
+  // treat x.com and twitter.com the same
+  u = u.replace('https://twitter.com/', 'https://x.com/');
+  u = u.replace('http://twitter.com/', 'https://x.com/');
+  u = u.replace('http://x.com/', 'https://x.com/');
+  // remove trailing slash and query/hash
+  u = u.split('?')[0].split('#')[0].replace(/\/$/, '');
+  return u;
 }
 
-// Call it when page loads
-window.addEventListener('load', () => {
-    fetchLiveStats();
-    
-    // Show popup after 2.5 seconds
-    setTimeout(() => {
-        showEarningsCTA();
-    }, 2500);
+async function isTwitterLinkAlreadyUsed(link){
+  if(!link) return false;
+  const target = normalizeTwitterUrl(link);
+  if(!target) return false;
+  try{
+    const [pending, listed] = await Promise.all([
+      fetchSheet(SHEETS.PENDING_ID, SHEETS.PENDING_RANGE),
+      fetchSheet(SHEETS.QUESTS_ID, SHEETS.QUESTS_RANGE)
+    ]);
+    const allRows = [...pending, ...listed];
+    for(const row of allRows){
+      for(const key of Object.keys(row)){
+        const val = normalizeTwitterUrl(row[key]);
+        if(val && (val === target || val.includes(target) || target.includes(val))) return true;
+      }
+    }
+    return false;
+  }catch(e){
+    console.error('Twitter link check failed', e);
+    return false;
+  }
+}
+
+async function fetchSheet(spreadsheetId, range){
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${SHEETS.API_KEY}`;
+  const res=await fetch(url);
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  const data=await res.json();
+  if(!data.values?.length) return [];
+  const headers=data.values[0].map(h=>h.trim());
+  return data.values.slice(1).map((row,i)=>{
+    const obj={rowIndex:i+2};
+    headers.forEach((h,j)=>{obj[h]=(row[j]||'').trim();});
+    return obj;
+  });
+}
+
+// ── LIVE QUESTS (join.html logic) ──
+async function loadLiveQuests(){
+  const el=$('questFeed');
+  el.innerHTML='<div class="loading"><span class="spinner"></span> Loading featured quests…</div>';
+  try{
+    const rows=await fetchSheet(SHEETS.QUESTS_ID, SHEETS.QUESTS_RANGE);
+liveQuests=rows.map(q=>{
+  const status=parseInt(q.Status)||0;
+  const title=q.Title||'Untitled';
+  const description=q.Description||'';
+  const cat=classifyQuest(title, description);
+  return {
+    id:parseInt(q.ID)||0,
+    title,
+    sponsor:q.Sponsor||'',
+    description,
+    reward:q.Reward||'',
+    link:q.Link||'',
+    trackCode:q['Track Code']||'',
+    statusCode: status,
+    status: status === 0 ? 'live' : 'done',
+    featured: status === 0,
+    cat,
+    emoji:CAT_EMOJI[cat]||'🚀'
+  };
+}).filter(q => q.status === 'live'); // only Status 0
+    livePage = 1;
+    renderLive();
+  }catch(e){
+    console.error(e);
+    el.innerHTML=`<div class="empty"><i class="fas fa-exclamation-triangle"></i>Could not load sheets.<br>${esc(e.message)}<br><button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="loadLiveQuests()">Retry</button></div>`;
+  }
+}
+
+function filterLive(){ livePage = 1; renderLive(); }
+
+function getFilteredLive(){
+  const s=(($('liveSearch')&&$('liveSearch').value)||'').toLowerCase().trim();
+  let list=activeCat==='all'?liveQuests:liveQuests.filter(q=>q.cat===activeCat);
+  if(s){
+    list=list.filter(q=>
+      (q.title||'').toLowerCase().includes(s)||
+      (q.trackCode||'').toLowerCase().includes(s)||
+      (q.sponsor||'').toLowerCase().includes(s)||
+      (q.description||'').toLowerCase().includes(s)
+    );
+  }
+  return [...list].sort((a,b)=>(b.featured?1:0)-(a.featured?1:0));
+}
+
+function goLivePage(n){
+  const list = getFilteredLive();
+  const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  livePage = Math.min(Math.max(1, n), totalPages);
+  renderLive();
+  const feed = document.getElementById('feed');
+  if (feed) feed.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Build page number list with ellipsis: e.g. 1 … 4 5 6 … 20
+function pageWindow(current, total) {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages = new Set([1, total, current, current - 1, current + 1, current - 2, current + 2]);
+  const sorted = [...pages].filter(p => p >= 1 && p <= total).sort((a, b) => a - b);
+  const out = [];
+  for (let i = 0; i < sorted.length; i++) {
+    if (i > 0 && sorted[i] - sorted[i - 1] > 1) out.push('…');
+    out.push(sorted[i]);
+  }
+  return out;
+}
+
+function renderLive(){
+  const el=$('questFeed');
+  const pager=$('livePager');
+  const list = getFilteredLive();
+  if(!list.length){
+    el.innerHTML='<div class="empty"><i class="fas fa-compass"></i>No quests match.</div>';
+    if(pager) pager.style.display='none';
+    return;
+  }
+  const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  if (livePage > totalPages) livePage = totalPages;
+  const start = (livePage - 1) * PAGE_SIZE;
+  const pageItems = list.slice(start, start + PAGE_SIZE);
+  el.innerHTML = pageItems.map(q => cardHTML(q, 'live')).join('');
+
+  if (pager) {
+    if (totalPages <= 1) {
+      pager.style.display = 'none';
+      return;
+    }
+    pager.style.display = 'flex';
+    const nums = pageWindow(livePage, totalPages)
+      .map(p => p === '…'
+        ? `<span class="pager-dots">…</span>`
+        : `<button class="btn btn-ghost btn-sm page-num ${p===livePage?'active':''}" onclick="goLivePage(${p})">${p}</button>`
+      ).join('');
+    pager.innerHTML =
+      `<div class="pager-info">${list.length} quests · Page ${livePage} of ${totalPages}</div>` +
+      `<button class="btn btn-ghost btn-sm" title="First" ${livePage<=1?'disabled':''} onclick="goLivePage(1)"><i class="fas fa-angles-left"></i></button>` +
+      `<button class="btn btn-ghost btn-sm" title="Prev" ${livePage<=1?'disabled':''} onclick="goLivePage(${livePage-1})"><i class="fas fa-chevron-left"></i></button>` +
+      nums +
+      `<button class="btn btn-ghost btn-sm" title="Next" ${livePage>=totalPages?'disabled':''} onclick="goLivePage(${livePage+1})"><i class="fas fa-chevron-right"></i></button>` +
+      `<button class="btn btn-ghost btn-sm" title="Last" ${livePage>=totalPages?'disabled':''} onclick="goLivePage(${totalPages})"><i class="fas fa-angles-right"></i></button>`;
+  }
+}
+
+// ── PENDING (explorer.html logic) ──
+async function loadPending(){
+  const el=$('pendingFeed');
+  el.innerHTML='<div class="loading"><span class="spinner"></span> Loading pending…</div>';
+  try{
+    const [pending, listed]=await Promise.all([
+      fetchSheet(SHEETS.PENDING_ID, SHEETS.PENDING_RANGE),
+      fetchSheet(SHEETS.LISTED_ID, SHEETS.LISTED_RANGE)
+    ]);
+    listedCodes=new Set(listed.map(q=>q['Track Code']).filter(Boolean));
+    pendingQuests=pending
+      .filter(q=>q['Track Code'] && !listedCodes.has(q['Track Code']))
+      .map(q=>({
+        title:q.Title||'Untitled',
+        sponsor:q.Sponsor||'',
+        description:q.Description||'',
+        reward:q.Reward||'',
+        link:q.Link||'',
+        trackCode:q['Track Code']||'',
+        telegram:q.Telegram||'',
+        email:q['Email address']||'',
+        status:'pending',
+        emoji:'⏳'
+      }));
+    renderPending(pendingQuests);
+  }catch(e){
+    console.error(e);
+    el.innerHTML=`<div class="empty"><i class="fas fa-exclamation-triangle"></i>${esc(e.message)}<br><button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="loadPending()">Retry</button></div>`;
+  }
+}
+
+function filterPending(){
+  const s=($('pendingSearch').value||'').toLowerCase();
+  const filtered=pendingQuests.filter(q=>
+    (q.sponsor||'').toLowerCase().includes(s)||(q.trackCode||'').toLowerCase().includes(s)||(q.title||'').toLowerCase().includes(s)
+  );
+  renderPending(filtered);
+}
+
+function renderPending(list){
+  const el=$('pendingFeed');
+  if(!list.length){el.innerHTML='<div class="empty"><i class="fas fa-hourglass-half"></i>No pending quests match.</div>';return;}
+  el.innerHTML=list.map(q=>cardHTML(q,'pending')).join('');
+}
+
+// ── BOUNTIES (Status = 2) ──
+async function loadBounties(){
+  const el = $('bountyFeed');
+  el.innerHTML = '<div class="loading"><span class="spinner"></span> Loading bounties…</div>';
+  try{
+    const rows = await fetchSheet(SHEETS.QUESTS_ID, SHEETS.QUESTS_RANGE);
+bountyQuests = rows.map(q => {
+  const status = parseInt(q.Status) || 0;
+  const title = q.Title || 'Untitled';
+  const description = q.Description || '';
+  const cat = classifyQuest(title, description);
+
+  // Column H = expiry date (header name may vary)
+  const expiryRaw = q.Deadline || q.Expiry || q.Expiration || q['Expiry Date'] || q['End Date'] || q['Expires'] || '';
+  const expiryDate = expiryRaw ? new Date(expiryRaw) : null;
+  const isExpired = expiryDate && !isNaN(expiryDate.getTime()) && expiryDate < new Date();
+
+  return {
+    id: parseInt(q.ID) || 0,
+    title,
+    sponsor: q.Sponsor || '',
+    description,
+    reward: q.Reward || '',
+    link: q.Link || '',
+    trackCode: q['Track Code'] || '',
+    statusCode: status,
+    status: status === 2 ? 'bounty' : 'other',
+    featured: false,
+    cat,
+    emoji: '🎁',
+    expiry: expiryRaw,
+    isExpired
+  };
+}).filter(q => q.status === 'bounty' && !q.isExpired); // Status 2 + not expired
+    bountyPage = 1;
+    renderBounties();
+  }catch(e){
+    console.error(e);
+    el.innerHTML = `<div class="empty"><i class="fas fa-exclamation-triangle"></i>${esc(e.message)}<br>
+      <button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="loadBounties()">Retry</button></div>`;
+  }
+}
+
+function filterBounties(){
+  bountyPage = 1;
+  renderBounties();
+}
+
+function getFilteredBounties(){
+  const s = (($('bountySearch') && $('bountySearch').value) || '').toLowerCase().trim();
+  let list = bountyQuests;
+  if(s){
+    list = list.filter(q =>
+      (q.title || '').toLowerCase().includes(s) ||
+      (q.trackCode || '').toLowerCase().includes(s) ||
+      (q.sponsor || '').toLowerCase().includes(s) ||
+      (q.description || '').toLowerCase().includes(s)
+    );
+  }
+  return list;
+}
+
+function goBountyPage(n){
+  const list = getFilteredBounties();
+  const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  bountyPage = Math.min(Math.max(1, n), totalPages);
+  renderBounties();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderBounties(){
+  const el = $('bountyFeed');
+  const pager = $('bountyPager');
+  const list = getFilteredBounties();
+
+  if(!list.length){
+    el.innerHTML = '<div class="empty"><i class="fas fa-gift"></i>No bounties available right now.</div>';
+    if(pager) pager.style.display = 'none';
+    return;
+  }
+
+  const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  if (bountyPage > totalPages) bountyPage = totalPages;
+  const start = (bountyPage - 1) * PAGE_SIZE;
+  const pageItems = list.slice(start, start + PAGE_SIZE);
+  el.innerHTML = pageItems.map(q => cardHTML(q, 'bounty')).join('');
+
+  if (pager) {
+    if (totalPages <= 1) {
+      pager.style.display = 'none';
+      return;
+    }
+    pager.style.display = 'flex';
+    const nums = pageWindow(bountyPage, totalPages)
+      .map(p => p === '…'
+        ? `<span class="pager-dots">…</span>`
+        : `<button class="btn btn-ghost btn-sm page-num ${p===bountyPage?'active':''}" onclick="goBountyPage(${p})">${p}</button>`
+      ).join('');
+    pager.innerHTML =
+      `<div class="pager-info">${list.length} bounties · Page ${bountyPage} of ${totalPages}</div>` +
+      `<button class="btn btn-ghost btn-sm" title="First" ${bountyPage<=1?'disabled':''} onclick="goBountyPage(1)"><i class="fas fa-angles-left"></i></button>` +
+      `<button class="btn btn-ghost btn-sm" title="Prev" ${bountyPage<=1?'disabled':''} onclick="goBountyPage(${bountyPage-1})"><i class="fas fa-chevron-left"></i></button>` +
+      nums +
+      `<button class="btn btn-ghost btn-sm" title="Next" ${bountyPage>=totalPages?'disabled':''} onclick="goBountyPage(${bountyPage+1})"><i class="fas fa-chevron-right"></i></button>` +
+      `<button class="btn btn-ghost btn-sm" title="Last" ${bountyPage>=totalPages?'disabled':''} onclick="goBountyPage(${totalPages})"><i class="fas fa-angles-right"></i></button>`;
+  }
+}
+
+
+
+
+function cardHTML(q, mode){
+  const feat = q.featured ? 'featured' : '';
+  const badge = q.featured ? '<span class="badge-feat"><i class="fas fa-star"></i> Featured</span>' : '';
+  const pend = mode === 'pending' ? '<span class="badge-pend">Pending</span>' : '';
+  const bountyBadge = mode === 'bounty' ? '<span class="badge-feat" style="background:linear-gradient(135deg,#34d399,#22d3ee);"><i class="fas fa-gift"></i> Bounty</span>' : '';
+
+  let actions;
+  if (mode === 'pending') {
+    actions = `<button class="btn btn-ghost btn-sm" onclick="copyTrack('${esc(q.trackCode)}')"><i class="fas fa-copy"></i> Copy track</button>`
+      + `<a class="btn btn-ghost btn-sm" href="${PAY.telegramPending}" target="_blank"><i class="fab fa-telegram"></i> Contact admin</a>`;
+  } else if (mode === 'bounty') {
+    actions = `<button class="btn btn-grad btn-sm" onclick="openLink('${esc(q.link)}')"><i class="fas fa-gift"></i> View Bounty</button>`
+      + `<button class="btn btn-ghost btn-sm" onclick="copyTrack('${esc(q.trackCode)}')"><i class="fas fa-copy"></i> Copy track</button>`;
+  } else {
+    actions = `<button class="btn btn-grad btn-sm" onclick="openLink('${esc(q.link)}')"><i class="fas fa-eye"></i> View post</button>`
+      + `<button class="btn btn-ghost btn-sm" onclick="copyTrack('${esc(q.trackCode)}')"><i class="fas fa-copy"></i> Copy track</button>`;
+  }
+
+  return `<article class="quest-card ${feat}">
+    <div class="quest-cover">${badge}${pend}${bountyBadge}<span>${q.emoji||'🚀'}</span></div>
+    <div class="quest-body">
+      <div class="quest-meta">
+        <span class="quest-cat">${esc(q.cat||q.sponsor||'Quest')}</span>
+        ${q.sponsor&&q.cat?`<span style="font-size:0.6rem;color:var(--muted2);">${esc(q.sponsor)}</span>`:''}
+        ${q.reward?`<div class="quest-stats">${esc(q.reward)}</div>`:''}
+      </div>
+      <div class="quest-name">${esc(q.title)}</div>
+      <div class="quest-desc">${esc(q.description)}</div>
+      ${mode==='pending'?`<div style="font-size:0.7rem;color:var(--muted);margin-bottom:8px;">Track: <span class="track-code">${esc(q.trackCode)}</span></div>`:''}
+      <div class="quest-actions">${actions}</div>
+    </div>
+  </article>`;
+}
+
+function openLink(url){if(url)window.open(url,'_blank');else toast('No link set');}
+function copyTrack(c){navigator.clipboard.writeText(c).then(()=>toast('Track code copied'));}
+function shareQ(title,code){
+  const text=`Check out ${title} on SnappQuest${code?' · Track '+code:''}`;
+  if(navigator.share)navigator.share({title,text,url:location.href}).catch(()=>{});
+  else navigator.clipboard.writeText(text+' '+location.href).then(()=>toast('Copied'));
+}
+
+function showView(name){
+  ['discover','pending','boost','bounties'].forEach(v=>{
+    const el=$('view-'+v);
+    if(el) el.style.display = v===name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.bn-item').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
+  if(name==='pending' && !pendingQuests.length) loadPending();
+  if(name==='bounties') loadBounties();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function openLaunch(boost){
+  $('launchOverlay').classList.add('show');
+  $('launchForm').style.display='block';
+  $('payStep').style.display='none';
+  $('launchTitle').textContent=boost?'Boost a Quest':'Launch a Quest';
+  $('launchSub').textContent=boost
+    ? 'Pay $0.50 USDT → then submit to pending.'
+    : 'Free = share your Twitter/X link in Telegram (limited reach). Boost = fill the form and pay $0.50 for more reach.';
+}
+function closeLaunch(){$('launchOverlay').classList.remove('show');draft=null;}
+function backToForm(){$('payStep').style.display='none';$('launchForm').style.display='block';}
+
+
+function launchFree(){
+  $('freeConfirmOverlay').classList.add('show');
+}
+
+function closeFreeConfirm(){
+  $('freeConfirmOverlay').classList.remove('show');
+}
+
+function openTxUsed(){
+  $('txUsedOverlay').classList.add('show');
+}
+function closeTxUsed(){
+  $('txUsedOverlay').classList.remove('show');
+}
+function confirmTxSupport(){
+  closeTxUsed();
+  window.open('https://t.me/SnappQuest/42', '_blank');
+  toast('Contact admin on Telegram');
+}
+
+function confirmFreeLaunch(){
+  closeFreeConfirm();
+  closeLaunch();
+  window.open(PAY.telegramPending, '_blank');
+  toast('Share your Twitter/X link in Telegram');
+}
+
+async function startLaunch(boost){
+  const email=$('qEmail').value.trim();
+  const name=$('qName').value.trim();
+  const sponsor=$('qSponsor').value.trim();
+  const desc=$('qDesc').value.trim();
+  const web=$('qWeb').value.trim();
+  const tg=$('qTg').value.trim();
+  const x=$('qX').value.trim();
+if(!email||!name||!sponsor||!desc||!web||!tg){
+  toast('Fill email, title, sponsor, description, Twitter link & Telegram');
+  return;
+}
+
+// Only accept Twitter / X links
+const isTwitter = /^https?:\/\/(www\.)?(twitter\.com|x\.com)\//i.test(web);
+if(!isTwitter){
+  toast('Quest link must be a Twitter / X post (x.com or twitter.com)');
+  return;
+}
+
+// Prevent same Twitter/X link twice
+toast('Checking link…');
+const linkUsed = await isTwitterLinkAlreadyUsed(web);
+if(linkUsed){
+  toast('This Twitter/X link was already promoted');
+  openTxUsed(); // or make a separate “link already used” modal if you prefer
+  return;
+}
+
+draft={email,name,sponsor,desc,web,tg,x,boost,track:trackCode()};
+  if(!boost){
+    submitToGoogleForm(draft).then(()=>{
+      closeLaunch();
+      toast('Submitted · Track '+draft.track);
+      window.open(PAY.telegramPending,'_blank');
+      setTimeout(()=>{showView('pending');loadPending();},500);
+    }).catch(e=>toast('Submit error — try classic create.html'));
+    return;
+  }
+  $('launchForm').style.display='none';
+  $('payStep').style.display='block';
+  selectPayChain('polygon');
+  $('payLog').innerHTML='Send 0.50 USDT, then verify.';
+}
+
+async function submitToGoogleForm(d){
+  // entry IDs from create.html
+  const body=new URLSearchParams();
+  body.set('entry.2147360639', d.email);
+  body.set('entry.1526178092', d.name);
+  body.set('entry.884208731', d.sponsor);
+  body.set('entry.1178007064', d.desc);
+  body.set('entry.1547645284', d.boost ? '0.5 USDT' : '0');
+  body.set('entry.899075060', d.web);
+  body.set('entry.112634495', d.tg);
+  body.set('entry.1507763482', d.x||'');
+  body.set('entry.269247622', d.track);
+  body.set('entry.256576255', d.boost ? (d.txLink || d.txHash || '') : 'Standard Quest');
+  body.set('entry.1138659293', '1');
+  await fetch(SHEETS.CREATE_FORM, {method:'POST', mode:'no-cors', body});
+}
+
+function selectPayChain(chain){
+  payChain=chain;
+  $('btnPoly').classList.toggle('active',chain==='polygon');
+  $('btnSol').classList.toggle('active',chain==='solana');
+  const addr=chain==='polygon'?PAY.receiverPolygon:PAY.receiverSolana;
+  $('payAddr').textContent=addr;
+  $('payNet').textContent='on '+(chain==='polygon'?'Polygon':'Solana');
+  const qr=$('payQr');qr.innerHTML='';
+  try{QRCode.toCanvas(document.createElement('canvas'),addr,{width:132,margin:1,color:{dark:'#0e1020',light:'#fff'}},(e,c)=>{if(!e)qr.appendChild(c);});}catch(e){}
+}
+$('payCopy').addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText($('payAddr').textContent);$('payCopy').textContent='Copied';setTimeout(()=>$('payCopy').textContent='Copy',1500);}catch(e){}
+});
+function isValidSol(a){if(!a||a.startsWith('0x')||a.length<32||a.length>44)return false;return /^[1-9A-HJ-NP-Za-km-z]+$/.test(a.trim());}
+function payLog(h){const el=$('payLog');el.innerHTML+=h+'<br>';el.scrollTop=el.scrollHeight;}
+
+async function verifyBoostPayment(){
+  const wallet=$('payWallet').value.trim();
+  if(!wallet){payLog('<span class="lg-err">❌ Enter wallet</span>');return;}
+  if(payChain==='polygon'&&!wallet.startsWith('0x')){payLog('<span class="lg-err">❌ Need 0x address</span>');return;}
+  if(payChain==='solana'&&!isValidSol(wallet)){payLog('<span class="lg-err">❌ Invalid Solana address</span>');return;}
+  $('verifyBtn').disabled=true;
+  payLog('<span class="lg-warn"><span class="spinner"></span>Scanning '+payChain+'…</span>');
+  let ok=null;
+  try{ok=payChain==='polygon'?await verifyPolygon(wallet):await verifySolana(wallet);}catch(e){payLog('<span class="lg-err">❌ '+e.message+'</span>');}
+  if(ok){
+  const txHash = ok.tx || '';
+  const txLink = payChain === 'polygon'
+    ? 'https://polygonscan.com/tx/' + txHash
+    : 'https://solscan.io/tx/' + txHash;
+
+  payLog('<span class="lg-warn"><span class="spinner"></span>Checking if transaction was already used…</span>');
+
+  const alreadyUsed = await isTxAlreadyUsed(txHash);
+  if(alreadyUsed){
+  payLog('<span class="lg-err">❌ This transaction already exists</span>');
+  payLog('<span class="lg-info">Contact admin on Telegram for support</span>');
+  toast('This transaction already exists');
+  openTxUsed();
+  $('verifyBtn').disabled = false;
+  return;
+}
+
+  payLog('<span class="lg-ok">🔒 Verified · New transaction</span>');
+
+  draft.txHash = txHash;
+  draft.txLink = txLink;
+
+  try{ await submitToGoogleForm(draft); }catch(e){}
+  setTimeout(()=>{
+    closeLaunch();
+    toast('Boosted quest submitted · Track ' + draft.track);
+    showView('pending');
+    loadPending();
+  }, 1000);
+}else{
+    payLog('<span class="lg-info">No match yet — wait & retry</span>');
+    $('verifyBtn').disabled=false;
+  }
+}
+
+async function verifyPolygon(userWallet){
+  const receiver=PAY.receiverPolygon.toLowerCase();
+  const token=PAY.USDT_POLYGON.toLowerCase();
+  const url=`https://api.etherscan.io/v2/api?chainid=137&module=account&action=tokentx&address=${receiver}&contractaddress=${token}&page=1&offset=40&sort=desc&apikey=${PAY.etherscanKey}`;
+  const res=await fetch(url);const data=await res.json();
+  if(data.status!=='1'||!Array.isArray(data.result)){payLog('<span class="lg-err">❌ No transfers</span>');return null;}
+  const now=Date.now(),win=PAY.timeWindowMin*60*1000,user=userWallet.toLowerCase();
+  for(const tx of data.result){
+    const t=parseInt(tx.timeStamp)*1000;if(t<now-win)continue;
+    const amount=parseFloat(tx.value)/1e6;
+    if((tx.to||'').toLowerCase()!==receiver||(tx.from||'').toLowerCase()!==user)continue;
+    if(Math.abs(amount-PAY.amount)<=PAY.tolerance){payLog('<span class="lg-ok">✅ '+amount.toFixed(2)+' USDT</span>');return {tx:tx.hash};}
+  }
+  payLog('<span class="lg-err">❌ No matching 0.50 USDT</span>');return null;
+}
+
+async function verifySolana(userWallet){
+  if(!isValidSol(PAY.receiverSolana)||!isValidSol(userWallet)){payLog('<span class="lg-err">❌ Invalid address</span>');return null;}
+  const body={jsonrpc:'2.0',id:'sq',method:'getTransfersByAddress',params:[PAY.receiverSolana,{mint:PAY.USDT_SOLANA,direction:'in',with:userWallet.trim(),limit:20,sortOrder:'desc',filters:{blockTime:{gte:Math.floor(Date.now()/1000)-PAY.timeWindowMin*60}}}]};
+  const res=await fetch('https://mainnet.helius-rpc.com/?api-key='+PAY.heliusKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const data=await res.json();
+  if(data.error){payLog('<span class="lg-err">❌ Helius: '+(data.error.message||'err')+'</span>');return null;}
+  const transfers=data.result?.data||data.result||[];
+  for(const t of transfers){
+    let amount=t.uiAmount!=null?parseFloat(t.uiAmount):(t.amount!=null&&t.decimals!=null?parseFloat(t.amount)/Math.pow(10,t.decimals):parseFloat(t.amount));
+    if(amount==null||isNaN(amount))continue;
+    if(Math.abs(amount-PAY.amount)<=PAY.tolerance){payLog('<span class="lg-ok">✅ '+amount.toFixed(2)+' USDT</span>');return {tx:t.signature};}
+  }
+  payLog('<span class="lg-err">❌ No match</span>');return null;
+}
+
+$('launchOverlay').addEventListener('click',e=>{if(e.target===$('launchOverlay'))closeLaunch();});
+
+$('freeConfirmOverlay').addEventListener('click', e => {
+  if (e.target === $('freeConfirmOverlay')) closeFreeConfirm();
 });
 
-    // Modal Functions (kept for now)
-    function openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        modal.classList.add('is-open');
-    }
+$('txUsedOverlay').addEventListener('click', e => {
+  if (e.target === $('txUsedOverlay')) closeTxUsed();
+});
 
-    function closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        modal.classList.remove('is-open');
-    }
+document.getElementById('catBar').addEventListener('click', e => {
+  const btn = e.target.closest('.cat');
+  if (!btn) return;
+  document.querySelectorAll('.cat').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  activeCat = btn.dataset.cat;
+  livePage = 1;
+  renderLive();
+});
 
-    document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('modal')) {
-            event.target.classList.remove('is-open');
-        }
-    });
+loadLiveQuests();
 </script>
 </body>
-
 </html>

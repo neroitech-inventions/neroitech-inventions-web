@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+
+  <title>ZeroConnect – Live Demo</title>
+
+<link href="images/favicon.ico" rel="icon">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#06080f;--surface:#0c1019;--surface2:#121826;--surface3:#1a2235;
+      --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+      --green:#22c55e;--green-dim:rgba(34,197,94,0.12);--green-glow:rgba(34,197,94,0.28);
+      --red:#ef4444;--yellow:#eab308;--purple:#8b5cf6;--blue:#3b82f6;
+      --text:#f1f5f9;--muted:#64748b;--muted2:#475569;
+      --font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+    }
+    html,body{min-height:100%;}
+    body{background:var(--bg);font-family:var(--font);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 90% 50% at 50% -15%,rgba(34,197,94,0.09),transparent),radial-gradient(ellipse 50% 40% at 100% 80%,rgba(59,130,246,0.05),transparent);}
+    .page{position:relative;z-index:1;max-width:920px;margin:0 auto;padding:28px 16px 64px;}
+
+    .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px;}
+    .brand{display:flex;align-items:center;gap:12px;}
+    .brand-mark{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px var(--green-glow);font-size:17px;color:#052e16;}
+    .brand-name{font-size:1.2rem;font-weight:800;letter-spacing:-0.4px;}
+    .brand-name span{color:var(--green);}
+    .brand-tag{font-size:0.7rem;color:var(--muted);}
+    .top-links{display:flex;gap:10px;align-items:center;}
+    .top-links a{font-size:0.78rem;color:var(--muted);text-decoration:none;padding:7px 14px;border-radius:8px;border:1px solid var(--border);transition:all .15s;}
+    .top-links a:hover{color:var(--text);border-color:var(--border2);}
+    .top-links a.primary{background:var(--green-dim);color:var(--green);border-color:rgba(34,197,94,0.25);}
+
+    .hero{text-align:center;margin-bottom:32px;}
+    .hero h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;}
+    .hero h1 em{font-style:normal;color:var(--green);}
+    .hero p{font-size:0.92rem;color:var(--muted);max-width:460px;margin:0 auto 16px;}
+    .demo-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:0.65rem;padding:5px 12px;border-radius:20px;background:rgba(234,179,8,0.1);color:var(--yellow);border:1px solid rgba(234,179,8,0.3);}
+
+    .layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;}
+    @media(max-width:720px){.layout{grid-template-columns:1fr;}}
+
+    /* Explainer */
+    .explainer{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:22px;}
+    .explainer h2{font-size:0.95rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+    .step{display:flex;gap:12px;margin-bottom:14px;}
+    .step-num{width:26px;height:26px;border-radius:8px;background:var(--green-dim);color:var(--green);font-size:0.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .step-body h3{font-size:0.82rem;font-weight:600;margin-bottom:2px;}
+    .step-body p{font-size:0.72rem;color:var(--muted);line-height:1.4;}
+    .note{margin-top:16px;padding:12px;background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.2);border-radius:10px;font-size:0.72rem;color:var(--yellow);line-height:1.45;}
+
+    /* Widget card */
+    .widget-wrap{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;box-shadow:0 10px 36px rgba(0,0,0,0.3);}
+    .widget-label{font-family:var(--mono);font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+    .widget-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    .card-title{font-size:1.15rem;font-weight:700;letter-spacing:-0.3px;margin-bottom:3px;}
+    .card-sub{font-size:0.78rem;color:var(--muted);margin-bottom:20px;}
+    .chain-tabs{display:flex;background:var(--surface2);border-radius:11px;padding:3px;margin-bottom:18px;border:1px solid var(--border);}
+    .chain-tab{flex:1;padding:9px 10px;border:none;border-radius:8px;background:transparent;color:var(--muted);font-family:var(--font);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+    .chain-tab:hover{color:var(--text);}
+    .chain-tab.active{background:var(--surface3);color:var(--text);box-shadow:0 2px 6px rgba(0,0,0,0.2);}
+    .chain-tab.active.poly{color:var(--green);}
+    .chain-tab.active.sol{color:var(--purple);}
+    .field{margin-bottom:14px;}
+    .field-label{font-size:0.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;display:block;}
+    .field-input{width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--mono);font-size:0.85rem;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;}
+    .field-input:focus{border-color:rgba(34,197,94,0.5);box-shadow:0 0 0 3px var(--green-dim);}
+    .field-input::placeholder{color:var(--muted2);}
+    .field-input.locked{opacity:0.65;cursor:not-allowed;border-color:rgba(34,197,94,0.35)!important;background:rgba(34,197,94,0.04)!important;}
+    .field-input.valid{border-color:rgba(34,197,94,0.6)!important;}
+    .field-input.invalid{border-color:rgba(239,68,68,0.6)!important;}
+    .field-status{display:inline-flex;align-items:center;gap:4px;font-size:0.62rem;margin-top:4px;height:14px;}
+    .field-status.valid{color:var(--green);}
+    .field-status.invalid{color:var(--red);}
+    .field-status.hidden{display:none;}
+    .pay-box{background:linear-gradient(160deg,var(--surface2),var(--surface3));border:1px solid var(--border2);border-radius:14px;padding:16px;margin:16px 0 12px;}
+    .pay-amount{font-size:1.7rem;font-weight:700;color:var(--green);letter-spacing:-1px;text-align:center;line-height:1.1;}
+    .pay-network{font-family:var(--mono);font-size:0.65rem;color:var(--muted);text-align:center;margin-top:3px;margin-bottom:14px;}
+    .addr-row{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.3);padding:10px 12px;border-radius:9px;margin-bottom:12px;border:1px solid var(--border);}
+    .addr-text{flex:1;font-family:var(--mono);font-size:0.68rem;word-break:break-all;color:var(--green);line-height:1.35;}
+    .copy-btn{padding:7px 11px;background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,0.25);border-radius:7px;font-size:0.68rem;font-weight:600;cursor:pointer;flex-shrink:0;font-family:var(--font);}
+    #qrcode{display:flex;justify-content:center;margin:2px 0 6px;}
+    #qrcode canvas{border-radius:10px;background:#fff;padding:8px;}
+    .pay-hint{font-size:0.65rem;color:var(--muted);text-align:center;line-height:1.45;margin-top:6px;}
+    .btn{padding:13px 18px;border:none;border-radius:11px;font-family:var(--font);font-size:0.85rem;font-weight:600;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;justify-content:center;gap:7px;width:100%;}
+    .btn:active{transform:scale(0.98);}
+    .btn:disabled{opacity:0.35;cursor:not-allowed;pointer-events:none;}
+    .btn-primary{background:linear-gradient(135deg,#22c55e,#16a34a);color:#052e16;box-shadow:0 4px 18px var(--green-glow);}
+    .btn-primary:hover:not(:disabled){box-shadow:0 6px 24px rgba(34,197,94,0.4);transform:translateY(-1px);}
+    .btn-demo{background:linear-gradient(135deg,#eab308,#ca8a04);color:#422006;box-shadow:0 4px 18px rgba(234,179,8,0.25);margin-top:10px;}
+    .status-log{background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:12px 14px;min-height:48px;max-height:140px;overflow-y:auto;font-family:var(--mono);font-size:0.68rem;line-height:1.7;word-break:break-all;margin-top:14px;color:var(--muted);}
+    .lg-ok{color:var(--green);}.lg-err{color:var(--red);}.lg-warn{color:var(--yellow);}.lg-info{color:var(--muted);}
+    .spinner{display:inline-block;width:9px;height:9px;border:2px solid var(--green-dim);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin-right:4px;vertical-align:middle;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .sol-note{background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:9px;padding:9px 12px;font-size:0.65rem;color:var(--purple);margin-top:10px;display:none;line-height:1.45;}
+
+    .footer{margin-top:36px;text-align:center;font-size:0.68rem;color:var(--muted2);}
+    .footer a{color:var(--muted);text-decoration:none;}
+    .footer a:hover{color:var(--green);}
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <div class="top">
+      <div class="brand">
+        <div class="brand-mark"><i class="fas fa-wallet"></i></div>
+        <div>
+          <div class="brand-name">Zero<span>Connect</span></div>
+          <div class="brand-tag">No wallet connection needed</div>
+        </div>
+      </div>
+      <div class="top-links">
+        <a href="index.html"><i class="fas fa-magic"></i> Generator</a>
+        <a href="index.html" class="primary"><i class="fas fa-code"></i> Get the code</a>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1>See how <em>ZeroConnect</em> works</h1>
+      <p>Interactive demo of the payment flow. No real money is sent, this is a simulated experience.</p>
+      <div class="demo-badge"><i class="fas fa-flask"></i> DEMO MODE, simulated verification</div>
+    </div>
+
+    <div class="layout">
+
+      <!-- Left: How it works -->
+      <div class="explainer">
+        <h2><i class="fas fa-list-ol" style="color:var(--green);"></i> How it works</h2>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Customer enters amount + wallet</h3>
+            <p>They type how much USDT they want to pay and the address they'll send from.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>They send USDT normally</h3>
+            <p>Copy the receiver address (or scan QR) and send from any wallet, Phantom, MetaMask, etc.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Click "I paid, Verify"</h3>
+            <p>ZeroConnect checks the blockchain for a matching transfer in the last 45 minutes.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h3>Redirect on success</h3>
+            <p>Customer is sent to your success URL with tx hash, amount, and chain as query params.</p>
+          </div>
+        </div>
+        <div class="note">
+          <strong>This is a demo.</strong> Click "Simulate successful payment" to experience the full flow without sending real USDT.
+        </div>
+      </div>
+
+      <!-- Right: Live widget -->
+      <div class="widget-wrap">
+        <div class="widget-label"><i class="fas fa-desktop"></i> Live widget preview</div>
+
+        <div class="card-title">Pay with USDT</div>
+        <div class="card-sub">Send from any wallet, no connection required</div>
+
+        <div class="chain-tabs">
+          <button class="chain-tab poly active" id="btnPoly" onclick="selectChain('polygon')">
+            <i class="fas fa-hexagon" style="font-size:0.7rem;"></i> Polygon
+          </button>
+          <button class="chain-tab sol" id="btnSol" onclick="selectChain('solana')">
+            <i class="fas fa-sun" style="font-size:0.7rem;"></i> Solana
+          </button>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Amount (USDT)</label>
+          <input class="field-input" type="number" id="fldAmount" placeholder="25.00" step="0.01" min="0.01" value="10" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label class="field-label">Your sending wallet</label>
+          <input class="field-input" type="text" id="fldWallet" placeholder="0x… or Solana address" value="" spellcheck="false">
+          <div class="field-status hidden" id="statusWallet"></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Reference <span style="opacity:0.5;">(optional)</span></label>
+          <input class="field-input" type="text" id="fldRef" placeholder="Order #12345" value="DEMO-001">
+        </div>
+
+        <div id="payInstructions">
+          <div class="pay-box">
+            <div class="pay-amount" id="displayAmount">10.00 USDT</div>
+            <div class="pay-network" id="displayNetwork">USDT on Polygon</div>
+            <div class="addr-row">
+              <code class="addr-text" id="displayAddr">0x7F4bA3D2c19E8F5a6bD7C4E91f2A0B8d6E3cF1A9</code>
+              <button class="copy-btn" id="copyAddrBtn">Copy</button>
+            </div>
+            <div id="qrcode"></div>
+            <div class="pay-hint">In a real page this would be your receiver address + QR.</div>
+          </div>
+
+          <button class="btn btn-primary" id="checkBtn" disabled style="opacity:0.5;">
+            <i class="fas fa-check-circle"></i> I paid, Verify payment
+          </button>
+          <button class="btn btn-demo" id="simBtn">
+            <i class="fas fa-play"></i> Simulate successful payment
+          </button>
+          <div class="sol-note" id="solNote">Solana uses Helius for transfer detection.</div>
+        </div>
+
+        <div class="status-log" id="log">This is a demo. Click "Simulate successful payment" to see the success flow.</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      ZeroConnect · Open source · <a href="index.html">Generate your own widget</a> · <a href="https://niti.com.ng" target="_blank">Powered by Neroitech Inventions</a>
+    </div>
+  </div>
+
+<script>
+const DEMO = {
+  receiverPolygon: '0xC4e9F18A7bD36c5E2F0a91B8d7E4c3A6F2bD9e15',
+  receiverSolana:  'Gx7WmQ9tNc2YhR5PzLk8VdFs3UaJbE6iXn4CrMpTwHyZ',
+  successUrl: 'https://example.com/payment-success'
+};
+
+let selectedChain = 'polygon';
+const $ = id => document.getElementById(id);
+function log(html){const el=$('log');el.innerHTML+=html+'<br>';el.scrollTop=el.scrollHeight;}
+function clearLog(){$('log').innerHTML='';}
+function short(a){return a?a.slice(0,8)+'…'+a.slice(-4):'—';}
+
+function isValidPolygonAddress(addr){
+  if(!addr||typeof addr!=='string')return false;
+  const a=addr.trim();
+  if(!a.startsWith('0x'))return false;
+  if(a.length!==42)return false;
+  return /^0x[0-9a-fA-F]{40}$/.test(a);
+}
+
+function isValidSolanaAddress(addr){
+  if(!addr||typeof addr!=='string')return false;
+  const a=addr.trim();
+  if(a.startsWith('0x'))return false;
+  if(a.length<32||a.length>44)return false;
+  return /^[1-9A-HJ-NP-Za-km-z]+$/.test(a);
+}
+
+function validateWallet(wallet,chain){
+  return chain==='polygon'?isValidPolygonAddress(wallet):isValidSolanaAddress(wallet);
+}
+
+function updateWalletStatus(){
+  const wallet=$('fldWallet').value.trim();
+  const statusEl=$('statusWallet');
+  const walletInput=$('fldWallet');
+  
+  if(!wallet){
+    walletInput.classList.remove('valid','invalid');
+    statusEl.classList.add('hidden');
+    return;
+  }
+  
+  const isValid=validateWallet(wallet,selectedChain);
+  statusEl.classList.remove('hidden');
+  
+  if(isValid){
+    walletInput.classList.remove('invalid');
+    walletInput.classList.add('valid');
+    statusEl.classList.remove('invalid');
+    statusEl.classList.add('valid');
+    statusEl.innerHTML='<i class="fas fa-check-circle"></i> Valid address';
+  }else{
+    walletInput.classList.remove('valid');
+    walletInput.classList.add('invalid');
+    statusEl.classList.remove('valid');
+    statusEl.classList.add('invalid');
+    statusEl.innerHTML='<i class="fas fa-exclamation-circle"></i> Invalid address';
+  }
+}
+
+function selectChain(chain){
+  selectedChain=chain;
+  $('btnPoly').classList.toggle('active',chain==='polygon');
+  $('btnSol').classList.toggle('active',chain==='solana');
+  $('solNote').style.display=chain==='solana'?'block':'none';
+  updateWalletStatus();
+  updateUI();
+}
+
+function updateUI(){
+  const amount=parseFloat($('fldAmount').value)||0;
+  const receiver=selectedChain==='polygon'?DEMO.receiverPolygon:DEMO.receiverSolana;
+  $('displayAmount').textContent=(amount||0).toFixed(2)+' USDT';
+  $('displayNetwork').textContent='USDT on '+(selectedChain==='polygon'?'Polygon':'Solana');
+  $('displayAddr').textContent=receiver;
+  const qrEl=$('qrcode');qrEl.innerHTML='';
+  try{
+    QRCode.toCanvas(document.createElement('canvas'),receiver,{width:130,margin:1,color:{dark:'#0e1320',light:'#ffffff'}},(err,canvas)=>{if(!err)qrEl.appendChild(canvas);});
+  }catch(e){}
+}
+
+['fldAmount','fldWallet'].forEach(id=>{
+  if(id==='fldWallet'){
+    $(id).addEventListener('input',()=>{updateWalletStatus();updateUI();});
+  }else{
+    $(id).addEventListener('input',updateUI);
+  }
+});
+
+$('copyAddrBtn').addEventListener('click',async()=>{
+  try{
+    await navigator.clipboard.writeText($('displayAddr').textContent);
+    const btn=$('copyAddrBtn');const old=btn.textContent;
+    btn.textContent='Copied';setTimeout(()=>btn.textContent=old,1500);
+  }catch(e){}
+});
+
+$('simBtn').addEventListener('click',()=>{
+  clearLog();
+  const amount=parseFloat($('fldAmount').value)||10;
+  const wallet=$('fldWallet').value.trim()||'0xDemo…';
+  const ref=$('fldRef').value.trim();
+
+  log('<span class="lg-warn"><span class="spinner"></span>Scanning blockchain (simulated)…</span>');
+  setTimeout(()=>{
+    log('<span class="lg-ok">✅ Matched '+amount.toFixed(2)+' USDT (just now)</span>');
+    log('<span class="lg-info">TX: 0xdemo…success</span>');
+    log('<span class="lg-ok">🔒 Verified. Redirecting in 2 seconds…</span>');
+    setTimeout(()=>{
+      const url=new URL(DEMO.successUrl);
+      url.searchParams.set('tx','0xdemo_simulated_tx_hash');
+      url.searchParams.set('amount',amount.toFixed(2));
+      url.searchParams.set('chain',selectedChain);
+      url.searchParams.set('wallet',wallet);
+      if(ref)url.searchParams.set('ref',ref);
+      log('<span class="lg-info">Would redirect to:</span>');
+      log('<span class="lg-ok">'+url.toString()+'</span>');
+      log('<span class="lg-info">In production the customer lands on your success page.</span>');
+    },1800);
+  },1200);
+});
+
+selectChain('polygon');
+updateUI();
+updateWalletStatus();
+</script>
+</body>
+</html>
