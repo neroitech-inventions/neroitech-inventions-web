@@ -20,6 +20,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{
@@ -446,6 +447,13 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 function trackCode(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let r='';for(let i=0;i<8;i++)r+=c[Math.floor(Math.random()*c.length)];return r;}
 function short(a){return a?a.slice(0,6)+'…'+a.slice(-4):'—';}
 
+function parseExpiry(str) {
+  if (!str) return null;
+  // Supports: 2026-08-07 19:29  or  2026-08-07
+  const d = new Date(String(str).trim().replace(' ', 'T'));
+  return isNaN(d.getTime()) ? null : d;
+}
+
 async function isTxAlreadyUsed(txHash){
   if(!txHash) return false;
   const hash = String(txHash).trim().toLowerCase();
@@ -473,29 +481,51 @@ async function isTxAlreadyUsed(txHash){
 function normalizeTwitterUrl(url){
   if(!url) return '';
   let u = String(url).trim().toLowerCase();
-  // treat x.com and twitter.com the same
+  u = u.replace(/^http:\/\//, 'https://');
   u = u.replace('https://twitter.com/', 'https://x.com/');
-  u = u.replace('http://twitter.com/', 'https://x.com/');
-  u = u.replace('http://x.com/', 'https://x.com/');
-  // remove trailing slash and query/hash
+  u = u.replace('https://www.twitter.com/', 'https://x.com/');
+  u = u.replace('https://www.x.com/', 'https://x.com/');
   u = u.split('?')[0].split('#')[0].replace(/\/$/, '');
   return u;
+}
+
+function twitterStatusId(url){
+  const m = normalizeTwitterUrl(url).match(/\/status\/(\d+)/);
+  return m ? m[1] : '';
 }
 
 async function isTwitterLinkAlreadyUsed(link){
   if(!link) return false;
   const target = normalizeTwitterUrl(link);
+  const targetId = twitterStatusId(link);
   if(!target) return false;
+
   try{
     const [pending, listed] = await Promise.all([
       fetchSheet(SHEETS.PENDING_ID, SHEETS.PENDING_RANGE),
       fetchSheet(SHEETS.QUESTS_ID, SHEETS.QUESTS_RANGE)
     ]);
     const allRows = [...pending, ...listed];
+    const linkKeys = ['Link', 'Quest link', 'Twitter / X post link', 'Website', 'URL', 'Web'];
+
     for(const row of allRows){
       for(const key of Object.keys(row)){
-        const val = normalizeTwitterUrl(row[key]);
-        if(val && (val === target || val.includes(target) || target.includes(val))) return true;
+        const isLikelyLinkCol = linkKeys.some(k => key.toLowerCase().includes(k.toLowerCase()))
+          || /link|url|web|twitter|x post/i.test(key);
+
+        const raw = String(row[key] || '').trim();
+        if(!raw || raw.length < 12) continue;
+        if(!/x\.com|twitter\.com/i.test(raw) && !isLikelyLinkCol) continue;
+
+        const val = normalizeTwitterUrl(raw);
+        if(!val) continue;
+
+        if(val === target) return true;
+
+        if(targetId){
+          const id = twitterStatusId(raw);
+          if(id && id === targetId) return true;
+        }
       }
     }
     return false;
@@ -525,26 +555,33 @@ async function loadLiveQuests(){
   el.innerHTML='<div class="loading"><span class="spinner"></span> Loading featured quests…</div>';
   try{
     const rows=await fetchSheet(SHEETS.QUESTS_ID, SHEETS.QUESTS_RANGE);
-liveQuests=rows.map(q=>{
-  const status=parseInt(q.Status)||0;
-  const title=q.Title||'Untitled';
-  const description=q.Description||'';
-  const cat=classifyQuest(title, description);
+liveQuests = rows.map(q => {
+  const status = parseInt(q.Status) || 0;
+  const title = q.Title || 'Untitled';
+  const description = q.Description || '';
+  const cat = classifyQuest(title, description);
+
+  const expiryRaw = q.Deadline || '';
+  const expiryDate = parseExpiry(expiryRaw);
+  const isExpired = expiryDate && expiryDate < new Date();
+
   return {
-    id:parseInt(q.ID)||0,
+    id: parseInt(q.ID) || 0,
     title,
-    sponsor:q.Sponsor||'',
+    sponsor: q.Sponsor || '',
     description,
-    reward:q.Reward||'',
-    link:q.Link||'',
-    trackCode:q['Track Code']||'',
+    reward: q.Reward || '',
+    link: q.Link || '',
+    trackCode: q['Track Code'] || '',
     statusCode: status,
     status: status === 0 ? 'live' : 'done',
     featured: status === 0,
     cat,
-    emoji:CAT_EMOJI[cat]||'🚀'
+    emoji: CAT_EMOJI[cat] || '🚀',
+    expiry: expiryRaw,
+    isExpired
   };
-}).filter(q => q.status === 'live'); // only Status 0
+}).filter(q => q.status === 'live' && !q.isExpired); // Status 0 + not expired
     livePage = 1;
     renderLive();
   }catch(e){
@@ -686,8 +723,8 @@ bountyQuests = rows.map(q => {
 
   // Column H = expiry date (header name may vary)
   const expiryRaw = q.Deadline || q.Expiry || q.Expiration || q['Expiry Date'] || q['End Date'] || q['Expires'] || '';
-  const expiryDate = expiryRaw ? new Date(expiryRaw) : null;
-  const isExpired = expiryDate && !isNaN(expiryDate.getTime()) && expiryDate < new Date();
+const expiryDate = parseExpiry(expiryRaw);
+const isExpired = expiryDate && expiryDate < new Date();
 
   return {
     id: parseInt(q.ID) || 0,
@@ -796,12 +833,13 @@ function cardHTML(q, mode){
   } else if (mode === 'bounty') {
     actions = `<button class="btn btn-grad btn-sm" onclick="openLink('${esc(q.link)}')"><i class="fas fa-gift"></i> View Bounty</button>`
       + `<button class="btn btn-ghost btn-sm" onclick="copyTrack('${esc(q.trackCode)}')"><i class="fas fa-copy"></i> Copy track</button>`;
-  } else {
-    actions = `<button class="btn btn-grad btn-sm" onclick="openLink('${esc(q.link)}')"><i class="fas fa-eye"></i> View post</button>`
-      + `<button class="btn btn-ghost btn-sm" onclick="copyTrack('${esc(q.trackCode)}')"><i class="fas fa-copy"></i> Copy track</button>`;
-  }
+} else {
+  actions = `<button class="btn btn-grad btn-sm" onclick="openLink('${esc(q.link)}')"><i class="fas fa-eye"></i> View post</button>`
+    + `<button class="btn btn-ghost btn-sm" onclick="copyTrack('${esc(q.trackCode)}')"><i class="fas fa-copy"></i> Copy track</button>`
+    + `<button class="btn btn-ghost btn-sm" onclick="shareCard(this)"><i class="fas fa-share-nodes"></i> Share</button>`;
+}
 
-  return `<article class="quest-card ${feat}">
+return `<article class="quest-card ${feat}" data-track="${esc(q.trackCode)}">
     <div class="quest-cover">${badge}${pend}${bountyBadge}<span>${q.emoji||'🚀'}</span></div>
     <div class="quest-body">
       <div class="quest-meta">
@@ -819,6 +857,39 @@ function cardHTML(q, mode){
 
 function openLink(url){if(url)window.open(url,'_blank');else toast('No link set');}
 function copyTrack(c){navigator.clipboard.writeText(c).then(()=>toast('Track code copied'));}
+
+async function shareCard(btn){
+  const card = btn.closest('.quest-card');
+  if(!card){ toast('Card not found'); return; }
+
+  toast('Creating image…');
+  try{
+    const canvas = await html2canvas(card, {
+      backgroundColor: '#0e1020',
+      scale: 2,
+      useCORS: true,
+      logging: false
+    });
+
+    canvas.toBlob((blob) => {
+      if(!blob){ toast('Could not create image'); return; }
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'snappquest-featured.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast('Image downloaded');
+    }, 'image/png');
+  }catch(e){
+    console.error(e);
+    toast('Download failed');
+  }
+}
+
 function shareQ(title,code){
   const text=`Check out ${title} on SnappQuest${code?' · Track '+code:''}`;
   if(navigator.share)navigator.share({title,text,url:location.href}).catch(()=>{});
