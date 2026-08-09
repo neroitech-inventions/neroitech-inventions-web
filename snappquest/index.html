@@ -834,8 +834,8 @@ function cardHTML(q, mode){
     actions = `<button class="btn btn-grad btn-sm" onclick="openLink('${esc(q.link)}')"><i class="fas fa-gift"></i> View Bounty</button>`
       + `<button class="btn btn-ghost btn-sm" onclick="copyTrack('${esc(q.trackCode)}')"><i class="fas fa-copy"></i> Copy track</button>`;
 } else {
-  actions = `<button class="btn btn-grad btn-sm" onclick="openLink('${esc(q.link)}')"><i class="fas fa-eye"></i> View post</button>`
-    + `<button class="btn btn-ghost btn-sm" onclick="copyTrack('${esc(q.trackCode)}')"><i class="fas fa-copy"></i> Copy track</button>`
+  actions = `<button class="btn btn-grad btn-sm" onclick="openLink('${esc(q.link)}')"><i class="fas fa-eye"></i> View</button>`
+    + `<button class="btn btn-ghost btn-sm" onclick="copyTrack('${esc(q.trackCode)}')"><i class="fas fa-copy"></i> Copy</button>`
     + `<button class="btn btn-ghost btn-sm" onclick="shareCard(this)"><i class="fas fa-share-nodes"></i> Share</button>`;
 }
 
