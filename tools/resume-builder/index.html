@@ -119,6 +119,24 @@
               class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white">
           </div>
 
+          <div>
+            <label class="text-sm text-slate-300 block mb-2">Font Size</label>
+            <input type="range" id="fontSizeControl" min="12" max="18" value="14" step="0.5"
+              class="w-full" onchange="document.getElementById('fontSizeDisplay').textContent = this.value; generateResume(); saveDraft()">
+            <div class="text-xs text-slate-400 mt-1">
+              <span id="fontSizeDisplay">14</span>px
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-300 block mb-2">Line Height</label>
+            <input type="range" id="lineHeightControl" min="1" max="2" value="1.6" step="0.1"
+              class="w-full" onchange="document.getElementById('lineHeightDisplay').textContent = this.value; generateResume(); saveDraft()">
+            <div class="text-xs text-slate-400 mt-1">
+              <span id="lineHeightDisplay">1.6</span>
+            </div>
+          </div>
+
 <div>
   <label class="text-sm text-slate-300">Choose Font</label>
   <select id="fontSelector" 
@@ -246,22 +264,29 @@
           </div>
 
           <div>
-            <label class="text-sm text-slate-300">Experience</label>
-            <p class="text-xs text-slate-500 mt-1 mb-1">Tip: Use **text** to make job titles bold</p>
-            <textarea id="experience" rows="6"
-              placeholder="**Frontend Developer** - Company
-Jan 2023 – Present
-- Built amazing products"
-              class="w-full mt-1 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
+            <label class="text-sm text-slate-300 block mb-2">Experience</label>
+            <p class="text-xs text-slate-500 mb-2">Tip: Use **text** to make job titles bold</p>
+            <div id="jobsContainer" class="space-y-3">
+              <div class="job-entry bg-slate-800 p-3 rounded-xl">
+                <textarea placeholder="**Frontend Developer** - Company&#10;Jan 2023 – Present&#10;- Built amazing products" 
+                  rows="4" class="job-textarea w-full p-2 rounded bg-slate-900 border border-slate-700 text-white text-sm outline-none mb-2"></textarea>
+                <button onclick="removeJob(this)" class="text-xs bg-red-600/80 text-white px-2 py-1 rounded hover:bg-red-700">Remove Job</button>
+              </div>
+            </div>
+            <button onclick="addJob()" class="text-xs bg-cyan-600 text-white px-3 py-2 rounded mt-3 hover:bg-cyan-700 font-bold">+ Add Another Job</button>
           </div>
 
           <div>
-            <label class="text-sm text-slate-300">Education</label>
-            <p class="text-xs text-slate-500 mt-1 mb-1">Tip: Use **text** to make degree bold</p>
-            <textarea id="education" rows="4"
-              placeholder="**B.Sc Computer Science** - University
-2018 – 2022"
-              class="w-full mt-1 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
+            <label class="text-sm text-slate-300 block mb-2">Education</label>
+            <p class="text-xs text-slate-500 mb-2">Tip: Use **text** to make degree bold</p>
+            <div id="degreesContainer" class="space-y-3">
+              <div class="degree-entry bg-slate-800 p-3 rounded-xl">
+                <textarea placeholder="**B.Sc Computer Science** - University&#10;2018 – 2022" 
+                  rows="3" class="degree-textarea w-full p-2 rounded bg-slate-900 border border-slate-700 text-white text-sm outline-none mb-2"></textarea>
+                <button onclick="removeDegree(this)" class="text-xs bg-red-600/80 text-white px-2 py-1 rounded hover:bg-red-700">Remove Degree</button>
+              </div>
+            </div>
+            <button onclick="addDegree()" class="text-xs bg-cyan-600 text-white px-3 py-2 rounded mt-3 hover:bg-cyan-700 font-bold">+ Add Another Degree</button>
           </div>
 
           <!-- Templates -->
@@ -366,6 +391,49 @@ Jan 2023 – Present
       }
     });
 
+    // Job and Degree Management
+    function addJob() {
+      const container = document.getElementById('jobsContainer');
+      const entry = document.createElement('div');
+      entry.className = 'job-entry bg-slate-800 p-3 rounded-xl';
+      entry.innerHTML = `
+        <textarea placeholder="**Job Title** - Company&#10;Dates&#10;- Achievement" 
+          rows="4" class="job-textarea w-full p-2 rounded bg-slate-900 border border-slate-700 text-white text-sm outline-none mb-2"></textarea>
+        <button onclick="removeJob(this)" class="text-xs bg-red-600/80 text-white px-2 py-1 rounded hover:bg-red-700">Remove Job</button>
+      `;
+      container.appendChild(entry);
+      entry.querySelector('textarea').addEventListener('input', () => { generateResume(); saveDraft(); });
+      generateResume();
+      saveDraft();
+    }
+
+    function removeJob(btn) {
+      btn.closest('.job-entry').remove();
+      generateResume();
+      saveDraft();
+    }
+
+    function addDegree() {
+      const container = document.getElementById('degreesContainer');
+      const entry = document.createElement('div');
+      entry.className = 'degree-entry bg-slate-800 p-3 rounded-xl';
+      entry.innerHTML = `
+        <textarea placeholder="**Degree** - University&#10;Year" 
+          rows="3" class="degree-textarea w-full p-2 rounded bg-slate-900 border border-slate-700 text-white text-sm outline-none mb-2"></textarea>
+        <button onclick="removeDegree(this)" class="text-xs bg-red-600/80 text-white px-2 py-1 rounded hover:bg-red-700">Remove Degree</button>
+      `;
+      container.appendChild(entry);
+      entry.querySelector('textarea').addEventListener('input', () => { generateResume(); saveDraft(); });
+      generateResume();
+      saveDraft();
+    }
+
+    function removeDegree(btn) {
+      btn.closest('.degree-entry').remove();
+      generateResume();
+      saveDraft();
+    }
+
     function formatText(text) {
       if (!text) return '';
       return text
@@ -423,6 +491,22 @@ Jan 2023 – Present
       document.querySelectorAll('.section-checkbox').forEach(cb => {
         sectionVisibility[cb.dataset.section] = cb.checked;
       });
+
+      // Collect all jobs
+      const jobs = [];
+      document.querySelectorAll('.job-textarea').forEach(ta => {
+        if (ta.value.trim()) {
+          jobs.push(ta.value);
+        }
+      });
+
+      // Collect all degrees
+      const degrees = [];
+      document.querySelectorAll('.degree-textarea').forEach(ta => {
+        if (ta.value.trim()) {
+          degrees.push(ta.value);
+        }
+      });
       
       return {
         name: document.getElementById('name').value,
@@ -434,11 +518,13 @@ Jan 2023 – Present
         twitter: document.getElementById('twitter').value,
         summary: document.getElementById('summary').value,
         skills: document.getElementById('skills').value,
-        experience: document.getElementById('experience').value,
-        education: document.getElementById('education').value,
+        jobs: jobs,
+        degrees: degrees,
         font: document.getElementById('fontSelector').value,
         theme: document.getElementById('themeColor').value,
         spacing: document.getElementById('spacingSelector').value,
+        fontSize: document.getElementById('fontSizeControl').value,
+        lineHeight: document.getElementById('lineHeightControl').value,
         template: activeTemplate,
         sectionsOrder: sectionsOrder,
         sectionVisibility: sectionVisibility
@@ -452,7 +538,7 @@ Jan 2023 – Present
       let saved;
       try { saved = JSON.parse(raw); } catch (e) { return; }
 
-      ['name', 'title', 'email', 'phone', 'location', 'linkedin', 'twitter', 'summary', 'skills', 'experience', 'education'].forEach(id => {
+      ['name', 'title', 'email', 'phone', 'location', 'linkedin', 'twitter', 'summary', 'skills'].forEach(id => {
         const el = document.getElementById(id);
         if (el && saved[id] !== undefined) el.value = saved[id];
       });
@@ -460,8 +546,42 @@ Jan 2023 – Present
       if (saved.font) document.getElementById('fontSelector').value = saved.font;
       if (saved.theme) document.getElementById('themeColor').value = saved.theme;
       if (saved.spacing) document.getElementById('spacingSelector').value = saved.spacing;
+      if (saved.fontSize) document.getElementById('fontSizeControl').value = saved.fontSize;
+      if (saved.lineHeight) document.getElementById('lineHeightControl').value = saved.lineHeight;
       if (saved.template) activeTemplate = saved.template;
       if (saved.imageData) window._savedProfileImage = saved.imageData;
+
+      // Restore jobs
+      if (saved.jobs && saved.jobs.length > 0) {
+        const jobContainer = document.getElementById('jobsContainer');
+        jobContainer.innerHTML = '';
+        saved.jobs.forEach(job => {
+          const entry = document.createElement('div');
+          entry.className = 'job-entry bg-slate-800 p-3 rounded-xl';
+          entry.innerHTML = `
+            <textarea rows="4" class="job-textarea w-full p-2 rounded bg-slate-900 border border-slate-700 text-white text-sm outline-none mb-2">${job}</textarea>
+            <button onclick="removeJob(this)" class="text-xs bg-red-600/80 text-white px-2 py-1 rounded hover:bg-red-700">Remove Job</button>
+          `;
+          jobContainer.appendChild(entry);
+          entry.querySelector('textarea').addEventListener('input', () => { generateResume(); saveDraft(); });
+        });
+      }
+
+      // Restore degrees
+      if (saved.degrees && saved.degrees.length > 0) {
+        const degreeContainer = document.getElementById('degreesContainer');
+        degreeContainer.innerHTML = '';
+        saved.degrees.forEach(degree => {
+          const entry = document.createElement('div');
+          entry.className = 'degree-entry bg-slate-800 p-3 rounded-xl';
+          entry.innerHTML = `
+            <textarea rows="3" class="degree-textarea w-full p-2 rounded bg-slate-900 border border-slate-700 text-white text-sm outline-none mb-2">${degree}</textarea>
+            <button onclick="removeDegree(this)" class="text-xs bg-red-600/80 text-white px-2 py-1 rounded hover:bg-red-700">Remove Degree</button>
+          `;
+          degreeContainer.appendChild(entry);
+          entry.querySelector('textarea').addEventListener('input', () => { generateResume(); saveDraft(); });
+        });
+      }
 
       // Restore section order
       if (saved.sectionsOrder) {
@@ -487,6 +607,8 @@ Jan 2023 – Present
         });
       }
 
+      document.getElementById('fontSizeDisplay').textContent = saved.fontSize || '14';
+      document.getElementById('lineHeightDisplay').textContent = saved.lineHeight || '1.6';
       generateResume();
       changeFont();
     }
@@ -544,11 +666,26 @@ Jan 2023 – Present
       const twitter = document.getElementById('twitter').value;
       const summary = document.getElementById('summary').value || 'Professional summary goes here.';
       const skills = document.getElementById('skills').value || 'HTML, CSS, JavaScript';
-      const experience = document.getElementById('experience').value || 'Your experience goes here.';
-      const education = document.getElementById('education').value || 'Your education goes here.';
       const skillsArray = skills.split(',').filter(s => s.trim());
       const themeColor = document.getElementById('themeColor').value;
       const spacing = document.getElementById('spacingSelector').value;
+      const fontSize = document.getElementById('fontSizeControl').value || '14';
+      const lineHeight = document.getElementById('lineHeightControl').value || '1.6';
+
+      // Collect all jobs and degrees
+      const jobs = [];
+      document.querySelectorAll('.job-textarea').forEach(ta => {
+        if (ta.value.trim()) {
+          jobs.push(ta.value);
+        }
+      });
+
+      const degrees = [];
+      document.querySelectorAll('.degree-textarea').forEach(ta => {
+        if (ta.value.trim()) {
+          degrees.push(ta.value);
+        }
+      });
 
       // Get section visibility from checkboxes
       const sectionVisibility = {};
@@ -628,7 +765,7 @@ Jan 2023 – Present
         summary: () => sectionVisibility.summary ? `
           <div class="resume-section ${sectionSpacing}">
             <h2 class="text-2xl font-bold ${headingMargin}">Professional Summary</h2>
-            <p class="${textLeading} opacity-80">${formatText(summary)}</p>
+            <p class="${textLeading} opacity-80" style="font-size: ${fontSize}px; line-height: ${lineHeight};">${formatText(summary)}</p>
           </div>` : '',
 
         skills: () => sectionVisibility.skills && skillsArray.length > 0 ? `
@@ -642,16 +779,16 @@ Jan 2023 – Present
             </div>
           </div>` : '',
 
-        experience: () => sectionVisibility.experience ? `
+        experience: () => sectionVisibility.experience && jobs.length > 0 ? `
           <div class="resume-section ${sectionSpacing}">
             <h2 class="text-2xl font-bold ${headingMargin}">Experience</h2>
-            <p class="${textLeading} opacity-90">${formatText(experience)}</p>
+            ${jobs.map(job => `<p class="${textLeading} opacity-90 mb-4" style="font-size: ${fontSize}px; line-height: ${lineHeight};">${formatText(job)}</p>`).join('')}
           </div>` : '',
 
-        education: () => sectionVisibility.education ? `
+        education: () => sectionVisibility.education && degrees.length > 0 ? `
           <div class="resume-section ${sectionSpacing}">
             <h2 class="text-2xl font-bold ${headingMargin}">Education</h2>
-            <p class="${textLeading} opacity-90">${formatText(education)}</p>
+            ${degrees.map(degree => `<p class="${textLeading} opacity-90 mb-3" style="font-size: ${fontSize}px; line-height: ${lineHeight};">${formatText(degree)}</p>`).join('')}
           </div>` : ''
       };
 
