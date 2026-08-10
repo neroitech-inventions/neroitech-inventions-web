@@ -9,8 +9,7 @@
   gtag('js', new Date());
   gtag('config', 'G-QM106YDX6N');
 </script>
-<script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.js"></script>
-<script defer data-domain="niti.com.ng" src="https://analytics.vgdh.io/js/script.tagged-events.outbound-links.file-downloads.hash.pageview-props.revenue.js"></script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Cross-Chain Bridge: Polygon ↔ Solana</title>
 <link href="images/favicon.ico" rel="icon">
@@ -529,7 +528,7 @@
 
   <!-- TOP BAR -->
   <div class="top-bar">
-    <div class="logo-box"><img src="images/verse_logo.svg" alt="Verse Logo" width="25" height="25"></div>
+    <div class="logo-box"><img src="images/favicon.ico" alt="Verse Logo" width="25" height="25"></div>
     <div class="top-title">
       <h1>Cross-Chain Bridge</h1>
       <p id="topSubtitle">Polygon & Solana Mainnet</p>
@@ -1588,7 +1587,7 @@ async function loadGateConfig() {
                     $feeDisplay.innerHTML = `<span style="color:var(--muted)">Use access code below</span>`;
                     $payFeeBtn.style.display = 'none';
                 } else {
-                    $feeDisplay.innerHTML = `<span style="color:var(--green);font-size:1.2rem;font-weight:500">${feeAmountUSDT.toLocaleString()} VERSE</span>`;
+                    $feeDisplay.innerHTML = `<span style="color:var(--green);font-size:1.2rem;font-weight:500">$${feeAmountUSDT.toLocaleString()} USDT</span>`;
                 }
             }
         }

@@ -1,737 +1,1528 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-QM106YDX6N');
-</script>
-
-     <title>Neroitech Inventions - Driving Growth Through Innovation</title>
-<!-- 
-Neroitech Inventions (NITI)
--->
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-     <meta name="description" content="We drive growth with digital innovation and cutting-edge solutions, empowering transformation and success. Our vision is to lead digital transformation and unlock limitless possibilities for our clients.">
-     <meta name="keywords" content="Neroitech Inventions, Neroitech, NITI">
-     <meta name="author" content="Neroitech Inventions">   
-     <meta content="Neroitech Inventions" name="keywords">
-     <meta content="As an award-winning Nigerian IT firm since 2016, we redefine industries and empower growth through digital innovation." name="description">
+     <meta name="description" content="We drive growth with digital innovation and cutting-edge solutions, empowering transformation and success.">
+     <meta name="keywords" content="Neroitech Inventions, Digital Innovation, IT Solutions, Web3">
+     <meta name="author" content="Neroitech Inventions">
+     
+     <title>Neroitech Inventions - Digital Innovation & Growth</title>
 
-     <meta property="og:image:secure_url" content="images/home-bg-meta.png"/> 
-     <meta property="og:title" content="Neroitech Inventions">
-     <meta property="og:description" content="We drive growth with digital innovation and cutting-edge solutions, empowering transformation and success. Our vision is to lead digital transformation and unlock limitless possibilities for our clients.">
-     <meta property="og:url" content="https://niti.com.ng">
-     <meta property="og:image:type" content="image/png">
-     <meta property="og:image:width" content="1892">
-     <meta property="og:image:height" content="899">
-     <meta property="og:image:alt" content="Neroitech Inventions - Driving Growth Through Innovation"/>
-     <meta property="og:image" content="https://niti.com.ng/images/home-bg-meta.png">
-     <meta property="og:type" content="website">
-     <meta name="twitter:card" content="Neroitech Inventions">
-     <meta name="twitter:site" content="Neroitech Inventions">
-     <meta name="twitter:title" content="Neroitech Inventions">
-     <meta name="twitter:description" content="We drive growth with digital innovation and cutting-edge solutions, empowering transformation and success. Our vision is to lead digital transformation and unlock limitless possibilities for our clients.">
-     <meta name="twitter:image" content="https://niti.com.ng/images/home-bg-meta.png">
-     <meta name="twitter:image:width" content="1200">
-     <meta name="twitter:image:height" content="630">
-     <meta name="twitter:image:alt" content="Neroitech Inventions">
-     <meta name="next-size-adjust">
-   
-       <!-- Favicon -->
-       <link href="images/favicon.ico" rel="icon">
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+     <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-QM106YDX6N');
+     </script>
 
-     <link rel="stylesheet" href="css/bootstrap.min.css">
-     <link rel="stylesheet" href="css/magnific-popup.css">
-     <link rel="stylesheet" href="css/font-awesome.min.css">
+     <!-- Favicon -->
+     <link href="images/favicon.ico" rel="icon">
      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-     <!-- MAIN CSS -->
-     <link rel="stylesheet" href="css/neroitech-inventions-style.css">
+     <style>
+          * {
+               margin: 0;
+               padding: 0;
+               box-sizing: border-box;
+          }
 
+          :root {
+               --bg-dark: #0B0F1A;
+               --bg-darker: #06080F;
+               --bg-card: #12182B;
+               --bg-card-hover: #1A2138;
+               --accent: #38BDF8;
+               --accent-secondary: #A78BFA;
+               --accent-glow: rgba(56, 189, 248, 0.28);
+               --text-primary: #F1F5F9;
+               --text-secondary: #94A3B8;
+               --text-tertiary: #64748B;
+               --border: #1E293B;
+               --border-light: #334155;
+          }
+
+          html {
+               scroll-behavior: smooth;
+          }
+
+          body {
+               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+               color: var(--text-primary);
+               background: var(--bg-dark);
+               line-height: 1.6;
+               overflow-x: hidden;
+               -webkit-font-smoothing: antialiased;
+          }
+
+          /* Typography */
+          h1 { font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.12; letter-spacing: -0.035em; }
+          h2 { font-size: clamp(2rem, 4vw, 2.85rem); font-weight: 750; line-height: 1.2; letter-spacing: -0.025em; }
+          h3 { font-size: 1.55rem; font-weight: 700; }
+          h4 { font-size: 1.2rem; font-weight: 650; }
+          p { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.75; }
+
+          a {
+               color: var(--accent);
+               text-decoration: none;
+               transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+
+          a:hover { color: var(--accent-secondary); }
+
+          /* Preloader */
+          .preloader {
+               position: fixed;
+               inset: 0;
+               background: var(--bg-darker);
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               z-index: 9999;
+               animation: fadeOut 0.5s ease-in-out 1s forwards;
+          }
+
+          .spinner {
+               width: 44px;
+               height: 44px;
+               border: 3px solid var(--border);
+               border-top-color: var(--accent);
+               border-radius: 50%;
+               animation: spin 0.8s linear infinite;
+          }
+
+          @keyframes spin { to { transform: rotate(360deg); } }
+          @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+          /* Navbar */
+          nav {
+               background: rgba(11, 15, 26, 0.85);
+               position: fixed;
+               width: 100%;
+               top: 0;
+               z-index: 1000;
+               border-bottom: 1px solid var(--border);
+               backdrop-filter: blur(18px);
+               -webkit-backdrop-filter: blur(18px);
+          }
+
+          .navbar-container {
+               max-width: 1400px;
+               margin: 0 auto;
+               padding: 0 2.5rem;
+               display: flex;
+               justify-content: space-between;
+               align-items: center;
+               height: 72px;
+          }
+
+          .navbar-brand {
+               display: flex;
+               align-items: center;
+               gap: 11px;
+               font-size: 1.3rem;
+               font-weight: 800;
+               color: var(--text-primary);
+               letter-spacing: -0.02em;
+          }
+
+          .navbar-brand:hover { color: var(--accent); }
+
+          .navbar-brand img {
+               width: 42px;
+               height: 42px;
+               border-radius: 11px;
+               box-shadow: 0 6px 20px rgba(56, 189, 248, 0.18);
+          }
+
+          .hamburger {
+               display: none;
+               flex-direction: column;
+               gap: 6px;
+               cursor: pointer;
+               background: none;
+               border: none;
+               z-index: 1001;
+               padding: 6px;
+          }
+
+          .hamburger span {
+               width: 24px;
+               height: 2px;
+               background: var(--accent);
+               border-radius: 2px;
+               transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+
+          .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+          .hamburger.active span:nth-child(2) { opacity: 0; }
+          .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+
+          .nav-wrapper {
+               display: flex;
+               align-items: center;
+               gap: 2.8rem;
+          }
+
+          .nav-links {
+               display: flex;
+               gap: 2.2rem;
+               list-style: none;
+               align-items: center;
+          }
+
+          .nav-links a {
+               font-size: 0.95rem;
+               font-weight: 600;
+               color: var(--text-secondary);
+               position: relative;
+          }
+
+          .nav-links a::after {
+               content: '';
+               position: absolute;
+               bottom: -6px;
+               left: 0;
+               width: 0;
+               height: 2px;
+               background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+               transition: width 0.3s ease;
+               border-radius: 2px;
+          }
+
+          .nav-links a:hover { color: var(--accent); }
+          .nav-links a:hover::after { width: 100%; }
+
+          .social-links {
+               display: flex;
+               gap: 0.7rem;
+          }
+
+          .social-links a {
+               width: 38px;
+               height: 38px;
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               border-radius: 10px;
+               background: var(--bg-card);
+               color: var(--accent);
+               border: 1px solid var(--border);
+               font-size: 1rem;
+          }
+
+          .social-links a:hover {
+               background: var(--accent);
+               color: var(--bg-dark);
+               transform: translateY(-3px);
+               box-shadow: 0 8px 24px var(--accent-glow);
+          }
+
+          /* Mobile Menu */
+          .mobile-menu {
+               display: none;
+               position: fixed;
+               left: 0;
+               top: 72px;
+               width: 100%;
+               height: calc(100vh - 72px);
+               background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
+               flex-direction: column;
+               gap: 0.25rem;
+               padding: 1.5rem 1.75rem;
+               z-index: 999;
+               overflow-y: auto;
+          }
+
+          .mobile-menu.active { display: flex; }
+
+          .mobile-menu a {
+               font-size: 1.1rem;
+               font-weight: 600;
+               color: var(--text-secondary);
+               padding: 14px 4px;
+               border-bottom: 1px solid var(--border);
+          }
+
+          .mobile-menu a:hover {
+               color: var(--accent);
+               padding-left: 10px;
+          }
+
+          /* Sections */
+          section {
+               padding: 6.5rem 2.5rem;
+               max-width: 1400px;
+               margin: 0 auto;
+          }
+
+          .section-title {
+               margin-bottom: 3.5rem;
+               text-align: center;
+          }
+
+          .section-title h2 {
+               margin-bottom: 1rem;
+               background: linear-gradient(135deg, #fff 15%, var(--accent) 100%);
+               -webkit-background-clip: text;
+               -webkit-text-fill-color: transparent;
+               background-clip: text;
+          }
+
+          .section-title p {
+               color: var(--text-tertiary);
+               font-size: 1.1rem;
+               max-width: 520px;
+               margin: 0 auto;
+          }
+
+/* ===== HERO with Background Image ===== */
+#home {
+     margin-top: 72px;
+     padding: 5.5rem 2.5rem 6.5rem;
+     display: flex;
+     align-items: center;
+     min-height: calc(100vh - 72px);
+     position: relative;
+     overflow: hidden;
+
+     /* Background Image */
+     background-image: 
+          linear-gradient(
+               135deg,
+               rgba(6, 8, 15, 0.92) 0%,
+               rgba(11, 15, 26, 0.85) 40%,
+               rgba(6, 8, 15, 0.88) 100%
+          ),
+          url('images/home-bg.jpg');   /* ← change this path if needed */
+
+     background-size: cover;
+     background-position: center;
+     background-repeat: no-repeat;
+}
+
+/* Optional soft color glows on top of the image */
+#home::before {
+     content: '';
+     position: absolute;
+     inset: 0;
+     background: 
+          radial-gradient(ellipse 80% 60% at 70% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 55%),
+          radial-gradient(ellipse 60% 50% at 10% 80%, rgba(167, 139, 250, 0.08) 0%, transparent 50%);
+     pointer-events: none;
+     z-index: 1;
+}
+
+.hero-content {
+     display: grid;
+     grid-template-columns: 1.05fr 0.95fr;
+     gap: 4.5rem;
+     align-items: center;
+     width: 100%;
+     position: relative;
+     z-index: 2;
+}
+
+          .hero-text h1 {
+               margin-bottom: 1.75rem;
+          }
+
+          .hero-cta {
+               display: inline-flex;
+               align-items: center;
+               gap: 10px;
+               background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+               color: var(--bg-dark);
+               padding: 15px 34px;
+               border-radius: 12px;
+               font-weight: 700;
+               font-size: 1rem;
+               margin-bottom: 2.25rem;
+               border: none;
+               cursor: pointer;
+               box-shadow: 0 10px 32px var(--accent-glow);
+               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+
+          .hero-cta:hover {
+               transform: translateY(-3px);
+               box-shadow: 0 14px 40px rgba(56, 189, 248, 0.4);
+          }
+
+          .hero-contact {
+               margin-top: 2.5rem;
+               padding-top: 2rem;
+          }
+
+          .hero-contact p {
+               margin: 0.4rem 0;
+               font-weight: 650;
+               color: var(--text-primary);
+               font-size: 1.05rem;
+          }
+
+          .hero-contact small {
+               display: block;
+               font-size: 0.9rem;
+               color: #94A3B8;
+               margin-top: 0.35rem;
+          }
+
+          .hero-video {
+               position: relative;
+               border-radius: 18px;
+               overflow: hidden;
+               box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--border);
+               background: var(--bg-card);
+          }
+
+          .hero-video::before {
+               content: '';
+               position: absolute;
+               inset: 0;
+               border-radius: 18px;
+               padding: 1px;
+               background: linear-gradient(135deg, rgba(56,189,248,0.4), transparent 40%, rgba(167,139,250,0.25));
+               -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+               mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+               -webkit-mask-composite: xor;
+               mask-composite: exclude;
+               pointer-events: none;
+               z-index: 1;
+          }
+
+          .hero-video iframe {
+               width: 100%;
+               height: 100%;
+               min-height: 420px;
+               border: none;
+               display: block;
+          }
+
+          /* ===== ABOUT ===== */
+          #about {
+               background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 100%);
+          }
+
+          .about-content {
+               display: grid;
+               grid-template-columns: 1fr 1.15fr;
+               gap: 4.5rem;
+               align-items: start;
+          }
+
+          .about-text h2 { margin-bottom: 1.5rem; }
+
+          .about-text p {
+               margin-bottom: 1.4rem;
+               font-size: 1.08rem;
+          }
+
+          .about-buttons {
+               display: flex;
+               gap: 1.4rem;
+               flex-wrap: wrap;
+               margin-top: 2.25rem;
+          }
+
+          .btn-primary {
+               background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+               color: var(--bg-dark);
+               padding: 14px 30px;
+               border-radius: 11px;
+               font-weight: 700;
+               display: inline-flex;
+               align-items: center;
+               gap: 9px;
+               border: none;
+               cursor: pointer;
+               box-shadow: 0 8px 28px var(--accent-glow);
+               transition: all 0.3s ease;
+          }
+
+          .btn-primary:hover {
+               transform: translateY(-2px);
+               box-shadow: 0 12px 36px rgba(56, 189, 248, 0.38);
+          }
+
+          .btn-secondary {
+               color: var(--accent);
+               font-weight: 700;
+               display: inline-flex;
+               align-items: center;
+               gap: 8px;
+               padding-bottom: 2px;
+               border-bottom: 2px solid transparent;
+               transition: all 0.25s ease;
+          }
+
+          .btn-secondary:hover {
+               border-bottom-color: var(--accent-secondary);
+               color: var(--accent-secondary);
+          }
+
+          .services-grid {
+               display: grid;
+               grid-template-columns: 1fr 1fr;
+               gap: 1.35rem;
+          }
+
+          .service-card {
+               background: var(--bg-dark);
+               border-radius: 16px;
+               padding: 1.85rem;
+               border: 1px solid var(--border);
+               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+               position: relative;
+               overflow: hidden;
+          }
+
+          .service-card::before {
+               content: '';
+               position: absolute;
+               top: 0;
+               left: 0;
+               right: 0;
+               height: 2px;
+               background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+               opacity: 0.9;
+          }
+
+          .service-card:hover {
+               transform: translateY(-5px);
+               background: var(--bg-card-hover);
+               border-color: var(--border-light);
+               box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+          }
+
+          .service-icon {
+               width: 52px;
+               height: 52px;
+               border-radius: 12px;
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               font-size: 1.35rem;
+               margin-bottom: 1.15rem;
+               background: rgba(56, 189, 248, 0.1);
+               color: var(--accent);
+               border: 1px solid rgba(56, 189, 248, 0.18);
+          }
+
+          .service-card h4 { margin-bottom: 0.6rem; }
+
+          .service-card p {
+               font-size: 0.95rem;
+               line-height: 1.65;
+               margin: 0;
+          }
+
+          /* ===== UPDATES ===== */
+          #updates {
+               background: var(--bg-darker);
+          }
+
+          .updates-grid {
+               display: grid;
+               grid-template-columns: repeat(2, 1fr);
+               gap: 1.75rem;
+          }
+
+          .update-card {
+               background: var(--bg-card);
+               border-radius: 16px;
+               overflow: hidden;
+               border: 1px solid var(--border);
+               display: flex;
+               flex-direction: column;
+               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+
+          .update-card:hover {
+               transform: translateY(-6px);
+               border-color: var(--border-light);
+               box-shadow: 0 20px 48px rgba(0, 0, 0, 0.4);
+          }
+
+          .update-image {
+               width: 100%;
+               height: 210px;
+               object-fit: cover;
+               background: linear-gradient(135deg, #151c32, #0a0e1f);
+          }
+
+          .update-content {
+               padding: 1.75rem;
+               flex: 1;
+               display: flex;
+               flex-direction: column;
+          }
+
+          .update-date {
+               font-size: 0.8rem;
+               color: var(--accent);
+               margin-bottom: 0.75rem;
+               display: flex;
+               align-items: center;
+               gap: 7px;
+               font-weight: 650;
+               text-transform: uppercase;
+               letter-spacing: 0.06em;
+          }
+
+          .update-card h3 {
+               margin-bottom: 0.85rem;
+               font-size: 1.3rem;
+               line-height: 1.3;
+          }
+
+          .update-card h3 a { color: var(--text-primary); }
+          .update-card h3 a:hover { color: var(--accent); }
+
+          .update-card p {
+               flex: 1;
+               margin-bottom: 1.25rem;
+               font-size: 0.98rem;
+          }
+
+          .btn-view {
+               align-self: flex-start;
+               color: var(--accent);
+               font-weight: 700;
+               font-size: 0.95rem;
+               display: inline-flex;
+               align-items: center;
+               gap: 7px;
+               border-bottom: 2px solid transparent;
+               padding-bottom: 1px;
+          }
+
+          .btn-view:hover {
+               border-bottom-color: var(--accent-secondary);
+               color: var(--accent-secondary);
+               transform: translateX(3px);
+          }
+
+          /* ===== AWARDS ===== */
+          #awards {
+               background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+          }
+
+          .awards-grid {
+               display: grid;
+               grid-template-columns: repeat(4, 1fr);
+               gap: 1.35rem;
+          }
+
+          .award-card {
+               background: var(--bg-dark);
+               border-radius: 16px;
+               padding: 2rem 1.5rem;
+               border: 1px solid var(--border);
+               text-align: center;
+               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+               position: relative;
+               overflow: hidden;
+               display: flex;
+               flex-direction: column;
+               align-items: center;
+          }
+
+          .award-card::before {
+               content: '';
+               position: absolute;
+               top: 0;
+               left: 0;
+               right: 0;
+               height: 2px;
+               background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+          }
+
+          .award-card:hover {
+               transform: translateY(-6px);
+               border-color: var(--border-light);
+               box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+          }
+
+          .award-icon {
+               width: 72px;
+               height: 72px;
+               border-radius: 16px;
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               font-size: 2rem;
+               margin-bottom: 1.25rem;
+               background: linear-gradient(145deg, rgba(56, 189, 248, 0.12), rgba(167, 139, 250, 0.08));
+               border: 1px solid rgba(56, 189, 248, 0.2);
+               color: var(--accent);
+               transition: all 0.3s ease;
+          }
+
+          .award-card:hover .award-icon {
+               transform: scale(1.08);
+               background: linear-gradient(145deg, rgba(56, 189, 248, 0.2), rgba(167, 139, 250, 0.12));
+               box-shadow: 0 8px 24px rgba(56, 189, 248, 0.15);
+          }
+
+          .award-info h3 {
+               font-size: 1.15rem;
+               margin-bottom: 0.45rem;
+          }
+
+          .award-info small {
+               color: var(--accent);
+               font-size: 0.8rem;
+               font-weight: 650;
+               text-transform: uppercase;
+               letter-spacing: 0.05em;
+          }
+
+          /* ===== CLIENTS ===== */
+          #clients {
+               background: var(--bg-darker);
+               padding: 5rem 2.5rem;
+          }
+
+          .clients-heading {
+               text-align: center;
+               margin-bottom: 3rem;
+          }
+
+          .clients-heading h3 {
+               color: var(--text-tertiary);
+               font-size: 0.85rem;
+               font-weight: 700;
+               text-transform: uppercase;
+               letter-spacing: 0.12em;
+               margin-bottom: 0.6rem;
+          }
+
+          .clients-heading p {
+               color: var(--text-secondary);
+               font-size: 1rem;
+               max-width: 480px;
+               margin: 0 auto;
+          }
+
+          .scroll-wrapper {
+               position: relative;
+               overflow: hidden;
+               mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+               -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+          }
+
+          .clients-list {
+               display: flex;
+               gap: 3.5rem;
+               animation: scroll 40s linear infinite;
+               width: max-content;
+               padding: 1rem 0;
+          }
+
+          .clients-list:hover { animation-play-state: paused; }
+
+          .clients-list img {
+               height: 56px;
+               width: auto;
+               object-fit: contain;
+               opacity: 0.55;
+               transition: all 0.3s ease;
+               filter: grayscale(100%);
+               flex-shrink: 0;
+          }
+
+          .clients-list img:hover {
+               opacity: 1;
+               filter: grayscale(0%);
+               transform: scale(1.08);
+          }
+
+          @keyframes scroll {
+               0% { transform: translateX(0); }
+               100% { transform: translateX(-50%); }
+          }
+
+          /* ===== CONTACT ===== */
+          #contact {
+               background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
+          }
+
+          .contact-container {
+               display: flex;
+               justify-content: center;
+          }
+
+          .contact-form {
+               background: var(--bg-card);
+               border-radius: 18px;
+               padding: 2.75rem;
+               display: grid;
+               grid-template-columns: 1fr 1fr;
+               gap: 1.5rem;
+               border: 1px solid var(--border);
+               max-width: 820px;
+               width: 100%;
+               box-shadow: 0 20px 56px rgba(0, 0, 0, 0.35);
+          }
+
+          .form-group {
+               display: flex;
+               flex-direction: column;
+          }
+
+          .form-group.full { grid-column: 1 / -1; }
+
+          .form-group label {
+               font-weight: 650;
+               margin-bottom: 0.55rem;
+               font-size: 0.8rem;
+               color: var(--text-secondary);
+               text-transform: uppercase;
+               letter-spacing: 0.06em;
+          }
+
+          .form-group input,
+          .form-group textarea,
+          .form-group select {
+               padding: 13px 16px;
+               border: 1px solid var(--border);
+               border-radius: 10px;
+               font-family: inherit;
+               font-size: 1rem;
+               background: var(--bg-dark);
+               color: var(--text-primary);
+               transition: all 0.25s ease;
+          }
+
+          .form-group input::placeholder,
+          .form-group textarea::placeholder {
+               color: var(--text-tertiary);
+          }
+
+          .form-group input:focus,
+          .form-group textarea:focus,
+          .form-group select:focus {
+               outline: none;
+               border-color: var(--accent);
+               box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+          }
+
+          .form-group textarea {
+               resize: vertical;
+               min-height: 130px;
+          }
+
+          .form-group select {
+               cursor: pointer;
+               appearance: none;
+               background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338BDF8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+               background-repeat: no-repeat;
+               background-position: right 14px center;
+               background-size: 16px;
+               padding-right: 40px;
+          }
+
+          .form-submit {
+               grid-column: 1 / -1;
+               display: flex;
+               gap: 1.5rem;
+               align-items: center;
+               margin-top: 0.35rem;
+          }
+
+          .form-submit button {
+               background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+               color: var(--bg-dark);
+               padding: 14px 40px;
+               border: none;
+               border-radius: 11px;
+               font-weight: 700;
+               cursor: pointer;
+               font-size: 0.95rem;
+               letter-spacing: 0.03em;
+               box-shadow: 0 8px 28px var(--accent-glow);
+               transition: all 0.3s ease;
+          }
+
+          .form-submit button:hover {
+               transform: translateY(-2px);
+               box-shadow: 0 12px 36px rgba(56, 189, 248, 0.38);
+          }
+
+          .form-link {
+               font-size: 0.95rem;
+               color: var(--text-secondary);
+          }
+
+          .form-link a {
+               font-weight: 700;
+          }
+
+          /* ===== FOOTER ===== */
+          footer {
+               background: var(--bg-darker);
+               padding: 4rem 2.5rem 2rem;
+          }
+
+          .footer-container {
+               max-width: 1400px;
+               margin: 0 auto;
+          }
+
+          .footer-grid {
+               display: grid;
+               grid-template-columns: 1.8fr 1fr 1fr 1.3fr;
+               gap: 3.5rem;
+               margin-bottom: 3rem;
+          }
+
+          .footer-section h3 {
+               color: var(--accent);
+               margin-bottom: 1.25rem;
+               font-size: 0.95rem;
+               font-weight: 700;
+               text-transform: uppercase;
+               letter-spacing: 0.06em;
+          }
+
+          .footer-section p {
+               color: var(--text-secondary);
+               font-size: 0.95rem;
+               line-height: 1.7;
+          }
+
+          .footer-links {
+               list-style: none;
+          }
+
+          .footer-links li { margin-bottom: 0.9rem; }
+
+          .footer-links a {
+               color: var(--text-secondary);
+               font-weight: 500;
+               font-size: 0.95rem;
+          }
+
+          .footer-links a:hover {
+               color: var(--accent);
+               padding-left: 6px;
+          }
+
+          .footer-bottom {
+               border-top: 1px solid var(--border);
+               padding-top: 1.75rem;
+               display: flex;
+               justify-content: space-between;
+               align-items: center;
+               flex-wrap: wrap;
+               gap: 1.5rem;
+          }
+
+          .footer-copyright {
+               color: var(--text-tertiary);
+               font-size: 0.9rem;
+          }
+
+          .footer-social {
+               display: flex;
+               gap: 0.75rem;
+          }
+
+          .footer-social a {
+               width: 42px;
+               height: 42px;
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               border-radius: 11px;
+               background: var(--bg-card);
+               color: var(--accent);
+               border: 1px solid var(--border);
+               font-size: 1.05rem;
+          }
+
+          .footer-social a:hover {
+               background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+               color: var(--bg-dark);
+               transform: translateY(-3px);
+               box-shadow: 0 8px 24px var(--accent-glow);
+          }
+
+          /* Back to top */
+          #topBtn {
+               position: fixed;
+               bottom: 9rem;
+               right: 1.75rem;
+               width: 48px;
+               height: 48px;
+               border-radius: 12px;
+               background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+               color: var(--bg-dark);
+               border: none;
+               cursor: pointer;
+               display: none;
+               align-items: center;
+               justify-content: center;
+               font-size: 1.2rem;
+               box-shadow: 0 8px 28px var(--accent-glow);
+               z-index: 999;
+               transition: all 0.3s ease;
+          }
+
+          #topBtn:hover {
+               transform: translateY(-3px);
+               box-shadow: 0 12px 36px rgba(56, 189, 248, 0.4);
+          }
+
+          #topBtn.show { display: flex; }
+
+          /* Tawk overrides */
+          iframe[src*="tawk.to"],
+          .tawk-min-container,
+          #tawk_frame,
+          .tawk-platform {
+               z-index: 9998 !important;
+          }
+
+          /* ===== RESPONSIVE ===== */
+          @media (max-width: 1100px) {
+               .awards-grid { grid-template-columns: repeat(2, 1fr); }
+               .footer-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+          }
+
+          @media (max-width: 900px) {
+               .hero-content,
+               .about-content {
+                    grid-template-columns: 1fr;
+                    gap: 3rem;
+               }
+
+               .hero-video iframe { min-height: 320px; }
+
+               .services-grid,
+               .updates-grid {
+                    grid-template-columns: 1fr;
+               }
+
+               .nav-links { display: none; }
+               .hamburger { display: flex; }
+          }
+
+          @media (max-width: 640px) {
+               .navbar-container { padding: 0 1.25rem; height: 64px; }
+               .social-links { display: none; }
+
+               section { padding: 4rem 1.25rem; }
+               #home {
+                    margin-top: 64px;
+                    padding: 3rem 1.25rem 4rem;
+               }
+
+               .contact-form {
+                    grid-template-columns: 1fr;
+                    padding: 1.75rem;
+               }
+
+               .form-submit {
+                    flex-direction: column;
+                    align-items: flex-start;
+               }
+
+               .awards-grid { grid-template-columns: 1fr; }
+               .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+
+               .footer-bottom {
+                    flex-direction: column;
+                    align-items: flex-start;
+               }
+
+               #clients { padding: 3.5rem 1.25rem; }
+               .clients-list img { height: 48px; }
+
+               .mobile-menu { top: 64px; height: calc(100vh - 64px); }
+          }
+     </style>
 </head>
 <body>
 
-     <!-- PRE LOADER -->
+     <!-- Preloader -->
      <section class="preloader">
-          <div class="spinner">
-               <span class="spinner-rotate"></span>
-          </div>
+          <div class="spinner"></div>
      </section>
 
+     <!-- Navigation -->
+     <nav>
+          <div class="navbar-container">
+               <a href="#home" class="navbar-brand">
+                    <img src="images/about-image.png" alt="Neroitech">
+                    <span>Neroitech Inventions</span>
+               </a>
+               
+               <div class="nav-wrapper">
+                    <ul class="nav-links">
+                         <li><a href="#home">Home</a></li>
+                         <li><a href="#about">About</a></li>
+                         <li><a href="#updates">Updates</a></li>
+                         <li><a href="#awards">Awards</a></li>
+                         <li><a href="#contact">Contact</a></li>
+                    </ul>
 
-     <!-- MENU -->
-     <section class="navbar custom-navbar navbar-fixed-top" role="navigation">
-          <div class="container">
+                    <div class="social-links">
+                         <a href="https://www.linkedin.com/company/neroitech-inventions" target="_blank" title="LinkedIn">
+                              <i class="fab fa-linkedin"></i>
+                         </a>
+                         <a href="https://medium.com/@neroitech-inventions" target="_blank" title="Medium">
+                              <i class="fab fa-medium"></i>
+                         </a>
+                         <a href="https://x.com/neroitech" target="_blank" title="X (Twitter)">
+                              <i class="fab fa-x-twitter"></i>
+                         </a>
+                         <a href="https://www.youtube.com/@neroitech-inventions" target="_blank" title="YouTube">
+                              <i class="fab fa-youtube"></i>
+                         </a>
+                    </div>
+               </div>
 
-               <div class="navbar-header">
-                    <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                         <span class="icon icon-bar"></span>
-                         <span class="icon icon-bar"></span>
-                         <span class="icon icon-bar"></span>
+               <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+               </button>
+          </div>
+     </nav>
+
+     <!-- Mobile Menu -->
+     <div class="mobile-menu" id="mobileMenu">
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#updates">Updates</a>
+          <a href="#awards">Awards</a>
+          <a href="#contact">Contact</a>
+          <a href="https://www.linkedin.com/company/neroitech-inventions" target="_blank">LinkedIn</a>
+          <a href="https://medium.com/@neroitech-inventions" target="_blank">Medium</a>
+          <a href="https://x.com/neroitech" target="_blank">X (Twitter)</a>
+          <a href="https://www.youtube.com/@neroitech-inventions" target="_blank">YouTube</a>
+     </div>
+
+     <!-- Hero Section -->
+     <section id="home">
+          <div class="hero-content">
+               <div class="hero-text">
+                    <h1>Empowering growth through digital innovation.</h1>
+                    <button class="hero-cta" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'}); closeMobileMenu();">
+                         <i class="fas fa-arrow-right"></i> Get Started
                     </button>
+                    <div class="hero-contact">
+                         <p>📞 (+234) 810-785-4712</p>
+                         <small>For top-notch content and research</small>
+                    </div>
+               </div>
+               <div class="hero-video">
+                    <iframe src="https://www.youtube.com/embed/7JlzdqYJ0oM?si=WSyU6JDFBVrswKmj" allowfullscreen=""></iframe>
+               </div>
+          </div>
+     </section>
 
-                    <!-- lOGO TEXT HERE -->
-                    <span style="display: inline-flex; align-items: center;">
-                    <img src="images/about-image.png" class="img-responsive" width="50px" height="50px" alt="" style="vertical-align: middle;"><a href="index.html" class="navbar-brand">Neroitech Inventions</a>
-               </span>
+     <!-- About Section -->
+     <section id="about">
+          <div class="about-content">
+               <div class="about-text">
+                    <h2>Who We Are</h2>
+                    <p>As an award-winning IT firm since 2016, we redefine industries and empower growth through digital innovation.</p>
+                    <p>Collaboration is at our core. We partner with clients to tackle challenges using innovative solutions, dynamic content, and compelling visuals to drive success.</p>
+                    <div class="about-buttons">
+                         <a href="#contact" class="btn-primary">
+                              <i class="fas fa-envelope"></i> Work With Us
+                         </a>
+                         <a href="#awards" class="btn-secondary">
+                              See Our Awards <i class="fas fa-arrow-right"></i>
+                         </a>
+                    </div>
                </div>
 
-               <!-- MENU LINKS -->
-               <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav navbar-nav-first">
-                         <li><a href="#home" >Home</a></li>
-                         <li><a href="#about" >About</a></li>
-                         <li><a href="#blog" >Updates</a></li>
-                         <li><a href="#award" >Awards</a></li>
-                         <li><a href="#contact" >Contacts</a></li>
+               <div class="services-grid">
+                    <div class="service-card">
+                         <div class="service-icon">
+                              <i class="fas fa-pen-fancy"></i>
+                         </div>
+                         <h4>Writing & Research</h4>
+                         <p>In-depth reports, pitch decks, and high-impact content that stand out and build authority.</p>
+                    </div>
+
+                    <div class="service-card">
+                         <div class="service-icon">
+                              <i class="fas fa-people-group"></i>
+                         </div>
+                         <h4>Community Building</h4>
+                         <p>Engage-to-earn systems, quest tools, and strategies that turn audiences into active ecosystems.</p>
+                    </div>
+
+                    <div class="service-card">
+                         <div class="service-icon">
+                              <i class="fas fa-video"></i>
+                         </div>
+                         <h4>Content Creation</h4>
+                         <p>Visually rich ads, social content, and multimedia that reach and convert wider audiences.</p>
+                    </div>
+
+                    <div class="service-card">
+                         <div class="service-icon">
+                              <i class="fas fa-cog"></i>
+                         </div>
+                         <h4>IT Support</h4>
+                         <p>Web tools, digital infrastructure, and tech solutions that keep operations running smoothly.</p>
+                    </div>
+               </div>
+          </div>
+     </section>
+
+     <!-- Updates Section -->
+     <section id="updates">
+          <div class="section-title">
+               <h2>Latest Updates</h2>
+               <p>Discover what we've been building</p>
+          </div>
+
+          <div class="updates-grid">
+               <div class="update-card">
+                    <img src="images/blog-image1.jpg" alt="SnappQuest" class="update-image">
+                    <div class="update-content">
+                         <div class="update-date">
+                              <i class="far fa-calendar"></i> November 2025
+                         </div>
+                         <h3><a href="https://niti.com.ng/snappquest">Meet SnappQuest</a></h3>
+                         <p>Turn your link into a promotion quest. Get engagement for free, or boost it for more reach.</p>
+                         <a href="https://niti.com.ng/snappquest" target="_blank" class="btn-view">
+                              View App <i class="fas fa-external-link-alt"></i>
+                         </a>
+                    </div>
+               </div>
+
+               <div class="update-card">
+                    <img src="images/blog-image2.jpg" alt="ZeroConnect" class="update-image">
+                    <div class="update-content">
+                         <div class="update-date">
+                              <i class="far fa-calendar"></i> August 2026
+                         </div>
+                         <h3><a href="https://niti.com.ng/tools/zeroconnect/">ZeroConnect</a></h3>
+                         <p>No-wallet USDT payment widget for Polygon and Solana, verify on-chain then redirect.</p>
+                         <a href="https://niti.com.ng/tools/zeroconnect/" target="_blank" class="btn-view">
+                              View App <i class="fas fa-external-link-alt"></i>
+                         </a>
+                    </div>
+               </div>
+
+               <div class="update-card">
+                    <img src="images/blog-image3.jpg" alt="2025 Recap" class="update-image">
+                    <div class="update-content">
+                         <div class="update-date">
+                              <i class="far fa-calendar"></i> January 2026
+                         </div>
+                         <h3><a href="https://medium.com/@neroitech-inventions/neroitech-inventions-a-decade-of-vision-the-trials-of-web3-and-the-rise-of-a-new-era-2025-recap-982730d99f41">2025 Recap</a></h3>
+                         <p>A Decade of Vision and the Rise of a New Era, Our NITI 2025 Recap and Our 2026 Outlook.</p>
+                         <a href="https://medium.com/@neroitech-inventions/neroitech-inventions-a-decade-of-vision-the-trials-of-web3-and-the-rise-of-a-new-era-2025-recap-982730d99f41" target="_blank" class="btn-view">
+                              Read More <i class="fas fa-external-link-alt"></i>
+                         </a>
+                    </div>
+               </div>
+
+               <div class="update-card">
+                    <img src="images/blog-image4.jpg" alt="Solana DePIN Report" class="update-image">
+                    <div class="update-content">
+                         <div class="update-date">
+                              <i class="far fa-calendar"></i> July 2025
+                         </div>
+                         <h3><a href="https://earn.superteam.fun/listing/write-a-5-10-page-report-on-solana-depin">Report on Solana DePIN</a></h3>
+                         <p>Our Solana DePIN research was selected as the #1 report by the Solana Foundation.</p>
+                         <a href="https://earn.superteam.fun/listing/write-a-5-10-page-report-on-solana-depin" target="_blank" class="btn-view">
+                              View Report <i class="fas fa-external-link-alt"></i>
+                         </a>
+                    </div>
+               </div>
+          </div>
+     </section>
+
+     <!-- Awards Section -->
+     <section id="awards">
+          <div class="section-title">
+               <h2>Our Recognition</h2>
+               <p>Awards and achievements from leading organizations</p>
+          </div>
+
+          <div class="awards-grid">
+               <div class="award-card">
+                    <div class="award-icon">
+                         <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="award-info">
+                         <h3>Witnet</h3>
+                         <small>Community Creation Challenge</small>
+                    </div>
+               </div>
+
+               <div class="award-card">
+                    <div class="award-icon">
+                         <i class="fas fa-award"></i>
+                    </div>
+                    <div class="award-info">
+                         <h3>Trava Finance</h3>
+                         <small>Creative Content Contest</small>
+                    </div>
+               </div>
+
+               <div class="award-card">
+                    <div class="award-icon">
+                         <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="award-info">
+                         <h3>Verse</h3>
+                         <small>Vibe Coding Competition</small>
+                    </div>
+               </div>
+
+               <div class="award-card">
+                    <div class="award-icon">
+                         <i class="fas fa-star"></i>
+                    </div>
+                    <div class="award-info">
+                         <h3>Solana Collective</h3>
+                         <small>fALL OUT Content Hackathon</small>
+                    </div>
+               </div>
+          </div>
+     </section>
+
+     <!-- Clients Section -->
+     <section id="clients">
+          <div class="section-title">
+               <h2>Trusted by industry leaders</h2>
+               <p>We've delivered content and research for innovative companies driving digital transformation</p>
+          </div>
+
+          <div class="scroll-wrapper">
+               <div class="clients-list">
+                    <img src="images/client1.png" alt="client 1">
+                    <img src="images/client2.png" alt="client 2">
+                    <img src="images/client3.png" alt="client 3">
+                    <img src="images/client4.png" alt="client 4">
+                    <img src="images/client5.png" alt="client 5">
+                    <img src="images/client6.png" alt="client 6">
+                    <img src="images/client7.png" alt="client 7">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/client1.png" alt="client 1">
+                    <img src="images/client2.png" alt="client 2">
+                    <img src="images/client3.png" alt="client 3">
+                    <img src="images/client4.png" alt="client 4">
+                    <img src="images/client5.png" alt="client 5">
+                    <img src="images/client6.png" alt="client 6">
+                    <img src="images/client7.png" alt="client 7">
+               </div>
+          </div>
+     </section>
+
+     <!-- Contact Section -->
+     <section id="contact">
+          <div class="section-title">
+               <h2>Get in Touch</h2>
+               <p>Let's work together to build something amazing</p>
+          </div>
+
+          <div class="contact-container">
+               <form id="contact-form" action="https://docs.google.com/forms/d/e/1FAIpQLSdnqEaQNwGpesZvnacwucRFbRzD4pmOCNJPAeHn3YlFUb3IBg/formResponse" method="POST" class="contact-form" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                         <label for="name">Full Name</label>
+                         <input type="text" id="name" name="entry.2005620554" placeholder="Your name" required>
+                    </div>
+
+                    <div class="form-group">
+                         <label for="email">Email Address</label>
+                         <input type="email" id="email" name="entry.1045781291" placeholder="your@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                         <label for="phone">Phone Number</label>
+                         <input type="tel" id="phone" name="entry.1166974658" placeholder="+234..." required>
+                    </div>
+
+                    <div class="form-group">
+                         <label for="budget">Budget Level</label>
+                         <select id="budget" name="entry.868891004" required>
+                              <option value="" disabled selected>Select budget range</option>
+                              <option>$50 to $100</option>
+                              <option>$100 to $500</option>
+                              <option>$500 to $1000</option>
+                              <option>$1000 to $4000</option>
+                              <option>$4000 to $7000</option>
+                              <option>$7000 to $10000</option>
+                              <option>$10000 or more</option>
+                         </select>
+                    </div>
+
+                    <div class="form-group full">
+                         <label for="message">Project Requirements</label>
+                         <textarea id="message" name="entry.839337160" placeholder="Tell us about your project..." required></textarea>
+                    </div>
+
+                    <div class="form-submit">
+                         <button type="submit">Send Message</button>
+                         <div class="form-link">
+                              or <a href="https://forms.gle/55vuh5MoC4zy4VjS9" target="_blank">use NITI forms →</a>
+                         </div>
+                    </div>
+               </form>
+          </div>
+     </section>
+
+<!-- Footer -->
+<footer>
+     <div class="footer-container">
+          <div class="footer-grid">
+               <div class="footer-section">
+                    <h3>Neroitech Inventions</h3>
+                    <p>We drive growth with top-notch content and visual ads, delivering cutting-edge solutions to reach a wider audience through visually rich content and ingenious ideas.</p>
+               </div>
+
+               <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                         <li><a href="#about">About Us</a></li>
+                         <li><a href="https://www.linkedin.com/in/nyerhowo-isuru/" target="_blank">Team Leader</a></li>
+                         <li><a href="#awards">Awards</a></li>
+                         <li><a href="https://medium.com/@neroitech-inventions" target="_blank">Read Blog</a></li>
                     </ul>
+               </div>
 
-                    <ul class="nav navbar-nav navbar-right">
-<li><a href="https://www.linkedin.com/company/neroitech-inventions" target="_blank"><i class="fa-brands fa-linkedin"></i></a></li>
-<li><a href="https://medium.com/@neroitech-inventions" target="_blank"><i class="fa-brands fa-medium"></i></a></li>
-<li><a href="https://x.com/neroitech" target="_blank"><i class="fa-brands fa-x-twitter"></i></a></li>
-<li><a href="https://www.youtube.com/@neroitech-inventions" target="_blank"><i class="fa-brands fa-youtube"></i></a></li>
-                         <li class="section-btn"><a href="#" data-toggle="modal" data-target="#modal-form">Staff Portal</a></li>
+               <div class="footer-section">
+                    <h3>Brand</h3>
+                    <ul class="footer-links">
+                         <li><a href="https://drive.google.com/drive/folders/11mGKqDfj_OzY6WTvSrzF7tPnDO92BHIb?usp=sharing" target="_blank">Brand Assets</a></li>
+                         <li><a href="https://neroitech-inventions.medium.com/neroitech-inventions-unveils-brand-refresh-ushering-in-a-new-era-of-digital-innovation-bb99ba1ac98f" target="_blank">Brand Identity</a></li>
                     </ul>
                </div>
 
-          </div>
-     </section>
-
-
-     <!-- HOME -->
-     <section id="home" data-stellar-background-ratio="0.5">
-          <div class="overlay"></div>
-          <div class="container">
-               <div class="row">
-
-                    <div class="col-md-6 col-sm-12">
-                         <div class="home-info">
-                              <h1>Empowering growth through digital innovation.</h1>
-                              <a href="#about" class="btn section-btn smoothScroll">Get Transformed</a>
-                              <span>
-                                   Call Us: (+234) 810-785-4712
-                                   <small>For top-notch content and research.</small>
-                              </span>
-                         </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-12">
-                         <div class="home-video">
-                              <div class="embed-responsive embed-responsive-16by9">
-                                   <iframe src="https://www.youtube.com/embed/7JlzdqYJ0oM?si=WSyU6JDFBVrswKmj" frameborder="0" allowfullscreen></iframe>
-                              </div>
-                         </div>
-                    </div>
-                    
+               <div class="footer-section">
+                    <h3>Tools</h3>
+                    <ul class="footer-links">
+                         <li><a href="https://niti.com.ng/snappquest" target="_blank">SnappQuest</a></li>
+                         <li><a href="https://niti.com.ng/tools/zeroconnect/" target="_blank">ZeroConnect</a></li>
+                         <li><a href="https://niti.com.ng/tools/polygon-solana" target="_blank">Polygon ↔ Solana Bridge</a></li>
+                         <li><a href="https://niti.com.ng/tools/resume-builder" target="_blank">Free Resume Builder</a></li>
+                    </ul>
                </div>
           </div>
-     </section>
 
-
-     <!-- ABOUT -->
-     <section id="about" data-stellar-background-ratio="0.5">
-          <div class="container">
-               <div class="row">
-
-                    <div class="col-md-5 col-sm-6">
-                         <div class="about-info">
-                              <div class="section-title">
-                                   <h2>Meet Us</h2>
-                                   <span class="line-bar">...</span>
-                              </div>
-<p>As an award-winning IT firm since 2016, we redefine industries and empower growth through digital innovation.</p>
-<p>Collaboration is at our core. We partner with clients to tackle challenges using innovative solutions, dynamic content, and compelling visuals to drive success.</p>
-
-
-<div style="margin-top: 32px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-    <a href="#contact"  style="
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: linear-gradient(135deg, #6366F1, #34D399);
-        color: #ffffff;
-        padding: 14px 28px;
-        border-radius: 50px;
-        font-size: 15px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-    "
-    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(99,102,241,0.4)'"
-    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(99,102,241,0.3)'">
-        <i class="fa fa-envelope" style="font-size:14px;"></i> Work With Us
-    </a>
-
-    <a href="#award" style="
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        color: #6366F1;
-        font-size: 15px;
-        font-weight: 600;
-        text-decoration: none;
-        border-bottom: 2px solid transparent;
-        padding-bottom: 2px;
-        transition: all 0.3s ease;
-    "
-    onmouseover="this.style.borderBottomColor='#6366F1'"
-    onmouseout="this.style.borderBottomColor='transparent'">
-        See Our Awards <i class="fa fa-arrow-right" style="font-size:13px;"></i>
-    </a>
-</div>
-                         </div>
-                    </div>
-
-<div class="col-md-7 col-sm-12">
-  <div class="row">
-
-    <div class="col-md-6 col-sm-6" style="margin-bottom:24px;">
-      <div style="background:#fff; border-radius:12px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-        <div style="width:40px;height:40px;background:#EEEDFE;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
-          <i class="fa fa-pencil" style="color:#534AB7;font-size:16px;"></i>
-        </div>
-        <h4 style="font-size:15px;font-weight:600;margin-bottom:8px;color:#1a1a2e;">Writing & Research</h4>
-        <p style="font-size:13px;color:#6b7280;line-height:1.7;margin:0;">In-depth reports, pitch decks, and high-impact content that stand out and build authority.</p>
-      </div>
-    </div>
-
-    <div class="col-md-6 col-sm-6" style="margin-bottom:24px;">
-      <div style="background:#fff; border-radius:12px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-        <div style="width:40px;height:40px;background:#E1F5EE;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
-          <i class="fa fa-users" style="color:#0F6E56;font-size:16px;"></i>
-        </div>
-        <h4 style="font-size:15px;font-weight:600;margin-bottom:8px;color:#1a1a2e;">Community Building</h4>
-        <p style="font-size:13px;color:#6b7280;line-height:1.7;margin:0;">Engage-to-earn systems, quest tools, and strategies that turn audiences active ecosystems.</p>
-      </div>
-    </div>
-
-    <div class="col-md-6 col-sm-6" style="margin-bottom:24px;">
-      <div style="background:#fff; border-radius:12px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-        <div style="width:40px;height:40px;background:#E6F1FB;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
-          <i class="fa fa-desktop" style="color:#185FA5;font-size:16px;"></i>
-        </div>
-        <h4 style="font-size:15px;font-weight:600;margin-bottom:8px;color:#1a1a2e;">Content Creation</h4>
-        <p style="font-size:13px;color:#6b7280;line-height:1.7;margin:0;">Visually rich ads, social content, and multimedia that reach and convert wider audiences.</p>
-      </div>
-    </div>
-
-    <div class="col-md-6 col-sm-6" style="margin-bottom:24px;">
-      <div style="background:#fff; border-radius:12px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-        <div style="width:40px;height:40px;background:#FAECE7;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
-          <i class="fa fa-cog" style="color:#993C1D;font-size:16px;"></i>
-        </div>
-        <h4 style="font-size:15px;font-weight:600;margin-bottom:8px;color:#1a1a2e;">IT Support</h4>
-        <p style="font-size:13px;color:#6b7280;line-height:1.7;margin:0;">Web tools, digital infrastructure, and tech solutions that keep operations running smoothly.</p>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-                    <!-- <div class="col-md-4 col-sm-12">
-                         <div class="about-image">
-                              <img src="images/success-preview.png" class="img-responsive" alt="">
-                         </div>
-                    </div>
-                    
+          <div class="footer-bottom">
+               <div class="footer-copyright">
+                    <p>&copy; 2016–2026 Neroitech Inventions. All rights reserved.</p>
                </div>
-          </div>-->
-     </section>
-
-
-     <!-- BLOG -->
-     <section id="blog" data-stellar-background-ratio="0.5">
-          <div class="container">
-               <div class="row">
-
-                    <div class="col-md-12 col-sm-12">
-                         <div class="section-title">
-                              <h2>Updates</h2>
-                              <span class="line-bar">...</span>
-                         </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-6">
-                         <!-- BLOG THUMB -->
-                         <div class="media blog-thumb">
-                              <div class="media-object media-left">
-                                   <a href="images/blog-image1.jpg" target="_blank"><img src="images/blog-image1.jpg" class="img-responsive" alt=""></a>
-                              </div>
-                              <div class="media-body blog-info">
-                                   <small><i class="fa fa-clock-o"></i> November 1, 2025</small>
-                                   <h3><a href="https://niti.com.ng/snappquest">Meet SnappQuest.</a></h3>
-                                   <p>Turn your link into a quest. Get engagement for free, or boost it for more reach.</p>
-                                   <a href="https://niti.com.ng/snappquest" class="btn section-btn" target="_blank">View App</a>
-                              </div>
-                         </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-6">
-                         <!-- BLOG THUMB -->
-                         <div class="media blog-thumb">
-                              <div class="media-object media-left">
-                                   <a href="images/blog-image2.jpg" target="_blank"><img src="images/blog-image2.jpg" class="img-responsive" alt=""></a>
-                              </div>
-<div class="media-body blog-info">
-     <small><i class="fa fa-clock-o"></i> Aug 7, 2026 </small>
-     <h3><a href="https://niti.com.ng/tools/zeroconnect/">ZeroConnect.</a></h3>
-     <p>No-wallet USDT payment widget for Polygon and Solana, verify on-chain then redirect.</p>
-     <a href="https://niti.com.ng/tools/zeroconnect/" class="btn section-btn" target="_blank">View App</a>
-
-</div>
-                         </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-6">
-                         <!-- BLOG THUMB -->
-                         <div class="media blog-thumb">
-                              <div class="media-object media-left">
-                                   <a href="images/blog-image3.jpg" target="_blank"><img src="images/blog-image3.jpg" class="img-responsive" alt=""></a>
-                              </div>
-                              <div class="media-body blog-info">
-                                   <small><i class="fa fa-clock-o"></i> Jan 02, 2026 </small>
-                                   <h3><a href="https://medium.com/@neroitech-inventions/neroitech-inventions-a-decade-of-vision-the-trials-of-web3-and-the-rise-of-a-new-era-2025-recap-982730d99f41">2025 Recap.</a></h3>
-                                   <p>A Decade of Vision and the Rise of a New Era, Our 2025 Recap and 2026 Outlook.</p>
-                                   <a href="https://medium.com/@neroitech-inventions/neroitech-inventions-a-decade-of-vision-the-trials-of-web3-and-the-rise-of-a-new-era-2025-recap-982730d99f41" class="btn section-btn" target="_blank">Read more</a>
-                              </div>
-                         </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-6">
-                         <!-- BLOG THUMB -->
-                         <div class="media blog-thumb">
-                              <div class="media-object media-left">
-                                   <a href="images/blog-image4.jpg" target="_blank"><img src="images/blog-image4.jpg" class="img-responsive" alt=""></a>
-                              </div>
-                              <div class="media-body blog-info">
-                                   <small><i class="fa fa-clock-o"></i> July 07, 2025 </small>
-                                   <h3><a href="https://earn.superteam.fun/listing/write-a-5-10-page-report-on-solana-depin">Report on Solana DePIN.</a></h3>
-                                   <p>Our Solana DePIN research was selected as the #1 report by the Solana Foundation.</p>
-                                   <a href="https://earn.superteam.fun/listing/write-a-5-10-page-report-on-solana-depin" class="btn section-btn" target="_blank">View Report</a>
-                              </div>
-                         </div>
-                    </div>
-                    
+               <div class="footer-social">
+                    <a href="https://www.linkedin.com/company/neroitech-inventions" target="_blank" title="LinkedIn">
+                         <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://medium.com/@neroitech-inventions" target="_blank" title="Medium">
+                         <i class="fab fa-medium"></i>
+                    </a>
+                    <a href="https://x.com/neroitech" target="_blank" title="X">
+                         <i class="fab fa-x-twitter"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@neroitech-inventions" target="_blank" title="YouTube">
+                         <i class="fab fa-youtube"></i>
+                    </a>
                </div>
           </div>
-     </section>
-
-
-     <!-- AWARD -->
-     <section id="award" data-stellar-background-ratio="0.5">
-          <div class="container">
-               <div class="row">
-
-                    <div class="col-md-12 col-sm-12">
-                         <div class="section-title">
-                              <h2>Our Awards</h2>
-                              <span class="line-bar">...</span>
-                         </div>
-                    </div>
-
-                    <div class="col-md-3 col-sm-6">
-                         <!-- AWARD THUMB -->
-                         <div class="work-thumb">
-                              <a href="images/work-image1.jpg" class="image-popup">
-                                   <img src="images/work-image1.jpg" class="img-responsive" alt="Witnet Community Creation Challenge Award">
-
-                                   <div class="work-info">
-                                        <h3>Witnet</h3>
-                                        <small>Community Creation Challenge</small>
-                                   </div>
-                              </a>
-                         </div>
-                    </div>
-
-                    <div class="col-md-3 col-sm-6">
-                         <!-- AWARD THUMB -->
-                         <div class="work-thumb">
-                              <a href="images/work-image2.jpg" class="image-popup">
-                                   <img src="images/work-image2.jpg" class="img-responsive" alt="Trava Creative Content Contest Award">
-
-                                   <div class="work-info">
-                                        <h3>Trava Finance</h3>
-                                        <small>Creative Content Contest</small>
-                                   </div>
-                              </a>
-                         </div>
-                    </div>
-
-                    <div class="col-md-3 col-sm-6">
-                         <!-- AWARD THUMB -->
-                         <div class="work-thumb">
-                              <a href="images/work-image3.jpg" class="image-popup">
-                                   <img src="images/work-image3.jpg" class="img-responsive" alt="LunarCrush Search For Influence Top 25 Award">
-
-                                   <div class="work-info">
-                                        <h3>LunarCrush</h3>
-                                        <small>Search For Influence Top 25</small>
-                                   </div>
-                              </a>
-                         </div>
-                    </div>
-
-                    <div class="col-md-3 col-sm-6">
-                         <!-- AWARD THUMB -->
-                         <div class="work-thumb">
-                              <a href="images/work-image4.jpg" class="image-popup">
-                                   <img src="images/work-image4.jpg" class="img-responsive" alt="Solana Foundation Bounty">
-
-                                   <div class="work-info">
-                                        <h3>Solana Collective</h3>
-                                        <small>fALL OUT track: What's DAT?</small>
-                                   </div>
-                              </a>
-                         </div>
-                    </div>
-
-               </div>
-          </div>
-     </section>
-
-
-<!-- clients -->
-<section id="clients">
-     <div class="container">
-       <div class="row">
-         <div class="col-md-12">
-   
-           <div class="scroll-wrapper">
-             <div class="clients-list">
-               <!-- Original set of images -->
-               <img src="images/client1.png" alt="client 1">
-               <img src="images/client2.png" alt="client 2">
-               <img src="images/client3.png" alt="client 3">
-               <img src="images/client4.png" alt="client 4">
-               <img src="images/client5.png" alt="client 5">
-               <img src="images/client6.png" alt="client 6">
-               <img src="images/client7.png" alt="client 7">
-               <img src="images/client8.png" alt="client 8">
-               <img src="images/client9.png" alt="client 9">
-               <img src="images/client10.png" alt="client 10">
-               <img src="images/client11.png" alt="client 11">
-               <img src="images/client12.png" alt="client 12">
-               <img src="images/client13.png" alt="client 13">
-               <img src="images/client14.png" alt="client 14">
-               <img src="images/client15.png" alt="client 15">
-               <img src="images/client16.png" alt="client 16">
-               <img src="images/client17.png" alt="client 17">
-   
-               <!-- Duplicate set -->
-               <img src="images/client1.png" alt="client 1">
-               <img src="images/client2.png" alt="client 2">
-               <img src="images/client3.png" alt="client 3">
-               <img src="images/client4.png" alt="client 4">
-               <img src="images/client5.png" alt="client 5">
-               <img src="images/client6.png" alt="client 6">
-               <img src="images/client7.png" alt="client 7">
-               <img src="images/client8.png" alt="client 8">
-               <img src="images/client9.png" alt="client 9">
-               <img src="images/client10.png" alt="client 10">
-               <img src="images/client11.png" alt="client 11">
-               <img src="images/client12.png" alt="client 12">
-               <img src="images/client13.png" alt="client 13">
-               <img src="images/client14.png" alt="client 14">
-               <img src="images/client15.png" alt="client 15">
-               <img src="images/client16.png" alt="client 16">
-               <img src="images/client17.png" alt="client 17">
-             </div>
-           </div>
-   
-         </div>
-       </div>
      </div>
-   </section>
-   
-     <!-- CONTACT -->
-     <section id="contact" data-stellar-background-ratio="0.5">
-          <div class="container">
-               <div class="row">
+</footer>
 
-                    <div class="col-md-12 col-sm-12">
-                         <div class="section-title">
-                              <h2>Get in Touch</h2>
-                              <span class="line-bar">...</span>
-                         </div>
-                    </div>
+     <!-- Back to Top Button -->
+     <button id="topBtn" title="Back to top">
+          <i class="fas fa-arrow-up"></i>
+     </button>
 
-                    <div class="col-md-8 col-sm-8">
-                        
-<!-- CONTACT FORM HERE -->
-<!-- HTML Form -->
-<form id="contact-form" role="form" action="https://docs.google.com/forms/d/e/1FAIpQLSdnqEaQNwGpesZvnacwucRFbRzD4pmOCNJPAeHn3YlFUb3IBg/formResponse" method="POST" onsubmit="handleSubmit(event)">
-     <div class="col-md-6 col-sm-6">
-         <input type="text" class="form-control" placeholder="Full Name" id="cf-name" name="entry.2005620554" required="">
-     </div>
- 
-     <div class="col-md-6 col-sm-6">
-         <input type="email" class="form-control" placeholder="Your Email" id="cf-email" name="entry.1045781291" required="">
-     </div>
- 
-     <div class="col-md-6 col-sm-6">
-         <input type="tel" class="form-control" placeholder="Your Phone" id="cf-number" name="entry.1166974658" required="">
-     </div>
- 
-     <div class="col-md-6 col-sm-6">
-         <select class="form-control" id="cf-budgets" name="entry.868891004" required>
-             <option value="" disabled selected>Budget Level</option>
-             <option>$50 to $100</option>
-             <option>$100 to $500</option>
-             <option>$500 to $1000</option>
-             <option>$1000 to $4000</option>
-             <option>$4000 to $7000</option>
-             <option>$7000 to $10000</option>
-             <option>$10000 or more</option>
-         </select>
-     </div>
- 
-     <div class="col-md-12 col-sm-12">
-         <textarea class="form-control" rows="6" placeholder="Your requirements" id="cf-message" name="entry.839337160" required=""></textarea>
-     </div>
- 
-     <div class="col-md-4 col-sm-12">
-         <input type="submit" class="form-control" value="Send Message">
-         <span class="form-link">
-             <a href="https://forms.gle/55vuh5MoC4zy4VjS9" target="_blank">Submit Using NITI Forms</a>
-         </span>
-     </div>
- </form>
- 
- <!-- SweetAlert Library -->
- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
- 
- <!-- JavaScript -->
- <script>
- function handleSubmit(event) {
-     event.preventDefault(); // Prevent default form submission
- 
-     var form = document.getElementById('contact-form');
-     var formData = new FormData(form);
- 
-     fetch(form.action, {
-         method: 'POST',
-         body: formData
-     })
-     .then(response => {
-         // Show success popup
-         Swal.fire({
-             title: 'Submitted Successfully!',
-             text: 'Thank you for reaching out to Neroitech Inventions.',
-             icon: 'success',
-             confirmButtonText: 'OK'
-         }).then(() => {
-             window.location.href = 'https://niti.com.ng'; // Redirect to NITI website
-         });
-     })
-     .catch(error => {
-         console.error('Error:', error);
-         // Show success popup even if there is an error
-         Swal.fire({
-             title: 'Submitted Successfully!',
-             text: 'Thank you for reaching out to Neroitech Inventions.',
-             icon: 'success',
-             confirmButtonText: 'OK'
-         }).then(() => {
-             window.location.href = 'https://niti.com.ng'; // Redirect to NITI website
-         });
-     });
- 
-     // Optionally, reset the form
-     form.reset();
- }
- </script>
- 
- <div id="form-response-message"></div>
-
-                    </div>
-
-                    <div class="col-md-4 col-sm-4">
-                         <div class="google-map">
-	<!-- How to change your own map point
-            1. Go to Google Maps
-            2. Click on your location point
-            3. Click "Share" and choose "Embed map" tab
-            4. Copy only URL and paste it within the src="" field below
-	-->
-     <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3971.3908936907856!2d5.8216329999999985!3d5.508846999999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNcKwMzAnMzEuOSJOIDXCsDQ5JzE3LjkiRQ!5e0!3m2!1sen!2sng!4v1722207424445!5m2!1sen!2sng" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                         </div>
-                    </div>
-
-               </div>
-          </div>
-     </section>
-
-
-     <!-- FOOTER -->
-     <footer data-stellar-background-ratio="0.5">
-          <div class="container">
-               <div class="row">
-
-                    <div class="col-md-5 col-sm-12">
-                         <div class="footer-thumb footer-info"> 
-                              <h2>Neroitech Inventions (NITI)</h2>
-                              <p>We drive growth with top-notch content and visual ads, delivering cutting-edge solutions to reach a wider audience through visually rich content and ingenious ideas.</p>
-                         </div>
-                    </div>
-
-                    <div class="col-md-2 col-sm-4"> 
-                         <div class="footer-thumb"> 
-                              <h2>Company</h2>
-                              <ul class="footer-link">
-                                   <li><a href="#about">About Us</a></li>
-                                   <li><a href="#about">Services</a></li>
-                                   <li><a href="#award">Awards</a></li>
-                                   <li><a href="https://medium.com/@neroitech-inventions">Read Blog</a></li>
-                              </ul>
-                         </div>
-                    </div>
-
-                    <div class="col-md-2 col-sm-4"> 
-                         <div class="footer-thumb"> 
-                              <h2>Brand</h2>
-                              <ul class="footer-link">
-                                   <li><a href="https://drive.google.com/drive/folders/11mGKqDfj_OzY6WTvSrzF7tPnDO92BHIb?usp=sharing" target="_blank">Brand Assets</a></li>
-                                   <li><a href="https://neroitech-inventions.medium.com/neroitech-inventions-unveils-brand-refresh-ushering-in-a-new-era-of-digital-innovation-bb99ba1ac98f" target="_blank">Brand Identity</a></li>
-                                   <li><a href="https://www.linkedin.com/in/nyerhowo-isuru/" target="_blank">Team Leader</a></li>
-                              </ul>
-                         </div>
-                    </div>
-
-                    <div class="col-md-3 col-sm-4"> 
-                         <div class="footer-thumb"> 
-                              <h2>Locate Us</h2>
-                              <p>Queen Mary Plaza,<br>Block A, Office Number A13,<br>Opposite Igbogidi Junction, Orhuwhorun, Udu Local Government, Delta State NG 330103</p>
-                         </div>
-                    </div>                    
-
-                    <div class="col-md-12 col-sm-12">
-                         <div class="footer-bottom">
-                              <div class="col-md-6 col-sm-5">
-                                   <div class="copyright-text"> 
-                                        <p>Copyright &copy; 2016-2026 Neroitech Inventions</p>
-                                   </div>
-                              </div>
-                              <div class="col-md-6 col-sm-7">
-                                   <div class="phone-contact"> 
-                                        <p>Call us <span>(+234) 8107854712</span></p>
-                                   </div>
-                                   <ul class="social-icon">
-<li><a href="https://www.linkedin.com/company/neroitech-inventions" target="_blank"><i class="fa-brands fa-linkedin"></i></a></li>
-<li><a href="https://medium.com/@neroitech-inventions" target="_blank"><i class="fa-brands fa-medium"></i></a></li>
-<li><a href="https://x.com/neroitech" target="_blank"><i class="fa-brands fa-x-twitter"></i></a></li>
-<li><a href="https://www.youtube.com/@neroitech-inventions" target="_blank"><i class="fa-brands fa-youtube"></i></a></li>
-                                   </ul>
-                              </div>
-                         </div>
-                    </div>
-                    
-               </div>
-          </div>
-     </footer>
-
-
-     <!-- MODAL -->
-     <section class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-               <div class="modal-content modal-popup">
-
-                    <div class="modal-header">
-                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                         </button>
-                    </div>
-
-                    <div class="modal-body">
-                         <div class="container-fluid">
-                              <div class="row">
-
-                                   <div class="col-md-12 col-sm-12">
-                                        <div class="modal-title">
-                                             <h2>NITI Team</h2>
-                                        </div>
-
-                                        <!-- NAV TABS -->
-                                        <ul class="nav nav-tabs" role="tablist">
-                                             <li class="active"><a href="#" aria-controls="sign_up" role="tab" data-toggle="tab">Staff Login</a></li>
-                                        </ul>
-
-                                        <!-- TAB PANES -->
-
-                                             <div role="tabpanel" class="tab-pane fade in" id="sign_in">
-                                                  <form action="#" method="post">
-                                                       <!--<input type="email" class="form-control" name="email" placeholder="Email" required>
-                                                       <input type="password" class="form-control" name="password" placeholder="Password" required>-->
-                                                       <p class="staff-text">Staff Login has been disabled by the admin. Please use the Staff URL.</p>
-                                                       <input type="submit" class="form-control" name="submit" value="Okay">
-                                                       <a href="https://www.linkedin.com/in/nyerhowo-isuru/" target="_blank">Need assistance?</a>
-                                                  </form>
-                                             </div>
-                                        </div>
-                                   </div>
-
-                              </div>
-                         </div>
-                    </div>
-
-               </div>
-          </div>
-     </section>
-
-     <!-- SCRIPTS -->
-     <script src="js/jquery.js"></script>
-     <script src="js/bootstrap.min.js"></script>
-     <script src="js/jquery.stellar.min.js"></script>
-     <script src="js/jquery.magnific-popup.min.js"></script>
-     <script src="js/custom.js"></script>
-
-
-     <button onclick="topFunction()" id="myBtn" title="Go to top">  <i class="fa fa-arrow-up"></i></button>
+     <!-- SweetAlert -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
      <script>
-          // Get the button
-          let mybutton = document.getElementById("myBtn");
-          
-          // When the user scrolls down 20px from the top of the document, show the button
-          window.onscroll = function() {scrollFunction()};
-          
-          function scrollFunction() {
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-              mybutton.style.display = "block";
-            } else {
-              mybutton.style.display = "none";
-            }
-          }
-          
-          // When the user clicks on the button, scroll to the top of the document
-          function topFunction() {
-            document.body.scrollTop = 0;
-            document.documentElement.scrollTop = 0;
-          }
-          </script>
+          const hamburger = document.getElementById('hamburgerBtn');
+          const mobileMenu = document.getElementById('mobileMenu');
 
-          <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-     (function(){
-     var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-     s1.async=true;
-     s1.src='https://embed.tawk.to/63c751d247425128790e3fce/1gn19f843';
-     s1.charset='UTF-8';
-     s1.setAttribute('crossorigin','*');
-     s0.parentNode.insertBefore(s1,s0);
-     })();
+          hamburger.addEventListener('click', () => {
+               hamburger.classList.toggle('active');
+               mobileMenu.classList.toggle('active');
+          });
+
+          function closeMobileMenu() {
+               hamburger.classList.remove('active');
+               mobileMenu.classList.remove('active');
+          }
+
+          document.querySelectorAll('#mobileMenu a').forEach(link => {
+               link.addEventListener('click', closeMobileMenu);
+          });
+
+          const topBtn = document.getElementById("topBtn");
+          window.addEventListener("scroll", () => {
+               if (window.scrollY > 300) {
+                    topBtn.classList.add("show");
+               } else {
+                    topBtn.classList.remove("show");
+               }
+          });
+
+          topBtn.addEventListener("click", () => {
+               window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+
+          function handleSubmit(event) {
+               event.preventDefault();
+               const form = document.getElementById('contact-form');
+               const formData = new FormData(form);
+
+               fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+               })
+               .then(() => {
+                    Swal.fire({
+                         title: 'Submitted Successfully!',
+                         text: 'Thank you for reaching out to Neroitech Inventions. We\'ll get back to you soon.',
+                         icon: 'success',
+                         confirmButtonText: 'OK',
+                         confirmButtonColor: '#38BDF8'
+                    }).then(() => {
+                         form.reset();
+                         window.location.href = 'https://niti.com.ng';
+                    });
+               })
+               .catch(() => {
+                    Swal.fire({
+                         title: 'Submitted Successfully!',
+                         text: 'Thank you for reaching out to Neroitech Inventions.',
+                         icon: 'success',
+                         confirmButtonText: 'OK',
+                         confirmButtonColor: '#38BDF8'
+                    }).then(() => {
+                         form.reset();
+                         window.location.href = 'https://niti.com.ng';
+                    });
+               });
+          }
+
+          // Tawk.to
+          var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+          (function(){
+               var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+               s1.async = true;
+               s1.src = 'https://embed.tawk.to/63c751d247425128790e3fce/1gn19f843';
+               s1.charset = 'UTF-8';
+               s1.setAttribute('crossorigin', '*');
+               s0.parentNode.insertBefore(s1, s0);
+          })();
      </script>
-     <!--End of Tawk.to Script-->
 
 </body>
 </html>
