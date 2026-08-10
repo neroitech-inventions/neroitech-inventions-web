@@ -65,6 +65,26 @@
       .resume-section { page-break-inside: avoid; break-inside: avoid; }
       .resume-header { page-break-after: avoid; border-radius: 0 !important; }
     }
+
+    .drag-handle {
+      cursor: grab;
+      color: #94a3b8;
+      font-weight: bold;
+      user-select: none;
+    }
+
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .section-item.dragging {
+      opacity: 0.5;
+      background-color: #1e293b !important;
+    }
+
+    .section-item:hover {
+      background-color: #334155 !important;
+    }
   </style>
 </head>
 <body class="text-white min-h-screen">
@@ -182,26 +202,30 @@
               class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
           </div>
 
-          <!-- Sections Visibility -->
+          <!-- Sections Visibility & Order -->
           <div class="pt-2">
-            <label class="text-sm text-slate-300 mb-3 block">Show / Hide Sections</label>
-            <div class="grid grid-cols-2 gap-3 text-sm">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="showSummary" checked onchange="generateResume()" class="rounded">
+            <label class="text-sm text-slate-300 mb-3 block">Sections (Drag to Reorder)</label>
+            <div id="sectionsContainer" class="space-y-2 text-sm">
+              <div class="section-item flex items-center gap-2 p-3 bg-slate-800 rounded-lg cursor-move hover:bg-slate-700 transition" draggable="true" data-section="summary">
+                <span class="drag-handle">≡</span>
+                <input type="checkbox" class="section-checkbox rounded" data-section="summary" checked>
                 <span>Summary</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="showSkills" checked onchange="generateResume()" class="rounded">
+              </div>
+              <div class="section-item flex items-center gap-2 p-3 bg-slate-800 rounded-lg cursor-move hover:bg-slate-700 transition" draggable="true" data-section="skills">
+                <span class="drag-handle">≡</span>
+                <input type="checkbox" class="section-checkbox rounded" data-section="skills" checked>
                 <span>Skills</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="showExperience" checked onchange="generateResume()" class="rounded">
+              </div>
+              <div class="section-item flex items-center gap-2 p-3 bg-slate-800 rounded-lg cursor-move hover:bg-slate-700 transition" draggable="true" data-section="experience">
+                <span class="drag-handle">≡</span>
+                <input type="checkbox" class="section-checkbox rounded" data-section="experience" checked>
                 <span>Experience</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="showEducation" checked onchange="generateResume()" class="rounded">
+              </div>
+              <div class="section-item flex items-center gap-2 p-3 bg-slate-800 rounded-lg cursor-move hover:bg-slate-700 transition" draggable="true" data-section="education">
+                <span class="drag-handle">≡</span>
+                <input type="checkbox" class="section-checkbox rounded" data-section="education" checked>
                 <span>Education</span>
-              </label>
+              </div>
             </div>
           </div>
 
@@ -280,6 +304,67 @@ Jan 2023 – Present
 
   <script>
     let activeTemplate = 'modern';
+    let sectionsOrder = ['summary', 'skills', 'experience', 'education'];
+    let draggedElement = null;
+
+    // Drag and Drop Logic
+    document.addEventListener('dragstart', (e) => {
+      if (e.target.classList.contains('section-item')) {
+        draggedElement = e.target;
+        e.target.style.opacity = '0.5';
+      }
+    });
+
+    document.addEventListener('dragend', (e) => {
+      if (e.target.classList.contains('section-item')) {
+        e.target.style.opacity = '1';
+      }
+    });
+
+    document.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      const container = document.getElementById('sectionsContainer');
+      const items = [...container.querySelectorAll('.section-item')];
+      const afterElement = getDragAfterElement(container, e.clientY);
+      
+      if (afterElement == null) {
+        container.appendChild(draggedElement);
+      } else {
+        container.insertBefore(draggedElement, afterElement);
+      }
+    });
+
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll('.section-item:not([style*="opacity"])'), draggedElement].filter(el => el !== draggedElement);
+      
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    // Update sections order when drag ends
+    document.addEventListener('drop', () => {
+      const container = document.getElementById('sectionsContainer');
+      const items = container.querySelectorAll('.section-item');
+      sectionsOrder = Array.from(items).map(item => item.dataset.section);
+      saveDraft();
+      generateResume();
+    });
+
+    // Section checkbox handlers
+    document.addEventListener('change', (e) => {
+      if (e.target.classList.contains('section-checkbox')) {
+        generateResume();
+        saveDraft();
+      }
+    });
 
     function formatText(text) {
       if (!text) return '';
@@ -334,6 +419,11 @@ Jan 2023 – Present
     }
 
     function collectFormData() {
+      const sectionVisibility = {};
+      document.querySelectorAll('.section-checkbox').forEach(cb => {
+        sectionVisibility[cb.dataset.section] = cb.checked;
+      });
+      
       return {
         name: document.getElementById('name').value,
         title: document.getElementById('title').value,
@@ -350,10 +440,8 @@ Jan 2023 – Present
         theme: document.getElementById('themeColor').value,
         spacing: document.getElementById('spacingSelector').value,
         template: activeTemplate,
-        showSummary: document.getElementById('showSummary').checked,
-        showSkills: document.getElementById('showSkills').checked,
-        showExperience: document.getElementById('showExperience').checked,
-        showEducation: document.getElementById('showEducation').checked
+        sectionsOrder: sectionsOrder,
+        sectionVisibility: sectionVisibility
       };
     }
 
@@ -375,11 +463,29 @@ Jan 2023 – Present
       if (saved.template) activeTemplate = saved.template;
       if (saved.imageData) window._savedProfileImage = saved.imageData;
 
+      // Restore section order
+      if (saved.sectionsOrder) {
+        sectionsOrder = saved.sectionsOrder;
+        const container = document.getElementById('sectionsContainer');
+        const items = container.querySelectorAll('.section-item');
+        const itemMap = new Map(Array.from(items).map(item => [item.dataset.section, item]));
+        
+        container.innerHTML = '';
+        saved.sectionsOrder.forEach(section => {
+          if (itemMap.has(section)) {
+            container.appendChild(itemMap.get(section));
+          }
+        });
+      }
+
       // Restore section visibility
-      if (saved.showSummary !== undefined) document.getElementById('showSummary').checked = saved.showSummary;
-      if (saved.showSkills !== undefined) document.getElementById('showSkills').checked = saved.showSkills;
-      if (saved.showExperience !== undefined) document.getElementById('showExperience').checked = saved.showExperience;
-      if (saved.showEducation !== undefined) document.getElementById('showEducation').checked = saved.showEducation;
+      if (saved.sectionVisibility) {
+        document.querySelectorAll('.section-checkbox').forEach(cb => {
+          if (saved.sectionVisibility[cb.dataset.section] !== undefined) {
+            cb.checked = saved.sectionVisibility[cb.dataset.section];
+          }
+        });
+      }
 
       generateResume();
       changeFont();
@@ -444,11 +550,11 @@ Jan 2023 – Present
       const themeColor = document.getElementById('themeColor').value;
       const spacing = document.getElementById('spacingSelector').value;
 
-      // Visibility
-      const showSummary = document.getElementById('showSummary').checked;
-      const showSkills = document.getElementById('showSkills').checked;
-      const showExperience = document.getElementById('showExperience').checked;
-      const showEducation = document.getElementById('showEducation').checked;
+      // Get section visibility from checkboxes
+      const sectionVisibility = {};
+      document.querySelectorAll('.section-checkbox').forEach(cb => {
+        sectionVisibility[cb.dataset.section] = cb.checked;
+      });
 
       // Spacing
       let headerPadding = 'p-10';
@@ -515,19 +621,17 @@ Jan 2023 – Present
         socialHTML += `</div>`;
       }
 
-      // Build sections only if visible
+      // Build sections in order only if visible
       let sectionsHTML = '';
 
-      if (showSummary) {
-        sectionsHTML += `
+      const sectionTemplates = {
+        summary: () => sectionVisibility.summary ? `
           <div class="resume-section ${sectionSpacing}">
             <h2 class="text-2xl font-bold ${headingMargin}">Professional Summary</h2>
             <p class="${textLeading} opacity-80">${formatText(summary)}</p>
-          </div>`;
-      }
+          </div>` : '',
 
-      if (showSkills) {
-        sectionsHTML += `
+        skills: () => sectionVisibility.skills && skillsArray.length > 0 ? `
           <div class="resume-section ${sectionSpacing}">
             <h2 class="text-2xl font-bold ${headingMargin}">Skills</h2>
             <div class="flex flex-wrap gap-2 sm:gap-3">
@@ -536,24 +640,27 @@ Jan 2023 – Present
                   ${skill.trim()}
                 </span>`).join('')}
             </div>
-          </div>`;
-      }
+          </div>` : '',
 
-      if (showExperience) {
-        sectionsHTML += `
+        experience: () => sectionVisibility.experience ? `
           <div class="resume-section ${sectionSpacing}">
             <h2 class="text-2xl font-bold ${headingMargin}">Experience</h2>
             <p class="${textLeading} opacity-90">${formatText(experience)}</p>
-          </div>`;
-      }
+          </div>` : '',
 
-      if (showEducation) {
-        sectionsHTML += `
-          <div class="resume-section">
+        education: () => sectionVisibility.education ? `
+          <div class="resume-section ${sectionSpacing}">
             <h2 class="text-2xl font-bold ${headingMargin}">Education</h2>
             <p class="${textLeading} opacity-90">${formatText(education)}</p>
-          </div>`;
-      }
+          </div>` : ''
+      };
+
+      // Build sections in the order specified
+      sectionsOrder.forEach(section => {
+        if (sectionTemplates[section]) {
+          sectionsHTML += sectionTemplates[section]();
+        }
+      });
 
       document.getElementById('resumeOutput').innerHTML = `
         <div class="resume-header ${headerClass} ${headerPadding}" style="background: linear-gradient(135deg, ${themeColor}, #2563eb)">
