@@ -166,18 +166,18 @@
       <section class="hero">
         <div class="hero-badge"><i class="fas fa-sparkles"></i> Discover & Promote</div>
         <h1>Every promotion<br>is a <em>quest</em>.</h1>
-        <p>Post your project free, or boost for $0.50 and hit the featured feed for more reach.</p>
+        <p>Post your project free, or boost to get more eyes on your post.</p>
         <div class="hero-cta">
           <button class="btn btn-grad" onclick="openLaunch()"><i class="fas fa-rocket"></i> Launch Quest</button>
           <button class="btn btn-ghost" onclick="document.getElementById('feed').scrollIntoView({behavior:'smooth'})"><i class="fas fa-compass"></i> Explore Quests</button>
         </div>
       </section>
-      <div class="boost-banner">
-        <div style="font-weight:700;margin-bottom:4px;">Boost = Featured on feed</div>
-        <div style="font-size:0.76rem;color:var(--muted);">Pay 0.50 USDT (Polygon/Solana) via ZeroConnect</div>
-        <div class="boost-price">$0.50 USDT</div>
-        <button class="btn btn-grad btn-sm" onclick="openLaunch(true)">Boost a Quest</button>
-      </div>
+<div class="boost-banner">
+  <div style="font-weight:700;margin-bottom:4px;">Boost = more eyes on your post</div>
+  <div style="font-size:0.76rem;color:var(--muted);">Get featured on the feed with higher reach for a little amount</div>
+  <div class="boost-price">$0.50 USDT</div>
+  <button class="btn btn-grad btn-sm" onclick="openLaunch(true)">Boost a Quest</button>
+</div>
       <section class="section">
         <div class="section-head"><div class="section-title">Categories</div></div>
         <div class="cats" id="catBar">
@@ -219,22 +219,26 @@
       <div class="quest-grid" id="pendingFeed"><div class="loading"><span class="spinner"></span> Loading pending…</div></div>
     </div>
 
-    <div id="view-boost" style="display:none;padding-top:22px;">
-      <div style="text-align:center;margin-bottom:16px;">
-        <div class="hero-badge"><i class="fas fa-star"></i> Boost</div>
-        <h2 style="font-size:1.35rem;font-weight:800;margin:10px 0 6px;">Boost your Quest</h2>
-        <p style="color:var(--muted);font-size:0.86rem;">$0.50 USDT · auto-verify on-chain</p>
-      </div>
-      <div class="boost-banner" style="text-align:left;">
-        <div class="boost-price" style="text-align:center;">$0.50</div>
-        <ul style="list-style:none;font-size:0.84rem;color:var(--muted);margin:12px 0 16px;">
-          <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Featured on homepage</li>
-          <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Category spotlight</li>
-          <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Polygon or Solana USDT</li>
-        </ul>
-        <button class="btn btn-grad btn-full" onclick="openLaunch(true)"><i class="fas fa-bolt"></i> Launch & Boost</button>
-      </div>
-    </div>
+   <div id="view-boost" style="display:none;padding-top:22px;">
+  <div style="text-align:center;margin-bottom:16px;">
+    <div class="hero-badge"><i class="fas fa-star"></i> Boost</div>
+    <h2 style="font-size:1.35rem;font-weight:800;margin:10px 0 6px;">Boost your Quest</h2>
+    <p style="color:var(--muted);font-size:0.86rem;">Don’t just post it, put it in front of people.</p>
+  </div>
+  <div class="boost-banner" style="text-align:left;">
+    <div class="boost-price" style="text-align:center;">$0.50 USDT</div>
+    <p style="font-size:0.84rem;color:var(--muted);text-align:center;margin-bottom:12px;">
+      One small payment. More eyes on your X post.
+    </p>
+    <ul style="list-style:none;font-size:0.84rem;color:var(--muted);margin:0 0 16px;">
+      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Featured on the homepage feed</li>
+      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Higher visibility than free posts</li>
+      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> More clicks, views & engagement</li>
+      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Auto-verified on Polygon or Solana</li>
+    </ul>
+    <button class="btn btn-grad btn-full" onclick="openLaunch(true)"><i class="fas fa-bolt"></i> Boost for $0.50</button>
+  </div>
+</div>
 
 <div id="view-bounties" style="display:none;padding-top:18px;">
   <div class="section-head">
