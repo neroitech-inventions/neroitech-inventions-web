@@ -128,7 +128,6 @@
       box-shadow:0 0 0 3px var(--green-dim);
     }
     .field-input::placeholder{color:var(--muted2);}
-    .field-hint{font-size:0.65rem;color:var(--muted2);margin-top:5px;}
     .field-input.valid{border-color:rgba(34,197,94,0.6)!important;}
     .field-input.invalid{border-color:rgba(239,68,68,0.6)!important;}
     .field-status{display:inline-flex;align-items:center;gap:4px;font-size:0.65rem;margin-top:5px;height:16px;}
@@ -205,6 +204,48 @@
       border-radius:10px;padding:12px 14px;font-size:0.72rem;color:var(--yellow);
       margin-bottom:18px;line-height:1.5;
     }
+
+    /* Modern Modal Alert Styles */
+    .modal-overlay{
+      display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);
+      backdrop-filter:blur(5px);z-index:9998;align-items:center;justify-content:center;
+      animation:fadeIn .2s ease-out;
+    }
+    .modal-overlay.show{display:flex;}
+    @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+    @keyframes slideUp{from{transform:translateY(16px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+    .modal{
+      background:var(--surface);border:1px solid var(--border);border-radius:16px;
+      padding:32px 28px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.4);
+      animation:slideUp .3s ease-out;
+    }
+    .modal-icon{
+      width:52px;height:52px;border-radius:12px;display:flex;
+      align-items:center;justify-content:center;margin-bottom:18px;font-size:24px;
+    }
+    .modal-icon.error{background:rgba(239,68,68,0.12);color:var(--red);}
+    .modal-icon.warning{background:rgba(234,179,8,0.12);color:var(--yellow);}
+    .modal-icon.success{background:var(--green-dim);color:var(--green);}
+    .modal-icon.info{background:rgba(59,130,246,0.12);color:var(--blue);}
+    .modal-title{font-size:1.1rem;font-weight:700;margin-bottom:8px;color:var(--text);}
+    .modal-message{font-size:0.9rem;color:var(--muted);line-height:1.6;margin-bottom:24px;}
+    .modal-actions{display:flex;gap:12px;}
+    .modal-btn{
+      flex:1;padding:12px 16px;border:none;border-radius:10px;
+      font-family:var(--font);font-size:0.9rem;font-weight:600;
+      cursor:pointer;transition:all .18s;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .modal-btn.primary{
+      background:linear-gradient(135deg,#22c55e,#16a34a);color:#052e16;
+    }
+    .modal-btn.primary:hover{transform:translateY(-2px);box-shadow:0 4px 16px var(--green-glow);}
+    .modal-btn.secondary{
+      background:var(--surface2);color:var(--text);border:1px solid var(--border);
+    }
+    .modal-btn.secondary:hover{border-color:var(--border2);background:var(--surface3);}
+    .modal-btn:active{transform:scale(0.96);}
+    @media(max-width:480px){.modal{padding:24px 20px;}.modal-btn{font-size:0.85rem;}}
   </style>
 </head>
 <body>
@@ -327,8 +368,51 @@
     </div>
   </div>
 
+  <!-- Modern Alert Modal -->
+  <div class="modal-overlay" id="alertOverlay">
+    <div class="modal" id="alertModal">
+      <div class="modal-icon" id="alertIcon"></div>
+      <div class="modal-title" id="alertTitle"></div>
+      <div class="modal-message" id="alertMessage"></div>
+      <div class="modal-actions">
+        <button class="modal-btn primary" id="alertConfirm">Okay</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 const $ = id => document.getElementById(id);
+
+// Modern Alert System
+function showAlert(title, message, type = 'error', onConfirm = null) {
+  const overlay = $('alertOverlay');
+  const icon = $('alertIcon');
+  const titleEl = $('alertTitle');
+  const msgEl = $('alertMessage');
+  const confirmBtn = $('alertConfirm');
+  
+  // Set icon based on type
+  const iconMap = {
+    error: '<i class="fas fa-circle-exclamation"></i>',
+    warning: '<i class="fas fa-triangle-exclamation"></i>',
+    success: '<i class="fas fa-check-circle"></i>',
+    info: '<i class="fas fa-circle-info"></i>'
+  };
+  
+  icon.className = `modal-icon ${type}`;
+  icon.innerHTML = iconMap[type] || iconMap.error;
+  titleEl.textContent = title;
+  msgEl.textContent = message;
+  
+  overlay.classList.add('show');
+  
+  confirmBtn.onclick = () => {
+    overlay.classList.remove('show');
+    if (onConfirm) onConfirm();
+  };
+  
+  confirmBtn.focus();
+}
 
 function esc(str) {
   return String(str || '')
@@ -753,19 +837,19 @@ $('genBtn').addEventListener('click', () => {
   };
 
   if (!cfg.poly && !cfg.sol) {
-    alert('Enter at least one receiver address (Polygon or Solana).');
+    showAlert('Missing Address', 'Enter at least one receiver address (Polygon or Solana).', 'error');
     return;
   }
   if (!cfg.url) {
-    alert('Enter a success redirect URL.');
+    showAlert('Missing URL', 'Enter a success redirect URL.', 'error');
     return;
   }
   if (cfg.poly && !cfg.etherscan) {
-    alert('Polygon requires an Etherscan API key.');
+    showAlert('Missing API Key', 'Polygon requires an Etherscan API key.', 'warning');
     return;
   }
   if (cfg.sol && !cfg.helius) {
-    alert('Solana requires a Helius API key.');
+    showAlert('Missing API Key', 'Solana requires a Helius API key.', 'warning');
     return;
   }
 
@@ -798,7 +882,7 @@ $('copyBtn').addEventListener('click', async () => {
     btn.innerHTML = '<i class="fas fa-check"></i> Copied';
     setTimeout(() => { btn.innerHTML = old; }, 2000);
   } catch (e) {
-    alert('Copy failed');
+    showAlert('Copy Failed', 'Could not copy to clipboard. Try again.', 'error');
   }
 });
 
@@ -822,6 +906,13 @@ $('inSol').addEventListener('input', () => {
   }
   const isValid = isValidSolanaAddress(addr);
   updateAddressStatus('inSol', 'statusSol', isValid, 'Solana');
+});
+
+// Close modal when clicking overlay
+$('alertOverlay').addEventListener('click', (e) => {
+  if (e.target === $('alertOverlay')) {
+    $('alertOverlay').classList.remove('show');
+  }
 });
 </script>
 </body>

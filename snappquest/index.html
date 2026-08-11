@@ -19,7 +19,6 @@
   <meta name="description" content="Promote any project for free. Boost for $0.50 USDT. Discover startups, AI, crypto & communities.">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -100,8 +99,18 @@
     .addr-row{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.35);padding:10px;border-radius:10px;margin-bottom:8px;border:1px solid var(--border);}
     .addr-text{flex:1;font-family:var(--mono);font-size:0.66rem;word-break:break-all;color:var(--green);}
     .copy-btn{padding:6px 10px;background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.25);border-radius:8px;font-size:0.68rem;font-weight:600;cursor:pointer;font-family:var(--font);}
-    #payQr{display:flex;justify-content:center;margin:4px 0;}
-    #payQr canvas{border-radius:10px;background:#fff;padding:8px;}
+    
+    /* Enhanced QR Code Styling */
+    .qr-section{display:none;margin-top:12px;padding-top:12px;border-top:1px solid rgba(52,211,153,0.15);}
+    .qr-section.show{display:block;}
+    .qr-label{font-size:0.7rem;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+    .qr-label i{font-size:0.85rem;}
+    #payQr{display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,rgba(52,211,153,0.08),rgba(34,211,238,0.05));border:1.5px solid rgba(52,211,153,0.25);border-radius:14px;padding:16px;margin-bottom:12px;}
+    #payQr canvas{border-radius:10px;background:#fff;padding:10px;box-shadow:0 8px 24px rgba(0,0,0,0.4);display:block;max-width:100%;height:auto;}
+    .qr-hint{font-size:0.65rem;color:var(--muted);text-align:center;line-height:1.6;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.15);border-radius:10px;padding:10px;display:flex;align-items:center;justify-content:center;gap:6px;}
+    .qr-hint i{font-size:0.75rem;color:var(--green);flex-shrink:0;}
+    .qr-fallback{font-size:0.65rem;color:var(--yellow);text-align:center;padding:12px;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);border-radius:10px;margin-bottom:10px;}
+    
     .pay-hint{font-size:0.62rem;color:var(--muted);text-align:center;}
     .status-log{background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:10px;min-height:40px;max-height:110px;overflow-y:auto;font-family:var(--mono);font-size:0.66rem;line-height:1.65;margin-top:10px;color:var(--muted);}
     .lg-ok{color:var(--green);}.lg-err{color:var(--red);}.lg-warn{color:var(--yellow);}.lg-info{color:var(--muted);}
@@ -223,7 +232,7 @@
   <div style="text-align:center;margin-bottom:16px;">
     <div class="hero-badge"><i class="fas fa-star"></i> Boost</div>
     <h2 style="font-size:1.35rem;font-weight:800;margin:10px 0 6px;">Boost your Quest</h2>
-    <p style="color:var(--muted);font-size:0.86rem;">Don’t just post it, put it in front of people.</p>
+    <p style="color:var(--muted);font-size:0.86rem;">Don't just post it, put it in front of people.</p>
   </div>
   <div class="boost-banner" style="text-align:left;">
     <div class="boost-price" style="text-align:center;">$0.50 USDT</div>
@@ -292,7 +301,16 @@
           <div class="pay-amount">0.50 USDT</div>
           <div class="pay-net" id="payNet">on Polygon</div>
           <div class="addr-row"><code class="addr-text" id="payAddr">—</code><button class="copy-btn" id="payCopy">Copy</button></div>
-          <div id="payQr"></div>
+          
+          <!-- Enhanced QR Code Section -->
+          <div class="qr-section" id="qrSection">
+            <div class="qr-label"><i class="fas fa-qrcode"></i> Scan to send</div>
+            <div id="payQr" style="min-height:20px;text-align:center;"></div>
+            <div class="qr-hint">
+              <i class="fas fa-info-circle"></i> Scan with wallet • Or copy address above
+            </div>
+          </div>
+          
           <div class="pay-hint">Send from the wallet above. Wait 30–60s, then verify.</div>
         </div>
         <button class="btn btn-grad btn-full" id="verifyBtn" onclick="verifyBoostPayment()"><i class="fas fa-check-circle"></i> I Paid, Verify</button>
@@ -306,7 +324,7 @@
   <div class="modal">
     <div class="modal-title" style="text-align:center;margin-bottom:6px;">Launch Free</div>
     <div class="modal-sub" style="text-align:center;margin-bottom:20px;line-height:1.5;">
-      You’ll be taken to Telegram to share your<br>
+      You'll be taken to Telegram to share your<br>
       <strong style="color:var(--text);">Twitter / X post link</strong>.<br>
       No form needed, just paste your link there.
     </div>
@@ -388,13 +406,9 @@ let livePage = 1;
 let bountyQuests = [];
 let bountyPage = 1;
 
-// Featured Quests: how many cards to show per page (change this number anytime)
-
 const PAGE_SIZE = 3;
 
-// Keyword → category (title first, then description). Short keys use word boundaries.
 function hasWord(text, word) {
-  // whole-word match so "ai" does not hit "claim" / "said" / "email"
   const re = new RegExp('(?:^|[^a-z0-9])' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:[^a-z0-9]|$)', 'i');
   return re.test(text);
 }
@@ -407,7 +421,6 @@ function classifyQuest(title, description) {
   const descL = (description || '').toLowerCase();
   const combined = titleL + ' ' + descL;
 
-  // Priority order matters — Engagement / Feedback / Bounty first
   const rules = [
     { cat: 'Engagement', keys: ['engagement', 'engage', 'like', 'comment', 'retweet', 'repost', 'follow', 'share', 'react', 'interaction'] },
     { cat: 'Feedback', keys: ['feedback', 'review', 'testimonial', 'survey', 'rate', 'rating', 'opinion'] },
@@ -424,14 +437,12 @@ function classifyQuest(title, description) {
     { cat: 'Communities', keys: ['community', 'discord', 'dao', 'forum', 'members', 'club'] }
   ];
 
-  // Prefer title matches
   for (const r of rules) {
     if (hasAny(titleL, r.keys)) return r.cat;
   }
   for (const r of rules) {
     if (hasAny(descL, r.keys)) return r.cat;
   }
-  // Explicit title patterns
   if (/\bengagement\b/i.test(titleL)) return 'Engagement';
   if (/\bfeedback\b/i.test(titleL)) return 'Feedback';
   if (/\bbounty\b/i.test(titleL)) return 'Bounty';
@@ -453,7 +464,6 @@ function short(a){return a?a.slice(0,6)+'…'+a.slice(-4):'—';}
 
 function parseExpiry(str) {
   if (!str) return null;
-  // Supports: 2026-08-07 19:29  or  2026-08-07
   const d = new Date(String(str).trim().replace(' ', 'T'));
   return isNaN(d.getTime()) ? null : d;
 }
@@ -469,7 +479,6 @@ async function isTxAlreadyUsed(txHash){
 
     const allRows = [...pending, ...listed];
     for(const row of allRows){
-      // Check every field in the row for this tx hash / link
       for(const key of Object.keys(row)){
         const val = String(row[key] || '').toLowerCase();
         if(val && val.includes(hash)) return true;
@@ -478,7 +487,7 @@ async function isTxAlreadyUsed(txHash){
     return false;
   }catch(e){
     console.error('TX check failed', e);
-    return false; // fail open so a sheet error doesn't block everyone
+    return false;
   }
 }
 
@@ -553,7 +562,6 @@ async function fetchSheet(spreadsheetId, range){
   });
 }
 
-// ── LIVE QUESTS (join.html logic) ──
 async function loadLiveQuests(){
   const el=$('questFeed');
   el.innerHTML='<div class="loading"><span class="spinner"></span> Loading featured quests…</div>';
@@ -585,7 +593,7 @@ liveQuests = rows.map(q => {
     expiry: expiryRaw,
     isExpired
   };
-}).filter(q => q.status === 'live' && !q.isExpired); // Status 0 + not expired
+}).filter(q => q.status === 'live' && !q.isExpired);
     livePage = 1;
     renderLive();
   }catch(e){
@@ -619,7 +627,6 @@ function goLivePage(n){
   if (feed) feed.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Build page number list with ellipsis: e.g. 1 … 4 5 6 … 20
 function pageWindow(current, total) {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
   const pages = new Set([1, total, current, current - 1, current + 1, current - 2, current + 2]);
@@ -668,7 +675,6 @@ function renderLive(){
   }
 }
 
-// ── PENDING (explorer.html logic) ──
 async function loadPending(){
   const el=$('pendingFeed');
   el.innerHTML='<div class="loading"><span class="spinner"></span> Loading pending…</div>';
@@ -713,7 +719,6 @@ function renderPending(list){
   el.innerHTML=list.map(q=>cardHTML(q,'pending')).join('');
 }
 
-// ── BOUNTIES (Status = 2) ──
 async function loadBounties(){
   const el = $('bountyFeed');
   el.innerHTML = '<div class="loading"><span class="spinner"></span> Loading bounties…</div>';
@@ -725,7 +730,6 @@ bountyQuests = rows.map(q => {
   const description = q.Description || '';
   const cat = classifyQuest(title, description);
 
-  // Column H = expiry date (header name may vary)
   const expiryRaw = q.Deadline || q.Expiry || q.Expiration || q['Expiry Date'] || q['End Date'] || q['Expires'] || '';
 const expiryDate = parseExpiry(expiryRaw);
 const isExpired = expiryDate && expiryDate < new Date();
@@ -746,7 +750,7 @@ const isExpired = expiryDate && expiryDate < new Date();
     expiry: expiryRaw,
     isExpired
   };
-}).filter(q => q.status === 'bounty' && !q.isExpired); // Status 2 + not expired
+}).filter(q => q.status === 'bounty' && !q.isExpired);
     bountyPage = 1;
     renderBounties();
   }catch(e){
@@ -820,9 +824,6 @@ function renderBounties(){
       `<button class="btn btn-ghost btn-sm" title="Last" ${bountyPage>=totalPages?'disabled':''} onclick="goBountyPage(${totalPages})"><i class="fas fa-angles-right"></i></button>`;
   }
 }
-
-
-
 
 function cardHTML(q, mode){
   const feat = q.featured ? 'featured' : '';
@@ -918,11 +919,10 @@ function openLaunch(boost){
   $('launchTitle').textContent=boost?'Boost a Quest':'Launch a Quest';
   $('launchSub').textContent=boost
     ? 'Pay $0.50 USDT → then submit to pending.'
-    : 'Free = share your Twitter/X link in Telegram (limited reach). Boost = fill the form and pay $0.50 for more reach.';
+    : 'Free means you share your link manually in Telegram (100+ reach) for no charge or complete payment to Boost for $0.50 to reach thousands of users in 24 hours.';
 }
 function closeLaunch(){$('launchOverlay').classList.remove('show');draft=null;}
 function backToForm(){$('payStep').style.display='none';$('launchForm').style.display='block';}
-
 
 function launchFree(){
   $('freeConfirmOverlay').classList.add('show');
@@ -964,19 +964,17 @@ if(!email||!name||!sponsor||!desc||!web||!tg){
   return;
 }
 
-// Only accept Twitter / X links
 const isTwitter = /^https?:\/\/(www\.)?(twitter\.com|x\.com)\//i.test(web);
 if(!isTwitter){
   toast('Quest link must be a Twitter / X post (x.com or twitter.com)');
   return;
 }
 
-// Prevent same Twitter/X link twice
 toast('Checking link…');
 const linkUsed = await isTwitterLinkAlreadyUsed(web);
 if(linkUsed){
   toast('This Twitter/X link was already promoted');
-  openTxUsed(); // or make a separate “link already used” modal if you prefer
+  openTxUsed();
   return;
 }
 
@@ -997,7 +995,6 @@ draft={email,name,sponsor,desc,web,tg,x,boost,track:trackCode()};
 }
 
 async function submitToGoogleForm(d){
-  // entry IDs from create.html
   const body=new URLSearchParams();
   body.set('entry.2147360639', d.email);
   body.set('entry.1526178092', d.name);
@@ -1020,9 +1017,15 @@ function selectPayChain(chain){
   const addr=chain==='polygon'?PAY.receiverPolygon:PAY.receiverSolana;
   $('payAddr').textContent=addr;
   $('payNet').textContent='on '+(chain==='polygon'?'Polygon':'Solana');
-  const qr=$('payQr');qr.innerHTML='';
-  try{QRCode.toCanvas(document.createElement('canvas'),addr,{width:132,margin:1,color:{dark:'#0e1020',light:'#fff'}},(e,c)=>{if(!e)qr.appendChild(c);});}catch(e){}
+  
+  // Display pre-made QR code image
+  const qr=$('payQr');
+  const qrImage = chain==='polygon' ? 'images/polygon-address.png' : 'images/solana-address.png';
+  
+  qr.innerHTML = `<img src="${qrImage}" alt="QR Code" style="border-radius:10px;background:#fff;padding:10px;box-shadow:0 8px 24px rgba(0,0,0,0.4);max-width:100%;height:auto;">`;
+  $('qrSection').classList.add('show');
 }
+
 $('payCopy').addEventListener('click',async()=>{
   try{await navigator.clipboard.writeText($('payAddr').textContent);$('payCopy').textContent='Copied';setTimeout(()=>$('payCopy').textContent='Copy',1500);}catch(e){}
 });
