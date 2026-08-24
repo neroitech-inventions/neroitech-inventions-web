@@ -529,6 +529,11 @@
         ✓ Works with ANY token. Enter numbers as: <strong>1000000</strong> or <strong>1M</strong> or <strong>543.87K</strong> or <strong>1.5B</strong>
       </div>
 
+            <div style="margin-bottom: 20px; padding: 12px; background: rgba(100, 200, 255, 0.1); border: 1px solid rgba(100, 200, 255, 0.2); border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" id="enableChartAnalysis" style="cursor: pointer; width: 18px; height: 18px;" onchange="toggleChartSection()">
+        <label for="enableChartAnalysis" style="cursor: pointer; margin: 0; color: #aaa; font-size: 13px;">Enable Chart Analysis (Optional)</label>
+      </div>
+
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Token Name</label>
@@ -954,13 +959,14 @@
       document.getElementById('chartPreview').src = '';
     }
 
-    // Show chart section when user enters token name
-    document.getElementById('tokenName').addEventListener('input', () => {
-      const tokenName = document.getElementById('tokenName').value.trim();
-      if (tokenName.length > 0) {
-        document.getElementById('chartSection').style.display = 'block';
-      }
-    });
+    // Toggle chart section based on checkbox
+    function toggleChartSection() {
+      const isEnabled = document.getElementById('enableChartAnalysis').checked;
+      document.getElementById('chartSection').style.display = isEnabled ? 'block' : 'none';
+    }
+
+    // Don't auto-show chart section - wait for user toggle
+    // Chart section stays hidden until user checks the checkbox
 
         // CHART ANALYSIS FUNCTIONS - WITH DRAG & DROP & PASTE
     function handleChartUpload(event) {
@@ -1070,16 +1076,6 @@
       }
     });
 
-    // Show chart section when user enters token name
-    const tokenNameInput = document.getElementById('tokenName');
-    if (tokenNameInput) {
-      tokenNameInput.addEventListener('input', () => {
-        const tokenName = tokenNameInput.value.trim();
-        if (tokenName.length > 0) {
-          document.getElementById('chartSection').style.display = 'block';
-        }
-      });
-    }
     // END CHART FUNCTIONS
 
     // Auto-calculate when any input changes
