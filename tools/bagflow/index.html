@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BagFlow - Crypto Projection Calculator</title>
+
+
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+     <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-QM106YDX6N');
+     </script>
+
+     <!-- Favicon -->
+     <link href="images/favicon.ico" rel="icon">
+       
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+      color: #e0e0e0;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      font-weight: 700;
+      background: linear-gradient(120deg, #ffffff, #a0a0a0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .header p {
+      font-size: 16px;
+      color: #999;
+    }
+
+    .input-section {
+      background: rgba(30, 30, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-group {
+      margin-bottom: 28px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 15px;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: rgba(100, 200, 255, 0.4);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 3px rgba(100, 200, 255, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: #666;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .current-value {
+      background: linear-gradient(135deg, rgba(100, 200, 255, 0.15), rgba(100, 200, 255, 0.05));
+      border: 1px solid rgba(100, 200, 255, 0.3);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .current-value-label {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .current-value-amount {
+      font-size: 36px;
+      font-weight: 700;
+      color: #64c8ff;
+    }
+
+    .projections-section {
+      background: rgba(30, 30, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 40px;
+      backdrop-filter: blur(10px);
+    }
+
+    .projections-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 28px;
+      color: #fff;
+    }
+
+    .market-cap-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .market-cap-btn {
+      padding: 12px 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .market-cap-btn:hover {
+      background: rgba(100, 200, 255, 0.15);
+      border-color: rgba(100, 200, 255, 0.3);
+      color: #64c8ff;
+      transform: translateY(-2px);
+    }
+
+    .market-cap-btn.active {
+      background: rgba(100, 200, 255, 0.25);
+      border-color: rgba(100, 200, 255, 0.5);
+      color: #64c8ff;
+      box-shadow: 0 4px 12px rgba(100, 200, 255, 0.2);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    thead {
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    th {
+      padding: 14px;
+      text-align: left;
+      color: #888;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e0e0e0;
+    }
+
+    tbody tr:hover {
+      background: rgba(100, 200, 255, 0.05);
+    }
+
+    .gain {
+      color: #4ade80;
+      font-weight: 600;
+    }
+
+    .error {
+      background: rgba(230, 75, 75, 0.15);
+      border: 1px solid rgba(230, 75, 75, 0.3);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #ff6b6b;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .note {
+      background: rgba(100, 150, 255, 0.08);
+      border: 1px solid rgba(100, 150, 255, 0.2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #aaa;
+      font-size: 13px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .disclaimer {
+      font-size: 12px;
+      color: #777;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 24px 16px;
+      }
+
+      .header h1 {
+        font-size: 32px;
+      }
+
+      .input-section,
+      .projections-section {
+        padding: 24px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .market-cap-buttons {
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+      }
+
+      table {
+        font-size: 13px;
+      }
+
+      th, td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Crypto BagFlow</h1>
+      <p>See your holdings at any market cap</p>
+    </div>
+
+    <div class="input-section">
+      <div class="note">
+        ✓ Works with ANY token. Enter numbers as: <strong>1000000</strong> or <strong>1M</strong> or <strong>543.87K</strong> or <strong>1.5B</strong>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Token Name</label>
+          <input type="text" id="tokenName" class="form-input" placeholder="e.g. BONK, Solana, Bitcoin" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Current Price (USD)</label>
+          <input type="text" id="currentPrice" class="form-input" placeholder="e.g. 0.00001 or 25.5" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Amount You Hold</label>
+          <input type="text" id="holdings" class="form-input" placeholder="e.g. 1000000 or 1M or 543.87K" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Circulating Supply</label>
+          <input type="text" id="circulatingSupply" class="form-input" placeholder="e.g. 100000000000 or 100B or 543.87M" />
+        </div>
+      </div>
+
+      <div id="errorMsg" class="error hidden"></div>
+
+      <div class="current-value" id="currentValue" style="display: none;">
+        <div class="current-value-label">Your Holdings Worth Today</div>
+        <div class="current-value-amount" id="currentValueAmount">$0.00</div>
+      </div>
+    </div>
+
+    <div class="projections-section" id="projectionsSection" style="display: none;">
+      <div class="projections-title">If this token reaches...</div>
+
+      <div class="market-cap-buttons" id="marketCapButtons"></div>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 28px; align-items: flex-end;">
+        <input type="text" id="customMarketCapInput" class="form-input" placeholder="Enter your target market cap (e.g. 250M or 2.5B)" style="flex: 1; margin: 0; padding: 12px 16px; font-size: 14px;" />
+        <button onclick="addCustomMarketCap()" style="padding: 12px 20px; background: linear-gradient(120deg, #64c8ff, #40a0ff); border: none; border-radius: 8px; color: #000; font-weight: 600; cursor: pointer; font-size: 14px; white-space: nowrap; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(100, 200, 255, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">Add Target</button>
+        <button onclick="clearCustomMarketCaps()" id="clearCustomBtn" style="padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #888; font-weight: 600; cursor: pointer; font-size: 13px; transition: all 0.2s; display: none;" onmouseover="this.style.borderColor='rgba(255, 255, 255, 0.2)'; this.style.color='#aaa'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.color='#888'">Clear</button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Market Cap</th>
+              <th>Token Price</th>
+              <th>Your Bag Worth</th>
+              <th>Gain</th>
+              <th>Return %</th>
+            </tr>
+          </thead>
+          <tbody id="projectionsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="disclaimer">
+        ⚠️ Projections are hypothetical. Actual prices may differ. Always do your own research.
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 12px; color: #666;">
+      <p>&copy; 2016–2026 <a href="https://niti.com.ng/" target="_blank" rel="noopener noreferrer" style="color: #666; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#64c8ff'" onmouseout="this.style.color='#666'">Neroitech Inventions</a>. All rights reserved.</p>
+    </div>
+  </div>
+
+  <script>
+    const marketCapPresets = [
+      { name: '$100K', value: 100000 },
+      { name: '$500K', value: 500000 },
+      { name: '$1M', value: 1000000 },
+      { name: '$5M', value: 5000000 },
+      { name: '$10M', value: 10000000 },
+      { name: '$50M', value: 50000000 },
+      { name: '$100M', value: 100000000 },
+      { name: '$500M', value: 500000000 },
+      { name: '$1B', value: 1000000000 },
+      { name: '$5B', value: 5000000000 },
+    ];
+
+    let customMarketCaps = [];
+
+    function formatInputValue(input) {
+      if (typeof input !== 'string') return '';
+      
+      const str = input.trim().toUpperCase();
+      
+      // Extract suffix (K, M, B, T) if present
+      const suffixMatch = str.match(/([KMBT])$/);
+      const suffix = suffixMatch ? suffixMatch[1] : '';
+      
+      // Remove non-digit and non-decimal characters (but not the suffix)
+      let numberPart = str.replace(/[^\d.]/g, '');
+      
+      // Split by decimal
+      const parts = numberPart.split('.');
+      const integerPart = parts[0];
+      const decimalPart = parts[1] || '';
+      
+      // Add commas to integer part
+      const withCommas = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      
+      // Combine: number + suffix
+      const combined = decimalPart ? withCommas + '.' + decimalPart : withCommas;
+      return suffix ? combined + suffix : combined;
+    }
+
+    function parseNumber(input) {
+      if (typeof input === 'number') return input;
+      if (typeof input !== 'string') return NaN;
+
+      const str = input.trim().toUpperCase();
+      
+      // Remove commas first
+      const cleaned = str.replace(/,/g, '');
+      
+      // Match number followed by optional decimal and optional suffix
+      const match = cleaned.match(/^([\d.]+)\s*([KMBT])?$/);
+      if (!match) return NaN;
+
+      let num = parseFloat(match[1]);
+      if (!isFinite(num)) return NaN;
+
+      const suffix = match[2];
+      if (suffix === 'K') return num * 1000;
+      if (suffix === 'M') return num * 1000000;
+      if (suffix === 'B') return num * 1000000000;
+      if (suffix === 'T') return num * 1000000000000;
+      
+      return num;
+    }
+
+    function formatCurrency(value) {
+      if (!isFinite(value) || value < 0) return '$0.00';
+      if (value >= 1e9) return '$' + (value / 1e9).toFixed(2) + 'B';
+      if (value >= 1e6) return '$' + (value / 1e6).toFixed(2) + 'M';
+      if (value >= 1e3) return '$' + (value / 1e3).toFixed(2) + 'K';
+      if (value >= 1) return '$' + value.toFixed(2);
+      if (value > 0) return '$' + value.toExponential(3);
+      return '$0.00';
+    }
+
+    function showError(msg) {
+      const errorDiv = document.getElementById('errorMsg');
+      errorDiv.textContent = msg;
+      errorDiv.classList.remove('hidden');
+      setTimeout(() => errorDiv.classList.add('hidden'), 4000);
+    }
+
+    function validateInputs() {
+      const tokenName = document.getElementById('tokenName').value.trim();
+      const currentPrice = parseNumber(document.getElementById('currentPrice').value);
+      const holdings = parseNumber(document.getElementById('holdings').value);
+      const supply = parseNumber(document.getElementById('circulatingSupply').value);
+
+      if (!tokenName) {
+        showError('Enter token name');
+        return false;
+      }
+      if (!isFinite(currentPrice) || currentPrice <= 0) {
+        showError('Enter current price (must be > 0). Use format: 0.00001, 1, 543.87M, etc.');
+        return false;
+      }
+      if (!isFinite(holdings) || holdings <= 0) {
+        showError('Enter amount you hold (must be > 0). Use format: 1000000, 1M, 543.87K, etc.');
+        return false;
+      }
+      if (!isFinite(supply) || supply <= 0) {
+        showError('Enter circulating supply (must be > 0). Use format: 100000000000, 1B, 543.87M, etc.');
+        return false;
+      }
+      return true;
+    }
+
+    function calculate() {
+      if (!validateInputs()) return;
+
+      const tokenName = document.getElementById('tokenName').value.trim();
+      const currentPrice = parseNumber(document.getElementById('currentPrice').value);
+      const holdings = parseNumber(document.getElementById('holdings').value);
+      const supply = parseNumber(document.getElementById('circulatingSupply').value);
+
+      // Show current value
+      const currentValue = holdings * currentPrice;
+      document.getElementById('currentValueAmount').textContent = formatCurrency(currentValue);
+      document.getElementById('currentValue').style.display = 'block';
+
+      // Show projections
+      document.getElementById('projectionsSection').style.display = 'block';
+
+      // Render buttons
+      const buttonContainer = document.getElementById('marketCapButtons');
+      buttonContainer.innerHTML = marketCapPresets.map((preset, idx) =>
+        `<button class="market-cap-btn${idx === 0 ? ' active' : ''}" onclick="projectMarketCap(${preset.value})">${preset.name}</button>`
+      ).join('');
+
+      // Generate all projections
+      generateProjections(currentPrice, holdings, supply, currentValue);
+    }
+
+    function generateProjections(currentPrice, holdings, supply, currentValue) {
+      const tbody = document.getElementById('projectionsBody');
+
+      // Combine presets and custom market caps, sort by value
+      const allMarketCaps = [...marketCapPresets, ...customMarketCaps];
+      allMarketCaps.sort((a, b) => a.value - b.value);
+
+      tbody.innerHTML = allMarketCaps.map(preset => {
+        const newPrice = preset.value / supply;
+        const newValue = holdings * newPrice;
+        const gain = newValue - currentValue;
+        const gainPercent = currentValue > 0 ? (gain / currentValue) * 100 : 0;
+
+        // Highlight custom market caps with different styling
+        const isCustom = customMarketCaps.some(cap => cap.value === preset.value);
+        const style = isCustom ? 'background: rgba(100, 200, 255, 0.08); font-weight: 600;' : '';
+
+        return `
+          <tr style="${style}">
+            <td><strong>${preset.name}</strong> ${isCustom ? '<span style="color: #64c8ff; font-size: 11px; margin-left: 6px;">(YOUR TARGET)</span>' : ''}</td>
+            <td>${formatCurrency(newPrice)}</td>
+            <td><strong>${formatCurrency(newValue)}</strong></td>
+            <td class="gain">${gain > 0 ? '+' : ''}${formatCurrency(gain)}</td>
+            <td class="gain">${gainPercent > 0 ? '+' : ''}${gainPercent.toFixed(1)}%</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function addCustomMarketCap() {
+      const input = document.getElementById('customMarketCapInput').value.trim();
+      if (!input) {
+        showError('Enter a market cap value');
+        return;
+      }
+
+      const value = parseNumber(input);
+      if (!isFinite(value) || value <= 0) {
+        showError('Invalid market cap. Use format: 250M, 2.5B, 500000000, etc.');
+        return;
+      }
+
+      // Check if this value already exists
+      if (customMarketCaps.some(cap => cap.value === value)) {
+        showError('This market cap is already added');
+        return;
+      }
+
+      // Add to custom market caps (sorted)
+      customMarketCaps.push({ name: formatCurrency(value), value: value });
+      customMarketCaps.sort((a, b) => a.value - b.value);
+
+      // Clear input
+      document.getElementById('customMarketCapInput').value = '';
+
+      // Show clear button if there are custom caps
+      document.getElementById('clearCustomBtn').style.display = customMarketCaps.length > 0 ? 'block' : 'none';
+
+      // Regenerate projections with custom values included
+      const tokenName = document.getElementById('tokenName').value.trim();
+      const currentPrice = parseNumber(document.getElementById('currentPrice').value);
+      const holdings = parseNumber(document.getElementById('holdings').value);
+      const supply = parseNumber(document.getElementById('circulatingSupply').value);
+
+      const currentValue = holdings * currentPrice;
+      generateProjections(currentPrice, holdings, supply, currentValue);
+    }
+
+    function clearCustomMarketCaps() {
+      customMarketCaps = [];
+      document.getElementById('customMarketCapInput').value = '';
+      document.getElementById('clearCustomBtn').style.display = 'none';
+
+      // Regenerate projections
+      const currentPrice = parseNumber(document.getElementById('currentPrice').value);
+      const holdings = parseNumber(document.getElementById('holdings').value);
+      const supply = parseNumber(document.getElementById('circulatingSupply').value);
+
+      const currentValue = holdings * currentPrice;
+      generateProjections(currentPrice, holdings, supply, currentValue);
+    }
+
+    // Auto-calculate when any input changes
+    const holdingsInput = document.getElementById('holdings');
+    const supplyInput = document.getElementById('circulatingSupply');
+    const priceInput = document.getElementById('currentPrice');
+
+    holdingsInput.addEventListener('input', (e) => {
+      e.target.value = formatInputValue(e.target.value);
+      calculate();
+    });
+
+    supplyInput.addEventListener('input', (e) => {
+      e.target.value = formatInputValue(e.target.value);
+      calculate();
+    });
+
+    priceInput.addEventListener('input', (e) => {
+      e.target.value = formatInputValue(e.target.value);
+      calculate();
+    });
+
+    document.getElementById('tokenName').addEventListener('input', calculate);
+
+    // Allow Enter key to add custom market cap
+    document.getElementById('customMarketCapInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addCustomMarketCap();
+    });
+  </script>
+</body>
+</html>
