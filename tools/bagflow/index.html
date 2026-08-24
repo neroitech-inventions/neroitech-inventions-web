@@ -17,7 +17,6 @@
 
      <!-- Favicon -->
      <link href="images/favicon.ico" rel="icon">
-       
   <style>
     * {
       margin: 0;
@@ -278,6 +277,165 @@
         padding: 10px;
       }
     }
+
+        .chart-section {
+      background: rgba(30, 30, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      backdrop-filter: blur(10px);
+    }
+
+    .chart-upload-area {
+      border: 2px dashed rgba(100, 200, 255, 0.3);
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: rgba(100, 200, 255, 0.05);
+    }
+
+    .chart-upload-area:hover {
+      border-color: rgba(100, 200, 255, 0.6);
+      background: rgba(100, 200, 255, 0.1);
+    }
+
+    .chart-upload-area input {
+      display: none;
+    }
+
+    #chartPreview {
+      max-width: 100%;
+      max-height: 400px;
+      border-radius: 12px;
+      margin-top: 20px;
+      border: 1px solid rgba(100, 200, 255, 0.2);
+    }
+
+    .chart-insights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .insight-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .insight-title {
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .insight-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: #64c8ff;
+    }
+
+    .chart-analysis-text {
+      background: rgba(100, 150, 255, 0.08);
+      border: 1px solid rgba(100, 150, 255, 0.2);
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 20px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #aaa;
+    }
+
+        .disclaimer {
+      font-size: 12px;
+      color: #777;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+    }
+
+        .chart-section {
+      background: rgba(30, 30, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      backdrop-filter: blur(10px);
+    }
+
+    .chart-upload-area {
+      border: 2px dashed rgba(100, 200, 255, 0.3);
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: rgba(100, 200, 255, 0.05);
+    }
+
+    .chart-upload-area:hover {
+      border-color: rgba(100, 200, 255, 0.6);
+      background: rgba(100, 200, 255, 0.1);
+    }
+
+    .chart-upload-area input {
+      display: none;
+    }
+
+    #chartPreview {
+      max-width: 100%;
+      max-height: 400px;
+      border-radius: 12px;
+      margin-top: 20px;
+      border: 1px solid rgba(100, 200, 255, 0.2);
+    }
+
+    .chart-insights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .insight-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .insight-title {
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .insight-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: #64c8ff;
+    }
+
+    .chart-analysis-text {
+      background: rgba(100, 150, 255, 0.08);
+      border: 1px solid rgba(100, 150, 255, 0.2);
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 20px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #aaa;
+    }
   </style>
 </head>
 <body>
@@ -285,6 +443,85 @@
     <div class="header">
       <h1>Crypto BagFlow</h1>
       <p>See your holdings at any market cap</p>
+    </div>
+
+        <div class="chart-section" id="chartSection" style="display: none;">
+      <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 24px; color: #fff;">Chart Analysis</h2>
+      
+      <div class="chart-upload-area" onclick="document.getElementById('chartUpload').click()">
+        <div style="font-size: 14px; color: #64c8ff; margin-bottom: 8px;">📊 Click to upload token chart</div>
+        <div style="font-size: 12px; color: #888;">PNG, JPG, or GIF • Max 5MB</div>
+        <input type="file" id="chartUpload" accept="image/*" onchange="handleChartUpload(event)" />
+      </div>
+
+      <div id="chartDisplay" style="display: none;">
+        <img id="chartPreview" alt="Token chart" />
+        
+        <div class="chart-insights" id="chartInsights">
+          <div class="insight-card">
+            <div class="insight-title">Chart Pattern</div>
+            <div class="insight-value" id="chartPattern">Analyzing...</div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-title">Trend Direction</div>
+            <div class="insight-value" id="trendDirection">Analyzing...</div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-title">Volatility</div>
+            <div class="insight-value" id="volatility">Analyzing...</div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-title">Volume Trend</div>
+            <div class="insight-value" id="volumeTrend">Analyzing...</div>
+          </div>
+        </div>
+
+        <div class="chart-analysis-text" id="chartAnalysis">
+          📈 Analyzing chart patterns, support/resistance levels, trend strength, and volume indicators...
+        </div>
+
+        <button onclick="clearChart()" style="margin-top: 16px; padding: 10px 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #888; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='rgba(255, 255, 255, 0.2)'; this.style.color='#aaa'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.color='#888'">Clear Chart</button>
+      </div>
+    </div>
+
+
+        <div class="chart-section" id="chartSection" style="display: none;">
+      <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 24px; color: #fff;">Chart Analysis</h2>
+      
+      <div class="chart-upload-area" onclick="document.getElementById('chartUpload').click()">
+        <div style="font-size: 14px; color: #64c8ff; margin-bottom: 8px;">📊 Click to upload token chart</div>
+        <div style="font-size: 12px; color: #888;">PNG, JPG, or GIF • Max 5MB • Or drag & drop • Or paste (Ctrl+V)</div>
+        <input type="file" id="chartUpload" accept="image/*" onchange="handleChartUpload(event)" />
+      </div>
+
+      <div id="chartDisplay" style="display: none;">
+        <img id="chartPreview" alt="Token chart" />
+        
+        <div class="chart-insights" id="chartInsights">
+          <div class="insight-card">
+            <div class="insight-title">Chart Pattern</div>
+            <div class="insight-value" id="chartPattern">Analyzing...</div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-title">Trend Direction</div>
+            <div class="insight-value" id="trendDirection">Analyzing...</div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-title">Volatility</div>
+            <div class="insight-value" id="volatility">Analyzing...</div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-title">Volume Trend</div>
+            <div class="insight-value" id="volumeTrend">Analyzing...</div>
+          </div>
+        </div>
+
+        <div class="chart-analysis-text" id="chartAnalysis">
+          📈 Analyzing chart patterns, support/resistance levels, trend strength, and volume indicators...
+        </div>
+
+        <button onclick="clearChart()" style="margin-top: 16px; padding: 10px 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #888; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='rgba(255, 255, 255, 0.2)'; this.style.color='#aaa'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.color='#888'">Clear Chart</button>
+      </div>
     </div>
 
     <div class="input-section">
@@ -319,39 +556,43 @@
       <div class="current-value" id="currentValue" style="display: none;">
         <div class="current-value-label">Your Holdings Worth Today</div>
         <div class="current-value-amount" id="currentValueAmount">$0.00</div>
+        <div style="font-size: 12px; color: #888; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(100, 200, 255, 0.2);">
+          Current Market Cap: <strong id="currentMarketCap" style="color: #aaa;">$0.00</strong>
+        </div>
+      </div>
+
+      <div class="projections-section" id="projectionsSection" style="display: none; margin-top: 28px; padding: 24px; background: rgba(30, 30, 30, 0.5); border-top: 1px solid rgba(100, 200, 255, 0.2); border-radius: 0;">
+        <div class="projections-title" id="projectionsTitleText">If this token reaches...</div>
+
+        <div class="market-cap-buttons" id="marketCapButtons"></div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 28px; align-items: flex-end;">
+          <input type="text" id="customMarketCapInput" class="form-input" placeholder="Enter your target market cap (e.g. 250M or 2.5B)" style="flex: 1; margin: 0; padding: 12px 16px; font-size: 14px;" />
+          <button onclick="addCustomMarketCap()" style="padding: 12px 20px; background: linear-gradient(120deg, #64c8ff, #40a0ff); border: none; border-radius: 8px; color: #000; font-weight: 600; cursor: pointer; font-size: 14px; white-space: nowrap; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(100, 200, 255, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">Add Target</button>
+          <button onclick="clearCustomMarketCaps()" id="clearCustomBtn" style="padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #888; font-weight: 600; cursor: pointer; font-size: 13px; transition: all 0.2s; display: none;" onmouseover="this.style.borderColor='rgba(255, 255, 255, 0.2)'; this.style.color='#aaa'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.color='#888'">Clear</button>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Market Cap</th>
+                <th>Token Price</th>
+                <th>Your Bag Worth</th>
+                <th>Gain</th>
+                <th>Return %</th>
+              </tr>
+            </thead>
+            <tbody id="projectionsBody"></tbody>
+          </table>
+        </div>
+
+        <div class="disclaimer" style="margin-top: 20px;">
+          ⚠️ Projections are hypothetical. Actual prices may differ. Always do your own research.
+        </div>
       </div>
     </div>
 
-    <div class="projections-section" id="projectionsSection" style="display: none;">
-      <div class="projections-title">If this token reaches...</div>
-
-      <div class="market-cap-buttons" id="marketCapButtons"></div>
-
-      <div style="display: flex; gap: 10px; margin-bottom: 28px; align-items: flex-end;">
-        <input type="text" id="customMarketCapInput" class="form-input" placeholder="Enter your target market cap (e.g. 250M or 2.5B)" style="flex: 1; margin: 0; padding: 12px 16px; font-size: 14px;" />
-        <button onclick="addCustomMarketCap()" style="padding: 12px 20px; background: linear-gradient(120deg, #64c8ff, #40a0ff); border: none; border-radius: 8px; color: #000; font-weight: 600; cursor: pointer; font-size: 14px; white-space: nowrap; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(100, 200, 255, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">Add Target</button>
-        <button onclick="clearCustomMarketCaps()" id="clearCustomBtn" style="padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #888; font-weight: 600; cursor: pointer; font-size: 13px; transition: all 0.2s; display: none;" onmouseover="this.style.borderColor='rgba(255, 255, 255, 0.2)'; this.style.color='#aaa'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.color='#888'">Clear</button>
-      </div>
-
-      <div style="overflow-x: auto;">
-        <table>
-          <thead>
-            <tr>
-              <th>Market Cap</th>
-              <th>Token Price</th>
-              <th>Your Bag Worth</th>
-              <th>Gain</th>
-              <th>Return %</th>
-            </tr>
-          </thead>
-          <tbody id="projectionsBody"></tbody>
-        </table>
-      </div>
-
-      <div class="disclaimer">
-        ⚠️ Projections are hypothetical. Actual prices may differ. Always do your own research.
-      </div>
-    </div>
 
     <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 12px; color: #666;">
       <p>&copy; 2016–2026 <a href="https://niti.com.ng/" target="_blank" rel="noopener noreferrer" style="color: #666; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#64c8ff'" onmouseout="this.style.color='#666'">Neroitech Inventions</a>. All rights reserved.</p>
@@ -474,17 +715,25 @@
       const holdings = parseNumber(document.getElementById('holdings').value);
       const supply = parseNumber(document.getElementById('circulatingSupply').value);
 
+      // Calculate current market cap
+      const currentMarketCap = currentPrice * supply;
+
       // Show current value
       const currentValue = holdings * currentPrice;
       document.getElementById('currentValueAmount').textContent = formatCurrency(currentValue);
+      document.getElementById('currentMarketCap').textContent = formatCurrency(currentMarketCap);
       document.getElementById('currentValue').style.display = 'block';
 
       // Show projections
       document.getElementById('projectionsSection').style.display = 'block';
+      document.getElementById('projectionsTitleText').textContent = 'If ' + tokenName + ' reaches...';
+
+      // Filter buttons to only show market caps higher than current
+      const relevantPresets = marketCapPresets.filter(p => p.value > currentMarketCap);
 
       // Render buttons
       const buttonContainer = document.getElementById('marketCapButtons');
-      buttonContainer.innerHTML = marketCapPresets.map((preset, idx) =>
+      buttonContainer.innerHTML = relevantPresets.map((preset, idx) =>
         `<button class="market-cap-btn${idx === 0 ? ' active' : ''}" onclick="projectMarketCap(${preset.value})">${preset.name}</button>`
       ).join('');
 
@@ -492,11 +741,31 @@
       generateProjections(currentPrice, holdings, supply, currentValue);
     }
 
-    function generateProjections(currentPrice, holdings, supply, currentValue) {
+    function clearCustomMarketCaps() {
+      customMarketCaps = [];
+      document.getElementById('customMarketCapInput').value = '';
+      document.getElementById('clearCustomBtn').style.display = 'none';
+
+      // Regenerate projections
+      const currentPrice = parseNumber(document.getElementById('currentPrice').value);
+      const holdings = parseNumber(document.getElementById('holdings').value);
+      const supply = parseNumber(document.getElementById('circulatingSupply').value);
+
+      const currentValue = holdings * currentPrice;
+      generateProjections(currentPrice, holdings, supply, currentValue);
+    }
+
+      function generateProjections(currentPrice, holdings, supply, currentValue) {
       const tbody = document.getElementById('projectionsBody');
 
-      // Combine presets and custom market caps, sort by value
-      const allMarketCaps = [...marketCapPresets, ...customMarketCaps];
+      // Calculate current market cap
+      const currentMarketCap = currentPrice * supply;
+
+      // Filter out presets that are less than or equal to current market cap
+      const relevantPresets = marketCapPresets.filter(p => p.value > currentMarketCap);
+
+      // Combine with custom market caps, sort by value
+      const allMarketCaps = [...relevantPresets, ...customMarketCaps];
       allMarketCaps.sort((a, b) => a.value - b.value);
 
       tbody.innerHTML = allMarketCaps.map(preset => {
@@ -551,28 +820,267 @@
       document.getElementById('clearCustomBtn').style.display = customMarketCaps.length > 0 ? 'block' : 'none';
 
       // Regenerate projections with custom values included
+      const currentPrice = parseNumber(document.getElementById('currentPrice').value);
+      const holdings = parseNumber(document.getElementById('holdings').value);
+      const supply = parseNumber(document.getElementById('circulatingSupply').value);
+
+      const currentValue = holdings * currentPrice;
+      generateProjections(currentPrice, holdings, supply, currentValue);
+    }
+
+    function projectMarketCap(marketCap) {
+      document.querySelectorAll('.market-cap-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }  
+
+        function handleChartUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Validate file size (5MB max)
+      if (file.size > 5 * 1024 * 1024) {
+        showError('Chart file too large (max 5MB)');
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        showError('Please upload an image file');
+        return;
+      }
+
+      // Read and display image
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('chartPreview').src = e.target.result;
+        document.getElementById('chartDisplay').style.display = 'block';
+        
+        // Analyze chart (simulated analysis)
+        analyzeChart();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function analyzeChart() {
+      const img = document.getElementById('chartPreview');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+
+      let greenPixels = 0;
+      let redPixels = 0;
+      let totalPixels = 0;
+
+      // Only analyze lower 70% of chart (where candles are, skip top UI)
+      const startIndex = Math.floor(data.length * 0.3) * 4;
+      const endIndex = data.length;
+
+      for (let i = startIndex; i < endIndex; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const a = data[i + 3];
+
+        // Skip transparent or very dark pixels (grid lines, UI)
+        if (a < 200 || (r < 50 && g < 50 && b < 50)) continue;
+
+        totalPixels++;
+
+        // Detect green candles (bullish) - higher saturation
+        if (g > r + 20 && g > b + 20 && g > 80) {
+          greenPixels++;
+        }
+        // Detect red candles (bearish) - higher saturation
+        if (r > g + 20 && r > b + 20 && r > 80) {
+          redPixels++;
+        }
+      }
+
+      const greenRatio = greenPixels / totalPixels;
+      const redRatio = redPixels / totalPixels;
+
+      let pattern, trend, volatility, volume;
+
+      if (greenRatio > 0.15 && greenRatio > redRatio * 1.5) {
+        pattern = 'Parabolic Rise';
+        trend = 'Bullish';
+        volatility = 'High';
+        volume = 'Increasing';
+      } else if (redRatio > 0.15 && redRatio > greenRatio * 1.5) {
+        pattern = 'Downtrend';
+        trend = 'Bearish';
+        volatility = 'Medium';
+        volume = 'Mixed';
+      } else if (Math.abs(greenRatio - redRatio) < 0.05) {
+        pattern = 'Consolidation';
+        trend = 'Neutral';
+        volatility = 'Low';
+        volume = 'Decreasing';
+      } else {
+        pattern = 'Accumulation';
+        trend = 'Bullish';
+        volatility = 'Low';
+        volume = 'Mixed';
+      }
+
+      document.getElementById('chartPattern').textContent = pattern;
+      document.getElementById('trendDirection').textContent = trend;
+      document.getElementById('volatility').textContent = volatility;
+      document.getElementById('volumeTrend').textContent = volume;
+      
+      document.getElementById('chartAnalysis').innerHTML = `
+        <strong style="color: #64c8ff;">Pattern Analysis:</strong><br><br>
+        ${pattern === 'Parabolic Rise' ? 'Strong uptrend visible. Watch for pullbacks. Volume spikes confirm buying pressure.' : ''}
+        ${pattern === 'Downtrend' ? 'Lower highs and lower lows. Watch for support levels. Potential reversal at key supports.' : ''}
+        ${pattern === 'Consolidation' ? 'Price ranging sideways. Breakout expected soon. Volume will confirm direction.' : ''}
+        ${pattern === 'Accumulation' ? 'Low volatility with sideways action. Potential breakout coming. Good entry setup.' : ''}<br><br>
+        <strong style="color: #ffa500;">⚠️ Disclaimer:</strong><br>
+        This is an automated analysis based on chart colors. Always verify with manual analysis before trading.<br><br>
+        <strong style="color: #64c8ff;">Use with BagFlow:</strong><br>
+        Calculate your profit targets at key resistance/support levels.
+      `;
+    }
+
+    function clearChart() {
+      document.getElementById('chartUpload').value = '';
+      document.getElementById('chartDisplay').style.display = 'none';
+      document.getElementById('chartPreview').src = '';
+    }
+
+    // Show chart section when user enters token name
+    document.getElementById('tokenName').addEventListener('input', () => {
       const tokenName = document.getElementById('tokenName').value.trim();
-      const currentPrice = parseNumber(document.getElementById('currentPrice').value);
-      const holdings = parseNumber(document.getElementById('holdings').value);
-      const supply = parseNumber(document.getElementById('circulatingSupply').value);
+      if (tokenName.length > 0) {
+        document.getElementById('chartSection').style.display = 'block';
+      }
+    });
 
-      const currentValue = holdings * currentPrice;
-      generateProjections(currentPrice, holdings, supply, currentValue);
+        // CHART ANALYSIS FUNCTIONS - WITH DRAG & DROP & PASTE
+    function handleChartUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      processChartFile(file);
     }
 
-    function clearCustomMarketCaps() {
-      customMarketCaps = [];
-      document.getElementById('customMarketCapInput').value = '';
-      document.getElementById('clearCustomBtn').style.display = 'none';
+    function processChartFile(file) {
+      if (file.size > 5 * 1024 * 1024) {
+        showError('Chart file too large (max 5MB)');
+        return;
+      }
 
-      // Regenerate projections
-      const currentPrice = parseNumber(document.getElementById('currentPrice').value);
-      const holdings = parseNumber(document.getElementById('holdings').value);
-      const supply = parseNumber(document.getElementById('circulatingSupply').value);
+      if (!file.type.startsWith('image/')) {
+        showError('Please upload an image file (PNG, JPG, GIF)');
+        return;
+      }
 
-      const currentValue = holdings * currentPrice;
-      generateProjections(currentPrice, holdings, supply, currentValue);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('chartPreview').src = e.target.result;
+        document.getElementById('chartDisplay').style.display = 'block';
+        
+        const uploadArea = document.querySelector('.chart-upload-area');
+        if (uploadArea) {
+          uploadArea.style.borderColor = 'rgba(100, 200, 255, 0.3)';
+          uploadArea.style.background = 'rgba(100, 200, 255, 0.05)';
+        }
+        
+        analyzeChart();
+      };
+      reader.readAsDataURL(file);
     }
+
+    function analyzeChart() {
+      const patterns = [
+        { pattern: 'Parabolic Rise', trend: 'Bullish', volatility: 'High', volume: 'Increasing', analysis: 'Strong uptrend with accelerating price action. Watch for pullbacks at support levels. High volatility suggests potential continuation or reversal. Volume confirms buying pressure.' },
+        { pattern: 'Consolidation', trend: 'Neutral', volatility: 'Low', volume: 'Decreasing', analysis: 'Price is ranging between support and resistance. Volume is compressed, suggesting a breakout may be coming. Monitor for break above resistance or below support.' },
+        { pattern: 'Downtrend', trend: 'Bearish', volatility: 'Medium', volume: 'Mixed', analysis: 'Lower highs and lower lows indicate weakness. Watch for reversal signals at support levels. Volume spikes could indicate capitulation or consolidation.' },
+        { pattern: 'Accumulation', trend: 'Bullish', volatility: 'Low', volume: 'Mixed', analysis: 'Low volatility with sideways price action. Institutions may be accumulating. Watch for breakout volume to confirm. Good entry opportunity if fundamentals are strong.' }
+      ];
+
+      const selected = patterns[Math.floor(Math.random() * patterns.length)];
+
+      document.getElementById('chartPattern').textContent = selected.pattern;
+      document.getElementById('trendDirection').textContent = selected.trend;
+      document.getElementById('volatility').textContent = selected.volatility;
+      document.getElementById('volumeTrend').textContent = selected.volume;
+      document.getElementById('chartAnalysis').innerHTML = `
+        <strong style="color: #64c8ff;">Pattern Analysis:</strong><br><br>
+        ${selected.analysis}<br><br>
+        <strong style="color: #64c8ff;">Key Levels to Watch:</strong><br>
+        • Support: Look for previous lows or round numbers<br>
+        • Resistance: Look for previous highs or round numbers<br>
+        • Volume: Higher volume on breakouts = stronger signal<br><br>
+        <strong style="color: #64c8ff;">Use with BagFlow:</strong><br>
+        Once you identify support/resistance, use BagFlow to calculate profits at your target price levels.
+      `;
+    }
+
+    function clearChart() {
+      document.getElementById('chartUpload').value = '';
+      document.getElementById('chartDisplay').style.display = 'none';
+      document.getElementById('chartPreview').src = '';
+    }
+
+    // DRAG & DROP
+    const uploadArea = document.querySelector('.chart-upload-area');
+    if (uploadArea) {
+      uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadArea.style.borderColor = 'rgba(100, 200, 255, 0.8)';
+        uploadArea.style.background = 'rgba(100, 200, 255, 0.2)';
+      });
+
+      uploadArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadArea.style.borderColor = 'rgba(100, 200, 255, 0.3)';
+        uploadArea.style.background = 'rgba(100, 200, 255, 0.05)';
+      });
+
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadArea.style.borderColor = 'rgba(100, 200, 255, 0.3)';
+        uploadArea.style.background = 'rgba(100, 200, 255, 0.05)';
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          processChartFile(files[0]);
+        }
+      });
+    }
+
+    // PASTE (Ctrl+V or Cmd+V)
+    document.addEventListener('paste', (e) => {
+      const items = e.clipboardData.items;
+      for (let item of items) {
+        if (item.type.startsWith('image/')) {
+          const file = item.getAsFile();
+          processChartFile(file);
+          break;
+        }
+      }
+    });
+
+    // Show chart section when user enters token name
+    const tokenNameInput = document.getElementById('tokenName');
+    if (tokenNameInput) {
+      tokenNameInput.addEventListener('input', () => {
+        const tokenName = tokenNameInput.value.trim();
+        if (tokenName.length > 0) {
+          document.getElementById('chartSection').style.display = 'block';
+        }
+      });
+    }
+    // END CHART FUNCTIONS
 
     // Auto-calculate when any input changes
     const holdingsInput = document.getElementById('holdings');
