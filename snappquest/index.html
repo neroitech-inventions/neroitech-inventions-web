@@ -598,7 +598,7 @@ liveQuests = rows.map(q => {
     renderLive();
   }catch(e){
     console.error(e);
-    el.innerHTML=`<div class="empty"><i class="fas fa-exclamation-triangle"></i>Could not load sheets.<br>${esc(e.message)}<br><button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="loadLiveQuests()">Retry</button></div>`;
+    el.innerHTML=`<div class="empty"><i class="fas fa-exclamation-triangle"></i>Could not load data.<br>${esc(e.message)}<br><button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="loadLiveQuests()">Retry</button></div>`;
   }
 }
 
