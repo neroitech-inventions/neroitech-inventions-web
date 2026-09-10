@@ -6,6 +6,8 @@
   const status = document.getElementById("status");
   const autoRun = document.getElementById("autoRun");
   let timer = null;
+  const previewStack = [];
+  let currentDoc = "";
 
   const SAMPLE_HTML = [
     '<div class="card">',
@@ -83,15 +85,39 @@
     ].join("\n");
   }
 
-  function runPreview() {
-    preview.srcdoc = buildDoc();
+  function runPreview(opts) {
+    const record = !opts || opts.record !== false;
+    const next = buildDoc();
+    if (record && currentDoc && currentDoc !== next) {
+      previewStack.push(currentDoc);
+      if (previewStack.length > 50) previewStack.shift();
+    }
+    currentDoc = next;
+    preview.removeAttribute("src");
+    preview.srcdoc = next;
     status.textContent = "Updated " + new Date().toLocaleTimeString();
+  }
+
+  function goBackPreview() {
+    try {
+      const win = preview.contentWindow;
+      if (win && win.location.href !== "about:srcdoc" && win.history.length > 1) {
+        win.history.back();
+        return;
+      }
+    } catch (err) {}
+    if (!previewStack.length) return;
+    currentDoc = previewStack.pop();
+    preview.removeAttribute("src");
+    preview.srcdoc = currentDoc;
   }
 
   function schedule() {
     if (!autoRun.checked) return;
     clearTimeout(timer);
-    timer = setTimeout(runPreview, 280);
+    timer = setTimeout(function () {
+      runPreview({ record: true });
+    }, 280);
   }
 
   function copyCode() {
@@ -111,13 +137,17 @@
     htmlEl.value = SAMPLE_HTML;
     cssEl.value = SAMPLE_CSS;
     jsEl.value = SAMPLE_JS;
-    runPreview();
+    runPreview({ record: false });
   }
 
   document.getElementById("tab-html").onclick = function () { showTab("html"); };
   document.getElementById("tab-css").onclick = function () { showTab("css"); };
   document.getElementById("tab-js").onclick = function () { showTab("js"); };
   document.getElementById("btnRun").onclick = runPreview;
+  document.getElementById("btnBack").onclick = goBackPreview;
+  document.getElementById("btnRefresh").onclick = function () {
+    runPreview({ record: false });
+  };
   document.getElementById("btnCopy").onclick = copyCode;
   document.getElementById("btnDownload").onclick = downloadFile;
   document.getElementById("btnSample").onclick = loadSample;
@@ -130,7 +160,7 @@
     btn.setAttribute("aria-pressed", previewOnly ? "true" : "false");
     btn.textContent = previewOnly ? "Show editor" : "Preview only";
     status.textContent = previewOnly
-      ? "Preview only"
+      ? "Preview only — click Show editor to return"
       : "Editor visible";
   };
   [htmlEl, cssEl, jsEl].forEach(function (el) {
@@ -144,6 +174,27 @@
       e.preventDefault();
       runPreview();
     }
+  });
+
+  preview.addEventListener("load", function () {
+    try {
+      const doc = preview.contentDocument;
+      if (!doc) return;
+      doc.addEventListener("click", function (e) {
+        const a = e.target.closest && e.target.closest("a[href]");
+        if (!a) return;
+        const href = a.getAttribute("href");
+        if (!href || href.charAt(0) === "#") return;
+        if (!/^https?:/i.test(href)) return;
+        e.preventDefault();
+        if (currentDoc) {
+          previewStack.push(currentDoc);
+          if (previewStack.length > 50) previewStack.shift();
+        }
+        preview.removeAttribute("srcdoc");
+        preview.src = href;
+      }, true);
+    } catch (err) {}
   });
 
   loadSample();
