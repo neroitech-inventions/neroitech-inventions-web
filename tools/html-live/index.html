@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Live Preview</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --panel: #1a1f2e;
+      --border: rgba(148, 163, 184, 0.16);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --cyan: #00d4ff;
+      --purple: #7c3aed;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
+    header h1 {
+      font-size: 0.95rem;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-right: auto;
+    }
+    button {
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: var(--cyan);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    }
+    button:hover {
+      background: rgba(0, 212, 255, 0.16);
+      border-color: var(--cyan);
+    }
+    button:active {
+      transform: scale(0.96);
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35);
+    }
+    button.primary {
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      color: #0f1419;
+      border: none;
+    }
+    button.primary:hover {
+      filter: brightness(1.08);
+    }
+    button.on {
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      color: #0f1419;
+      border-color: transparent;
+      box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.25);
+    }
+    .tabs { display: flex; gap: 6px; }
+    .tabs button.active {
+      background: rgba(0, 212, 255, 0.2);
+      border-color: var(--cyan);
+    }
+    .wrap {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 0;
+    }
+    .wrap.preview-only { grid-template-columns: 1fr; }
+    .wrap.preview-only .editor-col { display: none; }
+    body.preview-only .tabs { opacity: 0.35; pointer-events: none; }
+    .col {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+    }
+    .col:last-child { border-right: none; }
+    .label {
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    textarea {
+      flex: 1;
+      width: 100%;
+      resize: none;
+      border: none;
+      outline: none;
+      background: #0b0f14;
+      color: #e2e8f0;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      padding: 12px;
+      tab-size: 2;
+    }
+    iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #fff;
+    }
+    .status { color: var(--muted); font-size: 0.75rem; }
+    @media (max-width: 800px) {
+      .wrap { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+      .col { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>HTML Live Preview</h1>
+    <div class="tabs">
+      <button type="button" class="active" id="tab-html">HTML</button>
+      <button type="button" id="tab-css">CSS</button>
+      <button type="button" id="tab-js">JS</button>
+    </div>
+    <label class="status"><input type="checkbox" id="autoRun" checked> Auto</label>
+    <button type="button" class="primary" id="btnRun">Run</button>
+    <button type="button" id="btnCopy">Copy HTML</button>
+    <button type="button" id="btnDownload">Download</button>
+    <button type="button" id="btnSample">Sample</button>
+    <button type="button" id="btnToggle" aria-pressed="false">Preview only</button>
+    <span class="status" id="status">Ready</span>
+  </header>
+  <div class="wrap" id="wrap">
+    <div class="col editor-col">
+      <div class="label" id="editorLabel">HTML</div>
+      <textarea id="html" spellcheck="false"></textarea>
+      <textarea id="css" spellcheck="false" hidden></textarea>
+      <textarea id="js" spellcheck="false" hidden></textarea>
+    </div>
+    <div class="col">
+      <div class="label">Preview</div>
+      <iframe id="preview" sandbox="allow-scripts allow-modals allow-forms allow-same-origin"></iframe>
+    </div>
+  </div>
+  <script src="html-live.js"></script>
+</body>
+</html>
