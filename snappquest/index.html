@@ -122,6 +122,12 @@
     .chain-tab.active.poly{color:var(--green);}
     .chain-tab.active.sol{color:var(--purple);}
     .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:90;background:rgba(10,12,22,0.94);backdrop-filter:blur(18px);border-top:1px solid var(--border);padding:8px 0 calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;align-items:center;}
+    .modal {
+  padding-bottom: 120px;
+}
+body.modal-open .bottom-nav {
+  display: none;
+}
     .bn-item{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:0.58rem;font-weight:600;color:var(--muted2);background:none;border:none;cursor:pointer;font-family:var(--font);padding:6px 8px;}
     .bn-item i{font-size:1.05rem;}.bn-item.active{color:var(--cyan);}
     .bn-fab{width:48px;height:48px;border-radius:14px;margin-top:-18px;background:var(--grad);color:#0b0d18;border:none;display:flex;align-items:center;justify-content:center;font-size:1.15rem;box-shadow:0 6px 22px rgba(96,165,250,0.4);cursor:pointer;}
@@ -155,6 +161,17 @@
 }
 .overlay.center.show .modal {
   transform: scale(1) translateY(0);
+}
+#launchOverlay .modal {
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  padding-bottom: 40px;
+}
+body.modal-open {
+  overflow: hidden;
+}
+body.modal-open .bottom-nav {
+  display: none;
 }
   </style>
 </head>
@@ -270,7 +287,7 @@
     <div class="modal">
       <div class="modal-handle"></div>
       <div class="modal-title" id="launchTitle">Launch a Quest</div>
-      <div class="modal-sub" id="launchSub">Free means share your link on Telegram with limited reach, while Boost means pay $0.50 USDT first, then submit for more reach.</div>
+      <div class="modal-sub" id="launchSub">Free means you share your link manually in Telegram (100+ reach) for no charge or complete payment to Boost for $0.50 to reach thousands of users in 24 hours.</div>
 
       <div id="launchForm">
         <div class="field"><label>Email</label><input type="email" id="qEmail" placeholder="you@email.com"></div>
@@ -278,9 +295,9 @@
         <div class="field"><label>Sponsor name</label><input type="text" id="qSponsor" placeholder="Your name or brand"></div>
         <div class="field"><label>Description</label><textarea id="qDesc" placeholder="What should Explorers do?" maxlength="400"></textarea></div>
         <div class="field">
-  <label>Twitter / X post link</label>
-  <input type="url" id="qWeb" placeholder="https://x.com/username/status/… or https://twitter.com/…">
-</div>
+          <label>Twitter / X post link</label>
+          <input type="url" id="qWeb" placeholder="https://x.com/username/status/… or https://twitter.com/…">
+        </div>
         <div class="field"><label>Telegram</label><input type="text" id="qTg" placeholder="@handle or t.me/…"></div>
         <div class="field"><label>Twitter / X</label><input type="text" id="qX" placeholder="@handle"></div>
         <div class="modal-actions">
@@ -291,34 +308,45 @@
       </div>
 
       <div id="payStep" style="display:none;">
-        <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Send exactly <strong style="color:var(--green);">0.50 USDT</strong>, then verify.</p>
+        <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Pay with USDT or a gift card, then verify.</p>
         <div class="chain-tabs">
-          <button class="chain-tab poly active" id="btnPoly" onclick="selectPayChain('polygon')">Polygon</button>
-          <button class="chain-tab sol" id="btnSol" onclick="selectPayChain('solana')">Solana</button>
+          <button type="button" class="chain-tab active" id="payTabUsdt" onclick="setPayMethod('usdt')">USDT $0.50</button>
+          <button type="button" class="chain-tab" id="payTabGift" onclick="setPayMethod('gift')">Gift card</button>
         </div>
-        <div class="field"><label>Your sending wallet</label><input type="text" id="payWallet" placeholder="0x… or Solana address" spellcheck="false"></div>
-        <div class="pay-box">
-          <div class="pay-amount">0.50 USDT</div>
-          <div class="pay-net" id="payNet">on Polygon</div>
-          <div class="addr-row"><code class="addr-text" id="payAddr">—</code><button class="copy-btn" id="payCopy">Copy</button></div>
-          
-          <!-- Enhanced QR Code Section -->
-          <div class="qr-section" id="qrSection">
-            <div class="qr-label"><i class="fas fa-qrcode"></i> Scan to send</div>
-            <div id="payQr" style="min-height:20px;text-align:center;"></div>
-            <div class="qr-hint">
-              <i class="fas fa-info-circle"></i> Scan with wallet • Or copy address above
-            </div>
+        <div id="usdtPayBox">
+          <div class="chain-tabs">
+            <button class="chain-tab poly active" id="btnPoly" onclick="selectPayChain('polygon')">Polygon</button>
+            <button class="chain-tab sol" id="btnSol" onclick="selectPayChain('solana')">Solana</button>
           </div>
-          
-          <div class="pay-hint">Send from the wallet above. Wait 30–60s, then verify.</div>
+          <div class="field"><label>Your sending wallet</label><input type="text" id="payWallet" placeholder="0x… or Solana address" spellcheck="false"></div>
+          <div class="pay-box">
+            <div class="pay-amount">0.50 USDT</div>
+            <div class="pay-net" id="payNet">on Polygon</div>
+            <div class="addr-row"><code class="addr-text" id="payAddr">—</code><button class="copy-btn" id="payCopy">Copy</button></div>
+            <div class="qr-section" id="qrSection">
+              <div class="qr-label"><i class="fas fa-qrcode"></i> Scan to send</div>
+              <div id="payQr" style="min-height:20px;text-align:center;"></div>
+              <div class="qr-hint"><i class="fas fa-info-circle"></i> Scan with wallet • Or copy address above</div>
+            </div>
+            <div class="pay-hint">Send from the wallet above. Wait 30–60s, then verify.</div>
+          </div>
+          <button class="btn btn-grad btn-full" id="verifyBtn" onclick="verifyBoostPayment()"><i class="fas fa-check-circle"></i> I Paid, Verify</button>
         </div>
-        <button class="btn btn-grad btn-full" id="verifyBtn" onclick="verifyBoostPayment()"><i class="fas fa-check-circle"></i> I Paid, Verify</button>
+        <div id="giftPayBox" style="display:none;">
+          <div class="field">
+            <label>Gift card code</label>
+            <input type="text" id="giftCode" placeholder="Enter gift card" spellcheck="false">
+          </div>
+          <button class="btn btn-grad btn-full" id="giftBtn" onclick="redeemGiftCard()">
+            <i class="fas fa-gift"></i> Redeem gift card
+          </button>
+        </div>
         <button class="btn btn-ghost btn-full" style="margin-top:8px;color:var(--muted2);" onclick="backToForm()">← Back</button>
         <div class="status-log" id="payLog">Enter wallet, send 0.50 USDT, verify.</div>
       </div>
     </div>
-  
+  </div>
+
 <!-- FREE LAUNCH CONFIRM -->
 <div class="overlay center" id="freeConfirmOverlay">
   <div class="modal">
@@ -379,7 +407,15 @@ const SHEETS = {
   LISTED_ID: '1wY8FlSvSsYPCGo2qYsl20w4kcPqx9Z4CqzA2MeQozGo',
   LISTED_RANGE: 'Quests!A1:G1000',
   // create.html form
-  CREATE_FORM: 'https://docs.google.com/forms/d/e/1FAIpQLSe9lmAvmoScW5kuVpZprjVq5rF7TLYQTU_PJYKnN1SRQXAI5Q/formResponse'
+  CREATE_FORM: 'https://docs.google.com/forms/d/e/1FAIpQLSe9lmAvmoScW5kuVpZprjVq5rF7TLYQTU_PJYKnN1SRQXAI5Q/formResponse',
+
+GIFT_ID: '1D6NaJ0I1kLNUSUqWRjy4aaY1pE-we1PqpTmCytG5ass',
+GIFT_RANGE: 'Gift card!A1:Z2000',
+SUBMIT_ID: '1uI__u1VylTAb6ukduHOuHXkcGX5UwgpAFzD8DY5-_bI',
+SUBMIT_RANGE: 'submission!A1:F5000',
+// submit form.html form
+GIFT_FORM: 'https://docs.google.com/forms/d/e/1FAIpQLSdir7IFUdyasF2LWvt-DNVEx9kGQCezxaRQ3gG5ftlxSJa70A/viewform?usp=header'
+
 };
 
 // ═══ SAME PAY AS pay-plugin-v1.html ═══
@@ -913,6 +949,7 @@ function showView(name){
 }
 
 function openLaunch(boost){
+  document.body.classList.add('modal-open');
   $('launchOverlay').classList.add('show');
   $('launchForm').style.display='block';
   $('payStep').style.display='none';
@@ -921,7 +958,26 @@ function openLaunch(boost){
     ? 'Pay $0.50 USDT → then submit to pending.'
     : 'Free means you share your link manually in Telegram (100+ reach) for no charge or complete payment to Boost for $0.50 to reach thousands of users in 24 hours.';
 }
-function closeLaunch(){$('launchOverlay').classList.remove('show');draft=null;}
+function clearLaunchForm(){
+  ['qEmail','qName','qSponsor','qDesc','qWeb','qTg','qX','payWallet','giftCode'].forEach(id=>{
+    const el = $(id);
+    if(el) el.value = '';
+  });
+  const log = $('payLog');
+  if(log) log.innerHTML = 'Enter wallet, send 0.50 USDT, verify.';
+  const giftBtn = $('giftBtn');
+  if(giftBtn) giftBtn.disabled = false;
+  const verifyBtn = $('verifyBtn');
+  if(verifyBtn) verifyBtn.disabled = false;
+  setPayMethod('usdt');
+}
+
+function closeLaunch(){
+  $('launchOverlay').classList.remove('show');
+  document.body.classList.remove('modal-open');
+  clearLaunchForm();
+  draft=null;
+}
 function backToForm(){$('payStep').style.display='none';$('launchForm').style.display='block';}
 
 function launchFree(){
@@ -1000,14 +1056,106 @@ async function submitToGoogleForm(d){
   body.set('entry.1526178092', d.name);
   body.set('entry.884208731', d.sponsor);
   body.set('entry.1178007064', d.desc);
-  body.set('entry.1547645284', d.boost ? '0.5 USDT' : '0');
+body.set('entry.1547645284', d.giftCode || (d.boost ? '0.5 USDT' : '0'));
   body.set('entry.899075060', d.web);
   body.set('entry.112634495', d.tg);
   body.set('entry.1507763482', d.x||'');
   body.set('entry.269247622', d.track);
-  body.set('entry.256576255', d.boost ? (d.txLink || d.txHash || '') : 'Standard Quest');
+body.set('entry.256576255', d.giftCode || (d.boost ? (d.txLink || d.txHash || '') : 'Standard Quest'));
   body.set('entry.1138659293', '1');
   await fetch(SHEETS.CREATE_FORM, {method:'POST', mode:'no-cors', body});
+}
+
+let payMethod = 'usdt';
+
+function setPayMethod(method){
+  payMethod = method;
+  $('payTabUsdt').classList.toggle('active', method === 'usdt');
+  $('payTabGift').classList.toggle('active', method === 'gift');
+  $('usdtPayBox').style.display = method === 'usdt' ? 'block' : 'none';
+  $('giftPayBox').style.display = method === 'gift' ? 'block' : 'none';
+}
+
+function normCode(s){
+  return String(s || '').trim().toUpperCase();
+}
+
+async function fetchColumnE(){
+  const url = 'https://sheets.googleapis.com/v4/spreadsheets/' +
+    SHEETS.PENDING_ID +
+    '/values/' + encodeURIComponent('Form responses 3!E:E') +
+    '?key=' + SHEETS.API_KEY;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  return (data.values || []).map(r => normCode(r[0])).filter(Boolean);
+}
+
+async function isValidGiftCard(code){
+  const rows = await fetchSheet(SHEETS.GIFT_ID, SHEETS.GIFT_RANGE);
+  const want = normCode(code);
+  return rows.some(row =>
+    Object.values(row).some(v => normCode(v) === want)
+  );
+}
+
+async function isGiftCardUsed(code){
+  const colE = await fetchColumnE();
+  return colE.includes(normCode(code));
+}
+
+async function submitGiftCardUsed(code, d){
+  const body = new URLSearchParams();
+  body.set('entry.2147360639', code);            // B Track Code = gift card
+  body.set('entry.1526178092', 'used');          // Proof of Quest
+  body.set('entry.884208731', d.web || 'used');  // Quest Link
+  body.set('entry.256576255', d.tg || 'used');   // Telegram
+  body.set('entry.1138659293', d.x || 'used');   // Twitter
+  await fetch(SHEETS.GIFT_FORM, { method:'POST', mode:'no-cors', body });
+}
+
+async function redeemGiftCard(){
+  if(!draft){ toast('Fill the launch form first'); return; }
+  const code = $('giftCode').value.trim();
+  if(!code){ toast('Enter a gift card code'); return; }
+
+  $('giftBtn').disabled = true;
+  payLog('<span class="lg-warn">Checking gift card…</span>');
+
+  try{
+    const valid = await isValidGiftCard(code);
+    if(!valid){
+      toast('Invalid gift card');
+      payLog('<span class="lg-err">❌ Gift card not found</span>');
+      $('giftBtn').disabled = false;
+      return;
+    }
+
+    const used = await isGiftCardUsed(code);
+    if(used){
+      toast('This card has already been used');
+      payLog('<span class="lg-err">❌ This card has already been used</span>');
+      $('giftBtn').disabled = false;
+      return;
+    }
+
+    draft.boost = true;
+    draft.giftCode = code;
+    draft.txHash = code;
+    draft.txLink = code;
+
+    await submitToGoogleForm(draft);
+
+    const track = draft.track;
+    closeLaunch();
+    toast('Gift card accepted · Track ' + track);
+    showView('pending');
+    loadPending();
+  }catch(e){
+    console.error(e);
+    toast('Gift card check failed');
+    $('giftBtn').disabled = false;
+  }
 }
 
 function selectPayChain(chain){
@@ -1065,9 +1213,10 @@ async function verifyBoostPayment(){
   draft.txLink = txLink;
 
   try{ await submitToGoogleForm(draft); }catch(e){}
+  const track = draft.track;
   setTimeout(()=>{
     closeLaunch();
-    toast('Boosted quest submitted · Track ' + draft.track);
+    toast('Boosted quest submitted · Track ' + track);
     showView('pending');
     loadPending();
   }, 1000);
