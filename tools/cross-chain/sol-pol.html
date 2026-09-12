@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solana - Polygon Bridge</title>
+       <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+     <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-QM106YDX6N');
+     </script>
+
+     <!-- Favicon -->
+     <link href="images/favicon.ico" rel="icon">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@solana/web3.js@1.95.8/lib/index.iife.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#060910;--surface:#0c1220;--surface2:#101828;--border:#1a2d44;
+      --green:#00e5a0;--red:#ff4d6d;--yellow:#ffd166;--purple:#9945ff;
+      --text:#dde8f5;--muted:#4a6585;
+    }
+    body{
+      min-height:100vh;background:var(--bg);color:var(--text);
+      font-family:Syne,system-ui,sans-serif;
+      display:flex;justify-content:center;padding:24px 12px 48px;
+    }
+    .wrap{width:100%;max-width:460px}
+    h1{font-size:1.35rem;font-weight:800;margin-bottom:4px}
+    .sub{font-family:"DM Mono",monospace;font-size:.68rem;color:var(--muted);margin-bottom:18px}
+    .card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:20px;padding:18px;margin-bottom:12px;
+    }
+    .chain-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+    .chain{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px}
+    .chain b{display:block;font-size:.85rem}
+    .chain span{font-family:"DM Mono",monospace;font-size:.6rem;color:var(--muted)}
+    .arrow{color:var(--purple);font-weight:800}
+    label{display:block;font-size:.62rem;color:var(--muted);font-family:"DM Mono",monospace;margin:0 0 6px}
+    input{
+      width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);
+      background:var(--surface2);color:var(--text);font-family:"DM Mono",monospace;
+      font-size:1rem;outline:none;
+    }
+    input:focus{border-color:var(--purple)}
+    .field{margin-bottom:12px}
+    .row{display:flex;justify-content:space-between;gap:8px;font-family:"DM Mono",monospace;font-size:.65rem;color:var(--muted);margin-top:6px}
+    button{
+      width:100%;padding:14px;border:none;border-radius:14px;font-weight:800;
+      font-family:Syne,sans-serif;cursor:pointer;font-size:.95rem;
+    }
+    .primary{background:linear-gradient(135deg,#9945ff,#7b35e0);color:#fff;margin-top:8px}
+    .ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border);margin-bottom:8px}
+    .tiny{padding:8px 10px;font-size:.75rem;width:auto}
+    button:disabled{opacity:.4;cursor:not-allowed}
+    .log{
+      display:none;margin-top:12px;background:var(--surface2);border:1px solid var(--border);
+      border-radius:12px;padding:12px;font-family:"DM Mono",monospace;font-size:.68rem;
+      line-height:1.7;max-height:220px;overflow:auto;word-break:break-all;
+    }
+    .log.show{display:block}
+    .ok{color:var(--green)}.err{color:var(--red)}.warn{color:var(--yellow)}.info{color:var(--muted)}
+    .wallet{font-family:"DM Mono",monospace;font-size:.68rem;color:var(--green);margin-bottom:10px;display:none}
+    .wallet.show{display:block}
+    a{color:var(--green)}
+    #bridgeCard{display:none}
+    .status{font-family:"DM Mono",monospace;font-size:.7rem;margin-top:8px;display:none}
+    .status.show{display:block}
+    .book{display:flex;flex-direction:column;gap:8px}
+    .book-item{
+      display:flex;align-items:center;gap:8px;background:var(--surface2);
+      border:1px solid var(--border);border-radius:10px;padding:8px 10px;
+    }
+    .book-item b{font-size:.78rem;display:block}
+    .book-item span{font-family:"DM Mono",monospace;font-size:.58rem;color:var(--muted);word-break:break-all}
+    .book-item .grow{flex:1;min-width:0}
+    #unlockBtn:disabled{
+  opacity:1;
+  cursor:pointer;
+  pointer-events:auto;
+}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Solana to Polygon</h1>
+    <p class="sub">USDT on Solana to USDT on Polygon</p>
+
+    <p class="sub" style="margin-top:-10px;margin-bottom:18px;">
+  <a href="index.html" style="color:#bf7fff;text-decoration:none;">
+    Need Polygon to Solana? Open the main bridge ↗
+  </a>
+</p>
+
+    <div class="card" id="gateCard">
+      <label>Access code</label>
+      <input id="accessCode" placeholder="Enter access code" spellcheck="false">
+      <button class="primary" id="unlockBtn" type="button">Unlock bridge</button>
+      <div class="status" id="gateStatus"></div>
+    </div>
+
+    <div class="card" id="bridgeCard">
+      <div class="chain-row">
+        <div class="chain"><b>Solana</b><span>You send USDT</span></div>
+        <div class="arrow">→</div>
+        <div class="chain"><b>Polygon</b><span>You receive USDT</span></div>
+      </div>
+
+      <div class="wallet" id="walletBar">
+  Connected: <span id="walletShort">—</span>
+  <button type="button" class="tiny ghost" id="copyWalletBtn" style="margin:0 0 0 8px;width:auto;display:inline-block">Copy</button>
+  <button type="button" class="tiny ghost" id="disconnectBtn" style="margin:0 0 0 8px;width:auto;display:inline-block">Disconnect</button>
+</div>
+      <button class="ghost" id="connectBtn" type="button">Connect Solana Wallet</button>
+
+      <div class="field">
+        <label>Amount (USDT)</label>
+        <input id="amount" type="number" min="1" step="0.01" placeholder="10">
+        <div class="row"><span id="bal">Balance: —</span><span>Min $1</span></div>
+      </div>
+      <div class="field">
+        <label>Polygon destination (0x…)</label>
+        <input id="dest" spellcheck="false" placeholder="0x…">
+        <div class="row"><span id="destHint"></span></div>
+        <div class="row">
+          <input id="destName" placeholder="Label (e.g. My MetaMask)" style="margin-top:8px">
+        </div>
+        <button class="ghost tiny" id="saveAddrBtn" type="button" style="margin-top:8px;width:100%">Save this address</button>
+      </div>
+
+      <div class="field">
+        <label>Saved Polygon addresses</label>
+        <div class="book" id="addrBook"></div>
+      </div>
+
+      <div class="row" id="quoteRow" style="display:none">
+        <span>You receive</span><span id="quoteOut">—</span>
+      </div>
+      <button class="primary" id="bridgeBtn" type="button" disabled>Get quote / Bridge</button>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+
+<script>
+const LIFI = "https://li.quest/v1";
+const USDT_SOL = "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB";
+const USDT_POL = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
+const SOL_CHAIN = "1151111081099710";
+const SHEETS_API_KEY = "AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q";
+const SHEETS_ID = "1Wa2KMPLPp-egHpifo_aG1yM2_srqhgv4HYMw3z8lC0w";
+const SHEETS_RANGE = "SnappQuestData!A11:B11";
+const BOOK_KEY = "solpol_addrbook_v1";
+const UNLOCK_KEY = "solpol_unlocked_v1";
+
+const RPCS = [
+  "https://mainnet.helius-rpc.com/?api-key=a822542b-adaf-4bd1-898e-eaea64abea66",
+  "https://solana-rpc.publicnode.com",
+  "https://rpc.ankr.com/solana",
+  "https://api.mainnet-beta.solana.com"
+];
+let connection = new solanaWeb3.Connection(RPCS[0], "confirmed");
+
+async function workingConnection(){
+  for (const url of RPCS){
+    try{
+      const c = new solanaWeb3.Connection(url, "confirmed");
+      await Promise.race([
+        c.getSlot(),
+        new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), 4000))
+      ]);
+      connection = c;
+      return c;
+    }catch(_){}
+  }
+  return connection;
+}
+
+let solWallet = null;
+let solAddress = "";
+let quoteData = null;
+let quoteTimer = null;
+let validCode = "";
+let unlocked = false;
+
+const $ = id => document.getElementById(id);
+function log(html){ const el=$("log"); el.classList.add("show"); el.innerHTML += html + "<br>"; el.scrollTop = el.scrollHeight; }
+function short(a){ return a.slice(0,6) + "…" + a.slice(-4); }
+function isEvm(a){
+  const addr = String(a || "").trim();
+  if (!/^0x[0-9a-fA-F]{40}$/.test(addr)) return false;
+  if (/^0x0{40}$/i.test(addr)) return false;
+  return true;
+}
+function destHint(text, ok){
+  const el = $("destHint");
+  if (!el) return;
+  el.className = ok ? "ok" : "err";
+  el.textContent = text || "";
+}
+function validateDest(showEmpty){
+  const addr = $("dest").value.trim();
+  if (!addr){
+    destHint(showEmpty ? "Enter a Polygon 0x address" : "", false);
+    return false;
+  }
+  if (addr.startsWith("0x") && addr.length < 42){
+    destHint("Too short, Polygon addresses are 42 characters", false);
+    return false;
+  }
+  if (!addr.startsWith("0x")){
+    destHint("Must start with 0x, this is not a Polygon address", false);
+    return false;
+  }
+  if (/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(addr) && !addr.startsWith("0x")){
+    destHint("That looks like a Solana address. Paste a Polygon 0x wallet", false);
+    return false;
+  }
+  if (!isEvm(addr)){
+    destHint("Invalid Polygon address", false);
+    return false;
+  }
+  destHint("Valid Polygon address", true);
+  return true;
+}
+function gateMsg(text, ok){
+  const el = $("gateStatus");
+  el.className = "status show " + (ok ? "ok" : "err");
+  el.textContent = text;
+}
+
+function loadBook(){
+  try{ return JSON.parse(localStorage.getItem(BOOK_KEY) || "[]"); }catch(_){ return []; }
+}
+function saveBook(list){ localStorage.setItem(BOOK_KEY, JSON.stringify(list)); }
+function renderBook(){
+  const list = loadBook();
+  const el = $("addrBook");
+  if (!list.length){
+    el.innerHTML = '<div class="info">No saved addresses yet.</div>';
+    return;
+  }
+  el.innerHTML = list.map((item, i) => `
+    <div class="book-item">
+      <div class="grow">
+        <b>${esc(item.name)}</b>
+        <span>${esc(item.addr)}</span>
+      </div>
+      <button class="tiny ghost" type="button" onclick="useAddr(${i})" style="margin:0;width:auto">Use</button>
+      <button class="tiny ghost" type="button" onclick="delAddr(${i})" style="margin:0;width:auto">Del</button>
+    </div>
+  `).join("");
+}
+function esc(s){
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+}
+window.useAddr = function(i){
+  const item = loadBook()[i];
+  if (!item) return;
+  $("dest").value = item.addr;
+  $("destName").value = item.name;
+  scheduleQuote();
+};
+window.delAddr = function(i){
+  const list = loadBook();
+  list.splice(i,1);
+  saveBook(list);
+  renderBook();
+};
+function saveCurrentAddr(){
+  if (!validateDest(true)){
+    log('<span class="err">Cannot save — not a valid Polygon wallet address</span>');
+    return;
+  }
+  const addr = $("dest").value.trim();
+  const name = $("destName").value.trim() || short(addr);
+  const list = loadBook();
+  if (list.some(x => x.addr.toLowerCase() === addr.toLowerCase())){
+    log('<span class="warn">Address already saved</span>');
+    return;
+  }
+  list.push({ name, addr, ts: Date.now() });
+  saveBook(list);
+  renderBook();
+  log('<span class="ok">Address saved</span>');
+}
+
+function showBridge(){
+  unlocked = true;
+  $("gateCard").style.display = "none";
+  $("bridgeCard").style.display = "block";
+  renderBook();
+}
+
+async function loadAccessCode(){
+  const url = "https://sheets.googleapis.com/v4/spreadsheets/" + SHEETS_ID +
+    "/values/" + encodeURIComponent(SHEETS_RANGE) + "?key=" + SHEETS_API_KEY;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Could not load access config");
+  const data = await res.json();
+  const row = data.values && data.values[0] ? data.values[0] : [];
+  validCode = String(row[1] || "").trim();
+}
+
+async function unlock(){
+  const entered = $("accessCode").value.trim();
+  const btn = $("unlockBtn");
+  if (!entered){
+    gateMsg("Enter an access code", false);
+    btn.disabled = false;
+    return;
+  }
+  btn.disabled = true;
+  try{
+    await loadAccessCode();
+    if (!validCode){
+      gateMsg("No access code is set in the sheet", false);
+      return;
+    }
+    if (entered !== validCode){
+      gateMsg("Wrong access code", false);
+      return;
+    }
+    sessionStorage.setItem(UNLOCK_KEY, "1");
+    gateMsg("Unlocked", true);
+    showBridge();
+  }catch(e){
+    gateMsg(e.message, false);
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+function detectWallet(){
+  if (window.solana && window.solana.isPhantom) return window.solana;
+  if (window.solflare) return window.solflare;
+  if (window.solana) return window.solana;
+  return null;
+}
+
+async function connect(){
+  const w = detectWallet();
+  if (!w){ log('<span class="err">Install Phantom or Solflare</span>'); return; }
+  const res = await w.connect();
+  solWallet = w;
+  solAddress = (res.publicKey || w.publicKey).toString();
+  $("walletShort").textContent = short(solAddress);
+  $("walletBar").classList.add("show");
+  $("connectBtn").textContent = "Wallet connected";
+  await loadBalance();
+  scheduleQuote();
+}
+
+async function loadBalance(){
+  if (!solAddress) return;
+  $("bal").textContent = "Balance: loading…";
+  try{
+    const conn = await workingConnection();
+    const mint = new solanaWeb3.PublicKey(USDT_SOL);
+    const owner = new solanaWeb3.PublicKey(solAddress);
+    const accs = await conn.getParsedTokenAccountsByOwner(owner, { mint });
+    let bal = 0;
+    accs.value.forEach(a => {
+      bal += Number(a.account.data.parsed.info.tokenAmount.uiAmount || 0);
+    });
+    $("bal").textContent = "Balance: " + bal.toLocaleString(undefined,{maximumFractionDigits:6}) + " USDT";
+  }catch(e){
+    console.error(e);
+    $("bal").textContent = "Balance: unavailable";
+  }
+}
+
+async function fetchQuote(){
+  if (!unlocked) return;
+  const amt = parseFloat($("amount").value);
+  const dest = $("dest").value.trim();
+  quoteData = null;
+  $("quoteRow").style.display = "none";
+  $("bridgeBtn").disabled = true;
+  if (!solAddress || !amt || amt < 1 || !validateDest()) return;
+
+  const amountIn = Math.round(amt * 1e6).toString();
+  const params = new URLSearchParams({
+    fromChain: "sol",
+    toChain: "137",
+    fromToken: USDT_SOL,
+    toToken: USDT_POL,
+    fromAmount: amountIn,
+    fromAddress: solAddress,
+    toAddress: dest,
+    integrator: "neroitech-sol-pol"
+  });
+
+  log('<span class="warn">Finding Solana → Polygon route…</span>');
+  try{
+    const res = await fetch(LIFI + "/quote?" + params);
+    const data = await res.json();
+    if (!res.ok || data.message) throw new Error(data.message || ("Quote failed " + res.status));
+    quoteData = data;
+    const out = data.estimate?.toAmount ? Number(data.estimate.toAmount) / 1e6 : 0;
+    $("quoteOut").textContent = out.toFixed(4) + " USDT on Polygon";
+    $("quoteRow").style.display = "flex";
+    $("bridgeBtn").disabled = false;
+    $("bridgeBtn").textContent = "Bridge " + amt + " USDT";
+    log('<span class="ok">Route ready via ' + (data.tool || "Li.Fi") + "</span>");
+  }catch(e){
+    log('<span class="err">' + e.message + "</span>");
+  }
+}
+
+function scheduleQuote(){
+  clearTimeout(quoteTimer);
+  quoteTimer = setTimeout(fetchQuote, 700);
+}
+
+async function bridge(){
+  if (!unlocked || !quoteData || !solWallet || !solAddress) return;
+  const dest = $("dest").value.trim();
+  if (!validateDest(true)) return;
+  $("bridgeBtn").disabled = true;
+
+  try{
+    const raw = quoteData.transactionRequest && quoteData.transactionRequest.data;
+    if (!raw) throw new Error("Li.Fi did not return a Solana transaction. Try a new quote.");
+    log('<span class="warn">Confirm in your Solana wallet…</span>');
+
+    const bytes = Uint8Array.from(atob(raw), c => c.charCodeAt(0));
+    const tx = solanaWeb3.VersionedTransaction.deserialize(bytes);
+
+    let sig;
+    if (solWallet.signAndSendTransaction){
+      const result = await solWallet.signAndSendTransaction(tx);
+      sig = result.signature || result;
+    } else if (solWallet.signTransaction){
+      const signed = await solWallet.signTransaction(tx);
+      sig = await connection.sendRawTransaction(signed.serialize(), { skipPreflight:false, maxRetries:3 });
+    } else {
+      throw new Error("Wallet cannot send this transaction");
+    }
+
+    log('<span class="ok">Solana TX: <a href="https://solscan.io/tx/' + sig + '" target="_blank">' + short(sig) + "</a></span>");
+    log('<span class="info"><a href="https://scan.li.fi/tx/' + sig + '" target="_blank">Track on Li.Fi Scan</a></span>');
+
+    for (let i = 0; i < 24; i++){
+      await new Promise(r => setTimeout(r, 5000));
+      try{
+        const st = await fetch(LIFI + "/status?txHash=" + encodeURIComponent(sig) + "&fromChain=" + SOL_CHAIN + "&toChain=137");
+        const data = await st.json();
+        const s = (data.status || "").toUpperCase();
+        if (s === "DONE"){ log('<span class="ok">USDT arrived on Polygon.</span>'); break; }
+        if (s === "FAILED"){ log('<span class="err">Bridge failed.</span>'); break; }
+        if (i === 23) log('<span class="warn">Still processing. Use Li.Fi Scan.</span>');
+      }catch(_){}
+    }
+    quoteData = null;
+    $("amount").value = "";
+    $("quoteRow").style.display = "none";
+    $("bridgeBtn").textContent = "Get quote / Bridge";
+    loadBalance();
+  }catch(e){
+    const m = (e.message || "").toLowerCase();
+    log(m.includes("reject") || m.includes("denied") || m.includes("cancel")
+      ? '<span class="err">Rejected by wallet.</span>'
+      : '<span class="err">' + e.message + "</span>");
+  }
+  $("bridgeBtn").disabled = !quoteData;
+}
+
+$("unlockBtn").onclick = unlock;
+async function copyConnectedWallet(){
+  if (!solAddress){
+    log('<span class="err">Connect a wallet first</span>');
+    return;
+  }
+  try{
+    await navigator.clipboard.writeText(solAddress);
+  }catch(_){
+    const t = document.createElement("textarea");
+    t.value = solAddress;
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand("copy");
+    t.remove();
+  }
+  const btn = $("copyWalletBtn");
+  const prev = btn.textContent;
+  btn.textContent = "Copied";
+  log('<span class="ok">Wallet copied: ' + solAddress + "</span>");
+  setTimeout(() => { btn.textContent = prev; }, 1400);
+}
+async function disconnectWallet(){
+  try{
+    if (solWallet && solWallet.disconnect) await solWallet.disconnect();
+  }catch(_){}
+  solWallet = null;
+  solAddress = "";
+  quoteData = null;
+  $("walletShort").textContent = "—";
+  $("walletBar").classList.remove("show");
+  $("connectBtn").textContent = "Connect Solana Wallet";
+  $("bal").textContent = "Balance: —";
+  $("quoteRow").style.display = "none";
+  $("bridgeBtn").disabled = true;
+  $("bridgeBtn").textContent = "Get quote / Bridge";
+  log('<span class="info">Wallet disconnected</span>');
+}
+$("disconnectBtn").onclick = disconnectWallet;
+$("connectBtn").onclick = connect;
+$("bridgeBtn").onclick = bridge;
+$("saveAddrBtn").onclick = saveCurrentAddr;
+$("copyWalletBtn").onclick = copyConnectedWallet;
+$("amount").addEventListener("input", scheduleQuote);
+$("dest").addEventListener("input", () => { validateDest(); scheduleQuote(); });
+$("dest").addEventListener("blur", () => validateDest(true));
+$("accessCode").addEventListener("keydown", e => { if (e.key === "Enter") unlock(); });
+
+if (sessionStorage.getItem(UNLOCK_KEY) === "1") showBridge();
+</script>
+</body>
+</html>
