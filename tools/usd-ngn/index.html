@@ -68,7 +68,7 @@
     <p class="sub">Live conversion rate</p>
 
     <div class="card">
-      <div class="lbl">Official USD → NGN</div>
+      <div class="lbl">Official USD to NGN</div>
       <div class="rate" id="official">Loading…</div>
       <div class="hint" id="adjusted">NGN to USD rate: —</div>
       <div class="row"><span id="updated">—</span></div>
@@ -96,7 +96,8 @@
 const API_USD_NGN = "https://api.fastforex.io/fetch-one?from=USD&to=NGN";
 const API_NGN_USD = "https://api.fastforex.io/fetch-one?from=NGN&to=USD";
 const KEY = "93f9fd10f1-3076e6c54b-tlaf2s";
-const MARKUP = 65;
+const MARKUP_USD_TO_NGN = -6; // extra fees converting USD → NGN
+const MARKUP_NGN_TO_USD = 65; // extra fees when converting NGN → USD
 
 let usdToNgn = 0;
 let ngnToUsd = 0;
@@ -116,10 +117,10 @@ function render(){
   }
   if (mode === "usd"){
     if (!usdToNgn){ $("result").textContent = "—"; return; }
-    $("result").textContent = "$" + money(amt, 2) + " = ₦" + money(amt * usdToNgn, 2);
+    $("result").textContent = "$" + money(amt, 2) + " = ₦" + money(amt * (usdToNgn + MARKUP_USD_TO_NGN), 2);
   } else {
     if (!ngnToUsd){ $("result").textContent = "—"; return; }
-    const ngnPerUsd = (1 / ngnToUsd) + MARKUP;
+    const ngnPerUsd = (1 / ngnToUsd) + MARKUP_NGN_TO_USD;
     $("result").textContent = "₦" + money(amt, 2) + " = $" + money(amt / ngnPerUsd, 2);
   }
 }
@@ -146,13 +147,15 @@ async function loadRate(){
     const ngnData = await ngnRes.json();
     const usdRate = usdData && usdData.result && usdData.result.NGN;
     const ngnRate = ngnData && ngnData.result && ngnData.result.USD;
-    if (!usdRate) throw new Error((usdData && usdData.error) || "No USD→NGN rate");
-    if (!ngnRate) throw new Error((ngnData && ngnData.error) || "No NGN→USD rate");
+    if (!usdRate) throw new Error((usdData && usdData.error) || "No USD to NGN rate");
+    if (!ngnRate) throw new Error((ngnData && ngnData.error) || "No NGN to USD rate");
     usdToNgn = Number(usdRate);
     ngnToUsd = Number(ngnRate);
     const ngnPerUsdLive = 1 / ngnToUsd;
     $("official").textContent = "₦" + money(usdToNgn, 2);
-    $("adjusted").textContent = "NGN → USD live ₦" + money(ngnPerUsdLive, 2) + " · used ₦" + money(ngnPerUsdLive + MARKUP, 2) + " / $1";
+    $("adjusted").textContent =
+      "USD to NGN used ₦" + money(usdToNgn + MARKUP_USD_TO_NGN, 2) +
+      " · used ₦" + money(ngnPerUsdLive + MARKUP_NGN_TO_USD, 2) + " / $1";
     $("updated").textContent = "Updated " + new Date().toLocaleTimeString();
     render();
   }catch(e){
