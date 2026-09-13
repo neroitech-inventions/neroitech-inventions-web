@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>USD to Naira Rate</title>
+    <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+     <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-QM106YDX6N');
+     </script>
+
+     <!-- Favicon -->
+     <link href="images/favicon.ico" rel="icon">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#07110c;--card:#0d1c14;--line:#1d3a2a;
+      --green:#22c55e;--gold:#fbbf24;--text:#ecfdf3;--muted:#86a396;
+    }
+    body{
+      min-height:100vh;background:radial-gradient(circle at top,#163224,var(--bg) 55%);
+      color:var(--text);font-family:Syne,system-ui,sans-serif;
+      display:flex;justify-content:center;padding:28px 14px;
+    }
+    .wrap{width:100%;max-width:420px}
+    h1{font-size:1.45rem;font-weight:800}
+    .sub{font-family:"DM Mono",monospace;font-size:.68rem;color:var(--muted);margin:6px 0 18px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:12px}
+    .rate{font-family:"DM Mono",monospace;font-size:1.7rem;font-weight:500;color:var(--green)}
+    .lbl{font-size:.68rem;color:var(--muted);font-family:"DM Mono",monospace;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+    .hint{font-size:.72rem;color:var(--gold);font-family:"DM Mono",monospace;margin-top:8px}
+    .tabs{display:flex;gap:8px;margin-bottom:12px}
+    .tabs button{
+      flex:1;padding:10px;border:1px solid var(--line);background:transparent;
+      color:var(--muted);border-radius:12px;font-weight:800;font-family:Syne,sans-serif;cursor:pointer;
+    }
+    .tabs button.on{background:#143322;color:var(--text);border-color:var(--green)}
+    input{
+      width:100%;padding:14px;border-radius:12px;border:1px solid var(--line);
+      background:#0a1810;color:var(--text);font-family:"DM Mono",monospace;font-size:1.15rem;outline:none;
+    }
+    .out{margin-top:12px;font-size:1.25rem;font-family:"DM Mono",monospace}
+    .row{display:flex;justify-content:space-between;gap:8px;font-size:.7rem;color:var(--muted);font-family:"DM Mono",monospace;margin-top:8px}
+    button.refresh{
+      width:100%;margin-top:10px;padding:12px;border:none;border-radius:12px;
+      background:var(--green);color:#06210f;font-weight:800;cursor:pointer;font-family:Syne,sans-serif;
+    }
+    .err{color:#f87171;font-family:"DM Mono",monospace;font-size:.75rem;margin-top:8px}
+    .powered{
+      text-align:center;margin-top:8px;font-family:"DM Mono",monospace;
+      font-size:.68rem;color:var(--muted);
+    }
+    .powered span{color:var(--green)}
+    .powered a{
+  color:var(--green);
+  text-decoration:none;
+}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>USD to Naira</h1>
+    <p class="sub">Live conversion rate</p>
+
+    <div class="card">
+      <div class="lbl">Official USD → NGN</div>
+      <div class="rate" id="official">Loading…</div>
+      <div class="hint" id="adjusted">NGN to USD rate: —</div>
+      <div class="row"><span id="updated">—</span></div>
+      <button class="refresh" id="refreshBtn" type="button">Refresh rate</button>
+      <div class="err" id="err"></div>
+    </div>
+
+    <div class="card">
+      <div class="tabs">
+        <button type="button" class="on" id="tabUsd" onclick="setMode('usd')">USD → NGN</button>
+        <button type="button" id="tabNgn" onclick="setMode('ngn')">NGN → USD</button>
+      </div>
+      <div class="lbl" id="inLabel">Amount in USD</div>
+      <input id="amount" type="number" min="0" step="0.01" placeholder="100" value="100">
+      <div class="out" id="result">—</div>
+    </div>
+
+    <p class="powered">
+  Powered by
+  <a href="https://niti.com.ng/" target="_blank" rel="noopener">Neroitech Inventions</a>
+</p>
+  </div>
+
+<script>
+const API_USD_NGN = "https://api.fastforex.io/fetch-one?from=USD&to=NGN";
+const API_NGN_USD = "https://api.fastforex.io/fetch-one?from=NGN&to=USD";
+const KEY = "93f9fd10f1-3076e6c54b-tlaf2s";
+const MARKUP = 65;
+
+let usdToNgn = 0;
+let ngnToUsd = 0;
+let mode = "usd";
+
+const $ = id => document.getElementById(id);
+
+function money(n, dec){
+  return Number(n).toLocaleString(undefined, { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+function render(){
+  const amt = parseFloat($("amount").value);
+  if (!amt || amt < 0){
+    $("result").textContent = "—";
+    return;
+  }
+  if (mode === "usd"){
+    if (!usdToNgn){ $("result").textContent = "—"; return; }
+    $("result").textContent = "$" + money(amt, 2) + " = ₦" + money(amt * usdToNgn, 2);
+  } else {
+    if (!ngnToUsd){ $("result").textContent = "—"; return; }
+    const ngnPerUsd = (1 / ngnToUsd) + MARKUP;
+    $("result").textContent = "₦" + money(amt, 2) + " = $" + money(amt / ngnPerUsd, 2);
+  }
+}
+
+function setMode(next){
+  mode = next;
+  $("tabUsd").classList.toggle("on", next === "usd");
+  $("tabNgn").classList.toggle("on", next === "ngn");
+  $("inLabel").textContent = next === "usd" ? "Amount in USD" : "Amount in Naira";
+  $("amount").placeholder = next === "usd" ? "100" : "100000";
+  render();
+}
+
+async function loadRate(){
+  $("err").textContent = "";
+  $("refreshBtn").disabled = true;
+  try{
+    const opts = { headers: { "X-API-Key": KEY } };
+    const [usdRes, ngnRes] = await Promise.all([
+      fetch(API_USD_NGN, opts),
+      fetch(API_NGN_USD, opts)
+    ]);
+    const usdData = await usdRes.json();
+    const ngnData = await ngnRes.json();
+    const usdRate = usdData && usdData.result && usdData.result.NGN;
+    const ngnRate = ngnData && ngnData.result && ngnData.result.USD;
+    if (!usdRate) throw new Error((usdData && usdData.error) || "No USD→NGN rate");
+    if (!ngnRate) throw new Error((ngnData && ngnData.error) || "No NGN→USD rate");
+    usdToNgn = Number(usdRate);
+    ngnToUsd = Number(ngnRate);
+    const ngnPerUsdLive = 1 / ngnToUsd;
+    $("official").textContent = "₦" + money(usdToNgn, 2);
+    $("adjusted").textContent = "NGN → USD live ₦" + money(ngnPerUsdLive, 2) + " · used ₦" + money(ngnPerUsdLive + MARKUP, 2) + " / $1";
+    $("updated").textContent = "Updated " + new Date().toLocaleTimeString();
+    render();
+  }catch(e){
+    $("err").textContent = e.message || "Could not load rate";
+  }
+  $("refreshBtn").disabled = false;
+}
+
+$("amount").addEventListener("input", render);
+$("refreshBtn").onclick = loadRate;
+window.setMode = setMode;
+loadRate();
+</script>
+</body>
+</html>
