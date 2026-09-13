@@ -93,9 +93,9 @@
   </div>
 
 <script>
-const API_USD_NGN = "https://api.fastforex.io/fetch-one?from=USD&to=NGN";
-const API_NGN_USD = "https://api.fastforex.io/fetch-one?from=NGN&to=USD";
-const KEY = "93f9fd10f1-3076e6c54b-tlaf2s";
+const WORKER = "https://usd-ngn.nyerhowoisuru.workers.dev/";
+const API_USD_NGN = WORKER + "?from=USD&to=NGN";
+const API_NGN_USD = WORKER + "?from=NGN&to=USD";
 const MARKUP_USD_TO_NGN = -6; // extra fees converting USD → NGN
 const MARKUP_NGN_TO_USD = 65; // extra fees when converting NGN → USD
 
@@ -138,7 +138,7 @@ async function loadRate(){
   $("err").textContent = "";
   $("refreshBtn").disabled = true;
   try{
-    const opts = { headers: { "X-API-Key": KEY } };
+    const opts = {};
     const [usdRes, ngnRes] = await Promise.all([
       fetch(API_USD_NGN, opts),
       fetch(API_NGN_USD, opts)
