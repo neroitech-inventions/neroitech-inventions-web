@@ -1,0 +1,2178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoWalletConnect - Pay with crypto without connecting your wallet.</title>
+
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+     <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-QM106YDX6N');
+     </script>
+
+     <!-- Favicon -->
+     <link href="images/favicon.ico" rel="icon">
+
+    <link rel="icon" type="image/jpeg" href="nwc.jpg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #7c3aed;
+            --bg: #0f1419;
+            --card: #1a1f2e;
+            --border: rgba(148, 163, 184, 0.12);
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg), #1a2847);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .settings-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(124, 58, 237, 0.2));
+            border: 1.5px solid rgba(0, 212, 255, 0.4);
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            backdrop-filter: blur(8px);
+        }
+
+        .settings-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.35), rgba(124, 58, 237, 0.35));
+            border-color: rgba(0, 212, 255, 0.6);
+            box-shadow: 0 6px 24px rgba(0, 212, 255, 0.25);
+            transform: scale(1.08);
+        }
+
+        .settings-btn:active {
+            transform: scale(0.96);
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--muted);
+            margin-bottom: 32px;
+            font-size: 0.95rem;
+        }
+        /* Payment Countdown Styles */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.timer-wrap {
+    margin: 4px 0 20px;
+}
+
+.timer-wrap.hidden {
+    display: none;
+}
+
+.timer-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(124, 58, 237, 0.08));
+    border: 1px solid rgba(0, 212, 255, 0.28);
+    color: var(--primary);
+}
+
+.timer-clock {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    font-variant-numeric: tabular-nums;
+}
+
+.timer-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+.timer-wrap {
+    text-align: center;
+}
+
+.timer-inner {
+    width: 100%;
+    text-align: center;
+}
+
+.timer-clock {
+    text-align: center;
+}
+
+.timer-label {
+    text-align: center;
+}
+
+.timer-bar {
+    height: 4px;
+    margin-top: 10px;
+    border-radius: 99px;
+    background: rgba(148, 163, 184, 0.15);
+    overflow: hidden;
+}
+
+.timer-bar > span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transform-origin: left center;
+    transition: transform 1s linear, background 0.3s ease;
+}
+
+.timer-wrap.urgent .timer-pill {
+    background: rgba(255, 107, 107, 0.1);
+    border-color: rgba(255, 107, 107, 0.4);
+    color: #ff6b6b;
+    animation: pulse 1s infinite;
+}
+
+.timer-wrap.urgent .timer-bar > span {
+    background: #ff6b6b;
+}
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+
+        .network-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .network-btn {
+            padding: 14px;
+            background: transparent;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--muted);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .network-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .network-btn.active {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(124, 58, 237, 0.1));
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .settings-btn {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+    line-height: 0;
+}
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--bg);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--muted);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+.qr-box {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(124, 58, 237, 0.05));
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 600px) {
+    .qr-box {
+        padding: 16px;
+    }
+}
+
+#qrcode {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+#qrcode canvas {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+}
+
+#qrcode img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 600px) {
+    #qrcode {
+        padding: 8px;
+        width: 100%;
+    }
+    
+    #qrcode canvas {
+        max-width: 100% !important;
+        width: 180px !important;
+        height: 180px !important;
+    }
+}
+
+        #qrcode svg {
+            max-width: 100%;
+            display: block;
+        }
+
+        .qr-hint {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+
+.address-display {
+    width: 100%;
+    margin-top: 14px;
+    padding: 10px 12px;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-align: left;
+}
+
+.address-display > div:first-child {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.address-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--primary);
+    word-break: break-all;
+    line-height: 1.35;
+    margin-bottom: 8px;
+}
+
+.copy-btn {
+    width: 100%;
+    padding: 8px 10px;
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: 7px;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0;
+}
+
+.copy-btn:hover {
+    background: rgba(0, 212, 255, 0.15);
+    border-color: rgba(0, 212, 255, 0.45);
+}
+
+        .amount-section {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .amount-section input {
+            margin-bottom: 0;
+        }
+        .payment-summary {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 12px;
+}
+
+.payment-amount-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.payment-amount {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.payment-amount input {
+    flex: 1;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 12px 14px;
+}
+
+.payment-amount span {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.payment-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.payment-detail {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 12px;
+}
+
+.detail-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 5px;
+}
+
+.detail-value {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.network-warning {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    color: #fca5a5;
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+.network-warning strong {
+    color: #fca5a5;
+}
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--success), #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            animation: pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        .success-text {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .success-text h2 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .success-text p {
+            color: var(--muted);
+        }
+
+        .tx-box {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            word-break: break-all;
+        }
+
+        .tx-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .tx-hash {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--primary);
+            word-break: break-all;
+        }
+
+        .tx-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .tx-link:hover {
+            text-decoration: underline;
+        }
+
+        .info-box {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            color: #fca5a5;
+            margin-bottom: 20px;
+        }
+
+        .step-label {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .status-log {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--muted);
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .log-entry {
+            margin-bottom: 6px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .log-icon {
+            flex-shrink: 0;
+        }
+
+        .log-ok { color: var(--success); }
+        .log-err { color: #ef4444; }
+        .log-info { color: var(--primary); }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 0.9rem;
+            z-index: 1000;
+            animation: slideUp 0.3s ease;
+            display: none;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Modal */
+        .modal {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+        }
+
+        .modal-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        .modal h2 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .modal p {
+            font-size: 0.95rem;
+            color: var(--muted);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            flex: 1;
+        }
+
+        .modal-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .modal-btn-secondary {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            flex: 1;
+        }
+
+        .modal-btn-secondary:hover {
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @media (max-width: 600px) {
+            .modal {
+                padding: 30px 20px;
+            }
+
+            .modal h2 {
+                font-size: 1.4rem;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+        }
+
+
+        .site-footer {
+            margin: 8px 0 28px;
+            padding: 18px 16px 22px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+        .site-footer-brand {
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+        .site-footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 18px;
+        }
+        .site-footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .site-footer-links a:hover { text-decoration: underline; }
+        .site-footer.hidden { display: none; }
+        @media (max-width: 600px) {
+            .site-footer { margin-bottom: 80px; }
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            #qrcode {
+                width: 100%;
+                max-width: 280px;
+                padding: 10px;
+            }
+
+            .address-display {
+                flex-direction: column;
+                padding: 12px;
+            }
+
+            .address-text {
+                font-size: 0.65rem;
+                word-break: break-all;
+            }
+
+            .copy-btn {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .qr-box {
+                padding: 16px;
+            }
+
+            .status-log {
+                font-size: 0.65rem;
+            }
+        }
+
+        .qr-empty {
+    width: 100%;
+    padding: 28px 16px;
+    text-align: center;
+}
+
+.qr-empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(124, 58, 237, 0.15));
+    border: 1px solid rgba(0, 212, 255, 0.25);
+}
+
+.qr-empty h3 {
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+}
+
+.qr-empty p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    margin-bottom: 8px;
+}
+
+#qrcode:empty {
+    display: none;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Settings Button (Bottom-Right, Modern & Subtle) -->
+<button class="settings-btn" onclick="goToSettings()" title="Configure Wallets">
+    <span style="display:block;line-height:1;transform:translateY(1px);">⚙️</span>
+</button>
+
+        <!-- SETTINGS PAGE -->
+        <div class="section" id="settingsSection">
+            <div class="card">
+                <h1>NoWalletConnect</h1>
+                <p class="subtitle">Wallet Settings</p>
+
+                <div class="form-group">
+                    <label>Polygon Wallet Address</label>
+                    <input 
+                        type="text" 
+                        id="settingsPolygon" 
+                        placeholder="0x..."
+                        spellcheck="false"
+                    >
+                    <p style="font-size: 0.75rem; color: var(--muted); margin-top: 6px;">
+                        Your Polygon wallet for receiving payments
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label>Solana Wallet Address</label>
+                    <input 
+                        type="text" 
+                        id="settingsSolana" 
+                        placeholder="7dHbWXadE3fY..."
+                        spellcheck="false"
+                    >
+                    <p style="font-size: 0.75rem; color: var(--muted); margin-top: 6px;">
+                        Your Solana wallet for receiving payments
+                    </p>
+                </div>
+
+                <button class="btn-primary" onclick="saveWalletSettings()" style="padding: 16px;">
+                    Save Settings
+                </button>
+
+                <button class="btn-secondary" onclick="closeSettings()" style="padding: 16px;">
+                    Close
+                </button>
+            </div>
+        </div>
+        <!-- SECTION 1: Network Selection -->
+        <div class="section active" id="section1">
+            <div class="card">
+                <h1>NoWalletConnect</h1>
+                <p class="subtitle">Pay with Crypto</p>
+
+                <div style="text-align: center; padding: 40px 0;">
+                    <p style="font-size: 1.1rem; color: var(--text); margin-bottom: 32px;">Select Payment Method</p>
+                </div>
+
+                <div class="network-buttons" style="margin-bottom: 40px;">
+                    <button class="network-btn active" onclick="selectNetwork('polygon')" style="padding: 24px;">
+                        <img src="polygon.png" alt="Polygon" style="width: 50px; height: 50px; margin-bottom: 8px; object-fit: contain;">
+                        <div style="font-weight: 700;">Polygon</div>
+                        <div style="font-size: 0.8rem; color: var(--muted);"></div>
+                    </button>
+                    <button class="network-btn" onclick="selectNetwork('solana')" style="padding: 24px;">
+                        <img src="solana.png" alt="Solana" style="width: 50px; height: 50px; margin-bottom: 8px; object-fit: contain;">
+                        <div style="font-weight: 700;">Solana</div>
+                        <div style="font-size: 0.8rem; color: var(--muted);"></div>
+                    </button>
+                </div>
+
+                <button class="btn-primary" onclick="goToPaymentPage()" style="padding: 16px;">
+                    Continue →
+                </button>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Payment Page -->
+        <div class="section" id="section2">
+            <div class="card">
+                <h1>NoWalletConnect</h1>
+                <p class="subtitle" style="margin-bottom: 40px;">Checkout</p>
+
+<div class="payment-summary">
+
+    <div class="payment-amount-label">
+        SEND EXACTLY
+    </div>
+
+    <div class="payment-amount">
+<input
+    type="number"
+    id="expectedAmount"
+    placeholder="0.00"
+    value=""
+    min="0.01"
+    step="0.01"
+    oninput="startWatchingFromCheckout()"
+>
+        <span>USDT</span>
+    </div>
+
+    <div class="payment-details">
+
+        <div class="payment-detail">
+            <span class="detail-label">NETWORK</span>
+            <span class="detail-value" id="paymentNetwork">
+                Polygon
+            </span>
+        </div>
+
+        <div class="payment-detail">
+            <span class="detail-label">TOKEN</span>
+            <span class="detail-value" id="paymentToken">
+                USDT (ERC-20)
+            </span>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="network-warning" id="networkWarning">
+    <strong>⚠️ Only send USDT on Polygon</strong>
+    <span>Sending from another network may result in permanent loss.</span>
+</div>
+
+<div class="qr-box" id="qrBox">
+    <div id="qrReady">
+        <div class="qr-hint" style="margin-bottom: 20px; font-size: 0.9rem;" id="showSenderText">
+            Show this to the sender
+        </div>
+        <div id="qrcode"></div>
+        <div class="address-display">
+            <div style="font-size: 0.75rem; color: var(--muted); text-transform: uppercase; font-weight: 600;" id="addressLabel">
+                Receiving Address
+            </div>
+            <div class="address-text" id="displayWalletAddress">—</div>
+            <button class="copy-btn" onclick="copyToClipboard()">📋 Copy Address</button>
+        </div>
+    </div>
+
+    <div id="qrEmpty" class="qr-empty" hidden>
+        <div class="qr-empty-icon">⚙️</div>
+        <h3>Set a receive address</h3>
+        <p>Add your Polygon or Solana wallet in Settings before you can accept payment.</p>
+        <button class="btn-primary" onclick="goToSettings()" style="margin-top: 8px;">
+            Open Settings
+        </button>
+    </div>
+</div>
+
+<div class="info-box" id="watchStatus" style="text-align: center;">
+    Waiting for the sender to pay
+</div>
+<div class="timer-wrap hidden" id="watchCountdown">
+    <div class="timer-pill">
+        <div class="timer-inner">
+            <div class="timer-label">Payment window</div>
+            <div class="timer-clock" id="watchCountdownText">15:00</div>
+        </div>
+    </div>
+    <div class="timer-bar"><span id="watchCountdownBar"></span></div>
+</div>
+
+<button class="btn-secondary" onclick="startAutoVerification()" style="padding: 16px;">
+    Check again
+</button>
+
+                <button class="btn-secondary" onclick="goBack()" style="padding: 16px;">
+                    Change Network
+                </button>
+            </div>
+        </div>
+
+<!-- SECTION 3: Waiting for Payment -->
+<div class="section" id="section3">
+    <div class="card">
+        <h1 style="font-size: 1.5rem; margin-bottom: 40px;">NoWalletConnect</h1>
+
+        <div style="text-align: center; padding: 40px 0;">
+            <div class="spinner" style="margin: 0 auto 20px;"></div>
+            <h2 style="font-size: 1.3rem; margin-bottom: 16px;">Waiting for Payment</h2>
+            <p style="color: var(--muted); font-size: 1.1rem;"><strong id="waitAmount">50 USDT</strong></p>
+        </div>
+
+        <!-- TIMER HERE -->
+        <div id="watchCountdown3" style="text-align: center; color: var(--primary); font-size: 1.2rem; font-weight: 600; margin: 20px 0; font-family: 'JetBrains Mono', monospace; letter-spacing: 2px;"></div>
+
+        <div class="info-box" style="text-align: center; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: var(--success);">
+            We're confirming your payment...
+        </div>
+
+        <button class="btn-secondary" onclick="goToPaymentPage()" style="margin-top: 40px; padding: 16px;">
+            Change Amount
+        </button>
+    </div>
+</div>
+
+        <!-- SECTION 4: Success -->
+        <div class="section" id="section4">
+            <div class="card">
+                <div class="success-icon">✓</div>
+
+                <div class="success-text">
+                    <h1 style="font-size: 1.8rem; margin-bottom: 8px;">Payment Received!</h1>
+                    <p style="font-size: 1rem; color: var(--muted);">Thank you for your payment</p>
+                </div>
+
+                <div class="tx-box" style="margin: 40px 0;">
+                    <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary);" id="finalAmount">50 USDT</div>
+                    <div class="tx-label" style="margin-top: 12px;">Amount Paid</div>
+                </div>
+
+                <div class="tx-box" style="background: rgba(0, 212, 255, 0.05); border-color: rgba(0, 212, 255, 0.3);">
+                    <div class="tx-label">Transaction</div>
+                    <a id="txLink" href="" target="_blank" style="color: var(--primary); text-decoration: none; word-break: break-all; font-size: 0.75rem;">
+                        View on Explorer →
+                    </a>
+                </div>
+
+                 <!-- Redirect timer (shown in gateway mode) -->
+    <div id="redirectTimer" style="display: none; text-align: center; margin: 30px 0; padding: 20px; background: rgba(0, 212, 255, 0.05); border-radius: 10px;">
+      <p style="color: var(--muted); margin-bottom: 10px;">Redirecting to merchant in...</p>
+      <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary); font-family: 'JetBrains Mono', monospace;" id="redirectCountdown">10</div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <p style="color: var(--muted); font-size: 0.9rem;">Powered by NoWalletConnect</p>
+    </div>
+
+    <!-- ✅ Normal button (shown when NOT gateway mode) -->
+    <button class="btn-primary" id="acceptAnotherBtn" onclick="newPayment()" style="margin-top: 40px; padding: 16px;">
+      Accept Another Payment
+    </button>
+
+    <!-- ✅ Return to merchant button (shown only in gateway mode, clickable) -->
+    <button class="btn-primary" id="returnMerchantBtn" onclick="returnToMerchant()" style="margin-top: 40px; padding: 16px; display: none;">
+      Return to Merchant Website
+    </button>
+  </div>
+</div>
+
+
+    <footer class="site-footer" id="siteFooter">
+        <div class="site-footer-brand">NoWalletConnect</div>
+        <nav class="site-footer-links">
+            <a href="guide.html">Integration Guide</a>
+            <a href="merchant.html">Merchant Dashboard</a>
+            <a href="https://github.com/solacediamond/nowalletconnect/blob/main/NoWalletConnect-Docs.pdf" target="_blank" rel="noopener">Documentation</a>
+            <a href="https://t.me/noWalletConnect" target="_blank" rel="noopener">Telegram</a>
+        </nav>
+    </footer>
+
+    <div class="toast" id="toast"></div>
+
+    <!-- Wallet Configuration Modal -->
+    <div class="modal-overlay" id="walletModal">
+        <div class="modal">
+            <div class="modal-icon">⚙️</div>
+            <h2>Set Up Your Wallet</h2>
+            <p>You must configure your own receiver wallet address before accepting payments.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-primary" onclick="closeModalAndGoToSettings()">
+                    Go to Settings
+                </button>
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        // API Keys
+        const API = "https://nowalletconnect.nyerhowoisuru.workers.dev/";
+        
+        // USDT Contract Addresses
+        const USDT_POLYGON = '0xc2132D05D31c914a87C6611C10748AEb04B58e8F';
+        const USDT_SOLANA = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
+
+        // 💜 Google Sheets Configuration
+        const SHEETS = {
+          NWC_SHEET_ID: '1D1AmH676-RdnBbE9F0i0E5lNvv0y5VZlnQZ_eL5dx1Q',
+          NWC_API_KEY: 'AIzaSyBin_r5W1VlRYa-2P3lRq5MWP2_ctd_R3c',
+          NWC_MERCHANTS: 'MERCHANTS!A:G',
+          NWC_PAYMENTS: 'PAYMENTS!A:H'
+        };
+
+// DEFAULT WALLET ADDRESSES...
+
+        
+
+        // DEFAULT WALLET ADDRESSES (can be changed in settings)
+        const DEFAULT_POLYGON_WALLET = '';
+        const DEFAULT_SOLANA_WALLET = '';
+
+        let state = {
+            network: 'polygon',
+            walletAddress: DEFAULT_POLYGON_WALLET,
+            polygonWallet: DEFAULT_POLYGON_WALLET,
+            solanaWallet: DEFAULT_SOLANA_WALLET,
+            senderWallet: '',
+            expectedAmount: 0,
+            verifying: false,
+            previousSection: 1
+        };
+
+        // 💜 Payment Gateway Mode
+        const GATEWAY = {
+          merchantId: null,
+          amount: null,
+          returnUrl: null,
+          isGatewayMode: false,
+        };
+
+        
+
+        // ═════════════════════════════════════════
+        // 💜 GATEWAY MODE FUNCTIONS
+        // ═════════════════════════════════════════
+
+function detectGatewayMode() {
+  const params = new URLSearchParams(window.location.search);
+  const merchantId = params.get('merchant');
+  const amount = params.get('amount');
+  const network = params.get('network') || 'polygon';
+
+  if (!merchantId) {
+    return false;
+  }
+
+  if (!amount) {
+    showMerchantError('This payment link is no longer valid or the merchant ID doesn\'t exist.');
+    return false;
+  }
+
+  if (isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
+    showMerchantError('This payment link is no longer valid or the merchant ID doesn\'t exist.');
+    return false;
+  }
+
+  GATEWAY.merchantId = merchantId;
+  GATEWAY.amount = parseFloat(amount);
+  GATEWAY.isGatewayMode = true;  // ✅ Don't set returnUrl here
+  console.log('🎯 GATEWAY MODE DETECTED', GATEWAY);
+  loadMerchantForGateway(merchantId, GATEWAY.amount, network);
+  return true;
+}
+
+
+// Modern error display
+function showMerchantError(message) {
+  const container = document.querySelector('.container');
+  
+  container.innerHTML = `
+    <div class="card" style="text-align: center; padding: 60px 32px;">
+      <div style="font-size: 4rem; margin-bottom: 24px;">❌</div>
+      
+      <h1 style="font-size: 1.8rem; margin-bottom: 12px; background: none; -webkit-text-fill-color: unset; color: #ef4444;">
+        Payment Link Invalid
+      </h1>
+      
+      <p style="color: var(--muted); font-size: 1.1rem; margin-bottom: 32px; line-height: 1.6;">
+        ${message}
+      </p>
+      
+      <div style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 20px;">
+        <p style="color: var(--muted); font-size: 0.9rem;">
+          💡 Contact the merchant for a valid payment link.
+        </p>
+      </div>
+      
+      <p style="color: var(--muted); font-size: 0.85rem; margin-top: 40px;">
+        Powered by NoWalletConnect
+      </p>
+    </div>
+  `;
+}
+
+async function loadMerchantForGateway(merchantId, amount, network) {
+  try {
+    const merchants = await fetchMerchants();
+    const merchant = merchants[merchantId];
+
+    if (!merchant) {
+      showMerchantError('This payment link is no longer valid or the merchant ID doesn\'t exist.');
+      return;
+    }
+
+    // ✅ Get return URL from Google Sheet
+    GATEWAY.returnUrl = merchant.webhookUrl;  // ✅ Uses column 6 from database
+    GATEWAY.merchantId = merchantId;
+    GATEWAY.amount = amount;
+    GATEWAY.isGatewayMode = true;
+
+    // ✅ Use network from URL
+    state.network = network;
+    state.walletAddress = network === 'polygon' ? merchant.polygonWallet : merchant.solanaWallet;
+    
+    // ✅ UPDATE UI WITH NETWORK INFO
+    updatePaymentNetwork();
+
+
+    console.log('✅ Merchant loaded:', merchant);
+    state.merchantId = merchantId;
+    state.expectedAmount = amount;
+    state.polygonWallet = merchant.polygonWallet;
+    state.solanaWallet = merchant.solanaWallet;
+
+    // Update UI
+    document.getElementById('expectedAmount').value = amount;
+    document.getElementById('expectedAmount').disabled = true;
+
+    // Regenerate QR code with correct wallet for network
+    generateQRCode(state.walletAddress);
+
+    const showSenderText = document.getElementById('showSenderText');
+    if (showSenderText) {
+      showSenderText.textContent = 'Complete your payment below';
+      showSenderText.style.display = 'block';
+    }
+
+    const addressLabel = document.getElementById('addressLabel');
+    if (addressLabel) {
+      addressLabel.textContent = 'Send USDT to:';
+      addressLabel.style.display = 'block';
+    }
+
+    // Hide buttons in gateway mode
+    const settingsBtn = document.querySelector('.settings-btn');
+    if (settingsBtn) {
+      settingsBtn.style.display = 'none';
+    }
+
+    const changeNetworkBtn = document.querySelector('button[onclick*="goBack"]');
+    if (changeNetworkBtn) {
+      changeNetworkBtn.style.display = 'none';
+    }
+
+    goToSection(2);
+    
+    // ✅ Wait a moment then start verification
+    setTimeout(() => {
+      startAutoVerification();
+    }, 500);
+
+  } catch (err) {
+    console.error('Error loading merchant:', err);
+    alert('❌ Error loading merchant');
+  }
+}
+
+        // Redirect to merchant after payment
+        function redirectToMerchant(txHash) {
+          if (!GATEWAY.isGatewayMode || !GATEWAY.returnUrl) return;
+
+          const redirectUrl = new URL(GATEWAY.returnUrl);
+          redirectUrl.searchParams.append('payment_id', 'pay_' + Date.now());
+          redirectUrl.searchParams.append('tx_hash', txHash);
+          redirectUrl.searchParams.append('amount', GATEWAY.amount);
+          redirectUrl.searchParams.append('merchant', GATEWAY.merchantId);
+          redirectUrl.searchParams.append('network', state.network);
+          redirectUrl.searchParams.append('status', 'success');
+
+          console.log('🔄 Redirecting to merchant:', redirectUrl.toString());
+          setTimeout(() => { window.location.href = redirectUrl.toString(); }, 3000);
+        }
+
+async function recordPaymentToSheet(paymentData) {
+  try {
+    console.log('📝 Recording payment:', paymentData);
+
+    // ✅ CORRECT Format
+    const formUrl = 'https://docs.google.com/forms/d/14seQRN5oWOxqlYGJnaOvMQl6aGW02DFMupP2WRai66A/formResponse';
+
+    const formData = new FormData();
+    formData.append('entry.1529556014', 'completed');                              // status
+    formData.append('entry.1426755421', paymentData.payment_id || 'pay_' + Date.now());  // payment_id
+    formData.append('entry.129872802', paymentData.merchant_id || '');             // merchant_id
+    formData.append('entry.654384322', paymentData.amount);                        // amount
+    formData.append('entry.187968983', paymentData.tx_hash);                       // tx_hash
+    formData.append('entry.481009506', paymentData.network || 'polygon');          // network
+    formData.append('entry.475850415', paymentData.return_url || '');              // return_url
+
+    console.log('📤 Sending to form...');
+
+    await fetch(formUrl, {
+      method: 'POST',
+      body: formData,
+      mode: 'no-cors'
+    });
+
+    console.log('✅ Payment recorded to Google Form!');
+    return { success: true };
+  } catch (err) {
+    console.error('❌ Error:', err);
+  }
+}
+
+async function fetchPayments() {
+  try {
+    // ✅ NEW Database ID for PAYMENTS
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/1W6r8bcMl41HvYF2PJ0OyEicg11bcv1DjGNkQMSH85qw/values/'PAYMENTS'!A:H?key=${SHEETS.NWC_API_KEY}`;
+    
+    console.log('📥 Fetching from:', url);
+    
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!data.values) return [];
+
+    const payments = [];
+    const rows = data.values.slice(1);
+
+    for (const row of rows) {
+      if (!row[2]) continue;
+      payments.push({
+        timestamp: row[0],
+        status: row[1],
+        payment_id: row[2],
+        merchant_id: row[3],
+        amount: row[4],
+        tx_hash: row[5],
+        network: row[6],
+        return_url: row[7],
+      });
+    }
+
+    return payments;
+  } catch (err) {
+    console.error('❌ Error fetching payments:', err);
+    return [];
+  }
+}
+
+async function fetchMerchants() {
+  try {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEETS.NWC_SHEET_ID}/values/${SHEETS.NWC_MERCHANTS}?key=${SHEETS.NWC_API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!data.values || data.values.length < 2) return {};
+
+    const merchants = {};
+    const rows = data.values.slice(1);
+
+    for (const row of rows) {
+      // Your database order:
+      // [0]=created_at, [1]=merchant_id, [2]=name, [3]=polygon_wallet, 
+      // [4]=solana_wallet, [5]=email, [6]=webhook_url
+      
+      const merchantId = row[1];
+      if (!merchantId) continue;
+      
+      merchants[merchantId] = {
+        id: row[1],              // ✅ merchant_id
+        name: row[2] || '',      // ✅ name
+        polygonWallet: row[3] || '',    // ✅ polygon_wallet
+        solanaWallet: row[4] || '',     // ✅ solana_wallet
+        email: row[5] || '',     // ✅ email
+        webhookUrl: row[6] || '',       // ✅ webhook_url
+      };
+    }
+
+    return merchants;
+  } catch (err) {
+    console.error('❌ Error fetching merchants:', err);
+    return {};
+  }
+}
+
+// ✅ Redirect countdown timer
+function startRedirectCountdown() {
+  let seconds = 10;
+  
+  const timerDiv = document.getElementById('redirectTimer');
+  const countdownEl = document.getElementById('redirectCountdown');
+  const acceptBtn = document.getElementById('acceptAnotherBtn');
+  const returnBtn = document.getElementById('returnMerchantBtn');
+  
+  if (!timerDiv) return;
+  
+  // Show timer, hide normal button
+  timerDiv.style.display = 'block';
+  if (acceptBtn) acceptBtn.style.display = 'none';
+  if (returnBtn) returnBtn.style.display = 'block';
+  
+  const interval = setInterval(() => {
+    countdownEl.textContent = seconds;
+    
+    if (seconds <= 0) {
+      clearInterval(interval);
+      returnToMerchant();
+    }
+    
+    seconds--;
+  }, 1000);
+}
+
+// ✅ Return to merchant website
+function returnToMerchant() {
+  if (!GATEWAY.returnUrl) return;
+
+  const txLink = document.getElementById("txLink");
+  const txHash = (txLink && (txLink.title || txLink.textContent)) || "";
+
+  try {
+    const url = new URL(GATEWAY.returnUrl);
+    url.searchParams.set("payment_id", "pay_" + Date.now());
+    url.searchParams.set("tx_hash", txHash);
+    url.searchParams.set("amount", String(GATEWAY.amount || state.expectedAmount || ""));
+    url.searchParams.set("merchant", GATEWAY.merchantId || "");
+    url.searchParams.set("network", state.network || "");
+    url.searchParams.set("status", "success");
+    window.location.href = url.toString();
+  } catch (e) {
+    window.location.href = GATEWAY.returnUrl;
+  }
+}
+
+        function loadFromLocalStorage() {
+            const savedPolygon = localStorage.getItem('polygonWallet');
+            const savedSolana = localStorage.getItem('solanaWallet');
+            const savedNetwork = localStorage.getItem('network') || 'polygon';
+            
+            if (savedPolygon) {
+                state.polygonWallet = savedPolygon;
+            }
+            if (savedSolana) {
+                state.solanaWallet = savedSolana;
+            }
+            
+            state.network = savedNetwork;
+            state.walletAddress = state.network === 'polygon' ? state.polygonWallet : state.solanaWallet;
+        }
+
+        function loadFromCookies() {
+            state.network = getCookie('network') || 'polygon';
+            state.walletAddress = state.network === 'polygon' ? state.polygonWallet : state.solanaWallet;
+        }
+
+        function setCookie(name, value, days = 365) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.indexOf(nameEQ) === 0) {
+                    return decodeURIComponent(cookie.substring(nameEQ.length));
+                }
+            }
+            return '';
+        }
+
+function selectNetwork(network) {
+    state.network = network;
+    state.walletAddress =
+        network === 'polygon'
+            ? state.polygonWallet
+            : state.solanaWallet;
+
+    document.querySelectorAll('.network-btn')
+        .forEach(btn => btn.classList.remove('active'));
+
+    event.target.closest('.network-btn')
+        .classList.add('active');
+
+    // Update payment information
+    updatePaymentNetwork();
+
+    setCookie('network', state.network);
+}
+
+function updatePaymentNetwork() {
+    const networkElement =
+        document.getElementById('paymentNetwork');
+
+    const tokenElement =
+        document.getElementById('paymentToken');
+
+    const warningElement =
+        document.getElementById('networkWarning');
+
+    if (state.network === 'solana') {
+
+        networkElement.textContent = 'Solana';
+        tokenElement.textContent = 'USDT (SPL)';
+
+        warningElement.innerHTML = `
+            <strong>⚠️ Only send USDT on Solana</strong>
+            <span>Sending from another network may result in permanent loss.</span>
+        `;
+
+    } else {
+
+        networkElement.textContent = 'Polygon';
+        tokenElement.textContent = 'USDT (ERC-20)';
+
+        warningElement.innerHTML = `
+            <strong>⚠️ Only send USDT on Polygon</strong>
+            <span>Sending from another network may result in permanent loss.</span>
+        `;
+    }
+}
+
+function goToPaymentPage() {
+    generateQRCode();
+    goToSection(2);
+    startWatchingFromCheckout();
+}
+
+function generateQRCode() {
+    const qrContainer = document.getElementById("qrcode");
+    const ready = document.getElementById("qrReady");
+    const empty = document.getElementById("qrEmpty");
+    const addressDisplay = document.getElementById("displayWalletAddress");
+
+    qrContainer.innerHTML = "";
+
+    if (!state.walletAddress) {
+        ready.hidden = true;
+        empty.hidden = false;
+        setWatchStatus("Add your wallet in Settings first");
+        return;
+    }
+
+    ready.hidden = false;
+    empty.hidden = true;
+
+    if (addressDisplay) {
+        addressDisplay.textContent = state.walletAddress;
+    }
+
+    try {
+        new QRCode(qrContainer, {
+            text: state.walletAddress,
+            width: 250,
+            height: 250,
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    } catch (error) {
+        console.error("QR error:", error);
+        showToast("Error generating QR code");
+    }
+}
+
+function copyToClipboard() {
+    if (!state.walletAddress) {
+        showToast('❌ Wallet address not configured');
+        return;
+    }
+
+    navigator.clipboard.writeText(state.walletAddress)
+        .then(() => {
+            showToast('✓ Wallet address copied!');
+        })
+        .catch(() => {
+            showToast('❌ Failed to copy address');
+        });
+}
+
+        function goToWaitScreen() {
+            console.log('goToWaitScreen called');
+            
+            // CHECK IF WALLETS ARE STILL USING DEFAULTS (Not customized)
+            const isUsingDefaults = 
+                state.polygonWallet === DEFAULT_POLYGON_WALLET && 
+                state.solanaWallet === DEFAULT_SOLANA_WALLET;
+            
+            if (isUsingDefaults) {
+                console.log('User still using default wallets - show modal');
+                showModal();
+                return;
+            }
+            
+            const amount = parseFloat(document.getElementById('expectedAmount').value);
+            console.log('Amount entered:', amount);
+            
+            if (!amount || amount <= 0) {
+                showToast('Please enter valid amount');
+                console.log('Invalid amount');
+                return;
+            }
+            
+            state.expectedAmount = amount;
+            document.getElementById('waitAmount').textContent = amount + ' USDT';
+            clearLog();
+            
+            console.log('Calling goToSection(3)');
+            goToSection(3);
+            
+            // AUTO-START VERIFICATION
+            setTimeout(() => {
+                console.log('Starting auto-verification');
+                startAutoVerification();
+            }, 500);
+        }
+
+const WATCH_MS = 15 * 60 * 1000;
+
+function stopVerification() {
+    if (state.verifyTimer) {
+        clearInterval(state.verifyTimer);
+        state.verifyTimer = null;
+    }
+    if (state.countdownTimer) {
+        clearInterval(state.countdownTimer);
+        state.countdownTimer = null;
+    }
+    state.verifying = false;
+}
+
+function formatCountdown(ms) {
+    const s = Math.max(0, Math.ceil(ms / 1000));
+    const m = String(Math.floor(s / 60)).padStart(2, "0");
+    const r = String(s % 60).padStart(2, "0");
+    return m + ":" + r;
+}
+
+function setCountdownText(text) {
+    const wrap = document.getElementById("watchCountdown");
+    const textEl = document.getElementById("watchCountdownText");
+    const bar = document.getElementById("watchCountdownBar");
+    const el2 = document.getElementById("watchCountdown3");
+
+    const left = Math.max(0, (state.watchEndsAt || 0) - Date.now());
+    const urgent = left <= 5 * 60 * 1000 && left > 0;
+    const clock = text ? formatCountdown(left) : "";
+
+    if (wrap) {
+        if (!text) {
+            wrap.classList.add("hidden");
+        } else {
+            wrap.classList.remove("hidden");
+            wrap.classList.toggle("urgent", urgent);
+            if (textEl) textEl.textContent = clock;
+            if (bar) bar.style.transform = "scaleX(" + (left / WATCH_MS) + ")";
+        }
+    }
+
+    if (el2) {
+        el2.textContent = text ? ("⏱️ " + clock) : "";
+        el2.style.color = urgent ? "#ff6b6b" : "var(--primary)";
+    }
+}
+
+function startCountdown() {
+    if (state.countdownTimer) clearInterval(state.countdownTimer);
+
+    function tick() {
+        const left = (state.watchEndsAt || 0) - Date.now();
+        if (left <= 0) {
+            stopVerification();
+            setWatchStatus("⏰ Payment expired");
+            setCountdownText("");
+            showExpiredPayment();
+            return;
+        }
+        setCountdownText("⏱️ Payment expires in " + formatCountdown(left));
+    }
+
+    tick();
+    state.countdownTimer = setInterval(tick, 1000);
+}
+
+function showExpiredPayment() {
+    const watchStatus = document.getElementById("watchStatus");
+    if (watchStatus) {
+        // ONLY for merchant gateway mode
+        if (GATEWAY.isGatewayMode) {
+            watchStatus.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 12px;">⏰</div>
+                    <div style="font-size: 1.1rem; font-weight: 600; color: #ff6b6b; margin-bottom: 8px;">
+                        Payment Expired
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--muted); margin-bottom: 16px;">
+                        This payment request has expired. Returning to merchant...
+                    </div>
+                </div>
+            `;
+            // Auto redirect back to merchant
+            setTimeout(() => {
+                window.location.href = GATEWAY.returnUrl || window.history.back();
+            }, 2000);
+        } else {
+            // NORMAL CHECKOUT - keep original behavior (Generate New Payment)
+            watchStatus.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 12px;">⏰</div>
+                    <div style="font-size: 1.1rem; font-weight: 600; color: #ff6b6b; margin-bottom: 8px;">
+                        Payment Expired
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--muted); margin-bottom: 16px;">
+                        Generate a new payment to continue
+                    </div>
+                    <button onclick="goBack()" style="padding: 12px 24px; background: var(--primary); color: #0f1419; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        Generate New Payment
+                    </button>
+                </div>
+            `;
+        }
+    }
+}
+
+function setWatchStatus(text) {
+    const el = document.getElementById("watchStatus");
+    if (el) el.textContent = text;
+}
+
+function startWatchingFromCheckout() {
+    const isUsingDefaults =
+        state.polygonWallet === DEFAULT_POLYGON_WALLET &&
+        state.solanaWallet === DEFAULT_SOLANA_WALLET;
+
+    if (isUsingDefaults || !state.walletAddress) {
+        setWatchStatus("Add your wallet in Settings first");
+        setCountdownText("");
+        return;
+    }
+
+    const amount = parseFloat(document.getElementById("expectedAmount").value);
+    if (!amount || amount <= 0) {
+        setWatchStatus("Enter how much they should send");
+        setCountdownText("");
+        return;
+    }
+
+    state.expectedAmount = amount;
+    setWatchStatus("Awaiting your payment...");
+    startAutoVerification();
+}
+
+async function startAutoVerification() {
+    stopVerification();
+
+    if (!state.walletAddress || !state.expectedAmount) return;
+
+    state.verifying = true;
+    state.watchStartedAt = Date.now() - 60 * 1000;
+    state.watchEndsAt = Date.now() + WATCH_MS;
+    startCountdown();
+
+    const maxAttempts = Math.ceil(WATCH_MS / 5000);
+    let attempts = 0;
+
+    async function check() {
+        if (Date.now() >= state.watchEndsAt) {
+            stopVerification();
+            setWatchStatus("⏰ Payment expired");
+            setCountdownText("");
+            showExpiredPayment();
+            return;
+        }
+
+        attempts++;
+        try {
+            const url =
+                `${API}/verify?network=${encodeURIComponent(state.network)}` +
+                `&address=${encodeURIComponent(state.walletAddress)}` +
+                `&amount=${encodeURIComponent(state.expectedAmount)}` +
+                `&since=${state.watchStartedAt}`;
+
+            const result = await (await fetch(url)).json();
+            console.log("verify result", result);
+
+if (result.paid && result.tx) {
+    if (state.recordedTx === result.tx) return;
+    stopVerification();
+    setCountdownText("");
+    showSuccess(result.tx);
+    return;
+}
+            setWatchStatus("Awaiting your payment...");
+        } catch (e) {
+            console.error(e);
+            setWatchStatus("Can't check the payment right now");
+        }
+
+        if (attempts >= maxAttempts) {
+            stopVerification();
+            setWatchStatus("No payment yet - tap Check again");
+        }
+    }
+
+    check();
+    state.verifyTimer = setInterval(check, 5000);
+}
+
+async function showSuccess(txHash) {
+  if (!txHash) return;
+  if (state.recordedTx === txHash || state.recording) return;
+
+  state.recording = true;
+  state.recordedTx = txHash;
+  stopVerification();
+
+  document.getElementById("finalAmount").textContent = state.expectedAmount + " USDT";
+
+  const explorerUrl = state.network === "polygon"
+    ? "https://polygonscan.com/tx/" + txHash
+    : "https://solscan.io/tx/" + txHash;
+
+  const txLink = document.getElementById("txLink");
+  txLink.href = explorerUrl;
+  txLink.textContent = txHash.substring(0, 20) + "...";
+  txLink.title = txHash;
+
+  try {
+    await recordPaymentToSheet({
+      payment_id: "pay_" + Date.now(),
+      merchant_id: GATEWAY.merchantId || state.merchantId || "",
+      amount: state.expectedAmount,
+      tx_hash: txHash,
+      network: state.network,
+      return_url: GATEWAY.returnUrl || ""
+    });
+  } catch (e) {
+    console.error(e);
+    state.recording = false;
+    state.recordedTx = "";
+    return;
+  }
+
+  state.recording = false;
+  goToSection(4);
+  if (GATEWAY.isGatewayMode) startRedirectCountdown();
+}
+
+        function goToSetup() {
+            goToSection(1);
+        }
+
+function goBack() {
+    stopVerification();
+    goToSection(1);
+}
+
+function newPayment() {
+    stopVerification();
+    state.expectedAmount = 0;
+    const amountInput = document.getElementById("expectedAmount");
+    if (amountInput) amountInput.value = "";
+    setWatchStatus("Enter how much they should send");
+    setCountdownText("");
+    goToSection(2);
+    generateQRCode();
+}
+
+        function addLog(message, type) {
+            const log = document.getElementById('statusLog');
+            if (!log) return; // Element doesn't exist, skip
+            
+            const icons = { ok: '✓', err: '✗', info: 'ⓘ', warn: '⚠' };
+            const html = `
+                <div class="log-entry log-${type}">
+                    <div class="log-icon">${icons[type]}</div>
+                    <div>${message}</div>
+                </div>
+            `;
+            log.innerHTML += html;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function clearLog() {
+            const logElement = document.getElementById('statusLog');
+            if (logElement) {
+                logElement.innerHTML = '';
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function showModal() {
+            document.getElementById('walletModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('walletModal').classList.remove('show');
+        }
+
+        function closeModalAndGoToSettings() {
+            closeModal();
+            goToSettings();
+        }
+
+        // ===== SETTINGS FUNCTIONS =====
+        function goToSettings() {
+            // Get active section BEFORE navigating
+            const currentSection = getCurrentSection();
+            
+            // Only store if it's not the settings section
+            if (currentSection !== 'settingsSection') {
+                state.previousSection = currentSection;
+            }
+            
+            console.log('goToSettings: storing previousSection =', state.previousSection);
+            
+            // Load current values into settings form
+            document.getElementById('settingsPolygon').value = state.polygonWallet;
+            document.getElementById('settingsSolana').value = state.solanaWallet;
+            
+            // HIDE settings button on settings page
+            document.querySelector('.settings-btn').style.display = 'none';
+            
+            goToSection('settingsSection');
+        }
+
+function closeSettings() {
+    let targetSection = state.previousSection || 1;
+    if (targetSection === "settingsSection") targetSection = 1;
+
+    document.querySelector(".settings-btn").style.display = "flex";
+
+    if (targetSection === 2) {
+        generateQRCode();
+        goToSection(2);
+        startWatchingFromCheckout();
+        return;
+    }
+
+    goToSection(targetSection);
+}
+
+        function getCurrentSection() {
+            // Check if settings is active
+            if (document.getElementById('settingsSection') && document.getElementById('settingsSection').classList.contains('active')) {
+                return 'settingsSection';
+            }
+            
+            for (let i = 1; i <= 4; i++) {
+                if (document.getElementById('section' + i).classList.contains('active')) {
+                    return i;
+                }
+            }
+            return 1;
+        }
+
+        function saveWalletSettings() {
+            const polygonWallet = document.getElementById('settingsPolygon').value.trim();
+            const solanaWallet = document.getElementById('settingsSolana').value.trim();
+            
+            // Validate Polygon address
+            if (polygonWallet && !polygonWallet.startsWith('0x')) {
+                showToast('❌ Polygon address must start with 0x');
+                return;
+            }
+            
+            // Validate Solana address format (basic check)
+            if (solanaWallet && solanaWallet.length < 32) {
+                showToast('❌ Solana address too short');
+                return;
+            }
+            
+            // Save to localStorage
+            if (polygonWallet) {
+                state.polygonWallet = polygonWallet;
+                localStorage.setItem('polygonWallet', polygonWallet);
+            }
+            
+            if (solanaWallet) {
+                state.solanaWallet = solanaWallet;
+                localStorage.setItem('solanaWallet', solanaWallet);
+            }
+            
+            // Update current wallet if on that network
+    if (state.network === "polygon") {
+        state.walletAddress = state.polygonWallet;
+    } else {
+        state.walletAddress = state.solanaWallet;
+    }
+
+    generateQRCode();
+    startWatchingFromCheckout();
+
+    showToast("✅ Wallet settings saved!");
+
+    setTimeout(() => {
+        closeSettings();
+    }, 800);
+        }
+
+        function goToSection(sectionId) {
+            console.log('goToSection called with:', sectionId);
+            
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            // Show target section
+            let targetElement;
+            if (typeof sectionId === 'string') {
+                targetElement = document.getElementById(sectionId);
+            } else {
+                targetElement = document.getElementById('section' + sectionId);
+            }
+            
+            if (targetElement) {
+                targetElement.classList.add('active');
+                console.log('✓ Section activated:', sectionId);
+            } else {
+                console.error('✗ Section not found:', sectionId);
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+// Initialize
+window.addEventListener('load', () => {
+  if (!detectGatewayMode()) {
+    loadFromLocalStorage();
+    loadFromCookies();
+    updatePaymentNetwork();
+  } else {
+    const footer = document.getElementById('siteFooter');
+    if (footer) footer.classList.add('hidden');
+  }
+});
+    </script>
+</body>
+</html>

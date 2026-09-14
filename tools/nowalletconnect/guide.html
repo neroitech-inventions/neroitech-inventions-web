@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer data-domain="solacediamond.github.io" src="https://analytics.vgdh.io/js/script.js"></script>
+    <title>NoWalletConnect - Integration Guide</title>
+    <link rel="icon" type="image/jpeg" href="nwc.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f1419, #1a2847);
+            color: #f1f5f9;
+            min-height: 100vh;
+            padding: 40px 20px 80px;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .subtitle { color: #94a3b8; font-size: 1.1rem; }
+
+        .card {
+            background: #1a1f2e;
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            margin-bottom: 32px;
+        }
+
+        h2 {
+            color: #00d4ff;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+            padding-bottom: 12px;
+        }
+
+        .step {
+            background: rgba(30, 41, 59, 0.5);
+            border-left: 4px solid #00d4ff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            color: #0f1419;
+        }
+
+        .step-title {
+            color: #f1f5f9;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .code-block {
+            background: #0f1419;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0 0;
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding-right: 52px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            color: #00d4ff;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 20, 25, 0.85);
+            border: 1px solid rgba(0, 212, 255, 0.35);
+            color: #00d4ff;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: #00d4ff;
+        }
+
+        .copy-btn.copied {
+            color: #86efac;
+            border-color: rgba(134, 239, 172, 0.45);
+        }
+
+        .highlight {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .inline-code {
+            display: inline-block;
+            margin-top: 8px;
+            background: rgba(30, 41, 59, 0.8);
+            padding: 6px 8px;
+            border-radius: 4px;
+            color: #00d4ff;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+
+        .success-box {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .success-title {
+            color: #86efac;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .success-text {
+            color: #94a3b8;
+            line-height: 1.7;
+        }
+
+        .pricing-box {
+            background: rgba(0, 212, 255, 0.05);
+            border: 2px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .pricing-grid.single { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto 16px; }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+
+        .price-item {
+            text-align: center;
+            background: rgba(30, 41, 59, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 4px;
+        }
+
+        .price-label { color: #94a3b8; font-size: 0.85rem; }
+        .price-note { color: #94a3b8; font-size: 0.9rem; }
+
+        .ai-row { display: grid; grid-template-columns: 1fr 140px; gap: 10px; margin: 12px 0 8px; }
+        .ai-row input, .ai-amount {
+            width: 100%; padding: 12px 14px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(148, 163, 184, 0.12);
+            border-radius: 10px; color: #f1f5f9; font-size: 1rem; font-family: inherit;
+        }
+        .ai-row input:focus, .ai-amount:focus { outline: none; border-color: #00d4ff; }
+        .ai-gen {
+            border: none; border-radius: 10px; font-weight: 700; cursor: pointer;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed); color: #0f1419;
+        }
+
+
+        .pay-setup {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 12px 22px;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            color: #0f1419 !important;
+            text-decoration: none !important;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .pay-setup:hover { text-decoration: none !important; opacity: 0.92; }
+        .pay-setup-wrap { text-align: center; margin-top: 8px; }
+
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-top: 12px;
+        }
+
+        table.param {
+            width: 100%;
+            min-width: 480px;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        table.param th,
+        table.param td {
+            text-align: left;
+            padding: 10px 8px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+            color: #94a3b8;
+            vertical-align: top;
+        }
+
+        table.param th { color: #00d4ff; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        table.param td:first-child { color: #fbbf24; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; }
+
+        .faq-item {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .faq-question {
+            color: #00d4ff;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .faq-chevron {
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .faq-item.open .faq-chevron {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            color: #94a3b8;
+            display: none;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        a:hover { text-decoration: underline; }
+
+        .back-to-top {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0f1419;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(8px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 50;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 720px) {
+            body { padding: 20px 14px 88px; }
+            header { margin-bottom: 28px; }
+            h1 { font-size: 1.7rem; }
+            .subtitle { font-size: 0.95rem; }
+            .card { padding: 20px 14px; border-radius: 16px; margin-bottom: 18px; }
+            h2 { font-size: 1.2rem; margin-bottom: 16px; }
+            .step { padding: 14px; }
+            .step-title { font-size: 1rem; }
+            .step-desc { font-size: 0.92rem; }
+            .pricing-box { padding: 16px; }
+            .pricing-grid { grid-template-columns: 1fr; gap: 12px; }
+            .ai-row { grid-template-columns: 1fr; }
+            .price { font-size: 1.6rem; }
+            .inline-code { display: block; width: 100%; font-size: 0.75rem; }
+            .code-block { padding: 14px 12px; }
+            .code-block pre {
+                padding-right: 0;
+                padding-top: 28px;
+                font-size: 0.72rem;
+            }
+            .copy-btn { top: 8px; right: 8px; width: 32px; height: 32px; }
+            .back-to-top { right: 14px; bottom: 14px; width: 44px; height: 44px; }
+            table.param { min-width: 0; font-size: 0.82rem; }
+            table.param thead { display: none; }
+            table.param, table.param tbody, table.param tr, table.param td { display: block; width: 100%; }
+            table.param tr {
+                background: rgba(15, 20, 25, 0.45);
+                border: 1px solid rgba(148, 163, 184, 0.12);
+                border-radius: 10px;
+                padding: 10px 12px;
+                margin-bottom: 10px;
+            }
+            table.param td {
+                border: none;
+                padding: 4px 0;
+            }
+            table.param td:first-child {
+                font-size: 0.9rem;
+                margin-bottom: 4px;
+            }
+            table.param td::before {
+                content: attr(data-label);
+                display: block;
+                color: #00d4ff;
+                font-size: 0.68rem;
+                font-family: Inter, sans-serif;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-bottom: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NoWalletConnect</h1>
+            <p class="subtitle">Accept Crypto Payments in 5 Minutes</p>
+        </header>
+
+        <div class="card">
+            <h2>Pricing</h2>
+            <div class="pricing-box">
+                <div class="pricing-grid single">
+                    <div class="price-item">
+                        <div class="price">$0.25</div>
+                        <div class="price-label">Setup Fee</div>
+                        <div class="price-note">One time · no monthly fee</div>
+                    </div>
+                </div>
+                <div style="text-align: center; color: #86efac; font-size: 0.95rem; padding-top: 12px; border-top: 1px solid rgba(0, 212, 255, 0.1);">
+                    No transaction fees · Keep 100% of payments
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="card">
+            <h2>Give this to an AI</h2>
+            <p class="step-desc">
+                Enter your merchant ID. The brief below is filled in for you.
+                Copy it and paste it into ChatGPT, Claude, Cursor, or any coding AI.
+            </p>
+            <div class="ai-row">
+                <input id="aiMerchantId" type="text" placeholder="Your merchant ID e.g. NWC" spellcheck="false" oninput="renderAiBrief()">
+                <button class="ai-gen" type="button" onclick="renderAiBrief()">Generate</button>
+            </div>
+            <p class="step-desc" style="margin-top:12px;">Optional package price (leave empty if the customer should type the amount):</p>
+            <input class="ai-amount" id="aiAmount" type="text" placeholder="e.g. 49.99" spellcheck="false" oninput="renderAiBrief()">
+            <div class="code-block">
+                <button class="copy-btn" type="button" onclick="copyFrom(this)" aria-label="Copy code" title="Copy">
+                    <svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" hidden>
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </button>
+                <pre id="aiBrief">Enter your merchant ID to generate the AI brief.</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>How to Get Started</h2>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-title">Get Your Merchant ID</div>
+                <div class="step-desc">
+                    Create your account on the
+                    <a href="merchant.html">merchant page</a>.
+                    New merchants pay a <span class="highlight">$0.25</span> setup fee there, then save wallets and a return URL
+                    such as <code class="inline-code">https://yoursite.com/order-complete</code>.
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-title">Build a payment link</div>
+                <div class="step-desc">
+                    Send customers to the payment page with your merchant ID.
+                    Add <span class="highlight">amount</span> and/or <span class="highlight">network</span> only when you want those values locked.
+                    Anything you leave out, the customer fills in themselves.
+                    <br><br>
+                    <strong>Base URL:</strong>
+                    <br>
+                    <code class="inline-code">https://niti.com.ng/tools/nowalletconnect/checkout.html?merchant=MERCHANT_ID</code>
+                </div>
+                <div class="table-wrap"><table class="param">
+                    <thead>
+                        <tr><th>Param</th><th>Required</th><th>If present</th><th>If missing</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td data-label="Param">merchant</td><td data-label="Required">Yes</td><td data-label="If present">Shown on the page</td><td data-label="If missing">Link is invalid</td></tr>
+                        <tr><td data-label="Param">amount</td><td data-label="Required">No</td><td data-label="If present">Locked. Customer cannot change it</td><td data-label="If missing">Customer types the amount</td></tr>
+                        <tr><td data-label="Param">network</td><td data-label="Required">No</td><td data-label="If present">Locked to polygon or solana</td><td data-label="If missing">Customer picks the network</td></tr>
+                    </tbody>
+                </table></div>
+                <div class="step-desc" style="margin-top:14px;">
+                    <strong>Examples</strong><br>
+                    Customer chooses amount and network:<br>
+                    <code class="inline-code">checkout.html?merchant=NWC</code><br><br>
+                    Fixed $49.99 package, customer picks network:<br>
+                    <code class="inline-code">checkout.html?merchant=NWC&amp;amount=49.99</code><br><br>
+                    Fixed Solana, customer types amount:<br>
+                    <code class="inline-code">checkout.html?merchant=NWC&amp;network=solana</code><br><br>
+                    Fully locked package:<br>
+                    <code class="inline-code">checkout.html?merchant=NWC&amp;amount=49.99&amp;network=polygon</code>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-title">Copy This Code</div>
+                <div class="step-desc">
+                    Paste a button for each product. This example locks the price at 49.99 USDT and lets the customer pick the network.
+                    Replace <span class="highlight">MERCHANT_ID</span> and the amount. Keep the Powered by line.
+                </div>
+
+                <div class="code-block">
+                    <button class="copy-btn" type="button" onclick="copyFrom(this)" aria-label="Copy code" title="Copy">
+                        <svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" hidden>
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </button>
+                    <pre>&lt;div style="display:inline-block;text-align:center;"&gt;
+  &lt;a href="https://niti.com.ng/tools/nowalletconnect/checkout.html?merchant=MERCHANT_ID&amp;amount=49.99" style="text-decoration:none;"&gt;
+    &lt;button style="padding:12px 24px;background:linear-gradient(135deg,#00d4ff,#7c3aed);color:#0f1419;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:16px;"&gt;
+      Pay 49.99 USDT
+    &lt;/button&gt;
+  &lt;/a&gt;
+  &lt;div style="margin-top:8px;font-size:11px;font-family:sans-serif;"&gt;
+    &lt;a href="https://niti.com.ng/tools/nowalletconnect/" style="color:#94a3b8;text-decoration:none;"&gt;Powered by NoWalletConnect&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-title">Read the success return</div>
+                <div class="step-desc">
+                    After USDT is confirmed, checkout redirects to your merchant webhook URL with these query params:
+                </div>
+                <div class="table-wrap"><table class="param">
+                    <thead>
+                        <tr><th>Param</th><th>Meaning</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td data-label="Param">status</td><td data-label="Meaning">success</td></tr>
+                        <tr><td data-label="Param">amount</td><td data-label="Meaning">USDT amount paid</td></tr>
+                        <tr><td data-label="Param">tx_hash</td><td data-label="Meaning">On-chain transaction hash</td></tr>
+                        <tr><td data-label="Param">merchant</td><td data-label="Meaning">Your merchant ID</td></tr>
+                        <tr><td data-label="Param">network</td><td data-label="Meaning">polygon or solana</td></tr>
+                        <tr><td data-label="Param">payment_id</td><td data-label="Meaning">Local payment reference</td></tr>
+                    </tbody>
+                </table></div>
+                <div class="step-desc" style="margin-top:14px;">
+                    Example return:
+                    <br>
+                    <code class="inline-code">https://yoursite.com/order-complete?status=success&amp;amount=49.99&amp;tx_hash=0x…&amp;merchant=NWC&amp;network=polygon&amp;payment_id=pay_123</code>
+                </div>
+                <div class="code-block">
+                    <button class="copy-btn" type="button" onclick="copyFrom(this)" aria-label="Copy code" title="Copy">
+                        <svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" hidden>
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </button>
+                    <pre>const q = new URLSearchParams(location.search);
+if (q.get("status") === "success" && q.get("merchant") === "MERCHANT_ID") {
+  const paid = parseFloat(q.get("amount"));
+  const tx = q.get("tx_hash");
+  const network = q.get("network");
+  // mark the order paid / show thank you
+}</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-title">Done</div>
+                <div class="step-desc">
+                    Customer opens your link, fills only the unlocked fields, pays the exact USDT amount,
+                    and is returned to your site with the success parameters.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="success-box">
+                <div class="success-title">What You Get</div>
+                <div class="success-text">
+                    • Accept USDT on <strong>Polygon</strong> and <strong>Solana</strong><br>
+                    • Lock price, network, or both from the payment URL<br>
+                    • Let the customer fill any value you do not lock<br>
+                    • Return URL with status, amount, and tx hash<br>
+                    • Instant payment verification<br>
+                    • Direct deposits to your wallet<br>
+                    • Payment history in the merchant dashboard<br>
+                    • No transaction fees<br>
+                    • Keep 100% of payments
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Questions?</h2>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Can the customer change a locked amount?
+                    <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="faq-answer">
+                    No. If amount is in the URL, the field is read-only. If network is in the URL, those buttons are disabled.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How do I sell a specific package?
+                    <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="faq-answer">
+                    Put the package price in amount. Example: amount=9.99 for starter, amount=49.99 for pro. Use one button per package.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Where does the return URL come from?
+                    <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="faq-answer">
+                    From the Webhook URL saved on your merchant row. It is not passed in the payment link. Use a real page on your site.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How long does it take to set up?
+                    <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="faq-answer">
+                    About 5 minutes. Get a merchant ID, set wallets and a return URL, copy the button, add amount/network if you want them locked.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Do I need coding knowledge?
+                    <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="faq-answer">
+                    The Pay button is copy-paste. Reading the success return needs a few lines of JavaScript on your thank-you page.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Can I customize the Pay Now button?
+                    <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="faq-answer">
+                    Yes. Change the label, colors, size, or shape. Keep merchant in the href, add amount/network only when you want them locked, and keep the Powered by line.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    What are the fees?
+                    <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="faq-answer">
+                    $0.25 one-time setup, paid on the merchant registration page. No monthly fee and no transaction fees. You keep 100% of every payment.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How do customers pay?
+                    <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="faq-answer">
+                    They open your link, fill any unlocked fields, send the exact USDT amount on the chosen network, and wait for automatic verification.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Where does the money go?
+                    <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="faq-answer">
+                    Directly to the wallets saved on your merchant account. No middleman and no extra cut from us.
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(124, 58, 237, 0.05)); border-color: #00d4ff;">
+            <h2>Need Help?</h2>
+            <p style="color: #94a3b8; margin-bottom: 16px;">
+                If you have questions or need assistance:
+            </p>
+            <p style="color: #94a3b8; line-height: 1.8;">
+                Telegram: <a href="https://t.me/noWalletConnect" target="_blank" rel="noopener">Join our Telegram</a><br>
+                Documentation: <a href="https://github.com/solacediamond/nowalletconnect/blob/main/NoWalletConnect-Docs.pdf" target="_blank" rel="noopener">Full technical docs</a>
+            </p>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top" title="Back to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <script>
+        function copyFrom(btn) {
+            const code = btn.parentElement.querySelector("pre").innerText;
+
+            navigator.clipboard.writeText(code).then(() => {
+                btn.classList.add("copied");
+                btn.querySelector(".icon-copy").hidden = true;
+                btn.querySelector(".icon-check").hidden = false;
+                btn.title = "Copied";
+
+                setTimeout(() => {
+                    btn.classList.remove("copied");
+                    btn.querySelector(".icon-copy").hidden = false;
+                    btn.querySelector(".icon-check").hidden = true;
+                    btn.title = "Copy";
+                }, 1600);
+            }).catch(() => {
+                btn.title = "Copy failed";
+            });
+        }
+
+
+        function renderAiBrief() {
+            const id = (document.getElementById("aiMerchantId").value || "").trim() || "YOUR_MERCHANT_ID";
+            const rawAmt = (document.getElementById("aiAmount").value || "").trim();
+            const amount = rawAmt && !Number.isNaN(parseFloat(rawAmt)) ? String(parseFloat(rawAmt)) : "";
+            const pay = "https://niti.com.ng/tools/nowalletconnect/checkout.html";
+            const link = amount ? (pay + "?merchant=" + id + "&amount=" + amount) : (pay + "?merchant=" + id);
+            const el = document.getElementById("aiBrief");
+            if (!el) return;
+            el.textContent = `Integrate NoWalletConnect USDT checkout into my site.
+
+WHAT IT IS
+NoWalletConnect lets a customer pay USDT on Polygon or Solana without connecting a wallet to my site. They open a payment link, send USDT to my receive address, checkout verifies the transfer, then redirects back to my webhook URL.
+
+MY MERCHANT ID (do not change this):
+${id}
+
+PAYMENT URL TO USE
+${link}
+
+URL RULES
+- merchant is required. Mine is ${id}.
+- amount is optional. If present, lock the amount field. If missing, let the customer type it.
+- network is optional (polygon or solana). If present, lock it. If missing, let the customer choose.
+- Base host: https://niti.com.ng/tools/nowalletconnect/checkout.html
+
+ADD A PAY BUTTON
+Use this HTML. Keep the Powered by line.
+
+<div style="display:inline-block;text-align:center;">
+  <a href="${link}" style="text-decoration:none;">
+    <button style="padding:12px 24px;background:linear-gradient(135deg,#00d4ff,#7c3aed);color:#0f1419;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:16px;">
+      Pay${amount ? " " + amount + " USDT" : " with USDT"}
+    </button>
+  </a>
+  <div style="margin-top:8px;font-size:11px;font-family:sans-serif;">
+    <a href="https://niti.com.ng/tools/nowalletconnect/" style="color:#94a3b8;text-decoration:none;">Powered by NoWalletConnect</a>
+  </div>
+</div>
+
+SUCCESS RETURN
+My merchant webhook URL (set in the NoWalletConnect dashboard) receives the buyer after payment:
+
+?status=success&amount=...&tx_hash=...&merchant=${id}&network=polygon|solana&payment_id=pay_...
+
+On my thank-you / order page, read it like this:
+
+const q = new URLSearchParams(location.search);
+if (q.get("status") === "success" && q.get("merchant") === "${id}") {
+  const paid = parseFloat(q.get("amount"));
+  const tx = q.get("tx_hash");
+  const network = q.get("network");
+  // mark the order paid / show thank you
+}
+
+WHAT YOU SHOULD BUILD
+1. Put the Pay button on the product or checkout page.
+2. Make sure my webhook page exists and reads those query params.
+3. Only treat the order as paid when merchant is ${id}${amount ? " and amount is " + amount : ""}.
+4. Do not invent another payment provider. Do not change the merchant ID.
+5. Customer must send USDT only on the selected network.`;
+        }
+
+        function toggleFaq(element) {
+            element.classList.toggle("open");
+        }
+
+        const backToTop = document.getElementById("backToTop");
+
+        window.addEventListener("scroll", () => {
+            backToTop.classList.toggle("show", window.scrollY > 400);
+        });
+
+        backToTop.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+        renderAiBrief();
+    </script>
+</body>
+</html>

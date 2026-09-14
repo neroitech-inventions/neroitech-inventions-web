@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer data-domain="solacediamond.github.io" src="https://analytics.vgdh.io/js/script.js"></script>
+    <title>NoWalletConnect - Merchant Dashboard</title>
+    <link rel="icon" type="image/jpeg" href="nwc.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #00d4ff;
+            --secondary: #7c3aed;
+            --bg: #0f1419;
+            --card: #1a1f2e;
+            --border: rgba(148, 163, 184, 0.12);
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --success: #10b981;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg), #1a2847);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .hidden { display: none !important; }
+        .auth-container {
+            min-height: calc(100vh - 40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .auth-card, .card, .merchant-info {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        .auth-card { padding: 40px; max-width: 440px; width: 100%; }
+        .auth-title, h1 {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .auth-title { font-size: 1.8rem; font-weight: 700; text-align: center; margin-bottom: 8px; }
+        .auth-subtitle, .subtitle { color: var(--muted); text-align: center; margin-bottom: 28px; }
+        .form-group { margin-bottom: 18px; }
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        input:focus { outline: none; border-color: var(--primary); }
+        .hint { font-size: 0.75rem; color: var(--muted); margin-top: 6px; word-break: break-all; }
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--bg); }
+        .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+        .btn-logout, .btn-copy { width: auto; padding: 10px 14px; font-size: 0.85rem; }
+        .btn-logout { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; }
+        .btn-copy { background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.25); color: var(--primary); }
+        .toggle-auth { text-align: center; margin-top: 20px; color: var(--muted); }
+        .toggle-auth a { color: var(--primary); cursor: pointer; font-weight: 600; }
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .error-message.show { display: block; }
+        .setup-box {
+            background: rgba(0, 212, 255, 0.06);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .setup-box.paid {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.35);
+        }
+        .setup-title { font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+        .setup-box.paid .setup-title { color: #86efac; }
+        .setup-text { color: var(--muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 12px; }
+        header { text-align: center; margin: 12px 0 28px; }
+        h1 { font-size: 2.2rem; margin-bottom: 8px; }
+        .card { padding: 28px; margin-bottom: 24px; }
+        .card h2 { color: var(--primary); font-size: 1.25rem; margin-bottom: 18px; }
+        .merchant-info { padding: 22px; margin-bottom: 24px; }
+        .merchant-info-label { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 6px; }
+        .merchant-info-value { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+        .payment-link {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .payment-link-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--primary);
+            word-break: break-all;
+            margin: 8px 0 12px;
+            background: rgba(30, 41, 59, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+        .kpi {
+            background: rgba(30, 41, 59, 0.45);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+        }
+        .kpi-label {
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+        .kpi-value { font-size: 1.45rem; font-weight: 700; color: var(--text); }
+        .kpi-sub { margin-top: 4px; font-size: 0.75rem; color: var(--muted); }
+        .split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .split-card {
+            background: rgba(30, 41, 59, 0.45);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+        }
+        .bar-track {
+            height: 8px;
+            border-radius: 99px;
+            background: rgba(148, 163, 184, 0.15);
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .bar-fill { height: 100%; width: 0; border-radius: inherit; }
+        .bar-poly { background: linear-gradient(90deg, #00d4ff, #7c3aed); }
+        .bar-sol { background: linear-gradient(90deg, #9945ff, #14f195); }
+        .trend { display: flex; align-items: flex-end; gap: 6px; height: 92px; margin-top: 12px; }
+        .trend span {
+            flex: 1;
+            background: linear-gradient(180deg, #00d4ff, rgba(124, 58, 237, 0.35));
+            border-radius: 6px 6px 2px 2px;
+            min-height: 4px;
+        }
+        .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin: 8px 0 14px; }
+        .chip {
+            width: auto;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+        .chip.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(0, 212, 255, 0.1);
+        }
+        .search { flex: 1; min-width: 180px; padding: 10px 12px; margin: 0; }
+        .pay-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .pay-table th {
+            text-align: left;
+            color: var(--muted);
+            font-size: 0.68rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        .pay-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+        .badge-poly { color: #00d4ff; background: rgba(0, 212, 255, 0.12); }
+        .badge-sol { color: #14f195; background: rgba(20, 241, 149, 0.12); }
+        .tx { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--primary); }
+        .empty-state { text-align: center; padding: 32px 12px; color: var(--muted); }
+        .toast {
+            position: fixed; bottom: 20px; right: 20px;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 14px 18px; display: none; z-index: 20;
+        }
+        .toast.show { display: block; }
+        @media (max-width: 800px) {
+            .kpis, .split { grid-template-columns: 1fr 1fr; }
+            .auth-card { padding: 24px 18px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="loginPage">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-title">Merchant</div>
+                <div class="auth-subtitle">Sign in with merchant ID and email</div>
+                <div id="loginError" class="error-message"></div>
+                <div class="form-group">
+                    <label>Merchant ID</label>
+                    <input type="text" id="loginMerchantId" placeholder="NWC" spellcheck="false">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="owner@store.com">
+                </div>
+                <button class="btn-primary" id="loginBtn" type="button" onclick="handleLogin()">Sign In</button>
+                <div class="toggle-auth">No account? <a onclick="switchPage('register')">Create one</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="registerPage" class="hidden">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-title">Create Merchant</div>
+                <div class="auth-subtitle">Pay $0.25 USDT, then submit your details.</div>
+                <div id="registerError" class="error-message"></div>
+
+                <div class="setup-box" id="setupBox">
+                    <div class="setup-title" id="setupTitle">Setup fee required</div>
+                    <div class="setup-text" id="setupText">
+                        New accounts cost 0.25 USDT. Pay with NoWalletConnect using merchant
+                        <strong style="color:#fbbf24">NWC</strong>. Amount is locked.
+                    </div>
+                    <button class="btn-primary" id="setupPayBtn" type="button" onclick="startSetupPayment()">Pay $0.25 USDT</button>
+                </div>
+
+                <div id="registerFields">
+                    <div class="form-group">
+                        <label>Merchant ID</label>
+                        <input type="text" id="registerMerchantId" placeholder="NWC" spellcheck="false">
+                    </div>
+                    <div class="form-group">
+                        <label>Business Name</label>
+                        <input type="text" id="registerBusinessName" placeholder="My Store">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="registerEmail" placeholder="owner@store.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Polygon Wallet</label>
+                        <input type="text" id="registerPolygonWallet" placeholder="0x..." spellcheck="false">
+                    </div>
+                    <div class="form-group">
+                        <label>Solana Wallet</label>
+                        <input type="text" id="registerSolanaWallet" placeholder="7dHb..." spellcheck="false">
+                    </div>
+                    <div class="form-group">
+                        <label>Webhook URL</label>
+                        <input type="url" id="registerWebhook" placeholder="https://yoursite.com/order-complete">
+                    </div>
+                    <button class="btn-primary" id="registerBtn" type="button" onclick="handleRegister()" disabled>Create Account</button>
+                </div>
+                <div class="toggle-auth">Already a merchant? <a onclick="switchPage('login')">Sign in</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboardPage" class="hidden">
+        <div class="container">
+            <header>
+                <h1>NoWalletConnect</h1>
+                <p class="subtitle">Merchant Dashboard</p>
+            </header>
+
+            <div class="merchant-info">
+                <div class="merchant-info-label">Merchant</div>
+                <div class="merchant-info-value" id="currentMerchantId">—</div>
+                <div class="subtitle" style="text-align:left;margin:8px 0 16px;" id="currentMerchantName">—</div>
+                <button class="btn-logout" type="button" onclick="logout()">Log out</button>
+            </div>
+
+            <div class="card">
+                <h2>Your Checkout Link</h2>
+                <div class="payment-link">
+                    <div class="payment-link-text" id="checkoutLink">—</div>
+                    <button class="btn-copy" type="button" onclick="copyCheckoutLink()">Copy link</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Wallets on file</h2>
+                <p class="hint" id="walletPolygon">Polygon: —</p>
+                <p class="hint" id="walletSolana">Solana: —</p>
+            </div>
+
+            <div class="card">
+                <h2>Payment analytics</h2>
+                <div class="kpis">
+                    <div class="kpi">
+                        <div class="kpi-label">Volume</div>
+                        <div class="kpi-value" id="kpiVolume">0.00</div>
+                        <div class="kpi-sub">USDT received</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Payments</div>
+                        <div class="kpi-value" id="kpiCount">0</div>
+                        <div class="kpi-sub" id="kpiLast">No payments yet</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Average</div>
+                        <div class="kpi-value" id="kpiAvg">0.00</div>
+                        <div class="kpi-sub">Per transaction</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Largest</div>
+                        <div class="kpi-value" id="kpiMax">0.00</div>
+                        <div class="kpi-sub">Single payment</div>
+                    </div>
+                </div>
+                <div class="split">
+                    <div class="split-card">
+                        <div class="kpi-label">Polygon</div>
+                        <div class="kpi-value" id="polyVol">0.00</div>
+                        <div class="kpi-sub" id="polyCount">0 payments</div>
+                        <div class="bar-track"><div class="bar-fill bar-poly" id="polyBar"></div></div>
+                    </div>
+                    <div class="split-card">
+                        <div class="kpi-label">Solana</div>
+                        <div class="kpi-value" id="solVol">0.00</div>
+                        <div class="kpi-sub" id="solCount">0 payments</div>
+                        <div class="bar-track"><div class="bar-fill bar-sol" id="solBar"></div></div>
+                    </div>
+                </div>
+                <div class="kpi-label">Last 7 days</div>
+                <div class="trend" id="trend"></div>
+            </div>
+
+            <div class="card">
+                <h2>Payment history</h2>
+                <div class="toolbar">
+                    <button class="chip active" type="button" data-net="all" onclick="setPayFilter(this)">All</button>
+                    <button class="chip" type="button" data-net="polygon" onclick="setPayFilter(this)">Polygon</button>
+                    <button class="chip" type="button" data-net="solana" onclick="setPayFilter(this)">Solana</button>
+                    <input class="search" id="paySearch" placeholder="Search tx or amount" oninput="renderPayTable()">
+                    <button class="btn-copy" type="button" onclick="exportPayments()">Export CSV</button>
+                    <button class="btn-copy" type="button" onclick="loadPayments()">Refresh</button>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="pay-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Network</th>
+                                <th>Transaction</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payTableBody">
+                            <tr><td colspan="4" class="empty-state">Loading…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const SHEETS = {
+            SHEET_ID: "1D1AmH676-RdnBbE9F0i0E5lNvv0y5VZlnQZ_eL5dx1Q",
+            API_KEY: "AIzaSyBin_r5W1VlRYa-2P3lRq5MWP2_ctd_R3c",
+            RANGE: "MERCHANTS!A:G"
+        };
+        const PAYMENTS = {
+            SHEET_ID: "1Zi3KS3HBRbvnHYslVQ1v9dKBOPRpHhqoCwVYcUJsmrI",
+            RANGE: "PAYMENTS!A:H"
+        };
+        const CHECKOUT_URL = "https://niti.com.ng/tools/nowalletconnect/checkout.html";
+        const SESSION_KEY = "nwc_session";
+        const SETUP = {
+            merchant: "NWC",
+            amount: 0.25,
+            storageKey: "nwc_setup_paid",
+            payUrl: "https://niti.com.ng/tools/nowalletconnect/checkout.html?merchant=NWC&amount=0.25"
+        };
+
+        const FORM = {
+            ACTION: "https://docs.google.com/forms/d/e/1FAIpQLSeqrx1nAnypgHDJRnlzqU5TRqvqQh4f08GMajSrQu1S3Drh1w/formResponse",
+            FIELDS: {
+                merchantId: "entry.1199619997",
+                businessName: "entry.319209615",
+                polygonWallet: "entry.426543731",
+                solanaWallet: "entry.956523137",
+                email: "entry.1884886894",
+                webhook: "entry.1795862196"
+            }
+        };
+
+        let currentMerchant = null;
+        let allPayments = [];
+        let payFilter = "all";
+
+        function setText(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        }
+
+        function switchPage(page) {
+            document.getElementById("loginPage").classList.add("hidden");
+            document.getElementById("registerPage").classList.add("hidden");
+            document.getElementById("dashboardPage").classList.add("hidden");
+            if (page === "login") document.getElementById("loginPage").classList.remove("hidden");
+            if (page === "register") {
+                document.getElementById("registerPage").classList.remove("hidden");
+                updateSetupUI();
+            }
+            if (page === "dashboard") document.getElementById("dashboardPage").classList.remove("hidden");
+        }
+
+        function showError(id, message) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.textContent = message;
+            el.classList.add("show");
+            setTimeout(() => el.classList.remove("show"), 5000);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 2500);
+        }
+
+        function setupPaid() {
+            return sessionStorage.getItem(SETUP.storageKey) === "1";
+        }
+
+        function markSetupPaid() {
+            sessionStorage.setItem(SETUP.storageKey, "1");
+            updateSetupUI();
+        }
+
+        function updateSetupUI() {
+            const paid = setupPaid();
+            const box = document.getElementById("setupBox");
+            const btn = document.getElementById("registerBtn");
+            const payBtn = document.getElementById("setupPayBtn");
+            box.classList.toggle("paid", paid);
+            document.getElementById("setupTitle").textContent = paid ? "Setup fee paid" : "Setup fee required";
+            document.getElementById("setupText").textContent = paid
+                ? "0.25 USDT received. Fill the form and create your merchant account."
+                : "New accounts cost 0.25 USDT, Pay with NoWalletConnect.";
+            payBtn.style.display = paid ? "none" : "block";
+            btn.disabled = !paid;
+        }
+
+        function startSetupPayment() {
+            sessionStorage.setItem("nwc_setup_pending", "1");
+            window.location.href = SETUP.payUrl;
+        }
+
+        function captureSetupReturn() {
+            const q = new URLSearchParams(location.search);
+            const status = (q.get("status") || "").toLowerCase();
+            const merchant = (q.get("merchant") || "").trim().toUpperCase();
+            const amount = parseFloat(q.get("amount"));
+            if (status === "success" && merchant === SETUP.merchant && !Number.isNaN(amount) && Math.abs(amount - SETUP.amount) < 0.001) {
+                markSetupPaid();
+                switchPage("register");
+                showToast("Setup fee paid");
+                history.replaceState({}, "", location.pathname + location.hash);
+                return true;
+            }
+            if (sessionStorage.getItem("nwc_setup_pending") === "1" && setupPaid()) {
+                switchPage("register");
+                return true;
+            }
+            return false;
+        }
+
+        async function fetchMerchantRows() {
+            const url =
+                "https://sheets.googleapis.com/v4/spreadsheets/" +
+                SHEETS.SHEET_ID +
+                "/values/" + encodeURIComponent(SHEETS.RANGE) +
+                "?key=" + SHEETS.API_KEY;
+            const res = await fetch(url);
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error?.message || "Could not read database");
+            return (data.values || []).slice(1);
+        }
+
+        async function findMerchant(merchantId, email) {
+            const id = String(merchantId || "").trim().toLowerCase();
+            const mail = String(email || "").trim().toLowerCase();
+            const rows = await fetchMerchantRows();
+            for (const row of rows) {
+                const rowId = String(row[1] || "").trim().toLowerCase();
+                const rowEmail = String(row[5] || "").trim().toLowerCase();
+                if (rowId === id && rowEmail === mail) {
+                    return {
+                        id: String(row[1]).trim(),
+                        name: String(row[2] || "").trim(),
+                        polygonWallet: String(row[3] || "").trim(),
+                        solanaWallet: String(row[4] || "").trim(),
+                        email: String(row[5] || "").trim()
+                    };
+                }
+            }
+            return null;
+        }
+
+        function enterDashboard(user) {
+            currentMerchant = user;
+            localStorage.setItem(SESSION_KEY, JSON.stringify({ id: user.id, email: user.email }));
+            openDashboard(user);
+            loadPayments();
+        }
+
+        async function handleLogin() {
+            const merchantId = document.getElementById("loginMerchantId").value.trim();
+            const email = document.getElementById("loginEmail").value.trim();
+            const btn = document.getElementById("loginBtn");
+            if (!merchantId || !email) {
+                showError("loginError", "Enter merchant ID and email.");
+                return;
+            }
+            btn.disabled = true;
+            btn.textContent = "Checking database...";
+            try {
+                const user = await findMerchant(merchantId, email);
+                if (!user) {
+                    showError("loginError", "No data with that merchant ID and email.");
+                    return;
+                }
+                enterDashboard(user);
+                showToast("Signed in");
+            } catch (err) {
+                showError("loginError", err.message || "Database lookup failed.");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Sign In";
+            }
+        }
+
+        function submitGoogleForm(payload) {
+            return new Promise((resolve, reject) => {
+                try {
+                    const iframeName = "nwc_gform_" + Date.now();
+                    const iframe = document.createElement("iframe");
+                    iframe.name = iframeName;
+                    iframe.style.display = "none";
+                    document.body.appendChild(iframe);
+
+                    const form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = FORM.ACTION;
+                    form.target = iframeName;
+                    form.acceptCharset = "UTF-8";
+                    form.style.display = "none";
+
+                    const fields = {
+                        [FORM.FIELDS.merchantId]: payload.merchantId,
+                        [FORM.FIELDS.businessName]: payload.businessName,
+                        [FORM.FIELDS.polygonWallet]: payload.polygonWallet,
+                        [FORM.FIELDS.solanaWallet]: payload.solanaWallet,
+                        [FORM.FIELDS.email]: payload.email,
+                        [FORM.FIELDS.webhook]: payload.webhook,
+                        fvv: "1",
+                        pageHistory: "0"
+                    };
+                    Object.keys(fields).forEach(name => {
+                        const input = document.createElement("input");
+                        input.type = "hidden";
+                        input.name = name;
+                        input.value = fields[name];
+                        form.appendChild(input);
+                    });
+
+                    document.body.appendChild(form);
+                    form.submit();
+                    setTimeout(() => {
+                        form.remove();
+                        iframe.remove();
+                        resolve();
+                    }, 2500);
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function handleRegister() {
+            if (!setupPaid()) {
+                showError("registerError", "Pay the $0.25 setup fee before creating an account.");
+                return;
+            }
+
+            const merchantId = document.getElementById("registerMerchantId").value.trim();
+            const businessName = document.getElementById("registerBusinessName").value.trim();
+            const email = document.getElementById("registerEmail").value.trim();
+            const polygonWallet = document.getElementById("registerPolygonWallet").value.trim();
+            const solanaWallet = document.getElementById("registerSolanaWallet").value.trim();
+            const webhook = document.getElementById("registerWebhook").value.trim();
+            const btn = document.getElementById("registerBtn");
+
+            if (!merchantId || !email || !businessName || !polygonWallet || !solanaWallet || !webhook) {
+                showError("registerError", "All fields must be filled.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = "Checking database...";
+            try {
+                const existing = await findMerchant(merchantId, email);
+                if (existing) {
+                    enterDashboard(existing);
+                    showToast("Already in database");
+                    return;
+                }
+
+                btn.textContent = "Submitting data...";
+                await submitGoogleForm({
+                    merchantId,
+                    businessName,
+                    email,
+                    polygonWallet,
+                    solanaWallet,
+                    webhook
+                });
+
+                btn.textContent = "Waiting for database...";
+                let user = null;
+                for (let i = 0; i < 8; i++) {
+                    await sleep(1500);
+                    user = await findMerchant(merchantId, email);
+                    if (user) break;
+                }
+
+                if (!user) {
+                    showError("registerError", "Submitted, but the data is not in the database yet. Wait a few seconds and Sign In.");
+                    return;
+                }
+
+                sessionStorage.removeItem(SETUP.storageKey);
+                sessionStorage.removeItem("nwc_setup_pending");
+                enterDashboard(user);
+                showToast("Account created");
+            } catch (err) {
+                showError("registerError", err.message || "Database lookup failed.");
+            } finally {
+                btn.disabled = !setupPaid();
+                btn.textContent = "Create Account";
+            }
+        }
+
+        function openDashboard(user) {
+            setText("currentMerchantId", user.id);
+            setText("currentMerchantName", (user.name || "Merchant") + " · " + user.email);
+            setText("checkoutLink", CHECKOUT_URL + "?merchant=" + encodeURIComponent(user.id));
+            setText("walletPolygon", "Polygon: " + (user.polygonWallet || "—"));
+            setText("walletSolana", "Solana: " + (user.solanaWallet || "—"));
+            switchPage("dashboard");
+        }
+
+        function copyCheckoutLink() {
+            const text = document.getElementById("checkoutLink").textContent;
+            navigator.clipboard.writeText(text).then(() => showToast("Link copied"));
+        }
+
+        async function loadPayments() {
+            if (!currentMerchant) return;
+            const url =
+                "https://sheets.googleapis.com/v4/spreadsheets/" +
+                PAYMENTS.SHEET_ID +
+                "/values/" + encodeURIComponent(PAYMENTS.RANGE) +
+                "?key=" + SHEETS.API_KEY;
+            try {
+                const data = await (await fetch(url)).json();
+                const rows = (data.values || []).slice(1);
+                const id = String(currentMerchant.id).trim().toLowerCase();
+                allPayments = rows.map(row => ({
+                    date: row[0] || row[2] || "",
+                    merchant: String(row[3] || "").trim(),
+                    amount: parseFloat(row[4] || 0) || 0,
+                    tx: String(row[5] || "").trim(),
+                    network: String(row[6] || "polygon").trim().toLowerCase()
+                })).filter(p => p.merchant.toLowerCase() === id && p.amount > 0);
+                renderAnalytics();
+                renderPayTable();
+            } catch (e) {
+                const body = document.getElementById("payTableBody");
+                if (body) body.innerHTML = '<tr><td colspan="4">Could not load payment history from the database.</td></tr>';
+            }
+        }
+
+        function renderAnalytics() {
+            const list = allPayments;
+            const vol = list.reduce((s, p) => s + p.amount, 0);
+            const max = list.reduce((m, p) => Math.max(m, p.amount), 0);
+            const poly = list.filter(p => p.network === "polygon");
+            const sol = list.filter(p => p.network === "solana");
+            const polyVol = poly.reduce((s, p) => s + p.amount, 0);
+            const solVol = sol.reduce((s, p) => s + p.amount, 0);
+
+            setText("kpiVolume", vol.toFixed(2));
+            setText("kpiCount", String(list.length));
+            setText("kpiAvg", list.length ? (vol / list.length).toFixed(2) : "0.00");
+            setText("kpiMax", max.toFixed(2));
+            setText("kpiLast", list.length
+                ? "Latest " + formatDate(list[list.length - 1].date)
+                : "No payments yet");
+            setText("polyVol", polyVol.toFixed(2));
+            setText("solVol", solVol.toFixed(2));
+            setText("polyCount", poly.length + " payments");
+            setText("solCount", sol.length + " payments");
+
+            const polyBar = document.getElementById("polyBar");
+            const solBar = document.getElementById("solBar");
+            if (polyBar) polyBar.style.width = (vol ? (polyVol / vol) * 100 : 0) + "%";
+            if (solBar) solBar.style.width = (vol ? (solVol / vol) * 100 : 0) + "%";
+
+            const days = [...Array(7)].map((_, i) => {
+                const d = new Date();
+                d.setDate(d.getDate() - (6 - i));
+                d.setHours(0, 0, 0, 0);
+                return d;
+            });
+            const dayTotals = days.map(day => {
+                const next = new Date(day);
+                next.setDate(next.getDate() + 1);
+                return list.filter(p => {
+                    const t = Date.parse(p.date);
+                    return !Number.isNaN(t) && t >= day.getTime() && t < next.getTime();
+                }).reduce((s, p) => s + p.amount, 0);
+            });
+            const peak = Math.max(1, ...dayTotals);
+            const trend = document.getElementById("trend");
+            if (trend) {
+                trend.innerHTML = dayTotals.map(v =>
+                    '<span title="' + v.toFixed(2) + ' USDT" style="height:' + Math.max(6, (v / peak) * 100) + '%"></span>'
+                ).join("");
+            }
+        }
+
+        function setPayFilter(btn) {
+            payFilter = btn.getAttribute("data-net");
+            document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+            btn.classList.add("active");
+            renderPayTable();
+        }
+
+        function visiblePayments() {
+            const q = ((document.getElementById("paySearch") || {}).value || "").toLowerCase();
+            return allPayments.filter(p => {
+                const netOk = payFilter === "all" || p.network === payFilter;
+                const qOk = !q || p.tx.toLowerCase().includes(q) || String(p.amount).includes(q);
+                return netOk && qOk;
+            }).slice().reverse();
+        }
+
+        function renderPayTable() {
+            const body = document.getElementById("payTableBody");
+            if (!body) return;
+            const rows = visiblePayments();
+            if (!rows.length) {
+                body.innerHTML = '<tr><td colspan="4" class="empty-state">No payments for this filter.</td></tr>';
+                return;
+            }
+            body.innerHTML = rows.map(p => {
+                const explorer = p.network === "solana"
+                    ? "https://solscan.io/tx/" + p.tx
+                    : "https://polygonscan.com/tx/" + p.tx;
+                const badge = p.network === "solana" ? "badge-sol" : "badge-poly";
+                const shortTx = p.tx ? p.tx.slice(0, 10) + "…" + p.tx.slice(-6) : "—";
+                return "<tr><td>" + formatDate(p.date) + "</td><td><strong>" +
+                    p.amount.toFixed(2) + "</strong> USDT</td><td><span class=\"badge " +
+                    badge + "\">" + p.network + "</span></td><td>" +
+                    (p.tx ? "<a class=\"tx\" href=\"" + explorer + "\" target=\"_blank\" rel=\"noopener\">" + shortTx + "</a>" : "—") +
+                    "</td></tr>";
+            }).join("");
+        }
+
+        function formatDate(value) {
+            const t = Date.parse(value);
+            if (Number.isNaN(t)) return value || "—";
+            return new Date(t).toLocaleString();
+        }
+
+        function exportPayments() {
+            const rows = visiblePayments();
+            const csv = ["date,amount,network,tx"].concat(
+                rows.map(p => [p.date, p.amount, p.network, p.tx].join(","))
+            ).join("\n");
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+            a.download = (currentMerchant && currentMerchant.id) + "-payments.csv";
+            a.click();
+        }
+
+        function logout() {
+            localStorage.removeItem(SESSION_KEY);
+            currentMerchant = null;
+            allPayments = [];
+            switchPage("login");
+            showToast("Logged out");
+        }
+
+        (async function init() {
+            if (captureSetupReturn()) return;
+
+            const raw = localStorage.getItem(SESSION_KEY);
+            if (!raw) {
+                switchPage("login");
+                return;
+            }
+            try {
+                const session = JSON.parse(raw);
+                const user = await findMerchant(session.id, session.email);
+                if (user) enterDashboard(user);
+                else {
+                    localStorage.removeItem(SESSION_KEY);
+                    switchPage("login");
+                }
+            } catch {
+                switchPage("login");
+            }
+        })();
+    </script>
+</body>
+</html>

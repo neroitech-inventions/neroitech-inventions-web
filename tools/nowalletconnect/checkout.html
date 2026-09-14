@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer data-domain="solacediamond.github.io" src="https://analytics.vgdh.io/js/script.js"></script>
+    <title>NoWalletConnect Checkout</title>
+    <link rel="icon" type="image/jpeg" href="nwc.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f1419, #1a2847);
+            color: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container { width: 100%; max-width: 500px; }
+
+        .card {
+            background: #1a1f2e;
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .merchant-chip {
+            display: inline-block;
+            margin-bottom: 24px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            color: #00d4ff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .form-group { margin-bottom: 24px; }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            letter-spacing: 0.06em;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(148, 163, 184, 0.12);
+            border-radius: 12px;
+            color: #f1f5f9;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+
+        input[type="number"]:disabled,
+        input[type="number"][readonly] {
+            opacity: 0.85;
+            cursor: not-allowed;
+            border-color: rgba(0, 212, 255, 0.35);
+            background: rgba(0, 212, 255, 0.06);
+        }
+
+        input::placeholder { color: #94a3b8; }
+
+        .lock-note {
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .network-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .network-option input { display: none; }
+
+        .network-label {
+            display: block;
+            padding: 12px 16px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(148, 163, 184, 0.12);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #f1f5f9;
+            text-transform: none;
+            letter-spacing: 0;
+            margin: 0;
+        }
+
+        .network-option input:checked + .network-label {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+        }
+
+        .network-label:hover {
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+
+        .network-selector.locked .network-label {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .network-selector.locked .network-option input:checked + .network-label {
+            opacity: 1;
+        }
+
+        .display-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .display-item { text-align: center; }
+        .display-label {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .display-value {
+            color: #00d4ff;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            border: none;
+            border-radius: 12px;
+            color: #0f1419;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 212, 255, 0.3);
+        }
+
+        button[type="submit"]:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: #fca5a5;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .powered {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .powered a {
+            color: #94a3b8;
+            text-decoration: none;
+        }
+
+        .powered a:hover { color: #00d4ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="error" id="error"></div>
+
+            <h1>NoWalletConnect</h1>
+            <p class="subtitle">Pay with USDT</p>
+            <div class="merchant-chip" id="merchantChip">Merchant: —</div>
+
+            <form onsubmit="handlePayment(event)">
+                <div class="form-group">
+                    <label for="amount">Amount (USDT)</label>
+                    <input
+                        type="number"
+                        id="amount"
+                        placeholder="100.00"
+                        step="0.01"
+                        min="0.01"
+                        required
+                        oninput="updateDisplay()"
+                    >
+                    <p class="lock-note" id="amountLockNote" hidden>Amount is fixed.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Network</label>
+                    <div class="network-selector" id="networkSelector">
+                        <div class="network-option">
+                            <input type="radio" id="polygon" name="network" value="polygon" checked onchange="updateDisplay()">
+                            <label for="polygon" class="network-label">Polygon</label>
+                        </div>
+                        <div class="network-option">
+                            <input type="radio" id="solana" name="network" value="solana" onchange="updateDisplay()">
+                            <label for="solana" class="network-label">Solana</label>
+                        </div>
+                    </div>
+                    <p class="lock-note" id="networkLockNote" hidden>Network is fixed.</p>
+                </div>
+
+                <div class="display-box">
+                    <div class="display-item">
+                        <div class="display-label">Total</div>
+                        <div class="display-value" id="displayAmount">—</div>
+                    </div>
+                    <div class="display-item">
+                        <div class="display-label">Network</div>
+                        <div class="display-value" id="displayNetwork" style="font-size: 1.2rem;">Polygon</div>
+                    </div>
+                </div>
+
+                <button type="submit" id="payBtn" disabled>Proceed to Checkout</button>
+            </form>
+
+            <div class="powered">
+                <a href="https://niti.com.ng/tools/nowalletconnect/nowalletconnect/" target="_blank" rel="noopener">Powered by NoWalletConnect</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CHECKOUT_PAGE = "https://niti.com.ng/tools/nowalletconnect/";
+        const params = new URLSearchParams(window.location.search);
+
+        const locked = {
+            merchant: (params.get("merchant") || "").trim(),
+            amount: params.get("amount"),
+            network: (params.get("network") || "").trim().toLowerCase()
+        };
+
+        function showError(message) {
+            const errorEl = document.getElementById("error");
+            errorEl.textContent = message;
+            errorEl.style.display = "block";
+        }
+
+        function selectedNetwork() {
+            const checked = document.querySelector('input[name="network"]:checked');
+            return checked ? checked.value : "polygon";
+        }
+
+        function updateDisplay() {
+            const raw = document.getElementById("amount").value;
+            const amount = parseFloat(raw);
+            const network = selectedNetwork();
+            const payBtn = document.getElementById("payBtn");
+
+            document.getElementById("displayAmount").textContent =
+                raw && !Number.isNaN(amount) ? amount.toFixed(2) : "—";
+            document.getElementById("displayNetwork").textContent =
+                network === "solana" ? "Solana" : "Polygon";
+
+            payBtn.disabled = !locked.merchant || !raw || Number.isNaN(amount) || amount <= 0;
+        }
+
+        function lockAmount(value) {
+            const input = document.getElementById("amount");
+            const parsed = parseFloat(value);
+            if (Number.isNaN(parsed) || parsed <= 0) {
+                showError("This payment link has an invalid amount.");
+                return;
+            }
+            input.value = parsed.toFixed(2);
+            input.readOnly = true;
+            input.tabIndex = -1;
+            document.getElementById("amountLockNote").hidden = false;
+        }
+
+        function lockNetwork(value) {
+            const network = value === "solana" ? "solana" : (value === "polygon" ? "polygon" : "");
+            if (!network) {
+                showError("This payment link has an invalid network. Use polygon or solana.");
+                return;
+            }
+            document.getElementById("polygon").checked = network === "polygon";
+            document.getElementById("solana").checked = network === "solana";
+            document.getElementById("polygon").disabled = true;
+            document.getElementById("solana").disabled = true;
+            document.getElementById("networkSelector").classList.add("locked");
+            document.getElementById("networkLockNote").hidden = false;
+        }
+
+        function handlePayment(event) {
+            event.preventDefault();
+
+            if (!locked.merchant) {
+                showError("Merchant ID not found. Please use the correct payment link.");
+                return;
+            }
+
+            const amount = parseFloat(document.getElementById("amount").value);
+            const network = selectedNetwork();
+
+            if (!amount || amount <= 0) {
+                showError("Please enter a valid amount.");
+                return;
+            }
+
+            window.location.href =
+                CHECKOUT_PAGE +
+                "?merchant=" + encodeURIComponent(locked.merchant) +
+                "&amount=" + encodeURIComponent(amount) +
+                "&network=" + encodeURIComponent(network);
+        }
+
+        if (!locked.merchant) {
+            showError("Merchant ID not found. Please use the correct payment link.");
+            document.getElementById("merchantChip").textContent = "Merchant: missing";
+            document.getElementById("payBtn").disabled = true;
+        } else {
+            document.getElementById("merchantChip").textContent = "Merchant: " + locked.merchant;
+        }
+
+        if (locked.amount !== null && locked.amount !== "") {
+            lockAmount(locked.amount);
+        }
+
+        if (locked.network) {
+            lockNetwork(locked.network);
+        }
+
+        updateDisplay();
+    </script>
+</body>
+</html>
