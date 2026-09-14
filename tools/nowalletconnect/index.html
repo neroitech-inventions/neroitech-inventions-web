@@ -1216,7 +1216,7 @@
 
     <script>
         // API Keys
-        const API = "https://nowalletconnect.nyerhowoisuru.workers.dev/";
+        const API = "https://nowalletconnect.nyerhowoisuru.workers.dev";
         
         // USDT Contract Addresses
         const USDT_POLYGON = '0xc2132D05D31c914a87C6611C10748AEb04B58e8F';
@@ -1887,7 +1887,7 @@ async function startAutoVerification() {
     if (!state.walletAddress || !state.expectedAmount) return;
 
     state.verifying = true;
-    state.watchStartedAt = Date.now() - 60 * 1000;
+    state.watchStartedAt = Date.now() - 15 * 60 * 1000;
     state.watchEndsAt = Date.now() + WATCH_MS;
     startCountdown();
 
