@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script defer data-domain="solacediamond.github.io" src="https://analytics.vgdh.io/js/script.js"></script>
     <title>NoWalletConnect - Merchant Dashboard</title>
     <link rel="icon" type="image/jpeg" href="nwc.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -435,6 +434,51 @@
         let allPayments = [];
         let payFilter = "all";
 
+        const USED_SETUP_TX_KEY = "nwc_setup_used_txs";
+
+function normalizeTx(tx) {
+    return String(tx || "").trim().toLowerCase();
+}
+
+function usedSetupTxs() {
+    try {
+        const raw = JSON.parse(localStorage.getItem(USED_SETUP_TX_KEY) || "[]");
+        return Array.isArray(raw) ? raw.map(normalizeTx) : [];
+    } catch {
+        return [];
+    }
+}
+
+function markSetupTxUsed(tx) {
+    const hash = normalizeTx(tx);
+    if (!hash) return;
+    const next = Array.from(new Set(usedSetupTxs().concat(hash)));
+    localStorage.setItem(USED_SETUP_TX_KEY, JSON.stringify(next));
+}
+
+function setupTxAlreadyUsed(tx) {
+    return usedSetupTxs().includes(normalizeTx(tx));
+}
+
+async function fetchPaymentRows() {
+    const url =
+        "https://sheets.googleapis.com/v4/spreadsheets/" +
+        PAYMENTS.SHEET_ID +
+        "/values/" + encodeURIComponent(PAYMENTS.RANGE) +
+        "?key=" + SHEETS.API_KEY;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || "Could not read payments");
+    return (data.values || []).slice(1);
+}
+
+async function setupTxExistsInPayments(tx) {
+    const hash = normalizeTx(tx);
+    if (!hash) return false;
+    const rows = await fetchPaymentRows();
+    return rows.some(row => normalizeTx(row[5]) === hash);
+}
+
         function setText(id, value) {
             const el = document.getElementById(id);
             if (el) el.textContent = value;
@@ -495,24 +539,64 @@
             window.location.href = SETUP.payUrl;
         }
 
-        function captureSetupReturn() {
-            const q = new URLSearchParams(location.search);
-            const status = (q.get("status") || "").toLowerCase();
-            const merchant = (q.get("merchant") || "").trim().toUpperCase();
-            const amount = parseFloat(q.get("amount"));
-            if (status === "success" && merchant === SETUP.merchant && !Number.isNaN(amount) && Math.abs(amount - SETUP.amount) < 0.001) {
-                markSetupPaid();
+async function captureSetupReturn() {
+    const q = new URLSearchParams(location.search);
+    const status = (q.get("status") || "").toLowerCase();
+    const merchant = (q.get("merchant") || "").trim().toUpperCase();
+    const amount = parseFloat(q.get("amount"));
+    const txHash = normalizeTx(q.get("tx_hash"));
+
+    const looksLikeSetupReturn =
+        status === "success" &&
+        merchant === SETUP.merchant &&
+        !Number.isNaN(amount) &&
+        Math.abs(amount - SETUP.amount) < 0.001;
+
+    if (looksLikeSetupReturn) {
+        if (!txHash) {
+            switchPage("register");
+            showError("registerError", "Setup payment is missing a transaction hash.");
+            history.replaceState({}, "", location.pathname + location.hash);
+            return true;
+        }
+
+        if (setupTxAlreadyUsed(txHash)) {
+            switchPage("register");
+            showError("registerError", "This transaction hash was already used to create a merchant.");
+            history.replaceState({}, "", location.pathname + location.hash);
+            return true;
+        }
+
+        try {
+            const exists = await setupTxExistsInPayments(txHash);
+            if (!exists) {
                 switchPage("register");
-                showToast("Setup fee paid");
+                showError("registerError", "This transaction was not found in the payments database.");
                 history.replaceState({}, "", location.pathname + location.hash);
                 return true;
             }
-            if (sessionStorage.getItem("nwc_setup_pending") === "1" && setupPaid()) {
-                switchPage("register");
-                return true;
-            }
-            return false;
+        } catch (err) {
+            switchPage("register");
+            showError("registerError", err.message || "Could not verify the setup transaction.");
+            history.replaceState({}, "", location.pathname + location.hash);
+            return true;
         }
+
+        sessionStorage.setItem("nwc_setup_tx", txHash);
+        markSetupTxUsed(txHash);
+        markSetupPaid();
+        switchPage("register");
+        showToast("Setup fee paid");
+        history.replaceState({}, "", location.pathname + location.hash);
+        return true;
+    }
+
+    if (sessionStorage.getItem("nwc_setup_pending") === "1" && setupPaid()) {
+        switchPage("register");
+        return true;
+    }
+    return false;
+}
 
         async function fetchMerchantRows() {
             const url =
@@ -630,13 +714,22 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        async function handleRegister() {
-            if (!setupPaid()) {
-                showError("registerError", "Pay the $0.25 setup fee before creating an account.");
-                return;
-            }
+async function handleRegister() {
+    if (!setupPaid()) {
+        showError("registerError", "Pay the $0.25 setup fee before creating an account.");
+        return;
+    }
 
-            const merchantId = document.getElementById("registerMerchantId").value.trim();
+    const setupTx = normalizeTx(sessionStorage.getItem("nwc_setup_tx"));
+    if (!setupTx) {
+        showError("registerError", "Pay the $0.25 setup fee before creating an account.");
+        return;
+    }
+    if (!setupTxAlreadyUsed(setupTx)) {
+        markSetupTxUsed(setupTx);
+    }
+
+    const merchantId = document.getElementById("registerMerchantId").value.trim();
             const businessName = document.getElementById("registerBusinessName").value.trim();
             const email = document.getElementById("registerEmail").value.trim();
             const polygonWallet = document.getElementById("registerPolygonWallet").value.trim();
@@ -847,6 +940,7 @@
         }
 
         (async function init() {
+            if (await captureSetupReturn()) return;
             if (captureSetupReturn()) return;
 
             const raw = localStorage.getItem(SESSION_KEY);
