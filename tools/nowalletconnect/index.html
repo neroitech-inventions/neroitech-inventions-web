@@ -505,6 +505,46 @@
     color: var(--text);
 }
 
+.amount-input-wrap {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.amount-input-wrap input {
+    flex: 1;
+    padding-right: 40px;
+}
+
+.amount-clear {
+    position: absolute;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(148, 163, 184, 0.18);
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1;
+    cursor: pointer;
+    display: none;
+}
+
+.amount-clear.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.amount-clear:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
 .payment-details {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1028,6 +1068,7 @@
     </div>
 
     <div class="payment-amount">
+        <div class="amount-input-wrap">
 <input
     type="number"
     id="expectedAmount"
@@ -1035,7 +1076,11 @@
     value=""
     min="0.01"
     step="0.01"
+    oninput="onAmountTyped()"
+    onblur="lockUniqueAmount(); startWatchingFromCheckout()"
 >
+            <button type="button" class="amount-clear" id="clearAmountBtn" onclick="clearAmount()">×</button>
+        </div>
         <span>USDT</span>
     </div>
 
@@ -2059,6 +2104,49 @@ function newPayment() {
                 logElement.innerHTML = '';
             }
         }
+
+function onAmountTyped() {
+    const el = document.getElementById("expectedAmount");
+    const btn = document.getElementById("clearAmountBtn");
+    const raw = el ? String(el.value).trim() : "";
+    const typed = parseFloat(raw);
+    if (btn) btn.classList.toggle("show", raw !== "");
+
+    if (raw === "") {
+        state.expectedAmount = 0;
+        state.listedAmount = 0;
+        return;
+    }
+
+    if (state.expectedAmount && Math.abs(typed - state.expectedAmount) > 0.000001) {
+        state.expectedAmount = 0;
+    }
+}
+
+function lockUniqueAmount() {
+    const el = document.getElementById("expectedAmount");
+    const typed = parseFloat(el && el.value);
+    if (!typed || typed <= 0) return;
+
+    if (!state.expectedAmount) {
+        state.listedAmount = Math.round(typed * 100) / 100;
+        state.expectedAmount = uniquePayAmount(state.listedAmount);
+        el.value = state.expectedAmount;
+    }
+    onAmountTyped();
+}
+
+function clearAmount() {
+    const el = document.getElementById("expectedAmount");
+    if (el) el.value = "";
+    state.expectedAmount = 0;
+    state.listedAmount = 0;
+    stopVerification();
+    setWatchStatus("Enter how much they should send");
+    setCountdownText("");
+    onAmountTyped();
+    if (el) el.focus();
+}        
 
         function showToast(message) {
             const toast = document.getElementById('toast');
