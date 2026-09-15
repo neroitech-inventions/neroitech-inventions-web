@@ -1256,23 +1256,8 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
+    <script src="config.js"></script>
     <script>
-        // API Keys
-        const API = "https://nowalletconnect.nyerhowoisuru.workers.dev";
-        
-        // USDT Contract Addresses
-        const USDT_POLYGON = '0xc2132D05D31c914a87C6611C10748AEb04B58e8F';
-        const USDT_SOLANA = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
-
-        // 💜 Google Sheets Configuration
-        const SHEETS = {
-          NWC_SHEET_ID: '1jqDkywSOl9p4deRwB1DW13gdArxP0XhFaiSLSAB533A',
-          NWC_API_KEY: 'AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q',
-          NWC_MERCHANTS: 'MERCHANTS!A:G',
-          NWC_PAYMENTS: 'PAYMENTS!A:H'
-        };
-
 // DEFAULT WALLET ADDRESSES...
 
         
@@ -1464,9 +1449,6 @@ async function loadMerchantForGateway(merchantId, amount, network) {
           setTimeout(() => { window.location.href = redirectUrl.toString(); }, 3000);
         }
 
-
-const PAYMENTS_SHEET_ID = "1taoinvOhzoILkt-y1mViX8P2hvGWtpI8y8Jp-ZMYtUo";
-
 function normalizeTx(tx) {
   return String(tx || "").trim().toLowerCase();
 }
@@ -1519,8 +1501,8 @@ async function recordPaymentToSheet(paymentData) {
 
 async function fetchPayments() {
   try {
-    // ✅ NEW Database ID for PAYMENTS
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/1W6r8bcMl41HvYF2PJ0OyEicg11bcv1DjGNkQMSH85qw/values/'PAYMENTS'!A:H?key=${SHEETS.NWC_API_KEY}`;
+    const url =
+  `https://sheets.googleapis.com/v4/spreadsheets/${PAYMENTS_FETCH_SHEET_ID}/values/${encodeURIComponent(SHEETS.NWC_PAYMENTS)}?key=${SHEETS.NWC_API_KEY}`;
     
     console.log('📥 Fetching from:', url);
     
