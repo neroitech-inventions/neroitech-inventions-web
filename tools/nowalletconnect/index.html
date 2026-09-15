@@ -1409,6 +1409,28 @@ async function loadMerchantForGateway(merchantId, amount, network) {
           setTimeout(() => { window.location.href = redirectUrl.toString(); }, 3000);
         }
 
+
+const PAYMENTS_SHEET_ID = "1taoinvOhzoILkt-y1mViX8P2hvGWtpI8y8Jp-ZMYtUo";
+
+function normalizeTx(tx) {
+  return String(tx || "").trim().toLowerCase();
+}
+
+async function paymentTxExists(txHash) {
+  const hash = normalizeTx(txHash);
+  if (!hash) return false;
+
+  const url =
+    "https://sheets.googleapis.com/v4/spreadsheets/" +
+    PAYMENTS_SHEET_ID +
+    "/values/" + encodeURIComponent("PAYMENTS!A:H") +
+    "?key=" + SHEETS.NWC_API_KEY;
+
+  const data = await (await fetch(url)).json();
+  const rows = (data.values || []).slice(1);
+  return rows.some(row => normalizeTx(row[5]) === hash);
+}        
+
 async function recordPaymentToSheet(paymentData) {
   try {
     console.log('📝 Recording payment:', paymentData);
@@ -1956,14 +1978,17 @@ async function showSuccess(txHash) {
   txLink.title = txHash;
 
   try {
-    await recordPaymentToSheet({
-      payment_id: "pay_" + Date.now(),
-      merchant_id: GATEWAY.merchantId || state.merchantId || "",
-      amount: state.expectedAmount,
-      tx_hash: txHash,
-      network: state.network,
-      return_url: GATEWAY.returnUrl || ""
-    });
+    const alreadySaved = await paymentTxExists(txHash);
+    if (!alreadySaved) {
+      await recordPaymentToSheet({
+        payment_id: "pay_" + Date.now(),
+        merchant_id: GATEWAY.merchantId || state.merchantId || "",
+        amount: state.expectedAmount,
+        tx_hash: txHash,
+        network: state.network,
+        return_url: GATEWAY.returnUrl || ""
+      });
+    }
   } catch (e) {
     console.error(e);
     state.recording = false;
