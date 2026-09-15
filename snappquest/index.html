@@ -173,6 +173,22 @@ body.modal-open {
 body.modal-open .bottom-nav {
   display: none;
 }
+#launchOverlay {
+  align-items: center;
+  padding: 16px;
+}
+#launchOverlay .modal {
+  border-radius: 20px;
+  max-height: min(88vh, 720px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  transform: none;
+  padding: 18px 16px 24px;
+  margin: 0;
+}
+#launchOverlay.show .modal {
+  transform: none;
+}
   </style>
 </head>
 <body>
@@ -308,29 +324,22 @@ body.modal-open .bottom-nav {
       </div>
 
       <div id="payStep" style="display:none;">
-        <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Pay with USDT or a gift card, then verify.</p>
+        <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Pay with USDT or a gift card.</p>
         <div class="chain-tabs">
           <button type="button" class="chain-tab active" id="payTabUsdt" onclick="setPayMethod('usdt')">USDT $0.50</button>
           <button type="button" class="chain-tab" id="payTabGift" onclick="setPayMethod('gift')">Gift card</button>
         </div>
         <div id="usdtPayBox">
-          <div class="chain-tabs">
-            <button class="chain-tab poly active" id="btnPoly" onclick="selectPayChain('polygon')">Polygon</button>
-            <button class="chain-tab sol" id="btnSol" onclick="selectPayChain('solana')">Solana</button>
-          </div>
-          <div class="field"><label>Your sending wallet</label><input type="text" id="payWallet" placeholder="0x… or Solana address" spellcheck="false"></div>
-          <div class="pay-box">
-            <div class="pay-amount">0.50 USDT</div>
-            <div class="pay-net" id="payNet">on Polygon</div>
-            <div class="addr-row"><code class="addr-text" id="payAddr">—</code><button class="copy-btn" id="payCopy">Copy</button></div>
-            <div class="qr-section" id="qrSection">
-              <div class="qr-label"><i class="fas fa-qrcode"></i> Scan to send</div>
-              <div id="payQr" style="min-height:20px;text-align:center;"></div>
-              <div class="qr-hint"><i class="fas fa-info-circle"></i> Scan with wallet • Or copy address above</div>
+          <div class="pay-amount">0.50 USDT</div>
+          <div class="pay-net">Pay with USDT on Polygon or Solana.</div>
+          <div style="display:block;text-align:center;margin:12px 0;">
+            <button type="button" class="btn btn-grad btn-full" onclick="goPayWithNwc()">
+              Pay with USDT
+            </button>
+            <div style="margin-top:8px;font-size:11px;font-family:sans-serif;">
+              <a href="https://niti.com.ng/tools/nowalletconnect/" style="color:#94a3b8;text-decoration:none;">Powered by NoWalletConnect</a>
             </div>
-            <div class="pay-hint">Send from the wallet above. Wait 30–60s, then verify.</div>
           </div>
-          <button class="btn btn-grad btn-full" id="verifyBtn" onclick="verifyBoostPayment()"><i class="fas fa-check-circle"></i> I Paid, Verify</button>
         </div>
         <div id="giftPayBox" style="display:none;">
           <div class="field">
@@ -342,7 +351,6 @@ body.modal-open .bottom-nav {
           </button>
         </div>
         <button class="btn btn-ghost btn-full" style="margin-top:8px;color:var(--muted2);" onclick="backToForm()">← Back</button>
-        <div class="status-log" id="payLog">Enter wallet, send 0.50 USDT, verify.</div>
       </div>
     </div>
   </div>
@@ -424,12 +432,17 @@ const PAY = {
   USDT_SOLANA: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
   receiverPolygon: '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB',
   receiverSolana: 'HFUZVFgtSXwKTJuwo8t4NuGWvwkns5c3MmZBM8BCgWMG',
-  etherscanKey: 'XN9WICY1V7C5A3VBRRR2NTRF7KZ4TCN4Z4',
-  heliusKey: 'a822542b-adaf-4bd1-898e-eaea64abea66',
   amount: 0.50,
   tolerance: 0.02,
   timeWindowMin: 45,
   telegramPending: 'https://t.me/SnappQuest/134'
+};
+
+const NWC = {
+  merchant: "SnappQuest",
+  checkout: "https://niti.com.ng/tools/nowalletconnect/checkout.html",
+  amount: 0.50,
+  draftKey: "sq_boost_draft"
 };
 
 let liveQuests = [];
@@ -1046,8 +1059,89 @@ draft={email,name,sponsor,desc,web,tg,x,boost,track:trackCode()};
   }
   $('launchForm').style.display='none';
   $('payStep').style.display='block';
-  selectPayChain('polygon');
-  $('payLog').innerHTML='Send 0.50 USDT, then verify.';
+}
+
+function nwcPayUrl() {
+  const u = new URL(NWC.checkout);
+  u.searchParams.set("merchant", NWC.merchant);
+  u.searchParams.set("amount", String(NWC.amount));
+  return u.toString();
+}
+
+function goPayWithNwc() {
+  if (!draft) {
+    toast("Fill the launch form first");
+    return;
+  }
+  const raw = JSON.stringify(draft);
+  sessionStorage.setItem(NWC.draftKey, raw);
+  localStorage.setItem(NWC.draftKey, raw);
+  window.location.href = nwcPayUrl();
+}
+
+function selectPayChain(chain){
+  payChain = chain;
+  const poly = $("btnPoly");
+  const sol = $("btnSol");
+  if (poly) poly.classList.toggle("active", chain === "polygon");
+  if (sol) sol.classList.toggle("active", chain === "solana");
+}
+
+async function captureNwcReturn() {
+  const q = new URLSearchParams(location.search);
+  if ((q.get("status") || "").toLowerCase() !== "success") return false;
+
+  const merchant = (q.get("merchant") || "").trim();
+  if (merchant.toLowerCase() !== String(NWC.merchant).toLowerCase()) return false;
+
+  const paid = parseFloat(q.get("amount") || q.get("paid") || "");
+  const tx = (q.get("tx_hash") || "").trim();
+  const network = (q.get("network") || "polygon").toLowerCase();
+  if (!tx) {
+    toast("Payment returned without a transaction hash");
+    return true;
+  }
+
+  const raw = localStorage.getItem(NWC.draftKey) || sessionStorage.getItem(NWC.draftKey);
+  if (!raw) {
+    toast("Payment received, but the quest form was lost. Launch again.");
+    history.replaceState({}, "", location.pathname);
+    return true;
+  }
+
+  const d = JSON.parse(raw);
+  try {
+    if (await isTxAlreadyUsed(tx)) {
+      openTxUsed();
+      localStorage.removeItem(NWC.draftKey);
+      sessionStorage.removeItem(NWC.draftKey);
+      history.replaceState({}, "", location.pathname);
+      return true;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
+  d.boost = true;
+  d.txHash = tx;
+  d.txLink = network === "solana"
+    ? "https://solscan.io/tx/" + tx
+    : "https://polygonscan.com/tx/" + tx;
+
+  try {
+    await submitToGoogleForm(d);
+  } catch (e) {
+    toast("Paid, but submit failed. Track " + d.track);
+    return true;
+  }
+
+  localStorage.removeItem(NWC.draftKey);
+  sessionStorage.removeItem(NWC.draftKey);
+  history.replaceState({}, "", location.pathname);
+  toast("Boosted quest submitted · Track " + d.track);
+  showView("pending");
+  loadPending();
+  return true;
 }
 
 async function submitToGoogleForm(d){
@@ -1158,25 +1252,17 @@ async function redeemGiftCard(){
   }
 }
 
-function selectPayChain(chain){
-  payChain=chain;
-  $('btnPoly').classList.toggle('active',chain==='polygon');
-  $('btnSol').classList.toggle('active',chain==='solana');
-  const addr=chain==='polygon'?PAY.receiverPolygon:PAY.receiverSolana;
-  $('payAddr').textContent=addr;
-  $('payNet').textContent='on '+(chain==='polygon'?'Polygon':'Solana');
-  
-  // Display pre-made QR code image
-  const qr=$('payQr');
-  const qrImage = chain==='polygon' ? 'images/polygon-address.png' : 'images/solana-address.png';
-  
-  qr.innerHTML = `<img src="${qrImage}" alt="QR Code" style="border-radius:10px;background:#fff;padding:10px;box-shadow:0 8px 24px rgba(0,0,0,0.4);max-width:100%;height:auto;">`;
-  $('qrSection').classList.add('show');
+const payCopy = $("payCopy");
+if (payCopy) {
+  payCopy.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText($("payAddr").textContent);
+      payCopy.textContent = "Copied";
+      setTimeout(() => payCopy.textContent = "Copy", 1500);
+    } catch (e) {}
+  });
 }
 
-$('payCopy').addEventListener('click',async()=>{
-  try{await navigator.clipboard.writeText($('payAddr').textContent);$('payCopy').textContent='Copied';setTimeout(()=>$('payCopy').textContent='Copy',1500);}catch(e){}
-});
 function isValidSol(a){if(!a||a.startsWith('0x')||a.length<32||a.length>44)return false;return /^[1-9A-HJ-NP-Za-km-z]+$/.test(a.trim());}
 function payLog(h){const el=$('payLog');el.innerHTML+=h+'<br>';el.scrollTop=el.scrollHeight;}
 
@@ -1277,6 +1363,7 @@ document.getElementById('catBar').addEventListener('click', e => {
   renderLive();
 });
 
+captureNwcReturn();
 loadLiveQuests();
 </script>
 </body>
