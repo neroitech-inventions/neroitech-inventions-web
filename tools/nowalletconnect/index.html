@@ -1244,6 +1244,7 @@
             solanaWallet: DEFAULT_SOLANA_WALLET,
             senderWallet: '',
             expectedAmount: 0,
+            listedAmount: 0,
             verifying: false,
             previousSection: 1
         };
@@ -1261,6 +1262,14 @@
         // ═════════════════════════════════════════
         // 💜 GATEWAY MODE FUNCTIONS
         // ═════════════════════════════════════════
+
+
+function uniquePayAmount(base) {
+  const price = Math.round(Number(base) * 100) / 100;
+  if (!Number.isFinite(price) || price <= 0) return 0;
+  const tag = Math.floor(Math.random() * 90) + 10;
+  return Number((price + tag / 10000).toFixed(4));
+}        
 
 function detectGatewayMode() {
   const params = new URLSearchParams(window.location.search);
@@ -1283,8 +1292,9 @@ function detectGatewayMode() {
   }
 
   GATEWAY.merchantId = merchantId;
-  GATEWAY.amount = parseFloat(amount);
-  GATEWAY.isGatewayMode = true;  // ✅ Don't set returnUrl here
+  GATEWAY.listedAmount = parseFloat(amount);
+  GATEWAY.amount = uniquePayAmount(GATEWAY.listedAmount);
+  GATEWAY.isGatewayMode = true;
   console.log('🎯 GATEWAY MODE DETECTED', GATEWAY);
   loadMerchantForGateway(merchantId, GATEWAY.amount, network);
   return true;
@@ -1346,6 +1356,7 @@ async function loadMerchantForGateway(merchantId, amount, network) {
 
     console.log('✅ Merchant loaded:', merchant);
     state.merchantId = merchantId;
+    state.listedAmount = GATEWAY.listedAmount || amount;
     state.expectedAmount = amount;
     state.polygonWallet = merchant.polygonWallet;
     state.solanaWallet = merchant.solanaWallet;
@@ -1573,7 +1584,8 @@ function returnToMerchant() {
     const url = new URL(GATEWAY.returnUrl);
     url.searchParams.set("payment_id", "pay_" + Date.now());
     url.searchParams.set("tx_hash", txHash);
-    url.searchParams.set("amount", String(GATEWAY.amount || state.expectedAmount || ""));
+    url.searchParams.set("amount", String(GATEWAY.listedAmount || state.listedAmount || GATEWAY.amount || ""));
+    url.searchParams.set("paid", String(state.expectedAmount || ""));
     url.searchParams.set("merchant", GATEWAY.merchantId || "");
     url.searchParams.set("network", state.network || "");
     url.searchParams.set("status", "success");
@@ -1744,17 +1756,19 @@ function copyToClipboard() {
                 return;
             }
             
-            const amount = parseFloat(document.getElementById('expectedAmount').value);
-            console.log('Amount entered:', amount);
+            const listed = parseFloat(document.getElementById('expectedAmount').value);
+            console.log('Amount entered:', listed);
             
-            if (!amount || amount <= 0) {
+            if (!listed || listed <= 0) {
                 showToast('Please enter valid amount');
                 console.log('Invalid amount');
                 return;
             }
-            
-            state.expectedAmount = amount;
-            document.getElementById('waitAmount').textContent = amount + ' USDT';
+
+            state.listedAmount = listed;
+            state.expectedAmount = uniquePayAmount(listed);
+            document.getElementById('expectedAmount').value = state.expectedAmount;
+            document.getElementById('waitAmount').textContent = state.expectedAmount + ' USDT';
             clearLog();
             
             console.log('Calling goToSection(3)');
@@ -1890,14 +1904,18 @@ function startWatchingFromCheckout() {
         return;
     }
 
-    const amount = parseFloat(document.getElementById("expectedAmount").value);
-    if (!amount || amount <= 0) {
+    const typed = parseFloat(document.getElementById("expectedAmount").value);
+    if (!typed || typed <= 0) {
         setWatchStatus("Enter how much they should send");
         setCountdownText("");
         return;
     }
 
-    state.expectedAmount = amount;
+    if (!state.expectedAmount || Math.abs(state.expectedAmount - typed) > 0.000001) {
+        state.listedAmount = Math.round(typed * 100) / 100;
+        state.expectedAmount = uniquePayAmount(state.listedAmount);
+        document.getElementById("expectedAmount").value = state.expectedAmount;
+    }
     setWatchStatus("Awaiting your payment...");
     startAutoVerification();
 }
