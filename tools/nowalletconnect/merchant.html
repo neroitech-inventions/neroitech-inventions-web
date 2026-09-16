@@ -44,6 +44,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            padding-top: 30px;
         }
         .auth-card, .card, .merchant-info {
             background: var(--card);
@@ -237,54 +238,549 @@
             .kpis, .split { grid-template-columns: 1fr 1fr; }
             .auth-card { padding: 24px 18px; }
         }
-        .site-nav {
+/* =========================
+   MODERN SITE HEADER
+   ========================= */
+
+.site-nav {
+    position: relative;
+    z-index: 1000;
     max-width: 1100px;
-    margin: 0 auto 24px;
-    padding: 14px 18px;
+    margin: 0 auto 10px; /* was 28px */
+    padding: 10px 12px 10px 20px;
+
     display: flex;
-    justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 10px 22px;
-    background: rgba(26, 31, 46, 0.85);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    backdrop-filter: blur(12px);
+    justify-content: space-between;
+    gap: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(26, 31, 46, 0.92),
+            rgba(15, 20, 25, 0.88)
+        );
+
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 18px;
+
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.3s ease;
 }
 
-.site-nav a {
-    color: var(--primary);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: all 0.2s ease;
+.site-nav:hover {
+    border-color: rgba(0, 212, 255, 0.22);
+
+    box-shadow:
+        0 16px 50px rgba(0, 0, 0, 0.34),
+        0 0 30px rgba(0, 212, 255, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.site-nav a:hover {
+
+/* Brand */
+
+.site-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
     color: var(--text);
-    text-decoration: underline;
+    text-decoration: none;
+
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+
+    white-space: nowrap;
 }
 
-@media (max-width: 600px) {
+.site-nav-logo {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    color: var(--bg);
+
+    font-size: 0.9rem;
+    font-weight: 900;
+
+    box-shadow:
+        0 6px 20px rgba(0, 212, 255, 0.18);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.site-nav-brand:hover .site-nav-logo {
+    transform: rotate(-4deg) scale(1.06);
+
+    box-shadow:
+        0 8px 28px rgba(0, 212, 255, 0.3);
+}
+
+.site-nav-brand span {
+    background:
+        linear-gradient(
+            135deg,
+            var(--text),
+            var(--primary)
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* Desktop links */
+
+.site-nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 5px;
+}
+
+.site-nav-links a {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    padding: 10px 13px;
+
+    border-radius: 10px;
+
+    color: var(--muted);
+    text-decoration: none;
+
+    font-size: 0.82rem;
+    font-weight: 600;
+
+    transition:
+        color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease;
+}
+
+.site-nav-links a::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 5px;
+
+    width: 0;
+    height: 2px;
+
+    border-radius: 99px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    transform: translateX(-50%);
+
+    transition: width 0.25s ease;
+}
+
+.site-nav-links a:hover {
+    color: var(--text);
+
+    background: rgba(255, 255, 255, 0.045);
+
+    transform: translateY(-1px);
+}
+
+.site-nav-links a:hover::after {
+    width: 55%;
+}
+
+
+/* Active/current page */
+
+.site-nav-links a.active {
+    color: var(--primary);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0, 212, 255, 0.09),
+            rgba(124, 58, 237, 0.08)
+        );
+
+    border: 1px solid rgba(0, 212, 255, 0.12);
+}
+
+.site-nav-links a.active::after {
+    width: 55%;
+}
+
+
+/* Telegram button */
+
+.site-nav-links a.nav-telegram {
+    margin-left: 5px;
+
+    color: var(--text);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0, 212, 255, 0.12),
+            rgba(124, 58, 237, 0.12)
+        );
+
+    border: 1px solid rgba(0, 212, 255, 0.18);
+}
+
+.site-nav-links a.nav-telegram:hover {
+    border-color: rgba(0, 212, 255, 0.4);
+
+    box-shadow:
+        0 6px 20px rgba(0, 212, 255, 0.1);
+}
+
+
+/* Hamburger */
+
+.site-nav-toggle {
+    display: none;
+
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+    margin: 0;
+
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 11px;
+
+    background: rgba(255, 255, 255, 0.04);
+
+    cursor: pointer;
+
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.site-nav-toggle:hover {
+    background: rgba(0, 212, 255, 0.08);
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+.site-nav-toggle span {
+    width: 19px;
+    height: 2px;
+
+    border-radius: 99px;
+
+    background: var(--text);
+
+    transition:
+        transform 0.3s ease,
+        opacity 0.25s ease;
+}
+
+
+/* Hamburger → X */
+
+.site-nav.open .site-nav-toggle span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.site-nav.open .site-nav-toggle span:nth-child(2) {
+    opacity: 0;
+}
+
+.site-nav.open .site-nav-toggle span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* =========================
+   MOBILE HEADER
+   ========================= */
+
+@media (max-width: 760px) {
+
     .site-nav {
-        gap: 10px 16px;
-        padding: 12px;
+        margin: -5px 0 22px;
+
+        padding: 9px 10px 9px 14px;
+
+        border-radius: 15px;
     }
 
-    .site-nav a {
-        font-size: 0.78rem;
+    .site-nav-brand {
+        font-size: 0.92rem;
+    }
+
+    .site-nav-logo {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+    }
+
+    .site-nav-toggle {
+        display: flex;
+    }
+
+    .site-nav-links {
+        position: absolute;
+
+        top: calc(100% + 9px);
+        left: 0;
+        right: 0;
+
+        padding: 8px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(26, 31, 46, 0.98),
+                rgba(15, 20, 25, 0.98)
+            );
+
+        border: 1px solid rgba(148, 163, 184, 0.15);
+        border-radius: 15px;
+
+        box-shadow:
+            0 20px 50px rgba(0, 0, 0, 0.45);
+
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px) scale(0.98);
+
+        pointer-events: none;
+
+        transition:
+            opacity 0.25s ease,
+            visibility 0.25s ease,
+            transform 0.25s ease;
+    }
+
+    .site-nav.open .site-nav-links {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+    }
+
+    .site-nav-links a {
+        width: 100%;
+
+        padding: 13px 14px;
+
+        border-radius: 10px;
+
+        font-size: 0.88rem;
+    }
+
+    .site-nav-links a:hover {
+        transform: none;
+    }
+
+    .site-nav-links a::after {
+        display: none;
+    }
+
+    .site-nav-links a.active {
+        background:
+            linear-gradient(
+                135deg,
+                rgba(0, 212, 255, 0.1),
+                rgba(124, 58, 237, 0.1)
+            );
+    }
+
+    .site-nav-links a.nav-telegram {
+        margin: 4px 0 0;
+        justify-content: center;
+    }
+}
+
+
+/* Very small phones */
+
+@media (max-width: 380px) {
+
+    .site-nav-brand span {
+        font-size: 0.85rem;
+    }
+
+    .site-nav-logo {
+        width: 34px;
+        height: 34px;
+    }
+
+    .site-nav-toggle {
+        width: 40px;
+        height: 40px;
+    }
+}
+.site-nav-logo {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    overflow: hidden;
+    background: linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.18);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.site-nav-logo img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.site-nav-brand:hover .site-nav-logo {
+    transform: rotate(-4deg) scale(1.06);
+    box-shadow: 0 8px 28px rgba(0, 212, 255, 0.3);
+}
+/* Tight spacing between header and login */
+#loginPage {
+    margin-top: -10px;
+}
+
+.auth-container {
+    padding-top: 0;
+    margin-top: 0;
+}
+
+/* =========================
+   MOBILE LOGIN SPACING
+   ========================= */
+
+@media (max-width: 760px) {
+
+    .site-nav {
+        margin-bottom: 50px;
+    }
+
+    #loginPage .auth-container,
+    #registerPage .auth-container {
+        min-height: auto;
+        padding-top: 0;
+        align-items: flex-start;
+    }
+
+    #loginPage .auth-card,
+    #registerPage .auth-card {
+        margin-top: 24px;
     }
 }
     </style>
 </head>
 <body>
 
-    <nav class="site-nav">
-    <a href="index.html">NoWalletConnect</a>
-    <a href="guide.html">Integration Guide</a>
-    <a href="merchant.html">Merchant Dashboard</a>
-    <a href="NoWalletConnect-Docs.pdf" target="_blank" rel="noopener">Documentation</a>
-    <a href="https://t.me/noWalletConnect" target="_blank" rel="noopener">Telegram</a>
+<nav class="site-nav" id="siteNav">
+
+    <a href="index.html" class="site-nav-brand">
+       <div class="site-nav-logo">
+    <img src="nwc.jpg" alt="NoWalletConnect">
+</div>
+        <span>NoWalletConnect</span>
+    </a>
+
+    <div class="site-nav-links" id="siteNavLinks">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="guide.html">
+            Integration Guide
+        </a>
+
+        <a href="merchant.html" class="active">
+            Merchant Dashboard
+        </a>
+
+        <a
+            href="NoWalletConnect-Docs.pdf"
+            target="_blank"
+            rel="noopener"
+        >
+            Documentation
+        </a>
+
+        <a
+            href="https://t.me/noWalletConnect"
+            target="_blank"
+            rel="noopener"
+            class="nav-telegram"
+        >
+            Telegram ↗
+        </a>
+
+    </div>
+
+    <button
+        class="site-nav-toggle"
+        id="siteNavToggle"
+        type="button"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
 </nav>
 
     <div id="loginPage">
@@ -357,10 +853,6 @@
 
     <div id="dashboardPage" class="hidden">
         <div class="container">
-            <header>
-                <h1>NoWalletConnect</h1>
-                <p class="subtitle">Merchant Dashboard</p>
-            </header>
 
             <div class="merchant-info">
                 <div class="merchant-info-label">Merchant</div>
@@ -1008,6 +1500,68 @@ async function handleRegister() {
                 switchPage("login");
             }
         })();
+
+
+
+        /* =========================
+   MOBILE NAVIGATION
+   ========================= */
+
+(function () {
+    const nav = document.getElementById("siteNav");
+    const toggle = document.getElementById("siteNavToggle");
+    const links = document.querySelectorAll(".site-nav-links a");
+
+    if (!nav || !toggle) return;
+
+    function closeMenu() {
+        nav.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Open navigation menu");
+    }
+
+    function openMenu() {
+        nav.classList.add("open");
+        toggle.setAttribute("aria-expanded", "true");
+        toggle.setAttribute("aria-label", "Close navigation menu");
+    }
+
+    toggle.addEventListener("click", function () {
+        if (nav.classList.contains("open")) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    /* Close menu when a link is selected */
+    links.forEach(function (link) {
+        link.addEventListener("click", function () {
+            closeMenu();
+        });
+    });
+
+    /* Close when clicking outside */
+    document.addEventListener("click", function (event) {
+        if (!nav.contains(event.target)) {
+            closeMenu();
+        }
+    });
+
+    /* Close menu when pressing Escape */
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            closeMenu();
+        }
+    });
+
+    /* Reset menu if screen changes back to desktop */
+    window.addEventListener("resize", function () {
+        if (window.innerWidth > 760) {
+            closeMenu();
+        }
+    });
+})();
     </script>
 </body>
 </html>
