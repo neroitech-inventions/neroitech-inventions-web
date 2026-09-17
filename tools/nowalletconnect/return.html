@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoWalletConnect - Payment complete</title>
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+     <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-QM106YDX6N');
+     </script>
+
+     <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="nwc.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #00d4ff;
+            --secondary: #7c3aed;
+            --bg: #0f1419;
+            --card: #1a1f2e;
+            --border: rgba(148, 163, 184, 0.12);
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --success: #10b981;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(1200px 600px at 20% -10%, rgba(0, 212, 255, 0.12), transparent 55%),
+                        radial-gradient(900px 500px at 110% 10%, rgba(124, 58, 237, 0.16), transparent 50%),
+                        linear-gradient(135deg, var(--bg), #1a2847);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .wrap {
+            max-width: 560px;
+            margin: 48px auto;
+        }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px 32px 28px;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto auto 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        .mark {
+            width: 84px;
+            height: 84px;
+            margin: 8px auto 22px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.35), rgba(0, 212, 255, 0.08));
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.18);
+        }
+        .mark.fail {
+            background: radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.28), rgba(124, 58, 237, 0.08));
+            border-color: rgba(239, 68, 68, 0.35);
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.12);
+        }
+        .mark svg { width: 40px; height: 40px; }
+        .kicker {
+            font-size: 0.72rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 1.85rem;
+            line-height: 1.25;
+            font-weight: 800;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, var(--primary), #c4b5fd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .message {
+            color: #e2e8f0;
+            font-size: 1.08rem;
+            line-height: 1.65;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0 auto 26px;
+            max-width: 440px;
+        }
+        .facts {
+            display: grid;
+            gap: 10px;
+            text-align: left;
+            margin-bottom: 22px;
+        }
+        .fact {
+            background: rgba(30, 41, 59, 0.55);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 14px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+        }
+        .fact span {
+            color: var(--muted);
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .fact strong, .fact a {
+            color: var(--primary);
+            font-size: 0.92rem;
+            font-weight: 700;
+            text-align: right;
+            word-break: break-all;
+        }
+        .fact a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            text-decoration: none;
+        }
+        .fact a:hover { text-decoration: underline; }
+        .hidden { display: none !important; }
+        .home {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--bg);
+            font-weight: 800;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .hint {
+            margin-top: 18px;
+            color: var(--muted);
+            font-size: 0.75rem;
+            line-height: 1.5;
+        }
+        .hint code {
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            word-break: break-all;
+        }
+        .powered {
+            margin-top: 22px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+        .powered a { color: var(--muted); text-decoration: none; }
+        .powered a:hover { color: var(--primary); }
+        @media (max-width: 520px) {
+            .wrap { margin: 18px auto; }
+            .card { padding: 28px 18px 22px; border-radius: 20px; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="card">
+            <div class="mark" id="statusMark">
+                <svg id="okIcon" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 7L10 17L5 12" stroke="#6ee7b7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <svg id="failIcon" class="hidden" viewBox="0 0 24 24" fill="none">
+                    <path d="M7 7l10 10M17 7L7 17" stroke="#fca5a5" stroke-width="2.4" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="kicker" id="kicker">Payment received</div>
+            <h1 id="headline">Thank you</h1>
+            <p class="message" id="message">Your payment was received.</p>
+            <div class="facts hidden" id="facts"></div>
+            <a class="home" href="https://niti.com.ng/tools/nowalletconnect/">Back to NoWalletConnect</a>
+        </div>
+        <div class="powered">
+            <a href="https://niti.com.ng/tools/nowalletconnect/" target="_blank" rel="noopener">Powered by NoWalletConnect</a>
+        </div>
+    </div>
+    <script>
+        const DEFAULT_OK = "Your USDT payment was received.";
+        const DEFAULT_WAIT = "You can close this page whenever you’re ready.";
+        const DEFAULT_FAIL = "This payment could not be confirmed.";
+
+        const q = new URLSearchParams(location.search);
+
+        function first(keys) {
+            for (const key of keys) {
+                const value = q.get(key);
+                if (value !== null && String(value).trim() !== "") return String(value);
+            }
+            return "";
+        }
+
+        function safeText(value, max) {
+            const clean = String(value || "").replace(/\s+/g, " ").trim();
+            return clean.length > max ? clean.slice(0, max) + "…" : clean;
+        }
+
+        const status = first(["status"]).toLowerCase();
+        const custom = safeText(first(["message", "msg", "text", "note"]), 280);
+        const amount = first(["amount"]);
+        const merchant = first(["merchant"]);
+        const network = first(["network"]).toLowerCase();
+        const tx = first(["tx_hash", "tx", "hash"]);
+        const paymentId = first(["payment_id"]);
+        const success = status === "success" || status === "paid" || status === "complete" || status === "";
+
+        document.getElementById("kicker").textContent = success ? "Payment received" : "Payment update";
+        document.getElementById("headline").textContent = success ? "Thank you" : "Not confirmed";
+        document.getElementById("message").textContent = custom || (success ? DEFAULT_OK : DEFAULT_FAIL);
+
+        if (!success) {
+            document.getElementById("statusMark").classList.add("fail");
+            document.getElementById("okIcon").classList.add("hidden");
+            document.getElementById("failIcon").classList.remove("hidden");
+        }
+
+        const facts = [];
+        if (amount) facts.push(["Amount", parseFloat(amount) ? parseFloat(amount).toFixed(2) + " USDT" : amount]);
+        if (network) facts.push(["Network", network === "solana" ? "Solana" : "Polygon"]);
+        if (merchant) facts.push(["Merchant", merchant]);
+        if (paymentId) facts.push(["Reference", paymentId]);
+        if (tx) {
+            const explorer = network === "solana"
+                ? "https://solscan.io/tx/" + encodeURIComponent(tx)
+                : "https://polygonscan.com/tx/" + encodeURIComponent(tx);
+            const shortTx = tx.length > 18 ? tx.slice(0, 10) + "…" + tx.slice(-6) : tx;
+            facts.push(["Transaction", { href: explorer, label: shortTx }]);
+        }
+
+        const box = document.getElementById("facts");
+        if (facts.length) {
+            box.classList.remove("hidden");
+            facts.forEach(([label, value]) => {
+                const row = document.createElement("div");
+                row.className = "fact";
+                const left = document.createElement("span");
+                left.textContent = label;
+                row.appendChild(left);
+                if (value && typeof value === "object" && value.href) {
+                    const link = document.createElement("a");
+                    link.href = value.href;
+                    link.target = "_blank";
+                    link.rel = "noopener";
+                    link.textContent = value.label;
+                    row.appendChild(link);
+                } else {
+                    const right = document.createElement("strong");
+                    right.textContent = value;
+                    row.appendChild(right);
+                }
+                box.appendChild(row);
+            });
+        } else if (!custom) {
+            document.getElementById("message").textContent = success ? DEFAULT_OK + " " + DEFAULT_WAIT : DEFAULT_FAIL;
+        }
+
+    </script>
+</body>
+</html>

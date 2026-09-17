@@ -227,7 +227,13 @@
         .badge-poly { color: #00d4ff; background: rgba(0, 212, 255, 0.12); }
         .badge-sol { color: #14f195; background: rgba(20, 241, 149, 0.12); }
         .tx { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--primary); }
-        .empty-state { text-align: center; padding: 32px 12px; color: var(--muted); }
+                .empty-state { text-align: center; padding: 32px 12px; color: var(--muted); }
+        .link-builder { display: grid; gap: 16px; }
+        .link-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .link-field label { margin-bottom: 8px; }
+        .link-options { display: flex; flex-wrap: wrap; gap: 8px; }
+        .link-options .chip { cursor: pointer; }
+        .link-preview-meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 8px; line-height: 1.45; }
         .toast {
             position: fixed; bottom: 20px; right: 20px;
             background: var(--card); border: 1px solid var(--border);
@@ -235,7 +241,7 @@
         }
         .toast.show { display: block; }
         @media (max-width: 800px) {
-            .kpis, .split { grid-template-columns: 1fr 1fr; }
+                        .kpis, .split, .link-row { grid-template-columns: 1fr; }
             .auth-card { padding: 24px 18px; }
         }
 /* =========================
@@ -869,6 +875,56 @@
                 </div>
             </div>
 
+                        <div class="card">
+                <h2>Generate donation / payment link</h2>
+                <p class="hint" style="margin-bottom:16px;">Share a link that already includes your merchant ID. Lock an amount, lock Polygon or Solana, or leave both open so the payer types any USDT amount and picks the chain.</p>
+                <div class="link-builder">
+                    <div class="link-row">
+                        <div class="link-field">
+                            <label>Amount</label>
+                            <div class="link-options" id="amountModeOptions">
+                                <button class="chip active" type="button" data-mode="open" onclick="setAmountMode('open', this)">Payer chooses</button>
+                                <button class="chip" type="button" data-mode="fixed" onclick="setAmountMode('fixed', this)">Fixed amount</button>
+                            </div>
+                            <input type="number" id="linkAmount" min="0.01" step="0.01" placeholder="e.g. 5.00" style="margin-top:10px;display:none;" oninput="updateGeneratedLink()">
+                        </div>
+                        <div class="link-field">
+                            <label>Network</label>
+                            <div class="link-options" id="networkModeOptions">
+                                <button class="chip active" type="button" data-net="any" onclick="setNetworkMode('any', this)">Payer chooses</button>
+                                <button class="chip" type="button" data-net="polygon" onclick="setNetworkMode('polygon', this)">Polygon only</button>
+                                <button class="chip" type="button" data-net="solana" onclick="setNetworkMode('solana', this)">Solana only</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="link-preview-meta" id="linkSummary">Open amount · either network</div>
+                        <div class="payment-link">
+                            <div class="payment-link-text" id="generatedLink">—</div>
+                            <button class="btn-copy" type="button" onclick="copyGeneratedLink()">Copy generated link</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                        <div class="card">
+                <h2>Generate thank-you / webhook URL</h2>
+                <p class="hint" style="margin-bottom:16px;">Use this as your merchant Webhook URL. After a successful payment, payers land on the NoWalletConnect thank-you page with your message. Checkout will add amount, network, and transaction hash automatically.</p>
+                <div class="link-builder">
+                    <div class="link-field">
+                        <label>Thank-you message</label>
+                        <input type="text" id="returnMessage" maxlength="280" placeholder="Thank you. Your USDT payment went through." oninput="updateReturnLink()">
+                    </div>
+                    <div>
+                        <div class="link-preview-meta" id="returnSummary">Uses the default thank-you text if you leave the message empty.</div>
+                        <div class="payment-link">
+                            <div class="payment-link-text" id="generatedReturnLink">—</div>
+                            <button class="btn-copy" type="button" onclick="copyReturnLink()">Copy webhook URL</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card">
                 <h2>Wallets on file</h2>
                 <p class="hint" id="walletPolygon">Polygon: —</p>
@@ -950,6 +1006,7 @@
     <script src="config.js"></script>
     <script>
         const CHECKOUT_URL = "https://niti.com.ng/tools/nowalletconnect/checkout.html";
+        const RETURN_URL = "https://niti.com.ng/tools/nowalletconnect/return.html";
         const SESSION_KEY = "nwc_session";
         const SETUP = {
             merchant: "NITI",
@@ -973,6 +1030,8 @@
         let currentMerchant = null;
         let allPayments = [];
         let payFilter = "all";
+        let linkAmountMode = "open";
+        let linkNetworkMode = "any";
 
         const USED_SETUP_TX_KEY = "nwc_setup_used_txs";
 
@@ -1333,12 +1392,104 @@ async function handleRegister() {
             setText("checkoutLink", CHECKOUT_URL + "?merchant=" + encodeURIComponent(user.id));
             setText("walletPolygon", "Polygon: " + (user.polygonWallet || "—"));
             setText("walletSolana", "Solana: " + (user.solanaWallet || "—"));
+            updateGeneratedLink();
+            updateReturnLink();
+            switchPage("dashboard");
             switchPage("dashboard");
         }
 
         function copyCheckoutLink() {
             const text = document.getElementById("checkoutLink").textContent;
             navigator.clipboard.writeText(text).then(() => showToast("Link copied"));
+        }
+
+                function setAmountMode(mode, btn) {
+            linkAmountMode = mode;
+            document.querySelectorAll("#amountModeOptions .chip").forEach(c => c.classList.remove("active"));
+            if (btn) btn.classList.add("active");
+            const input = document.getElementById("linkAmount");
+            if (input) input.style.display = mode === "fixed" ? "block" : "none";
+            updateGeneratedLink();
+        }
+
+        function setNetworkMode(mode, btn) {
+            linkNetworkMode = mode;
+            document.querySelectorAll("#networkModeOptions .chip").forEach(c => c.classList.remove("active"));
+            if (btn) btn.classList.add("active");
+            updateGeneratedLink();
+        }
+
+        function buildPaymentLink() {
+            if (!currentMerchant) return "";
+            const params = new URLSearchParams();
+            params.set("merchant", currentMerchant.id);
+            if (linkAmountMode === "fixed") {
+                const amount = parseFloat((document.getElementById("linkAmount") || {}).value);
+                if (!Number.isNaN(amount) && amount > 0) {
+                    params.set("amount", amount.toFixed(2));
+                }
+            }
+            if (linkNetworkMode === "polygon" || linkNetworkMode === "solana") {
+                params.set("network", linkNetworkMode);
+            }
+            return CHECKOUT_URL + "?" + params.toString();
+        }
+
+        function updateGeneratedLink() {
+            const linkEl = document.getElementById("generatedLink");
+            const summaryEl = document.getElementById("linkSummary");
+            if (!linkEl || !summaryEl) return;
+
+            if (!currentMerchant) {
+                linkEl.textContent = "—";
+                summaryEl.textContent = "Sign in to generate a link.";
+                return;
+            }
+
+            const amount = parseFloat((document.getElementById("linkAmount") || {}).value);
+            const amountOk = linkAmountMode !== "fixed" || (!Number.isNaN(amount) && amount > 0);
+            const amountLabel = linkAmountMode === "fixed"
+                ? (amountOk ? amount.toFixed(2) + " USDT locked" : "enter a fixed amount")
+                : "payer chooses amount";
+            const networkLabel = linkNetworkMode === "polygon"
+                ? "Polygon locked"
+                : linkNetworkMode === "solana"
+                    ? "Solana locked"
+                    : "payer chooses network";
+
+            summaryEl.textContent = amountLabel + " · " + networkLabel;
+            linkEl.textContent = amountOk ? buildPaymentLink() : "Enter a valid amount to finish this link.";
+        }
+
+        function copyGeneratedLink() {
+            const text = (document.getElementById("generatedLink") || {}).textContent || "";
+            if (!text || text === "—" || text.indexOf("http") !== 0) {
+                showToast("Finish the link first");
+                return;
+            }
+            navigator.clipboard.writeText(text).then(() => showToast("Donation link copied"));
+        }
+
+                function buildReturnLink() {
+            const message = String((document.getElementById("returnMessage") || {}).value || "").replace(/\s+/g, " ").trim();
+            if (!message) return RETURN_URL;
+            return RETURN_URL + "?message=" + encodeURIComponent(message);
+        }
+
+        function updateReturnLink() {
+            const linkEl = document.getElementById("generatedReturnLink");
+            const summaryEl = document.getElementById("returnSummary");
+            if (!linkEl || !summaryEl) return;
+            const message = String((document.getElementById("returnMessage") || {}).value || "").replace(/\s+/g, " ").trim();
+            summaryEl.textContent = message
+                ? "Payers will see: " + (message.length > 90 ? message.slice(0, 90) + "…" : message)
+                : "Uses the default thank-you text if you leave the message empty.";
+            linkEl.textContent = buildReturnLink();
+        }
+
+        function copyReturnLink() {
+            const text = buildReturnLink();
+            navigator.clipboard.writeText(text).then(() => showToast("Webhook URL copied"));
         }
 
         async function loadPayments() {
