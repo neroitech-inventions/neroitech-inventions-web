@@ -907,16 +907,26 @@
                 </div>
             </div>
 
-                        <div class="card">
+                <div class="card">
                 <h2>Generate thank-you / webhook URL</h2>
-                <p class="hint" style="margin-bottom:16px;">Use this as your merchant Webhook URL. After a successful payment, payers land on the NoWalletConnect thank-you page with your message. Checkout will add amount, network, and transaction hash automatically.</p>
+                <p class="hint" style="margin-bottom:16px;">Use this as your merchant Webhook URL. After payment, payers land on the NoWalletConnect thank-you page. You can set the message, where the button goes, and the button label.</p>
                 <div class="link-builder">
                     <div class="link-field">
                         <label>Thank-you message</label>
                         <input type="text" id="returnMessage" maxlength="280" placeholder="Thank you. Your USDT payment went through." oninput="updateReturnLink()">
                     </div>
+                    <div class="link-row">
+                        <div class="link-field">
+                            <label>Button URL</label>
+                            <input type="url" id="returnRedirect" placeholder="https://yoursite.com" oninput="updateReturnLink()">
+                        </div>
+                        <div class="link-field">
+                            <label>Button label</label>
+                            <input type="text" id="returnLabel" maxlength="48" placeholder="Continue" oninput="updateReturnLink()">
+                        </div>
+                    </div>
                     <div>
-                        <div class="link-preview-meta" id="returnSummary">Uses the default thank-you text if you leave the message empty.</div>
+                        <div class="link-preview-meta" id="returnSummary">Uses the default thank-you text and NoWalletConnect button if you leave these empty.</div>
                         <div class="payment-link">
                             <div class="payment-link-text" id="generatedReturnLink">—</div>
                             <button class="btn-copy" type="button" onclick="copyReturnLink()">Copy webhook URL</button>
@@ -1470,26 +1480,61 @@ async function handleRegister() {
             navigator.clipboard.writeText(text).then(() => showToast("Donation link copied"));
         }
 
-                function buildReturnLink() {
+        function safeReturnHttpUrl(value) {
+            const raw = String(value || "").trim();
+            if (!raw) return "";
+            try {
+                const url = new URL(raw);
+                if (url.protocol !== "http:" && url.protocol !== "https:") return "";
+                return url.toString();
+            } catch {
+                return "";
+            }
+        }
+
+        function buildReturnLink() {
+            const params = new URLSearchParams();
             const message = String((document.getElementById("returnMessage") || {}).value || "").replace(/\s+/g, " ").trim();
-            if (!message) return RETURN_URL;
-            return RETURN_URL + "?message=" + encodeURIComponent(message);
+            const redirect = safeReturnHttpUrl((document.getElementById("returnRedirect") || {}).value);
+            const label = String((document.getElementById("returnLabel") || {}).value || "").replace(/\s+/g, " ").trim();
+
+            if (message) params.set("message", message);
+            if (redirect) params.set("redirect", redirect);
+            if (label) params.set("label", label);
+
+            const query = params.toString();
+            return query ? RETURN_URL + "?" + query : RETURN_URL;
         }
 
         function updateReturnLink() {
             const linkEl = document.getElementById("generatedReturnLink");
             const summaryEl = document.getElementById("returnSummary");
             if (!linkEl || !summaryEl) return;
+
             const message = String((document.getElementById("returnMessage") || {}).value || "").replace(/\s+/g, " ").trim();
-            summaryEl.textContent = message
-                ? "Payers will see: " + (message.length > 90 ? message.slice(0, 90) + "…" : message)
-                : "Uses the default thank-you text if you leave the message empty.";
+            const redirectRaw = String((document.getElementById("returnRedirect") || {}).value || "").trim();
+            const redirect = safeReturnHttpUrl(redirectRaw);
+            const label = String((document.getElementById("returnLabel") || {}).value || "").replace(/\s+/g, " ").trim();
+
+            const bits = [];
+            bits.push(message
+                ? "Message: " + (message.length > 70 ? message.slice(0, 70) + "…" : message)
+                : "Default thank-you text");
+            if (redirectRaw && !redirect) bits.push("Button URL must start with http:// or https://");
+            else bits.push(redirect ? "Button goes to " + redirect : "Button goes to NoWalletConnect");
+            if (label) bits.push("Label: " + label);
+
+            summaryEl.textContent = bits.join(" · ");
             linkEl.textContent = buildReturnLink();
         }
 
         function copyReturnLink() {
-            const text = buildReturnLink();
-            navigator.clipboard.writeText(text).then(() => showToast("Webhook URL copied"));
+            const redirectRaw = String((document.getElementById("returnRedirect") || {}).value || "").trim();
+            if (redirectRaw && !safeReturnHttpUrl(redirectRaw)) {
+                showToast("Button URL must be http or https");
+                return;
+            }
+            navigator.clipboard.writeText(buildReturnLink()).then(() => showToast("Webhook URL copied"));
         }
 
         async function loadPayments() {

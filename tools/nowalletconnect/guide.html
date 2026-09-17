@@ -461,8 +461,9 @@
                 <div class="step-desc">
                     Create your account on the
                     <a href="merchant.html">merchant page</a>.
-                    New merchants pay a <span class="highlight">$0.25</span> setup fee there, then save wallets and a return URL
-                    such as <code class="inline-code">https://yoursite.com/order-complete</code>.
+                    New merchants pay a <span class="highlight">$0.25</span> setup fee there, then save wallets and a Webhook URL.
+                    Use your own page, such as <code class="inline-code">https://yoursite.com/order-complete</code>,
+                    or generate a hosted thank-you URL in step 4.
                 </div>
             </div>
 
@@ -574,6 +575,54 @@ if (q.get("status") === "success" && q.get("merchant") === "MERCHANT_ID") {
   // mark the order paid / show thank you
 }</pre>
                 </div>
+
+                <div class="step-desc" style="margin-top:18px;">
+                    <strong>No site of your own?</strong> Use the hosted NoWalletConnect return page as your Webhook URL.
+                    It shows a thank-you screen. You can set the message, the button destination, and the button label in the URL.
+                    After payment, checkout still appends <span class="highlight">status</span>, <span class="highlight">amount</span>,
+                    <span class="highlight">tx_hash</span>, <span class="highlight">merchant</span>, <span class="highlight">network</span>
+                    and <span class="highlight">payment_id</span>.
+                </div>
+                <div class="table-wrap">
+                    <table class="param">
+                        <thead>
+                            <tr><th>Param</th><th>Required</th><th>Meaning</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td data-label="Param">message</td><td data-label="Required">No</td><td data-label="Meaning">Custom thank-you text. If missing, the page uses its default copy.</td></tr>
+                            <tr><td data-label="Param">redirect</td><td data-label="Required">No</td><td data-label="Meaning">Where the button goes. Must be http or https. If missing, the button goes to NoWalletConnect.</td></tr>
+                            <tr><td data-label="Param">label</td><td data-label="Required">No</td><td data-label="Meaning">Button text. If missing and redirect is set, the button says Continue.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="step-desc" style="margin-top:14px;">
+                    Example:<br>
+                    <code class="inline-code">https://niti.com.ng/tools/nowalletconnect/return.html?message=Thank+you.+Your+USDT+payment+went+through.&amp;redirect=https://yoursite.com&amp;label=Back+to+shop</code>
+                </div>
+
+                <div class="step-desc" style="margin-top:18px;">
+                    <strong>Generate a webhook URL</strong><br>
+                    Fill what you need, copy the link, and save it as your merchant Webhook URL. You can also do this from the merchant dashboard.
+                </div>
+                <p class="step-desc" style="margin-top:12px;">Thank-you message</p>
+                <input class="ai-amount" id="retMessage" type="text" maxlength="280" placeholder="Thank you. Your USDT payment went through." oninput="renderReturnUrl()">
+                <p class="step-desc" style="margin-top:12px;">Button URL (optional)</p>
+                <input class="ai-amount" id="retRedirect" type="url" placeholder="https://yoursite.com" oninput="renderReturnUrl()">
+                <p class="step-desc" style="margin-top:12px;">Button label (optional)</p>
+                <input class="ai-amount" id="retLabel" type="text" maxlength="48" placeholder="Continue" oninput="renderReturnUrl()">
+                <p class="step-desc" id="retHint" style="margin-top:10px;"></p>
+                <div class="code-block">
+                    <button class="copy-btn" type="button" onclick="copyFrom(this)" aria-label="Copy code" title="Copy">
+                        <svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" hidden>
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </button>
+                    <pre id="retUrl">https://niti.com.ng/tools/nowalletconnect/return.html</pre>
+                </div>
             </div>
 
             <div class="step">
@@ -594,6 +643,7 @@ if (q.get("status") === "success" && q.get("merchant") === "MERCHANT_ID") {
                     • Lock price, network, or both from the payment URL<br>
                     • Let the customer fill any value you do not lock<br>
                     • Return URL with status, amount, and tx hash<br>
+                    • Hosted thank-you page you can use as the webhook URL<br>
                     • Instant payment verification<br>
                     • Direct deposits to your wallet<br>
                     • Payment history in the merchant dashboard<br>
@@ -632,7 +682,19 @@ if (q.get("status") === "success" && q.get("merchant") === "MERCHANT_ID") {
                     <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </div>
                 <div class="faq-answer">
-                    From the Webhook URL saved on your merchant row. It is not passed in the payment link. Use a real page on your site.
+                    From the Webhook URL saved on your merchant row. It is not passed in the payment link.
+                    Use a page on your site, or generate a hosted return.html URL in step 4 / the merchant dashboard.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How do I use the NoWalletConnect thank-you page?
+                    <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="faq-answer">
+                    Generate a return.html URL in step 4 or in the merchant dashboard. Optional params are message, redirect, and label.
+                    Save that full URL as your Webhook URL. After payment, payers see your message and a button to your site if you set redirect.
                 </div>
             </div>
 
@@ -652,7 +714,7 @@ if (q.get("status") === "success" && q.get("merchant") === "MERCHANT_ID") {
                     <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </div>
                 <div class="faq-answer">
-                    The Pay button is copy-paste. Reading the success return needs a few lines of JavaScript on your thank-you page.
+                    The Pay button is copy-paste. If you use the hosted return page as your webhook URL, you do not need to code a thank-you page.
                 </div>
             </div>
 
@@ -783,7 +845,10 @@ My merchant webhook URL (set in the NoWalletConnect dashboard) receives the buye
 
 ?status=success&amount=...&tx_hash=...&merchant=${id}&network=polygon|solana&payment_id=pay_...
 
-On my thank-you / order page, read it like this:
+If I do not have my own thank-you page, use the hosted return page as the webhook URL:
+https://niti.com.ng/tools/nowalletconnect/return.html?message=Thank+you.+Your+USDT+payment+went+through.&redirect=https://yoursite.com&label=Continue
+
+On my own thank-you / order page, read it like this:
 
 const q = new URLSearchParams(location.search);
 if (q.get("status") === "success" && q.get("merchant") === "${id}") {
@@ -801,6 +866,38 @@ WHAT YOU SHOULD BUILD
 5. Customer must send USDT only on the selected network.`;
         }
 
+        function safeGuideHttpUrl(value) {
+            const raw = String(value || "").trim();
+            if (!raw) return "";
+            try {
+                const url = new URL(raw);
+                if (url.protocol !== "http:" && url.protocol !== "https:") return "";
+                return url.toString();
+            } catch {
+                return "";
+            }
+        }
+
+        function renderReturnUrl() {
+            const base = "https://niti.com.ng/tools/nowalletconnect/return.html";
+            const message = String((document.getElementById("retMessage") || {}).value || "").replace(/\s+/g, " ").trim();
+            const redirectRaw = String((document.getElementById("retRedirect") || {}).value || "").trim();
+            const redirect = safeGuideHttpUrl(redirectRaw);
+            const label = String((document.getElementById("retLabel") || {}).value || "").replace(/\s+/g, " ").trim();
+            const hint = document.getElementById("retHint");
+            const out = document.getElementById("retUrl");
+            const params = new URLSearchParams();
+            if (message) params.set("message", message);
+            if (redirect) params.set("redirect", redirect);
+            if (label) params.set("label", label);
+            if (hint) {
+                hint.textContent = redirectRaw && !redirect
+                    ? "Button URL must start with http:// or https://. It was left out of the generated link."
+                    : "Save this URL as your merchant Webhook URL.";
+            }
+            if (out) out.textContent = params.toString() ? base + "?" + params.toString() : base;
+        }
+
         function toggleFaq(element) {
             element.classList.toggle("open");
         }
@@ -815,6 +912,7 @@ WHAT YOU SHOULD BUILD
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
         renderAiBrief();
+        renderReturnUrl();
     </script>
 </body>
 </html>

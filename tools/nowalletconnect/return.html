@@ -195,7 +195,7 @@
             <h1 id="headline">Thank you</h1>
             <p class="message" id="message">Your payment was received.</p>
             <div class="facts hidden" id="facts"></div>
-            <a class="home" href="https://niti.com.ng/tools/nowalletconnect/">Back to NoWalletConnect</a>
+                        <a class="home" id="homeBtn" href="https://niti.com.ng/tools/nowalletconnect/">Back to NoWalletConnect</a>
         </div>
         <div class="powered">
             <a href="https://niti.com.ng/tools/nowalletconnect/" target="_blank" rel="noopener">Powered by NoWalletConnect</a>
@@ -205,6 +205,9 @@
         const DEFAULT_OK = "Your USDT payment was received.";
         const DEFAULT_WAIT = "You can close this page whenever you’re ready.";
         const DEFAULT_FAIL = "This payment could not be confirmed.";
+
+        const DEFAULT_HOME = "https://niti.com.ng/tools/nowalletconnect/";
+        const DEFAULT_LABEL = "Back to NoWalletConnect";
 
         const q = new URLSearchParams(location.search);
 
@@ -221,6 +224,18 @@
             return clean.length > max ? clean.slice(0, max) + "…" : clean;
         }
 
+                function safeHttpUrl(value) {
+            const raw = String(value || "").trim();
+            if (!raw) return "";
+            try {
+                const url = new URL(raw);
+                if (url.protocol !== "http:" && url.protocol !== "https:") return "";
+                return url.toString();
+            } catch {
+                return "";
+            }
+        }
+
         const status = first(["status"]).toLowerCase();
         const custom = safeText(first(["message", "msg", "text", "note"]), 280);
         const amount = first(["amount"]);
@@ -228,11 +243,17 @@
         const network = first(["network"]).toLowerCase();
         const tx = first(["tx_hash", "tx", "hash"]);
         const paymentId = first(["payment_id"]);
+        const buttonUrl = safeHttpUrl(first(["redirect", "next", "url", "button", "home", "href"]));
+        const buttonLabel = safeText(first(["label", "btn", "button_text"]), 48);
         const success = status === "success" || status === "paid" || status === "complete" || status === "";
 
         document.getElementById("kicker").textContent = success ? "Payment received" : "Payment update";
         document.getElementById("headline").textContent = success ? "Thank you" : "Not confirmed";
         document.getElementById("message").textContent = custom || (success ? DEFAULT_OK : DEFAULT_FAIL);
+
+        const homeBtn = document.getElementById("homeBtn");
+        homeBtn.href = buttonUrl || DEFAULT_HOME;
+        homeBtn.textContent = buttonLabel || (buttonUrl ? "Continue" : DEFAULT_LABEL); 
 
         if (!success) {
             document.getElementById("statusMark").classList.add("fail");
