@@ -1158,7 +1158,7 @@ function normCode(s){
 async function fetchColumnE(){
   const url = 'https://sheets.googleapis.com/v4/spreadsheets/' +
     SHEETS.PENDING_ID +
-    '/values/' + encodeURIComponent('Form responses 3!E:E') +
+    '/values/' + encodeURIComponent('Pending Quest!E:E') +
     '?key=' + SHEETS.API_KEY;
   const res = await fetch(url);
   if(!res.ok) throw new Error('HTTP ' + res.status);

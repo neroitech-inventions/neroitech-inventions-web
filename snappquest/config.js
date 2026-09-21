@@ -5,7 +5,7 @@ const SHEETS = {
   QUESTS_RANGE: 'Quests!A1:I1000',
 
   PENDING_ID: '1o_kkpaYmp56mq_May0bBdbmdXK669DGOYY3YHZpdh7E',
-  PENDING_RANGE: 'Form responses 3!A1:L8000',
+  PENDING_RANGE: 'Pending Quest!A1:L8000',
 
   LISTED_ID: '1wY8FlSvSsYPCGo2qYsl20w4kcPqx9Z4CqzA2MeQozGo',
   LISTED_RANGE: 'Quests!A1:G1000',
