@@ -226,7 +226,7 @@ body.modal-open .bottom-nav {
           <button class="cat active" data-cat="all">✨ All</button>
           <button class="cat" data-cat="Engagement">💬 Engagement</button>
           <button class="cat" data-cat="Feedback">📝 Feedback</button>
-          <button class="cat" data-cat="Bounty">🎁 Bounty</button>
+          <button class="cat" data-cat="Bounty">🪙 Bounty</button>
           <button class="cat" data-cat="Crypto">💰 Crypto</button>
           <button class="cat" data-cat="AI">🤖 AI</button>
           <button class="cat" data-cat="Social">📱 Social</button>
@@ -281,15 +281,15 @@ body.modal-open .bottom-nav {
     <a class="btn btn-grad btn-full" href="https://t.me/SnappQuest/21191" target="_blank" rel="noopener">
       <i class="fab fa-telegram"></i> Open Giftcard Market
     </a>
-    <button class="btn btn-ghost btn-full" style="margin-top:8px;" onclick="openLaunch(true)">
-      <i class="fas fa-ticket"></i> Redeem a gift card
-    </button>
+<a class="btn btn-ghost btn-full" style="margin-top:8px;" href="https://t.me/SnappQuest/34/21110" target="_blank" rel="noopener">
+  <i class="fas fa-circle-info"></i> How to use a giftcard
+</a>
   </div>
 </div>
 
 <div id="view-bounties" style="display:none;padding-top:18px;">
   <div class="section-head">
-    <div class="section-title"><i class="fas fa-gift" style="color:var(--green);margin-right:6px;"></i> Bounties</div>
+<div class="section-title"><i class="fas fa-coins" style="color:var(--green);margin-right:6px;"></i> Bounties</div>
     <button class="btn btn-ghost btn-sm" onclick="loadBounties()"><i class="fas fa-sync"></i></button>
   </div>
   <p style="font-size:0.76rem;color:var(--muted);margin-bottom:12px;">Complete these bounties to earn rewards.</p>
@@ -405,7 +405,7 @@ body.modal-open .bottom-nav {
     <button class="bn-item" data-view="pending" onclick="showView('pending')"><i class="fas fa-hourglass-half"></i> Pending</button>
     <button class="bn-fab" onclick="openLaunch()"><i class="fas fa-plus"></i></button>
     <button class="bn-item" data-view="giftcard" onclick="showView('giftcard')"><i class="fas fa-gift"></i> Giftcard</button>
-    <button class="bn-item" data-view="bounties" onclick="showView('bounties')"><i class="fas fa-gift"></i> Bounties</button>
+    <button class="bn-item" data-view="bounties" onclick="showView('bounties')"><i class="fas fa-coins"></i> Bounties</button>
   </nav>
   <div class="toast" id="toast"></div>
 
@@ -485,7 +485,7 @@ function classifyQuest(title, description) {
 }
 
 const CAT_EMOJI = {
-  Engagement: '💬', Feedback: '📝', Bounty: '🎁',
+  Engagement: '💬', Feedback: '📝', Bounty: '🪙',
   AI: '🤖', Crypto: '💰', NFT: '🖼', Games: '🎮', YouTube: '📺',
   Telegram: '✈️', Social: '📱', Apps: '📲', Websites: '🌐',
   Communities: '👥', Other: '🔹'
@@ -781,7 +781,7 @@ const isExpired = expiryDate && expiryDate < new Date();
     status: status === 2 ? 'bounty' : 'other',
     featured: false,
     cat,
-    emoji: '🎁',
+    emoji: '🪙',
     expiry: expiryRaw,
     isExpired
   };
@@ -828,7 +828,7 @@ function renderBounties(){
   const list = getFilteredBounties();
 
   if(!list.length){
-    el.innerHTML = '<div class="empty"><i class="fas fa-gift"></i>No bounties available right now.</div>';
+el.innerHTML = '<div class="empty"><i class="fas fa-coins"></i>No bounties available right now.</div>';
     if(pager) pager.style.display = 'none';
     return;
   }
@@ -864,14 +864,14 @@ function cardHTML(q, mode){
   const feat = q.featured ? 'featured' : '';
   const badge = q.featured ? '<span class="badge-feat"><i class="fas fa-star"></i> Featured</span>' : '';
   const pend = mode === 'pending' ? '<span class="badge-pend">Pending</span>' : '';
-  const bountyBadge = mode === 'bounty' ? '<span class="badge-feat" style="background:linear-gradient(135deg,#34d399,#22d3ee);"><i class="fas fa-gift"></i> Bounty</span>' : '';
+  const bountyBadge = mode === 'bounty' ? '<span class="badge-feat" style="background:linear-gradient(135deg,#34d399,#22d3ee);"><i class="fas fa-coins"></i> Bounty</span>' : '';
 
   let actions;
   if (mode === 'pending') {
     actions = `<button class="btn btn-ghost btn-sm" onclick="copyTrack('${esc(q.trackCode)}')"><i class="fas fa-copy"></i> Copy track</button>`
       + `<a class="btn btn-ghost btn-sm" href="${PAY.telegramPending}" target="_blank"><i class="fab fa-telegram"></i> Contact admin</a>`;
   } else if (mode === 'bounty') {
-    actions = `<button class="btn btn-grad btn-sm" onclick="openLink('${esc(q.link)}')"><i class="fas fa-gift"></i> View Bounty</button>`
+  actions = `<button class="btn btn-grad btn-sm" onclick="openLink('${esc(q.link)}')"><i class="fas fa-coins"></i> View Bounty</button>`
       + `<button class="btn btn-ghost btn-sm" onclick="copyTrack('${esc(q.trackCode)}')"><i class="fas fa-copy"></i> Copy track</button>`;
 } else {
   actions = `<button class="btn btn-grad btn-sm" onclick="openLink('${esc(q.link)}')"><i class="fas fa-eye"></i> View</button>`
