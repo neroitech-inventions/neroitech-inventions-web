@@ -261,24 +261,29 @@ body.modal-open .bottom-nav {
       <div class="quest-grid" id="pendingFeed"><div class="loading"><span class="spinner"></span> Loading pending…</div></div>
     </div>
 
-   <div id="view-boost" style="display:none;padding-top:22px;">
+   <div id="view-giftcard" style="display:none;padding-top:22px;">
   <div style="text-align:center;margin-bottom:16px;">
-    <div class="hero-badge"><i class="fas fa-star"></i> Boost</div>
-    <h2 style="font-size:1.35rem;font-weight:800;margin:10px 0 6px;">Boost your Quest</h2>
-    <p style="color:var(--muted);font-size:0.86rem;">Don't just post it, put it in front of people.</p>
+    <div class="hero-badge"><i class="fas fa-gift"></i> Gift cards</div>
+    <h2 style="font-size:1.35rem;font-weight:800;margin:10px 0 6px;">SnappQuest Giftcard</h2>
+    <p style="color:var(--muted);font-size:0.86rem;">Buy or sell gift cards peer-to-peer on Telegram.</p>
   </div>
   <div class="boost-banner" style="text-align:left;">
-    <div class="boost-price" style="text-align:center;">$0.50 USDT</div>
+    <div class="boost-price" style="text-align:center;">P2P Market</div>
     <p style="font-size:0.84rem;color:var(--muted);text-align:center;margin-bottom:12px;">
-      One small payment. More eyes on your X post.
+      Trade SnappQuest gift cards with the community. Use a code here to boost a quest.
     </p>
     <ul style="list-style:none;font-size:0.84rem;color:var(--muted);margin:0 0 16px;">
-      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Featured on the homepage feed</li>
-      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Higher visibility than free posts</li>
-      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> More clicks, views & engagement</li>
-      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Auto-verified on Polygon or Solana</li>
+      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Buy a gift card from other members</li>
+      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Sell unused or earned cards</li>
+      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Redeem a code when you launch a boost</li>
+      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Deals happen in Telegram, not on-site</li>
     </ul>
-    <button class="btn btn-grad btn-full" onclick="openLaunch(true)"><i class="fas fa-bolt"></i> Boost for $0.50</button>
+    <a class="btn btn-grad btn-full" href="https://t.me/SnappQuest/21191" target="_blank" rel="noopener">
+      <i class="fab fa-telegram"></i> Open Giftcard Market
+    </a>
+    <button class="btn btn-ghost btn-full" style="margin-top:8px;" onclick="openLaunch(true)">
+      <i class="fas fa-ticket"></i> Redeem a gift card
+    </button>
   </div>
 </div>
 
@@ -399,7 +404,7 @@ body.modal-open .bottom-nav {
     <button class="bn-item active" data-view="discover" onclick="showView('discover')"><i class="fas fa-home"></i> Discover</button>
     <button class="bn-item" data-view="pending" onclick="showView('pending')"><i class="fas fa-hourglass-half"></i> Pending</button>
     <button class="bn-fab" onclick="openLaunch()"><i class="fas fa-plus"></i></button>
-    <button class="bn-item" data-view="boost" onclick="showView('boost')"><i class="fas fa-star"></i> Boost</button>
+    <button class="bn-item" data-view="giftcard" onclick="showView('giftcard')"><i class="fas fa-gift"></i> Giftcard</button>
     <button class="bn-item" data-view="bounties" onclick="showView('bounties')"><i class="fas fa-gift"></i> Bounties</button>
   </nav>
   <div class="toast" id="toast"></div>
@@ -932,7 +937,7 @@ function shareQ(title,code){
 }
 
 function showView(name){
-  ['discover','pending','boost','bounties'].forEach(v=>{
+  ['discover','pending','giftcard','bounties'].forEach(v=>{
     const el=$('view-'+v);
     if(el) el.style.display = v===name ? 'block' : 'none';
   });
