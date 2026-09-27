@@ -285,6 +285,18 @@ body.modal-open .bottom-nav {
   <i class="fas fa-circle-info"></i> How to use a giftcard
 </a>
   </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:14px;">
+    <div style="font-weight:700;margin-bottom:4px;">Validate a gift card</div>
+    <p style="font-size:0.76rem;color:var(--muted);margin-bottom:12px;">Check whether a code is real and still unused. Redeem happens when you boost a quest.</p>
+    <div class="field" style="margin-bottom:8px;">
+      <label>Enter Gift card code</label>
+      <input type="text" id="giftCheckCode" placeholder="Enter gift card" spellcheck="false" autocomplete="off">
+    </div>
+    <button class="btn btn-grad btn-full" id="giftCheckBtn" type="button" onclick="checkGiftCardStatus()">
+      Validate gift card
+    </button>
+    <div id="giftCheckResult" style="display:none;margin-top:12px;font-size:0.8rem;border-radius:11px;padding:10px 12px;line-height:1.45;"></div>
+  </div>
 </div>
 
 <div id="view-bounties" style="display:none;padding-top:18px;">
@@ -1182,6 +1194,54 @@ async function isValidGiftCard(code){
 async function isGiftCardUsed(code){
   const colE = await fetchColumnE();
   return colE.includes(normCode(code));
+}
+
+function showGiftCheck(html, kind){
+  const el = $('giftCheckResult');
+  if(!el) return;
+  const colors = {
+    ok: 'background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.28);color:var(--green);',
+    err: 'background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.28);color:var(--red);',
+    warn: 'background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.28);color:var(--yellow);',
+    info: 'background:var(--surface2);border:1px solid var(--border);color:var(--muted);'
+  };
+  el.style.cssText = 'display:block;margin-top:12px;font-size:0.8rem;border-radius:11px;padding:10px 12px;line-height:1.45;' + (colors[kind] || colors.info);
+  el.innerHTML = html;
+}
+
+async function checkGiftCardStatus(){
+  const input = $('giftCheckCode');
+  const btn = $('giftCheckBtn');
+  const code = (input && input.value || '').trim();
+  if(!code){
+    showGiftCheck('Enter a gift card code first.', 'warn');
+    toast('Enter a gift card code');
+    return;
+  }
+  if(btn) btn.disabled = true;
+  showGiftCheck('<span class="spinner"></span> Verifying…', 'info');
+  try{
+    const valid = await isValidGiftCard(code);
+    if(!valid){
+      showGiftCheck('<i class="fas fa-circle-xmark"></i> This code is not valid.', 'err');
+      toast('Invalid gift card');
+      return;
+    }
+    const used = await isGiftCardUsed(code);
+    if(used){
+      showGiftCheck('<i class="fas fa-ban"></i> Valid code, but it has already been used.', 'warn');
+      toast('This card has already been used');
+      return;
+    }
+    showGiftCheck('<i class="fas fa-circle-check"></i> This gift card is valid and available to redeem.', 'ok');
+    toast('Gift card is valid');
+  }catch(e){
+    console.error(e);
+    showGiftCheck('Could not check this code. Try again.', 'err');
+    toast('Gift card check failed');
+  }finally{
+    if(btn) btn.disabled = false;
+  }
 }
 
 async function submitGiftCardUsed(code, d){
