@@ -948,14 +948,37 @@ function shareQ(title,code){
   else navigator.clipboard.writeText(text+' '+location.href).then(()=>toast('Copied'));
 }
 
+const TAB_VIEWS = ['discover','pending','giftcard','bounties'];
+let applyingViewFromUrl = false;
+
+function currentTabFromUrl(){
+  const q = new URLSearchParams(location.search).get('view');
+  const hash = (location.hash || '').replace(/^#/, '').split('?')[0].toLowerCase();
+  const raw = (q || hash || '').toLowerCase();
+  return TAB_VIEWS.includes(raw) ? raw : '';
+}
+
+function setTabUrl(name){
+  if (applyingViewFromUrl) return;
+  const nextHash = '#' + name;
+  if (location.hash === nextHash) return;
+  if (history.replaceState) {
+    history.replaceState(null, '', location.pathname + location.search + nextHash);
+  } else {
+    location.hash = name;
+  }
+}
+
 function showView(name){
-  ['discover','pending','giftcard','bounties'].forEach(v=>{
+  if (!TAB_VIEWS.includes(name)) name = 'discover';
+  TAB_VIEWS.forEach(v=>{
     const el=$('view-'+v);
     if(el) el.style.display = v===name ? 'block' : 'none';
   });
   document.querySelectorAll('.bn-item').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
   if(name==='pending' && !pendingQuests.length) loadPending();
   if(name==='bounties') loadBounties();
+  setTabUrl(name);
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -1420,6 +1443,21 @@ document.getElementById('catBar').addEventListener('click', e => {
 
 captureNwcReturn();
 loadLiveQuests();
+
+(function bootTabFromUrl(){
+  const view = currentTabFromUrl();
+  if (view) {
+    applyingViewFromUrl = true;
+    showView(view);
+    applyingViewFromUrl = false;
+  }
+  window.addEventListener('hashchange', () => {
+    const next = currentTabFromUrl() || 'discover';
+    applyingViewFromUrl = true;
+    showView(next);
+    applyingViewFromUrl = false;
+  });
+})();
 </script>
 </body>
 </html>
