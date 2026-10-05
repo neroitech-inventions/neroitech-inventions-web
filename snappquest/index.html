@@ -16,7 +16,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SnappQuest - Every promotion is a quest</title>
   <link href="images/icon.png" rel="icon">
-  <meta name="description" content="Promote any project for free. Boost for $0.50 USDT. Discover startups, AI, crypto & communities.">
+  <meta name="description" content="Boost a quest for $0.50 USDT. Discover startups, AI, crypto & communities.">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -208,7 +208,7 @@ body.modal-open .bottom-nav {
       <section class="hero">
         <div class="hero-badge"><i class="fas fa-sparkles"></i> Discover & Promote</div>
         <h1>Every promotion<br>is a <em>quest</em>.</h1>
-        <p>Post your project free, or boost to get more eyes on your post.</p>
+        <p>Boost your project for $0.50 USDT and get more eyes on your post.</p>
         <div class="hero-cta">
           <button class="btn btn-grad" onclick="openLaunch()"><i class="fas fa-rocket"></i> Launch Quest</button>
           <button class="btn btn-ghost" onclick="document.getElementById('feed').scrollIntoView({behavior:'smooth'})"><i class="fas fa-compass"></i> Explore Quests</button>
@@ -320,7 +320,7 @@ body.modal-open .bottom-nav {
     <div class="modal">
       <div class="modal-handle"></div>
       <div class="modal-title" id="launchTitle">Launch a Quest</div>
-      <div class="modal-sub" id="launchSub">Free means you share your link manually in Telegram (100+ reach) for no charge or complete payment to Boost for $0.50 to reach thousands of users in 24 hours.</div>
+      <div class="modal-sub" id="launchSub">Pay $0.50 USDT to boost your quest and reach thousands of users in 24 hours.</div>
 
       <div id="launchForm">
         <div class="field"><label>Email</label><input type="email" id="qEmail" placeholder="you@email.com"></div>
@@ -334,7 +334,6 @@ body.modal-open .bottom-nav {
         <div class="field"><label>Telegram</label><input type="text" id="qTg" placeholder="@handle or t.me/…"></div>
         <div class="field"><label>Twitter / X</label><input type="text" id="qX" placeholder="@handle"></div>
         <div class="modal-actions">
-          <button class="btn btn-grad btn-full" onclick="launchFree()"><i class="fas fa-paper-plane"></i> Launch Free (Telegram)</button>
           <button class="btn btn-ghost btn-full" onclick="startLaunch(true)"><i class="fas fa-star"></i> Boost for $0.50 USDT</button>
           <button class="btn btn-ghost btn-full" style="color:var(--muted2);" onclick="closeLaunch()">Cancel</button>
         </div>
@@ -371,26 +370,6 @@ body.modal-open .bottom-nav {
       </div>
     </div>
   </div>
-
-<!-- FREE LAUNCH CONFIRM -->
-<div class="overlay center" id="freeConfirmOverlay">
-  <div class="modal">
-    <div class="modal-title" style="text-align:center;margin-bottom:6px;">Launch Free</div>
-    <div class="modal-sub" style="text-align:center;margin-bottom:20px;line-height:1.5;">
-      You'll be taken to Telegram to share your<br>
-      <strong style="color:var(--text);">Twitter / X post link</strong>.<br>
-      No form needed, just paste your link there.
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-grad btn-full" onclick="confirmFreeLaunch()">
-        <i class="fab fa-telegram"></i> Open Telegram
-      </button>
-      <button class="btn btn-ghost btn-full" style="color:var(--muted2);" onclick="closeFreeConfirm()">
-        Cancel
-      </button>
-    </div>
-  </div>
-</div>
 
 <!-- TX ALREADY USED CONFIRM -->
 <div class="overlay center" id="txUsedOverlay">
@@ -982,15 +961,13 @@ function showView(name){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function openLaunch(boost){
+function openLaunch(){
   document.body.classList.add('modal-open');
   $('launchOverlay').classList.add('show');
   $('launchForm').style.display='block';
   $('payStep').style.display='none';
-  $('launchTitle').textContent=boost?'Boost a Quest':'Launch a Quest';
-  $('launchSub').textContent=boost
-    ? 'Pay $0.50 USDT → then submit to pending.'
-    : 'Free means you share your link manually in Telegram (100+ reach) for no charge or complete payment to Boost for $0.50 to reach thousands of users in 24 hours.';
+  $('launchTitle').textContent='Boost a Quest';
+  $('launchSub').textContent='Pay $0.50 USDT to boost your quest and reach thousands of users in 24 hours.';
 }
 function clearLaunchForm(){
   ['qEmail','qName','qSponsor','qDesc','qWeb','qTg','qX','payWallet','giftCode'].forEach(id=>{
@@ -1014,14 +991,6 @@ function closeLaunch(){
 }
 function backToForm(){$('payStep').style.display='none';$('launchForm').style.display='block';}
 
-function launchFree(){
-  $('freeConfirmOverlay').classList.add('show');
-}
-
-function closeFreeConfirm(){
-  $('freeConfirmOverlay').classList.remove('show');
-}
-
 function openTxUsed(){
   $('txUsedOverlay').classList.add('show');
 }
@@ -1032,13 +1001,6 @@ function confirmTxSupport(){
   closeTxUsed();
   window.open('https://t.me/SnappQuest/42', '_blank');
   toast('Contact admin on Telegram');
-}
-
-function confirmFreeLaunch(){
-  closeFreeConfirm();
-  closeLaunch();
-  window.open('https://t.me/SnappQuest/3322', '_blank');
-  toast('Share your Twitter/X link in Telegram');
 }
 
 async function startLaunch(boost){
@@ -1068,18 +1030,9 @@ if(linkUsed){
   return;
 }
 
-draft={email,name,sponsor,desc,web,tg,x,boost,track:trackCode()};
-  if(!boost){
-    submitToGoogleForm(draft).then(()=>{
-      closeLaunch();
-      toast('Submitted · Track '+draft.track);
-      window.open(PAY.telegramPending,'_blank');
-      setTimeout(()=>{showView('pending');loadPending();},500);
-    }).catch(e=>toast('Submit error — try classic create.html'));
-    return;
-  }
-  $('launchForm').style.display='none';
-  $('payStep').style.display='block';
+draft={email,name,sponsor,desc,web,tg,x,boost:true,track:trackCode()};
+$('launchForm').style.display='none';
+$('payStep').style.display='block';
 }
 
 function nwcPayUrl() {
@@ -1422,10 +1375,6 @@ async function verifySolana(userWallet){
 }
 
 $('launchOverlay').addEventListener('click',e=>{if(e.target===$('launchOverlay'))closeLaunch();});
-
-$('freeConfirmOverlay').addEventListener('click', e => {
-  if (e.target === $('freeConfirmOverlay')) closeFreeConfirm();
-});
 
 $('txUsedOverlay').addEventListener('click', e => {
   if (e.target === $('txUsedOverlay')) closeTxUsed();
