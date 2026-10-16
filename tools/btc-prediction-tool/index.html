@@ -26,7 +26,9 @@
         <header>
             <h1>Bitcoin 24-Hour Market Prediction & Sentiment Analysis</h1>
             <p class="subtitle">Rule-based analysis combining Fear & Greed Index, technical indicators, and price action. Not financial advice.</p>
-            <div class="last-update" id="lastUpdate">Loading data...</div>
+<div class="last-update" id="lastUpdate">
+    <span class="loader"></span>
+    <span>Loading market data</span>
         </header>
 
         <section class="market-overview" id="marketOverview">
@@ -110,39 +112,56 @@
             </div>
         </section>
 
-        <section class="position-advisor">
+<section class="position-advisor">
     <div class="card">
         <h2>Position Advisor</h2>
-        <div class="toggle" style="margin-bottom: 1rem;">
+        <div class="toggle" style="margin-bottom: 1.25rem;">
             <input type="checkbox" id="advisorToggle">
             <label for="advisorToggle" style="margin:0; color: var(--text);">Enable Position Advisor</label>
         </div>
 
         <div id="advisorSection" class="hidden">
-            <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-                <div style="flex:1; min-width:140px;">
+            <div class="advisor-grid">
+                <div class="field">
                     <label>Position Type</label>
-                    <select id="positionType" style="width:100%; padding:0.6rem; border-radius:6px; background:#0d1117; color:#e6edf3; border:1px solid #30363d;">
+                    <select id="positionType">
                         <option value="long">LONG</option>
                         <option value="short">SHORT</option>
                     </select>
                 </div>
-                <div style="flex:1; min-width:140px;">
+                <div class="field">
+                    <label>Leverage</label>
+                    <input type="number" id="leverage" placeholder="40" value="1" min="1" step="1">
+                </div>
+                <div class="field">
                     <label>Entry Price ($)</label>
-                    <input type="number" id="entryPrice" placeholder="e.g. 82000" step="any" style="width:100%; padding:0.6rem; border-radius:6px; background:#0d1117; color:#e6edf3; border:1px solid #30363d;">
+                    <input type="number" id="entryPrice" placeholder="82000" step="any">
                 </div>
-                <div style="flex:1; min-width:140px;">
-                    <label>Position Size (USD)</label>
-                    <input type="number" id="positionSize" placeholder="e.g. 500" step="any" style="width:100%; padding:0.6rem; border-radius:6px; background:#0d1117; color:#e6edf3; border:1px solid #30363d;">
+                <div class="field">
+                    <label>Position Size (USDC)</label>
+                    <input type="number" id="positionSize" placeholder="82" step="any">
                 </div>
-                <div style="flex:1; min-width:140px;">
+                <div class="field">
+                    <label>Initial Margin (USDC)</label>
+                    <input type="number" id="margin" placeholder="Auto-calculated" step="any" readonly>
+                </div>
+                <div class="field">
+                    <label>Target Price ($)</label>
+                    <input type="number" id="targetPrice" placeholder="80000" step="any">
+                </div>
+                <div class="field">
                     <label>Liquidation Price ($)</label>
-                    <input type="number" id="liqPrice" placeholder="e.g. 78000" step="any" style="width:100%; padding:0.6rem; border-radius:6px; background:#0d1117; color:#e6edf3; border:1px solid #30363d;">
+                    <input type="number" id="liqPrice" placeholder="82810" step="any">
                 </div>
             </div>
-<button id="analyzePosition" style="margin-top:1rem;">Analyze Position</button>
-<button id="resetPosition" style="margin-top:1rem; margin-left:0.5rem; background:#6e7681;">Reset</button>
-            <div id="positionResult" style="margin-top:1.25rem;"></div>
+
+            <div class="advisor-actions">
+                <button id="analyzePosition">Analyze Position</button>
+                <button id="resetPosition" class="secondary">Reset</button>
+            </div>
+
+            <div id="positionResult"></div>
+            <div id="scenarioTable"></div>
         </div>
     </div>
 </section>

@@ -114,7 +114,21 @@ function estimateSupportResistance(prices) {
 
 async function loadData() {
     const lastUpdateEl = document.getElementById('lastUpdate');
-    lastUpdateEl.textContent = 'Fetching data...';
+    lastUpdateEl.innerHTML = '<span class="loader"></span><span>Loading market data</span>';
+    lastUpdateEl.classList.remove('done');
+
+    // Show skeletons
+    document.getElementById('btcPrice').innerHTML = '<span class="skeleton" style="width:140px; height:2rem;"></span>';
+    document.getElementById('btcChange').innerHTML = '<span class="skeleton" style="width:70px;"></span>';
+    document.getElementById('volume').innerHTML = '<span class="skeleton" style="width:80px;"></span>';
+    document.getElementById('fngValue').innerHTML = '<span class="skeleton" style="width:60px; height:2.5rem;"></span>';
+    document.getElementById('fngLabel').innerHTML = '<span class="skeleton" style="width:90px;"></span>';
+    document.getElementById('techIndicators').innerHTML = `
+        <div class="skeleton skeleton-block"></div>
+        <div class="skeleton skeleton-block"></div>
+        <div class="skeleton skeleton-block"></div>
+    `;
+    document.getElementById('signal').innerHTML = '<span class="skeleton" style="width:160px; height:2rem;"></span>';
 
     try {
         // Fear & Greed
@@ -205,12 +219,14 @@ async function loadData() {
         // Save forecast
         saveForecast(prediction, currentPrice);
 
-        lastUpdateEl.textContent = 'Last updated: ' + new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+lastUpdateEl.classList.add('done');
+lastUpdateEl.innerHTML = 'Last updated: ' + new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
 
-    } catch (err) {
-        console.error(err);
-        lastUpdateEl.textContent = 'Error loading data: ' + err.message + '. Check console or try refresh.';
-    }
+} catch (err) {
+    console.error(err);
+    lastUpdateEl.classList.add('done');
+    lastUpdateEl.textContent = 'Error loading data. Try refreshing.';
+}
 }
 
 function updateDailyAnalysis(fngData, prices) {
@@ -609,6 +625,18 @@ const advisorToggle = document.getElementById('advisorToggle');
 const advisorSection = document.getElementById('advisorSection');
 const analyzeBtn = document.getElementById('analyzePosition');
 const positionResult = document.getElementById('positionResult');
+const scenarioTable = document.getElementById('scenarioTable');
+const resetBtn = document.getElementById('resetPosition');
+
+function updateMargin() {
+    const leverage = parseFloat(document.getElementById('leverage')?.value) || 1;
+    const notional = parseFloat(document.getElementById('positionSize')?.value) || 0;
+    const marginEl = document.getElementById('margin');
+    if (marginEl && leverage > 0 && notional > 0) {
+        const margin = notional / leverage;
+        marginEl.value = margin.toFixed(2);
+    }
+}
 
 const STORAGE_KEY = 'positionAdvisorData';
 
@@ -616,8 +644,11 @@ function savePositionData() {
     const data = {
         enabled: advisorToggle?.checked || false,
         type: document.getElementById('positionType')?.value || 'long',
+        leverage: document.getElementById('leverage')?.value || '1',
         entry: document.getElementById('entryPrice')?.value || '',
         size: document.getElementById('positionSize')?.value || '',
+        margin: document.getElementById('margin')?.value || '',
+        target: document.getElementById('targetPrice')?.value || '',
         liq: document.getElementById('liqPrice')?.value || ''
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -630,10 +661,13 @@ function loadPositionData() {
         const data = JSON.parse(saved);
         if (advisorToggle) advisorToggle.checked = data.enabled;
         if (data.enabled && advisorSection) advisorSection.classList.remove('hidden');
-        if (document.getElementById('positionType')) document.getElementById('positionType').value = data.type;
-        if (document.getElementById('entryPrice')) document.getElementById('entryPrice').value = data.entry;
-        if (document.getElementById('positionSize')) document.getElementById('positionSize').value = data.size;
-        if (document.getElementById('liqPrice')) document.getElementById('liqPrice').value = data.liq;
+        if (document.getElementById('positionType')) document.getElementById('positionType').value = data.type || 'long';
+        if (document.getElementById('leverage')) document.getElementById('leverage').value = data.leverage || '1';
+        if (document.getElementById('entryPrice')) document.getElementById('entryPrice').value = data.entry || '';
+        if (document.getElementById('positionSize')) document.getElementById('positionSize').value = data.size || '';
+        if (document.getElementById('margin')) document.getElementById('margin').value = data.margin || '';
+        if (document.getElementById('targetPrice')) document.getElementById('targetPrice').value = data.target || '';
+        if (document.getElementById('liqPrice')) document.getElementById('liqPrice').value = data.liq || '';
     } catch (e) {}
 }
 
@@ -641,11 +675,12 @@ function resetPositionData() {
     localStorage.removeItem(STORAGE_KEY);
     if (advisorToggle) advisorToggle.checked = false;
     if (advisorSection) advisorSection.classList.add('hidden');
-    if (document.getElementById('positionType')) document.getElementById('positionType').value = 'long';
-    if (document.getElementById('entryPrice')) document.getElementById('entryPrice').value = '';
-    if (document.getElementById('positionSize')) document.getElementById('positionSize').value = '';
-    if (document.getElementById('liqPrice')) document.getElementById('liqPrice').value = '';
+    ['positionType','leverage','entryPrice','positionSize','margin','targetPrice','liqPrice'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = id === 'positionType' ? 'long' : (id === 'leverage' ? '1' : '');
+    });
     if (positionResult) positionResult.innerHTML = '';
+    if (scenarioTable) scenarioTable.innerHTML = '';
 }
 
 if (advisorToggle) {
@@ -655,97 +690,148 @@ if (advisorToggle) {
     });
 }
 
-// Save on input changes
-['positionType', 'entryPrice', 'positionSize', 'liqPrice'].forEach(id => {
+['positionType','leverage','entryPrice','positionSize','margin','targetPrice','liqPrice'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener('input', savePositionData);
-    if (el) el.addEventListener('change', savePositionData);
+    if (el) {
+        el.addEventListener('input', () => {
+            if (id === 'leverage' || id === 'positionSize') {
+                updateMargin();
+            }
+            savePositionData();
+        });
+        el.addEventListener('change', () => {
+            if (id === 'leverage' || id === 'positionSize') {
+                updateMargin();
+            }
+            savePositionData();
+        });
+    }
 });
 
+function calcPnL(type, qty, entry, price) {
+    if (type === 'long') return qty * (price - entry);
+    return qty * (entry - price);
+}
+
 if (analyzeBtn) {
-    analyzeBtn.addEventListener('click', () => {
-        const type = document.getElementById('positionType').value;
-        const entry = parseFloat(document.getElementById('entryPrice').value);
-        const size = parseFloat(document.getElementById('positionSize').value);
-        const liqPrice = parseFloat(document.getElementById('liqPrice').value);
+    analyzeBtn.addEventListener('click', async () => {
+        // Check if price is already available
         const currentPriceText = document.getElementById('btcPrice').textContent.replace(/[$,]/g, '');
         const currentPrice = parseFloat(currentPriceText);
-        const signal = document.getElementById('signal').textContent;
 
-        if (!entry || !size || !currentPrice) {
-            positionResult.innerHTML = '<p style="color:#f85149;">Please fill entry price and size, and wait for price data to load.</p>';
+        if (!currentPrice || isNaN(currentPrice)) {
+            positionResult.innerHTML = '<p style="color:#d29922;">Market data is still loading. Please wait a moment and try again.</p>';
             return;
         }
+// Show loading state on button
+const originalText = analyzeBtn.textContent;
+analyzeBtn.disabled = true;
+analyzeBtn.classList.add('analyzing');
+analyzeBtn.innerHTML = '<span class="btn-spinner"></span> Analyzing';
 
-        let pnl = 0;
-        let pnlPct = 0;
-        if (type === 'long') {
-            pnl = (currentPrice - entry) * (size / entry);
-            pnlPct = ((currentPrice - entry) / entry) * 100;
-        } else {
-            pnl = (entry - currentPrice) * (size / entry);
-            pnlPct = ((entry - currentPrice) / entry) * 100;
-        }
+        try {
+            await loadData();
+            await new Promise(r => setTimeout(r, 400));
 
-        let liqDistancePct = null;
-        if (liqPrice && liqPrice > 0) {
+            const type = document.getElementById('positionType').value;
+            const entry = parseFloat(document.getElementById('entryPrice').value);
+            const notional = parseFloat(document.getElementById('positionSize').value);
+            const margin = parseFloat(document.getElementById('margin').value) || 0;
+            const target = parseFloat(document.getElementById('targetPrice').value);
+            const liqPrice = parseFloat(document.getElementById('liqPrice').value);
+            const freshPriceText = document.getElementById('btcPrice').textContent.replace(/[$,]/g, '');
+            const freshPrice = parseFloat(freshPriceText);
+            const signal = document.getElementById('signal').textContent;
+
+            if (!entry || !notional || !freshPrice) {
+                positionResult.innerHTML = '<p style="color:#f85149;">Please fill entry price and position size.</p>';
+                return;
+            }
+
+            const qty = notional / entry;
+            const currentPnL = calcPnL(type, qty, entry, freshPrice);
+            const targetPnL = target ? calcPnL(type, qty, entry, target) : null;
+            const roe = margin > 0 && targetPnL !== null ? (targetPnL / margin) * 100 : null;
+
+            let liqDistancePct = null;
+            if (liqPrice && liqPrice > 0) {
+                liqDistancePct = type === 'long'
+                    ? ((freshPrice - liqPrice) / freshPrice) * 100
+                    : ((liqPrice - freshPrice) / freshPrice) * 100;
+            }
+
+            let advice = 'Hold';
+            let adviceClass = 'hold';
+            let reason = '';
+            const predictionIsLong = signal.includes('LONG');
+            const predictionIsShort = signal.includes('SHORT');
+
             if (type === 'long') {
-                liqDistancePct = ((currentPrice - liqPrice) / currentPrice) * 100;
+                if (predictionIsLong) {
+                    advice = 'Hold';
+                    reason = 'Prediction still has a LONG BIAS. Your position aligns.';
+                } else if (predictionIsShort) {
+                    advice = 'Consider Closing';
+                    adviceClass = 'close';
+                    reason = 'Prediction has shifted to SHORT BIAS.';
+                }
             } else {
-                liqDistancePct = ((liqPrice - currentPrice) / currentPrice) * 100;
+                if (predictionIsShort) {
+                    advice = 'Hold';
+                    reason = 'Prediction still has a SHORT BIAS. Your position aligns.';
+                } else if (predictionIsLong) {
+                    advice = 'Consider Closing';
+                    adviceClass = 'close';
+                    reason = 'Prediction has shifted to LONG BIAS.';
+                }
             }
-        }
 
-        let advice = 'Hold';
-        let adviceClass = 'hold';
-        let reason = '';
+            let liqInfo = liqPrice && liqDistancePct !== null
+                ? `<br>Liquidation: $${liqPrice.toLocaleString()} (${liqDistancePct.toFixed(1)}% away)`
+                : '';
 
-        const predictionIsLong = signal.includes('LONG');
-        const predictionIsShort = signal.includes('SHORT');
+            positionResult.innerHTML = `
+                <div class="advice ${adviceClass}">${advice}</div>
+                <div class="details">
+                    Quantity: ${qty.toFixed(6)} BTC<br>
+                    Entry: $${entry.toLocaleString()} → Current: $${freshPrice.toLocaleString()}<br>
+                    Current P&L: ${currentPnL >= 0 ? '+' : ''}$${currentPnL.toFixed(2)}<br>
+                    ${target ? `Target P&L: ${targetPnL >= 0 ? '+' : ''}$${targetPnL.toFixed(2)} (ROE ${roe !== null ? roe.toFixed(1) + '%' : '—'})<br>` : ''}
+                    Current Signal: ${signal}${liqInfo}<br>
+                    <em>${reason}</em>
+                </div>
+            `;
 
-        if (type === 'long') {
-            if (predictionIsLong) {
-                advice = 'Hold';
-                reason = 'Prediction still has a LONG BIAS. Your position aligns with the current outlook.';
-            } else if (predictionIsShort) {
-                advice = 'Consider Closing';
-                adviceClass = 'close';
-                reason = 'Prediction has shifted to SHORT BIAS. Your LONG position no longer aligns.';
+            if (target) {
+                const prices = [entry * 0.98, entry * 0.99, entry, entry * 1.01, entry * 1.02, target];
+                const unique = [...new Set(prices.map(p => Math.round(p)))].sort((a,b) => type === 'short' ? b - a : a - b);
+                const rows = unique.map(p => {
+                    const pnl = calcPnL(type, qty, entry, p);
+                    const cls = pnl > 0 ? 'style="color:#3fb950"' : pnl < 0 ? 'style="color:#f85149"' : '';
+                    return `<tr><td>$${p.toLocaleString()}</td><td ${cls}>${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td></tr>`;
+                }).join('');
+                scenarioTable.innerHTML = `
+                    <h3 style="font-size:0.95rem; color:#8b949e; margin-bottom:0.5rem;">Scenarios</h3>
+                    <table style="width:100%; font-size:0.85rem;">
+                        <thead><tr><th>Price</th><th>P&L</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                `;
             } else {
-                advice = 'Hold (Cautious)';
-                reason = 'No clear bias. Monitor the position.';
+                scenarioTable.innerHTML = '';
             }
-        } else {
-            if (predictionIsShort) {
-                advice = 'Hold';
-                reason = 'Prediction still has a SHORT BIAS. Your position aligns with the current outlook.';
-            } else if (predictionIsLong) {
-                advice = 'Consider Closing';
-                adviceClass = 'close';
-                reason = 'Prediction has shifted to LONG BIAS. Your SHORT position no longer aligns.';
-            } else {
-                advice = 'Hold (Cautious)';
-                reason = 'No clear bias. Monitor the position.';
-            }
-        }
 
-        let liqInfo = '';
-        if (liqPrice && liqPrice > 0 && liqDistancePct !== null) {
-            liqInfo = `<br>Liquidation: $${liqPrice.toLocaleString()} (${liqDistancePct >= 0 ? '+' : ''}${liqDistancePct.toFixed(1)}% away)`;
-        }
+            savePositionData();
 
-        positionResult.innerHTML = `
-            <div class="advice ${adviceClass}">${advice}</div>
-            <div class="details">
-                Entry: $${entry.toLocaleString()} → Current: $${currentPrice.toLocaleString()}<br>
-                Unrealized P&L: ${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)} (${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(2)}%)<br>
-                Current Signal: ${signal}${liqInfo}<br>
-                <em>${reason}</em>
-            </div>
-        `;
-        savePositionData();
+} finally {
+    analyzeBtn.disabled = false;
+    analyzeBtn.classList.remove('analyzing');
+    analyzeBtn.textContent = originalText;
+}
     });
 }
+
+if (resetBtn) resetBtn.addEventListener('click', resetPositionData);
 
 // Load saved data on page load
 loadPositionData();
@@ -753,7 +839,3 @@ loadPositionData();
 // Optional: expose reset globally so the button can call it
 window.resetPositionAdvisor = resetPositionData;
 
-const resetBtn = document.getElementById('resetPosition');
-if (resetBtn) {
-    resetBtn.addEventListener('click', resetPositionData);
-}
