@@ -110,6 +110,43 @@
             </div>
         </section>
 
+        <section class="position-advisor">
+    <div class="card">
+        <h2>Position Advisor</h2>
+        <div class="toggle" style="margin-bottom: 1rem;">
+            <input type="checkbox" id="advisorToggle">
+            <label for="advisorToggle" style="margin:0; color: var(--text);">Enable Position Advisor</label>
+        </div>
+
+        <div id="advisorSection" class="hidden">
+            <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+                <div style="flex:1; min-width:140px;">
+                    <label>Position Type</label>
+                    <select id="positionType" style="width:100%; padding:0.6rem; border-radius:6px; background:#0d1117; color:#e6edf3; border:1px solid #30363d;">
+                        <option value="long">LONG</option>
+                        <option value="short">SHORT</option>
+                    </select>
+                </div>
+                <div style="flex:1; min-width:140px;">
+                    <label>Entry Price ($)</label>
+                    <input type="number" id="entryPrice" placeholder="e.g. 82000" step="any" style="width:100%; padding:0.6rem; border-radius:6px; background:#0d1117; color:#e6edf3; border:1px solid #30363d;">
+                </div>
+                <div style="flex:1; min-width:140px;">
+                    <label>Position Size (USD)</label>
+                    <input type="number" id="positionSize" placeholder="e.g. 500" step="any" style="width:100%; padding:0.6rem; border-radius:6px; background:#0d1117; color:#e6edf3; border:1px solid #30363d;">
+                </div>
+                <div style="flex:1; min-width:140px;">
+                    <label>Liquidation Price ($)</label>
+                    <input type="number" id="liqPrice" placeholder="e.g. 78000" step="any" style="width:100%; padding:0.6rem; border-radius:6px; background:#0d1117; color:#e6edf3; border:1px solid #30363d;">
+                </div>
+            </div>
+<button id="analyzePosition" style="margin-top:1rem;">Analyze Position</button>
+<button id="resetPosition" style="margin-top:1rem; margin-left:0.5rem; background:#6e7681;">Reset</button>
+            <div id="positionResult" style="margin-top:1.25rem;"></div>
+        </div>
+    </div>
+</section>
+
         <section class="forecasts">
             <div class="card">
                 <h2>Recent Forecasts (Local Storage)</h2>

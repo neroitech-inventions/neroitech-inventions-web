@@ -465,3 +465,16 @@ footer {
     color: white;
     border-color: #58a6ff;
 }
+.hidden { display: none; }
+.toggle { display: flex; align-items: center; gap: 0.6rem; }
+.toggle input { width: auto; margin: 0; }
+#positionResult .advice {
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0.75rem;
+}
+#positionResult .advice.hold { background: rgba(63,185,80,0.15); color: #3fb950; border: 1px solid rgba(63,185,80,0.3); }
+#positionResult .advice.close { background: rgba(248,81,73,0.15); color: #f85149; border: 1px solid rgba(248,81,73,0.3); }
+#positionResult .details { font-size: 0.9rem; color: #8b949e; line-height: 1.6; }

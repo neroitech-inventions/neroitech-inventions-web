@@ -109,47 +109,42 @@ footer {
 .powered {
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
-    font-size: 0.88rem;
+    gap: 0.5rem;
+    font-size: 0.9rem;
     color: #8b949e;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 0.5rem 1.15rem 0.5rem 0.9rem;
+    padding: 0.55rem 1.1rem;
     border-radius: 999px;
-    backdrop-filter: blur(12px);
-    transition: all 0.25s ease;
+    backdrop-filter: blur(8px);
 }
 
-.powered:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(88, 166, 255, 0.3);
-    transform: translateY(-1px);
-}
-
-.powered .dot {
-    width: 6px;
-    height: 6px;
-    background: #3fb950;
-    border-radius: 50%;
-    box-shadow: 0 0 8px #3fb950;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+.powered span {
+    opacity: 0.8;
 }
 
 .powered a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     color: #58a6ff;
     text-decoration: none;
     font-weight: 600;
-    letter-spacing: 0.2px;
     transition: color 0.2s;
 }
 
 .powered a:hover {
     color: #79b8ff;
+}
+
+.powered a svg {
+    opacity: 0.7;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.powered a:hover svg {
+    opacity: 1;
+    transform: translate(1px, -1px);
 }
 
 #backToTop {
@@ -224,9 +219,15 @@ footer {
 
 <footer>
     <div class="powered">
-        <span class="dot"></span>
-        Powered by
-        <a href="https://niti.com.ng/" target="_blank" rel="noopener">Neroitech Inventions</a>
+        <span>Powered by</span>
+        <a href="https://niti.com.ng/" target="_blank" rel="noopener">
+            Neroitech Inventions
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+        </a>
     </div>
 </footer>
 
@@ -246,26 +247,28 @@ const tokenValueResult = document.getElementById('tokenValueResult');
 const defaultPcts = [1, 2, 5, 10, 25, 50, 75, 100];
 
 function formatNum(n) {
-    if (n === null || isNaN(n)) return '—';
+    if (n === null || isNaN(n) || n === 0) return '—';
     if (n >= 1000) return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
     if (n >= 1) return n.toLocaleString(undefined, { maximumFractionDigits: 4 });
     return n.toLocaleString(undefined, { maximumFractionDigits: 6 });
 }
 
 function syncBalance() {
-    tokenBalanceEl.value = balanceEl.value;
+    if (tokenBalanceEl && balanceEl) {
+        tokenBalanceEl.value = balanceEl.value;
+    }
 }
-
-
 
 function calculate() {
     syncBalance();
+
     const balance = parseFloat(balanceEl.value) || 0;
     const advanced = advancedToggle.checked;
     const tokenPrice = parseFloat(tokenPriceEl.value) || 0;
     const tokenBalance = parseFloat(tokenBalanceEl.value) || 0;
     const customPct = parseFloat(customPctEl.value) || 0;
 
+    // Percentage breakdown (always based on Total Balance)
     percentagesEl.innerHTML = defaultPcts.map(pct => {
         const val = balance * (pct / 100);
         return `
@@ -276,37 +279,48 @@ function calculate() {
         `;
     }).join('');
 
+    // Token holdings value
+    let tokenValue = 0;
+    if (advanced && tokenPrice > 0 && tokenBalance > 0) {
+        tokenValue = tokenBalance * tokenPrice;
+        tokenValueResult.innerHTML = `
+            <div style="font-size:0.85rem; color:var(--muted);">Token holdings value</div>
+            <div class="big">$${formatNum(tokenValue)}</div>
+        `;
+        tokenValueResult.classList.remove('hidden');
+    } else {
+        tokenValueResult.classList.add('hidden');
+    }
+
+// Custom percentage — percentage of the Total Balance amount
 if (customPct > 0 && balance > 0) {
     const amount = balance * (customPct / 100);
+
+    let extra = '';
+    // If advanced and token price is set, also show the USD value of that percentage
+    if (advanced && tokenPrice > 0) {
+        const usdValue = amount * tokenPrice;
+        extra = `<div style="margin-top:0.4rem; font-size:0.9rem; color:var(--muted);">≈ $${formatNum(usdValue)}</div>`;
+    }
+
     customResult.innerHTML = `
         <div style="font-size:0.85rem; color:var(--muted);">${customPct}% of balance</div>
         <div class="big">${formatNum(amount)}</div>
+        ${extra}
     `;
     customResult.classList.remove('hidden');
 } else {
     customResult.classList.add('hidden');
 }
-
-if (advanced && tokenBalance > 0 && tokenPrice > 0) {
-    const value = tokenBalance * tokenPrice;
-    tokenValueResult.innerHTML = `
-        <div style="font-size:0.85rem; color:var(--muted);">Token holdings value</div>
-        <div class="big">${formatNum(value)}</div>
-    `;
-    tokenValueResult.classList.remove('hidden');
-} else {
-    tokenValueResult.classList.add('hidden');
-}
 }
 
 advancedToggle.addEventListener('change', () => {
     advancedSection.classList.toggle('hidden', !advancedToggle.checked);
-    syncBalance();
     calculate();
 });
 
-[balanceEl, tokenPriceEl, tokenBalanceEl, customPctEl].forEach(el => {
-    el.addEventListener('input', calculate);
+[balanceEl, tokenPriceEl, customPctEl].forEach(el => {
+    if (el) el.addEventListener('input', calculate);
 });
 
 // Back to top

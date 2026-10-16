@@ -603,3 +603,157 @@ if (backToTop) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 }
+
+// Position Advisor
+const advisorToggle = document.getElementById('advisorToggle');
+const advisorSection = document.getElementById('advisorSection');
+const analyzeBtn = document.getElementById('analyzePosition');
+const positionResult = document.getElementById('positionResult');
+
+const STORAGE_KEY = 'positionAdvisorData';
+
+function savePositionData() {
+    const data = {
+        enabled: advisorToggle?.checked || false,
+        type: document.getElementById('positionType')?.value || 'long',
+        entry: document.getElementById('entryPrice')?.value || '',
+        size: document.getElementById('positionSize')?.value || '',
+        liq: document.getElementById('liqPrice')?.value || ''
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadPositionData() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+    try {
+        const data = JSON.parse(saved);
+        if (advisorToggle) advisorToggle.checked = data.enabled;
+        if (data.enabled && advisorSection) advisorSection.classList.remove('hidden');
+        if (document.getElementById('positionType')) document.getElementById('positionType').value = data.type;
+        if (document.getElementById('entryPrice')) document.getElementById('entryPrice').value = data.entry;
+        if (document.getElementById('positionSize')) document.getElementById('positionSize').value = data.size;
+        if (document.getElementById('liqPrice')) document.getElementById('liqPrice').value = data.liq;
+    } catch (e) {}
+}
+
+function resetPositionData() {
+    localStorage.removeItem(STORAGE_KEY);
+    if (advisorToggle) advisorToggle.checked = false;
+    if (advisorSection) advisorSection.classList.add('hidden');
+    if (document.getElementById('positionType')) document.getElementById('positionType').value = 'long';
+    if (document.getElementById('entryPrice')) document.getElementById('entryPrice').value = '';
+    if (document.getElementById('positionSize')) document.getElementById('positionSize').value = '';
+    if (document.getElementById('liqPrice')) document.getElementById('liqPrice').value = '';
+    if (positionResult) positionResult.innerHTML = '';
+}
+
+if (advisorToggle) {
+    advisorToggle.addEventListener('change', () => {
+        advisorSection.classList.toggle('hidden', !advisorToggle.checked);
+        savePositionData();
+    });
+}
+
+// Save on input changes
+['positionType', 'entryPrice', 'positionSize', 'liqPrice'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', savePositionData);
+    if (el) el.addEventListener('change', savePositionData);
+});
+
+if (analyzeBtn) {
+    analyzeBtn.addEventListener('click', () => {
+        const type = document.getElementById('positionType').value;
+        const entry = parseFloat(document.getElementById('entryPrice').value);
+        const size = parseFloat(document.getElementById('positionSize').value);
+        const liqPrice = parseFloat(document.getElementById('liqPrice').value);
+        const currentPriceText = document.getElementById('btcPrice').textContent.replace(/[$,]/g, '');
+        const currentPrice = parseFloat(currentPriceText);
+        const signal = document.getElementById('signal').textContent;
+
+        if (!entry || !size || !currentPrice) {
+            positionResult.innerHTML = '<p style="color:#f85149;">Please fill entry price and size, and wait for price data to load.</p>';
+            return;
+        }
+
+        let pnl = 0;
+        let pnlPct = 0;
+        if (type === 'long') {
+            pnl = (currentPrice - entry) * (size / entry);
+            pnlPct = ((currentPrice - entry) / entry) * 100;
+        } else {
+            pnl = (entry - currentPrice) * (size / entry);
+            pnlPct = ((entry - currentPrice) / entry) * 100;
+        }
+
+        let liqDistancePct = null;
+        if (liqPrice && liqPrice > 0) {
+            if (type === 'long') {
+                liqDistancePct = ((currentPrice - liqPrice) / currentPrice) * 100;
+            } else {
+                liqDistancePct = ((liqPrice - currentPrice) / currentPrice) * 100;
+            }
+        }
+
+        let advice = 'Hold';
+        let adviceClass = 'hold';
+        let reason = '';
+
+        const predictionIsLong = signal.includes('LONG');
+        const predictionIsShort = signal.includes('SHORT');
+
+        if (type === 'long') {
+            if (predictionIsLong) {
+                advice = 'Hold';
+                reason = 'Prediction still has a LONG BIAS. Your position aligns with the current outlook.';
+            } else if (predictionIsShort) {
+                advice = 'Consider Closing';
+                adviceClass = 'close';
+                reason = 'Prediction has shifted to SHORT BIAS. Your LONG position no longer aligns.';
+            } else {
+                advice = 'Hold (Cautious)';
+                reason = 'No clear bias. Monitor the position.';
+            }
+        } else {
+            if (predictionIsShort) {
+                advice = 'Hold';
+                reason = 'Prediction still has a SHORT BIAS. Your position aligns with the current outlook.';
+            } else if (predictionIsLong) {
+                advice = 'Consider Closing';
+                adviceClass = 'close';
+                reason = 'Prediction has shifted to LONG BIAS. Your SHORT position no longer aligns.';
+            } else {
+                advice = 'Hold (Cautious)';
+                reason = 'No clear bias. Monitor the position.';
+            }
+        }
+
+        let liqInfo = '';
+        if (liqPrice && liqPrice > 0 && liqDistancePct !== null) {
+            liqInfo = `<br>Liquidation: $${liqPrice.toLocaleString()} (${liqDistancePct >= 0 ? '+' : ''}${liqDistancePct.toFixed(1)}% away)`;
+        }
+
+        positionResult.innerHTML = `
+            <div class="advice ${adviceClass}">${advice}</div>
+            <div class="details">
+                Entry: $${entry.toLocaleString()} → Current: $${currentPrice.toLocaleString()}<br>
+                Unrealized P&L: ${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)} (${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(2)}%)<br>
+                Current Signal: ${signal}${liqInfo}<br>
+                <em>${reason}</em>
+            </div>
+        `;
+        savePositionData();
+    });
+}
+
+// Load saved data on page load
+loadPositionData();
+
+// Optional: expose reset globally so the button can call it
+window.resetPositionAdvisor = resetPositionData;
+
+const resetBtn = document.getElementById('resetPosition');
+if (resetBtn) {
+    resetBtn.addEventListener('click', resetPositionData);
+}
