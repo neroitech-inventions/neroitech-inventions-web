@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Position Size Calculator</title>
+  <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+     <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-QM106YDX6N');
+     </script>
+
+     <!-- Favicon -->
+     <link href="images/favicon.ico" rel="icon">
+<style>
+:root {
+    --bg: #0a0e17;
+    --card: rgba(22, 27, 34, 0.9);
+    --border: rgba(255,255,255,0.08);
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: radial-gradient(ellipse at top, #161b22, #0a0e17 70%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 1.5rem;
+}
+.container { max-width: 640px; margin: 0 auto; }
+h1 {
+    text-align: center;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #fff, #58a6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.subtitle { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    backdrop-filter: blur(10px);
+}
+label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.4rem; }
+input {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: rgba(0,0,0,0.3);
+    color: var(--text);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+input:focus { outline: none; border-color: var(--accent); }
+.row { display: flex; gap: 1rem; }
+.row > * { flex: 1; }
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+.toggle input { width: auto; margin: 0; }
+.percentages {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+}
+.pct-card {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    text-align: center;
+}
+.pct-card .pct { font-size: 0.8rem; color: var(--muted); }
+.pct-card .val { font-size: 1.15rem; font-weight: 600; margin-top: 0.2rem; }
+.custom-result {
+    background: rgba(88, 166, 255, 0.1);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+.custom-result .big { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+.hidden { display: none; }
+.advanced { border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 0.5rem; }
+
+footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    text-align: center;
+}
+
+.powered {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.88rem;
+    color: #8b949e;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.5rem 1.15rem 0.5rem 0.9rem;
+    border-radius: 999px;
+    backdrop-filter: blur(12px);
+    transition: all 0.25s ease;
+}
+
+.powered:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(88, 166, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.powered .dot {
+    width: 6px;
+    height: 6px;
+    background: #3fb950;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #3fb950;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.powered a {
+    color: #58a6ff;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    transition: color 0.2s;
+}
+
+.powered a:hover {
+    color: #79b8ff;
+}
+
+#backToTop {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(22, 27, 34, 0.9);
+    backdrop-filter: blur(10px);
+    color: var(--accent);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+#backToTop.visible {
+    opacity: 1;
+    visibility: visible;
+}
+#backToTop:hover {
+    background: var(--accent);
+    color: white;
+    transform: translateY(-3px);
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Position Size Calculator</h1>
+    <p class="subtitle">Enter your balance to see percentage breakdowns. Turn on Advanced for token calculations.</p>
+
+    <div class="card">
+        <label for="balance">Total Balance</label>
+        <input type="number" id="balance" placeholder="e.g. 1000" step="any" min="0">
+
+        <div class="toggle">
+            <input type="checkbox" id="advancedToggle">
+            <label for="advancedToggle" style="margin:0; color: var(--text);">Advanced (Token mode)</label>
+        </div>
+
+        <div id="advancedSection" class="advanced hidden">
+            <div class="row">
+                <div>
+                    <label for="tokenPrice">Token Price (USD)</label>
+                    <input type="number" id="tokenPrice" placeholder="e.g. 0.85" step="any" min="0">
+                </div>
+                <div>
+                    <label for="tokenBalance">Token Balance (optional)</label>
+                    <input type="number" id="tokenBalance" placeholder="Auto-filled from Token Balance" step="any" min="0" disabled>
+                </div>
+            </div>
+            <label for="customPct">Custom % of balance to allocate</label>
+            <input type="number" id="customPct" placeholder="e.g. 5" step="0.1" min="0" max="100">
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 style="font-size:1rem; margin-bottom:1rem; color: var(--accent);">Percentage Breakdown</h2>
+        <div class="percentages" id="percentages"></div>
+        <div id="customResult" class="custom-result hidden"></div>
+        <div id="tokenValueResult" class="custom-result hidden"></div>
+    </div>
+
+<footer>
+    <div class="powered">
+        <span class="dot"></span>
+        Powered by
+        <a href="https://niti.com.ng/" target="_blank" rel="noopener">Neroitech Inventions</a>
+    </div>
+</footer>
+
+<button id="backToTop" title="Back to top">↑</button>
+
+<script>
+const balanceEl = document.getElementById('balance');
+const advancedToggle = document.getElementById('advancedToggle');
+const advancedSection = document.getElementById('advancedSection');
+const tokenPriceEl = document.getElementById('tokenPrice');
+const tokenBalanceEl = document.getElementById('tokenBalance');
+const customPctEl = document.getElementById('customPct');
+const percentagesEl = document.getElementById('percentages');
+const customResult = document.getElementById('customResult');
+const tokenValueResult = document.getElementById('tokenValueResult');
+
+const defaultPcts = [1, 2, 5, 10, 25, 50, 75, 100];
+
+function formatNum(n) {
+    if (n === null || isNaN(n)) return '—';
+    if (n >= 1000) return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    if (n >= 1) return n.toLocaleString(undefined, { maximumFractionDigits: 4 });
+    return n.toLocaleString(undefined, { maximumFractionDigits: 6 });
+}
+
+function syncBalance() {
+    tokenBalanceEl.value = balanceEl.value;
+}
+
+
+
+function calculate() {
+    syncBalance();
+    const balance = parseFloat(balanceEl.value) || 0;
+    const advanced = advancedToggle.checked;
+    const tokenPrice = parseFloat(tokenPriceEl.value) || 0;
+    const tokenBalance = parseFloat(tokenBalanceEl.value) || 0;
+    const customPct = parseFloat(customPctEl.value) || 0;
+
+    percentagesEl.innerHTML = defaultPcts.map(pct => {
+        const val = balance * (pct / 100);
+        return `
+            <div class="pct-card">
+                <div class="pct">${pct}%</div>
+                <div class="val">${formatNum(val)}</div>
+            </div>
+        `;
+    }).join('');
+
+if (customPct > 0 && balance > 0) {
+    const amount = balance * (customPct / 100);
+    customResult.innerHTML = `
+        <div style="font-size:0.85rem; color:var(--muted);">${customPct}% of balance</div>
+        <div class="big">${formatNum(amount)}</div>
+    `;
+    customResult.classList.remove('hidden');
+} else {
+    customResult.classList.add('hidden');
+}
+
+if (advanced && tokenBalance > 0 && tokenPrice > 0) {
+    const value = tokenBalance * tokenPrice;
+    tokenValueResult.innerHTML = `
+        <div style="font-size:0.85rem; color:var(--muted);">Token holdings value</div>
+        <div class="big">${formatNum(value)}</div>
+    `;
+    tokenValueResult.classList.remove('hidden');
+} else {
+    tokenValueResult.classList.add('hidden');
+}
+}
+
+advancedToggle.addEventListener('change', () => {
+    advancedSection.classList.toggle('hidden', !advancedToggle.checked);
+    syncBalance();
+    calculate();
+});
+
+[balanceEl, tokenPriceEl, tokenBalanceEl, customPctEl].forEach(el => {
+    el.addEventListener('input', calculate);
+});
+
+// Back to top
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 250) {
+        backToTop.classList.add('visible');
+    } else {
+        backToTop.classList.remove('visible');
+    }
+});
+backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+calculate();
+</script>
+</body>
+</html>
