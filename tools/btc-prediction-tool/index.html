@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+     <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-QM106YDX6N');
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTC 24h Market Prediction & Sentiment</title>
+    <link href="images/favicon.ico" rel="icon">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial@0.2.1/dist/chartjs-chart-financial.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bitcoin 24-Hour Market Prediction & Sentiment Analysis</h1>
+            <p class="subtitle">Rule-based analysis combining Fear & Greed Index, technical indicators, and price action. Not financial advice.</p>
+            <div class="last-update" id="lastUpdate">Loading data...</div>
+        </header>
+
+        <section class="market-overview" id="marketOverview">
+            <div class="card">
+                <h2>BTC Market Overview</h2>
+                <div class="price-display">
+                    <span class="price" id="btcPrice">--</span>
+                    <span class="change" id="btcChange">--</span>
+                </div>
+                <div class="stats">
+                    <div>24h Volume: <span id="volume">--</span></div>
+                    <div>Data: <span id="priceSource">--</span></div>
+                </div>
+            </div>
+            <div class="card fng-card">
+                <h2>Fear & Greed Index</h2>
+                <div class="gauge" id="fngGauge">
+                    <div class="gauge-value" id="fngValue">--</div>
+                    <div class="gauge-label" id="fngLabel">--</div>
+                </div>
+                <div class="fng-trend" id="fngTrend">--</div>
+            </div>
+        </section>
+
+        <section class="charts">
+            <div class="card">
+                <h2>Price & Sentiment (7 Days)</h2>
+                <canvas id="priceSentimentChart"></canvas>
+            </div>
+        </section>
+<section class="charts">
+    <div class="card">
+        <h2>Bitcoin Price Chart</h2>
+        <div class="chart-controls" style="margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="tf-btn active" data-tf="24h">24h</button>
+            <button class="tf-btn" data-tf="7d">7d</button>
+            <span style="margin: 0 0.5rem; opacity: 0.4;">|</span>
+            <button class="chart-type-btn active" data-type="line">Line</button>
+            <button class="chart-type-btn" data-type="area">Area</button>
+            <button class="chart-type-btn" data-type="candlestick">Candlestick</button>
+        </div>
+        <canvas id="btcPriceChart"></canvas>
+    </div>
+</section>
+
+        <section class="analysis-grid">
+            <div class="card">
+                <h2>7-Day Sentiment vs Price</h2>
+                <div id="sentimentAnalysis" class="analysis-text"></div>
+                <table id="dailyTable">
+                    <thead>
+                        <tr><th>Date</th><th>F&G</th><th>Category</th><th>BTC Close</th><th>Change %</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="card">
+                <h2>Technical Indicators</h2>
+                <div id="techIndicators"></div>
+            </div>
+        </section>
+
+        <section class="prediction-panel">
+            <div class="card prediction-card">
+                <h2>24-Hour Prediction</h2>
+                <div class="signal" id="signal">--</div>
+                <div class="probabilities">
+                    <div>Up: <span id="probUp">--</span>%</div>
+                    <div>Down: <span id="probDown">--</span>%</div>
+                    <div>Sideways: <span id="probSide">--</span>%</div>
+                </div>
+                <div class="reasons">
+                    <h3>Bullish Factors</h3>
+                    <ul id="bullishFactors"></ul>
+                    <h3>Bearish Factors</h3>
+                    <ul id="bearishFactors"></ul>
+                </div>
+                <div class="support-resistance" id="srLevels"></div>
+                <div class="invalidation" id="invalidation"></div>
+                <div class="forecast-meta" id="forecastMeta"></div>
+            </div>
+        </section>
+
+        <section class="forecasts">
+            <div class="card">
+                <h2>Recent Forecasts (Local Storage)</h2>
+                <div id="forecastHistory"></div>
+                <button id="clearHistory">Clear History</button>
+            </div>
+        </section>
+
+<footer>
+    <p class="disclaimer">
+        Data sources: Alternative.me (Fear & Greed), CoinGecko / Binance (prices). All calculations client-side. Predictions are rule-based estimates, not statistically validated probabilities. Past performance does not guarantee future results. Never trade with money you cannot afford to lose.
+    </p>
+    <div class="powered">
+        <span>Powered by</span>
+        <a href="https://niti.com.ng/" target="_blank" rel="noopener">
+            Neroitech Inventions
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+        </a>
+    </div>
+</footer>
+    </div>
+
+<button id="backToTop" title="Back to top" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+</button>
+
+    <script src="app.js"></script>
+</body>
+</html>
