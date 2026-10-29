@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X Link Analyzer</title>
+
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+     <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-QM106YDX6N');
+     </script>
+
+     <!-- Favicon -->
+     <link href="images/favicon.ico" rel="icon">
+<style>
+  :root {
+    --bg: #0f0f1a;
+    --card: #1a1a2e;
+    --accent: #1d9bf0;
+    --accent2: #8ecdf8;
+    --text: #f8f9fa;
+    --muted: #8b98a5;
+    --success: #00ba7c;
+    --danger: #f4212e;
+    --border: #2f3336;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #000;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+  .container {
+    width: 100%;
+    max-width: 720px;
+    background: var(--card);
+    border-radius: 16px;
+    padding: 1.75rem 1.5rem;
+    border: 1px solid #2f3336;
+  }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .subtitle { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.95rem; }
+  textarea, input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: #000;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+  }
+  textarea { min-height: 70px; resize: vertical; }
+  input:focus, textarea:focus { border-color: var(--accent); }
+  .actions {
+    display: flex;
+    gap: 0.6rem;
+    margin: 0.75rem 0 1.25rem;
+    flex-wrap: wrap;
+  }
+  button {
+    padding: 0.7rem 1.1rem;
+    border: none;
+    border-radius: 9999px;
+    background: var(--accent);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.15s;
+  }
+  button:hover { background: #1a8cd8; }
+  button.secondary {
+    background: transparent;
+    border: 1px solid #536471;
+    color: var(--text);
+  }
+  button.secondary:hover { background: rgba(255,255,255,0.08); }
+  .result {
+    background: #000;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-top: 1rem;
+  }
+  .result h3 { margin-bottom: 0.8rem; font-size: 1.1rem; }
+  .param {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #2f3336;
+    gap: 1rem;
+  }
+  .param:last-child { border-bottom: none; }
+  .param-label { font-weight: 600; color: var(--accent2); min-width: 110px; }
+  .param-value { flex: 1; word-break: break-all; }
+  .explanation {
+    margin-top: 1rem;
+    background: rgba(29,155,240,0.08);
+    border-left: 3px solid var(--accent);
+    padding: 0.8rem 1rem;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: #e7e9ea;
+  }
+  .advanced-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .advanced-toggle input { width: auto; }
+  .footer {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: #555;
+  }
+  .powered {
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.4px;
+    text-align: center;
+  }
+  .powered a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .powered a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #58a6ff, #79b8ff);
+    transition: width 0.3s ease;
+  }
+  .powered a:hover {
+    color: #79b8ff;
+  }
+  .powered a:hover::after {
+    width: 100%;
+  }
+  .clean-url {
+    background: #000;
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+    word-break: break-all;
+    margin: 0.5rem 0;
+    border: 1px dashed #38444d;
+  }
+  .badge {
+    display: inline-block;
+    background: #1d9bf0;
+    color: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: 0.4rem;
+  }
+
+  /* Modern Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #1a1a2e;
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 12px;
+    border: 1px solid #2f3336;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    font-size: 0.95rem;
+    font-weight: 500;
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 90vw;
+    text-align: center;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  .toast.success { border-left: 4px solid #00ba7c; }
+  .toast.error { border-left: 4px solid #f4212e; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.727-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    Link Analyzer
+  </h1>
+  <p class="subtitle">Paste any X / Twitter post link. Analyze trackers, clean them, or customize the URL.</p>
+
+  <textarea id="input" placeholder="https://x.com/username/status/1234567890123456789?s=20&t=abc123"></textarea>
+
+  <div class="actions">
+    <button onclick="analyze()">Analyze Link</button>
+    <button class="secondary" onclick="clean()">Clean Trackers</button>
+    <button class="secondary" onclick="copyResult()">Copy Cleaned</button>
+  </div>
+
+  <label class="advanced-toggle">
+    <input type="checkbox" id="advanced" onchange="if(lastUrl) analyze()">
+    Show advanced details
+  </label>
+
+  <div id="output"></div>
+
+<footer>
+    <div class="powered">
+        <span>Powered by</span>
+        <a href="https://niti.com.ng/" target="_blank" rel="noopener">
+            Neroitech Inventions
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+        </a>
+    </div>
+</footer>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const sMap = {
+  "09": "iOS (older app) — original share menu",
+  "12": "iOS — share sheet",
+  "17": "Web Desktop — Email share",
+  "18": "Web Desktop — Download / Direct",
+  "19": "Android — Copy link button",
+  "20": "Web Desktop — Copy link button (most common)",
+  "21": "Web — newer UI Copy link",
+  "41": "Gryphon (third-party iOS client) — Copy link",
+  "46": "iPhone X app — Copy link button"
+};
+
+let lastUrl = "";
+let lastClean = "";
+
+function showToast(message, type = "success") {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.className = "toast " + type + " show";
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2800);
+}
+
+function analyze() {
+  const raw = document.getElementById("input").value.trim();
+  if (!raw) return showToast("Paste a link first", "error");
+  lastUrl = raw;
+
+  let url;
+  try {
+    url = new URL(raw.startsWith("http") ? raw : "https://" + raw);
+  } catch {
+    return showToast("Invalid URL", "error");
+  }
+
+  const host = url.hostname.replace("www.", "");
+  const isX = host.includes("x.com") || host.includes("twitter.com");
+  if (!isX) {
+    document.getElementById("output").innerHTML = `<div class="result"><p style="color:var(--danger)">This doesn't look like an X / Twitter link.</p></div>`;
+    return;
+  }
+
+  const path = url.pathname;
+  const statusMatch = path.match(/\/status\/(\d+)/);
+  const statusId = statusMatch ? statusMatch[1] : null;
+  const userMatch = path.match(/^\/([^\/]+)/);
+  const username = userMatch ? userMatch[1] : null;
+
+  const params = Object.fromEntries(url.searchParams.entries());
+  const s = params.s || params.S || null;
+  const t = params.t || params.a || null;
+
+  // Snowflake timestamp
+  let postTime = null;
+  if (statusId && statusId.length > 10) {
+    try {
+      const ts = (BigInt(statusId) >> 22n) + 1288834974657n;
+      postTime = new Date(Number(ts));
+    } catch {}
+  }
+
+  const advanced = document.getElementById("advanced").checked;
+
+  let html = `<div class="result"><h3>Analysis</h3>`;
+
+  if (username) html += `<div class="param"><span class="param-label">Username</span><span class="param-value">@${username}</span></div>`;
+  if (statusId) html += `<div class="param"><span class="param-label">Post ID</span><span class="param-value">${statusId}</span></div>`;
+  if (postTime) html += `<div class="param"><span class="param-label">Posted</span><span class="param-value">${postTime.toLocaleString()}</span></div>`;
+
+  if (s) {
+    const meaning = sMap[s] || sMap[s.padStart(2,"0")] || "Unknown share source";
+    html += `<div class="param"><span class="param-label">s= (share source)</span><span class="param-value">${s} <span class="badge">${meaning}</span></span></div>`;
+  }
+
+  if (t) {
+    html += `<div class="param"><span class="param-label">t= / a= (token)</span><span class="param-value">${t}</span></div>`;
+  }
+
+  if (Object.keys(params).length === 0) {
+    html += `<div class="param"><span class="param-label">Trackers</span><span class="param-value" style="color:var(--success)">None detected — already clean</span></div>`;
+  }
+
+  html += `</div>`;
+
+  // Explanation
+  let expl = "";
+  if (s) expl += `The <strong>s=${s}</strong> parameter indicates how the link was shared or copied. `;
+  if (t) expl += `The <strong>t=/a=</strong> value is a session/share token used by X for analytics, attribution, and bot detection. It does not reveal personal info to people who receive the link. `;
+  if (!s && !t) expl += "No tracking parameters found. This is a clean post link. ";
+  expl += "You can safely remove everything after the <code>?</code> — the post will still open normally.";
+
+  html += `<div class="explanation">${expl}</div>`;
+
+  // Cleaned version
+  const clean = url.origin + url.pathname;
+  lastClean = clean;
+  html += `<div class="result" style="margin-top:1rem"><h3>Cleaned Link</h3><div class="clean-url">${clean}</div></div>`;
+
+  if (advanced) {
+    html += `<div class="result" style="margin-top:1rem"><h3>Advanced</h3>`;
+    html += `<div class="param"><span class="param-label">Full params</span><span class="param-value">${JSON.stringify(params, null, 2)}</span></div>`;
+    if (statusId) html += `<div class="param"><span class="param-label">Snowflake ID</span><span class="param-value">Yes — timestamp extractable</span></div>`;
+    html += `<div class="param"><span class="param-label">Original</span><span class="param-value" style="font-size:0.8rem">${raw}</span></div>`;
+    html += `</div>`;
+  }
+
+  document.getElementById("output").innerHTML = html;
+}
+
+function clean() {
+  if (!lastUrl) return analyze();
+  document.getElementById("input").value = lastClean || lastUrl.split("?")[0];
+  analyze();
+  showToast("Trackers removed");
+}
+
+function copyResult() {
+  const text = lastClean || document.getElementById("input").value.split("?")[0];
+  navigator.clipboard.writeText(text).then(() => showToast("Cleaned link copied!"));
+}
+</script>
+</body>
+</html>
