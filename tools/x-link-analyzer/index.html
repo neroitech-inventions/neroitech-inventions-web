@@ -55,7 +55,7 @@
     gap: 0.5rem;
   }
   .subtitle { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.95rem; }
-  textarea, input {
+  textarea, input, select {
     width: 100%;
     padding: 0.85rem 1rem;
     border-radius: 12px;
@@ -67,7 +67,7 @@
     outline: none;
   }
   textarea { min-height: 70px; resize: vertical; }
-  input:focus, textarea:focus { border-color: var(--accent); }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
   .actions {
     display: flex;
     gap: 0.6rem;
@@ -185,6 +185,34 @@
     margin-left: 0.4rem;
   }
 
+  /* Customize panel */
+  .customize {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    background: #000;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .customize h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+  }
+  .customize label {
+    display: block;
+    margin: 0.6rem 0 0.3rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .customize .row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+  .customize .row button {
+    white-space: nowrap;
+  }
+
   /* Modern Toast */
   .toast {
     position: fixed;
@@ -236,6 +264,36 @@
 
   <div id="output"></div>
 
+  <!-- Customize Panel -->
+  <div class="customize" id="customizePanel" style="display:none;">
+    <h3>Customize Link</h3>
+    
+    <label>Change share source (s=)</label>
+    <select id="sSelect">
+      <option value="">— Keep current / None —</option>
+      <option value="19">19 — Android Copy link</option>
+      <option value="20">20 — Web Desktop Copy link</option>
+      <option value="21">21 — Web newer UI Copy link</option>
+      <option value="46">46 — iPhone App Copy link</option>
+      <option value="12">12 — iOS Share sheet</option>
+      <option value="09">09 — iOS older share menu</option>
+      <option value="17">17 — Web Email share</option>
+      <option value="18">18 — Web Download / Direct</option>
+      <option value="41">41 — Gryphon (3rd-party iOS)</option>
+    </select>
+
+    <label style="margin-top:0.8rem;">
+      <input type="checkbox" id="removeToken" checked style="width:auto; margin-right:0.4rem;">
+      Remove tracking token (t= / a=)
+    </label>
+
+    <div class="row">
+      <button onclick="applyCustomize()">Apply Changes</button>
+      <button class="secondary" onclick="copyCustom()">Copy Custom Link</button>
+    </div>
+    <div id="customPreview" class="clean-url" style="margin-top:0.75rem; display:none;"></div>
+  </div>
+
 <footer>
     <div class="powered">
         <span>Powered by</span>
@@ -268,6 +326,7 @@ const sMap = {
 
 let lastUrl = "";
 let lastClean = "";
+let currentParsed = null;
 
 function showToast(message, type = "success") {
   const toast = document.getElementById("toast");
@@ -295,6 +354,7 @@ function analyze() {
   const isX = host.includes("x.com") || host.includes("twitter.com");
   if (!isX) {
     document.getElementById("output").innerHTML = `<div class="result"><p style="color:var(--danger)">This doesn't look like an X / Twitter link.</p></div>`;
+    document.getElementById("customizePanel").style.display = "none";
     return;
   }
 
@@ -307,6 +367,8 @@ function analyze() {
   const params = Object.fromEntries(url.searchParams.entries());
   const s = params.s || params.S || null;
   const t = params.t || params.a || null;
+
+  currentParsed = { url, params, s, t };
 
   // Snowflake timestamp
   let postTime = null;
@@ -363,6 +425,11 @@ function analyze() {
   }
 
   document.getElementById("output").innerHTML = html;
+
+  // Show customize panel and pre-select current s
+  document.getElementById("customizePanel").style.display = "block";
+  if (s) document.getElementById("sSelect").value = s;
+  document.getElementById("customPreview").style.display = "none";
 }
 
 function clean() {
@@ -375,6 +442,43 @@ function clean() {
 function copyResult() {
   const text = lastClean || document.getElementById("input").value.split("?")[0];
   navigator.clipboard.writeText(text).then(() => showToast("Cleaned link copied!"));
+}
+
+function applyCustomize() {
+  if (!currentParsed) return showToast("Analyze a link first", "error");
+
+  const newS = document.getElementById("sSelect").value;
+  const removeToken = document.getElementById("removeToken").checked;
+
+  const base = currentParsed.url.origin + currentParsed.url.pathname;
+  const newParams = new URLSearchParams();
+
+  if (newS) {
+    newParams.set("s", newS);
+  }
+
+  if (!removeToken && currentParsed.t) {
+    // Preserve existing token key if possible
+    const originalParams = currentParsed.url.searchParams;
+    if (originalParams.has("t")) newParams.set("t", currentParsed.t);
+    else if (originalParams.has("a")) newParams.set("a", currentParsed.t);
+  }
+
+  const customUrl = newParams.toString() ? `${base}?${newParams.toString()}` : base;
+
+  const preview = document.getElementById("customPreview");
+  preview.textContent = customUrl;
+  preview.style.display = "block";
+
+  showToast("Custom link generated");
+}
+
+function copyCustom() {
+  const preview = document.getElementById("customPreview");
+  if (!preview.textContent || preview.style.display === "none") {
+    return showToast("Apply changes first", "error");
+  }
+  navigator.clipboard.writeText(preview.textContent).then(() => showToast("Custom link copied!"));
 }
 </script>
 </body>
