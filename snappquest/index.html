@@ -226,14 +226,14 @@ body.modal-open .bottom-nav {
           <button class="cat active" data-cat="all">✨ All</button>
           <button class="cat" data-cat="Engagement">💬 Engagement</button>
           <button class="cat" data-cat="Feedback">📝 Feedback</button>
-          <button class="cat" data-cat="Bounty">🪙 Bounty</button>
+          <button class="cat" data-cat="Bounty">💰 Bounty</button>
           <button class="cat" data-cat="Crypto">💰 Crypto</button>
           <button class="cat" data-cat="AI">🤖 AI</button>
           <button class="cat" data-cat="Social">📱 Social</button>
           <button class="cat" data-cat="Games">🎮 Games</button>
           <button class="cat" data-cat="YouTube">📺 YouTube</button>
           <button class="cat" data-cat="Telegram">✈️ Telegram</button>
-          <button class="cat" data-cat="NFT">🖼 NFT</button>
+          <button class="cat" data-cat="NFT">🖼️ NFT</button>
           <button class="cat" data-cat="Apps">📲 Apps</button>
           <button class="cat" data-cat="Websites">🌐 Websites</button>
           <button class="cat" data-cat="Communities">👥 Communities</button>
@@ -476,8 +476,8 @@ function classifyQuest(title, description) {
 }
 
 const CAT_EMOJI = {
-  Engagement: '💬', Feedback: '📝', Bounty: '🪙',
-  AI: '🤖', Crypto: '💰', NFT: '🖼', Games: '🎮', YouTube: '📺',
+  Engagement: '💬', Feedback: '📝', Bounty: '💰',
+  AI: '🤖', Crypto: '💰', NFT: '🖼️', Games: '🎮', YouTube: '📺',
   Telegram: '✈️', Social: '📱', Apps: '📲', Websites: '🌐',
   Communities: '👥', Other: '🔹'
 };
@@ -772,7 +772,7 @@ const isExpired = expiryDate && expiryDate < new Date();
     status: status === 2 ? 'bounty' : 'other',
     featured: false,
     cat,
-    emoji: '🪙',
+    emoji: '💰',
     expiry: expiryRaw,
     isExpired
   };
