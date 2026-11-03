@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
   <script>
@@ -15,886 +15,814 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Elite Resume Builder</title>
   <link href="images/favicon.ico" rel="icon">
-  <meta name="description" content="Create stunning professional resumes with Elite Resume Builder by Neroitech Inventions.">
-  
-  <script src="https://cdn.tailwindcss.com"></script>
- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;500;600;700&family=Lato:wght@400;700&family=Source+Sans+3:wght@400;600;700&family=Raleway:wght@400;500;600;700&family=Nunito:wght@400;600;700&family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
   <style>
+    :root {
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --accent: #0f172a;
+      --accent-hover: #1e293b;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --sidebar: #0f172a;
+      --sidebar-text: #ffffff;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      background: var(--accent);
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header h1 { font-size: 1.25rem; font-weight: 700; }
+   .powered {
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.4px;
+  }
+  .powered a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .powered a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #58a6ff, #79b8ff);
+    transition: width 0.3s ease;
+  }
+  .powered a:hover {
+    color: #79b8ff;
+  }
+  .powered a:hover::after {
+    width: 100%;
+  }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: white;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    footer a:hover { text-decoration: underline; }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .back-to-top.show { display: flex; }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 16px;
+      padding: 28px 32px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    .modal h3 { margin-bottom: 12px; font-size: 1.2rem; }
+    .modal p { color: var(--muted); margin-bottom: 24px; }
+    .modal-buttons { display: flex; gap: 12px; justify-content: center; }
+    .modal-buttons button { min-width: 100px; }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
       background: #0f172a;
-    }
-
-    .glass {
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .resume-preview {
-      width: 100%;
-      min-height: 1120px;
+      color: white;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      z-index: 1001;
+      opacity: 0;
       transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
 
-    .template-card:hover {
-      transform: translateY(-4px);
+    .tabs {
+      display: none;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 8px;
+      gap: 8px;
+      justify-content: center;
+    }
+    .tabs button {
+      flex: 1;
+      max-width: 180px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: white;
+      font-weight: 600;
+    }
+    .tabs button.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
     }
 
+    .layout {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      min-height: calc(100vh - 56px);
+    }
+
+    .form-panel {
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 24px 20px 40px;
+    }
+    .preview-panel {
+      background: #e2e8f0;
+      overflow: auto;
+      padding: 32px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .section {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+    .section h2 {
+      font-size: 1rem;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin: 12px 0 4px;
+      color: var(--muted);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: white;
+    }select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: white;
+    }
+    textarea { min-height: 72px; resize: vertical; }
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    button.secondary { background: #475569; }
+    button.danger { background: #dc2626; }
+    button:hover { opacity: 0.92; }
+
+    .item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .item-controls { display: flex; gap: 8px; margin-top: 10px; }
+
+    .color-options { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    .color-swatch {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 3px solid transparent; cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .color-swatch.active { border-color: #0f172a; }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    /* Resume */
+    .resume {
+      width: 820px;
+      min-height: 1100px;
+      background: white;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      display: flex;
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+    .resume-sidebar {
+      width: 290px;
+      background: var(--sidebar);
+      color: var(--sidebar-text);
+      padding: 42px 28px;
+      flex-shrink: 0;
+    }
+    .resume-main { flex: 1; padding: 42px 36px; }
+    .resume h1 { font-size: 30px; font-weight: 800; margin-bottom: 8px; line-height: 1.15; }
+    .resume .job-title-big { font-size: 15px; opacity: 0.85; margin-bottom: 18px; }
+    .resume .contact { font-size: 12.5px; opacity: 0.8; line-height: 1.6; margin-bottom: 28px; }
+    .resume h2 {
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      margin: 22px 0 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+      font-weight: 700;
+    }
+    .resume-main h2 {
+      color: var(--accent);
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .job, .edu { margin-bottom: 16px; }
+    .job-title, .edu-title { font-weight: 700; font-size: 14px; }
+    .job-meta, .edu-meta { font-size: 12.5px; color: var(--muted); margin: 2px 0 6px; }
+    .resume-sidebar .job-meta, .resume-sidebar .edu-meta { color: rgba(255,255,255,0.7); }
+    .photo-preview {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(255,255,255,0.3);
+      margin-bottom: 16px;
+      display: none;
+    }
+    .photo-preview.show { display: block; }
+
+    @media (max-width: 1000px) {
+      .tabs { display: flex; }
+      .layout { grid-template-columns: 1fr; }
+      .form-panel, .preview-panel { display: none; }
+      .form-panel.active, .preview-panel.active { display: block; }
+      .preview-panel { padding: 16px; }
+      .resume { width: 100%; min-height: auto; }
+      .resume-sidebar { width: 220px; padding: 28px 18px; }
+      .resume-main { padding: 28px 20px; }
+    }
+    @media (max-width: 600px) {
+      .resume { flex-direction: column; }
+      .resume-sidebar { width: 100%; }
+    }
     @media print {
-      * {
+      /* Reset page and hide non-resume elements */
+      body {
+        background: white !important;
+        margin: 0;
+        padding: 0;
+      }
+      header, footer, .tabs, .form-panel, .back-to-top, .modal-overlay, .toast {
+        display: none !important;
+      }
+      .layout {
+        display: block !important;
+        min-height: auto !important;
+      }
+      .preview-panel {
+        display: block !important;
+        background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+      }
+      .resume {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: auto !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        position: static !important;
+      }
+      .resume-sidebar {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-        color-adjust: exact !important;
+        background: var(--sidebar) !important;
+        color: var(--sidebar-text) !important;
       }
-      a[href]:after { content: "" !important; }
-      a { text-decoration: none !important; color: inherit !important; }
-      @page { margin: 0; }
-      body * { visibility: hidden; }
-      #resumeOutput, #resumeOutput * { visibility: visible; }
-      #resumeOutput {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        border-radius: 0 !important;
-        box-shadow: none !important;
+      .resume-main {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
-      .resume-section { page-break-inside: avoid; break-inside: avoid; }
-      .resume-header { page-break-after: avoid; border-radius: 0 !important; }
-    }
-
-    .drag-handle {
-      cursor: grab;
-      color: #94a3b8;
-      font-weight: bold;
-      user-select: none;
-    }
-
-    .drag-handle:active {
-      cursor: grabbing;
-    }
-
-    .section-item.dragging {
-      opacity: 0.5;
-      background-color: #1e293b !important;
-    }
-
-    .section-item:hover {
-      background-color: #334155 !important;
+      @page {
+        margin: 0.4cm;
+        size: A4;
+      }
     }
   </style>
 </head>
-<body class="text-white min-h-screen">
+<body>
+  <header>
+    <h1>Free Resume Builder</h1>
+  </header>
 
-  <div class="max-w-7xl mx-auto p-6">
+  <div class="tabs">
+    <button id="tab-form" class="active" onclick="showTab('form')">Edit</button>
+    <button id="tab-preview" onclick="showTab('preview')">Preview</button>
+  </div>
 
-    <div class="text-center mb-10">
-      <h1 class="text-5xl font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-        Elite Resume Builder
-      </h1>
-      <p class="text-slate-300 mt-3 text-lg">
-        Build award-winning resumes with beautiful templates.
-      </p>
-    </div>
+  <div class="layout">
+    <div class="form-panel active" id="form-panel">
+      <div class="section">
+        <h2>Photo & Style</h2>
+        <label>Profile Photo (optional)</label>
+        <input type="file" id="photo-input" accept="image/*">
+        <label>Font Style</label>
+        <select id="font-select">
+          <option value="'Segoe UI', system-ui, sans-serif">Modern (Sans)</option>
+          <option value="'Georgia', serif">Classic (Serif)</option>
+          <option value="'Palatino Linotype', 'Book Antiqua', Palatino, serif">Elegant</option>
+          <option value="'Trebuchet MS', sans-serif">Clean</option>
+          <option value="'Courier New', monospace">Technical</option>
+          <option value="'Arial', sans-serif">Simple</option>
+        </select>
+      </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="section">
+        <h2>Personal Info</h2>
+        <label>Full Name</label>
+        <input id="name" type="text" value="Alex Rivera">
+        <label>Job Title</label>
+        <input id="title" type="text" value="Product Designer">
+        <label>Email</label>
+        <input id="email" type="email" value="alex@example.com">
+        <label>Phone</label>
+        <input id="phone" type="text" value="+31 6 1234 5678">
+        <label>Location</label>
+        <input id="location" type="text" value="Amsterdam, NL">
+        <label>Website / LinkedIn</label>
+        <input id="link" type="text" value="linkedin.com/in/alexrivera">
+      </div>
 
-      <!-- FORM -->
-      <div class="lg:col-span-1 glass rounded-3xl p-4 sm:p-6 lg:sticky lg:top-5 h-fit">
-        <div class="space-y-5">
+      <div class="section">
+        <h2>Summary</h2>
+        <textarea id="summary">Creative product designer with 6+ years crafting clean, user-focused digital experiences for startups and agencies.</textarea>
+      </div>
 
-          <!-- Theme + Photo + Font + Spacing -->
-          <div class="flex items-center justify-between gap-3">
-            <label class="text-sm text-slate-300">Theme Color</label>
-            <input type="color" id="themeColor" value="#06b6d4" onchange="generateResume()"
-              class="w-14 h-10 rounded-lg border-none bg-transparent cursor-pointer">
-          </div>
+      <div class="section">
+        <h2>Experience</h2>
+        <div id="experience-list"></div>
+        <button type="button" onclick="addExperience()">+ Add Experience</button>
+      </div>
 
-          <div>
-            <label class="text-sm text-slate-300">Profile Photo</label>
-            <input id="profileImage" type="file" accept="image/*"
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white">
-          </div>
+      <div class="section">
+        <h2>Education</h2>
+        <div id="education-list"></div>
+        <button type="button" onclick="addEducation()">+ Add Education</button>
+      </div>
 
-          <div>
-            <label class="text-sm text-slate-300 block mb-2">Font Size</label>
-            <input type="range" id="fontSizeControl" min="12" max="18" value="14" step="0.5"
-              class="w-full" onchange="document.getElementById('fontSizeDisplay').textContent = this.value; generateResume(); saveDraft()">
-            <div class="text-xs text-slate-400 mt-1">
-              <span id="fontSizeDisplay">14</span>px
-            </div>
-          </div>
+      <div class="section">
+        <h2>Skills</h2>
+        <textarea id="skills">Figma, UI Design, Prototyping, User Research, HTML/CSS, Design Systems</textarea>
+      </div>
 
-          <div>
-            <label class="text-sm text-slate-300 block mb-2">Line Height</label>
-            <input type="range" id="lineHeightControl" min="1" max="2" value="1.6" step="0.1"
-              class="w-full" onchange="document.getElementById('lineHeightDisplay').textContent = this.value; generateResume(); saveDraft()">
-            <div class="text-xs text-slate-400 mt-1">
-              <span id="lineHeightDisplay">1.6</span>
-            </div>
-          </div>
-
-<div>
-  <label class="text-sm text-slate-300">Choose Font</label>
-  <select id="fontSelector" 
-    class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white" 
-    onchange="changeFont()">
-    
-    <optgroup label="Sans-Serif (Modern)">
-      <option value="Inter, sans-serif">Inter</option>
-      <option value="Poppins, sans-serif">Poppins</option>
-      <option value="Montserrat, sans-serif">Montserrat</option>
-      <option value="Roboto, sans-serif">Roboto</option>
-      <option value="'Open Sans', sans-serif">Open Sans</option>
-      <option value="Lato, sans-serif">Lato</option>
-      <option value="'Source Sans 3', sans-serif">Source Sans 3</option>
-      <option value="Raleway, sans-serif">Raleway</option>
-      <option value="Nunito, sans-serif">Nunito</option>
-      <option value="Arial, sans-serif">Arial</option>
-    </optgroup>
-
-    <optgroup label="Serif (Classic)">
-      <option value="Georgia, serif">Georgia</option>
-      <option value="'Times New Roman', serif">Times New Roman</option>
-      <option value="Merriweather, serif">Merriweather</option>
-      <option value="'Playfair Display', serif">Playfair Display</option>
-    </optgroup>
-
-  </select>
-</div>
-
-          <div>
-            <label class="text-sm text-slate-300 block mb-2">Resume Spacing</label>
-            <select id="spacingSelector" onchange="generateResume()"
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none text-white">
-              <option value="compact">Compact</option>
-              <option value="normal" selected>Normal</option>
-              <option value="spacious">Spacious</option>
-            </select>
-          </div>
-
-          <!-- Personal Info -->
-          <div>
-            <label class="text-sm text-slate-300">Full Name</label>
-            <input id="name" type="text" placeholder="John Doe"
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
-          </div>
-
-          <div>
-            <label class="text-sm text-slate-300">Job Title</label>
-            <input id="title" type="text" placeholder="Frontend Developer"
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
-          </div>
-
-          <div>
-            <label class="text-sm text-slate-300">Email</label>
-            <input id="email" type="email" placeholder="john@example.com"
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
-          </div>
-
-          <div>
-            <label class="text-sm text-slate-300">Phone</label>
-            <input id="phone" type="text" placeholder="+234..."
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
-          </div>
-
-          <div>
-            <label class="text-sm text-slate-300">Location</label>
-            <input id="location" type="text" placeholder="Lagos, Nigeria"
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
-          </div>
-
-          <!-- Social Links -->
-          <div>
-            <label class="text-sm text-slate-300">LinkedIn</label>
-            <input id="linkedin" type="url" placeholder="https://linkedin.com/in/yourname"
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
-          </div>
-
-          <div>
-            <label class="text-sm text-slate-300">Twitter / X</label>
-            <input id="twitter" type="url" placeholder="https://x.com/yourhandle"
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
-          </div>
-
-          <!-- Sections Visibility & Order -->
-          <div class="pt-2">
-            <label class="text-sm text-slate-300 mb-3 block">Sections (Drag to Reorder)</label>
-            <div id="sectionsContainer" class="space-y-2 text-sm">
-              <div class="section-item flex items-center gap-2 p-3 bg-slate-800 rounded-lg cursor-move hover:bg-slate-700 transition" draggable="true" data-section="summary">
-                <span class="drag-handle">≡</span>
-                <input type="checkbox" class="section-checkbox rounded" data-section="summary" checked>
-                <span>Summary</span>
-              </div>
-              <div class="section-item flex items-center gap-2 p-3 bg-slate-800 rounded-lg cursor-move hover:bg-slate-700 transition" draggable="true" data-section="skills">
-                <span class="drag-handle">≡</span>
-                <input type="checkbox" class="section-checkbox rounded" data-section="skills" checked>
-                <span>Skills</span>
-              </div>
-              <div class="section-item flex items-center gap-2 p-3 bg-slate-800 rounded-lg cursor-move hover:bg-slate-700 transition" draggable="true" data-section="experience">
-                <span class="drag-handle">≡</span>
-                <input type="checkbox" class="section-checkbox rounded" data-section="experience" checked>
-                <span>Experience</span>
-              </div>
-              <div class="section-item flex items-center gap-2 p-3 bg-slate-800 rounded-lg cursor-move hover:bg-slate-700 transition" draggable="true" data-section="education">
-                <span class="drag-handle">≡</span>
-                <input type="checkbox" class="section-checkbox rounded" data-section="education" checked>
-                <span>Education</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Content Fields -->
-          <div>
-            <label class="text-sm text-slate-300">Professional Summary</label>
-            <p class="text-xs text-slate-500 mt-1 mb-1">Tip: Use **text** to make anything bold</p>
-            <textarea id="summary" rows="4"
-              placeholder="Experienced frontend developer..."
-              class="w-full mt-1 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
-          </div>
-
-          <div>
-            <label class="text-sm text-slate-300">Skills (comma separated)</label>
-            <textarea id="skills" rows="3"
-              placeholder="HTML, CSS, JavaScript, React, Tailwind"
-              class="w-full mt-2 p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none"></textarea>
-          </div>
-
-          <div>
-            <label class="text-sm text-slate-300 block mb-2">Experience</label>
-            <p class="text-xs text-slate-500 mb-2">Tip: Use **text** to make job titles bold</p>
-            <div id="jobsContainer" class="space-y-3">
-              <div class="job-entry bg-slate-800 p-3 rounded-xl">
-                <textarea placeholder="**Frontend Developer** - Company&#10;Jan 2023 – Present&#10;- Built amazing products" 
-                  rows="4" class="job-textarea w-full p-2 rounded bg-slate-900 border border-slate-700 text-white text-sm outline-none mb-2"></textarea>
-                <button onclick="removeJob(this)" class="text-xs bg-red-600/80 text-white px-2 py-1 rounded hover:bg-red-700">Remove Job</button>
-              </div>
-            </div>
-            <button onclick="addJob()" class="text-xs bg-cyan-600 text-white px-3 py-2 rounded mt-3 hover:bg-cyan-700 font-bold">+ Add Another Job</button>
-          </div>
-
-          <div>
-            <label class="text-sm text-slate-300 block mb-2">Education</label>
-            <p class="text-xs text-slate-500 mb-2">Tip: Use **text** to make degree bold</p>
-            <div id="degreesContainer" class="space-y-3">
-              <div class="degree-entry bg-slate-800 p-3 rounded-xl">
-                <textarea placeholder="**B.Sc Computer Science** - University&#10;2018 – 2022" 
-                  rows="3" class="degree-textarea w-full p-2 rounded bg-slate-900 border border-slate-700 text-white text-sm outline-none mb-2"></textarea>
-                <button onclick="removeDegree(this)" class="text-xs bg-red-600/80 text-white px-2 py-1 rounded hover:bg-red-700">Remove Degree</button>
-              </div>
-            </div>
-            <button onclick="addDegree()" class="text-xs bg-cyan-600 text-white px-3 py-2 rounded mt-3 hover:bg-cyan-700 font-bold">+ Add Another Degree</button>
-          </div>
-
-          <!-- Templates -->
-          <div>
-            <label class="text-sm text-slate-300 mb-3 block">Choose Template</label>
-            <div class="grid grid-cols-3 gap-3">
-              <button onclick="setTemplate('modern')" class="template-card bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl h-24 transition-all"></button>
-              <button onclick="setTemplate('dark')" class="template-card bg-gradient-to-br from-slate-700 to-black rounded-2xl h-24 transition-all"></button>
-              <button onclick="setTemplate('minimal')" class="template-card bg-gradient-to-br from-white to-slate-300 rounded-2xl h-24 transition-all"></button>
-            </div>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="flex gap-3 pt-3">
-            <button onclick="generateResume()"
-              class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 py-3 rounded-xl font-bold hover:scale-105 transition-all">
-              Generate
-            </button>
-            <button onclick="window.print()"
-              class="bg-white text-black px-5 rounded-xl font-bold hover:scale-105 transition-all">
-              Print
-            </button>
-            <button onclick="clearDraft()"
-              class="flex-1 bg-red-600/80 py-3 rounded-xl font-bold hover:scale-105 transition-all">
-              Clear
-            </button>
-          </div>
-
+      <div class="section">
+        <h2>Sidebar Color</h2>
+        <div class="color-options" id="color-options">
+          <div class="color-swatch active" data-color="#0f172a" style="background:#0f172a"></div>
+          <div class="color-swatch" data-color="#1e40af" style="background:#1e40af"></div>
+          <div class="color-swatch" data-color="#065f46" style="background:#065f46"></div>
+          <div class="color-swatch" data-color="#7c2d12" style="background:#7c2d12"></div>
+          <div class="color-swatch" data-color="#4c1d95" style="background:#4c1d95"></div>
+          <div class="color-swatch" data-color="#0f766e" style="background:#0f766e"></div>
+        </div>
+        <label style="margin-top:14px">Or enter your own color code</label>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <input type="text" id="custom-color" placeholder="#0f172a" maxlength="7" style="flex:1;">
+          <input type="color" id="color-picker" value="#0f172a" style="width:48px; height:40px; padding:0; border:none; cursor:pointer;">
+          <button type="button" onclick="applyCustomColor()">Apply</button>
+        </div>
+        <label style="margin-top:18px">Sidebar Text Color</label>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <input type="text" id="text-color" placeholder="#ffffff" maxlength="7" value="#ffffff" style="flex:1;">
+          <input type="color" id="text-color-picker" value="#ffffff" style="width:48px; height:40px; padding:0; border:none; cursor:pointer;">
+          <button type="button" onclick="applyTextColor()">Apply</button>
         </div>
       </div>
 
-      <!-- PREVIEW -->
-      <div class="lg:col-span-2 overflow-hidden">
-        <div id="resumeOutput" class="resume-preview bg-white text-black rounded-2xl lg:rounded-3xl shadow-2xl overflow-hidden">
-          <!-- generated content -->
+      <div class="actions">
+        <button onclick="window.print()">Download PDF</button>
+        <button class="secondary" onclick="showConfirm('Reset Resume', 'This will clear all your saved data. Are you sure?', () => { clearData(); location.reload(); })">Reset</button>
+      </div>
+    </div>
+
+    <div class="preview-panel" id="preview-panel">
+      <div class="resume" id="resume">
+        <div class="resume-sidebar">
+          <img id="prev-photo" class="photo-preview" alt="Profile photo">
+          <h1 id="prev-name">Alex Rivera</h1>
+          <div class="job-title-big" id="prev-title">Product Designer</div>
+          <div class="contact" id="prev-contact"></div>
+          <h2>Skills</h2>
+          <div id="prev-skills"></div>
+        </div>
+        <div class="resume-main">
+          <h2>Summary</h2>
+          <div id="prev-summary"></div>
+          <h2>Experience</h2>
+          <div id="prev-experience"></div>
+          <h2>Education</h2>
+          <div id="prev-education"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <script>
-    let activeTemplate = 'modern';
-    let sectionsOrder = ['summary', 'skills', 'experience', 'education'];
-    let draggedElement = null;
-
-    // Drag and Drop Logic
-    document.addEventListener('dragstart', (e) => {
-      if (e.target.classList.contains('section-item')) {
-        draggedElement = e.target;
-        e.target.style.opacity = '0.5';
-      }
-    });
-
-    document.addEventListener('dragend', (e) => {
-      if (e.target.classList.contains('section-item')) {
-        e.target.style.opacity = '1';
-      }
-    });
-
-    document.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      const container = document.getElementById('sectionsContainer');
-      const items = [...container.querySelectorAll('.section-item')];
-      const afterElement = getDragAfterElement(container, e.clientY);
-      
-      if (afterElement == null) {
-        container.appendChild(draggedElement);
-      } else {
-        container.insertBefore(draggedElement, afterElement);
-      }
-    });
-
-    function getDragAfterElement(container, y) {
-      const draggableElements = [...container.querySelectorAll('.section-item:not([style*="opacity"])'), draggedElement].filter(el => el !== draggedElement);
-      
-      return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
-
-        if (offset < 0 && offset > closest.offset) {
-          return { offset: offset, element: child };
-        } else {
-          return closest;
-        }
-      }, { offset: Number.NEGATIVE_INFINITY }).element;
-    }
-
-    // Update sections order when drag ends
-    document.addEventListener('drop', () => {
-      const container = document.getElementById('sectionsContainer');
-      const items = container.querySelectorAll('.section-item');
-      sectionsOrder = Array.from(items).map(item => item.dataset.section);
-      saveDraft();
-      generateResume();
-    });
-
-    // Section checkbox handlers
-    document.addEventListener('change', (e) => {
-      if (e.target.classList.contains('section-checkbox')) {
-        generateResume();
-        saveDraft();
-      }
-    });
-
-    // Job and Degree Management
-    function addJob() {
-      const container = document.getElementById('jobsContainer');
-      const entry = document.createElement('div');
-      entry.className = 'job-entry bg-slate-800 p-3 rounded-xl';
-      entry.innerHTML = `
-        <textarea placeholder="**Job Title** - Company&#10;Dates&#10;- Achievement" 
-          rows="4" class="job-textarea w-full p-2 rounded bg-slate-900 border border-slate-700 text-white text-sm outline-none mb-2"></textarea>
-        <button onclick="removeJob(this)" class="text-xs bg-red-600/80 text-white px-2 py-1 rounded hover:bg-red-700">Remove Job</button>
-      `;
-      container.appendChild(entry);
-      entry.querySelector('textarea').addEventListener('input', () => { generateResume(); saveDraft(); });
-      generateResume();
-      saveDraft();
-    }
-
-    function removeJob(btn) {
-      btn.closest('.job-entry').remove();
-      generateResume();
-      saveDraft();
-    }
-
-    function addDegree() {
-      const container = document.getElementById('degreesContainer');
-      const entry = document.createElement('div');
-      entry.className = 'degree-entry bg-slate-800 p-3 rounded-xl';
-      entry.innerHTML = `
-        <textarea placeholder="**Degree** - University&#10;Year" 
-          rows="3" class="degree-textarea w-full p-2 rounded bg-slate-900 border border-slate-700 text-white text-sm outline-none mb-2"></textarea>
-        <button onclick="removeDegree(this)" class="text-xs bg-red-600/80 text-white px-2 py-1 rounded hover:bg-red-700">Remove Degree</button>
-      `;
-      container.appendChild(entry);
-      entry.querySelector('textarea').addEventListener('input', () => { generateResume(); saveDraft(); });
-      generateResume();
-      saveDraft();
-    }
-
-    function removeDegree(btn) {
-      btn.closest('.degree-entry').remove();
-      generateResume();
-      saveDraft();
-    }
-
-    function formatText(text) {
-      if (!text) return '';
-      return text
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\n/g, '<br>');
-    }
-
-    // Extract clean handle from social URL
-    function getHandle(url, platform) {
-      if (!url) return '';
-      try {
-        const clean = url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
-        if (platform === 'linkedin') {
-          return clean.replace('linkedin.com/in/', '').replace('ng.linkedin.com/in/', '');
-        }
-        if (platform === 'twitter') {
-          return clean.replace('x.com/', '').replace('twitter.com/', '');
-        }
-        return clean;
-      } catch {
-        return url;
-      }
-    }
-
-    function saveDraft() {
-      const imageInput = document.getElementById('profileImage');
-      let imageData = null;
-
-      const existing = localStorage.getItem('eliteResumeDraft');
-      if (existing) {
-        try {
-          const parsed = JSON.parse(existing);
-          imageData = parsed.imageData || null;
-        } catch (e) {}
-      }
-
-      if (imageInput.files && imageInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const data = collectFormData();
-          data.imageData = e.target.result;
-          localStorage.setItem('eliteResumeDraft', JSON.stringify(data));
-        };
-        reader.readAsDataURL(imageInput.files[0]);
-        return;
-      }
-
-      const data = collectFormData();
-      data.imageData = imageData;
-      localStorage.setItem('eliteResumeDraft', JSON.stringify(data));
-    }
-
-    function collectFormData() {
-      const sectionVisibility = {};
-      document.querySelectorAll('.section-checkbox').forEach(cb => {
-        sectionVisibility[cb.dataset.section] = cb.checked;
-      });
-
-      // Collect all jobs
-      const jobs = [];
-      document.querySelectorAll('.job-textarea').forEach(ta => {
-        if (ta.value.trim()) {
-          jobs.push(ta.value);
-        }
-      });
-
-      // Collect all degrees
-      const degrees = [];
-      document.querySelectorAll('.degree-textarea').forEach(ta => {
-        if (ta.value.trim()) {
-          degrees.push(ta.value);
-        }
-      });
-      
-      return {
-        name: document.getElementById('name').value,
-        title: document.getElementById('title').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        location: document.getElementById('location').value,
-        linkedin: document.getElementById('linkedin').value,
-        twitter: document.getElementById('twitter').value,
-        summary: document.getElementById('summary').value,
-        skills: document.getElementById('skills').value,
-        jobs: jobs,
-        degrees: degrees,
-        font: document.getElementById('fontSelector').value,
-        theme: document.getElementById('themeColor').value,
-        spacing: document.getElementById('spacingSelector').value,
-        fontSize: document.getElementById('fontSizeControl').value,
-        lineHeight: document.getElementById('lineHeightControl').value,
-        template: activeTemplate,
-        sectionsOrder: sectionsOrder,
-        sectionVisibility: sectionVisibility
-      };
-    }
-
-    function loadDraft() {
-      const raw = localStorage.getItem('eliteResumeDraft');
-      if (!raw) return;
-
-      let saved;
-      try { saved = JSON.parse(raw); } catch (e) { return; }
-
-      ['name', 'title', 'email', 'phone', 'location', 'linkedin', 'twitter', 'summary', 'skills'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el && saved[id] !== undefined) el.value = saved[id];
-      });
-
-      if (saved.font) document.getElementById('fontSelector').value = saved.font;
-      if (saved.theme) document.getElementById('themeColor').value = saved.theme;
-      if (saved.spacing) document.getElementById('spacingSelector').value = saved.spacing;
-      if (saved.fontSize) document.getElementById('fontSizeControl').value = saved.fontSize;
-      if (saved.lineHeight) document.getElementById('lineHeightControl').value = saved.lineHeight;
-      if (saved.template) activeTemplate = saved.template;
-      if (saved.imageData) window._savedProfileImage = saved.imageData;
-
-      // Restore jobs
-      if (saved.jobs && saved.jobs.length > 0) {
-        const jobContainer = document.getElementById('jobsContainer');
-        jobContainer.innerHTML = '';
-        saved.jobs.forEach(job => {
-          const entry = document.createElement('div');
-          entry.className = 'job-entry bg-slate-800 p-3 rounded-xl';
-          entry.innerHTML = `
-            <textarea rows="4" class="job-textarea w-full p-2 rounded bg-slate-900 border border-slate-700 text-white text-sm outline-none mb-2">${job}</textarea>
-            <button onclick="removeJob(this)" class="text-xs bg-red-600/80 text-white px-2 py-1 rounded hover:bg-red-700">Remove Job</button>
-          `;
-          jobContainer.appendChild(entry);
-          entry.querySelector('textarea').addEventListener('input', () => { generateResume(); saveDraft(); });
-        });
-      }
-
-      // Restore degrees
-      if (saved.degrees && saved.degrees.length > 0) {
-        const degreeContainer = document.getElementById('degreesContainer');
-        degreeContainer.innerHTML = '';
-        saved.degrees.forEach(degree => {
-          const entry = document.createElement('div');
-          entry.className = 'degree-entry bg-slate-800 p-3 rounded-xl';
-          entry.innerHTML = `
-            <textarea rows="3" class="degree-textarea w-full p-2 rounded bg-slate-900 border border-slate-700 text-white text-sm outline-none mb-2">${degree}</textarea>
-            <button onclick="removeDegree(this)" class="text-xs bg-red-600/80 text-white px-2 py-1 rounded hover:bg-red-700">Remove Degree</button>
-          `;
-          degreeContainer.appendChild(entry);
-          entry.querySelector('textarea').addEventListener('input', () => { generateResume(); saveDraft(); });
-        });
-      }
-
-      // Restore section order
-      if (saved.sectionsOrder) {
-        sectionsOrder = saved.sectionsOrder;
-        const container = document.getElementById('sectionsContainer');
-        const items = container.querySelectorAll('.section-item');
-        const itemMap = new Map(Array.from(items).map(item => [item.dataset.section, item]));
-        
-        container.innerHTML = '';
-        saved.sectionsOrder.forEach(section => {
-          if (itemMap.has(section)) {
-            container.appendChild(itemMap.get(section));
-          }
-        });
-      }
-
-      // Restore section visibility
-      if (saved.sectionVisibility) {
-        document.querySelectorAll('.section-checkbox').forEach(cb => {
-          if (saved.sectionVisibility[cb.dataset.section] !== undefined) {
-            cb.checked = saved.sectionVisibility[cb.dataset.section];
-          }
-        });
-      }
-
-      document.getElementById('fontSizeDisplay').textContent = saved.fontSize || '14';
-      document.getElementById('lineHeightDisplay').textContent = saved.lineHeight || '1.6';
-      generateResume();
-      changeFont();
-    }
-
-    function clearDraft() {
-      document.getElementById('clearModal').classList.remove('hidden');
-      document.getElementById('clearModal').classList.add('flex');
-    }
-
-    function closeClearModal() {
-      document.getElementById('clearModal').classList.add('hidden');
-      document.getElementById('clearModal').classList.remove('flex');
-    }
-
-    function confirmClearDraft() {
-      localStorage.removeItem('eliteResumeDraft');
-      window._savedProfileImage = null;
-
-      document.querySelectorAll('input[type="text"], input[type="email"], input[type="url"], textarea').forEach(el => el.value = '');
-      document.getElementById('profileImage').value = '';
-      document.getElementById('themeColor').value = '#06b6d4';
-      document.getElementById('fontSelector').value = 'Inter, sans-serif';
-      document.getElementById('spacingSelector').value = 'normal';
-      activeTemplate = 'modern';
-
-      // Reset visibility
-      document.getElementById('showSummary').checked = true;
-      document.getElementById('showSkills').checked = true;
-      document.getElementById('showExperience').checked = true;
-      document.getElementById('showEducation').checked = true;
-
-      generateResume();
-      changeFont();
-      closeClearModal();
-    }
-
-    function changeFont() {
-      document.getElementById('resumeOutput').style.fontFamily = document.getElementById('fontSelector').value;
-    }
-
-    function setTemplate(template) {
-      activeTemplate = template;
-      generateResume();
-      changeFont();
-      saveDraft();
-    }
-
-    function generateResume() {
-      const name = document.getElementById('name').value || 'Your Name';
-      const title = document.getElementById('title').value || 'Your Profession';
-      const email = document.getElementById('email').value || 'your@email.com';
-      const phone = document.getElementById('phone').value || '+234...';
-      const location = document.getElementById('location').value || 'Nigeria';
-      const linkedin = document.getElementById('linkedin').value;
-      const twitter = document.getElementById('twitter').value;
-      const summary = document.getElementById('summary').value || 'Professional summary goes here.';
-      const skills = document.getElementById('skills').value || 'HTML, CSS, JavaScript';
-      const skillsArray = skills.split(',').filter(s => s.trim());
-      const themeColor = document.getElementById('themeColor').value;
-      const spacing = document.getElementById('spacingSelector').value;
-      const fontSize = document.getElementById('fontSizeControl').value || '14';
-      const lineHeight = document.getElementById('lineHeightControl').value || '1.6';
-
-      // Collect all jobs and degrees
-      const jobs = [];
-      document.querySelectorAll('.job-textarea').forEach(ta => {
-        if (ta.value.trim()) {
-          jobs.push(ta.value);
-        }
-      });
-
-      const degrees = [];
-      document.querySelectorAll('.degree-textarea').forEach(ta => {
-        if (ta.value.trim()) {
-          degrees.push(ta.value);
-        }
-      });
-
-      // Get section visibility from checkboxes
-      const sectionVisibility = {};
-      document.querySelectorAll('.section-checkbox').forEach(cb => {
-        sectionVisibility[cb.dataset.section] = cb.checked;
-      });
-
-      // Spacing
-      let headerPadding = 'p-10';
-      let sectionSpacing = 'mb-8';
-      let contentPadding = 'p-5 sm:p-8 lg:p-10';
-      let headingMargin = 'mb-3';
-      let textLeading = 'leading-7';
-
-      if (spacing === 'compact') {
-        headerPadding = 'p-6'; sectionSpacing = 'mb-5'; contentPadding = 'p-4 sm:p-5 lg:p-6';
-        headingMargin = 'mb-1'; textLeading = 'leading-5';
-      }
-      if (spacing === 'spacious') {
-        headerPadding = 'p-14'; sectionSpacing = 'mb-12'; contentPadding = 'p-6 sm:p-10 lg:p-14';
-        headingMargin = 'mb-5'; textLeading = 'leading-8';
-      }
-
-      // Template styles
-      let templateClass = 'bg-white text-black';
-      let headerClass = 'text-white';
-      let chipClass = 'bg-cyan-100 text-cyan-900';
-
-      if (activeTemplate === 'dark') {
-        templateClass = 'bg-slate-900 text-white';
-        headerClass = 'bg-black text-white';
-        chipClass = 'bg-slate-700 text-white';
-      }
-      if (activeTemplate === 'minimal') {
-        templateClass = 'bg-white text-black';
-        headerClass = 'bg-white text-black border-b';
-        chipClass = 'bg-slate-200 text-black';
-      }
-
-      document.getElementById('resumeOutput').className =
-        `resume-preview rounded-3xl shadow-2xl overflow-hidden ${templateClass}`;
-
-      // Profile image
-      let profileImageHTML = '';
-      const imageInput = document.getElementById('profileImage');
-      if (imageInput.files && imageInput.files[0]) {
-        profileImageHTML = `<img src="${URL.createObjectURL(imageInput.files[0])}" class="w-28 h-28 rounded-full object-cover border-4 border-white shadow-xl mb-5">`;
-      } else if (window._savedProfileImage) {
-        profileImageHTML = `<img src="${window._savedProfileImage}" class="w-28 h-28 rounded-full object-cover border-4 border-white shadow-xl mb-5">`;
-      }
-
-      if (linkedin || twitter) {
-        socialHTML = `<div class="flex flex-wrap gap-4 mt-4 text-sm opacity-90">`;
-        if (linkedin) {
-          const handle = getHandle(linkedin, 'linkedin');
-          socialHTML += `
-            <a href="${linkedin.startsWith('http') ? linkedin : 'https://' + linkedin}" target="_blank" class="flex items-center gap-1.5 hover:opacity-100">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-              <span>${handle}</span>
-            </a>`;
-        }
-        if (twitter) {
-          const handle = getHandle(twitter, 'twitter');
-          socialHTML += `
-            <a href="${twitter.startsWith('http') ? twitter : 'https://' + twitter}" target="_blank" class="flex items-center gap-1.5 hover:opacity-100">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-              <span>@${handle}</span>
-            </a>`;
-        }
-        socialHTML += `</div>`;
-      }
-
-      // Build sections in order only if visible
-      let sectionsHTML = '';
-
-      const sectionTemplates = {
-        summary: () => sectionVisibility.summary ? `
-          <div class="resume-section ${sectionSpacing}">
-            <h2 class="text-2xl font-bold ${headingMargin}">Professional Summary</h2>
-            <p class="${textLeading} opacity-80" style="font-size: ${fontSize}px; line-height: ${lineHeight};">${formatText(summary)}</p>
-          </div>` : '',
-
-        skills: () => sectionVisibility.skills && skillsArray.length > 0 ? `
-          <div class="resume-section ${sectionSpacing}">
-            <h2 class="text-2xl font-bold ${headingMargin}">Skills</h2>
-            <div class="flex flex-wrap gap-2 sm:gap-3">
-              ${skillsArray.map(skill => `
-                <span class="${chipClass} px-3 sm:px-4 py-2 rounded-full font-medium text-sm sm:text-base">
-                  ${skill.trim()}
-                </span>`).join('')}
-            </div>
-          </div>` : '',
-
-        experience: () => sectionVisibility.experience && jobs.length > 0 ? `
-          <div class="resume-section ${sectionSpacing}">
-            <h2 class="text-2xl font-bold ${headingMargin}">Experience</h2>
-            ${jobs.map(job => `<p class="${textLeading} opacity-90 mb-4" style="font-size: ${fontSize}px; line-height: ${lineHeight};">${formatText(job)}</p>`).join('')}
-          </div>` : '',
-
-        education: () => sectionVisibility.education && degrees.length > 0 ? `
-          <div class="resume-section ${sectionSpacing}">
-            <h2 class="text-2xl font-bold ${headingMargin}">Education</h2>
-            ${degrees.map(degree => `<p class="${textLeading} opacity-90 mb-3" style="font-size: ${fontSize}px; line-height: ${lineHeight};">${formatText(degree)}</p>`).join('')}
-          </div>` : ''
-      };
-
-      // Build sections in the order specified
-      sectionsOrder.forEach(section => {
-        if (sectionTemplates[section]) {
-          sectionsHTML += sectionTemplates[section]();
-        }
-      });
-
-      document.getElementById('resumeOutput').innerHTML = `
-        <div class="resume-header ${headerClass} ${headerPadding}" style="background: linear-gradient(135deg, ${themeColor}, #2563eb)">
-          ${profileImageHTML}
-          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold break-words">${name}</h1>
-          <p class="text-lg sm:text-xl lg:text-2xl mt-2 opacity-90 break-words">${title}</p>
-          
-<div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-4 text-[13px] leading-none">
-  <span>${email}</span>
-  <span>${phone}</span>
-  <span>${location}</span>
-
-  ${linkedin ? `
-    <a href="${linkedin.startsWith('http') ? linkedin : 'https://' + linkedin}" target="_blank" 
-       class="flex items-center gap-1 opacity-90 hover:opacity-100">
-      <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-      </svg>
-      <span>${getHandle(linkedin, 'linkedin')}</span>
-    </a>` : ''}
-
-  ${twitter ? `
-    <a href="${twitter.startsWith('http') ? twitter : 'https://' + twitter}" target="_blank" 
-       class="flex items-center gap-1 opacity-90 hover:opacity-100">
-      <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-      </svg>
-      <span>@${getHandle(twitter, 'twitter')}</span>
-    </a>` : ''}
-</div>
-        </div>
-        
-        <div class="${contentPadding}">
-          ${sectionsHTML}
-        </div>
-      `;
-
-      changeFont();
-    }
-
-    // INIT
-    window.addEventListener('DOMContentLoaded', () => {
-      loadDraft();
-      generateResume();
-
-      document.querySelectorAll('input, textarea, select').forEach(input => {
-        input.addEventListener('input', () => {
-          generateResume();
-          saveDraft();
-        });
-        input.addEventListener('change', () => {
-          generateResume();
-          saveDraft();
-        });
-      });
-    });
-  </script>
-
-  <footer class="text-center text-slate-400 py-8 text-sm px-4">
-    © 2026 <a href="https://niti.com.ng/" target="_blank"><b>Neroitech Inventions</b></a>. All rights reserved.
+  <footer>
+    Powered by <a href="https://niti.com.ng/" target="_blank" rel="noopener">
+        Neroitech Inventions
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </a>
   </footer>
 
-  <!-- Back to top -->
-  <button id="backToTop" onclick="scrollToTop()"
-    class="hidden fixed bottom-6 right-6 bg-cyan-500 hover:bg-cyan-600 text-white w-14 h-14 rounded-full shadow-2xl text-2xl font-bold transition-all duration-300 z-50">
-    ↑
-  </button>
+  <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
 
-  <script>
-    const backToTopButton = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-      backToTopButton.classList.toggle('hidden', window.scrollY <= 300);
-    });
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  </script>
-
-  <!-- Clear Modal -->
-  <div id="clearModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeClearModal()"></div>
-    <div class="relative glass rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-white/10">
-      <div class="text-center">
-        <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-red-500/20 flex items-center justify-center">
-          <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-          </svg>
-        </div>
-        <h3 class="text-xl font-bold text-white mb-2">Clear all progress?</h3>
-        <p class="text-slate-300 text-sm mb-8">This will permanently delete your saved resume data, photo, and settings.</p>
-        <div class="flex gap-3">
-          <button onclick="closeClearModal()" class="flex-1 py-3 rounded-xl font-semibold bg-slate-700 hover:bg-slate-600">Cancel</button>
-          <button onclick="confirmClearDraft()" class="flex-1 py-3 rounded-xl font-semibold bg-red-600 hover:bg-red-500">Yes, Clear Everything</button>
-        </div>
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <h3 id="modal-title">Confirm</h3>
+      <p id="modal-message">Are you sure?</p>
+      <div class="modal-buttons">
+        <button class="secondary" id="modal-cancel">Cancel</button>
+        <button id="modal-confirm">Confirm</button>
       </div>
     </div>
   </div>
+  <div class="toast" id="toast"></div>
 
+  <script>
+    function showTab(tab) {
+      document.getElementById("tab-form").classList.toggle("active", tab === "form");
+      document.getElementById("tab-preview").classList.toggle("active", tab === "preview");
+      document.getElementById("form-panel").classList.toggle("active", tab === "form");
+      document.getElementById("preview-panel").classList.toggle("active", tab === "preview");
+    }
+
+    function addExperience(data = {}) {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `
+        <label>Job Title</label>
+        <input class="exp-title" value="${data.title || ""}" placeholder="Senior Designer">
+        <label>Company</label>
+        <input class="exp-company" value="${data.company || ""}" placeholder="Company Name">
+        <label>Dates</label>
+        <input class="exp-dates" value="${data.dates || ""}" placeholder="2021 – Present">
+        <label>Description</label>
+        <textarea class="exp-desc" placeholder="Key achievements...">${data.desc || ""}</textarea>
+        <div class="item-controls">
+          <button class="danger" type="button" onclick="this.closest('.item').remove(); updatePreview()">Remove</button>
+        </div>
+      `;
+      document.getElementById("experience-list").appendChild(div);
+      div.querySelectorAll("input, textarea").forEach(el => el.addEventListener("input", updatePreview));
+      updatePreview();
+    }
+
+    function addEducation(data = {}) {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `
+        <label>Degree</label>
+        <input class="edu-degree" value="${data.degree || ""}" placeholder="BA Design">
+        <label>School</label>
+        <input class="edu-school" value="${data.school || ""}" placeholder="University">
+        <label>Dates</label>
+        <input class="edu-dates" value="${data.dates || ""}" placeholder="2015 – 2019">
+        <div class="item-controls">
+          <button class="danger" type="button" onclick="this.closest('.item').remove(); updatePreview()">Remove</button>
+        </div>
+      `;
+      document.getElementById("education-list").appendChild(div);
+      div.querySelectorAll("input").forEach(el => el.addEventListener("input", updatePreview));
+      updatePreview();
+    }
+
+    function updatePreview() {
+      // ... existing updatePreview code stays the same
+      document.getElementById("prev-name").textContent = document.getElementById("name").value || "Your Name";
+      document.getElementById("prev-title").textContent = document.getElementById("title").value || "";
+
+      const parts = [
+        document.getElementById("email").value,
+        document.getElementById("phone").value,
+        document.getElementById("location").value,
+        document.getElementById("link").value
+      ].filter(Boolean);
+      document.getElementById("prev-contact").innerHTML = parts.map(p => `<div>${p}</div>`).join("");
+
+      document.getElementById("prev-summary").textContent = document.getElementById("summary").value || "";
+
+      const skills = document.getElementById("skills").value.split(",").map(s => s.trim()).filter(Boolean);
+      document.getElementById("prev-skills").innerHTML = skills.map(s => `<div class="skill-item">• ${s}</div>`).join("") || "—";
+
+      const expHtml = Array.from(document.querySelectorAll("#experience-list .item")).map(item => {
+        const title = item.querySelector(".exp-title").value;
+        const company = item.querySelector(".exp-company").value;
+        const dates = item.querySelector(".exp-dates").value;
+        const desc = item.querySelector(".exp-desc").value;
+        if (!title && !company) return "";
+        return `<div class="job"><div class="job-title">${title}</div><div class="job-meta">${company}${dates ? " · " + dates : ""}</div><div>${desc}</div></div>`;
+      }).join("");
+      document.getElementById("prev-experience").innerHTML = expHtml || "<em style='color:#94a3b8'>Add experience to see it here</em>";
+
+      const eduHtml = Array.from(document.querySelectorAll("#education-list .item")).map(item => {
+        const degree = item.querySelector(".edu-degree").value;
+        const school = item.querySelector(".edu-school").value;
+        const dates = item.querySelector(".edu-dates").value;
+        if (!degree && !school) return "";
+        return `<div class="edu"><div class="edu-title">${degree}</div><div class="edu-meta">${school}${dates ? " · " + dates : ""}</div></div>`;
+      }).join("");
+      document.getElementById("prev-education").innerHTML = eduHtml || "<em style='color:#94a3b8'>Add education to see it here</em>";
+
+      saveData();
+    }
+
+    document.querySelectorAll(".color-swatch").forEach(swatch => {
+      swatch.addEventListener("click", () => {
+        document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+        swatch.classList.add("active");
+        const color = swatch.dataset.color;
+        applyColor(color);
+        document.getElementById("custom-color").value = color;
+        document.getElementById("color-picker").value = color;
+      });
+    });
+
+    function saveData() {
+      const data = {
+        name: document.getElementById("name").value,
+        title: document.getElementById("title").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        location: document.getElementById("location").value,
+        link: document.getElementById("link").value,
+        summary: document.getElementById("summary").value,
+        skills: document.getElementById("skills").value,
+        font: document.getElementById("font-select").value,
+        color: getComputedStyle(document.documentElement).getPropertyValue("--sidebar").trim(),
+        textColor: getComputedStyle(document.documentElement).getPropertyValue("--sidebar-text").trim(),
+        photo: document.getElementById("prev-photo").src || "",
+        experiences: Array.from(document.querySelectorAll("#experience-list .item")).map(item => ({
+          title: item.querySelector(".exp-title").value,
+          company: item.querySelector(".exp-company").value,
+          dates: item.querySelector(".exp-dates").value,
+          desc: item.querySelector(".exp-desc").value
+        })),
+        education: Array.from(document.querySelectorAll("#education-list .item")).map(item => ({
+          degree: item.querySelector(".edu-degree").value,
+          school: item.querySelector(".edu-school").value,
+          dates: item.querySelector(".edu-dates").value
+        }))
+      };
+      localStorage.setItem("neroitech-resume", JSON.stringify(data));
+    }
+
+    function loadData() {
+      const saved = localStorage.getItem("neroitech-resume");
+      if (!saved) return false;
+      try {
+        const data = JSON.parse(saved);
+        document.getElementById("name").value = data.name || "";
+        document.getElementById("title").value = data.title || "";
+        document.getElementById("email").value = data.email || "";
+        document.getElementById("phone").value = data.phone || "";
+        document.getElementById("location").value = data.location || "";
+        document.getElementById("link").value = data.link || "";
+        document.getElementById("summary").value = data.summary || "";
+        document.getElementById("skills").value = data.skills || "";
+        if (data.font) {
+          document.getElementById("font-select").value = data.font;
+          document.getElementById("resume").style.fontFamily = data.font;
+        }
+        if (data.color) {
+          applyColor(data.color);
+          document.getElementById("custom-color").value = data.color;
+          document.getElementById("color-picker").value = data.color;
+        }
+        if (data.textColor) {
+          document.documentElement.style.setProperty("--sidebar-text", data.textColor);
+          document.getElementById("text-color").value = data.textColor;
+          document.getElementById("text-color-picker").value = data.textColor;
+        }
+        if (data.photo && data.photo.startsWith("data:")) {
+          const img = document.getElementById("prev-photo");
+          img.src = data.photo;
+          img.classList.add("show");
+        }
+        document.getElementById("experience-list").innerHTML = "";
+        (data.experiences || []).forEach(exp => addExperience(exp));
+        document.getElementById("education-list").innerHTML = "";
+        (data.education || []).forEach(edu => addEducation(edu));
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    function showConfirm(title, message, onConfirm) {
+      const modal = document.getElementById("modal");
+      document.getElementById("modal-title").textContent = title;
+      document.getElementById("modal-message").textContent = message;
+      modal.classList.add("show");
+
+      const confirmBtn = document.getElementById("modal-confirm");
+      const cancelBtn = document.getElementById("modal-cancel");
+
+      const cleanup = () => {
+        modal.classList.remove("show");
+        confirmBtn.onclick = null;
+        cancelBtn.onclick = null;
+      };
+
+      confirmBtn.onclick = () => { cleanup(); onConfirm(); };
+      cancelBtn.onclick = cleanup;
+    }
+
+    function clearData() {
+      localStorage.removeItem("neroitech-resume");
+    }
+
+    function applyColor(color) {
+      document.documentElement.style.setProperty("--sidebar", color);
+      document.documentElement.style.setProperty("--accent", color);
+      saveData();
+    }
+
+    function applyCustomColor() {
+      let color = document.getElementById("custom-color").value.trim();
+      if (!color.startsWith("#")) color = "#" + color;
+      if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
+        document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+        applyColor(color);
+        document.getElementById("color-picker").value = color;
+      } else {
+        showToast("Please enter a valid hex color (e.g. #1a2b3c)");
+      }
+    }
+
+    document.getElementById("color-picker").addEventListener("input", function() {
+      document.getElementById("custom-color").value = this.value;
+      applyCustomColor();
+    });
+
+    function applyTextColor() {
+      let color = document.getElementById("text-color").value.trim();
+      if (!color.startsWith("#")) color = "#" + color;
+      if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
+        document.documentElement.style.setProperty("--sidebar-text", color);
+        saveData();
+      } else {
+        showToast("Please enter a valid hex color for text (e.g. #ffffff)");
+      }
+    }
+
+    document.getElementById("text-color-picker").addEventListener("input", function() {
+      document.getElementById("text-color").value = this.value;
+      applyTextColor();
+    });
+
+    document.getElementById("text-color").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") applyTextColor();
+    });
+
+    // Back to top button
+    const backToTop = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+      } else {
+        backToTop.classList.remove("show");
+      }
+    });
+
+    ["name","title","email","phone","location","link","summary","skills"].forEach(id => {
+      document.getElementById(id).addEventListener("input", updatePreview);
+    });
+
+    // Photo upload
+    document.getElementById("photo-input").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const img = document.getElementById("prev-photo");
+        img.src = ev.target.result;
+        img.classList.add("show");
+        saveData();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Font selection
+    document.getElementById("font-select").addEventListener("change", function() {
+      document.getElementById("resume").style.fontFamily = this.value;
+      saveData();
+    });
+
+    // Load saved data or use starter content
+    if (!loadData()) {
+      addExperience({
+        title: "Product Designer",
+        company: "Studio North",
+        dates: "2021 – Present",
+        desc: "Lead designer for mobile and web products. Improved conversion by 28% through redesigns."
+      });
+      addExperience({
+        title: "UI Designer",
+        company: "Digital Agency",
+        dates: "2018 – 2021",
+        desc: "Designed interfaces for fintech and e-commerce clients."
+      });
+      addEducation({
+        degree: "BA Interaction Design",
+        school: "University of the Arts",
+        dates: "2014 – 2018"
+      });
+    }
+    updatePreview();
+
+    // Auto-switch to preview on small screens when focusing inputs? Optional.
+  </script>
 </body>
 </html>
