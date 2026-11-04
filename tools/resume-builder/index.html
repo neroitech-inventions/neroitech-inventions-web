@@ -380,7 +380,7 @@
         margin: 0;
         padding: 0;
       }
-      header, footer, .tabs, .form-panel, .back-to-top, .modal-overlay, .toast {
+      header, footer, .tabs, .form-panel, .back-to-top, .modal-overlay, .toast, #readonly-banner {
         display: none !important;
       }
       .layout {
@@ -582,11 +582,12 @@
 
   <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
 
-  <div class="modal-overlay" id="help-modal">
-    <div class="modal" style="text-align:left; max-width:520px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <h3 id="help-step-title">Step 1 of 4</h3>
-        <span id="help-progress" style="font-size:0.85rem; color:#64748b;">1 / 4</span>
+  <div class="modal-overlay" id="help-modal" onclick="if(event.target===this) this.classList.remove('show')">
+    <div class="modal" style="text-align:left; max-width:520px; position:relative;">
+      <button onclick="document.getElementById('help-modal').classList.remove('show')" style="position:absolute; top:12px; right:12px; background:transparent; border:none; font-size:1.4rem; cursor:pointer; color:#64748b; padding:4px 8px; line-height:1;">×</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding-right:28px;">
+        <h3 id="help-step-title">Step 1 of 5</h3>
+        <span id="help-progress" style="font-size:0.85rem; color:#64748b;">1 / 5</span>
       </div>
       <div id="help-content" style="min-height:140px; margin-bottom:20px; line-height:1.6;"></div>
       <div class="modal-buttons">
@@ -611,47 +612,65 @@
   <script>
     const helpSteps = [
       {
-        title: "Step 1 of 4 - Fill your details",
+        title: "Step 1 of 5 - Fill your details",
         content: "<p>Enter your name, job title, contact info, summary, experience, education, and skills.</p><p style='margin-top:10px;'>The preview on the right updates as you type. On mobile, use the <strong>Edit</strong> and <strong>Preview</strong> tabs to switch views.</p>"
       },
       {
-        title: "Step 2 of 4 - Add a photo (optional)",
-        content: "<p>You can upload a file directly, or use an image URL.</p><p style='margin-top:10px;'><strong>Recommended:</strong> Go to <a href='https://imgbb.com/' target='_blank'>ImgBB</a>, upload your photo, then copy the <em>direct link</em> or the full embed code (HTML or BBCode) and paste it in the Image URL field. Click <strong>Load Image URL</strong>.</p><p style='margin-top:10px;'>Direct links look like: <code>https://i.ibb.co/...</code></p>"
+        title: "Step 2 of 5 - Choose a CV style",
+        content: "<p>Under <strong>Photo & Style</strong>, use the <strong>CV Style</strong> dropdown to pick a layout:</p><ul style='margin:10px 0 0 18px;'><li>Classic Sidebar</li><li>Modern Centered</li><li>Minimal Single Column</li><li>Professional Split</li></ul><p style='margin-top:10px;'>You can also change the font and photo border color.</p>"
       },
       {
-        title: "Step 3 of 4 - Share your CV",
-        content: "<p>Click the blue <strong>Get Share Link</strong> button. The link is copied automatically.</p><p style='margin-top:10px;'>Anyone who opens it will see your resume.</p><p style='margin-top:10px;'>Want a shorter, nicer link? Click <strong>Shorten Link</strong> and paste it into <a href='https://urlmini.github.io/' target='_blank'>urlmini</a>.</p>"
+        title: "Step 3 of 5 - Add a photo (optional)",
+        content: "<p>Upload a file, or use an image URL.</p><p style='margin-top:10px;'><strong>Recommended:</strong> Go to <a href='https://imgbb.com/' target='_blank'>ImgBB</a>, upload your photo, then paste the direct link or embed code and click <strong>Load Image URL</strong>.</p><p style='margin-top:10px;'>Direct links look like: <code>https://i.ibb.co/...</code></p>"
       },
       {
-        title: "Step 4 of 4 - Download PDF",
-        content: "<p>Click <strong>Download PDF</strong>.</p><p style='margin-top:10px;'>In the print dialog, turn off <strong>Headers and footers</strong> so the date and URL don’t appear on the page.</p><p style='margin-top:10px;'>That’s it - your resume is ready.</p>"
+        title: "Step 4 of 5 - Share your CV",
+        content: "<p>Click the blue <strong>Get Share Link</strong> button.</p><p style='margin-top:10px;'>You will be asked for a <strong>lock code</strong>. Anyone who opens the link sees a read-only CV. They need the code to unlock and edit.</p><p style='margin-top:10px;'>Want a shorter link? Click <strong>Shorten Link</strong> and paste it into <a href='https://urlmini.github.io/' target='_blank'>urlmini</a>.</p>"
+      },
+      {
+        title: "Step 5 of 5 - Download PDF",
+        content: "<p>Click <strong>Download PDF</strong>.</p><p style='margin-top:10px;'>In the print dialog, turn off <strong>Headers and footers</strong> so the date and URL don’t appear.</p><p style='margin-top:10px;'>That’s it - your resume is ready.</p>"
       }
     ];
+
+    const helpStepsReadOnly = [
+      {
+        title: "Read-only CV",
+        content: "<p>You are viewing a shared resume. You can look at it and download a PDF, but you cannot edit it.</p><p style='margin-top:10px;'>To make changes, click <strong>Unlock to Edit</strong> at the top and enter the lock code from the person who shared it.</p>"
+      },
+      {
+        title: "Download PDF",
+        content: "<p>Click <strong>Download PDF</strong> (if available) or use your browser’s print function.</p><p style='margin-top:10px;'>Turn off <strong>Headers and footers</strong> in the print dialog for a clean file.</p>"
+      }
+    ];
+
     let currentHelpStep = 0;
+    let activeHelpSteps = helpSteps;
 
     function showHelp() {
+      activeHelpSteps = isReadOnly ? helpStepsReadOnly : helpSteps;
       currentHelpStep = 0;
       renderHelpStep();
       document.getElementById("help-modal").classList.add("show");
     }
 
     function renderHelpStep() {
-      const step = helpSteps[currentHelpStep];
+      const step = activeHelpSteps[currentHelpStep];
       document.getElementById("help-step-title").textContent = step.title;
       document.getElementById("help-content").innerHTML = step.content;
-      document.getElementById("help-progress").textContent = (currentHelpStep + 1) + " / " + helpSteps.length;
+      document.getElementById("help-progress").textContent = (currentHelpStep + 1) + " / " + activeHelpSteps.length;
       document.getElementById("help-prev").style.display = currentHelpStep === 0 ? "none" : "inline-block";
-      document.getElementById("help-next").textContent = currentHelpStep === helpSteps.length - 1 ? "Done" : "Next";
+      document.getElementById("help-next").textContent = currentHelpStep === activeHelpSteps.length - 1 ? "Done" : "Next";
     }
 
     function helpStep(dir) {
-      if (dir === 1 && currentHelpStep === helpSteps.length - 1) {
+      if (dir === 1 && currentHelpStep === activeHelpSteps.length - 1) {
         document.getElementById("help-modal").classList.remove("show");
         return;
       }
       currentHelpStep += dir;
       if (currentHelpStep < 0) currentHelpStep = 0;
-      if (currentHelpStep >= helpSteps.length) currentHelpStep = helpSteps.length - 1;
+      if (currentHelpStep >= activeHelpSteps.length) currentHelpStep = activeHelpSteps.length - 1;
       renderHelpStep();
     }
 
@@ -1003,7 +1022,9 @@
       const banner = document.createElement("div");
       banner.id = "readonly-banner";
       banner.style.cssText = "background:#1e293b; color:white; padding:12px 20px; text-align:center; font-size:0.9rem;";
-      banner.innerHTML = `Read-only view <button onclick="promptUnlock()" style="margin-left:12px; background:#2563eb; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer;">Unlock to Edit</button>`;
+      banner.innerHTML = `Read-only view 
+        <button onclick="window.print()" style="margin-left:12px; background:#0f172a; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer;">Download PDF</button>
+        <button onclick="promptUnlock()" style="margin-left:8px; background:#2563eb; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer;">Unlock to Edit</button>`;
       document.body.insertBefore(banner, document.querySelector(".layout"));
     }
 
