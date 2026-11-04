@@ -207,6 +207,13 @@ async function loadData() {
 
         // Prediction
         const prediction = generatePrediction(currentFng, fngData, closes, rsi, macd, ema20, ema50, volumes);
+        window.shareData = {
+    prediction,
+    currentPrice,
+    currentFng: currentFng.value,
+    fngLabel: fngClass.label,
+    timestamp: new Date().toISOString()
+};
         updatePredictionUI(prediction, support, resistance);
 
         // Chart
@@ -838,4 +845,138 @@ loadPositionData();
 
 // Optional: expose reset globally so the button can call it
 window.resetPositionAdvisor = resetPositionData;
+
+
+// Share Signal as Image
+function generateShareImage() {
+    const data = window.shareData;
+    if (!data || !data.prediction) {
+        alert('Please wait for market data to load before sharing.');
+        return;
+    }
+
+    const canvas = document.createElement('canvas');
+    const width = 1200;
+    const height = 630;
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+
+    // Background
+    const gradient = ctx.createLinearGradient(0, 0, width, height);
+    gradient.addColorStop(0, '#0a0e17');
+    gradient.addColorStop(1, '#161b22');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+
+    // Accent border
+    ctx.strokeStyle = '#58a6ff';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(10, 10, width - 20, height - 20);
+
+    // Title
+    ctx.fillStyle = '#e6edf3';
+    ctx.font = 'bold 36px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Bitcoin 24h Market Signal', width / 2, 80);
+
+    // Signal
+    const signal = data.prediction.signal;
+    const isLong = signal.includes('LONG');
+    ctx.fillStyle = isLong ? '#3fb950' : '#f85149';
+    ctx.font = 'bold 72px Inter, sans-serif';
+    ctx.fillText(signal, width / 2, 180);
+
+    // Probabilities
+    ctx.fillStyle = '#8b949e';
+    ctx.font = '24px Inter, sans-serif';
+    const probs = `Up ${data.prediction.upProb}%  •  Down ${data.prediction.downProb}%  •  Sideways ${data.prediction.sideProb}%`;
+    ctx.fillText(probs, width / 2, 240);
+
+    // Price and F&G
+    ctx.fillStyle = '#e6edf3';
+    ctx.font = '28px Inter, sans-serif';
+    ctx.fillText(`BTC: $${Math.round(data.currentPrice).toLocaleString()}  |  Fear & Greed: ${data.currentFng} (${data.fngLabel})`, width / 2, 300);
+
+    // Factors
+    ctx.font = 'bold 22px Inter, sans-serif';
+    ctx.fillStyle = '#3fb950';
+    ctx.textAlign = 'left';
+    ctx.fillText('Bullish Factors:', 80, 360);
+    ctx.fillStyle = '#e6edf3';
+    ctx.font = '18px Inter, sans-serif';
+    data.prediction.bullFactors.forEach((f, i) => {
+        ctx.fillText(`• ${f}`, 100, 395 + i * 30);
+    });
+
+    ctx.font = 'bold 22px Inter, sans-serif';
+    ctx.fillStyle = '#f85149';
+    ctx.fillText('Bearish Factors:', 650, 360);
+    ctx.fillStyle = '#e6edf3';
+    ctx.font = '18px Inter, sans-serif';
+    data.prediction.bearFactors.forEach((f, i) => {
+        ctx.fillText(`• ${f}`, 670, 395 + i * 30);
+    });
+
+    // Footer
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#8b949e';
+    ctx.font = '16px Inter, sans-serif';
+    const time = new Date(data.timestamp).toLocaleString();
+    ctx.fillText(`Generated ${time} UTC  •  Rule-based analysis  •  Not financial advice`, width / 2, 560);
+    ctx.fillText('Powered by Neroitech Inventions', width / 2, 590);
+
+    // Download
+    const link = document.createElement('a');
+    link.download = `btc-signal-${new Date().toISOString().slice(0, 10)}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+}
+
+function copySignalAsText() {
+    const data = window.shareData;
+    if (!data || !data.prediction) {
+        alert('Please wait for market data to load before copying.');
+        return;
+    }
+
+    const p = data.prediction;
+    const price = Math.round(data.currentPrice).toLocaleString();
+    const time = new Date(data.timestamp).toLocaleString();
+
+    const text = `Bitcoin 24h Signal
+
+${p.signal}
+Up: ${p.upProb}% | Down: ${p.downProb}% | Sideways: ${p.sideProb}%
+
+BTC: $${price}
+Fear & Greed: ${data.currentFng} (${data.fngLabel})
+
+Bullish Factors:
+${p.bullFactors.map(f => `• ${f}`).join('\n') || '• None significant'}
+
+Bearish Factors:
+${p.bearFactors.map(f => `• ${f}`).join('\n') || '• None significant'}
+
+Generated: ${time} UTC
+Rule-based analysis • Not financial advice
+Powered by Neroitech Inventions`;
+
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copySignalBtn');
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = original, 2000);
+    }).catch(() => {
+        alert('Failed to copy. Please try again or copy manually.');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const shareBtn = document.getElementById('shareSignalBtn');
+    if (shareBtn) shareBtn.addEventListener('click', generateShareImage);
+
+    const copyBtn = document.getElementById('copySignalBtn');
+    if (copyBtn) copyBtn.addEventListener('click', copySignalAsText);
+});
 

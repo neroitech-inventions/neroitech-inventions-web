@@ -651,3 +651,60 @@ button:disabled {
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
 }
+/* Share button */
+.share-btn {
+    background: linear-gradient(135deg, #58a6ff, #1f6feb);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(88, 166, 255, 0.3);
+}
+.share-btn:hover {
+    background: linear-gradient(135deg, #79b8ff, #58a6ff);
+    transform: translateY(-2px);
+}
+.share-btn.secondary {
+    background: #21262d;
+    border: 1px solid #30363d;
+    box-shadow: none;
+}
+.share-btn.secondary:hover {
+    background: #30363d;
+}
+
+.share-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.share-actions .share-btn {
+    flex: 1 1 200px;
+    min-width: 180px;
+    max-width: 280px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.share-btn {
+    background: linear-gradient(135deg, #58a6ff, #1f6feb);
+    box-shadow: 0 4px 15px rgba(88, 166, 255, 0.3);
+}
+.share-btn:hover {
+    background: linear-gradient(135deg, #79b8ff, #58a6ff);
+    transform: translateY(-2px);
+}
+
+.share-btn.secondary {
+    background: #21262d;
+    border: 1px solid #30363d;
+    box-shadow: none;
+}
+.share-btn.secondary:hover {
+    background: #30363d;
+}
