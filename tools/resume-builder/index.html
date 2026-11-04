@@ -281,7 +281,8 @@
       font-size: 0.9rem;
     }
     @media (max-width: 500px) {
-      .actions { grid-template-columns: 1fr; }
+      #readonly-banner { flex-direction: column; }
+      #readonly-banner button { width: 100%; max-width: 280px; }
     }
 
     /* Resume */
@@ -1064,10 +1065,10 @@
       document.querySelector(".preview-panel").classList.add("active");
       const banner = document.createElement("div");
       banner.id = "readonly-banner";
-      banner.style.cssText = "background:#1e293b; color:white; padding:12px 20px; text-align:center; font-size:0.9rem;";
-      banner.innerHTML = `Read-only view 
-        <button onclick="window.print()" style="margin-left:12px; background:#0f172a; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer;">Download PDF</button>
-        <button onclick="promptUnlock()" style="margin-left:8px; background:#2563eb; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer;">Unlock to Edit</button>`;
+      banner.style.cssText = "background:#1e293b; color:white; padding:12px 16px; text-align:center; font-size:0.9rem; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center;";
+      banner.innerHTML = `<span>Read-only view</span>
+        <button onclick="window.print()" style="background:#0f172a; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:0.85rem;">Download PDF</button>
+        <button onclick="promptUnlock()" style="background:#2563eb; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:0.85rem;">Unlock to Edit</button>`;
       document.body.insertBefore(banner, document.querySelector(".layout"));
     }
 

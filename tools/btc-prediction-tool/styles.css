@@ -70,6 +70,7 @@ h1 {
     margin-bottom: 1.75rem;
     box-shadow: var(--shadow);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
 }
 
 .card:hover {
@@ -94,30 +95,39 @@ h2 {
 }
 
 @media (max-width: 768px) {
-    body { padding: 0.75rem; }
-    h1 { font-size: 1.4rem; }
-    .subtitle { font-size: 0.85rem; }
-    .price-display { font-size: 1.7rem; }
+    body { padding: 0.5rem; }
+    h1 { font-size: 1.3rem; line-height: 1.3; }
+    .subtitle { font-size: 0.8rem; }
+    .price-display { font-size: 1.6rem; flex-wrap: wrap; }
+    .change { margin-left: 0; margin-top: 0.25rem; display: block; }
     .market-overview,
-    .analysis-grid { grid-template-columns: 1fr; }
+    .analysis-grid { grid-template-columns: 1fr; gap: 1rem; }
     .card { padding: 1rem; margin-bottom: 1rem; }
-    .probabilities { flex-direction: column; gap: 0.5rem; }
-    .probabilities div { min-width: auto; }
-    .chart-controls { flex-wrap: wrap; }
+    .probabilities { flex-direction: column; gap: 0.5rem; align-items: stretch; }
+    .probabilities div { min-width: auto; padding: 0.6rem; }
+    .chart-controls { flex-wrap: wrap; justify-content: flex-start; }
+    .chart-controls button { flex: 1 1 auto; min-width: 70px; }
     .advisor-grid { grid-template-columns: 1fr; }
     .advisor-actions { flex-direction: column; }
     .advisor-actions button { width: 100%; }
-    table { font-size: 0.75rem; }
-    th, td { padding: 0.4rem 0.25rem; }
-    .gauge { width: 140px; height: 140px; }
-    .gauge-value { font-size: 2.2rem; }
-    #backToTop { bottom: 16px; right: 16px; width: 42px; height: 42px; }
+    table { font-size: 0.72rem; display: block; overflow-x: auto; }
+    th, td { padding: 0.35rem 0.2rem; white-space: nowrap; }
+    .gauge { width: 130px; height: 130px; }
+    .gauge-value { font-size: 2rem; }
+    .signal { font-size: 1.4rem; padding: 0.9rem; }
+    #techIndicators div { font-size: 0.85rem; padding: 0.5rem 0.6rem; word-break: break-word; }
+    .reasons ul { margin-left: 1rem; }
+    .reasons li { font-size: 0.85rem; }
+    #backToTop { bottom: 12px; right: 12px; width: 40px; height: 40px; }
+    .stats { flex-direction: column; gap: 0.4rem; }
 }
 
 @media (max-width: 480px) {
-    h1 { font-size: 1.2rem; }
-    .price-display { font-size: 1.5rem; }
-    .signal { font-size: 1.4rem; padding: 0.9rem; }
+    h1 { font-size: 1.15rem; }
+    .price-display { font-size: 1.4rem; }
+    .signal { font-size: 1.25rem; }
+    .card { padding: 0.85rem; }
+    #techIndicators div { font-size: 0.8rem; }
 }
 
 .price-display {
@@ -125,6 +135,10 @@ h2 {
     font-weight: 700;
     letter-spacing: -1px;
     margin-bottom: 0.5rem;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .change {
