@@ -15,6 +15,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Elite Resume Builder</title>
   <link href="images/favicon.ico" rel="icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lato:wght@400;700&family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #f1f5f9;
@@ -165,7 +168,8 @@
       padding: 10px;
       border-radius: 8px;
       border: 1px solid var(--border);
-      background: white;
+      background: #e2e8f0;
+      color: #0f172a;
       font-weight: 600;
     }
     .tabs button.active {
@@ -266,10 +270,18 @@
     .color-swatch.active { border-color: #0f172a; }
 
     .actions {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 8px;
+      margin-top: 12px;
+    }
+    .actions button {
+      width: 100%;
+      padding: 12px 8px;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 500px) {
+      .actions { grid-template-columns: 1fr; }
     }
 
     /* Resume */
@@ -315,7 +327,7 @@
       height: 90px;
       border-radius: 50%;
       object-fit: cover;
-      border: 3px solid rgba(255,255,255,0.3);
+      border: 3px solid #ffffff;
       margin-bottom: 16px;
       display: none;
     }
@@ -384,6 +396,7 @@
 <body>
   <header>
     <h1>Free Resume Builder</h1>
+    <button onclick="showHelp()" style="background:transparent; border:1px solid white; padding:6px 14px; font-size:0.85rem;">Help</button>
   </header>
 
   <div class="tabs">
@@ -397,15 +410,38 @@
         <h2>Photo & Style</h2>
         <label>Profile Photo (optional)</label>
         <input type="file" id="photo-input" accept="image/*">
+        <label style="margin-top:10px">Or use an Image URL (works with share links) <span style="font-weight:400; color:#64748b;" title="Paste a direct image link, or the full embed code from ImgBB (HTML or BBCode). Click Help for details.">ⓘ</span></label>
+        <input type="text" id="photo-url" placeholder="Paste direct URL or ImgBB embed code">
+        <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+          <button type="button" onclick="applyPhotoUrl()">Load Image URL</button>
+          <button type="button" onclick="window.open('https://imgbb.com/', '_blank')" style="background:#059669;">Upload to ImgBB</button>
+        </div>
         <label>Font Style</label>
         <select id="font-select">
           <option value="'Segoe UI', system-ui, sans-serif">Modern (Sans)</option>
-          <option value="'Georgia', serif">Classic (Serif)</option>
-          <option value="'Palatino Linotype', 'Book Antiqua', Palatino, serif">Elegant</option>
-          <option value="'Trebuchet MS', sans-serif">Clean</option>
-          <option value="'Courier New', monospace">Technical</option>
-          <option value="'Arial', sans-serif">Simple</option>
+          <option value="'Arial', sans-serif">Arial</option>
+          <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica</option>
+          <option value="'Verdana', sans-serif">Verdana</option>
+          <option value="'Trebuchet MS', sans-serif">Trebuchet</option>
+          <option value="'Georgia', serif">Georgia</option>
+          <option value="'Times New Roman', Times, serif">Times New Roman</option>
+          <option value="'Palatino Linotype', 'Book Antiqua', Palatino, serif">Palatino</option>
+          <option value="'Garamond', serif">Garamond</option>
+          <option value="'Courier New', monospace">Courier</option>
+          <option value="'Consolas', monospace">Consolas</option>
+          <option value="'Inter', system-ui, sans-serif">Inter</option>
+          <option value="'Roboto', sans-serif">Roboto</option>
+          <option value="'Open Sans', sans-serif">Open Sans</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Montserrat', sans-serif">Montserrat</option>
+          <option value="'Poppins', sans-serif">Poppins</option>
         </select>
+        <label style="margin-top:14px">Photo Border Color</label>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <input type="text" id="photo-border-color" placeholder="#ffffff" maxlength="7" value="#ffffff" style="flex:1;">
+          <input type="color" id="photo-border-picker" value="#ffffff" style="width:48px; height:40px; padding:0; border:none; cursor:pointer;">
+          <button type="button" onclick="applyPhotoBorder()">Apply</button>
+        </div>
       </div>
 
       <div class="section">
@@ -472,7 +508,9 @@
 
       <div class="actions">
         <button onclick="window.print()">Download PDF</button>
-        <button class="secondary" onclick="showConfirm('Reset Resume', 'This will clear all your saved data. Are you sure?', () => { clearData(); location.reload(); })">Reset</button>
+        <button onclick="generateShareLink()" style="background:#2563eb;">Get Share Link</button>
+        <button onclick="window.open('https://urlmini.github.io/', '_blank')" style="background:#7c3aed;">Shorten Link</button>
+        <button onclick="showConfirm('Reset Resume', 'This will clear all your saved data. Are you sure?', () => { clearData(); location.reload(); })" style="background:#dc2626;">Reset</button>
       </div>
     </div>
 
@@ -511,6 +549,20 @@
 
   <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
 
+  <div class="modal-overlay" id="help-modal">
+    <div class="modal" style="text-align:left; max-width:520px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h3 id="help-step-title">Step 1 of 4</h3>
+        <span id="help-progress" style="font-size:0.85rem; color:#64748b;">1 / 4</span>
+      </div>
+      <div id="help-content" style="min-height:140px; margin-bottom:20px; line-height:1.6;"></div>
+      <div class="modal-buttons">
+        <button class="secondary" id="help-prev" onclick="helpStep(-1)" style="display:none;">Back</button>
+        <button id="help-next" onclick="helpStep(1)">Next</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="modal">
     <div class="modal">
       <h3 id="modal-title">Confirm</h3>
@@ -524,6 +576,52 @@
   <div class="toast" id="toast"></div>
 
   <script>
+    const helpSteps = [
+      {
+        title: "Step 1 of 4 - Fill your details",
+        content: "<p>Enter your name, job title, contact info, summary, experience, education, and skills.</p><p style='margin-top:10px;'>The preview on the right updates as you type. On mobile, use the <strong>Edit</strong> and <strong>Preview</strong> tabs to switch views.</p>"
+      },
+      {
+        title: "Step 2 of 4 - Add a photo (optional)",
+        content: "<p>You can upload a file directly, or use an image URL.</p><p style='margin-top:10px;'><strong>Recommended:</strong> Go to <a href='https://imgbb.com/' target='_blank'>ImgBB</a>, upload your photo, then copy the <em>direct link</em> or the full embed code (HTML or BBCode) and paste it in the Image URL field. Click <strong>Load Image URL</strong>.</p><p style='margin-top:10px;'>Direct links look like: <code>https://i.ibb.co/...</code></p>"
+      },
+      {
+        title: "Step 3 of 4 - Share your CV",
+        content: "<p>Click the blue <strong>Get Share Link</strong> button. The link is copied automatically.</p><p style='margin-top:10px;'>Anyone who opens it will see your resume.</p><p style='margin-top:10px;'>Want a shorter, nicer link? Click <strong>Shorten Link</strong> and paste it into <a href='https://urlmini.github.io/' target='_blank'>urlmini</a>.</p>"
+      },
+      {
+        title: "Step 4 of 4 - Download PDF",
+        content: "<p>Click <strong>Download PDF</strong>.</p><p style='margin-top:10px;'>In the print dialog, turn off <strong>Headers and footers</strong> so the date and URL don’t appear on the page.</p><p style='margin-top:10px;'>That’s it - your resume is ready.</p>"
+      }
+    ];
+    let currentHelpStep = 0;
+
+    function showHelp() {
+      currentHelpStep = 0;
+      renderHelpStep();
+      document.getElementById("help-modal").classList.add("show");
+    }
+
+    function renderHelpStep() {
+      const step = helpSteps[currentHelpStep];
+      document.getElementById("help-step-title").textContent = step.title;
+      document.getElementById("help-content").innerHTML = step.content;
+      document.getElementById("help-progress").textContent = (currentHelpStep + 1) + " / " + helpSteps.length;
+      document.getElementById("help-prev").style.display = currentHelpStep === 0 ? "none" : "inline-block";
+      document.getElementById("help-next").textContent = currentHelpStep === helpSteps.length - 1 ? "Done" : "Next";
+    }
+
+    function helpStep(dir) {
+      if (dir === 1 && currentHelpStep === helpSteps.length - 1) {
+        document.getElementById("help-modal").classList.remove("show");
+        return;
+      }
+      currentHelpStep += dir;
+      if (currentHelpStep < 0) currentHelpStep = 0;
+      if (currentHelpStep >= helpSteps.length) currentHelpStep = helpSteps.length - 1;
+      renderHelpStep();
+    }
+
     function showTab(tab) {
       document.getElementById("tab-form").classList.toggle("active", tab === "form");
       document.getElementById("tab-preview").classList.toggle("active", tab === "preview");
@@ -587,7 +685,7 @@
       document.getElementById("prev-summary").textContent = document.getElementById("summary").value || "";
 
       const skills = document.getElementById("skills").value.split(",").map(s => s.trim()).filter(Boolean);
-      document.getElementById("prev-skills").innerHTML = skills.map(s => `<div class="skill-item">• ${s}</div>`).join("") || "—";
+      document.getElementById("prev-skills").innerHTML = skills.map(s => `<div class="skill-item">• ${s}</div>`).join("") || "-";
 
       const expHtml = Array.from(document.querySelectorAll("#experience-list .item")).map(item => {
         const title = item.querySelector(".exp-title").value;
@@ -635,6 +733,8 @@
         font: document.getElementById("font-select").value,
         color: getComputedStyle(document.documentElement).getPropertyValue("--sidebar").trim(),
         textColor: getComputedStyle(document.documentElement).getPropertyValue("--sidebar-text").trim(),
+        photoBorder: document.getElementById("photo-border-color").value || "#ffffff",
+        photoUrl: document.getElementById("photo-url").value.trim(),
         photo: document.getElementById("prev-photo").src || "",
         experiences: Array.from(document.querySelectorAll("#experience-list .item")).map(item => ({
           title: item.querySelector(".exp-title").value,
@@ -678,7 +778,17 @@
           document.getElementById("text-color").value = data.textColor;
           document.getElementById("text-color-picker").value = data.textColor;
         }
-        if (data.photo && data.photo.startsWith("data:")) {
+        if (data.photoBorder) {
+          document.getElementById("prev-photo").style.borderColor = data.photoBorder;
+          document.getElementById("photo-border-color").value = data.photoBorder;
+          document.getElementById("photo-border-picker").value = data.photoBorder;
+        }
+        if (data.photoUrl) {
+          document.getElementById("photo-url").value = data.photoUrl;
+          const img = document.getElementById("prev-photo");
+          img.src = data.photoUrl;
+          img.classList.add("show");
+        } else if (data.photo && data.photo.startsWith("data:")) {
           const img = document.getElementById("prev-photo");
           img.src = data.photo;
           img.classList.add("show");
@@ -719,8 +829,96 @@
       cancelBtn.onclick = cleanup;
     }
 
-    function clearData() {
-      localStorage.removeItem("neroitech-resume");
+    function generateShareLink() {
+      const data = {
+        name: document.getElementById("name").value,
+        title: document.getElementById("title").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        location: document.getElementById("location").value,
+        link: document.getElementById("link").value,
+        summary: document.getElementById("summary").value,
+        skills: document.getElementById("skills").value,
+        font: document.getElementById("font-select").value,
+        color: getComputedStyle(document.documentElement).getPropertyValue("--sidebar").trim(),
+        textColor: getComputedStyle(document.documentElement).getPropertyValue("--sidebar-text").trim(),
+        photoBorder: document.getElementById("photo-border-color").value || "#ffffff",
+        photoUrl: document.getElementById("photo-url").value.trim(),
+        experiences: Array.from(document.querySelectorAll("#experience-list .item")).map(item => ({
+          title: item.querySelector(".exp-title").value,
+          company: item.querySelector(".exp-company").value,
+          dates: item.querySelector(".exp-dates").value,
+          desc: item.querySelector(".exp-desc").value
+        })),
+        education: Array.from(document.querySelectorAll("#education-list .item")).map(item => ({
+          degree: item.querySelector(".edu-degree").value,
+          school: item.querySelector(".edu-school").value,
+          dates: item.querySelector(".edu-dates").value
+        }))
+      };
+      try {
+        const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+        const url = window.location.origin + window.location.pathname + "#cv=" + encoded;
+        navigator.clipboard.writeText(url).then(() => {
+          showToast("Share link copied! Use Shorten Link for a fancy URL");
+        }).catch(() => {
+          prompt("Copy this link:", url);
+        });
+      } catch (e) {
+        showToast("Could not create link - resume data too large");
+      }
+    }
+
+    function extractImageUrl(input) {
+      input = input.trim();
+      // HTML embed: <img src="...">
+      let match = input.match(/<img[^>]+src=["']([^"']+)["']/i);
+      if (match) return match[1];
+      // BBCode: [img]url[/img]
+      match = input.match(/\[img\]([^\[]+)\[\/img\]/i);
+      if (match) return match[1];
+      // Plain URL
+      match = input.match(/https?:\/\/[^\s<>"'\]]+/i);
+      if (match) return match[0];
+      return input;
+    }
+
+    function applyPhotoUrl() {
+      let raw = document.getElementById("photo-url").value.trim();
+      if (!raw) {
+        showToast("Please enter an image URL");
+        return;
+      }
+      const url = extractImageUrl(raw);
+      // Basic check for image-like URL
+      const isLikelyImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?|$)/i.test(url) || url.includes("i.ibb.co") || url.includes("imgur.com") || url.includes("postimg");
+      if (!isLikelyImage && !url.startsWith("http")) {
+        showToast("Invalid image link. Use a direct image URL or ImgBB embed code.");
+        return;
+      }
+      document.getElementById("photo-url").value = url; // clean the field
+      const img = document.getElementById("prev-photo");
+      img.src = url;
+      img.classList.add("show");
+      img.onerror = () => showToast("Could not load image. Make sure it's a direct image link.");
+      img.onload = () => showToast("Image loaded");
+      saveData();
+    }
+
+    function loadFromShareLink() {
+      const hash = window.location.hash;
+      if (!hash.startsWith("#cv=")) return false;
+      try {
+        const encoded = hash.slice(4);
+        const json = decodeURIComponent(escape(atob(encoded)));
+        const data = JSON.parse(json);
+        // Reuse existing load logic by temporarily storing it
+        localStorage.setItem("neroitech-resume", JSON.stringify(data));
+        return true;
+      } catch (e) {
+        showToast("Invalid share link");
+        return false;
+      }
     }
 
     function applyColor(color) {
@@ -794,13 +992,40 @@
       reader.readAsDataURL(file);
     });
 
+    function applyPhotoBorder() {
+      let color = document.getElementById("photo-border-color").value.trim();
+      if (!color) return;
+      if (!color.startsWith("#") && !color.startsWith("rgb")) color = "#" + color;
+      // Accept hex or let the browser handle it
+      const img = document.getElementById("prev-photo");
+      img.style.borderColor = color;
+      img.style.borderWidth = "3px";
+      img.style.borderStyle = "solid";
+      saveData();
+    }
+
+    document.getElementById("photo-border-picker").addEventListener("input", function() {
+      document.getElementById("photo-border-color").value = this.value;
+      applyPhotoBorder();
+    });
+
+    document.getElementById("photo-border-color").addEventListener("change", function() {
+      applyPhotoBorder();
+    });
+
+    document.getElementById("photo-border-color").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") applyPhotoBorder();
+    });
+
     // Font selection
     document.getElementById("font-select").addEventListener("change", function() {
       document.getElementById("resume").style.fontFamily = this.value;
       saveData();
     });
 
-    // Load saved data or use starter content
+    // Check for share link first
+    loadFromShareLink();
+    // Then load from localStorage (or starter if nothing)
     if (!loadData()) {
       addExperience({
         title: "Product Designer",
