@@ -615,9 +615,14 @@
       <button onclick="document.getElementById('help-modal').classList.remove('show')" style="position:absolute; top:12px; right:12px; background:transparent; border:none; font-size:1.4rem; cursor:pointer; color:#64748b; padding:4px 8px; line-height:1;">×</button>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding-right:28px;">
         <h3 id="help-step-title">Step 1 of 5</h3>
-        <span id="help-progress" style="font-size:0.85rem; color:#64748b;">1 / 5</span>
       </div>
-      <div id="help-content" style="min-height:140px; margin-bottom:20px; line-height:1.6;"></div>
+      <div id="help-content" style="min-height:140px; margin-bottom:16px; line-height:1.6;"></div>
+      <div style="margin-bottom:16px;">
+        <div style="height:4px; background:#e2e8f0; border-radius:2px; overflow:hidden;">
+          <div id="help-progress-bar" style="height:100%; background:#0f172a; width:0%; transition:width 0.3s;"></div>
+        </div>
+        <div id="help-progress" style="text-align:center; font-size:0.75rem; color:#64748b; margin-top:6px;">1 / 5</div>
+      </div>
       <div class="modal-buttons">
         <button class="secondary" id="help-prev" onclick="helpStep(-1)" style="display:none;">Back</button>
         <button id="help-next" onclick="helpStep(1)">Next</button>
@@ -687,6 +692,7 @@
       document.getElementById("help-step-title").textContent = step.title;
       document.getElementById("help-content").innerHTML = step.content;
       document.getElementById("help-progress").textContent = (currentHelpStep + 1) + " / " + activeHelpSteps.length;
+      document.getElementById("help-progress-bar").style.width = ((currentHelpStep + 1) / activeHelpSteps.length * 100) + "%";
       document.getElementById("help-prev").style.display = currentHelpStep === 0 ? "none" : "inline-block";
       document.getElementById("help-next").textContent = currentHelpStep === activeHelpSteps.length - 1 ? "Done" : "Next";
     }
