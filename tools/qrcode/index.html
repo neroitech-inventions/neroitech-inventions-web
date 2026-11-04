@@ -378,13 +378,25 @@
         .footer a {
             color: #667eea;
             text-decoration: none;
-            transition: var(--transition);
-            font-weight: 500;
+            font-weight: 600;
+            position: relative;
+            transition: color 0.2s;
         }
-
         .footer a:hover {
             color: #764ba2;
-            text-decoration: underline;
+        }
+        .footer a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+        .footer a:hover::after {
+            width: 100%;
         }
 
         @media (max-width: 768px) {
@@ -396,6 +408,34 @@
                 font-size: 20px;
             }
         }
+           .powered {
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.4px;
+  }
+  .powered a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .powered a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #58a6ff, #79b8ff);
+    transition: width 0.3s ease;
+  }
+  .powered a:hover {
+    color: #79b8ff;
+  }
+  .powered a:hover::after {
+    width: 100%;
+  }
     </style>
 </head>
 <body>
@@ -478,7 +518,14 @@
         </div>
 
         <div class="footer">
-            <p>&copy; 2016–2026 <a href="https://niti.com.ng/" target="_blank" rel="noopener noreferrer">Neroitech Inventions</a>. All rights reserved.</p>
+             Powered by <a href="https://niti.com.ng/" target="_blank" rel="noopener">
+        Neroitech Inventions
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </a>
         </div>
     </div>
 
