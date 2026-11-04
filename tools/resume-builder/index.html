@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -331,7 +332,27 @@
       margin-bottom: 16px;
       display: none;
     }
-    .photo-preview.show { display: block; }
+    .photo-preview.show { display: block !important; }
+    .skills-bubbles .skill-item,
+    .skills-tags .skill-item {
+      display: inline-block;
+      margin: 4px 6px 4px 0;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(255,255,255,0.15);
+    }
+    .skills-tags .skill-item {
+      border-radius: 4px;
+      background: rgba(255,255,255,0.1);
+    }
+    .skills-inline .skill-item { display: inline; }
+    .skills-inline .skill-item:not(:last-child)::after { content: " · "; }
+    .resume-main .skills-bubbles .skill-item,
+    .resume-main .skills-tags .skill-item {
+      background: #e2e8f0;
+      color: var(--text);
+    }
     .resume.style-modern {
       flex-direction: column;
       text-align: center;
@@ -468,6 +489,13 @@
           <option value="modern">Modern Centered</option>
           <option value="minimal">Minimal Single Column</option>
           <option value="professional">Professional Split</option>
+        </select>
+        <label style="margin-top:14px">Skills Style</label>
+        <select id="skills-style">
+          <option value="list">Bullet List</option>
+          <option value="bubbles">Bubbles</option>
+          <option value="tags">Tags</option>
+          <option value="inline">Inline</option>
         </select>
         <label style="margin-top:14px">Photo Border Color</label>
         <div style="display:flex; gap:8px; align-items:center;">
@@ -737,7 +765,14 @@
       document.getElementById("prev-summary").textContent = document.getElementById("summary").value || "";
 
       const skills = document.getElementById("skills").value.split(",").map(s => s.trim()).filter(Boolean);
-      document.getElementById("prev-skills").innerHTML = skills.map(s => `<div class="skill-item">• ${s}</div>`).join("") || "-";
+      const skillsContainer = document.getElementById("prev-skills");
+      const style = document.getElementById("skills-style")?.value || "list";
+      skillsContainer.className = "skills-" + style;
+      if (style === "list") {
+        skillsContainer.innerHTML = skills.map(s => `<div class="skill-item">• ${s}</div>`).join("") || "-";
+      } else {
+        skillsContainer.innerHTML = skills.map(s => `<span class="skill-item">${s}</span>`).join("") || "-";
+      }
 
       const expHtml = Array.from(document.querySelectorAll("#experience-list .item")).map(item => {
         const title = item.querySelector(".exp-title").value;
@@ -784,6 +819,7 @@
         skills: document.getElementById("skills").value,
         font: document.getElementById("font-select").value,
         style: document.getElementById("style-select")?.value || "sidebar",
+        skillsStyle: document.getElementById("skills-style")?.value || "list",
         color: getComputedStyle(document.documentElement).getPropertyValue("--sidebar").trim(),
         textColor: getComputedStyle(document.documentElement).getPropertyValue("--sidebar-text").trim(),
         photoBorder: document.getElementById("photo-border-color").value || "#ffffff",
@@ -826,6 +862,9 @@
           const resume = document.getElementById("resume");
           resume.classList.remove("style-sidebar", "style-modern", "style-minimal", "style-professional");
           resume.classList.add("style-" + data.style);
+        }
+        if (data.skillsStyle && document.getElementById("skills-style")) {
+          document.getElementById("skills-style").value = data.skillsStyle;
         }
         if (data.color) {
           applyColor(data.color);
@@ -925,6 +964,7 @@
         skills: document.getElementById("skills").value,
         font: document.getElementById("font-select").value,
         style: document.getElementById("style-select")?.value || "sidebar",
+        skillsStyle: document.getElementById("skills-style")?.value || "list",
         color: getComputedStyle(document.documentElement).getPropertyValue("--sidebar").trim(),
         textColor: getComputedStyle(document.documentElement).getPropertyValue("--sidebar-text").trim(),
         photoBorder: document.getElementById("photo-border-color").value || "#ffffff",
@@ -1139,6 +1179,8 @@
     document.getElementById("photo-border-color").addEventListener("keypress", function(e) {
       if (e.key === "Enter") applyPhotoBorder();
     });
+
+    document.getElementById("skills-style").addEventListener("change", updatePreview);
 
     document.getElementById("style-select").addEventListener("change", function() {
       const resume = document.getElementById("resume");
