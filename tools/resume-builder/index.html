@@ -332,6 +332,32 @@
       display: none;
     }
     .photo-preview.show { display: block; }
+    .resume.style-modern {
+      flex-direction: column;
+      text-align: center;
+    }
+    .resume.style-modern .resume-sidebar {
+      width: 100%;
+      padding: 32px 40px 20px;
+    }
+    .resume.style-modern .resume-main { padding: 20px 40px 40px; text-align: left; }
+    .resume.style-modern .photo-preview { margin: 0 auto 16px; }
+
+    .resume.style-minimal {
+      flex-direction: column;
+    }
+    .resume.style-minimal .resume-sidebar {
+      width: 100%;
+      background: white !important;
+      color: var(--text) !important;
+      padding: 32px 40px 10px;
+      border-bottom: 2px solid var(--sidebar);
+    }
+    .resume.style-minimal .resume-sidebar h2 { color: var(--sidebar); border-color: var(--border); }
+    .resume.style-minimal .resume-main { padding: 24px 40px 40px; }
+
+    .resume.style-professional .resume-sidebar { order: 2; }
+    .resume.style-professional .resume-main { order: 1; }
 
     @media (max-width: 1000px) {
       .tabs { display: flex; }
@@ -435,6 +461,13 @@
           <option value="'Lato', sans-serif">Lato</option>
           <option value="'Montserrat', sans-serif">Montserrat</option>
           <option value="'Poppins', sans-serif">Poppins</option>
+        </select>
+        <label style="margin-top:14px">CV Style</label>
+        <select id="style-select">
+          <option value="sidebar">Classic Sidebar</option>
+          <option value="modern">Modern Centered</option>
+          <option value="minimal">Minimal Single Column</option>
+          <option value="professional">Professional Split</option>
         </select>
         <label style="margin-top:14px">Photo Border Color</label>
         <div style="display:flex; gap:8px; align-items:center;">
@@ -731,6 +764,7 @@
         summary: document.getElementById("summary").value,
         skills: document.getElementById("skills").value,
         font: document.getElementById("font-select").value,
+        style: document.getElementById("style-select")?.value || "sidebar",
         color: getComputedStyle(document.documentElement).getPropertyValue("--sidebar").trim(),
         textColor: getComputedStyle(document.documentElement).getPropertyValue("--sidebar-text").trim(),
         photoBorder: document.getElementById("photo-border-color").value || "#ffffff",
@@ -767,6 +801,12 @@
         if (data.font) {
           document.getElementById("font-select").value = data.font;
           document.getElementById("resume").style.fontFamily = data.font;
+        }
+        if (data.style) {
+          document.getElementById("style-select").value = data.style;
+          const resume = document.getElementById("resume");
+          resume.classList.remove("style-sidebar", "style-modern", "style-minimal", "style-professional");
+          resume.classList.add("style-" + data.style);
         }
         if (data.color) {
           applyColor(data.color);
@@ -865,6 +905,7 @@
         summary: document.getElementById("summary").value,
         skills: document.getElementById("skills").value,
         font: document.getElementById("font-select").value,
+        style: document.getElementById("style-select")?.value || "sidebar",
         color: getComputedStyle(document.documentElement).getPropertyValue("--sidebar").trim(),
         textColor: getComputedStyle(document.documentElement).getPropertyValue("--sidebar-text").trim(),
         photoBorder: document.getElementById("photo-border-color").value || "#ffffff",
@@ -1078,9 +1119,10 @@
       if (e.key === "Enter") applyPhotoBorder();
     });
 
-    // Font selection
-    document.getElementById("font-select").addEventListener("change", function() {
-      document.getElementById("resume").style.fontFamily = this.value;
+    document.getElementById("style-select").addEventListener("change", function() {
+      const resume = document.getElementById("resume");
+      resume.classList.remove("style-sidebar", "style-modern", "style-minimal", "style-professional");
+      resume.classList.add("style-" + this.value);
       saveData();
     });
 
