@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -906,6 +905,10 @@
       toast.textContent = message;
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    function clearData() {
+      localStorage.removeItem("neroitech-resume");
     }
 
     function showConfirm(title, message, onConfirm, withInput = false) {
