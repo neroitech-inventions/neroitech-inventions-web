@@ -810,10 +810,20 @@
       setTimeout(() => toast.classList.remove("show"), 2800);
     }
 
-    function showConfirm(title, message, onConfirm) {
+    function showConfirm(title, message, onConfirm, withInput = false) {
       const modal = document.getElementById("modal");
       document.getElementById("modal-title").textContent = title;
-      document.getElementById("modal-message").textContent = message;
+      const msgEl = document.getElementById("modal-message");
+      msgEl.innerHTML = message;
+      let input = null;
+      if (withInput) {
+        input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Enter lock code";
+        input.style.cssText = "width:100%; padding:10px; margin-top:12px; border:1px solid #e2e8f0; border-radius:8px; font-size:1rem;";
+        msgEl.appendChild(input);
+        setTimeout(() => input.focus(), 100);
+      }
       modal.classList.add("show");
 
       const confirmBtn = document.getElementById("modal-confirm");
@@ -821,15 +831,30 @@
 
       const cleanup = () => {
         modal.classList.remove("show");
+        if (input) input.remove();
         confirmBtn.onclick = null;
         cancelBtn.onclick = null;
       };
 
-      confirmBtn.onclick = () => { cleanup(); onConfirm(); };
+      confirmBtn.onclick = () => {
+        const value = input ? input.value : true;
+        cleanup();
+        onConfirm(value);
+      };
       cancelBtn.onclick = cleanup;
     }
 
     function generateShareLink() {
+      showConfirm("Lock Code", "Enter a code to lock this CV. Only people with the code can edit it.", (code) => {
+        if (!code || code.trim().length < 3) {
+          showToast("Code must be at least 3 characters");
+          return;
+        }
+        createShareLink(code.trim());
+      }, true);
+    }
+
+    function createShareLink(lockCode) {
       const data = {
         name: document.getElementById("name").value,
         title: document.getElementById("title").value,
@@ -844,6 +869,7 @@
         textColor: getComputedStyle(document.documentElement).getPropertyValue("--sidebar-text").trim(),
         photoBorder: document.getElementById("photo-border-color").value || "#ffffff",
         photoUrl: document.getElementById("photo-url").value.trim(),
+        lockCode: btoa(lockCode),
         experiences: Array.from(document.querySelectorAll("#experience-list .item")).map(item => ({
           title: item.querySelector(".exp-title").value,
           company: item.querySelector(".exp-company").value,
@@ -905,6 +931,9 @@
       saveData();
     }
 
+    let isReadOnly = false;
+    let currentLockCode = null;
+
     function loadFromShareLink() {
       const hash = window.location.hash;
       if (!hash.startsWith("#cv=")) return false;
@@ -912,7 +941,10 @@
         const encoded = hash.slice(4);
         const json = decodeURIComponent(escape(atob(encoded)));
         const data = JSON.parse(json);
-        // Reuse existing load logic by temporarily storing it
+        if (data.lockCode) {
+          currentLockCode = atob(data.lockCode);
+          isReadOnly = true;
+        }
         localStorage.setItem("neroitech-resume", JSON.stringify(data));
         return true;
       } catch (e) {
@@ -920,6 +952,35 @@
         return false;
       }
     }
+
+    function enterReadOnlyMode() {
+      document.querySelector(".form-panel").style.display = "none";
+      document.querySelector(".tabs").style.display = "none";
+      document.querySelector(".layout").style.gridTemplateColumns = "1fr";
+      document.querySelector(".preview-panel").style.display = "flex";
+      document.querySelector(".preview-panel").classList.add("active");
+      const banner = document.createElement("div");
+      banner.id = "readonly-banner";
+      banner.style.cssText = "background:#1e293b; color:white; padding:12px 20px; text-align:center; font-size:0.9rem;";
+      banner.innerHTML = `Read-only view <button onclick="promptUnlock()" style="margin-left:12px; background:#2563eb; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer;">Unlock to Edit</button>`;
+      document.body.insertBefore(banner, document.querySelector(".layout"));
+    }
+
+    function promptUnlock() {
+      showConfirm("Unlock CV", "Enter the lock code to edit this resume.", (code) => {
+        if (code === currentLockCode) {
+          isReadOnly = false;
+          document.getElementById("readonly-banner")?.remove();
+          document.querySelector(".form-panel").style.display = "";
+          document.querySelector(".tabs").style.display = "";
+          document.querySelector(".layout").style.gridTemplateColumns = "";
+          showToast("Unlocked — you can now edit");
+        } else {
+          showToast("Wrong code");
+        }
+      }, true);
+    }
+    window.promptUnlock = promptUnlock;
 
     function applyColor(color) {
       document.documentElement.style.setProperty("--sidebar", color);
@@ -1046,6 +1107,7 @@
       });
     }
     updatePreview();
+    if (isReadOnly) enterReadOnlyMode();
 
     // Auto-switch to preview on small screens when focusing inputs? Optional.
   </script>
