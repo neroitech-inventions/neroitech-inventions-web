@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quote Generator</title>
+
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+     <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-QM106YDX6N');
+     </script>
+
+     <!-- Favicon -->
+     <link href="images/favicon.ico" rel="icon">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&family=Raleway:wght@300;400;500&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Oswald:wght@400;500&family=Caveat:wght@400;600&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0f0f12;
+  --surface: #1a1a1f;
+  --surface2: #25252c;
+  --border: #2e2e36;
+  --text: #f0f0f4;
+  --muted: #8a8a96;
+  --accent: #8b5cf6;
+  --accent2: #a78bfa;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 60px;
+}
+header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #fff 30%, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+header p { color: var(--muted); margin-top: 6px; font-size: 0.95rem; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 28px;
+  width: 100%;
+  max-width: 1100px;
+}
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+}
+.panel h2 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin: 14px 0 6px;
+}
+textarea, input[type="text"], select {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+textarea:focus, input:focus, select:focus { border-color: var(--accent); }
+textarea { min-height: 100px; resize: vertical; }
+
+.row { display: flex; gap: 10px; }
+.row > * { flex: 1; }
+
+.color-row { display: flex; gap: 8px; align-items: center; }
+.color-row input[type="color"] {
+  width: 48px; height: 40px; border: none; border-radius: 8px; cursor: pointer; padding: 0; background: none;
+}
+.color-row input[type="text"] { flex: 1; }
+
+.themes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 6px;
+}
+.theme-btn {
+  aspect-ratio: 1.6;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.12s, border-color 0.15s;
+}
+.theme-btn:hover { transform: scale(1.04); }
+.theme-btn.active { border-color: var(--accent); }
+.theme-btn span {
+  position: absolute;
+  bottom: 4px;
+  left: 0; right: 0;
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+button.action {
+  width: 100%;
+  margin-top: 18px;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  transition: opacity 0.15s, transform 0.1s;
+}
+button.action:hover { opacity: 0.92; }
+button.action:active { transform: scale(0.98); }
+button.secondary {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  margin-top: 8px;
+}
+
+.preview-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+#quote-canvas {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+.canvas-note {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 12px;
+}
+.powered {
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.4px;
+  }
+  .powered a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .powered a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #58a6ff, #79b8ff);
+    transition: width 0.3s ease;
+  }
+  .powered a:hover {
+    color: #79b8ff;
+  }
+  .powered a:hover::after {
+    width: 100%;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Quote Generator</h1>
+  <p>Write a quote. Customize it. Download as an image.</p>
+</header>
+
+<div class="layout">
+  <div class="panel">
+    <h2>Your Quote</h2>
+    <label>Quote Text</label>
+    <textarea id="quote-text" placeholder="Write your quote here...">The only way to do great work is to love what you do.</textarea>
+    
+    <label style="display:flex;align-items:center;gap:8px;margin-top:14px">
+      <input type="checkbox" id="show-author" checked style="width:auto">
+      Show who said it
+    </label>
+    <input type="text" id="author" placeholder="Author name (optional)" value="Steve Jobs" style="margin-top:6px">
+
+    <h2 style="margin-top:22px">Appearance</h2>
+    
+    <label>Font</label>
+    <select id="font-select">
+      <option value="'Playfair Display', serif">Playfair Display</option>
+      <option value="'Lora', serif">Lora</option>
+      <option value="'Merriweather', serif">Merriweather</option>
+      <option value="'Inter', sans-serif">Inter</option>
+      <option value="'Poppins', sans-serif">Poppins</option>
+      <option value="'Montserrat', sans-serif">Montserrat</option>
+      <option value="'Raleway', sans-serif">Raleway</option>
+      <option value="'Oswald', sans-serif">Oswald</option>
+      <option value="'Caveat', cursive">Caveat</option>
+      <option value="'Dancing Script', cursive">Dancing Script</option>
+    </select>
+
+    <label>Font Size</label>
+    <input type="range" id="font-size" min="28" max="72" value="42" style="width:100%">
+    <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-top:4px">
+      <span>Small</span><span id="size-val">42</span><span>Large</span>
+    </div>
+
+    <label>Text Color</label>
+    <div class="color-row">
+      <input type="color" id="text-color" value="#ffffff">
+      <input type="text" id="text-color-hex" value="#ffffff" maxlength="7">
+    </div>
+
+    <label>Theme</label>
+    <div class="themes" id="themes">
+      <div class="theme-btn active" data-theme="gradient-purple" style="background:linear-gradient(135deg,#1a1a2e,#16213e)"><span>Midnight</span></div>
+      <div class="theme-btn" data-theme="gradient-sunset" style="background:linear-gradient(135deg,#ff6b6b,#feca57)"><span>Sunset</span></div>
+      <div class="theme-btn" data-theme="gradient-ocean" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364)"><span>Ocean</span></div>
+      <div class="theme-btn" data-theme="gradient-forest" style="background:linear-gradient(135deg,#134e5e,#71b280)"><span>Forest</span></div>
+      <div class="theme-btn" data-theme="solid-dark" style="background:#111"><span>Solid Dark</span></div>
+      <div class="theme-btn" data-theme="solid-light" style="background:#f8f9fa"><span style="color:#333">Light</span></div>
+      <div class="theme-btn" data-theme="gradient-gold" style="background:linear-gradient(135deg,#b8860b,#ffd700)"><span>Gold</span></div>
+      <div class="theme-btn" data-theme="gradient-rose" style="background:linear-gradient(135deg,#ee9ca7,#ffdde1)"><span style="color:#333">Rose</span></div>
+      <div class="theme-btn" data-theme="custom" style="background:#333"><span>Custom</span></div>
+    </div>
+
+    <div id="custom-bg-wrap" style="display:none;margin-top:12px">
+      <label>Custom Background</label>
+      <div class="color-row">
+        <input type="color" id="bg-color" value="#1a1a2e">
+        <input type="text" id="bg-color-hex" value="#1a1a2e" maxlength="7">
+      </div>
+    </div>
+
+    <label style="margin-top:16px">Quote Mark Style</label>
+    <select id="quote-style">
+      <option value="none">None</option>
+      <option value="simple" selected>“ ”</option>
+      <option value="big">Large decorative</option>
+      <option value="minimal">Minimal bars</option>
+    </select>
+
+    <label>Text Alignment</label>
+    <select id="align">
+      <option value="center">Center</option>
+      <option value="left">Left</option>
+      <option value="right">Right</option>
+    </select>
+
+    <button class="action" id="download-btn">Download Image</button>
+    <button class="secondary action" id="random-btn">Random Quote</button>
+  </div>
+
+  <div class="preview-wrap">
+    <div>
+      <canvas id="quote-canvas" width="1080" height="1080"></canvas>
+      <div class="canvas-note">Preview · 1080×1080 (square, perfect for socials)</div>
+    </div>
+  </div>
+</div>
+
+<footer style="margin-top:40px; text-align:center; font-size:0.85rem; color:var(--muted);" class="powered">
+      Powered by <a href="https://niti.com.ng/" target="_blank" rel="noopener">
+        Neroitech Inventions
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </a>
+</footer>
+
+<script>
+const canvas = document.getElementById('quote-canvas');
+const ctx = canvas.getContext('2d');
+
+const quotes = [
+  { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+  { text: "In the middle of difficulty lies opportunity.", author: "Albert Einstein" },
+  { text: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
+  { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+  { text: "It is never too late to be what you might have been.", author: "George Eliot" },
+  { text: "Do what you can, with what you have, where you are.", author: "Theodore Roosevelt" },
+  { text: "Everything you’ve ever wanted is on the other side of fear.", author: "George Addair" },
+  { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" }
+];
+
+const themes = {
+  'gradient-purple': { type: 'gradient', colors: ['#1a1a2e', '#16213e', '#0f3460'] },
+  'gradient-sunset': { type: 'gradient', colors: ['#ff6b6b', '#feca57', '#ff9f43'] },
+  'gradient-ocean': { type: 'gradient', colors: ['#0f2027', '#203a43', '#2c5364'] },
+  'gradient-forest': { type: 'gradient', colors: ['#134e5e', '#71b280'] },
+  'solid-dark': { type: 'solid', color: '#111111' },
+  'solid-light': { type: 'solid', color: '#f8f9fa' },
+  'gradient-gold': { type: 'gradient', colors: ['#b8860b', '#ffd700'] },
+  'gradient-rose': { type: 'gradient', colors: ['#ee9ca7', '#ffdde1'] },
+  'custom': { type: 'solid', color: '#1a1a2e' }
+};
+
+let currentTheme = 'gradient-purple';
+
+function wrapText(text, maxWidth, fontSize) {
+  const words = text.split(' ');
+  const lines = [];
+  let current = '';
+  ctx.font = `${fontSize}px ${document.getElementById('font-select').value}`;
+  for (const word of words) {
+    const test = current ? current + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = test;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+function draw() {
+  const w = canvas.width;
+  const h = canvas.height;
+  const quote = document.getElementById('quote-text').value.trim() || 'Your quote here';
+  const showAuthor = document.getElementById('show-author').checked;
+  const author = showAuthor ? document.getElementById('author').value.trim() : '';
+  const font = document.getElementById('font-select').value;
+  const fontSize = parseInt(document.getElementById('font-size').value);
+  const textColor = document.getElementById('text-color').value;
+  const align = document.getElementById('align').value;
+  const quoteStyle = document.getElementById('quote-style').value;
+
+  // Background
+  const theme = themes[currentTheme];
+  if (theme.type === 'solid') {
+    ctx.fillStyle = theme.color;
+    ctx.fillRect(0, 0, w, h);
+  } else {
+    const grad = ctx.createLinearGradient(0, 0, w, h);
+    theme.colors.forEach((c, i) => grad.addColorStop(i / (theme.colors.length - 1), c));
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  // Quote marks
+  ctx.fillStyle = textColor;
+  ctx.globalAlpha = 0.25;
+  if (quoteStyle === 'big') {
+    ctx.font = `180px ${font}`;
+    ctx.textAlign = 'left';
+    ctx.fillText('“', 60, 180);
+  } else if (quoteStyle === 'simple') {
+    ctx.font = `90px ${font}`;
+    ctx.textAlign = 'center';
+    ctx.fillText('“', w / 2, 160);
+  }
+  ctx.globalAlpha = 1;
+
+  // Main text
+  const maxWidth = w - 160;
+  const lines = wrapText(quote, maxWidth, fontSize);
+  const lineHeight = fontSize * 1.35;
+  const totalHeight = lines.length * lineHeight + (author ? 70 : 0);
+  let y = (h - totalHeight) / 2 + fontSize * 0.8;
+
+  ctx.font = `${fontSize}px ${font}`;
+  ctx.fillStyle = textColor;
+  ctx.textAlign = align;
+  const x = align === 'center' ? w / 2 : align === 'left' ? 80 : w - 80;
+
+  lines.forEach(line => {
+    ctx.fillText(line, x, y);
+    y += lineHeight;
+  });
+
+  // Author
+  if (author) {
+    y += 20;
+    ctx.font = `${Math.round(fontSize * 0.45)}px ${font}`;
+    ctx.globalAlpha = 0.85;
+    ctx.fillText(author.startsWith('-') || author.startsWith('-') ? author : '- ' + author, x, y);
+    ctx.globalAlpha = 1;
+  }
+
+  // Minimal bars
+  if (quoteStyle === 'minimal') {
+    ctx.fillStyle = textColor;
+    ctx.globalAlpha = 0.4;
+    const barY = (h - totalHeight) / 2 - 30;
+    ctx.fillRect(w / 2 - 40, barY, 80, 4);
+    ctx.fillRect(w / 2 - 40, y + 30, 80, 4);
+    ctx.globalAlpha = 1;
+  }
+}
+
+function update() {
+  draw();
+}
+
+// Events
+['quote-text','author','font-select','font-size','text-color','quote-style','align','show-author'].forEach(id => {
+  document.getElementById(id).addEventListener('input', update);
+});
+
+document.getElementById('font-size').addEventListener('input', e => {
+  document.getElementById('size-val').textContent = e.target.value;
+});
+
+document.getElementById('text-color').addEventListener('input', e => {
+  document.getElementById('text-color-hex').value = e.target.value;
+});
+document.getElementById('text-color-hex').addEventListener('input', e => {
+  const v = e.target.value;
+  if (/^#[0-9A-Fa-f]{6}$/.test(v)) document.getElementById('text-color').value = v;
+  update();
+});
+
+document.getElementById('themes').addEventListener('click', e => {
+  const btn = e.target.closest('.theme-btn');
+  if (!btn) return;
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentTheme = btn.dataset.theme;
+  document.getElementById('custom-bg-wrap').style.display = currentTheme === 'custom' ? 'block' : 'none';
+  update();
+});
+
+document.getElementById('bg-color').addEventListener('input', e => {
+  document.getElementById('bg-color-hex').value = e.target.value;
+  themes.custom.color = e.target.value;
+  update();
+});
+document.getElementById('bg-color-hex').addEventListener('input', e => {
+  const v = e.target.value;
+  if (/^#[0-9A-Fa-f]{6}$/.test(v)) {
+    document.getElementById('bg-color').value = v;
+    themes.custom.color = v;
+    update();
+  }
+});
+
+document.getElementById('download-btn').addEventListener('click', () => {
+  const link = document.createElement('a');
+  link.download = 'quote.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
+
+document.getElementById('random-btn').addEventListener('click', () => {
+  const q = quotes[Math.floor(Math.random() * quotes.length)];
+  document.getElementById('quote-text').value = q.text;
+  document.getElementById('author').value = q.author;
+  update();
+});
+
+// Initial draw
+update();
+</script>
+</body>
+</html>
