@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QM106YDX6N');
+  </script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gig Builder</title>
+<link href="images/favicon.ico" rel="icon">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --accent: #0f172a;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+header {
+  background: var(--accent);
+  color: white;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+header h1 { font-size: 1.25rem; font-weight: 700; }
+header button {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tabs {
+  display: none;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 8px;
+  gap: 8px;
+  justify-content: center;
+}
+.tabs button {
+  flex: 1;
+  max-width: 180px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #e2e8f0;
+  color: #0f172a;
+  font-weight: 600;
+  cursor: pointer;
+}
+.tabs button.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  min-height: calc(100vh - 56px);
+}
+.form-panel {
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 24px 20px 40px;
+}
+.preview-panel {
+  background: #e2e8f0;
+  overflow: auto;
+  padding: 32px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.section {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 18px;
+}
+.section h2 {
+  font-size: 1rem;
+  margin-bottom: 14px;
+}
+label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 12px 0 4px;
+  color: var(--muted);
+}
+input, textarea, select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: white;
+}
+textarea { min-height: 80px; resize: vertical; }
+.rich {
+  min-height: 80px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  font-size: 0.95rem;
+  outline: none;
+}
+.rich:focus { border-color: var(--accent); }
+.rich:empty:before {
+  content: attr(data-placeholder);
+  color: #94a3b8;
+}
+.toolbar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.toolbar button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: #f1f5f9;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+.toolbar button:hover { background: #e2e8f0; }
+.bounty-desc a { color: #7c3aed; }
+.rich ul, .rich ol, .bounty-desc ul, .bounty-desc ol {
+  margin: 6px 0 6px 20px;
+}
+.rich li, .bounty-desc li { margin: 2px 0; }
+button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+button.secondary { background: #475569; }
+button:hover { opacity: 0.92; }
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+.actions button { width: 100%; }
+
+/* Bounty preview card */
+.bounty-card {
+  width: 100%;
+  max-width: 720px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+.bounty-top {
+  padding: 28px 28px 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.bounty-badge {
+  display: inline-block;
+  background: #f1f5f9;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+.bounty-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+.bounty-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.875rem;
+  color: #0f172a;
+  font-weight: 600;
+}
+.bounty-meta strong { color: #0f172a; font-weight: 700; }
+.reward-pill {
+  display: inline-flex;
+  background: #ecfdf5;
+  color: #166534;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+.bounty-body { padding: 24px 28px 28px; }
+.section-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #0f172a;
+  font-weight: 700;
+  margin: 20px 0 10px;
+}
+.section-title:first-child { margin-top: 0; }
+.bounty-desc {
+  line-height: 1.7;
+  color: #334155;
+  white-space: pre-wrap;
+  font-size: 0.95rem;
+}
+.skills { display: flex; flex-wrap: wrap; gap: 8px; }
+.skill {
+  background: #f1f5f9;
+  color: #475569;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+.modal h3 { margin-bottom: 12px; }
+.modal p { color: var(--muted); margin-bottom: 16px; }
+.modal input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.modal-buttons { display: flex; gap: 10px; justify-content: center; }
+.modal-buttons button { min-width: 100px; }
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #0f172a;
+  color: white;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  z-index: 1001;
+  opacity: 0;
+  transition: all 0.3s;
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  display: none;
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+}
+.back-to-top.show { display: flex; }
+.back-to-top:hover { opacity: 0.9; }
+
+@media (max-width: 1000px) {
+  .tabs { display: flex; }
+  .layout { grid-template-columns: 1fr; }
+  .form-panel, .preview-panel { display: none; }
+  .form-panel.active, .preview-panel.active { display: block; }
+  .preview-panel { padding: 16px; }
+}
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: white;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    footer a:hover { text-decoration: underline; }
+    .resume-link {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.resume-link:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+   .powered {
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.4px;
+  }
+  .powered a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .powered a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #58a6ff, #79b8ff);
+    transition: width 0.3s ease;
+  }
+  .powered a:hover {
+    color: #79b8ff;
+  }
+  .powered a:hover::after {
+    width: 100%;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1><a href="index.html" onclick="window.location.hash='';" class="resume-link">Gig Builder</a></h1>
+  <button onclick="showHelp()">Help</button>
+</header>
+
+<div class="tabs">
+  <button id="tab-form" class="active" onclick="showTab('form')">Edit</button>
+  <button id="tab-preview" onclick="showTab('preview')">Preview</button>
+</div>
+
+<div class="layout">
+  <div class="form-panel active" id="form-panel">
+    <div class="section">
+      <h2>Bounty Details</h2>
+      <label>Title</label>
+      <input id="title" type="text" value="Build a Cross-Chain Swap UI">
+      <label>Organization / Sponsor</label>
+      <input id="sponsor" type="text" value="Neroitech">
+      <label>Reward</label>
+      <div style="display:flex; gap:10px;">
+        <input id="reward" type="text" value="500" style="flex:1">
+        <select id="currency" style="flex:1">
+          <option>USDT</option>
+          <option>USDC</option>
+          <option>USDG</option>
+          <option>SOL</option>
+          <option>BNB</option>
+          <option>SUI</option>
+          <option>BTC</option>
+          <option>ETH</option>
+          <option value="custom">+ Add Custom</option>
+        </select>
+      </div>
+      <label>Deadline</label>
+      <input id="deadline" type="text" value="Dec 15, 2026">
+      <label>Skills (comma separated)</label>
+      <input id="skills" type="text" value="React, Solana, UI/UX">
+      <label style="margin-top:16px">Telegram Group Link</label>
+      <input id="tg-link" type="text" placeholder="https://t.me/yourgroup or t.me/+invite">
+      <p style="font-size:0.75rem; color:#64748b; margin-top:4px;">Users will submit in this group. Search by track code to find submissions.</p>
+      <label style="margin-top:16px">Project Logo / Photo (optional)</label>
+      <input type="text" id="photo-url" placeholder="Paste direct URL or ImgBB embed code">
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <button type="button" onclick="applyPhotoUrl()" style="flex:1;">Load Image URL</button>
+        <button type="button" onclick="window.open('https://imgbb.com/', '_blank')" style="flex:1; background:#059669;">Upload to ImgBB</button>
+      </div>
+      <p style="font-size:0.75rem; color:#64748b; margin-top:4px;">Use ImgBB so the logo works with share links.</p>
+      <label style="margin-top:16px">Category</label>
+      <select id="category">
+        <option>Development</option>
+        <option>Design</option>
+        <option>Content</option>
+        <option>Research</option>
+        <option>Other</option>
+      </select>
+
+    </div>
+
+    <div class="section">
+      <h2>Content</h2>
+      <label>Description</label>
+      <div class="toolbar">
+        <button type="button" onclick="format('bold')" title="Bold"><b>B</b></button>
+        <button type="button" onclick="format('italic')" title="Italic"><i>I</i></button>
+        <button type="button" onclick="format('underline')" title="Underline"><u>U</u></button>
+        <button type="button" onclick="format('insertUnorderedList')" title="Bullet list">•</button>
+        <button type="button" onclick="format('insertOrderedList')" title="Numbered list">1.</button>
+        <button type="button" onclick="format('createLink')" title="Link">🔗</button>
+        <button type="button" onclick="format('removeFormat')" title="Clear formatting">✕</button>
+        <button type="button" onclick="openColorPicker(this)" title="Text color" style="width:32px; height:32px; padding:0; background:#f1f5f9; border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:0.9rem;">🎨</button>
+      </div>
+      <div id="description" class="rich" contenteditable="true">Build a clean, responsive UI for a cross-chain swap tool that supports Solana and EVM chains. Include wallet connection, token selection, and quote display.</div>
+
+      <label>Requirements / Deliverables</label>
+      <div class="toolbar">
+        <button type="button" onclick="format('bold')" title="Bold"><b>B</b></button>
+        <button type="button" onclick="format('italic')" title="Italic"><i>I</i></button>
+        <button type="button" onclick="format('underline')" title="Underline"><u>U</u></button>
+        <button type="button" onclick="format('insertUnorderedList')" title="Bullet list">•</button>
+        <button type="button" onclick="format('insertOrderedList')" title="Numbered list">1.</button>
+        <button type="button" onclick="format('createLink')" title="Link">🔗</button>
+        <button type="button" onclick="format('removeFormat')" title="Clear formatting">✕</button>
+        <button type="button" onclick="openColorPicker(this)" title="Text color" style="width:32px; height:32px; padding:0; background:#f1f5f9; border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:0.9rem;">🎨</button>
+      </div>
+      <div id="requirements" class="rich" contenteditable="true">- Working prototype<br>- Source code on GitHub<br>- Short demo video or screenshots<br>- README with setup instructions</div>
+
+      <label style="margin-top:14px">Winners Announcement</label>
+      <div class="toolbar">
+        <button type="button" onclick="format('bold')" title="Bold"><b>B</b></button>
+        <button type="button" onclick="format('italic')" title="Italic"><i>I</i></button>
+        <button type="button" onclick="format('underline')" title="Underline"><u>U</u></button>
+        <button type="button" onclick="format('insertUnorderedList')" title="Bullet list">•</button>
+        <button type="button" onclick="format('insertOrderedList')" title="Numbered list">1.</button>
+        <button type="button" onclick="format('createLink')" title="Link">🔗</button>
+        <button type="button" onclick="format('removeFormat')" title="Clear formatting">✕</button>
+        <button type="button" onclick="openColorPicker(this)" title="Text color" style="width:32px; height:32px; padding:0; background:#f1f5f9; border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:0.9rem;">🎨</button>
+      </div>
+      <div id="winners" class="rich" contenteditable="true" data-placeholder="How and when winners will be announced..."></div>
+
+      <label style="margin-top:14px">Prizes</label>
+      <div class="toolbar">
+        <button type="button" onclick="format('bold')" title="Bold"><b>B</b></button>
+        <button type="button" onclick="format('italic')" title="Italic"><i>I</i></button>
+        <button type="button" onclick="format('underline')" title="Underline"><u>U</u></button>
+        <button type="button" onclick="format('insertUnorderedList')" title="Bullet list">•</button>
+        <button type="button" onclick="format('insertOrderedList')" title="Numbered list">1.</button>
+        <button type="button" onclick="format('createLink')" title="Link">🔗</button>
+        <button type="button" onclick="format('removeFormat')" title="Clear formatting">✕</button>
+        <button type="button" onclick="openColorPicker(this)" title="Text color" style="width:32px; height:32px; padding:0; background:#f1f5f9; border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:0.9rem;">🎨</button>
+      </div>
+      <div id="prizes" class="rich" contenteditable="true" data-placeholder="Prize breakdown..."></div>
+
+      <label style="margin-top:14px">Resources</label>
+      <div class="toolbar">
+        <button type="button" onclick="format('bold')" title="Bold"><b>B</b></button>
+        <button type="button" onclick="format('italic')" title="Italic"><i>I</i></button>
+        <button type="button" onclick="format('underline')" title="Underline"><u>U</u></button>
+        <button type="button" onclick="format('insertUnorderedList')" title="Bullet list">•</button>
+        <button type="button" onclick="format('insertOrderedList')" title="Numbered list">1.</button>
+        <button type="button" onclick="format('createLink')" title="Link">🔗</button>
+        <button type="button" onclick="format('removeFormat')" title="Clear formatting">✕</button>
+        <button type="button" onclick="openColorPicker(this)" title="Text color" style="width:32px; height:32px; padding:0; background:#f1f5f9; border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:0.9rem;">🎨</button>
+      </div>
+      <div id="resources" class="rich" contenteditable="true" data-placeholder="Helpful links and resources..."></div>
+
+      <label style="margin-top:14px">Terms</label>
+      <div class="toolbar">
+        <button type="button" onclick="format('bold')" title="Bold"><b>B</b></button>
+        <button type="button" onclick="format('italic')" title="Italic"><i>I</i></button>
+        <button type="button" onclick="format('underline')" title="Underline"><u>U</u></button>
+        <button type="button" onclick="format('insertUnorderedList')" title="Bullet list">•</button>
+        <button type="button" onclick="format('insertOrderedList')" title="Numbered list">1.</button>
+        <button type="button" onclick="format('createLink')" title="Link">🔗</button>
+        <button type="button" onclick="format('removeFormat')" title="Clear formatting">✕</button>
+        <button type="button" onclick="openColorPicker(this)" title="Text color" style="width:32px; height:32px; padding:0; background:#f1f5f9; border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:0.9rem;">🎨</button>
+      </div>
+      <div id="terms" class="rich" contenteditable="true" data-placeholder="Terms and conditions..."></div>
+
+      <label style="margin-top:14px">Contact</label>
+      <div class="toolbar">
+        <button type="button" onclick="format('bold')" title="Bold"><b>B</b></button>
+        <button type="button" onclick="format('italic')" title="Italic"><i>I</i></button>
+        <button type="button" onclick="format('underline')" title="Underline"><u>U</u></button>
+        <button type="button" onclick="format('insertUnorderedList')" title="Bullet list">•</button>
+        <button type="button" onclick="format('insertOrderedList')" title="Numbered list">1.</button>
+        <button type="button" onclick="format('createLink')" title="Link">🔗</button>
+        <button type="button" onclick="format('removeFormat')" title="Clear formatting">✕</button>
+        <button type="button" onclick="openColorPicker(this)" title="Text color" style="width:32px; height:32px; padding:0; background:#f1f5f9; border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:0.9rem;">🎨</button>
+      </div>
+      <input id="contact" type="text" placeholder="@username or t.me/username">
+    </div>
+
+    <div class="actions">
+      <button onclick="generateShareLink()">Get Share Link</button>
+      <button class="secondary" onclick="clearForm()">Clear</button>
+    </div>
+  </div>
+
+  <div class="preview-panel" id="preview-panel">
+    <div class="bounty-card">
+      <div class="bounty-top">
+        <img id="prev-photo" style="width:64px; height:64px; border-radius:12px; object-fit:cover; margin-bottom:12px; display:none; border:2px solid #e2e8f0;">
+        <div class="bounty-badge" id="prev-category">Development</div>
+        <div class="bounty-title" id="prev-title">Build a Cross-Chain Swap UI</div>
+        <div class="bounty-meta">
+          <span><strong id="prev-sponsor">Neroitech</strong></span>
+          <span>Deadline: <strong id="prev-deadline">Dec 15, 2026</strong></span>
+          <span class="reward-pill" id="prev-reward">500 USDC</span>
+          <span style="font-size:0.75rem; opacity:0.7;"><strong>Track:</strong> <span id="prev-track" style="font-weight:400;">----</span></span>
+          
+        </div>
+        <div id="countdown" style="margin-top:12px; font-size:0.9rem; font-weight:600; color:#7c3aed;"></div>
+      </div>
+      <div class="bounty-body">
+        <div class="section-title">Description</div>
+        <div class="bounty-desc" id="prev-desc"></div>
+        <div class="section-title">Requirements</div>
+        <div class="bounty-desc" id="prev-req"></div>
+        <div class="section-title">Prizes</div>
+        <div class="bounty-desc" id="prev-prizes"></div>
+        <div class="section-title">Resources</div>
+        <div class="bounty-desc" id="prev-resources"></div>
+        <div class="section-title">Terms</div>
+        <div class="bounty-desc" id="prev-terms"></div>
+        <div class="section-title">Skills Needed</div>
+        <div class="skills" id="prev-skills"></div>
+        <div class="section-title">Contact</div>
+        <div id="prev-contact"></div>
+        <div class="section-title">Winner Announcement By</div>
+        <div class="bounty-desc" id="prev-winners"></div>
+        <div id="submit-area" style="margin-top:24px;">
+          <button onclick="openSubmit()" style="width:100%; background:#7c3aed; color:white; border:none; padding:14px; border-radius:8px; font-size:1rem; font-weight:600; cursor:pointer;">Submit Now</button>
+          <p style="text-align:center; font-size:0.75rem; color:#94a3b8; margin-top:8px;">By submitting you agree to the terms of this bounty.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <footer>
+    Powered by <a href="https://niti.com.ng/" target="_blank" rel="noopener">
+        Neroitech Inventions
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </a>
+  </footer>
+
+<div class="modal-overlay" id="help-modal" onclick="if(event.target===this) this.classList.remove('show')">
+  <div class="modal" style="text-align:left; max-width:520px; position:relative;">
+    <button onclick="document.getElementById('help-modal').classList.remove('show')" style="position:absolute; top:12px; right:12px; background:transparent; border:none; font-size:1.4rem; cursor:pointer; color:#64748b; padding:4px 8px; line-height:1;">×</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding-right:28px;">
+      <h3 id="help-step-title">Step 1 of 4</h3>
+    </div>
+    <div id="help-content" style="min-height:140px; margin-bottom:16px; line-height:1.6;"></div>
+    <div style="margin-bottom:16px;">
+      <div style="height:4px; background:#e2e8f0; border-radius:2px; overflow:hidden;">
+        <div id="help-progress-bar" style="height:100%; background:#0f172a; width:0%; transition:width 0.3s;"></div>
+      </div>
+      <div id="help-progress" style="text-align:center; font-size:0.75rem; color:#64748b; margin-top:6px;">1 / 5</div>
+    </div>
+    <div class="modal-buttons">
+      <button class="secondary" id="help-prev" onclick="helpStep(-1)" style="display:none;">Back</button>
+      <button id="help-next" onclick="helpStep(1)">Next</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="submit-modal">
+  <div class="modal" style="max-width:480px; text-align:left;">
+    <h3 style="text-align:center;">Bounty Submission</h3>
+    <p style="text-align:center; font-size:0.85rem;">We can't wait to see what you've created!</p>
+    <label>Link to Your Submission *</label>
+    <input id="sub-link" type="text" placeholder="https://...">
+    <label>Tweet Link</label>
+    <input id="sub-tweet" type="text" placeholder="https://x.com/...">
+    <label>Anything Else?</label>
+    <textarea id="sub-notes" placeholder="Add info or link" style="min-height:70px;"></textarea>
+    <div class="modal-buttons" style="margin-top:16px;">
+      <button class="secondary" onclick="closeSubmit()">Cancel</button>
+      <button onclick="sendSubmission()" style="background:#7c3aed;">Submit</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3 id="modal-title">Confirm</h3>
+    <p id="modal-message"></p>
+    <div class="modal-buttons">
+      <button class="secondary" id="modal-cancel">Cancel</button>
+      <button id="modal-confirm">Confirm</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">↑</button>
+
+<script>
+// URL Mini config
+const URLMINI = {
+  SHEET_ID: "1ZUUmPDQGseg5bGEagOeFy89akZRtFQAIm5MksrGOrtw",
+  API_KEY: "AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q",
+  RANGE: "SHORTS!A:D",
+  GO_URL: "https://urlmini.github.io",
+  FORM_ACTION: "https://docs.google.com/forms/d/e/1FAIpQLSdGOvrH7mRsviL6U8H8qYS8cy9-sijgyLfR4fAg4i3vF8fdag/formResponse",
+  FIELDS: {
+    code: "entry.1136799663",
+    url: "entry.314328174",
+    user: "entry.1530086966"
+  }
+};
+
+const fields = ['title','sponsor','reward','currency','deadline','skills','category','tg-link','photo-url','contact'];
+const richFields = ['description','requirements','winners','prizes','resources','terms'];
+
+function format(cmd) {
+  if (cmd === 'createLink') {
+    showConfirm("Add Link", "Enter the URL", (url) => {
+      if (url && url.trim()) document.execCommand('createLink', false, url.trim());
+    }, true);
+  } else {
+    document.execCommand(cmd, false, null);
+  }
+}
+
+let savedSelection = null;
+
+function saveSelection() {
+  const sel = window.getSelection();
+  if (sel.rangeCount > 0) savedSelection = sel.getRangeAt(0);
+}
+
+function restoreSelection() {
+  if (savedSelection) {
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(savedSelection);
+  }
+}
+
+function applyColor(color) {
+  if (!savedSelection || savedSelection.collapsed) return;
+  const span = document.createElement('span');
+  span.style.color = color;
+  try {
+    savedSelection.surroundContents(span);
+  } catch (e) {
+    const content = savedSelection.extractContents();
+    span.appendChild(content);
+    savedSelection.insertNode(span);
+  }
+  updatePreview();
+}
+
+function openColorPicker(btn) {
+  saveSelection();
+  const existing = document.getElementById('color-panel');
+  if (existing) existing.remove();
+
+  const panel = document.createElement('div');
+  panel.id = 'color-panel';
+  panel.style.cssText = 'position:absolute; background:white; border:1px solid #e2e8f0; border-radius:10px; padding:12px; box-shadow:0 4px 16px rgba(0,0,0,0.12); z-index:1000; width:220px;';
+  const rect = btn.getBoundingClientRect();
+  panel.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+  panel.style.left = (rect.left + window.scrollX) + 'px';
+
+  panel.innerHTML = `
+    <div style="display:flex; gap:6px; margin-bottom:8px;">
+      <input type="color" id="cp-picker" value="#7c3aed" style="width:40px; height:32px; border:none; cursor:pointer;">
+      <input type="text" id="cp-hex" placeholder="#hex or name" style="flex:1; padding:6px 8px; border:1px solid #e2e8f0; border-radius:6px; font-size:0.85rem;">
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px;">
+      ${['#000','#dc2626','#ea580c','#ca8a04','#16a34a','#2563eb','#7c3aed','#db2777'].map(c => 
+        `<div onclick="document.getElementById('cp-hex').value='${c}'; applyColor('${c}')" style="width:22px; height:22px; border-radius:4px; background:${c}; cursor:pointer; border:1px solid #e2e8f0;"></div>`
+      ).join('')}
+    </div>
+    <button onclick="document.getElementById('color-panel').remove()" style="width:100%; padding:6px; background:#f1f5f9; color:#0f172a; border:1px solid #e2e8f0; border-radius:6px; font-size:0.8rem;">Close</button>
+  `;
+  document.body.appendChild(panel);
+
+  const picker = panel.querySelector('#cp-picker');
+  const hex = panel.querySelector('#cp-hex');
+  picker.oninput = () => { hex.value = picker.value; applyColor(picker.value); };
+  hex.oninput = () => {
+    const v = hex.value.trim();
+    if (v) applyColor(v);
+  };
+}
+
+// Save selection when clicking into rich editors
+document.querySelectorAll('.rich').forEach(el => {
+  el.addEventListener('mouseup', saveSelection);
+  el.addEventListener('keyup', saveSelection);
+});
+
+const helpSteps = [
+  {
+    title: "Step 1 of 7 - Basic Details",
+    content: "<p>Start with the basics:</p><ul style='margin:10px 0 0 18px;'><li><strong>Title</strong> - what the bounty is about</li><li><strong>Sponsor</strong> - your project or name</li><li><strong>Reward</strong> - amount + currency (use + Add Custom for any token)</li><li><strong>Deadline</strong> - when it ends (e.g. Dec 15, 2026)</li><li><strong>Skills</strong> - comma separated (React, Solana, Design)</li><li><strong>Category</strong> - Development, Design, Content, etc.</li></ul><p style='margin-top:10px;'>The preview updates as you type.</p>"
+  },
+  {
+    title: "Step 2 of 7 - Logo",
+    content: "<p>Add a project logo so your bounty looks professional.</p><p style='margin-top:10px;'>Paste a direct image URL or ImgBB embed code, then click <strong>Load Image URL</strong>.</p><p style='margin-top:10px;'>Need to host an image? Click <strong>Upload to ImgBB</strong> first. Logos work with share links.</p>"
+  },
+  {
+    title: "Step 3 of 7 - Rich Content",
+    content: "<p>Fill in the content sections with formatting:</p><ul style='margin:10px 0 0 18px;'><li><strong>Description</strong> - what needs to be done</li><li><strong>Requirements</strong> - deliverables</li><li><strong>Winners Announcement</strong> - how winners are chosen</li><li><strong>Prizes</strong> - prize breakdown</li><li><strong>Resources</strong> - helpful links</li><li><strong>Terms</strong> - rules</li></ul><p style='margin-top:10px;'>Use the toolbar for <strong>bold</strong>, <em>italic</em>, lists, links, and text color.</p>"
+  },
+  {
+    title: "Step 4 of 7 - Contact & Telegram",
+    content: "<p><strong>Telegram Contact</strong> - enter a username (e.g. @username). It shows as a “Reach out” link.</p><p style='margin-top:10px;'><strong>Telegram Group Link</strong> - paste your group invite link. Submissions will open this group so people can paste their entry.</p><p style='margin-top:10px;'>Search the group by the track code to find submissions.</p>"
+  },
+  {
+    title: "Step 5 of 7 - Formatting Tools",
+    content: "<p>Each content box has a toolbar:</p><ul style='margin:10px 0 0 18px;'><li><strong>B</strong> - Bold</li><li><em>I</em> - Italic</li><li><u>U</u> - Underline</li><li>• - Bullet list</li><li>1. - Numbered list</li><li>🔗 - Add link</li><li>🎨 - Text color (hex, name, or picker)</li><li>✕ - Clear formatting</li></ul><p style='margin-top:10px;'>Select text first, then click a tool.</p>"
+  },
+  {
+    title: "Step 6 of 7 - Share Link",
+    content: "<p>Click <strong>Get Share Link</strong> and set a lock code (at least 3 characters).</p><p style='margin-top:10px;'>Anyone who opens the link sees a read-only bounty with a Submit button. They need the code to edit.</p><p style='margin-top:10px;'>The link contains all your data, including formatting and logo.</p>"
+  },
+  {
+    title: "Step 7 of 7 - Submissions",
+    content: "<p>When someone clicks <strong>Submit Now</strong>, they enter their links and notes.</p><p style='margin-top:10px;'>The app copies the submission text and opens your Telegram group. They paste it there.</p><p style='margin-top:10px;'>Every bounty has a unique <strong>Track code</strong>. Search your group for that code to find all submissions.</p><p style='margin-top:10px;'>That’s it - your bounty is live.</p>"
+  }
+];
+
+let currentHelpStep = 0;
+
+function showHelp() {
+  currentHelpStep = 0;
+  renderHelpStep();
+  document.getElementById("help-modal").classList.add("show");
+}
+
+function renderHelpStep() {
+  const step = helpSteps[currentHelpStep];
+  document.getElementById("help-step-title").textContent = step.title;
+  document.getElementById("help-content").innerHTML = step.content;
+  document.getElementById("help-progress").textContent = (currentHelpStep + 1) + " / " + helpSteps.length;
+  document.getElementById("help-progress-bar").style.width = ((currentHelpStep + 1) / helpSteps.length * 100) + "%";
+  document.getElementById("help-prev").style.display = currentHelpStep === 0 ? "none" : "inline-block";
+  document.getElementById("help-next").textContent = currentHelpStep === helpSteps.length - 1 ? "Done" : "Next";
+}
+
+function helpStep(dir) {
+  if (dir === 1 && currentHelpStep === helpSteps.length - 1) {
+    document.getElementById("help-modal").classList.remove("show");
+    return;
+  }
+  currentHelpStep += dir;
+  if (currentHelpStep < 0) currentHelpStep = 0;
+  if (currentHelpStep >= helpSteps.length) currentHelpStep = helpSteps.length - 1;
+  renderHelpStep();
+}
+
+function extractImageUrl(input) {
+  input = input.trim();
+  let match = input.match(/<img[^>]+src=["']([^"']+)["']/i);
+  if (match) return match[1];
+  match = input.match(/\[img\]([^\[]+)\[\/img\]/i);
+  if (match) return match[1];
+  match = input.match(/https?:\/\/[^\s<>"']+/i);
+  if (match) return match[0];
+  return input;
+}
+
+function applyPhotoUrl() {
+  let raw = document.getElementById("photo-url").value.trim();
+  if (!raw) { showToast("Please enter an image URL"); return; }
+  const url = extractImageUrl(raw);
+  document.getElementById("photo-url").value = url;
+  const img = document.getElementById("prev-photo");
+  img.src = url;
+  img.style.display = "block";
+  showToast("Image loaded");
+}
+
+
+let trackCode = Math.random().toString(36).slice(2, 8).toUpperCase();
+let isReadOnly = false;
+let currentLockCode = null;
+let currentShortUrl = null;
+let isDirty = true;
+let isLoading = false;
+
+function showTab(tab) {
+  document.getElementById("tab-form").classList.toggle("active", tab === "form");
+  document.getElementById("tab-preview").classList.toggle("active", tab === "preview");
+  document.getElementById("form-panel").classList.toggle("active", tab === "form");
+  document.getElementById("preview-panel").classList.toggle("active", tab === "preview");
+}
+
+function updatePreview() {
+  document.getElementById('prev-title').textContent = document.getElementById('title').value || 'Untitled Bounty';
+  document.getElementById('prev-sponsor').textContent = document.getElementById('sponsor').value || 'Anonymous';
+  document.getElementById('prev-deadline').textContent = document.getElementById('deadline').value || 'TBD';
+  document.getElementById('prev-category').textContent = document.getElementById('category').value;
+  const currency = document.getElementById('currency').value;
+document.getElementById('prev-reward').textContent = (document.getElementById('reward').value || '0') + ' ' + currency;
+  document.getElementById('prev-desc').innerHTML = document.getElementById('description').innerHTML || 'No description provided.';
+  document.getElementById('prev-req').innerHTML = document.getElementById('requirements').innerHTML || 'No specific requirements listed.';
+  document.getElementById('prev-winners').innerHTML = document.getElementById('winners').innerHTML || 'Winners will be announced after the deadline.';
+  document.getElementById('prev-prizes').innerHTML = document.getElementById('prizes').innerHTML || '';
+  document.getElementById('prev-resources').innerHTML = document.getElementById('resources').innerHTML || '';
+  document.getElementById('prev-terms').innerHTML = document.getElementById('terms').innerHTML || '';
+  const contactVal = document.getElementById('contact').value.trim();
+  if (contactVal) {
+    let handle = contactVal.replace('https://t.me/', '').replace('t.me/', '').replace('@', '');
+    const url = 'https://t.me/' + handle;
+    document.getElementById('prev-contact').innerHTML = `<p style="margin:0;"><a href="${url}" target="_blank" style="font-size:0.8rem; font-weight:500; color:#64748b; text-decoration:none;">Reach out <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline; vertical-align:middle; margin:0 2px 2px;"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a><span style="font-size:0.8rem; color:#64748b;">if you have any questions about this bounty</span></p>`;
+  } else {
+    document.getElementById('prev-contact').innerHTML = '';
+  }
+  const skills = document.getElementById('skills').value.split(',').map(s => s.trim()).filter(Boolean);
+  document.getElementById('prev-skills').innerHTML = skills.map(s => `<span class="skill">${s}</span>`).join('') || '<span style="color:var(--muted)">None specified</span>';
+  document.getElementById('prev-track').textContent = trackCode;
+
+  updateCountdown();
+}
+
+function updateCountdown() {
+  const deadlineStr = document.getElementById('deadline').value;
+  const el = document.getElementById('countdown');
+  if (!deadlineStr) { el.textContent = ''; return; }
+  const target = new Date(deadlineStr);
+  if (isNaN(target.getTime())) { el.textContent = ''; return; }
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) { el.textContent = 'Deadline passed'; return; }
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  const secs = Math.floor((diff % 60000) / 1000);
+  el.innerHTML = `<span style="font-size:1.1rem;">⏰ ${days}d ${hours}h ${mins}m ${secs}s</span> <span style="font-weight:400; color:#64748b;">remaining</span>`;
+}
+
+function openSubmit() {
+  document.getElementById('submit-modal').classList.add('show');
+}
+function closeSubmit() {
+  document.getElementById('submit-modal').classList.remove('show');
+}
+
+function sendSubmission() {
+  const link = document.getElementById('sub-link').value.trim();
+  if (!link) { showToast('Submission link is required'); return; }
+  const tweet = document.getElementById('sub-tweet').value.trim();
+  const notes = document.getElementById('sub-notes').value.trim();
+  const tgLink = document.getElementById('tg-link').value.trim();
+  if (!tgLink) { showToast('No Telegram group set'); return; }
+
+  let text = `New Bounty Submission\n\nTrack: ${trackCode}\n\nTitle: ${document.getElementById('title').value}\n\nLink: ${link}`;
+  if (tweet && tweet !== link) text += `\n\nTweet: ${tweet}`;
+  if (notes) text += `\n\nNotes: ${notes}`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    showConfirm("Submission Ready", "Your entry has been copied to the clipboard.<br><br>Paste it in the Telegram group that will open.", () => {
+      window.open(tgLink, '_blank');
+    });
+  }).catch(() => {
+    showConfirm("Submission Ready", "Copy your entry and paste it in the Telegram group.", () => {
+      window.open(tgLink, '_blank');
+    });
+  });
+
+  closeSubmit();
+}
+
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2800);
+}
+
+function showConfirm(title, message, onConfirm, withInput = false) {
+  const modal = document.getElementById("modal");
+  document.getElementById("modal-title").textContent = title;
+  const msgEl = document.getElementById("modal-message");
+  msgEl.innerHTML = message;
+  let input = null;
+  if (withInput) {
+    input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "Enter lock code";
+    input.style.cssText = "width:100%; padding:10px; margin-top:12px; border:1px solid #e2e8f0; border-radius:8px; font-size:1rem;";
+    msgEl.appendChild(input);
+    setTimeout(() => input.focus(), 100);
+  }
+  modal.classList.add("show");
+  const confirmBtn = document.getElementById("modal-confirm");
+  const cancelBtn = document.getElementById("modal-cancel");
+  const cleanup = () => {
+    modal.classList.remove("show");
+    if (input) input.remove();
+    confirmBtn.onclick = null;
+    cancelBtn.onclick = null;
+  };
+  confirmBtn.onclick = () => {
+    const value = input ? input.value : true;
+    cleanup();
+    onConfirm(value);
+  };
+  cancelBtn.onclick = cleanup;
+}
+
+function updateShareButton() {
+  const btn = document.querySelector('button[onclick="generateShareLink()"]');
+  if (btn) btn.textContent = (currentShortUrl && !isDirty) ? "Copy Link" : "Get Share Link";
+}
+
+function generateShareLink() {
+  if (currentShortUrl && !isDirty) {
+    navigator.clipboard.writeText(currentShortUrl).then(() => {
+      showToast("Link copied!");
+    }).catch(() => prompt("Copy this link:", currentShortUrl));
+    return;
+  }
+  showConfirm("Lock Code", "Enter a code to lock this bounty. Only people with the code can edit it.", (code) => {
+    if (!code || code.trim().length < 3) {
+      showToast("Code must be at least 3 characters");
+      return;
+    }
+    createShareLink(code.trim());
+  }, true);
+}
+
+async function createShareLink(lockCode) {
+  const data = {};
+  fields.forEach(id => data[id] = document.getElementById(id).value);
+  richFields.forEach(id => data[id] = document.getElementById(id).innerHTML);
+  data.lockCode = btoa(lockCode);
+  data.trackCode = trackCode;
+
+  try {
+    showToast("Checking for existing link...");
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    const longUrl = window.location.origin + window.location.pathname + "#bounty=" + encoded;
+
+    // Check if this exact URL already exists in the sheet
+    const existing = await findExistingShortLink(longUrl);
+    if (existing) {
+      currentShortUrl = existing;
+      isDirty = false;
+      updateShareButton();
+      navigator.clipboard.writeText(existing).then(() => {
+        showToast("Existing link copied!");
+      }).catch(() => prompt("Copy this link:", existing));
+      return;
+    }
+
+    // Create new
+    showToast("Creating short link...");
+    const title = document.getElementById('title').value.trim();
+    let code = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50);
+    if (!code || code.length < 3) code = 'bounty-' + trackCode.toLowerCase();
+    const shortUrl = await createShortLink(code, longUrl, document.getElementById('sponsor').value || 'bounty');
+    data.shortUrl = shortUrl;
+    currentShortUrl = shortUrl;
+    isDirty = false;
+    updateShareButton();
+    navigator.clipboard.writeText(shortUrl).then(() => {
+      showToast("Short link copied!");
+    }).catch(() => prompt("Copy this link:", shortUrl));
+  } catch (e) {
+    showToast("Could not create short link");
+    console.error(e);
+  }
+}
+
+async function findExistingShortLink(targetUrl) {
+  const url = "https://sheets.googleapis.com/v4/spreadsheets/" + URLMINI.SHEET_ID + "/values/" + encodeURIComponent(URLMINI.RANGE) + "?key=" + URLMINI.API_KEY;
+  const res = await fetch(url);
+  if (!res.ok) return null;
+  const data = await res.json();
+  const rows = data.values || [];
+  for (const row of rows) {
+    const code = row[1];
+    const storedUrl = row[2];
+    if (code && storedUrl && storedUrl === targetUrl) {
+      return URLMINI.GO_URL + "?c=" + code;
+    }
+  }
+  return null;
+}
+
+async function createShortLink(code, dest, user) {
+  // Check if code exists in database
+  const url = "https://sheets.googleapis.com/v4/spreadsheets/" + URLMINI.SHEET_ID + "/values/" + encodeURIComponent(URLMINI.RANGE) + "?key=" + URLMINI.API_KEY;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Could not check database");
+  const data = await res.json();
+  const rows = data.values || [];
+  const used = new Set();
+  // Column B is the code (index 1)
+  rows.forEach(row => {
+    if (row[1]) used.add(String(row[1]).trim().toLowerCase());
+  });
+
+  let finalCode = code.toLowerCase();
+  let n = 1;
+  while (used.has(finalCode)) {
+    finalCode = code.toLowerCase() + '-' + n;
+    n++;
+    if (n > 50) throw new Error("Could not find available code");
+  }
+
+  // Submit to form
+  await new Promise((resolve) => {
+    const iframe = document.createElement("iframe");
+    iframe.name = "urlmini_" + Date.now();
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = URLMINI.FORM_ACTION;
+    form.target = iframe.name;
+    form.style.display = "none";
+    const fields = {
+      [URLMINI.FIELDS.code]: finalCode,
+      [URLMINI.FIELDS.url]: dest,
+      [URLMINI.FIELDS.user]: user,
+      fvv: "1",
+      pageHistory: "0"
+    };
+    Object.keys(fields).forEach(name => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      input.value = fields[name];
+      form.appendChild(input);
+    });
+    document.body.appendChild(form);
+    form.submit();
+    setTimeout(() => { form.remove(); iframe.remove(); resolve(); }, 2000);
+  });
+
+  return URLMINI.GO_URL + "?c=" + finalCode;
+}
+
+function loadFromShareLink() {
+  const hash = window.location.hash;
+  if (!hash.startsWith("#bounty=")) return false;
+  isLoading = true;
+  try {
+    const encoded = hash.slice(8);
+    const json = decodeURIComponent(escape(atob(encoded)));
+    const data = JSON.parse(json);
+    if (data.lockCode) {
+      currentLockCode = atob(data.lockCode);
+      isReadOnly = true;
+    }
+    if (data.shortUrl) {
+      currentShortUrl = data.shortUrl;
+      isDirty = false;
+    }
+    fields.forEach(id => {
+      if (data[id] !== undefined) {
+        if (id === 'currency') {
+          const select = document.getElementById('currency');
+          const exists = Array.from(select.options).some(o => o.value === data[id]);
+          if (!exists && data[id] && data[id] !== 'custom') {
+            const option = document.createElement('option');
+            option.value = data[id];
+            option.textContent = data[id];
+            select.insertBefore(option, select.querySelector('option[value="custom"]'));
+          }
+          select.value = data[id];
+        } else {
+          document.getElementById(id).value = data[id];
+        }
+      }
+    });
+    richFields.forEach(id => {
+      if (data[id] !== undefined) document.getElementById(id).innerHTML = data[id];
+    });
+    if (data.trackCode) trackCode = data.trackCode;
+    if (data['photo-url']) {
+      const img = document.getElementById("prev-photo");
+      img.src = data['photo-url'];
+      img.style.display = "block";
+    }
+    setTimeout(() => { isLoading = false; }, 100);
+    return true;
+  } catch (e) {
+    showToast("Invalid share link");
+    return false;
+  }
+}
+
+function enterReadOnlyMode() {
+  document.querySelector(".form-panel").style.display = "none";
+  document.querySelector(".tabs").style.display = "none";
+  document.querySelector(".layout").style.gridTemplateColumns = "1fr";
+  document.querySelector(".preview-panel").style.display = "flex";
+  document.querySelector(".preview-panel").classList.add("active");
+  document.getElementById("submit-area").style.display = "block";
+  const banner = document.createElement("div");
+  banner.id = "readonly-banner";
+  banner.style.cssText = "background:#1e293b; color:white; padding:12px 16px; text-align:center; font-size:0.9rem; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center;";
+  banner.innerHTML = `<span>Read-only view</span>
+    <button onclick="promptUnlock()" style="background:#2563eb; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:0.85rem;">Unlock to Edit</button>`;
+  document.body.insertBefore(banner, document.querySelector(".layout"));
+}
+
+function promptUnlock() {
+  showConfirm("Unlock Bounty", "Enter the lock code to edit this bounty.", (code) => {
+    if (code === currentLockCode) {
+      isReadOnly = false;
+      document.getElementById("readonly-banner")?.remove();
+      document.querySelector(".form-panel").style.display = "";
+      document.querySelector(".tabs").style.display = "";
+      document.querySelector(".layout").style.gridTemplateColumns = "";
+      showToast("Unlocked - you can now edit");
+    } else {
+      showToast("Wrong code");
+    }
+  }, true);
+}
+window.promptUnlock = promptUnlock;
+
+function clearForm() {
+  showConfirm("Clear Form", "Clear all fields?", () => {
+    fields.forEach(id => document.getElementById(id).value = "");
+    richFields.forEach(id => document.getElementById(id).innerHTML = "");
+    updatePreview();
+    showToast("Form cleared");
+  });
+}
+
+fields.forEach(id => {
+  document.getElementById(id).addEventListener("input", () => {
+    if (!isLoading) {
+      isDirty = true;
+      updateShareButton();
+    }
+    updatePreview();
+  });
+});
+richFields.forEach(id => {
+  document.getElementById(id).addEventListener("input", () => {
+    if (!isLoading) {
+      isDirty = true;
+      updateShareButton();
+    }
+    updatePreview();
+  });
+});
+
+document.getElementById("currency").addEventListener("change", function() {
+  if (this.value === "custom") {
+    const select = this;
+    showConfirm("Add Custom Token", "Enter the token name (e.g. PEPE, ARB)", (name) => {
+      if (name && name.trim()) {
+        const token = name.trim().toUpperCase();
+        const option = document.createElement("option");
+        option.value = token;
+        option.textContent = token;
+        select.insertBefore(option, select.querySelector('option[value="custom"]'));
+        select.value = token;
+      } else {
+        select.value = "USDT";
+      }
+      updatePreview();
+    }, true);
+  } else {
+    updatePreview();
+  }
+});
+
+loadFromShareLink();
+updatePreview();
+updateShareButton();
+if (isReadOnly) enterReadOnlyMode();
+setInterval(updateCountdown, 1000);
+
+const backToTop = document.getElementById("backToTop");
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    backToTop.classList.add("show");
+  } else {
+    backToTop.classList.remove("show");
+  }
+});
+</script>
+</body>
+</html>

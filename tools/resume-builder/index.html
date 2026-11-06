@@ -781,7 +781,7 @@
       },
       {
         title: "Step 4 of 5 - Share your CV",
-        content: "<p>Click the blue <strong>Get Share Link</strong> button.</p><p style='margin-top:10px;'>You will be asked for a <strong>lock code</strong>. Anyone who opens the link sees a read-only CV. They need the code to unlock and edit.</p>"
+        content: "<p>Click the blue <strong>Get Share Link</strong> button.</p><p style='margin-top:10px;'>You will be asked for a <strong>lock code</strong>. A short link is created from your name (e.g. nyerhowo-isuru-cv). Anyone who opens the link sees a read-only CV. They need the code to unlock and edit.</p>"
       },
       {
         title: "Step 5 of 5 - Download PDF",
@@ -1143,7 +1143,18 @@
       cancelBtn.onclick = cleanup;
     }
 
+    function updateShareButton() {
+      const btn = document.querySelector('button[onclick="generateShareLink()"]');
+      if (btn) btn.textContent = (currentShortUrl && !isDirty) ? "Copy Link" : "Get Share Link";
+    }
+
     function generateShareLink() {
+      if (currentShortUrl && !isDirty) {
+        navigator.clipboard.writeText(currentShortUrl).then(() => {
+          showToast("Link copied!");
+        }).catch(() => prompt("Copy this link:", currentShortUrl));
+        return;
+      }
       showConfirm("Lock Code", "Enter a code to lock this CV. Only people with the code can edit it.", (code) => {
         if (!code || code.trim().length < 3) {
           showToast("Code must be at least 3 characters");
@@ -1153,7 +1164,85 @@
       }, true);
     }
 
-    function createShareLink(lockCode) {
+    // URL Mini config
+    const URLMINI = {
+      SHEET_ID: "1ZUUmPDQGseg5bGEagOeFy89akZRtFQAIm5MksrGOrtw",
+      API_KEY: "AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q",
+      RANGE: "SHORTS!A:D",
+      GO_URL: "https://urlmini.github.io",
+      FORM_ACTION: "https://docs.google.com/forms/d/e/1FAIpQLSdGOvrH7mRsviL6U8H8qYS8cy9-sijgyLfR4fAg4i3vF8fdag/formResponse",
+      FIELDS: {
+        code: "entry.1136799663",
+        url: "entry.314328174",
+        user: "entry.1530086966"
+      }
+    };
+
+    async function createShortLink(code, dest, user) {
+      const url = "https://sheets.googleapis.com/v4/spreadsheets/" + URLMINI.SHEET_ID + "/values/" + encodeURIComponent(URLMINI.RANGE) + "?key=" + URLMINI.API_KEY;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Could not check database");
+      const data = await res.json();
+      const rows = data.values || [];
+      const used = new Set();
+      rows.forEach(row => {
+        if (row[1]) used.add(String(row[1]).trim().toLowerCase());
+      });
+      let finalCode = code.toLowerCase();
+      let n = 1;
+      while (used.has(finalCode)) {
+        finalCode = code.toLowerCase() + '-' + n;
+        n++;
+        if (n > 50) throw new Error("Could not find available code");
+      }
+      await new Promise((resolve) => {
+        const iframe = document.createElement("iframe");
+        iframe.name = "urlmini_" + Date.now();
+        iframe.style.display = "none";
+        document.body.appendChild(iframe);
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = URLMINI.FORM_ACTION;
+        form.target = iframe.name;
+        form.style.display = "none";
+        const fields = {
+          [URLMINI.FIELDS.code]: finalCode,
+          [URLMINI.FIELDS.url]: dest,
+          [URLMINI.FIELDS.user]: user,
+          fvv: "1",
+          pageHistory: "0"
+        };
+        Object.keys(fields).forEach(name => {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = name;
+          input.value = fields[name];
+          form.appendChild(input);
+        });
+        document.body.appendChild(form);
+        form.submit();
+        setTimeout(() => { form.remove(); iframe.remove(); resolve(); }, 2000);
+      });
+      return URLMINI.GO_URL + "?c=" + finalCode;
+    }
+
+    async function findExistingShortLink(targetUrl) {
+      const url = "https://sheets.googleapis.com/v4/spreadsheets/" + URLMINI.SHEET_ID + "/values/" + encodeURIComponent(URLMINI.RANGE) + "?key=" + URLMINI.API_KEY;
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      const data = await res.json();
+      const rows = data.values || [];
+      for (const row of rows) {
+        const code = row[1];
+        const storedUrl = row[2];
+        if (code && storedUrl && storedUrl === targetUrl) {
+          return URLMINI.GO_URL + "?c=" + code;
+        }
+      }
+      return null;
+    }
+
+    async function createShareLink(lockCode) {
       const data = {
         name: document.getElementById("name").value,
         title: document.getElementById("title").value,
@@ -1173,6 +1262,7 @@
         photoBorder: document.getElementById("photo-border-color").value || "#ffffff",
         photoUrl: document.getElementById("photo-url").value.trim(),
         lockCode: btoa(lockCode),
+        shortUrl: currentShortUrl,
         iconEmail: document.getElementById("icon-email").checked,
         iconPhone: document.getElementById("icon-phone").checked,
         iconLocation: document.getElementById("icon-location").checked,
@@ -1195,14 +1285,36 @@
       };
       try {
         const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-        const url = window.location.origin + window.location.pathname + "#cv=" + encoded;
-        navigator.clipboard.writeText(url).then(() => {
-          showToast("Share link copied! Use Shorten Link for a fancy URL");
+        const longUrl = window.location.origin + window.location.pathname + "#cv=" + encoded;
+
+        showToast("Checking for existing link...");
+        const existing = await findExistingShortLink(longUrl);
+        if (existing) {
+          currentShortUrl = existing;
+          isDirty = false;
+          updateShareButton();
+          navigator.clipboard.writeText(existing).then(() => {
+            showToast("Existing link copied!");
+          }).catch(() => prompt("Copy this link:", existing));
+          return;
+        }
+
+        const name = document.getElementById("name").value.trim();
+        let code = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) + '-cv';
+        if (!code || code.length < 3) code = 'cv-' + Date.now().toString(36);
+        showToast("Creating short link...");
+        const shortUrl = await createShortLink(code, longUrl, name || 'resume');
+        currentShortUrl = shortUrl;
+        isDirty = false;
+        updateShareButton();
+        navigator.clipboard.writeText(shortUrl).then(() => {
+          showToast("Short link copied!");
         }).catch(() => {
-          prompt("Copy this link:", url);
+          prompt("Copy this link:", shortUrl);
         });
       } catch (e) {
-        showToast("Could not create link - resume data too large");
+        showToast("Could not create short link");
+        console.error(e);
       }
     }
 
@@ -1240,6 +1352,8 @@
 
     let isReadOnly = false;
     let currentLockCode = null;
+    let currentShortUrl = null;
+    let isDirty = true;
 
     function loadFromShareLink() {
       const hash = window.location.hash;
@@ -1251,6 +1365,10 @@
         if (data.lockCode) {
           currentLockCode = atob(data.lockCode);
           isReadOnly = true;
+        }
+        if (data.shortUrl) {
+          currentShortUrl = data.shortUrl;
+          isDirty = false;
         }
         localStorage.setItem("neroitech-resume", JSON.stringify(data));
         return true;
@@ -1344,7 +1462,11 @@
     });
 
     ["name","title","email","phone","location","link","summary","skills"].forEach(id => {
-      document.getElementById(id).addEventListener("input", updatePreview);
+      document.getElementById(id).addEventListener("input", () => {
+        isDirty = true;
+        updateShareButton();
+        updatePreview();
+      });
     });
 
     document.getElementById("photo-input").addEventListener("change", function(e) {
@@ -1419,6 +1541,7 @@
       });
     }
     updatePreview();
+    updateShareButton();
     if (isReadOnly) enterReadOnlyMode();
   </script>
 </body>
