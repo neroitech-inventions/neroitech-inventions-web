@@ -848,6 +848,7 @@
     <button class="color-btn" onclick="openColorPicker('highlight')" title="Highlight"><i class="fa-solid fa-highlighter"></i> <span class="color-indicator" id="highlight-color-indicator" style="background:#fef08a"></span></button>
     <input type="color" id="text-color" value="#0f172a" onchange="applyTextColor(this.value)" style="display:none;">
     <input type="color" id="highlight-color" value="#fef08a" onchange="applyHighlightColor(this.value)" style="display:none;">
+    <button type="button" onclick="insertDateTime()" title="Insert current date and time" aria-label="Insert current date and time"><i class="fa-regular fa-calendar-days" aria-hidden="true"></i></button>
     <div class="separator desktop-only"></div>
     <button onclick="execCmd('justifyLeft')" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
     <button onclick="execCmd('justifyCenter')" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
@@ -859,6 +860,7 @@
     <button onclick="insertLink()" title="Insert Link"><i class="fa-solid fa-link"></i></button>
     <button onclick="toggleEmojiPicker(event)" title="Emoji"><i class="fa-solid fa-face-smile"></i></button>
     <button onclick="copyToClipboard()" title="Copy to Clipboard"><i class="fa-solid fa-copy"></i></button>
+    <button type="button" onmousedown="saveSelection()" onclick="pasteFromClipboard()" title="Paste from Clipboard"><i class="fa-solid fa-paste"></i></button>
     <button onclick="togglePageEnds()" id="page-ends-btn" title="Show where printed pages end"><i class="fa-solid fa-file-lines"></i></button>
     <button onclick="clearAllFormatting()" title="Clear Formatting (including links)"><i class="fa-solid fa-eraser"></i></button>
     <button id="more-tools-btn" onclick="toggleMoreTools()" title="More tools" style="display:none;"><i class="fa-solid fa-ellipsis"></i></button>
@@ -935,6 +937,7 @@
         <button onclick="insertLink(); toggleMoreTools()"><i class="fa-solid fa-link"></i> Insert Link</button>
         <button onclick="toggleEmojiPicker(event); toggleMoreTools()"><i class="fa-solid fa-face-smile"></i> Emoji</button>
         <button onclick="copyToClipboard(); toggleMoreTools()"><i class="fa-solid fa-copy"></i> Copy</button>
+        <button onmousedown="saveSelection()" onclick="pasteFromClipboard(); toggleMoreTools()"><i class="fa-solid fa-paste"></i> Paste</button>
         <button onclick="togglePageEnds(); toggleMoreTools()"><i class="fa-solid fa-file-lines"></i> Page Ends</button>
         <button onclick="clearAllFormatting(); toggleMoreTools()"><i class="fa-solid fa-eraser"></i> Clear Format</button>
       </div>
@@ -1419,6 +1422,24 @@
       }
     }
 
+    function insertDateTime() {
+      const editor = document.getElementById('editor');
+      editor.focus();
+      restoreSelection();
+      const now = new Date();
+      const date = new Intl.DateTimeFormat(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
+      const time = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', hour12: false }).format(now);
+      const stamp = `${date} ${time}`;
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount && editor.contains(selection.anchorNode)) {
+        document.execCommand('insertText', false, stamp);
+      } else {
+        editor.appendChild(document.createTextNode(stamp));
+      }
+      saveSelection();
+      saveData();
+    }
+
     function openColorPicker(type) {
       saveSelection();
       currentColorType = type;
@@ -1582,6 +1603,56 @@
       updateSaveButton();
 
       showToast('New note started');
+    }
+
+    async function pasteFromClipboard() {
+      // Keep the editor cursor/selection even though clicking the toolbar moves focus.
+      saveSelection();
+      if (!navigator.clipboard || typeof navigator.clipboard.readText !== 'function') {
+        showToast('Clipboard access is unavailable here. Use Ctrl+V (or Cmd+V) in the note.');
+        return;
+      }
+
+      try {
+        const pastedText = await navigator.clipboard.readText();
+        if (!pastedText) {
+          showToast('Clipboard is empty');
+          return;
+        }
+
+        editor.focus();
+        if (savedSelection && editor.contains(savedSelection.commonAncestorContainer)) {
+          restoreSelection();
+        } else {
+          const range = document.createRange();
+          range.selectNodeContents(editor);
+          range.collapse(false);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+
+        // Insert as plain text to avoid importing unsafe or unwanted HTML formatting.
+        const inserted = document.execCommand('insertText', false, pastedText);
+        if (!inserted) {
+          const selection = window.getSelection();
+          if (selection && selection.rangeCount) {
+            const range = selection.getRangeAt(0);
+            range.deleteContents();
+            const textNode = document.createTextNode(pastedText);
+            range.insertNode(textNode);
+            range.setStartAfter(textNode);
+            range.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
+        }
+        saveSelection();
+        saveData();
+        showToast('Pasted from clipboard');
+      } catch (error) {
+        showToast('Paste permission denied. Use Ctrl+V (or Cmd+V) in the note.');
+      }
     }
 
     function copyToClipboard() {
