@@ -422,8 +422,146 @@
     }
     .emoji-picker span:hover { background: #f1f5f9; border-radius: 4px; }
 
+    #read-widget {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      margin-left: auto;
+      flex: 0 0 auto;
+      z-index: 80;
+    }
+    #read-toggle {
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      background: #eef2ff;
+      color: #4338ca;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+      transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+    #read-toggle:hover {
+      background: #e0e7ff;
+      box-shadow: 0 4px 12px rgba(67, 56, 202, .14);
+      transform: translateY(-1px);
+    }
+    #read-toggle:focus-visible {
+      outline: 3px solid rgba(99, 102, 241, .28);
+      outline-offset: 2px;
+    }
+    #read-widget.open #read-toggle {
+      background: #4338ca;
+      color: white;
+      box-shadow: 0 5px 16px rgba(67, 56, 202, .24);
+    }
+    #read-controls {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: min(360px, calc(100vw - 28px));
+      box-sizing: border-box;
+      padding: 17px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+      border: 1px solid rgba(226, 232, 240, .95);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .98);
+      box-shadow: 0 18px 50px rgba(15, 23, 42, .18), 0 3px 10px rgba(15, 23, 42, .06);
+      backdrop-filter: blur(14px);
+      z-index: 500;
+      animation: readPanelIn .18s ease-out;
+    }
+    #read-widget.open #read-controls { display: flex; }
+    @keyframes readPanelIn {
+      from { opacity: 0; transform: translateY(-6px) scale(.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    #read-controls strong {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 2px;
+      font-size: .95rem;
+      color: #0f172a;
+    }
+    #read-controls strong i {
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      color: #4338ca;
+      background: #eef2ff;
+    }
+    #read-controls label {
+      color: #64748b;
+      font-size: .76rem;
+      font-weight: 650;
+      margin: 2px 0 -5px;
+    }
+    #read-controls select {
+      width: 100%;
+      min-height: 40px;
+      padding: 8px 11px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #f8fafc;
+      color: #0f172a;
+      font: inherit;
+      font-size: .84rem;
+      outline: none;
+    }
+    #read-controls select:focus { border-color: #818cf8; box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
+    #read-controls .speech-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 3px;
+    }
+    #read-controls button {
+      min-height: 38px;
+      padding: 8px 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #fff;
+      color: #334155;
+      font: inherit;
+      font-size: .82rem;
+      font-weight: 650;
+      cursor: pointer;
+      transition: background .15s ease, border-color .15s ease, transform .15s ease;
+    }
+    #read-controls button:hover { background: #f1f5f9; border-color: #cbd5e1; }
+    #read-controls button:active { transform: scale(.98); }
+    #read-controls button:first-child {
+      background: #4338ca;
+      border-color: #4338ca;
+      color: white;
+    }
+    #read-controls button:first-child:hover { background: #3730a3; }
+    #speech-status {
+      display: block;
+      padding-top: 9px;
+      border-top: 1px solid #f1f5f9;
+      color: #64748b;
+      font-size: .76rem;
+    }
+    #speech-voice { max-width: 100%; }
+    @media (max-width: 600px) {
+      #read-widget { margin-left: auto; }
+      #read-controls { right: -4px; width: min(340px, calc(100vw - 20px)); }
+    }
+
     @media print {
-      header, .toolbar, .find-bar, footer, .modal-overlay, .toast, #readonly-banner, .back-to-top,
+      header, .toolbar, #read-widget, .find-bar, footer, .modal-overlay, .toast, #readonly-banner, .back-to-top,
       .more-tools-panel, .color-picker-panel, .emoji-picker, .page-end-marker {
         display: none !important;
       }
@@ -511,6 +649,20 @@
       #editor {
         padding: 8px 16px 80px;
         font-size: 16px;
+      }
+      #read-controls {
+        padding: 8px 10px;
+        gap: 6px;
+      }
+      #read-controls strong {
+        width: 100%;
+      }
+      #read-controls select {
+        max-width: 46vw;
+      }
+      #speech-status {
+        width: 100%;
+        margin-left: 0;
       }
       .find-bar {
         padding: 10px 12px;
@@ -684,6 +836,32 @@
     <button onclick="togglePageEnds()" id="page-ends-btn" title="Show where printed pages end"><i class="fa-solid fa-file-lines"></i></button>
     <button onclick="clearAllFormatting()" title="Clear Formatting (including links)"><i class="fa-solid fa-eraser"></i></button>
     <button id="more-tools-btn" onclick="toggleMoreTools()" title="More tools" style="display:none;"><i class="fa-solid fa-ellipsis"></i></button>
+    <div id="read-widget">
+    <button id="read-toggle" type="button" onclick="toggleReadControls()" aria-label="Show read aloud options" aria-expanded="false" title="Read note aloud">
+      <i class="fa-solid fa-volume-high"></i>
+    </button>
+    <section id="read-controls" aria-label="Read note aloud options">
+    <strong><i class="fa-solid fa-volume-high"></i> Read Note</strong>
+    <label for="speech-voice">Voice</label>
+    <select id="speech-voice" aria-label="Choose reading voice">
+      <option value="">Loading available voices…</option>
+    </select>
+    <label for="speech-speed">Speed</label>
+    <select id="speech-speed" aria-label="Reading speed">
+      <option value="0.75">Slow</option>
+      <option value="1" selected>Normal</option>
+      <option value="1.25">Fast</option>
+      <option value="1.5">Very fast</option>
+    </select>
+    <div class="speech-actions">
+      <button type="button" onclick="readNote()"><i class="fa-solid fa-play"></i> Read</button>
+      <button type="button" onclick="pauseReading()"><i class="fa-solid fa-pause"></i> Pause</button>
+      <button type="button" onclick="resumeReading()"><i class="fa-solid fa-play"></i> Resume</button>
+      <button type="button" onclick="stopReading()"><i class="fa-solid fa-stop"></i> Stop</button>
+    </div>
+    <span id="speech-status" role="status" aria-live="polite">Ready</span>
+    </section>
+    </div>
   </div>
 
   <div class="color-picker-panel" id="color-picker-panel">
@@ -796,6 +974,144 @@
   <script>
     const editor = document.getElementById('editor');
     const titleInput = document.getElementById('note-title');
+
+    function toggleReadControls() {
+      const widget = document.getElementById('read-widget');
+      const toggle = document.getElementById('read-toggle');
+      const isOpen = widget.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      toggle.setAttribute('aria-label', isOpen ? 'Hide read aloud options' : 'Show read aloud options');
+      toggle.title = isOpen ? 'Hide read aloud options' : 'Read note aloud';
+    }
+
+    document.addEventListener('click', event => {
+      const widget = document.getElementById('read-widget');
+      if (widget.classList.contains('open') && !widget.contains(event.target)) {
+        widget.classList.remove('open');
+        document.getElementById('read-toggle').setAttribute('aria-expanded', 'false');
+      }
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        const widget = document.getElementById('read-widget');
+        widget.classList.remove('open');
+        document.getElementById('read-toggle').setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Read the note aloud using voices supplied by the user's browser/device.
+    // The note title is deliberately excluded: only #editor text is spoken.
+    let availableSpeechVoices = [];
+
+    function loadSpeechVoices() {
+      const voiceSelect = document.getElementById('speech-voice');
+      if (!('speechSynthesis' in window)) {
+        voiceSelect.innerHTML = '<option value="">Speech is not supported</option>';
+        document.querySelectorAll('#read-controls button').forEach(button => {
+          button.disabled = true;
+        });
+        document.getElementById('speech-status').textContent = 'Not supported in this browser';
+        return;
+      }
+
+      const previousVoice = localStorage.getItem('sharednote-speech-voice') || voiceSelect.value;
+      availableSpeechVoices = window.speechSynthesis.getVoices();
+      voiceSelect.innerHTML = '';
+
+      if (!availableSpeechVoices.length) {
+        voiceSelect.innerHTML = '<option value="">Waiting for device voices…</option>';
+        return;
+      }
+
+      availableSpeechVoices.forEach(voice => {
+        const option = document.createElement('option');
+        option.value = voice.voiceURI;
+        option.textContent = `${voice.name} (${voice.lang})`;
+        voiceSelect.appendChild(option);
+      });
+
+      const matchingVoice = availableSpeechVoices.find(voice =>
+        voice.voiceURI === previousVoice
+      );
+      if (matchingVoice) {
+        voiceSelect.value = matchingVoice.voiceURI;
+      }
+    }
+
+    function readNote() {
+      if (!('speechSynthesis' in window)) {
+        showToast('Speech reading is not supported in this browser');
+        return;
+      }
+
+      const text = editor.innerText.trim();
+      if (!text) {
+        showToast('There is no note content to read');
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      const selectedVoiceURI = document.getElementById('speech-voice').value;
+      const selectedVoice = availableSpeechVoices.find(voice =>
+        voice.voiceURI === selectedVoiceURI
+      );
+
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang;
+      }
+
+      utterance.rate = Number(document.getElementById('speech-speed').value) || 1;
+      utterance.onstart = () => {
+        document.getElementById('speech-status').textContent = 'Reading…';
+      };
+      utterance.onend = () => {
+        document.getElementById('speech-status').textContent = 'Finished';
+      };
+      utterance.onerror = event => {
+        document.getElementById('speech-status').textContent =
+          event.error === 'canceled' ? 'Stopped' : 'Could not read note';
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function pauseReading() {
+      if ('speechSynthesis' in window && window.speechSynthesis.speaking &&
+          !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+        document.getElementById('speech-status').textContent = 'Paused';
+      }
+    }
+
+    function resumeReading() {
+      if ('speechSynthesis' in window && window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        document.getElementById('speech-status').textContent = 'Reading…';
+      }
+    }
+
+    function stopReading() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        document.getElementById('speech-status').textContent = 'Stopped';
+      }
+    }
+
+    document.getElementById('speech-voice').addEventListener('change', event => {
+      localStorage.setItem('sharednote-speech-voice', event.target.value);
+    });
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.addEventListener?.('voiceschanged', loadSpeechVoices);
+      window.addEventListener('load', loadSpeechVoices);
+      loadSpeechVoices();
+    } else {
+      loadSpeechVoices();
+    }
+
     let isReadOnly = false;
     let currentLockCode = null;
     let currentShortUrl = null;
