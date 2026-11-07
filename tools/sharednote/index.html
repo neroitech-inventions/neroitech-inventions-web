@@ -1023,49 +1023,63 @@
       });
     }
 
-    let pageEndsVisible = false;
-    const PAGE_CONTENT_HEIGHT = 1000; // approximate printable page height in px
 
-    function togglePageEnds() {
-      pageEndsVisible = !pageEndsVisible;
-      const btn = document.getElementById('page-ends-btn');
-      if (pageEndsVisible) {
-        if (btn) btn.classList.add('active');
-        renderPageEnds();
-        showToast('Page ends shown');
-      } else {
-        if (btn) btn.classList.remove('active');
-        clearPageEnds();
-        showToast('Page ends hidden');
-      }
-    }
+let pageEndsVisible = false;
 
-    function clearPageEnds() {
-      document.querySelectorAll('.page-end-marker').forEach(el => el.remove());
-    }
+// A4 height is 297mm.
+// Your print CSS uses 1.5cm top and bottom margins.
+// Printable height = 297mm - 30mm = 267mm.
+const PAGE_CONTENT_HEIGHT = (267 * 96) / 25.4;
 
-    function renderPageEnds() {
-      clearPageEnds();
-      if (!pageEndsVisible) return;
+function togglePageEnds() {
+  pageEndsVisible = !pageEndsVisible;
 
-      const container = document.querySelector('.editor-container');
-      if (!container) return;
+  const btn = document.getElementById('page-ends-btn');
 
-      const contentHeight = editor.scrollHeight;
-      const titleHeight = titleInput.offsetHeight || 60;
-      let page = 1;
-      let y = PAGE_CONTENT_HEIGHT;
+  if (pageEndsVisible) {
+    if (btn) btn.classList.add('active');
+    renderPageEnds();
+    showToast('A4 page markers shown');
+  } else {
+    if (btn) btn.classList.remove('active');
+    clearPageEnds();
+    showToast('Page markers hidden');
+  }
+}
 
-      while (y < contentHeight) {
-        const marker = document.createElement('div');
-        marker.className = 'page-end-marker';
-        marker.style.top = (titleHeight + y) + 'px';
-        marker.innerHTML = `<span>End of page ${page}</span>`;
-        container.appendChild(marker);
-        page++;
-        y += PAGE_CONTENT_HEIGHT;
-      }
-    }
+function clearPageEnds() {
+  document.querySelectorAll('.page-end-marker').forEach(el => el.remove());
+}
+
+function renderPageEnds() {
+  clearPageEnds();
+
+  if (!pageEndsVisible) return;
+
+  const container = document.querySelector('.editor-container');
+  if (!container) return;
+
+  // Include both the title and the note content.
+  const titleHeight = titleInput.offsetHeight || 60;
+  const totalContentHeight = titleHeight + editor.scrollHeight;
+
+  let page = 1;
+  let y = PAGE_CONTENT_HEIGHT;
+
+  while (y < totalContentHeight) {
+    const marker = document.createElement('div');
+
+    marker.className = 'page-end-marker';
+    marker.style.top = y + 'px';
+    marker.innerHTML = `<span>End of page ${page}</span>`;
+
+    container.appendChild(marker);
+
+    page++;
+    y += PAGE_CONTENT_HEIGHT;
+  }
+}
+
 
     function clearAllFormatting() {
       editor.focus();
@@ -1287,41 +1301,36 @@
       showToast('All matches replaced');
     }
 
-    function cleanPrint() {
-      const title = titleInput.value.trim() || 'Note';
-      const content = editor.innerHTML || '';
+function cleanPrint() {
+  const content = editor.innerHTML || '';
 
-      const printWindow = window.open('', '_blank');
-      if (!printWindow) {
-        showToast('Please allow pop-ups to download PDF');
-        return;
-      }
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) {
+    showToast('Please allow pop-ups to download PDF');
+    return;
+  }
 
-      const doc = printWindow.document;
-      doc.open();
-      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body></html>');
-      doc.close();
+  const doc = printWindow.document;
+  doc.open();
+doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body></html>');
+  doc.close();
 
-      const style = doc.createElement('style');
-      style.textContent = 'body{font-family:Inter,system-ui,sans-serif;margin:0;padding:20px;color:#0f172a;line-height:1.6;}h1{font-size:1.8rem;margin:0 0 20px;}#content{font-size:16px;line-height:1.7;}#content ul,#content ol{margin-left:24px;}@media print{body{padding:0;}@page{margin:1.5cm;}}';
-      doc.head.appendChild(style);
+  const style = doc.createElement('style');
+  style.textContent = 'body{font-family:Inter,system-ui,sans-serif;margin:0;padding:20px;color:#0f172a;line-height:1.6;}#content{font-size:16px;line-height:1.7;}#content ul,#content ol{margin-left:24px;}@media print{body{padding:0;}@page{margin:1.5cm;}}';
+  doc.head.appendChild(style);
 
-      const h1 = doc.createElement('h1');
-      h1.textContent = title;
-      doc.body.appendChild(h1);
+  const div = doc.createElement('div');
+  div.id = 'content';
+  div.innerHTML = content;
+  doc.body.appendChild(div);
 
-      const div = doc.createElement('div');
-      div.id = 'content';
-      div.innerHTML = content;
-      doc.body.appendChild(div);
-
-      doc.title = '';
-      setTimeout(function() {
-        printWindow.focus();
-        printWindow.print();
-        printWindow.onafterprint = function() { printWindow.close(); };
-      }, 300);
-    }
+  doc.title = '';
+  setTimeout(function() {
+    printWindow.focus();
+    printWindow.print();
+    printWindow.onafterprint = function() { printWindow.close(); };
+  }, 300);
+}
 
     function showToast(message) {
       const toast = document.getElementById('toast');
@@ -1776,14 +1785,32 @@ window.addEventListener("scroll", updateBackToTop);
         });
       }, 10);
     }
-    titleInput.addEventListener('input', saveData);
-    editor.addEventListener('input', () => {
-      if (pageEndsVisible) {
-        // Debounce refresh of page markers
-        clearTimeout(editor._pageEndTimer);
-        editor._pageEndTimer = setTimeout(renderPageEnds, 300);
-      }
-    });
+
+titleInput.addEventListener('input', () => {
+  saveData();
+
+  if (pageEndsVisible) {
+    clearTimeout(editor._pageEndTimer);
+    editor._pageEndTimer = setTimeout(renderPageEnds, 300);
+  }
+});
+
+editor.addEventListener('input', () => {
+  saveData();
+
+  if (pageEndsVisible) {
+    clearTimeout(editor._pageEndTimer);
+    editor._pageEndTimer = setTimeout(renderPageEnds, 300);
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (pageEndsVisible) {
+    clearTimeout(editor._pageEndTimer);
+    editor._pageEndTimer = setTimeout(renderPageEnds, 300);
+  }
+});
+
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
