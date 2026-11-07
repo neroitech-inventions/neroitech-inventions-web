@@ -555,7 +555,68 @@
     width: 100%;
     max-width: 280px;
   }
-}    
+}   
+
+/* Modern save shared note prompt */
+#modal.save-choice .modal {
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.22);
+  animation: savePromptIn 0.2s ease-out;
+}
+
+#modal.save-choice #modal-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+
+#modal.save-choice #modal-message {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+#modal.save-choice .modal-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+#modal.save-choice .modal-buttons button {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#modal.save-choice #modal-confirm {
+  background: #2563eb;
+  color: white;
+  border: none;
+}
+
+#modal.save-choice #modal-cancel {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+
+@keyframes savePromptIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
   </style>
 </head>
 <body>
@@ -738,6 +799,7 @@
     let isReadOnly = false;
     let currentLockCode = null;
     let currentShortUrl = null;
+    let currentSharedNoteData = null;
     let isDirty = true;
     let lastFindIndex = -1;
     let findMatches = [];
@@ -1323,6 +1385,9 @@
       const confirmBtn = document.getElementById('modal-confirm');
       const cancelBtn = document.getElementById('modal-cancel');
 
+      confirmBtn.textContent = 'Confirm';
+      cancelBtn.textContent = 'Cancel';
+
       const cleanup = () => {
         modal.classList.remove('show');
         confirmBtn.onclick = null;
@@ -1483,13 +1548,28 @@
         }
         titleInput.value = data.title || 'Shared Note';
         editor.innerHTML = data.content || '';
-        localStorage.setItem('sharednote-data', JSON.stringify(data));
+        currentSharedNoteData = data;
         return true;
       } catch (e) {
         showToast('Invalid share link');
         return false;
       }
     }
+
+    function toggleSaveSharedNote(shouldSave) {
+  if (!currentSharedNoteData) return;
+
+  if (shouldSave) {
+    localStorage.setItem(
+      'sharednote-shared-copy',
+      JSON.stringify(currentSharedNoteData)
+    );
+    showToast('Shared note saved in this browser');
+  } else {
+    localStorage.removeItem('sharednote-shared-copy');
+    showToast('Saved shared copy removed');
+  }
+}
 
     function enterReadOnlyMode() {
       editor.contentEditable = 'false';
@@ -1504,21 +1584,61 @@
       document.body.insertBefore(banner, document.querySelector('.editor-container'));
     }
 
-    function promptUnlock() {
-      showConfirm('Unlock Note', 'Enter the lock code to edit this note.', (code) => {
-        if (code === currentLockCode) {
-          isReadOnly = false;
-          editor.contentEditable = 'true';
-          titleInput.readOnly = false;
-          document.getElementById('toolbar').style.display = '';
-          document.getElementById('readonly-banner')?.remove();
-          showToast('Unlocked - you can now edit');
-        } else {
-          showToast('Wrong code');
-        }
-      }, true, 'Enter lock code');
+function promptUnlock() {
+  showConfirm('Unlock Note', 'Enter the lock code to edit this note.', (code) => {
+    if (code !== currentLockCode) {
+      showToast('Wrong code');
+      return;
     }
-    window.promptUnlock = promptUnlock;
+
+    showSaveSharedNotePrompt();
+  }, true, 'Enter lock code');
+}
+
+function showSaveSharedNotePrompt() {
+  const modal = document.getElementById('modal');
+  const title = document.getElementById('modal-title');
+  const message = document.getElementById('modal-message');
+  const inputContainer = document.getElementById('modal-input-container');
+  const confirmBtn = document.getElementById('modal-confirm');
+  const cancelBtn = document.getElementById('modal-cancel');
+
+  title.textContent = 'Save this note?';
+  message.textContent = 'Would you like to keep a copy of this shared note in this browser so you can access it again later?';
+  inputContainer.innerHTML = '';
+
+  confirmBtn.textContent = 'Save Note';
+  cancelBtn.textContent = 'Not Now';
+
+  modal.classList.add('show', 'save-choice');
+
+  function finish(save) {
+    modal.classList.remove('show', 'save-choice');
+    confirmBtn.onclick = null;
+    cancelBtn.onclick = null;
+
+    if (save && currentSharedNoteData) {
+      localStorage.setItem(
+        'sharednote-shared-copy',
+        JSON.stringify(currentSharedNoteData)
+      );
+      showToast('Shared note saved in this browser');
+    }
+
+    isReadOnly = false;
+    editor.contentEditable = 'true';
+    titleInput.readOnly = false;
+    document.getElementById('toolbar').style.display = '';
+    document.getElementById('readonly-banner')?.remove();
+
+    showToast(save ? 'Note saved and unlocked' : 'Note unlocked');
+  }
+
+  confirmBtn.onclick = () => finish(true);
+  cancelBtn.onclick = () => finish(false);
+}
+
+window.promptUnlock = promptUnlock;
 
     const helpSteps = [
       {
