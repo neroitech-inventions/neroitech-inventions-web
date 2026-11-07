@@ -735,6 +735,83 @@
   }
 }   
 
+
+/* Premium draft-storage chooser */
+#modal.storage-modal .modal {
+  width: min(92vw, 510px); max-width: 510px; padding: 30px;
+  border: 1px solid rgba(148,163,184,.2); border-radius: 24px;
+  background: linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
+  box-shadow: 0 30px 100px rgba(15,23,42,.32);
+  animation: privacyModalIn .24s cubic-bezier(.2,.8,.2,1);
+}
+#modal.storage-modal #modal-title { font-size: 1.55rem; font-weight: 800; letter-spacing: -.045em; color:#0f172a; margin:0 0 8px; }
+#modal.storage-modal #modal-message { color:#64748b; font-size:.92rem; line-height:1.6; margin:0 0 21px; }
+.storage-intro { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
+.storage-intro-icon { width:46px;height:46px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(135deg,#dbeafe,#ede9fe);color:#4338ca;font-size:1.35rem; }
+.storage-intro-copy { display:grid;gap:2px;text-align:left; }
+.storage-intro-copy strong { color:#1e293b;font-size:.9rem; }
+.storage-intro-copy small { color:#94a3b8;font-size:.75rem; }
+.storage-choice-list { display:grid;gap:12px; }
+.storage-choice-card { position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) 22px;align-items:center;gap:13px;padding:16px;text-align:left;cursor:pointer;border:1.5px solid #e2e8f0;border-radius:17px;background:#fff;transition:all .18s ease; }
+.storage-choice-card:hover { transform:translateY(-1px);border-color:#a5b4fc;box-shadow:0 8px 24px rgba(15,23,42,.06); }
+.storage-choice-card.selected { border-color:#6366f1;background:linear-gradient(110deg,#eef2ff 0%,#fff 78%);box-shadow:0 0 0 3px rgba(99,102,241,.10),0 10px 26px rgba(79,70,229,.07); }
+.storage-choice-card input { position:absolute;opacity:0;width:1px;height:1px; }
+.storage-choice-card:focus-within { outline:3px solid rgba(99,102,241,.22);outline-offset:3px; }
+.storage-choice-icon { width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:#f1f5f9;color:#475569;font-size:1.35rem; }
+.storage-choice-card.selected .storage-choice-icon { background:#e0e7ff;color:#4338ca; }
+.storage-choice-copy { display:grid;gap:5px;min-width:0; }
+.storage-choice-copy strong { color:#0f172a;font-size:.96rem;font-weight:750; }
+.storage-choice-copy small { color:#64748b;font-size:.79rem;line-height:1.5; }
+.storage-choice-copy em { width:fit-content;margin-top:2px;padding:4px 8px;border-radius:999px;background:#e0e7ff;color:#4338ca;font-size:.67rem;font-style:normal;font-weight:750;letter-spacing:.01em; }
+.storage-choice-check { width:21px;height:21px;display:grid;place-items:center;border:1.5px solid #cbd5e1;border-radius:50%;color:transparent;font-size:.75rem;font-weight:800; }
+.storage-choice-card.selected .storage-choice-check { background:#4f46e5;border-color:#4f46e5;color:#fff; }
+.storage-modal-note { display:flex;gap:9px;align-items:flex-start;margin:16px 2px 0;padding:12px 13px;border-radius:13px;background:#f1f5f9;color:#64748b;font-size:.75rem;line-height:1.5;text-align:left; }
+#modal.storage-modal .modal-buttons { margin-top:23px;gap:10px; }
+#modal.storage-modal .modal-buttons button { min-width:100px;padding:12px 18px!important;border-radius:12px!important;font-weight:700; }
+#modal.storage-modal #modal-confirm { background:#4f46e5!important;box-shadow:0 5px 14px rgba(79,70,229,.22); }
+#modal.storage-modal #modal-cancel { background:#fff!important;color:#475569!important;border:1px solid #e2e8f0!important; }
+@media(max-width:480px){#modal.storage-modal .modal{padding:23px 18px;border-radius:20px}.storage-choice-card{grid-template-columns:42px minmax(0,1fr) 20px;padding:13px;gap:10px}.storage-choice-icon{width:42px;height:42px;border-radius:13px}}
+
+/* Modern privacy sharing chooser */
+#modal.privacy-modal .modal {
+  width: min(92vw, 480px);
+  max-width: 480px;
+  padding: 28px;
+  border: 1px solid rgba(148,163,184,.22);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 28px 90px rgba(15,23,42,.28);
+  animation: privacyModalIn .22s ease-out;
+}
+#modal.privacy-modal #modal-title { font-size: 1.45rem; font-weight: 750; letter-spacing: -.035em; color: #0f172a; margin-bottom: 8px; }
+#modal.privacy-modal #modal-message { font-size: .94rem; line-height: 1.55; color: #64748b; margin-bottom: 18px; }
+.privacy-choice-list { display: grid; gap: 11px; }
+.privacy-choice-card {
+  display: grid; grid-template-columns: 42px minmax(0,1fr) 22px; align-items: center; gap: 12px;
+  position: relative; padding: 15px; text-align: left; cursor: pointer;
+  border: 1.5px solid #e2e8f0; border-radius: 15px; background: #fff;
+  transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+}
+.privacy-choice-card:hover { border-color: #94a3b8; background: #f8fafc; }
+.privacy-choice-card.selected { border-color: #2563eb; background: #eff6ff; box-shadow: 0 0 0 3px rgba(37,99,235,.09); }
+.privacy-choice-card input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.privacy-choice-card:focus-within { outline: 3px solid rgba(37,99,235,.22); outline-offset: 2px; }
+.privacy-choice-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: #f1f5f9; font-size: 1.2rem; }
+.privacy-choice-card.selected .privacy-choice-icon { background: #dbeafe; }
+.privacy-choice-copy { display: grid; gap: 4px; min-width: 0; }
+.privacy-choice-copy strong { color: #0f172a; font-size: .98rem; }
+.privacy-choice-copy small { color: #64748b; font-size: .82rem; line-height: 1.45; }
+.privacy-choice-copy em { width: fit-content; margin-top: 3px; padding: 3px 7px; border-radius: 999px; background: #dbeafe; color: #1d4ed8; font-size: .68rem; font-style: normal; font-weight: 700; }
+.privacy-choice-check { display: grid; place-items: center; width: 21px; height: 21px; border: 1.5px solid #cbd5e1; border-radius: 50%; color: transparent; font-size: .78rem; font-weight: 800; }
+.privacy-choice-card.selected .privacy-choice-check { border-color: #2563eb; background: #2563eb; color: #fff; }
+.privacy-modal-footnote { display: flex; gap: 7px; align-items: flex-start; margin: 15px 1px 0 !important; color: #64748b !important; font-size: .77rem !important; line-height: 1.45 !important; }
+#modal.privacy-modal .modal-buttons { margin-top: 22px; gap: 9px; }
+#modal.privacy-modal .modal-buttons button { min-width: 92px; padding: 11px 17px !important; border-radius: 11px !important; font-weight: 650; }
+#modal.privacy-modal #modal-confirm { background: #2563eb !important; }
+#modal.privacy-modal #modal-cancel { background: #f1f5f9 !important; color: #334155 !important; border: 1px solid #e2e8f0 !important; }
+@keyframes privacyModalIn { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (max-width: 480px) { #modal.privacy-modal .modal { padding: 22px 18px; } .privacy-choice-card { padding: 12px; gap: 9px; grid-template-columns: 38px minmax(0,1fr) 20px; } .privacy-choice-icon { width: 38px; height: 38px; } }
+
 /* Modern save shared note prompt */
 #modal.save-choice .modal {
   border-radius: 20px;
@@ -802,6 +879,7 @@
     <h1><a href="index.html" onclick="localStorage.removeItem('sharednote-data');">SharedNote</a></h1>
     <div class="header-actions">
       <button onclick="newNote()">New Note</button>
+      <button onclick="showStorageSettings()" title="Choose where drafts are stored">Storage</button>
       <button onclick="toggleFind()">Find & Replace</button>
       <button id="save-btn" onclick="generateShareLink()">Save</button>
       <button onclick="cleanPrint()">Download PDF</button>
@@ -1383,7 +1461,11 @@
     let isReadOnly = false;
     let currentLockCode = null;
     let currentShortUrl = null;
+    let currentPrivateUrl = null;
     let currentSharedNoteData = null;
+    // Draft persistence is a user choice. The preference itself is stored separately;
+    // URL-only mode never writes note content to localStorage.
+    let storageMode = localStorage.getItem('sharednote-storage-mode') || 'local';
     let isDirty = true;
     let lastFindIndex = -1;
     let findMatches = [];
@@ -1999,19 +2081,28 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
 
     function saveData() {
       if (isReadOnly) return;
+      if (storageMode === 'url') {
+        localStorage.removeItem('sharednote-data');
+        return;
+      }
       const data = {
         title: titleInput.value,
         content: editor.innerHTML,
         timestamp: Date.now(),
-        shortUrl: currentShortUrl || null
+        shortUrl: currentShortUrl || null,
+        privateUrl: currentPrivateUrl || null
       };
       localStorage.setItem('sharednote-data', JSON.stringify(data));
       // Only mark dirty if we already have a saved short link
       // (so we know the shared version is outdated)
-      if (currentShortUrl) isDirty = true;
+      if (currentShortUrl || currentPrivateUrl) isDirty = true;
     }
 
     function loadData() {
+      if (storageMode === 'url') {
+        editor.innerHTML = '<p>Welcome to <strong>SharedNote</strong>! Start typing your note here.</p>';
+        return false;
+      }
       const saved = localStorage.getItem('sharednote-data');
       if (!saved) {
         editor.innerHTML = '<p>Welcome to <strong>SharedNote</strong>! Start typing your note here.</p>';
@@ -2025,11 +2116,71 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
           currentShortUrl = data.shortUrl;
           isDirty = false; // content matches the last saved short link
         }
+        if (data.privateUrl) currentPrivateUrl = data.privateUrl;
         updateSaveButton();
         return true;
       } catch (e) {
         return false;
       }
+    }
+
+    function showStorageSettings() {
+      const modal = document.getElementById('modal');
+      document.getElementById('modal-title').textContent = 'Your storage, your choice';
+      document.getElementById('modal-message').textContent = 'Choose where SharedNote keeps your working draft. This is separate from how you share a note.';
+      const container = document.getElementById('modal-input-container');
+      container.innerHTML = `
+        <div class="storage-intro">
+          <span class="storage-intro-icon" aria-hidden="true">✦</span>
+          <span class="storage-intro-copy"><strong>Take control of your data</strong><small>You can change this setting whenever you like.</small></span>
+        </div>
+        <div class="storage-choice-list" role="radiogroup" aria-label="Draft storage location">
+          <label class="storage-choice-card ${storageMode === 'local' ? 'selected' : ''}" for="draft-storage-local">
+            <input id="draft-storage-local" type="radio" name="draft-storage-mode" value="local" ${storageMode === 'local' ? 'checked' : ''}>
+            <span class="storage-choice-icon" aria-hidden="true">💻</span>
+            <span class="storage-choice-copy"><strong>On this device</strong><small>Automatically save your draft in this browser, so you can return to it later on this device.</small><em>Convenient autosave</em></span>
+            <span class="storage-choice-check" aria-hidden="true">✓</span>
+          </label>
+          <label class="storage-choice-card ${storageMode === 'url' ? 'selected' : ''}" for="draft-storage-url">
+            <input id="draft-storage-url" type="radio" name="draft-storage-mode" value="url" ${storageMode === 'url' ? 'checked' : ''}>
+            <span class="storage-choice-icon" aria-hidden="true">🔗</span>
+            <span class="storage-choice-copy"><strong>URL only</strong><small>Do not save note content in this browser. Keep the note in the current tab and create a link when you're ready to share.</small><em>More local privacy</em></span>
+            <span class="storage-choice-check" aria-hidden="true">✓</span>
+          </label>
+        </div>
+        <div class="storage-modal-note"><span aria-hidden="true">ⓘ</span><span>In URL-only mode, changes can be lost if you close or reload the tab before creating and keeping a share link.</span></div>`;
+      modal.classList.remove('privacy-modal', 'save-choice');
+      modal.classList.add('show', 'storage-modal');
+      const confirmBtn = document.getElementById('modal-confirm');
+      const cancelBtn = document.getElementById('modal-cancel');
+      confirmBtn.textContent = 'Save preference'; cancelBtn.textContent = 'Cancel';
+      container.querySelectorAll('.storage-choice-card input').forEach(input => {
+        input.addEventListener('change', () => {
+          container.querySelectorAll('.storage-choice-card').forEach(card => card.classList.toggle('selected', card.querySelector('input').checked));
+        });
+      });
+      const cleanup = () => { modal.classList.remove('show', 'storage-modal'); confirmBtn.onclick = null; cancelBtn.onclick = null; };
+      confirmBtn.onclick = () => {
+        const selected = container.querySelector('input[name="draft-storage-mode"]:checked')?.value || 'local';
+        if (selected === 'url' && storageMode !== 'url') {
+          const apply = () => {
+            storageMode = 'url';
+            localStorage.setItem('sharednote-storage-mode', 'url');
+            localStorage.removeItem('sharednote-data');
+            cleanup();
+            showToast('URL-only mode enabled; local draft removed');
+          };
+          cleanup();
+          showConfirm('Remove local draft?', 'Switching to URL-only will delete the saved draft from this browser. Your current note remains open until you leave or reload. Continue?', apply);
+          return;
+        }
+        storageMode = selected;
+        localStorage.setItem('sharednote-storage-mode', selected);
+        if (selected === 'local') saveData();
+        cleanup();
+        showToast(selected === 'local' ? 'Drafts will be saved on this device' : 'URL-only mode enabled');
+      };
+      cancelBtn.onclick = cleanup;
     }
 
     function showConfirm(title, message, onConfirm, withInput = false, placeholder = 'Enter value') {
@@ -2082,27 +2233,87 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
     }
 
     function generateShareLink() {
-      // Always reuse an existing short link for this note — never create another one
       if (currentShortUrl) {
         navigator.clipboard.writeText(currentShortUrl).then(() => {
-          showToast(isDirty ? 'Existing link copied (shows version from first save)' : 'Link copied!');
-        }).catch(() => {
-          showConfirm('Existing Link', 'This note already has a short link. Copy it below:', () => {}, true, currentShortUrl);
-          setTimeout(() => {
-            const inp = document.querySelector('#modal-input-container input');
-            if (inp) inp.value = currentShortUrl;
-          }, 150);
-        });
+          showToast(isDirty ? 'Existing online link copied (it contains the previous saved version)' : 'Online link copied!');
+        }).catch(() => showConfirm('Online Link', 'Copy this link:', () => {}, true, currentShortUrl));
         return;
       }
-      // First time saving this note — create a short link
-      showConfirm('Save Link', 'Enter a code to lock this note. Only people with the code can edit it.', (code) => {
-        if (!code || code.trim().length < 3) {
-          showToast('Code must be at least 3 characters');
-          return;
-        }
-        createShareLink(code.trim());
-      }, true, 'Enter lock code');
+      if (currentPrivateUrl && !isDirty) {
+        navigator.clipboard.writeText(currentPrivateUrl).then(() => showToast('Private link copied!'))
+          .catch(() => showConfirm('Private Link', 'Copy this complete private link:', () => {}, true, currentPrivateUrl));
+        return;
+      }
+      showShareModeChooser();
+    }
+
+    function showShareModeChooser() {
+      const modal = document.getElementById('modal');
+      document.getElementById('modal-title').textContent = 'Choose how to share';
+      document.getElementById('modal-message').textContent = 'Choose where your note is stored when you create its sharing link.';
+      const container = document.getElementById('modal-input-container');
+      container.innerHTML = `
+        <div class="privacy-choice-list" role="radiogroup" aria-label="Sharing method">
+          <label class="privacy-choice-card selected" for="share-private">
+            <input id="share-private" type="radio" name="share-mode" value="private" checked>
+            <span class="privacy-choice-icon" aria-hidden="true">🔒</span>
+            <span class="privacy-choice-copy"><strong>Private link</strong><small>Encrypted note data stays in the full URL. No note upload and no short link.</small><em>Privacy-focused</em></span>
+            <span class="privacy-choice-check" aria-hidden="true">✓</span>
+          </label>
+          <label class="privacy-choice-card" for="share-online">
+            <input id="share-online" type="radio" name="share-mode" value="online">
+            <span class="privacy-choice-icon" aria-hidden="true">☁️</span>
+            <span class="privacy-choice-copy"><strong>Online storage</strong><small>Stores the note online and creates a shorter sharing link.</small></span>
+            <span class="privacy-choice-check" aria-hidden="true">✓</span>
+          </label>
+        </div>
+        <p class="privacy-modal-footnote"><span aria-hidden="true">ⓘ</span> Anyone with the complete private link can read the note. Keep it secure.</p>`;
+      modal.classList.add('show', 'privacy-modal');
+      const confirmBtn = document.getElementById('modal-confirm');
+      const cancelBtn = document.getElementById('modal-cancel');
+      confirmBtn.textContent = 'Continue'; cancelBtn.textContent = 'Cancel';
+      const updateCards = () => {
+        container.querySelectorAll('.privacy-choice-card').forEach(card => {
+          card.classList.toggle('selected', card.querySelector('input').checked);
+        });
+      };
+      container.querySelectorAll('input[name="share-mode"]').forEach(input => input.addEventListener('change', updateCards));
+      const cleanup = () => { modal.classList.remove('show', 'privacy-modal'); confirmBtn.onclick = null; cancelBtn.onclick = null; };
+      confirmBtn.onclick = () => {
+        const mode = container.querySelector('input[name="share-mode"]:checked')?.value || 'private';
+        cleanup();
+        showConfirm('Lock Your Note', 'Enter a lock code (at least 3 characters). Anyone with the complete private link can open the note; the lock code is needed to edit it.', code => {
+          if (!code || code.trim().length < 3) { showToast('Code must be at least 3 characters'); return; }
+          if (mode === 'private') createPrivateShareLink(code.trim());
+          else createShareLink(code.trim());
+        }, true, 'Enter lock code');
+      };
+      cancelBtn.onclick = cleanup;
+    }
+
+    function bytesToBase64Url(bytes) {
+      let binary = ''; bytes.forEach(b => binary += String.fromCharCode(b));
+      return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+    }
+    function base64UrlToBytes(value) {
+      const base64 = value.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - value.length % 4) % 4);
+      return Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+    }
+    async function createPrivateShareLink(lockCode) {
+      try {
+        if (!window.crypto || !crypto.subtle) throw new Error('Secure encryption requires HTTPS or localhost');
+        const data = { title: titleInput.value, content: editor.innerHTML, lockCode: btoa(lockCode) };
+        const key = await crypto.subtle.generateKey({name:'AES-GCM', length:256}, true, ['encrypt','decrypt']);
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const rawKey = new Uint8Array(await crypto.subtle.exportKey('raw', key));
+        const encrypted = new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, new TextEncoder().encode(JSON.stringify(data))));
+        const payload = new Uint8Array(iv.length + encrypted.length); payload.set(iv); payload.set(encrypted, iv.length);
+        // The key is in the URL fragment, which browsers do not send to the web server.
+        const privateUrl = window.location.origin + window.location.pathname + '#private=' + bytesToBase64Url(payload) + '.' + bytesToBase64Url(rawKey);
+        currentPrivateUrl = privateUrl; currentShortUrl = null; isDirty = false; saveData(); updateSaveButton();
+        try { await navigator.clipboard.writeText(privateUrl); showToast('Encrypted private link copied - no note upload'); }
+        catch { showConfirm('Private Link Created', 'Copy the complete encrypted private link:', () => {}, true, privateUrl); setTimeout(() => { const inp=document.querySelector('#modal-input-container input'); if(inp) inp.value=privateUrl; }, 100); }
+      } catch (e) { console.error(e); showToast(e.message || 'Could not create private link'); }
     }
 
     // URL Mini config (same as resume builder)
@@ -2202,8 +2413,23 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
       }
     }
 
-    function loadFromShareLink() {
+    async function loadFromShareLink() {
       const hash = window.location.hash;
+      if (hash.startsWith('#private=')) {
+        try {
+          const parts = hash.slice(9).split('.');
+          if (parts.length !== 2 || !crypto.subtle) throw new Error('Invalid private link');
+          const payload = base64UrlToBytes(parts[0]);
+          const rawKey = base64UrlToBytes(parts[1]);
+          const key = await crypto.subtle.importKey('raw', rawKey, {name:'AES-GCM'}, false, ['decrypt']);
+          const iv = payload.slice(0,12), ciphertext = payload.slice(12);
+          const plain = await crypto.subtle.decrypt({name:'AES-GCM',iv}, key, ciphertext);
+          const data = JSON.parse(new TextDecoder().decode(plain));
+          if (data.lockCode) { currentLockCode = atob(data.lockCode); isReadOnly = true; }
+          titleInput.value = data.title || 'Shared Note'; editor.innerHTML = data.content || '';
+          currentSharedNoteData = data; return true;
+        } catch (e) { console.error(e); showToast('Invalid or damaged private link'); return false; }
+      }
       if (!hash.startsWith('#note=')) return false;
       try {
         const encoded = hash.slice(6);
@@ -2322,7 +2548,7 @@ window.promptUnlock = promptUnlock;
       },
       {
         title: "Step 4 of 4 - Download PDF",
-        content: "<p>Click <strong>Download PDF</strong>.</p><p style='margin-top:10px;'>A clean print view opens with only your note. In the print dialog, turn off <strong>Headers and footers</strong> if any date or URL still appears.</p><p style='margin-top:10px;'>That’s it — your note is ready.</p>"
+        content: "<p>Click <strong>Download PDF</strong>.</p><p style='margin-top:10px;'>A clean print view opens with only your note. In the print dialog, turn off <strong>Headers and footers</strong> if any date or URL still appears.</p><p style='margin-top:10px;'>That’s it - your note is ready.</p>"
       }
     ];
 
@@ -2495,11 +2721,12 @@ window.addEventListener('resize', () => {
 
     // Init
     initEmojiPicker();
-    if (!loadFromShareLink()) {
-      loadData();
-    }
-    updateSaveButton();
-    if (isReadOnly) enterReadOnlyMode();
+    (async () => {
+      const loadedFromLink = await loadFromShareLink();
+      if (!loadedFromLink) loadData();
+      updateSaveButton();
+      if (isReadOnly) enterReadOnlyMode();
+    })();
   </script>
 </body>
 </html>
