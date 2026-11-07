@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QM106YDX6N');
+  </script>
+
+  <title>SharedNote</title>
+  <link href="images/favicon.ico" rel="icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lato:wght@400;700&family=Merriweather:wght@400;700&family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --accent: #0f172a;
+      --accent-hover: #1e293b;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --toolbar: #f1f5f9;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column; 
+    }
+    header {
+      background: var(--accent);
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    header h1 a {
+      color: white;
+      text-decoration: none;
+    }
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .header-actions button {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .header-actions button:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .toolbar {
+      background: var(--toolbar);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .toolbar button, .toolbar select, .toolbar input[type="color"] {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .toolbar button:hover, .toolbar select:hover {
+      background: #e2e8f0;
+    }
+    .toolbar button.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .toolbar .separator {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+      margin: 0 4px;
+    }
+    .toolbar select {
+      padding: 6px 8px;
+    }
+    .more-tools-panel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 300;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .more-tools-panel.show { display: flex; }
+    .more-tools-content {
+      background: white;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 16px 16px 0 0;
+      padding: 16px;
+      box-shadow: 0 -8px 30px rgba(0,0,0,0.15);
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .more-tools-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    .more-tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .more-tools-grid button {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+    }
+    .color-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px !important;
+    }
+    .color-indicator {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+      display: inline-block;
+    }
+    .color-picker-panel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 310;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .color-picker-panel.show { display: flex; }
+    .color-picker-content {
+      background: white;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 16px 16px 0 0;
+      padding: 16px;
+      box-shadow: 0 -8px 30px rgba(0,0,0,0.15);
+    }
+    .color-swatches {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+    .color-swatch {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .color-swatch:hover { border-color: #0f172a; }
+
+    .page-end-marker {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 0;
+      border-top: 2px dashed #94a3b8;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .page-end-marker span {
+      position: absolute;
+      right: 12px;
+      top: -10px;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #e2e8f0;
+      font-weight: 600;
+    }
+    .editor-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    }
+    .note-title {
+      padding: 16px 24px 8px;
+      border: none;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      color: var(--text);
+    }
+    .note-title::placeholder {
+      color: #94a3b8;
+    }
+    #editor {
+      flex: 1;
+      padding: 8px 24px 40px;
+      outline: none;
+      overflow-y: auto;
+      font-size: 16px;
+      line-height: 1.7;
+      background: white;
+      min-height: 300px;
+    }
+    #editor:empty:before {
+      content: "Start writing your note here...";
+      color: #94a3b8;
+    }
+    #editor ul, #editor ol {
+      margin-left: 24px;
+      margin-bottom: 8px;
+    }
+    #editor a {
+      color: #2563eb;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    #editor a:hover {
+      color: #1d4ed8;
+    }
+
+    .find-bar {
+      display: none;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .find-bar.show { display: flex; }
+    .find-bar input {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+    .find-bar button {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .find-bar button.secondary { background: #475569; }
+    .find-bar .close-find {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: white;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    footer a { 
+      color: var(--accent); 
+      text-decoration: none; 
+      font-weight: 600; 
+      position: relative;
+    }
+    footer a:hover { text-decoration: underline; }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .back-to-top.show { display: flex; }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 16px;
+      padding: 28px 32px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .modal h3 { margin-bottom: 12px; font-size: 1.2rem; }
+    .modal p { color: var(--muted); margin-bottom: 16px; }
+    .modal input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+    .modal-buttons { display: flex; gap: 12px; justify-content: flex-end; }
+    .modal-buttons button { min-width: 90px; }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f172a;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      z-index: 1001;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .emoji-picker {
+      position: absolute;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      display: none;
+      z-index: 100;
+      max-width: 280px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .emoji-picker.show { display: block; }
+    .emoji-picker span {
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 4px;
+      display: inline-block;
+    }
+    .emoji-picker span:hover { background: #f1f5f9; border-radius: 4px; }
+
+    @media print {
+      header, .toolbar, .find-bar, footer, .modal-overlay, .toast, #readonly-banner, .back-to-top,
+      .more-tools-panel, .color-picker-panel, .emoji-picker, .page-end-marker {
+        display: none !important;
+      }
+      body {
+        background: white !important;
+        height: auto !important;
+        margin: 0;
+        padding: 0;
+      }
+      .editor-container {
+        display: block !important;
+        overflow: visible !important;
+      }
+      .note-title {
+        font-size: 1.8rem;
+        padding: 0 0 16px;
+        border: none;
+        background: transparent;
+      }
+      #editor {
+        padding: 0;
+        overflow: visible;
+        background: white;
+        min-height: auto;
+      }
+      #editor:empty:before {
+        content: none;
+      }
+      @page {
+        margin: 1.5cm;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 16px;
+      }
+      header h1 {
+        font-size: 1.15rem;
+      }
+      .header-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .header-actions button {
+        flex: 1 1 auto;
+        min-width: 0;
+        padding: 8px 10px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+      .toolbar {
+        padding: 8px 10px;
+        gap: 5px;
+      }
+      .toolbar button, .toolbar select, .toolbar input[type="color"] {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+      }
+      .toolbar select {
+        max-width: 100px;
+      }
+      /* Hide secondary tools on mobile, show More button */
+      .toolbar .separator,
+      .toolbar button[onclick*="strikeThrough"],
+      .toolbar button[onclick*="justify"],
+      .toolbar button[onclick*="insertUnorderedList"],
+      .toolbar button[onclick*="insertOrderedList"],
+      .toolbar button[onclick*="insertLink"],
+      .toolbar button[onclick*="toggleEmojiPicker"],
+      .toolbar button[onclick*="removeFormat"] {
+        display: none;
+      }
+      #more-tools-btn {
+        display: inline-flex !important;
+      }
+      .note-title {
+        font-size: 1.25rem;
+        padding: 12px 16px 6px;
+      }
+      #editor {
+        padding: 8px 16px 80px;
+        font-size: 16px;
+      }
+      .find-bar {
+        padding: 10px 12px;
+        gap: 6px;
+      }
+      .find-bar input {
+        flex: 1 1 140px;
+        min-width: 0;
+      }
+      .find-bar button {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+      }
+      .modal {
+        padding: 20px 16px;
+        margin: 16px;
+      }
+      .back-to-top {
+        bottom: 16px;
+        right: 16px;
+        width: 44px;
+        height: 44px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-actions button {
+        font-size: 0.75rem;
+        padding: 7px 8px;
+      }
+      .toolbar button, .toolbar select {
+        padding: 6px 8px;
+      }
+    }
+/* Read-only banner mobile responsiveness */
+@media (max-width: 500px) {
+  #readonly-banner {
+    flex-direction: column;
+  }
+
+  #readonly-banner button {
+    width: 100%;
+    max-width: 280px;
+  }
+}    
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="index.html" onclick="localStorage.removeItem('sharednote-data');">SharedNote</a></h1>
+    <div class="header-actions">
+      <button onclick="newNote()">New Note</button>
+      <button onclick="toggleFind()">Find & Replace</button>
+      <button id="save-btn" onclick="generateShareLink()">Save</button>
+      <button onclick="cleanPrint()">Download PDF</button>
+      <button onclick="showHelp()">Help</button>
+    </div>
+  </header>
+
+  <div class="toolbar" id="toolbar">
+    <button onclick="execCmd('undo')" title="Undo"><i class="fa-solid fa-undo"></i></button>
+    <button onclick="execCmd('redo')" title="Redo"><i class="fa-solid fa-redo"></i></button>
+    <div class="separator"></div>
+    <button onclick="scrollToTop()" title="Page Up - Jump to beginning"><i class="fa-solid fa-arrow-up"></i></button>
+    <button onclick="scrollToBottom()" title="Page Down - Jump to end"><i class="fa-solid fa-arrow-down"></i></button>
+    <div class="separator"></div>
+    <button onclick="execCmd('bold')" title="Bold (Ctrl+B)"><i class="fa-solid fa-bold"></i></button>
+    <button onclick="execCmd('italic')" title="Italic (Ctrl+I)"><i class="fa-solid fa-italic"></i></button>
+    <button onclick="execCmd('underline')" title="Underline (Ctrl+U)"><i class="fa-solid fa-underline"></i></button>
+    <button onclick="execCmd('strikeThrough')" title="Strikethrough"><i class="fa-solid fa-strikethrough"></i></button>
+    <div class="separator"></div>
+    <select id="font-family" onchange="execCmd('fontName', this.value)" title="Font Family">
+      <option value="Inter">Inter</option>
+      <option value="Roboto">Roboto</option>
+      <option value="Open Sans">Open Sans</option>
+      <option value="Lato">Lato</option>
+      <option value="Montserrat">Montserrat</option>
+      <option value="Poppins">Poppins</option>
+      <option value="Merriweather">Merriweather</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Source Code Pro">Source Code Pro</option>
+      <option value="Arial">Arial</option>
+      <option value="Courier New">Courier New</option>
+    </select>
+    <select id="font-size" onchange="execCmd('fontSize', this.value)" title="Font Size">
+      <option value="1">Small</option>
+      <option value="3" selected>Normal</option>
+      <option value="4">Large</option>
+      <option value="5">X-Large</option>
+      <option value="6">XX-Large</option>
+      <option value="7">Huge</option>
+    </select>
+    <div class="separator"></div>
+    <button class="color-btn" onclick="openColorPicker('text')" title="Text Color"><i class="fa-solid fa-font"></i> <span class="color-indicator" id="text-color-indicator" style="background:#0f172a"></span></button>
+    <button class="color-btn" onclick="openColorPicker('highlight')" title="Highlight"><i class="fa-solid fa-highlighter"></i> <span class="color-indicator" id="highlight-color-indicator" style="background:#fef08a"></span></button>
+    <input type="color" id="text-color" value="#0f172a" onchange="applyTextColor(this.value)" style="display:none;">
+    <input type="color" id="highlight-color" value="#fef08a" onchange="applyHighlightColor(this.value)" style="display:none;">
+    <div class="separator desktop-only"></div>
+    <button onclick="execCmd('justifyLeft')" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
+    <button onclick="execCmd('justifyCenter')" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
+    <button onclick="execCmd('justifyRight')" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
+    <div class="separator"></div>
+    <button onclick="execCmd('insertUnorderedList')" title="Bullet List"><i class="fa-solid fa-list-ul"></i></button>
+    <button onclick="execCmd('insertOrderedList')" title="Numbered List"><i class="fa-solid fa-list-ol"></i></button>
+    <div class="separator"></div>
+    <button onclick="insertLink()" title="Insert Link"><i class="fa-solid fa-link"></i></button>
+    <button onclick="toggleEmojiPicker(event)" title="Emoji"><i class="fa-solid fa-face-smile"></i></button>
+    <button onclick="copyToClipboard()" title="Copy to Clipboard"><i class="fa-solid fa-copy"></i></button>
+    <button onclick="togglePageEnds()" id="page-ends-btn" title="Show where printed pages end"><i class="fa-solid fa-file-lines"></i></button>
+    <button onclick="clearAllFormatting()" title="Clear Formatting (including links)"><i class="fa-solid fa-eraser"></i></button>
+    <button id="more-tools-btn" onclick="toggleMoreTools()" title="More tools" style="display:none;"><i class="fa-solid fa-ellipsis"></i></button>
+  </div>
+
+  <div class="color-picker-panel" id="color-picker-panel">
+    <div class="color-picker-content">
+      <div class="more-tools-header">
+        <span id="color-picker-title">Text Color</span>
+        <button onclick="closeColorPicker()" style="background:transparent; border:none; font-size:1.4rem; cursor:pointer; color:#64748b;">×</button>
+      </div>
+      <div class="color-swatches" id="color-swatches"></div>
+      <div style="display:flex; gap:10px; margin-top:16px; align-items:center;">
+        <input type="color" id="custom-color-input" value="#0f172a" style="width:48px; height:40px; border:none; cursor:pointer;">
+        <button onclick="applyCustomColor()" style="flex:1; padding:10px; border-radius:8px; border:none; background:#0f172a; color:white; font-weight:600; cursor:pointer;">Apply Custom</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="more-tools-panel" id="more-tools-panel">
+    <div class="more-tools-content">
+      <div class="more-tools-header">
+        <span>More tools</span>
+        <button onclick="toggleMoreTools()" style="background:transparent; border:none; font-size:1.4rem; cursor:pointer; color:#64748b;">×</button>
+      </div>
+      <div class="more-tools-grid">
+        <button onclick="scrollToTop(); toggleMoreTools()"><i class="fa-solid fa-arrow-up"></i> Page Up</button>
+        <button onclick="scrollToBottom(); toggleMoreTools()"><i class="fa-solid fa-arrow-down"></i> Page Down</button>
+        <button onclick="execCmd('strikeThrough'); toggleMoreTools()"><i class="fa-solid fa-strikethrough"></i> Strikethrough</button>
+        <button onclick="execCmd('justifyLeft'); toggleMoreTools()"><i class="fa-solid fa-align-left"></i> Align Left</button>
+        <button onclick="execCmd('justifyCenter'); toggleMoreTools()"><i class="fa-solid fa-align-center"></i> Align Center</button>
+        <button onclick="execCmd('justifyRight'); toggleMoreTools()"><i class="fa-solid fa-align-right"></i> Align Right</button>
+        <button onclick="execCmd('insertUnorderedList'); toggleMoreTools()"><i class="fa-solid fa-list-ul"></i> Bullet List</button>
+        <button onclick="execCmd('insertOrderedList'); toggleMoreTools()"><i class="fa-solid fa-list-ol"></i> Numbered List</button>
+        <button onclick="insertLink(); toggleMoreTools()"><i class="fa-solid fa-link"></i> Insert Link</button>
+        <button onclick="toggleEmojiPicker(event); toggleMoreTools()"><i class="fa-solid fa-face-smile"></i> Emoji</button>
+        <button onclick="copyToClipboard(); toggleMoreTools()"><i class="fa-solid fa-copy"></i> Copy</button>
+        <button onclick="togglePageEnds(); toggleMoreTools()"><i class="fa-solid fa-file-lines"></i> Page Ends</button>
+        <button onclick="clearAllFormatting(); toggleMoreTools()"><i class="fa-solid fa-eraser"></i> Clear Format</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="find-bar" id="find-bar">
+    <input type="text" id="find-input" placeholder="Find...">
+    <input type="text" id="replace-input" placeholder="Replace with...">
+    <button onclick="findText()" title="Find next"><i class="fa-solid fa-search"></i></button>
+    <button onclick="findPrev()" title="Previous match" id="find-prev" style="display:none;"><i class="fa-solid fa-chevron-up"></i></button>
+    <button onclick="findNext()" title="Next match" id="find-next" style="display:none;"><i class="fa-solid fa-chevron-down"></i></button>
+    <span id="find-count" style="font-size:0.85rem; color:#64748b; min-width:50px; text-align:center; display:none;"></span>
+    <button onclick="replaceText()">Replace</button>
+    <button onclick="replaceAllText()">Replace All</button>
+    <button class="close-find" onclick="toggleFind()">×</button>
+  </div>
+
+  <div class="editor-container">
+    <input type="text" class="note-title" id="note-title" placeholder="Untitled Note" value="My Note">
+    <div id="editor" contenteditable="true" spellcheck="true"></div>
+  </div>
+
+  <div class="emoji-picker" id="emoji-picker"></div>
+
+  <footer>
+    Powered by <a href="https://niti.com.ng/" target="_blank" rel="noopener">
+      Neroitech Inventions
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-left:2px;">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+        <polyline points="15 3 21 3 21 9"></polyline>
+        <line x1="10" y1="14" x2="21" y2="3"></line>
+      </svg>
+    </a>
+  </footer>
+
+  <button class="back-to-top" id="backToTop"
+  onclick="editor.scrollTo({top:0,behavior:'smooth'}); window.scrollTo({top:0,behavior:'smooth'});">
+  ↑
+</button>
+
+  <div class="modal-overlay" id="help-modal" onclick="if(event.target===this) this.classList.remove('show')">
+    <div class="modal" style="text-align:left; max-width:520px; position:relative;">
+      <button onclick="document.getElementById('help-modal').classList.remove('show')" style="position:absolute; top:12px; right:12px; background:transparent; border:none; font-size:1.4rem; cursor:pointer; color:#64748b; padding:4px 8px; line-height:1;">×</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding-right:28px;">
+        <h3 id="help-step-title">Step 1 of 4</h3>
+      </div>
+      <div id="help-content" style="min-height:120px; margin-bottom:16px; line-height:1.6;"></div>
+      <div style="margin-bottom:16px;">
+        <div style="height:4px; background:#e2e8f0; border-radius:2px; overflow:hidden;">
+          <div id="help-progress-bar" style="height:100%; background:#0f172a; width:0%; transition:width 0.3s;"></div>
+        </div>
+        <div id="help-progress" style="text-align:center; font-size:0.75rem; color:#64748b; margin-top:6px;">1 / 4</div>
+      </div>
+      <div class="modal-buttons">
+        <button class="secondary" id="help-prev" onclick="helpStep(-1)" style="display:none; background:#475569; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer;">Back</button>
+        <button id="help-next" onclick="helpStep(1)" style="background:#0f172a; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer;">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <h3 id="modal-title">Confirm</h3>
+      <p id="modal-message"></p>
+      <div id="modal-input-container"></div>
+      <div class="modal-buttons">
+        <button class="secondary" id="modal-cancel" style="background:#475569; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer;">Cancel</button>
+        <button id="modal-confirm" style="background:#0f172a; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer;">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const editor = document.getElementById('editor');
+    const titleInput = document.getElementById('note-title');
+    let isReadOnly = false;
+    let currentLockCode = null;
+    let currentShortUrl = null;
+    let isDirty = true;
+    let lastFindIndex = -1;
+    let findMatches = [];
+    let currentMatchIndex = -1;
+
+    const emojis = ["😀","😂","😍","🥰","😎","🤔","👍","👎","❤️","🔥","✨","🎉","📝","✅","❌","⭐","💡","📌","🔗","📎","📅","⏰","🚀","💯","🙌","👏","🙏","💪","🎯","📊","📈","🔔","💬","📧","📱","💻","🌍","☀️","🌙","🌈"];
+
+    function initEmojiPicker() {
+      const picker = document.getElementById('emoji-picker');
+      picker.innerHTML = emojis.map(e => `<span onclick="insertEmoji('${e}')">${e}</span>`).join('');
+    }
+
+    const textColors = ['#0f172a','#1e40af','#dc2626','#059669','#7c3aed','#ea580c','#000000','#ffffff','#64748b','#be123c','#0d9488','#4f46e5'];
+    const highlightColors = ['#fef08a','#bbf7d0','#bfdbfe','#fecaca','#e9d5ff','#fed7aa','#ffffff','#f1f5f9','#fde68a','#86efac','#93c5fd','#f9a8d4'];
+    let currentColorType = 'text';
+
+    let savedSelection = null;
+
+    function saveSelection() {
+      const sel = window.getSelection();
+      if (sel.rangeCount > 0) {
+        savedSelection = sel.getRangeAt(0).cloneRange();
+      }
+    }
+
+    function restoreSelection() {
+      if (savedSelection) {
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(savedSelection);
+      }
+    }
+
+    function openColorPicker(type) {
+      saveSelection();
+      currentColorType = type;
+      const panel = document.getElementById('color-picker-panel');
+      const title = document.getElementById('color-picker-title');
+      const swatches = document.getElementById('color-swatches');
+      const colors = type === 'text' ? textColors : highlightColors;
+      title.textContent = type === 'text' ? 'Text Color' : 'Highlight Color';
+      swatches.innerHTML = colors.map(c => `<div class="color-swatch" style="background:${c}" onclick="selectColor('${c}')"></div>`).join('');
+      document.getElementById('custom-color-input').value = type === 'text' ? '#0f172a' : '#fef08a';
+      panel.classList.add('show');
+    }
+
+    function closeColorPicker() {
+      document.getElementById('color-picker-panel').classList.remove('show');
+    }
+
+    function selectColor(color) {
+      if (currentColorType === 'text') {
+        applyTextColor(color);
+      } else {
+        applyHighlightColor(color);
+      }
+      closeColorPicker();
+    }
+
+    function applyCustomColor() {
+      const color = document.getElementById('custom-color-input').value;
+      selectColor(color);
+    }
+
+    function applyTextColor(color) {
+      editor.focus();
+      restoreSelection();
+      document.execCommand('styleWithCSS', false, true);
+      document.execCommand('foreColor', false, color);
+      document.getElementById('text-color-indicator').style.background = color;
+      document.getElementById('text-color').value = color;
+      saveData();
+    }
+
+    function applyHighlightColor(color) {
+      editor.focus();
+      restoreSelection();
+      document.execCommand('styleWithCSS', false, true);
+      document.execCommand('hiliteColor', false, color);
+      document.getElementById('highlight-color-indicator').style.background = color;
+      document.getElementById('highlight-color').value = color;
+      saveData();
+    }
+
+    function toggleMoreTools() {
+      document.getElementById('more-tools-panel').classList.toggle('show');
+    }
+
+    function toggleEmojiPicker(e) {
+      const picker = document.getElementById('emoji-picker');
+      if (picker.classList.contains('show')) {
+        picker.classList.remove('show');
+        return;
+      }
+      const rect = e.target.getBoundingClientRect();
+      picker.style.top = (rect.bottom + 6) + 'px';
+      picker.style.left = rect.left + 'px';
+      picker.classList.add('show');
+    }
+
+    function insertEmoji(emoji) {
+      editor.focus();
+      document.execCommand('insertText', false, emoji);
+      document.getElementById('emoji-picker').classList.remove('show');
+      saveData();
+    }
+
+    document.addEventListener('click', (e) => {
+      const picker = document.getElementById('emoji-picker');
+      if (!picker.contains(e.target) && !e.target.closest('[onclick*="toggleEmojiPicker"]')) {
+        picker.classList.remove('show');
+      }
+      const morePanel = document.getElementById('more-tools-panel');
+      if (morePanel.classList.contains('show') && !morePanel.querySelector('.more-tools-content').contains(e.target) && !e.target.closest('#more-tools-btn')) {
+        morePanel.classList.remove('show');
+      }
+      const colorPanel = document.getElementById('color-picker-panel');
+      if (colorPanel.classList.contains('show') && !colorPanel.querySelector('.color-picker-content').contains(e.target) && !e.target.closest('.color-btn')) {
+        colorPanel.classList.remove('show');
+      }
+    });
+
+    function execCmd(command, value = null) {
+      editor.focus();
+      document.execCommand(command, false, value);
+      saveData();
+    }
+
+    function scrollToTop() {
+      editor.scrollTo({ top: 0, behavior: 'smooth' });
+      // Move cursor to the start
+      editor.focus();
+      const range = document.createRange();
+      range.selectNodeContents(editor);
+      range.collapse(true);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+
+    function scrollToBottom() {
+      editor.scrollTo({ top: editor.scrollHeight, behavior: 'smooth' });
+      // Move cursor to the end
+      editor.focus();
+      const range = document.createRange();
+      range.selectNodeContents(editor);
+      range.collapse(false);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+
+    function newNote() {
+      const hasContent = titleInput.value.trim() !== 'Untitled Note' || editor.innerText.trim().length > 0;
+      if (hasContent) {
+        showConfirm('New Note', 'Start a fresh note? Any unsaved changes will be cleared.', () => {
+          performNewNote();
+        });
+      } else {
+        performNewNote();
+      }
+    }
+
+    function performNewNote() {
+      // Reset state
+      isReadOnly = false;
+      currentLockCode = null;
+      currentShortUrl = null;
+      isDirty = true;
+      findMatches = [];
+      currentMatchIndex = -1;
+
+      // Clear UI
+      titleInput.value = 'Untitled Note';
+      titleInput.readOnly = false;
+      editor.contentEditable = 'true';
+      editor.innerHTML = '<p>Welcome to <strong>SharedNote</strong>! Start typing your note here.</p>';
+      editor.focus();
+
+      // Remove read-only banner if present
+      document.getElementById('readonly-banner')?.remove();
+      document.getElementById('toolbar').style.display = '';
+
+      // Clear saved data and hash
+      localStorage.removeItem('sharednote-data');
+      if (window.location.hash) {
+        history.replaceState(null, '', window.location.pathname);
+      }
+
+      // Reset find UI
+      updateFindUI();
+      document.getElementById('find-bar').classList.remove('show');
+      updateSaveButton();
+
+      showToast('New note started');
+    }
+
+    function copyToClipboard() {
+      const text = editor.innerText;
+      if (!text.trim()) {
+        showToast('Nothing to copy');
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Copied to clipboard!');
+      }).catch(() => {
+        // Fallback for older browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          showToast('Copied to clipboard!');
+        } catch (e) {
+          showToast('Could not copy');
+        }
+        document.body.removeChild(textarea);
+      });
+    }
+
+    let pageEndsVisible = false;
+    const PAGE_CONTENT_HEIGHT = 1000; // approximate printable page height in px
+
+    function togglePageEnds() {
+      pageEndsVisible = !pageEndsVisible;
+      const btn = document.getElementById('page-ends-btn');
+      if (pageEndsVisible) {
+        if (btn) btn.classList.add('active');
+        renderPageEnds();
+        showToast('Page ends shown');
+      } else {
+        if (btn) btn.classList.remove('active');
+        clearPageEnds();
+        showToast('Page ends hidden');
+      }
+    }
+
+    function clearPageEnds() {
+      document.querySelectorAll('.page-end-marker').forEach(el => el.remove());
+    }
+
+    function renderPageEnds() {
+      clearPageEnds();
+      if (!pageEndsVisible) return;
+
+      const container = document.querySelector('.editor-container');
+      if (!container) return;
+
+      const contentHeight = editor.scrollHeight;
+      const titleHeight = titleInput.offsetHeight || 60;
+      let page = 1;
+      let y = PAGE_CONTENT_HEIGHT;
+
+      while (y < contentHeight) {
+        const marker = document.createElement('div');
+        marker.className = 'page-end-marker';
+        marker.style.top = (titleHeight + y) + 'px';
+        marker.innerHTML = `<span>End of page ${page}</span>`;
+        container.appendChild(marker);
+        page++;
+        y += PAGE_CONTENT_HEIGHT;
+      }
+    }
+
+    function clearAllFormatting() {
+      editor.focus();
+      const sel = window.getSelection();
+      
+      if (sel.rangeCount > 0 && !sel.isCollapsed) {
+        // Clear formatting only in the current selection
+        const range = sel.getRangeAt(0);
+        const plainText = range.toString();
+        range.deleteContents();
+        range.insertNode(document.createTextNode(plainText));
+        showToast('Formatting cleared in selection');
+      } else {
+        // Clear formatting in the entire note
+        const plain = editor.innerText;
+        if (!plain.trim()) {
+          showToast('Nothing to clear');
+          return;
+        }
+        // Rebuild as plain paragraphs
+        const lines = plain.split('\n');
+        editor.innerHTML = lines.map(line => {
+          const escaped = line.replace(/&/g, '&' + 'amp;').replace(/</g, '&' + 'lt;').replace(/>/g, '&' + 'gt;');
+          return escaped ? `<div>${escaped}</div>` : '<div><br></div>';
+        }).join('');
+        showToast('All formatting cleared');
+      }
+      saveData();
+    }
+
+    function insertLink() {
+      showConfirm('Insert Link', 'Enter the URL (include https://):', (url) => {
+        if (url && url.trim()) {
+          editor.focus();
+          document.execCommand('createLink', false, url.trim());
+          saveData();
+        }
+      }, true, 'https://example.com');
+    }
+
+    function toggleFind() {
+      const bar = document.getElementById('find-bar');
+      bar.classList.toggle('show');
+      if (bar.classList.contains('show')) {
+        document.getElementById('find-input').focus();
+      } else {
+        // Clear navigation state when closing
+        findMatches = [];
+        currentMatchIndex = -1;
+        updateFindUI();
+        window.getSelection().removeAllRanges();
+      }
+    }
+
+    function getTextNodes(node) {
+      const textNodes = [];
+      if (node.nodeType === Node.TEXT_NODE) {
+        textNodes.push(node);
+      } else {
+        for (let child of node.childNodes) {
+          textNodes.push(...getTextNodes(child));
+        }
+      }
+      return textNodes;
+    }
+
+    function findAllMatches(query) {
+      if (!query) return [];
+      const matches = [];
+      const textNodes = getTextNodes(editor);
+      const lowerQuery = query.toLowerCase();
+      let globalOffset = 0;
+
+      textNodes.forEach(node => {
+        const text = node.textContent;
+        const lowerText = text.toLowerCase();
+        let start = 0;
+        while (true) {
+          const idx = lowerText.indexOf(lowerQuery, start);
+          if (idx === -1) break;
+          matches.push({
+            node: node,
+            start: idx,
+            end: idx + query.length,
+            globalStart: globalOffset + idx
+          });
+          start = idx + 1;
+        }
+        globalOffset += text.length;
+      });
+      return matches;
+    }
+
+    function selectMatch(match) {
+      if (!match) return;
+      editor.focus();
+      const range = document.createRange();
+      range.setStart(match.node, match.start);
+      range.setEnd(match.node, match.end);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+
+      // Reliably scroll the editor container so the match is centered
+      try {
+        // Force layout so getBoundingClientRect is accurate
+        const editorRect = editor.getBoundingClientRect();
+        const rangeRect = range.getBoundingClientRect();
+
+        if (rangeRect.height === 0 && rangeRect.width === 0) {
+          // Fallback if range has no dimensions yet
+          match.node.parentElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        const relativeTop = rangeRect.top - editorRect.top + editor.scrollTop;
+        const targetScrollTop = relativeTop - (editor.clientHeight / 2) + (rangeRect.height / 2);
+
+        editor.scrollTo({
+          top: Math.max(0, Math.min(targetScrollTop, editor.scrollHeight - editor.clientHeight)),
+          behavior: 'smooth'
+        });
+      } catch (e) {
+        // Last-resort fallback
+        try {
+          match.node.parentElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } catch (_) {}
+      }
+    }
+
+    function updateFindUI() {
+      const prevBtn = document.getElementById('find-prev');
+      const nextBtn = document.getElementById('find-next');
+      const countEl = document.getElementById('find-count');
+      if (findMatches.length > 0) {
+        prevBtn.style.display = 'inline-flex';
+        nextBtn.style.display = 'inline-flex';
+        countEl.style.display = 'inline';
+        countEl.textContent = `${currentMatchIndex + 1} / ${findMatches.length}`;
+      } else {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+        countEl.style.display = 'none';
+        countEl.textContent = '';
+      }
+    }
+
+    function findText() {
+      const query = document.getElementById('find-input').value.trim();
+      if (!query) {
+        showToast('Enter text to find');
+        return;
+      }
+      findMatches = findAllMatches(query);
+      if (findMatches.length === 0) {
+        currentMatchIndex = -1;
+        updateFindUI();
+        showToast('No matches found');
+        return;
+      }
+      currentMatchIndex = 0;
+      selectMatch(findMatches[currentMatchIndex]);
+      updateFindUI();
+      showToast(`Found ${findMatches.length} match${findMatches.length > 1 ? 'es' : ''}`);
+    }
+
+    function findNext() {
+      if (findMatches.length === 0) {
+        findText();
+        return;
+      }
+      currentMatchIndex = (currentMatchIndex + 1) % findMatches.length;
+      selectMatch(findMatches[currentMatchIndex]);
+      updateFindUI();
+    }
+
+    function findPrev() {
+      if (findMatches.length === 0) {
+        findText();
+        return;
+      }
+      currentMatchIndex = (currentMatchIndex - 1 + findMatches.length) % findMatches.length;
+      selectMatch(findMatches[currentMatchIndex]);
+      updateFindUI();
+    }
+
+    function replaceText() {
+      const find = document.getElementById('find-input').value;
+      const replace = document.getElementById('replace-input').value;
+      if (!find) return;
+      const html = editor.innerHTML;
+      const regex = new RegExp(find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+      if (regex.test(html)) {
+        editor.innerHTML = html.replace(regex, replace);
+        saveData();
+        // Clear matches since content changed
+        findMatches = [];
+        currentMatchIndex = -1;
+        updateFindUI();
+        showToast('Replaced one match');
+        // Re-search if possible
+        setTimeout(() => findText(), 50);
+      } else {
+        showToast('Not found');
+      }
+    }
+
+    function replaceAllText() {
+      const find = document.getElementById('find-input').value;
+      const replace = document.getElementById('replace-input').value;
+      if (!find) return;
+      const html = editor.innerHTML;
+      const regex = new RegExp(find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      editor.innerHTML = html.replace(regex, replace);
+      saveData();
+      findMatches = [];
+      currentMatchIndex = -1;
+      updateFindUI();
+      showToast('All matches replaced');
+    }
+
+    function cleanPrint() {
+      const title = titleInput.value.trim() || 'Note';
+      const content = editor.innerHTML || '';
+
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        showToast('Please allow pop-ups to download PDF');
+        return;
+      }
+
+      const doc = printWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body></body></html>');
+      doc.close();
+
+      const style = doc.createElement('style');
+      style.textContent = 'body{font-family:Inter,system-ui,sans-serif;margin:0;padding:20px;color:#0f172a;line-height:1.6;}h1{font-size:1.8rem;margin:0 0 20px;}#content{font-size:16px;line-height:1.7;}#content ul,#content ol{margin-left:24px;}@media print{body{padding:0;}@page{margin:1.5cm;}}';
+      doc.head.appendChild(style);
+
+      const h1 = doc.createElement('h1');
+      h1.textContent = title;
+      doc.body.appendChild(h1);
+
+      const div = doc.createElement('div');
+      div.id = 'content';
+      div.innerHTML = content;
+      doc.body.appendChild(div);
+
+      doc.title = '';
+      setTimeout(function() {
+        printWindow.focus();
+        printWindow.print();
+        printWindow.onafterprint = function() { printWindow.close(); };
+      }, 300);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    function saveData() {
+      if (isReadOnly) return;
+      const data = {
+        title: titleInput.value,
+        content: editor.innerHTML,
+        timestamp: Date.now(),
+        shortUrl: currentShortUrl || null
+      };
+      localStorage.setItem('sharednote-data', JSON.stringify(data));
+      // Only mark dirty if we already have a saved short link
+      // (so we know the shared version is outdated)
+      if (currentShortUrl) isDirty = true;
+    }
+
+    function loadData() {
+      const saved = localStorage.getItem('sharednote-data');
+      if (!saved) {
+        editor.innerHTML = '<p>Welcome to <strong>SharedNote</strong>! Start typing your note here.</p>';
+        return false;
+      }
+      try {
+        const data = JSON.parse(saved);
+        titleInput.value = data.title || 'Untitled Note';
+        editor.innerHTML = data.content || '';
+        if (data.shortUrl) {
+          currentShortUrl = data.shortUrl;
+          isDirty = false; // content matches the last saved short link
+        }
+        updateSaveButton();
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function showConfirm(title, message, onConfirm, withInput = false, placeholder = 'Enter value') {
+      const modal = document.getElementById('modal');
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-message').textContent = message;
+      const inputContainer = document.getElementById('modal-input-container');
+      inputContainer.innerHTML = '';
+      let input = null;
+      if (withInput) {
+        input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = placeholder;
+        input.style.cssText = 'width:100%; padding:10px 12px; border:1px solid #e2e8f0; border-radius:8px; font-size:1rem; margin-top:8px;';
+        inputContainer.appendChild(input);
+        setTimeout(() => input.focus(), 100);
+      }
+      modal.classList.add('show');
+
+      const confirmBtn = document.getElementById('modal-confirm');
+      const cancelBtn = document.getElementById('modal-cancel');
+
+      const cleanup = () => {
+        modal.classList.remove('show');
+        confirmBtn.onclick = null;
+        cancelBtn.onclick = null;
+      };
+
+      confirmBtn.onclick = () => {
+        const value = input ? input.value : true;
+        cleanup();
+        onConfirm(value);
+      };
+      cancelBtn.onclick = cleanup;
+    }
+
+    function updateSaveButton() {
+      const btn = document.getElementById('save-btn');
+      if (!btn) return;
+      if (currentShortUrl) {
+        btn.textContent = 'Copy Link';
+        btn.title = 'Copy the existing short link';
+      } else {
+        btn.textContent = 'Save';
+        btn.title = 'Create a short link for this note';
+      }
+    }
+
+    function generateShareLink() {
+      // Always reuse an existing short link for this note — never create another one
+      if (currentShortUrl) {
+        navigator.clipboard.writeText(currentShortUrl).then(() => {
+          showToast(isDirty ? 'Existing link copied (shows version from first save)' : 'Link copied!');
+        }).catch(() => {
+          showConfirm('Existing Link', 'This note already has a short link. Copy it below:', () => {}, true, currentShortUrl);
+          setTimeout(() => {
+            const inp = document.querySelector('#modal-input-container input');
+            if (inp) inp.value = currentShortUrl;
+          }, 150);
+        });
+        return;
+      }
+      // First time saving this note — create a short link
+      showConfirm('Save Link', 'Enter a code to lock this note. Only people with the code can edit it.', (code) => {
+        if (!code || code.trim().length < 3) {
+          showToast('Code must be at least 3 characters');
+          return;
+        }
+        createShareLink(code.trim());
+      }, true, 'Enter lock code');
+    }
+
+    // URL Mini config (same as resume builder)
+    const URLMINI = {
+      SHEET_ID: "1ZUUmPDQGseg5bGEagOeFy89akZRtFQAIm5MksrGOrtw",
+      API_KEY: "AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q",
+      RANGE: "SHORTS!A:D",
+      GO_URL: "https://urlmini.github.io",
+      FORM_ACTION: "https://docs.google.com/forms/d/e/1FAIpQLSdGOvrH7mRsviL6U8H8qYS8cy9-sijgyLfR4fAg4i3vF8fdag/formResponse",
+      FIELDS: {
+        code: "entry.1136799663",
+        url: "entry.314328174",
+        user: "entry.1530086966"
+      }
+    };
+
+    async function createShortLink(code, dest, user) {
+      const url = "https://sheets.googleapis.com/v4/spreadsheets/" + URLMINI.SHEET_ID + "/values/" + encodeURIComponent(URLMINI.RANGE) + "?key=" + URLMINI.API_KEY;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Could not check database");
+      const data = await res.json();
+      const rows = data.values || [];
+      const used = new Set();
+      rows.forEach(row => {
+        if (row[1]) used.add(String(row[1]).trim().toLowerCase());
+      });
+      let finalCode = code.toLowerCase();
+      let n = 1;
+      while (used.has(finalCode)) {
+        finalCode = code.toLowerCase() + '-' + n;
+        n++;
+        if (n > 50) throw new Error("Could not find available code");
+      }
+      await new Promise((resolve) => {
+        const iframe = document.createElement("iframe");
+        iframe.name = "urlmini_" + Date.now();
+        iframe.style.display = "none";
+        document.body.appendChild(iframe);
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = URLMINI.FORM_ACTION;
+        form.target = iframe.name;
+        form.style.display = "none";
+        const fields = {
+          [URLMINI.FIELDS.code]: finalCode,
+          [URLMINI.FIELDS.url]: dest,
+          [URLMINI.FIELDS.user]: user,
+          fvv: "1",
+          pageHistory: "0"
+        };
+        Object.keys(fields).forEach(name => {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = name;
+          input.value = fields[name];
+          form.appendChild(input);
+        });
+        document.body.appendChild(form);
+        form.submit();
+        setTimeout(() => { form.remove(); iframe.remove(); resolve(); }, 2000);
+      });
+      return URLMINI.GO_URL + "?c=" + finalCode;
+    }
+
+    async function createShareLink(lockCode) {
+      const data = {
+        title: titleInput.value,
+        content: editor.innerHTML,
+        lockCode: btoa(lockCode)
+      };
+      try {
+        const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+        const longUrl = window.location.origin + window.location.pathname + "#note=" + encoded;
+
+        const name = titleInput.value.trim();
+        let code = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30) + '-note';
+        if (!code || code.length < 3) code = 'note-' + Date.now().toString(36);
+
+        showToast('Creating short link...');
+        const shortUrl = await createShortLink(code, longUrl, name || 'note');
+        currentShortUrl = shortUrl;
+        saveData();
+        isDirty = false; // content matches the newly created short link
+        updateSaveButton();
+        navigator.clipboard.writeText(shortUrl).then(() => {
+          showToast('Save link copied!');
+        }).catch(() => {
+          showConfirm('Copy Link', 'Copy this link:', () => {}, true, shortUrl);
+          setTimeout(() => {
+            const inp = document.querySelector('#modal-input-container input');
+            if (inp) inp.value = shortUrl;
+          }, 150);
+        });
+      } catch (e) {
+        showToast('Could not create short link');
+        console.error(e);
+      }
+    }
+
+    function loadFromShareLink() {
+      const hash = window.location.hash;
+      if (!hash.startsWith('#note=')) return false;
+      try {
+        const encoded = hash.slice(6);
+        const json = decodeURIComponent(escape(atob(encoded)));
+        const data = JSON.parse(json);
+        if (data.lockCode) {
+          currentLockCode = atob(data.lockCode);
+          isReadOnly = true;
+        }
+        titleInput.value = data.title || 'Shared Note';
+        editor.innerHTML = data.content || '';
+        localStorage.setItem('sharednote-data', JSON.stringify(data));
+        return true;
+      } catch (e) {
+        showToast('Invalid share link');
+        return false;
+      }
+    }
+
+    function enterReadOnlyMode() {
+      editor.contentEditable = 'false';
+      titleInput.readOnly = true;
+      document.getElementById('toolbar').style.display = 'none';
+      const banner = document.createElement('div');
+      banner.id = 'readonly-banner';
+      banner.style.cssText = "background:#1e293b; color:white; padding:12px 16px; text-align:center; font-size:0.9rem; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center;";
+      banner.innerHTML = `<span>Read-only view</span>
+        <button onclick="cleanPrint()" style="background:#0f172a; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:0.85rem;">Download PDF</button>
+        <button onclick="promptUnlock()" style="background:#2563eb; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:0.85rem;">Unlock to Edit</button>`;
+      document.body.insertBefore(banner, document.querySelector('.editor-container'));
+    }
+
+    function promptUnlock() {
+      showConfirm('Unlock Note', 'Enter the lock code to edit this note.', (code) => {
+        if (code === currentLockCode) {
+          isReadOnly = false;
+          editor.contentEditable = 'true';
+          titleInput.readOnly = false;
+          document.getElementById('toolbar').style.display = '';
+          document.getElementById('readonly-banner')?.remove();
+          showToast('Unlocked - you can now edit');
+        } else {
+          showToast('Wrong code');
+        }
+      }, true, 'Enter lock code');
+    }
+    window.promptUnlock = promptUnlock;
+
+    const helpSteps = [
+      {
+        title: "Step 1 of 4 - Start writing",
+        content: "<p>Type your note title and content directly in the editor. Everything auto-saves in your browser.</p><p style='margin-top:10px;'>Use the toolbar for bold, italic, underline, fonts, colors, lists, links, and emojis.</p>"
+      },
+      {
+        title: "Step 2 of 4 - Find & Replace",
+        content: "<p>Click <strong>Find & Replace</strong> in the header (or press Ctrl+F).</p><p style='margin-top:10px;'>Search for text, replace one match, or replace all matches at once.</p>"
+      },
+      {
+        title: "Step 3 of 4 - Save a link",
+        content: "<p>Click the <strong>Save</strong> button.</p><p style='margin-top:10px;'>You’ll be asked for a <strong>lock code</strong>. A short link is created. Anyone who opens it sees a read-only note and needs the code to unlock and edit.</p>"
+      },
+      {
+        title: "Step 4 of 4 - Download PDF",
+        content: "<p>Click <strong>Download PDF</strong>.</p><p style='margin-top:10px;'>A clean print view opens with only your note. In the print dialog, turn off <strong>Headers and footers</strong> if any date or URL still appears.</p><p style='margin-top:10px;'>That’s it — your note is ready.</p>"
+      }
+    ];
+
+    const helpStepsReadOnly = [
+      {
+        title: "Read-only Note",
+        content: "<p>You are viewing a shared note. You can read it and download a PDF, but you cannot edit it.</p><p style='margin-top:10px;'>To make changes, click <strong>Unlock to Edit</strong> at the top and enter the lock code from the person who shared it.</p>"
+      },
+      {
+        title: "Download PDF",
+        content: "<p>Click <strong>Download PDF</strong>.</p><p style='margin-top:10px;'>A clean view of your note opens for printing. Turn off <strong>Headers and footers</strong> in the print dialog if needed for a completely clean file.</p>"
+      }
+    ];
+
+    let currentHelpStep = 0;
+    let activeHelpSteps = helpSteps;
+
+    function showHelp() {
+      activeHelpSteps = isReadOnly ? helpStepsReadOnly : helpSteps;
+      currentHelpStep = 0;
+      renderHelpStep();
+      document.getElementById("help-modal").classList.add("show");
+    }
+
+    function renderHelpStep() {
+      const step = activeHelpSteps[currentHelpStep];
+      document.getElementById("help-step-title").textContent = step.title;
+      document.getElementById("help-content").innerHTML = step.content;
+      document.getElementById("help-progress").textContent = (currentHelpStep + 1) + " / " + activeHelpSteps.length;
+      document.getElementById("help-progress-bar").style.width = ((currentHelpStep + 1) / activeHelpSteps.length * 100) + "%";
+      document.getElementById("help-prev").style.display = currentHelpStep === 0 ? "none" : "inline-block";
+      document.getElementById("help-next").textContent = currentHelpStep === activeHelpSteps.length - 1 ? "Done" : "Next";
+    }
+
+    function helpStep(dir) {
+      if (dir === 1 && currentHelpStep === activeHelpSteps.length - 1) {
+        document.getElementById("help-modal").classList.remove("show");
+        return;
+      }
+      currentHelpStep += dir;
+      if (currentHelpStep < 0) currentHelpStep = 0;
+      if (currentHelpStep >= activeHelpSteps.length) currentHelpStep = activeHelpSteps.length - 1;
+      renderHelpStep();
+    }
+
+
+// Back to top button
+const backToTop = document.getElementById("backToTop");
+
+function updateBackToTop() {
+  if (editor.scrollTop > 300 || window.scrollY > 300) {
+    backToTop.classList.add("show");
+  } else {
+    backToTop.classList.remove("show");
+  }
+}
+
+// Watch scrolling inside the editor
+editor.addEventListener("scroll", updateBackToTop);
+
+// Also watch scrolling on the page
+window.addEventListener("scroll", updateBackToTop);
+
+
+    // Make links openable inside the editor
+    editor.addEventListener('click', function(e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+
+      // Ctrl/Cmd + Click opens the link immediately
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        window.open(link.href, '_blank', 'noopener');
+        return;
+      }
+
+      // Normal click: show a small open button
+      e.preventDefault();
+      showLinkPopup(link);
+    });
+
+    function showLinkPopup(link) {
+      // Remove any existing popup
+      document.querySelectorAll('.link-popup').forEach(p => p.remove());
+
+      const popup = document.createElement('div');
+      popup.className = 'link-popup';
+      popup.innerHTML = `
+        <a href="${link.href}" target="_blank" rel="noopener" style="color:#2563eb; text-decoration:none; font-weight:600; margin-right:12px;">Open link</a>
+        <button onclick="this.parentElement.remove()" style="background:transparent; border:none; cursor:pointer; font-size:1.1rem; color:#64748b;">×</button>
+      `;
+      popup.style.cssText = `
+        position: absolute;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 8px 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 1000;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+      `;
+
+      const rect = link.getBoundingClientRect();
+      popup.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+      popup.style.left = (rect.left + window.scrollX) + 'px';
+
+      document.body.appendChild(popup);
+
+      // Close when clicking elsewhere
+      setTimeout(() => {
+        document.addEventListener('click', function closePopup(ev) {
+          if (!popup.contains(ev.target)) {
+            popup.remove();
+            document.removeEventListener('click', closePopup);
+          }
+        });
+      }, 10);
+    }
+    titleInput.addEventListener('input', saveData);
+    editor.addEventListener('input', () => {
+      if (pageEndsVisible) {
+        // Debounce refresh of page markers
+        clearTimeout(editor._pageEndTimer);
+        editor._pageEndTimer = setTimeout(renderPageEnds, 300);
+      }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === 'b') { e.preventDefault(); execCmd('bold'); }
+        if (e.key === 'i') { e.preventDefault(); execCmd('italic'); }
+        if (e.key === 'u') { e.preventDefault(); execCmd('underline'); }
+        if (e.key === 'f') { e.preventDefault(); toggleFind(); }
+      }
+    });
+
+    // Enter in find box triggers search; Shift+Enter previous
+    document.getElementById('find-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (e.shiftKey) {
+          findPrev();
+        } else {
+          if (findMatches.length > 0) findNext();
+          else findText();
+        }
+      }
+    });
+
+    // Init
+    initEmojiPicker();
+    if (!loadFromShareLink()) {
+      loadData();
+    }
+    updateSaveButton();
+    if (isReadOnly) enterReadOnlyMode();
+  </script>
+</body>
+</html>
