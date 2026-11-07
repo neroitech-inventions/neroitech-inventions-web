@@ -558,6 +558,29 @@
       font-size: .76rem;
     }
     #speech-voice { max-width: 100%; }
+    #read-controls .speech-highlight-button {
+      grid-column: 1 / -1;
+      background: #fffbeb;
+      border-color: #fde68a;
+      color: #92400e;
+    }
+    #read-controls .speech-highlight-button:hover {
+      background: #fef3c7;
+      border-color: #fcd34d;
+    }
+    /* Temporary read-along highlighting; it does not alter saved note formatting. */
+    ::highlight(sharednote-speech-sentence) {
+      background-color: #fde68a;
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: rgba(180, 83, 9, .45);
+    }
+    ::highlight(sharednote-speech-word) {
+      background-color: #fbbf24;
+      color: #1f2937;
+      text-decoration: underline;
+      text-decoration-color: #b45309;
+    }
     @media (max-width: 600px) {
       #read-widget { margin-left: auto; }
       #read-controls { right: -4px; width: min(340px, calc(100vw - 20px)); }
@@ -856,11 +879,24 @@
       <option value="1.25">Fast</option>
       <option value="1.5">Very fast</option>
     </select>
+    <label for="speech-start-mode">Start reading</label>
+    <select id="speech-start-mode" aria-label="Choose where reading starts">
+      <option value="all" selected>Entire note</option>
+      <option value="cursor">From cursor to end</option>
+      <option value="selection">Selected text only</option>
+    </select>
+    <label for="speech-highlight-mode">Read-along highlight</label>
+    <select id="speech-highlight-mode" aria-label="Choose read-along highlight">
+      <option value="sentence" selected>Highlight sentence</option>
+      <option value="word">Highlight each word</option>
+      <option value="off">No automatic highlight</option>
+    </select>
     <div class="speech-actions">
       <button type="button" onclick="readNote()"><i class="fa-solid fa-play"></i> Read</button>
       <button type="button" onclick="pauseReading()"><i class="fa-solid fa-pause"></i> Pause</button>
       <button type="button" onclick="resumeReading()"><i class="fa-solid fa-play"></i> Resume</button>
       <button type="button" onclick="stopReading()"><i class="fa-solid fa-stop"></i> Stop</button>
+      <button type="button" class="speech-highlight-button" onmousedown="saveSelection()" onclick="highlightSelectedText()"><i class="fa-solid fa-highlighter"></i> Highlight selection</button>
     </div>
     <span id="speech-status" role="status" aria-live="polite">Ready</span>
     </section>
@@ -1002,9 +1038,12 @@
       }
     });
 
-    // Read the note aloud using voices supplied by the user's browser/device.
-    // The note title is deliberately excluded: only #editor text is spoken.
+    // Read aloud supports the whole note, text from the cursor, or selected text.
+    // Read-along highlighting uses the CSS Custom Highlight API and never edits note HTML.
     let availableSpeechVoices = [];
+    let speechQueue = [];
+    let speechQueueIndex = 0;
+    let speechRunId = 0;
 
     function loadSpeechVoices() {
       const voiceSelect = document.getElementById('speech-voice');
@@ -1036,26 +1075,180 @@
       const matchingVoice = availableSpeechVoices.find(voice =>
         voice.voiceURI === previousVoice
       );
-      if (matchingVoice) {
-        voiceSelect.value = matchingVoice.voiceURI;
+      if (matchingVoice) voiceSelect.value = matchingVoice.voiceURI;
+    }
+
+    function getEditorTextIndex() {
+      const walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT);
+      const entries = [];
+      let text = '';
+      let node;
+
+      while ((node = walker.nextNode())) {
+        const value = node.nodeValue || '';
+        if (!value.length) continue;
+        entries.push({ node, start: text.length, end: text.length + value.length });
+        text += value;
+      }
+      return { text, entries };
+    }
+
+    function getBoundaryTextOffset(container, offset) {
+      const range = document.createRange();
+      range.selectNodeContents(editor);
+      try {
+        range.setEnd(container, offset);
+        return range.toString().length;
+      } catch (error) {
+        return 0;
       }
     }
 
-    function readNote() {
-      if (!('speechSynthesis' in window)) {
-        showToast('Speech reading is not supported in this browser');
-        return;
+    function makeEditorRange(startOffset, endOffset, index) {
+      if (!index.entries.length || endOffset <= startOffset) return null;
+
+      let startEntry = null;
+      let endEntry = null;
+
+      for (const entry of index.entries) {
+        if (!startEntry && startOffset >= entry.start && startOffset < entry.end) {
+          startEntry = entry;
+        }
+        if (endOffset > entry.start && endOffset <= entry.end) {
+          endEntry = entry;
+          break;
+        }
       }
 
-      const text = editor.innerText.trim();
+      if (!startEntry) {
+        startEntry = index.entries.find(entry => startOffset === entry.end) || index.entries[index.entries.length - 1];
+      }
+      if (!endEntry) endEntry = index.entries[index.entries.length - 1];
+      if (!startEntry || !endEntry) return null;
+
+      const range = document.createRange();
+      const start = Math.max(0, Math.min(startEntry.node.nodeValue.length, startOffset - startEntry.start));
+      const finish = Math.max(0, Math.min(endEntry.node.nodeValue.length, endOffset - endEntry.start));
+
+      try {
+        range.setStart(startEntry.node, start);
+        range.setEnd(endEntry.node, finish);
+        return range;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function clearSpeechHighlight() {
+      if (window.CSS && CSS.highlights) {
+        CSS.highlights.delete('sharednote-speech-sentence');
+        CSS.highlights.delete('sharednote-speech-word');
+      }
+    }
+
+    function applySpeechHighlight(start, end, kind = 'sentence') {
+      const mode = document.getElementById('speech-highlight-mode').value;
+      if (mode === 'off' || !window.CSS || !CSS.highlights || typeof Highlight === 'undefined') return;
+
+      const index = getEditorTextIndex();
+      const range = makeEditorRange(start, end, index);
+      if (!range) return;
+
+      clearSpeechHighlight();
+      const name = kind === 'word' && mode === 'word'
+        ? 'sharednote-speech-word'
+        : 'sharednote-speech-sentence';
+      CSS.highlights.set(name, new Highlight(range));
+
+      const element = range.startContainer.parentElement;
+      if (element) element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function getReadingSelection() {
+      const mode = document.getElementById('speech-start-mode').value;
+      const index = getEditorTextIndex();
+      const selection = window.getSelection();
+      let activeRange = null;
+
+      if (selection && selection.rangeCount && editor.contains(selection.anchorNode)) {
+        activeRange = selection.getRangeAt(0).cloneRange();
+      } else if (savedSelection && editor.contains(savedSelection.commonAncestorContainer)) {
+        // Keep the editor selection available while the user opens the speaker menu.
+        activeRange = savedSelection.cloneRange();
+      }
+
+      if (mode === 'selection') {
+        if (!activeRange || activeRange.collapsed) {
+          showToast('Select some text in your note first');
+          return null;
+        }
+        const range = activeRange;
+        const start = getBoundaryTextOffset(range.startContainer, range.startOffset);
+        const text = range.toString().trim();
+        if (!text) {
+          showToast('The selected text is empty');
+          return null;
+        }
+        return { text, start };
+      }
+
+      if (mode === 'cursor') {
+        if (!activeRange) {
+          showToast('Place the cursor in your note where you want reading to start');
+          return null;
+        }
+        const range = activeRange;
+        const start = getBoundaryTextOffset(range.startContainer, range.startOffset);
+        const text = index.text.slice(start).trimStart();
+        if (!text) {
+          showToast('There is no text after the cursor');
+          return null;
+        }
+        return { text, start };
+      }
+
+      const text = index.text.trim();
       if (!text) {
         showToast('There is no note content to read');
+        return null;
+      }
+      const leadingSpace = index.text.length - index.text.trimStart().length;
+      return { text, start: leadingSpace };
+    }
+
+    function buildSpeechQueue(text, baseOffset) {
+      const chunks = [];
+      const sentencePattern = /[^.!?…\n]+[.!?…]?|\n+/g;
+      let match;
+
+      while ((match = sentencePattern.exec(text)) !== null) {
+        const raw = match[0];
+        const leading = raw.length - raw.trimStart().length;
+        const spoken = raw.trim();
+        if (!spoken) continue;
+
+        const start = baseOffset + match.index + leading;
+        chunks.push({ text: spoken, start, end: start + spoken.length });
+      }
+
+      if (!chunks.length && text.trim()) {
+        const spoken = text.trim();
+        chunks.push({ text: spoken, start: baseOffset, end: baseOffset + spoken.length });
+      }
+      return chunks;
+    }
+
+    function speakNextChunk(runId) {
+      if (runId !== speechRunId || speechQueueIndex >= speechQueue.length) {
+        if (runId === speechRunId) {
+          document.getElementById('speech-status').textContent = 'Finished';
+          clearSpeechHighlight();
+        }
         return;
       }
 
-      window.speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(text);
+      const chunk = speechQueue[speechQueueIndex];
+      const utterance = new SpeechSynthesisUtterance(chunk.text);
       const selectedVoiceURI = document.getElementById('speech-voice').value;
       const selectedVoice = availableSpeechVoices.find(voice =>
         voice.voiceURI === selectedVoiceURI
@@ -1065,20 +1258,85 @@
         utterance.voice = selectedVoice;
         utterance.lang = selectedVoice.lang;
       }
-
       utterance.rate = Number(document.getElementById('speech-speed').value) || 1;
+
       utterance.onstart = () => {
-        document.getElementById('speech-status').textContent = 'Reading…';
-      };
-      utterance.onend = () => {
-        document.getElementById('speech-status').textContent = 'Finished';
-      };
-      utterance.onerror = event => {
+        if (runId !== speechRunId) return;
         document.getElementById('speech-status').textContent =
-          event.error === 'canceled' ? 'Stopped' : 'Could not read note';
+          `Reading sentence ${speechQueueIndex + 1} of ${speechQueue.length}…`;
+        applySpeechHighlight(chunk.start, chunk.end, 'sentence');
+      };
+
+      utterance.onboundary = event => {
+        if (runId !== speechRunId || event.name !== 'word') return;
+        if (document.getElementById('speech-highlight-mode').value !== 'word') return;
+
+        const localStart = Math.max(0, event.charIndex || 0);
+        const localLength = Math.max(1, event.charLength || 1);
+        applySpeechHighlight(
+          chunk.start + localStart,
+          Math.min(chunk.end, chunk.start + localStart + localLength),
+          'word'
+        );
+      };
+
+      utterance.onend = () => {
+        if (runId !== speechRunId) return;
+        speechQueueIndex += 1;
+        speakNextChunk(runId);
+      };
+
+      utterance.onerror = event => {
+        if (runId !== speechRunId || event.error === 'canceled') return;
+        document.getElementById('speech-status').textContent = 'Could not read note';
+        clearSpeechHighlight();
       };
 
       window.speechSynthesis.speak(utterance);
+    }
+
+    function readNote() {
+      if (!('speechSynthesis' in window)) {
+        showToast('Speech reading is not supported in this browser');
+        return;
+      }
+
+      const reading = getReadingSelection();
+      if (!reading) return;
+
+      window.speechSynthesis.cancel();
+      speechRunId += 1;
+      const runId = speechRunId;
+      speechQueue = buildSpeechQueue(reading.text, reading.start);
+      speechQueueIndex = 0;
+      clearSpeechHighlight();
+
+      if (!speechQueue.length) {
+        showToast('There is no note content to read');
+        return;
+      }
+
+      document.getElementById('speech-status').textContent = 'Starting…';
+      speakNextChunk(runId);
+    }
+
+    function highlightSelectedText() {
+      // Restore the text selection saved before the toolbar button took focus.
+      if (savedSelection && editor.contains(savedSelection.commonAncestorContainer)) {
+        restoreSelection();
+      }
+
+      const selection = window.getSelection();
+      if (!selection || selection.isCollapsed ||
+          !editor.contains(selection.anchorNode) || !editor.contains(selection.focusNode)) {
+        showToast('Select text in your note to highlight it');
+        return;
+      }
+
+      saveSelection();
+      const color = document.getElementById('highlight-color').value || '#fef08a';
+      applyHighlightColor(color);
+      showToast('Selected text highlighted');
     }
 
     function pauseReading() {
@@ -1098,7 +1356,11 @@
 
     function stopReading() {
       if ('speechSynthesis' in window) {
+        speechRunId += 1;
         window.speechSynthesis.cancel();
+        speechQueue = [];
+        speechQueueIndex = 0;
+        clearSpeechHighlight();
         document.getElementById('speech-status').textContent = 'Stopped';
       }
     }
@@ -1136,6 +1398,11 @@
     let currentColorType = 'text';
 
     let savedSelection = null;
+
+    // Remember the last editor selection so toolbar controls don't lose the cursor/range.
+    editor.addEventListener('mouseup', saveSelection);
+    editor.addEventListener('keyup', saveSelection);
+    editor.addEventListener('input', saveSelection);
 
     function saveSelection() {
       const sel = window.getSelection();
@@ -1283,6 +1550,7 @@
     }
 
     function performNewNote() {
+      stopReading();
       // Reset state
       isReadOnly = false;
       currentLockCode = null;
