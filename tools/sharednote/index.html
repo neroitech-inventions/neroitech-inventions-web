@@ -766,6 +766,8 @@
 .storage-choice-check { width:21px;height:21px;display:grid;place-items:center;border:1.5px solid #cbd5e1;border-radius:50%;color:transparent;font-size:.75rem;font-weight:800; }
 .storage-choice-card.selected .storage-choice-check { background:#4f46e5;border-color:#4f46e5;color:#fff; }
 .storage-modal-note { display:flex;gap:9px;align-items:flex-start;margin:16px 2px 0;padding:12px 13px;border-radius:13px;background:#f1f5f9;color:#64748b;font-size:.75rem;line-height:1.5;text-align:left; }
+#modal.storage-modal #modal-input-container { margin-bottom: 18px; }
+#modal.storage-modal .online-protect-option { line-height: 1.45; margin-bottom: 2px; }
 #modal.storage-modal .modal-buttons { margin-top:23px;gap:10px; }
 #modal.storage-modal .modal-buttons button { min-width:100px;padding:12px 18px!important;border-radius:12px!important;font-weight:700; }
 #modal.storage-modal #modal-confirm { background:#4f46e5!important;box-shadow:0 5px 14px rgba(79,70,229,.22); }
@@ -2366,11 +2368,49 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
         const mode = container.querySelector('input[name="share-mode"]:checked')?.value || 'private';
         cleanup();
         if (mode === 'private') {
-          showPasswordPrompt('Protect your private note', 'Create a password of at least 8 characters. Recipients must enter it before any note content is displayed.', password => {
+          showPasswordPrompt('Protect your private note', 'Create a password of at least 8 characters. Recipients must enter it before any note content is displayed or edited.', password => {
             if (password.length < 8) { showToast('Use a password with at least 8 characters'); return; }
             createPrivateShareLink(password);
           }, 'Create a password');
         } else {
+          showOnlineStorageOptions();
+        }
+      };
+      cancelBtn.onclick = cleanup;
+    }
+
+
+    function showOnlineStorageOptions() {
+      const modal = document.getElementById('modal');
+      document.getElementById('modal-title').textContent = 'Online storage options';
+      document.getElementById('modal-message').textContent = 'Choose whether viewers must enter a password before the note can be read.';
+      const container = document.getElementById('modal-input-container');
+      container.innerHTML = `
+        <label class="online-protect-option" style="display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid #cbd5e1;border-radius:12px;margin-top:8px;cursor:pointer;">
+          <input id="online-view-protect" type="checkbox" style="width:18px;height:18px;margin-top:2px;">
+          <span><strong>Require password to view</strong><small style="display:block;color:#64748b;margin-top:4px;line-height:1.45;">Encrypts the note. Viewers must enter the password before its contents are shown or edited.</small></span>
+        </label>
+        <div id="online-view-password-wrap" hidden style="margin-top:12px;">
+          <label for="online-view-password" style="display:block;font-size:.9rem;font-weight:600;margin-bottom:6px;">Create viewing password</label>
+          <input id="online-view-password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" style="box-sizing:border-box;width:100%;padding:12px 14px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;">
+          <small style="display:block;color:#64748b;margin-top:5px;">Keep this password safe. It cannot be recovered if lost.</small>
+        </div>`;
+      const checkbox = container.querySelector('#online-view-protect');
+      const passwordWrap = container.querySelector('#online-view-password-wrap');
+      checkbox.addEventListener('change', () => { passwordWrap.hidden = !checkbox.checked; });
+      modal.classList.add('show', 'storage-modal');
+      const confirmBtn = document.getElementById('modal-confirm');
+      const cancelBtn = document.getElementById('modal-cancel');
+      confirmBtn.textContent = 'Continue'; cancelBtn.textContent = 'Cancel';
+      const cleanup = () => { modal.classList.remove('show', 'storage-modal'); confirmBtn.onclick = null; cancelBtn.onclick = null; };
+      confirmBtn.onclick = () => {
+        if (checkbox.checked) {
+          const password = container.querySelector('#online-view-password').value;
+          if (password.length < 8) { showToast('Password must be at least 8 characters'); container.querySelector('#online-view-password').focus(); return; }
+          cleanup();
+          createProtectedOnlineShortLink(password);
+        } else {
+          cleanup();
           showConfirm('Lock Your Note', 'Enter a lock code (at least 3 characters). Anyone with the link can read the note; the code is needed to edit it.', code => {
             if (!code || code.trim().length < 3) { showToast('Code must be at least 3 characters'); return; }
             createShareLink(code.trim());
@@ -2447,6 +2487,43 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
           setTimeout(() => { const inp=document.querySelector('#modal-input-container input'); if(inp) inp.value=privateUrl; }, 100);
         }
       } catch (e) { console.error(e); showToast(e.message || 'Could not create private link'); }
+    }
+
+
+    async function createProtectedOnlineShortLink(password) {
+      try {
+        if (!window.crypto || !crypto.subtle) throw new Error('Secure encryption requires HTTPS or localhost');
+        const data = { title: titleInput.value, content: editor.innerHTML };
+        const salt = crypto.getRandomValues(new Uint8Array(16));
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const key = await derivePrivateNoteKey(password, salt);
+        const encrypted = new Uint8Array(await crypto.subtle.encrypt(
+          { name: 'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(data))
+        ));
+        const encryptedUrl = window.location.origin + window.location.pathname +
+          '#private2=' + bytesToBase64Url(salt) + '.' + bytesToBase64Url(iv) + '.' + bytesToBase64Url(encrypted);
+        const name = titleInput.value.trim();
+        let code = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30) + '-note';
+        if (!code || code.length < 3) code = 'note-' + Date.now().toString(36);
+        showToast('Creating password-protected link...');
+        const shortUrl = await createShortLink(code, encryptedUrl, name || 'protected note');
+        currentShortUrl = shortUrl;
+        currentPrivateUrl = null;
+        currentLockCode = null;
+        saveData();
+        isDirty = false;
+        updateSaveButton();
+        try {
+          await navigator.clipboard.writeText(shortUrl);
+          showToast('Password-protected online link copied');
+        } catch {
+          showConfirm('Protected link created', 'Copy the password-protected sharing link:', () => {}, true, shortUrl);
+          setTimeout(() => { const input = document.querySelector('#modal-input-container input'); if (input) input.value = shortUrl; }, 100);
+        }
+      } catch (error) {
+        console.error(error);
+        showToast(error.message || 'Could not create password-protected link');
+      }
     }
 
     // URL Mini config (same as resume builder)
