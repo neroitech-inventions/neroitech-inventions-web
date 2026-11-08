@@ -2368,7 +2368,7 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
         const mode = container.querySelector('input[name="share-mode"]:checked')?.value || 'private';
         cleanup();
         if (mode === 'private') {
-          showPasswordPrompt('Protect your private note', 'Create a password of at least 8 characters. Recipients must enter it before any note content is displayed.', password => {
+          showPasswordPrompt('Protect your private note', 'Create a password of at least 8 characters. Recipients must enter it before any note content is displayed or edited.', password => {
             if (password.length < 8) { showToast('Use a password with at least 8 characters'); return; }
             createPrivateShareLink(password);
           }, 'Create a password');
@@ -2388,7 +2388,7 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
       container.innerHTML = `
         <label class="online-protect-option" style="display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid #cbd5e1;border-radius:12px;margin-top:8px;cursor:pointer;">
           <input id="online-view-protect" type="checkbox" style="width:18px;height:18px;margin-top:2px;">
-          <span><strong>Require password to view</strong><small style="display:block;color:#64748b;margin-top:4px;line-height:1.45;">Encrypts the note. Viewers must enter the password before its contents are shown.</small></span>
+          <span><strong>Require password to view</strong><small style="display:block;color:#64748b;margin-top:4px;line-height:1.45;">Encrypts the note. Viewers must enter the password before its contents are shown or edited.</small></span>
         </label>
         <div id="online-view-password-wrap" hidden style="margin-top:12px;">
           <label for="online-view-password" style="display:block;font-size:.9rem;font-weight:600;margin-bottom:6px;">Create viewing password</label>
