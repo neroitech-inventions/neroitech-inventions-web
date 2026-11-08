@@ -872,6 +872,75 @@
     transform: translateY(0) scale(1);
   }
 }
+
+    /* Password gate for encrypted private links */
+    #private-lock-screen {
+      position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center;
+      padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom));
+      background: radial-gradient(circle at top, #e0e7ff 0, #f8fafc 48%, #eef2ff 100%);
+    }
+    #private-lock-screen[hidden] { display: none !important; }
+    .private-lock-card {
+      width: min(100%, 420px); padding: clamp(22px, 5vw, 34px);
+      border: 1px solid #e2e8f0; border-radius: 24px; background: rgba(255,255,255,.97);
+      box-shadow: 0 24px 80px rgba(15,23,42,.18); text-align: center;
+    }
+    .private-lock-icon {
+      width: 58px; height: 58px; margin: 0 auto 16px; display: grid; place-items: center;
+      border-radius: 19px; background: #eef2ff; color: #4338ca; font-size: 1.45rem;
+    }
+    .private-lock-card h2 { font-size: 1.35rem; letter-spacing: -.03em; margin-bottom: 8px; color: #0f172a; }
+    .private-lock-card p { color: #64748b; font-size: .9rem; line-height: 1.55; margin-bottom: 18px; }
+    .private-lock-card input {
+      display: block; width: 100%; min-height: 48px; padding: 12px 14px; margin-bottom: 12px;
+      border: 1px solid #cbd5e1; border-radius: 12px; font: inherit; font-size: 16px;
+    }
+    .private-lock-card input:focus { outline: 3px solid rgba(79,70,229,.15); border-color: #6366f1; }
+    .private-lock-card button {
+      width: 100%; min-height: 48px; border: 0; border-radius: 12px; background: #4338ca;
+      color: #fff; font: inherit; font-weight: 700; cursor: pointer;
+    }
+    .private-lock-error {
+      display: flex; align-items: flex-start; gap: 9px; margin-top: 14px; padding: 11px 13px;
+      border: 1px solid #fecaca; border-radius: 12px; background: #fef2f2;
+      color: #991b1b; font-size: .84rem; line-height: 1.45; text-align: left;
+    }
+    .private-lock-error[hidden] { display: none !important; }
+    .private-lock-error i { flex: 0 0 auto; margin-top: 2px; }
+    /* Keep all modal content reachable on short screens and mobile browsers. */
+    .modal-overlay {
+      padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+      overflow-y: auto; overscroll-behavior: contain;
+    }
+    .modal {
+      width: min(100%, 510px); max-height: calc(100dvh - 24px); overflow-y: auto;
+      overscroll-behavior: contain; flex: 0 0 auto; margin: auto;
+    }
+    .modal-buttons { flex-wrap: wrap; }
+    .modal-buttons button { flex: 0 1 auto; }
+    @media (max-width: 520px) {
+      #modal.storage-modal .modal, #modal.privacy-modal .modal, #modal.save-choice .modal {
+        width: 100%; max-width: 100%; max-height: calc(100dvh - 24px);
+        padding: 20px 16px; border-radius: 20px;
+      }
+      #modal.storage-modal .modal-buttons,
+      #modal.privacy-modal .modal-buttons,
+      #modal.save-choice .modal-buttons { display: grid; grid-template-columns: 1fr 1fr; }
+      #modal.storage-modal .modal-buttons button,
+      #modal.privacy-modal .modal-buttons button,
+      #modal.save-choice .modal-buttons button { width: 100%; min-width: 0; }
+      .storage-choice-card, .privacy-choice-card {
+        grid-template-columns: 36px minmax(0,1fr) 18px; gap: 9px; padding: 12px;
+      }
+      .storage-choice-icon, .privacy-choice-icon { width: 36px; height: 36px; font-size: 1.05rem; }
+      .storage-choice-copy small, .privacy-choice-copy small { overflow-wrap: anywhere; }
+      .storage-modal-note, .privacy-modal-footnote { overflow-wrap: anywhere; }
+    }
+    @media (max-height: 620px) {
+      .modal-overlay { align-items: flex-start; }
+      .modal { margin: 0 auto; }
+    }
+
   </style>
 </head>
 <body>
@@ -1087,6 +1156,18 @@
         <button id="modal-confirm" style="background:#0f172a; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer;">Confirm</button>
       </div>
     </div>
+  </div>
+
+
+  <div id="private-lock-screen" hidden role="dialog" aria-modal="true" aria-labelledby="private-lock-title">
+    <form class="private-lock-card" id="private-lock-form">
+      <div class="private-lock-icon" aria-hidden="true"><i class="fa-solid fa-lock"></i></div>
+      <h2 id="private-lock-title">This note is password protected</h2>
+      <p>Enter the password provided by the sender to decrypt and view this note. Its contents remain hidden until the password is correct.</p>
+      <input id="private-note-password" type="password" autocomplete="current-password" placeholder="Enter note password" required>
+      <button type="submit">Unlock and view note</button>
+      <div class="private-lock-error" id="private-lock-error" role="alert" aria-live="polite" hidden><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i><span id="private-lock-error-text"></span></div>
+    </form>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -1463,6 +1544,8 @@
     let currentShortUrl = null;
     let currentPrivateUrl = null;
     let currentSharedNoteData = null;
+    let pendingPrivatePayload = null;
+    let pendingLegacyPrivateData = null;
     // Draft persistence is a user choice. The preference itself is stored separately;
     // URL-only mode never writes note content to localStorage.
     let storageMode = localStorage.getItem('sharednote-storage-mode') || 'local';
@@ -2282,13 +2365,58 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
       confirmBtn.onclick = () => {
         const mode = container.querySelector('input[name="share-mode"]:checked')?.value || 'private';
         cleanup();
-        showConfirm('Lock Your Note', 'Enter a lock code (at least 3 characters). Anyone with the complete private link can open the note; the lock code is needed to edit it.', code => {
-          if (!code || code.trim().length < 3) { showToast('Code must be at least 3 characters'); return; }
-          if (mode === 'private') createPrivateShareLink(code.trim());
-          else createShareLink(code.trim());
-        }, true, 'Enter lock code');
+        if (mode === 'private') {
+          showPasswordPrompt('Protect your private note', 'Create a password of at least 8 characters. Recipients must enter it before any note content is displayed.', password => {
+            if (password.length < 8) { showToast('Use a password with at least 8 characters'); return; }
+            createPrivateShareLink(password);
+          }, 'Create a password');
+        } else {
+          showConfirm('Lock Your Note', 'Enter a lock code (at least 3 characters). Anyone with the link can read the note; the code is needed to edit it.', code => {
+            if (!code || code.trim().length < 3) { showToast('Code must be at least 3 characters'); return; }
+            createShareLink(code.trim());
+          }, true, 'Enter lock code');
+        }
       };
       cancelBtn.onclick = cleanup;
+    }
+
+    function showPasswordPrompt(title, message, onSubmit, placeholder = 'Enter password') {
+      const modal = document.getElementById('modal');
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-message').textContent = message;
+      const container = document.getElementById('modal-input-container');
+      container.innerHTML = '';
+      const input = document.createElement('input');
+      input.type = 'password';
+      input.autocomplete = 'new-password';
+      input.placeholder = placeholder;
+      input.minLength = 8;
+      input.style.cssText = 'width:100%;padding:12px 14px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;margin-top:8px;';
+      container.appendChild(input);
+      modal.classList.add('show');
+      const confirmBtn = document.getElementById('modal-confirm');
+      const cancelBtn = document.getElementById('modal-cancel');
+      confirmBtn.textContent = 'Continue';
+      cancelBtn.textContent = 'Cancel';
+      const cleanup = () => { modal.classList.remove('show'); confirmBtn.onclick = null; cancelBtn.onclick = null; };
+      confirmBtn.onclick = () => {
+        const password = input.value;
+        if (password.length < 8) { showToast('Password must be at least 8 characters'); input.focus(); return; }
+        cleanup();
+        onSubmit(password);
+      };
+      cancelBtn.onclick = cleanup;
+      setTimeout(() => input.focus(), 100);
+    }
+
+    async function derivePrivateNoteKey(password, salt) {
+      const material = await crypto.subtle.importKey(
+        'raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']
+      );
+      return crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt, iterations: 310000, hash: 'SHA-256' },
+        material, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
+      );
     }
 
     function bytesToBase64Url(bytes) {
@@ -2299,20 +2427,25 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
       const base64 = value.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - value.length % 4) % 4);
       return Uint8Array.from(atob(base64), c => c.charCodeAt(0));
     }
-    async function createPrivateShareLink(lockCode) {
+    async function createPrivateShareLink(password) {
       try {
         if (!window.crypto || !crypto.subtle) throw new Error('Secure encryption requires HTTPS or localhost');
-        const data = { title: titleInput.value, content: editor.innerHTML, lockCode: btoa(lockCode) };
-        const key = await crypto.subtle.generateKey({name:'AES-GCM', length:256}, true, ['encrypt','decrypt']);
+        const data = { title: titleInput.value, content: editor.innerHTML };
+        const salt = crypto.getRandomValues(new Uint8Array(16));
         const iv = crypto.getRandomValues(new Uint8Array(12));
-        const rawKey = new Uint8Array(await crypto.subtle.exportKey('raw', key));
-        const encrypted = new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, new TextEncoder().encode(JSON.stringify(data))));
-        const payload = new Uint8Array(iv.length + encrypted.length); payload.set(iv); payload.set(encrypted, iv.length);
-        // The key is in the URL fragment, which browsers do not send to the web server.
-        const privateUrl = window.location.origin + window.location.pathname + '#private=' + bytesToBase64Url(payload) + '.' + bytesToBase64Url(rawKey);
+        const key = await derivePrivateNoteKey(password, salt);
+        const encrypted = new Uint8Array(await crypto.subtle.encrypt(
+          { name: 'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(data))
+        ));
+        // Password-derived encryption key is never placed in the URL.
+        const privateUrl = window.location.origin + window.location.pathname +
+          '#private2=' + bytesToBase64Url(salt) + '.' + bytesToBase64Url(iv) + '.' + bytesToBase64Url(encrypted);
         currentPrivateUrl = privateUrl; currentShortUrl = null; isDirty = false; saveData(); updateSaveButton();
-        try { await navigator.clipboard.writeText(privateUrl); showToast('Encrypted private link copied - no note upload'); }
-        catch { showConfirm('Private Link Created', 'Copy the complete encrypted private link:', () => {}, true, privateUrl); setTimeout(() => { const inp=document.querySelector('#modal-input-container input'); if(inp) inp.value=privateUrl; }, 100); }
+        try { await navigator.clipboard.writeText(privateUrl); showToast('Password-protected private link copied'); }
+        catch {
+          showConfirm('Private Link Created', 'Copy the complete encrypted private link:', () => {}, true, 'Copy link');
+          setTimeout(() => { const inp=document.querySelector('#modal-input-container input'); if(inp) inp.value=privateUrl; }, 100);
+        }
       } catch (e) { console.error(e); showToast(e.message || 'Could not create private link'); }
     }
 
@@ -2413,10 +2546,84 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
       }
     }
 
+    function showPrivatePasswordGate(payload, legacyData = null) {
+      pendingPrivatePayload = payload;
+      pendingLegacyPrivateData = legacyData;
+      // Keep the editor and title blank. No private note content is inserted before authentication.
+      titleInput.value = '';
+      editor.innerHTML = '';
+      document.getElementById('private-lock-screen').hidden = false;
+      const passwordInput = document.getElementById('private-note-password');
+      passwordInput.value = '';
+      setTimeout(() => passwordInput.focus(), 80);
+    }
+
+    async function unlockPrivateNote(password) {
+      try {
+        let data;
+        if (pendingLegacyPrivateData) {
+          // Legacy private links included the decryption key in the URL. Gate display using
+          // the legacy lock code, while new links use password-derived encryption.
+          data = pendingLegacyPrivateData;
+          if (!data.lockCode || password !== atob(data.lockCode)) throw new Error('Incorrect password');
+        } else {
+          const { salt, iv, ciphertext } = pendingPrivatePayload;
+          const key = await derivePrivateNoteKey(password, salt);
+          const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
+          data = JSON.parse(new TextDecoder().decode(plain));
+        }
+        titleInput.value = data.title || 'Shared Note';
+        editor.innerHTML = data.content || '';
+        currentLockCode = password;
+        currentSharedNoteData = data;
+        isReadOnly = true;
+        document.getElementById('private-lock-screen').hidden = true;
+        pendingPrivatePayload = null;
+        pendingLegacyPrivateData = null;
+        enterReadOnlyMode();
+        return true;
+      } catch (error) {
+        const isPasswordMismatch = error.message === 'Incorrect password' || error.name === 'OperationError';
+        const errorBox = document.getElementById('private-lock-error');
+        document.getElementById('private-lock-error-text').textContent = isPasswordMismatch
+          ? 'That password doesn’t match. Try again.'
+          : 'This private link is invalid or incomplete.';
+        errorBox.hidden = false;
+        document.getElementById('private-note-password').focus();
+        return false;
+      }
+    }
+
+    document.getElementById('private-note-password').addEventListener('input', () => {
+      document.getElementById('private-lock-error').hidden = true;
+    });
+
+    document.getElementById('private-lock-form').addEventListener('submit', async event => {
+      event.preventDefault();
+      const password = document.getElementById('private-note-password').value;
+      await unlockPrivateNote(password);
+    });
+
     async function loadFromShareLink() {
       const hash = window.location.hash;
+      if (hash.startsWith('#private2=')) {
+        try {
+          const parts = hash.slice(10).split('.');
+          if (parts.length !== 3 || !crypto.subtle) throw new Error('Invalid private link');
+          showPrivatePasswordGate({
+            salt: base64UrlToBytes(parts[0]),
+            iv: base64UrlToBytes(parts[1]),
+            ciphertext: base64UrlToBytes(parts[2])
+          });
+          return true;
+        } catch (e) {
+          console.error(e); showToast('Invalid or damaged private link'); return false;
+        }
+      }
       if (hash.startsWith('#private=')) {
         try {
+          // Backward compatibility for older links. Their key is embedded in the URL,
+          // so the password prompt is only a viewing gate, not equivalent encryption.
           const parts = hash.slice(9).split('.');
           if (parts.length !== 2 || !crypto.subtle) throw new Error('Invalid private link');
           const payload = base64UrlToBytes(parts[0]);
@@ -2424,10 +2631,9 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
           const key = await crypto.subtle.importKey('raw', rawKey, {name:'AES-GCM'}, false, ['decrypt']);
           const iv = payload.slice(0,12), ciphertext = payload.slice(12);
           const plain = await crypto.subtle.decrypt({name:'AES-GCM',iv}, key, ciphertext);
-          const data = JSON.parse(new TextDecoder().decode(plain));
-          if (data.lockCode) { currentLockCode = atob(data.lockCode); isReadOnly = true; }
-          titleInput.value = data.title || 'Shared Note'; editor.innerHTML = data.content || '';
-          currentSharedNoteData = data; return true;
+          const legacyData = JSON.parse(new TextDecoder().decode(plain));
+          showPrivatePasswordGate(null, legacyData);
+          return true;
         } catch (e) { console.error(e); showToast('Invalid or damaged private link'); return false; }
       }
       if (!hash.startsWith('#note=')) return false;
@@ -2544,7 +2750,7 @@ window.promptUnlock = promptUnlock;
       },
       {
         title: "Step 3 of 4 - Save a link",
-        content: "<p>Click the <strong>Save</strong> button.</p><p style='margin-top:10px;'>You’ll be asked for a <strong>lock code</strong>. A short link is created. Anyone who opens it sees a read-only note and needs the code to unlock and edit.</p>"
+        content: "<p>Click the <strong>Save</strong> button.</p><p style='margin-top:10px;'>Choose Private Link to encrypt the note and require its password before viewing, or Online Storage to create a short link.</p>"
       },
       {
         title: "Step 4 of 4 - Download PDF",
