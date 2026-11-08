@@ -2368,7 +2368,7 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
         const mode = container.querySelector('input[name="share-mode"]:checked')?.value || 'private';
         cleanup();
         if (mode === 'private') {
-          showPasswordPrompt('Protect your private note', 'Create a password of at least 8 characters. Recipients must enter it before any note content is displayed or edited.', password => {
+          showPasswordPrompt('Protect your private note', 'Create a password of at least 8 characters. Recipients must enter it before any note content is displayed.', password => {
             if (password.length < 8) { showToast('Use a password with at least 8 characters'); return; }
             createPrivateShareLink(password);
           }, 'Create a password');
@@ -2388,7 +2388,7 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
       container.innerHTML = `
         <label class="online-protect-option" style="display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid #cbd5e1;border-radius:12px;margin-top:8px;cursor:pointer;">
           <input id="online-view-protect" type="checkbox" style="width:18px;height:18px;margin-top:2px;">
-          <span><strong>Require password to view</strong><small style="display:block;color:#64748b;margin-top:4px;line-height:1.45;">Encrypts the note. Viewers must enter the password before its contents are shown or edited.</small></span>
+          <span><strong>Require password to view</strong><small style="display:block;color:#64748b;margin-top:4px;line-height:1.45;">Encrypts the note. Viewers must enter the password before its contents are shown.</small></span>
         </label>
         <div id="online-view-password-wrap" hidden style="margin-top:12px;">
           <label for="online-view-password" style="display:block;font-size:.9rem;font-weight:600;margin-bottom:6px;">Create viewing password</label>
@@ -2818,23 +2818,38 @@ window.promptUnlock = promptUnlock;
 
     const helpSteps = [
       {
-        title: "Step 1 of 4 - Start writing",
-        content: "<p>Type your note title and content directly in the editor. Everything auto-saves in your browser.</p><p style='margin-top:10px;'>Use the toolbar for bold, italic, underline, fonts, colors, lists, links, and emojis.</p>"
+        title: "1 of 8 - Write and autosave",
+        content: "<p>Enter a title and write in the note editor. In <strong>On this device</strong> storage mode, your draft is automatically saved in this browser.</p><p style='margin-top:10px;'>Use <strong>New Note</strong> to start a fresh note. Choose <strong>Storage</strong> to decide whether drafts are saved in this browser or kept URL-only.</p>"
       },
       {
-        title: "Step 2 of 4 - Find & Replace",
-        content: "<p>Click <strong>Find & Replace</strong> in the header (or press Ctrl+F).</p><p style='margin-top:10px;'>Search for text, replace one match, or replace all matches at once.</p>"
+        title: "2 of 8 - Format your note",
+        content: "<p>Use the toolbar to undo or redo, change fonts and text size, make text bold, italic, underlined or struck through, and change text or highlight colours.</p><p style='margin-top:10px;'>You can also align paragraphs, create bullet or numbered lists, insert links and emojis, and clear formatting. On smaller screens, open <strong>More tools</strong> to find additional editing controls.</p>"
       },
       {
-        title: "Step 3 of 4 - Save a link",
-        content: "<p>Click the <strong>Save</strong> button.</p><p style='margin-top:10px;'>Choose Private Link to encrypt the note and require its password before viewing, or Online Storage to create a short link.</p>"
+        title: "3 of 8 - Handy editing tools",
+        content: "<p>Use <strong>Find &amp; Replace</strong> to search for text, move between matches, replace one match, or replace all matches.</p><p style='margin-top:10px;'>You can insert the current date and time, copy or paste content, jump to the top or bottom, and show page-end guides to preview where printed pages may break.</p>"
       },
       {
-        title: "Step 4 of 4 - Download PDF",
-        content: "<p>Click <strong>Download PDF</strong>.</p><p style='margin-top:10px;'>A clean print view opens with only your note. In the print dialog, turn off <strong>Headers and footers</strong> if any date or URL still appears.</p><p style='margin-top:10px;'>That’s it - your note is ready.</p>"
+        title: "4 of 8 - Read aloud and highlighting",
+        content: "<p>Open the speaker button to read the note aloud using voices available in your browser or device. Choose a voice and reading speed, then read the entire note, from the cursor, or selected text.</p><p style='margin-top:10px;'>You can pause, resume or stop playback, highlight the current sentence or word as it is read, and apply a highlight to text you select yourself. Available voices and support depend on your browser and device.</p>"
+      },
+      {
+        title: "5 of 8 - Choose draft storage",
+        content: "<p>Open <strong>Storage</strong> to choose where your working draft is kept. <strong>On this device</strong> saves the draft in this browser so you can return to it on the same device.</p><p style='margin-top:10px;'><strong>URL only</strong> does not save note content in this browser. Keep the tab open and create and keep a share link before closing or reloading, or unsaved changes may be lost. Draft storage is separate from sharing.</p>"
+      },
+      {
+        title: "6 of 8 - Save and protect a shared note",
+        content: "<p>Click <strong>Save</strong> to choose a sharing method.</p><p style='margin-top:10px;'><strong>Private Link</strong> encrypts the note with a password you create. Anyone opening the link must enter that password before the note contents are shown.</p><p style='margin-top:10px;'><strong>Online Storage</strong> creates a short link. You can leave viewing unprotected, or turn on <strong>Require password to view</strong> to encrypt the note and require a password of at least 8 characters before it can be read.</p>"
+      },
+      {
+        title: "7 of 8 - Viewing, editing and password safety",
+        content: "<p>For an unencrypted Online Storage link, the lock code controls whether a recipient can edit the shared note; the note can still be read by anyone with the link. Password-protected links keep the note contents encrypted until the correct password is entered.</p><p style='margin-top:10px;'>Keep viewing passwords and edit lock codes safe. A lost encryption password cannot be used to decrypt the protected note. Existing older links may follow their original protection behaviour.</p>"
+      },
+      {
+        title: "8 of 8 - Download or print as PDF",
+        content: "<p>Click <strong>Download PDF</strong> to open a clean print view of your note, then choose <strong>Save as PDF</strong> in your browser's print dialog.</p><p style='margin-top:10px;'>If browser-added dates, URLs or page details appear, turn off <strong>Headers and footers</strong> in the print dialog. Your note is ready to save or share.</p>"
       }
     ];
-
     const helpStepsReadOnly = [
       {
         title: "Read-only Note",
