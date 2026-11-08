@@ -1551,6 +1551,7 @@
     // Draft persistence is a user choice. The preference itself is stored separately;
     // URL-only mode never writes note content to localStorage.
     let storageMode = localStorage.getItem('sharednote-storage-mode') || 'local';
+    let shareModePreference = localStorage.getItem('sharednote-share-mode') || 'online';
     let isDirty = true;
     let lastFindIndex = -1;
     let findMatches = [];
@@ -2339,14 +2340,14 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
       const container = document.getElementById('modal-input-container');
       container.innerHTML = `
         <div class="privacy-choice-list" role="radiogroup" aria-label="Sharing method">
-          <label class="privacy-choice-card selected" for="share-private">
-            <input id="share-private" type="radio" name="share-mode" value="private" checked>
+          <label class="privacy-choice-card ${shareModePreference === 'private' ? 'selected' : ''}" for="share-private">
+            <input id="share-private" type="radio" name="share-mode" value="private" ${shareModePreference === 'private' ? 'checked' : ''}>
             <span class="privacy-choice-icon" aria-hidden="true">🔒</span>
             <span class="privacy-choice-copy"><strong>Private link</strong><small>Encrypted note data stays in the full URL. No note upload and no short link.</small><em>Privacy-focused</em></span>
             <span class="privacy-choice-check" aria-hidden="true">✓</span>
           </label>
-          <label class="privacy-choice-card" for="share-online">
-            <input id="share-online" type="radio" name="share-mode" value="online">
+          <label class="privacy-choice-card ${shareModePreference === 'online' ? 'selected' : ''}" for="share-online">
+            <input id="share-online" type="radio" name="share-mode" value="online" ${shareModePreference === 'online' ? 'checked' : ''}>
             <span class="privacy-choice-icon" aria-hidden="true">☁️</span>
             <span class="privacy-choice-copy"><strong>Online storage</strong><small>Stores the note online and creates a shorter sharing link.</small></span>
             <span class="privacy-choice-check" aria-hidden="true">✓</span>
@@ -2365,7 +2366,9 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
       container.querySelectorAll('input[name="share-mode"]').forEach(input => input.addEventListener('change', updateCards));
       const cleanup = () => { modal.classList.remove('show', 'privacy-modal'); confirmBtn.onclick = null; cancelBtn.onclick = null; };
       confirmBtn.onclick = () => {
-        const mode = container.querySelector('input[name="share-mode"]:checked')?.value || 'private';
+        const mode = container.querySelector('input[name="share-mode"]:checked')?.value || shareModePreference || 'online';
+        shareModePreference = mode;
+        localStorage.setItem('sharednote-share-mode', mode);
         cleanup();
         if (mode === 'private') {
           showPasswordPrompt('Protect your private note', 'Create a password of at least 8 characters. Recipients must enter it before any note content is displayed or edited.', password => {
