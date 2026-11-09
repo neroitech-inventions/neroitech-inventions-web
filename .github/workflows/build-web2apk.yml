@@ -1,3 +1,11 @@
+# Web2APK Studio - GitHub Actions Workflow Fix 3
+#
+# Replace the entire contents of:
+# .github/workflows/build-web2apk.yml
+#
+# This version avoids the `yes` command's Broken pipe error by sending a
+# finite number of license-acceptance responses to sdkmanager.
+
 name: Build Android APK
 
 on:
@@ -8,37 +16,28 @@ on:
         required: true
         type: string
       app_name:
-        description: "Name shown under the app icon (2–32 characters)"
+        description: "Android app name"
         required: true
-        default: "My Website"
         type: string
       package_id:
-        description: "Android package ID"
+        description: "Android package ID (for example com.example.myapp)"
         required: true
-        default: "com.example.mywebsite"
         type: string
-      app_theme:
-        description: "App appearance"
-        required: true
+      theme:
+        description: "App theme"
+        required: false
         default: "light"
         type: choice
         options:
           - light
           - dark
 
-permissions:
-  contents: read
-
 jobs:
   build:
-    name: Generate debug APK
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    env:
-      ANDROID_HOME: /usr/local/lib/android/sdk
-      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+
     steps:
-      - name: Check out source
+      - name: Check out repository
         uses: actions/checkout@v5
 
       - name: Set up Java 17
@@ -47,66 +46,63 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Locate Android SDK manager
+      - name: Find Android SDK manager
         shell: bash
         run: |
           set -euo pipefail
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          if [ ! -d "$ANDROID_HOME" ]; then
-            echo "::error::Android SDK directory not found at $ANDROID_HOME"
-            ls -la /usr/local/lib/android || true
+          if [ -z "${ANDROID_HOME:-}" ]; then
+            echo "ANDROID_HOME is not set on this runner."
             exit 1
           fi
 
-          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -perm -u+x 2>/dev/null | sort -V | tail -n 1)"
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager 2>/dev/null | sort -V | tail -n 1)"
           if [ -z "$SDKMANAGER" ]; then
-            echo "::error::sdkmanager was not found under $ANDROID_HOME/cmdline-tools"
-            find "$ANDROID_HOME" -maxdepth 5 -type f -name sdkmanager -print || true
+            echo "Could not find sdkmanager under $ANDROID_HOME/cmdline-tools"
+            find "$ANDROID_HOME" -maxdepth 4 -type f -name sdkmanager -print || true
             exit 1
           fi
 
-          SDKMANAGER_DIR="$(dirname "$SDKMANAGER")"
-          echo "Found sdkmanager: $SDKMANAGER"
-          echo "$SDKMANAGER_DIR" >> "$GITHUB_PATH"
-          echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
+          echo "Using sdkmanager: $SDKMANAGER"
           echo "SDKMANAGER=$SDKMANAGER" >> "$GITHUB_ENV"
+          echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
+          echo "$(dirname "$SDKMANAGER")" >> "$GITHUB_PATH"
 
       - name: Accept Android SDK licenses
         shell: bash
         run: |
           set -euo pipefail
-          yes | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --licenses || {
-            result=$?
-            if [ "$result" -ne 141 ]; then exit "$result"; fi
-          }
+          for i in {1..50}; do printf 'y\n'; done | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --licenses
 
       - name: Install Android SDK packages
         shell: bash
         run: |
           set -euo pipefail
-          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --install \
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" \
             "platform-tools" \
             "platforms;android-35" \
             "build-tools;35.0.0"
 
       - name: Generate Android project
-        env:
-          WEBSITE_URL: ${{ inputs.website_url }}
-          APP_NAME: ${{ inputs.app_name }}
-          PACKAGE_ID: ${{ inputs.package_id }}
-          APP_THEME: ${{ inputs.app_theme }}
-        run: node web2apk-studio/scripts/generate-android.mjs
-
-      - name: Build APK
-        working-directory: android-project
+        shell: bash
         run: |
-          gradle --no-daemon assembleDebug
-          test -s app/build/outputs/apk/debug/app-debug.apk
+          set -euo pipefail
+          node --version
+          node web2apk-studio/scripts/generate-android.mjs \
+            --url "${{ inputs.website_url }}" \
+            --name "${{ inputs.app_name }}" \
+            --package "${{ inputs.package_id }}" \
+            --theme "${{ inputs.theme }}"
 
-      - name: Upload APK
+      - name: Build debug APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd android-project
+          gradle --no-daemon assembleDebug
+
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: web2apk-${{ github.run_number }}
+          name: web2apk-debug-apk
           path: android-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
-          retention-days: 7
