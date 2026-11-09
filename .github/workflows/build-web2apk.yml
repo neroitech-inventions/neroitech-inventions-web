@@ -77,10 +77,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --install \\
-            "platform-tools" \\
-            "platforms;android-35" \\
-            "build-tools;35.0.0"
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Generate Android project
         env:
