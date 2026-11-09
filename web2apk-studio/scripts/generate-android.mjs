@@ -6,6 +6,10 @@ const packageId = (process.env.PACKAGE_ID || "com.example.mywebsite").trim();
 const websiteUrl = (process.env.WEBSITE_URL || "").trim();
 const theme = (process.env.APP_THEME || "light").trim();
 
+// Optional custom launcher logo. Place the PNG at:
+// web2apk-studio/assets/app-logo.png
+const logoSource = path.resolve("web2apk-studio/assets/app-logo.png");
+
 if (appName.length < 2 || appName.length > 32 || /[<>]/.test(appName)) {
   throw new Error("App name must be 2–32 characters and cannot contain angle brackets.");
 }
@@ -28,8 +32,35 @@ const root = path.resolve("android-project");
 const app = path.join(root, "app");
 const java = path.join(app, "src/main/java", ...packageId.split("."));
 const values = path.join(app, "src/main/res/values");
+const res = path.join(app, "src/main/res");
+const mipmapDirs = ["mipmap-mdpi", "mipmap-hdpi", "mipmap-xhdpi", "mipmap-xxhdpi", "mipmap-xxxhdpi"];
 await fs.mkdir(java, { recursive: true });
 await fs.mkdir(values, { recursive: true });
+const dark = theme === "dark";
+
+// Install the custom launcher icon into the generated Android project.
+try {
+  await fs.access(logoSource);
+} catch {
+  throw new Error(`App logo not found: ${logoSource}. Add your PNG logo at web2apk-studio/assets/app-logo.png.`);
+}
+for (const dirName of mipmapDirs) {
+  const dir = path.join(res, dirName);
+  await fs.mkdir(dir, { recursive: true });
+  await fs.copyFile(logoSource, path.join(dir, "ic_launcher.png"));
+  await fs.copyFile(logoSource, path.join(dir, "ic_launcher_round.png"));
+}
+const drawable = path.join(res, "drawable");
+const adaptiveDir = path.join(res, "mipmap-anydpi-v26");
+await fs.mkdir(drawable, { recursive: true });
+await fs.mkdir(adaptiveDir, { recursive: true });
+await fs.copyFile(logoSource, path.join(drawable, "ic_launcher_foreground.png"));
+await fs.writeFile(path.join(drawable, "ic_launcher_background.xml"),
+  `<?xml version="1.0" encoding="utf-8"?><shape xmlns:android="http://schemas.android.com/apk/res/android"><solid android:color="${dark ? "#11131B" : "#FFFFFF"}"/></shape>`);
+await fs.writeFile(path.join(adaptiveDir, "ic_launcher.xml"),
+  `<?xml version="1.0" encoding="utf-8"?><adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@drawable/ic_launcher_background"/><foreground android:drawable="@drawable/ic_launcher_foreground"/></adaptive-icon>`);
+await fs.writeFile(path.join(adaptiveDir, "ic_launcher_round.xml"),
+  `<?xml version="1.0" encoding="utf-8"?><adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@drawable/ic_launcher_background"/><foreground android:drawable="@drawable/ic_launcher_foreground"/></adaptive-icon>`);
 
 const xml = s => s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
   .replaceAll('"', "&quot;").replaceAll("'", "&apos;");
@@ -66,7 +97,6 @@ android {
 `);
 await fs.writeFile(path.join(values, "strings.xml"),
   `<?xml version="1.0" encoding="utf-8"?><resources><string name="app_name">${xml(appName)}</string></resources>`);
-const dark = theme === "dark";
 await fs.writeFile(path.join(values, "styles.xml"), `<?xml version="1.0" encoding="utf-8"?>
 <resources><style name="AppTheme" parent="@android:style/Theme.Material.${dark ? "NoActionBar" : "Light.NoActionBar"}">
 <item name="android:colorAccent">#7865E8</item>
@@ -77,7 +107,7 @@ await fs.writeFile(path.join(values, "styles.xml"), `<?xml version="1.0" encodin
 await fs.writeFile(path.join(app, "src/main/AndroidManifest.xml"), `<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
   <uses-permission android:name="android.permission.INTERNET"/>
-  <application android:label="@string/app_name" android:theme="@style/AppTheme"
+  <application android:label="@string/app_name" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:theme="@style/AppTheme"
     android:usesCleartextTraffic="false" android:allowBackup="false">
     <activity android:name=".MainActivity" android:exported="true"
       android:configChanges="orientation|screenSize|keyboardHidden">
