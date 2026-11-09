@@ -139,6 +139,119 @@
       .wrap { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
       .col { border-right: none; border-bottom: 1px solid var(--border); }
     }
+
+    /* Secure-looking APK Builder access experience */
+    .apk-access-trigger {
+      background: linear-gradient(115deg, #00d4ff 0%, #8b5cf6 55%, #c084fc 100%);
+      color: #07111c;
+      border: 0;
+      font-weight: 800;
+      box-shadow: 0 7px 24px rgba(0, 212, 255, .18);
+    }
+    .apk-access-trigger:hover { filter: brightness(1.12); transform: translateY(-1px); }
+    .apk-modal-backdrop {
+      position: fixed; inset: 0; z-index: 9999; display: none;
+      align-items: center; justify-content: center; padding: 20px;
+      background: rgba(3, 7, 18, .78); backdrop-filter: blur(16px);
+    }
+    .apk-modal-backdrop.open { display: flex; }
+    .apk-modal {
+      position: relative; width: min(100%, 460px); overflow: hidden;
+      border: 1px solid rgba(125, 211, 252, .24); border-radius: 25px;
+      background: linear-gradient(155deg, #172033 0%, #0b1220 62%, #111827 100%);
+      color: #f8fafc; box-shadow: 0 30px 100px rgba(0,0,0,.58), 0 0 55px rgba(0,212,255,.10);
+      animation: apkModalIn .24s ease-out;
+    }
+    @keyframes apkModalIn { from { opacity: 0; transform: translateY(14px) scale(.975); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .apk-modal-top { padding: 27px 28px 20px; text-align: center; position: relative; }
+    .apk-close {
+      position: absolute; top: 14px; right: 14px; width: 34px; height: 34px;
+      padding: 0; border-radius: 11px; color: #a8b4c7; background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.09); font-size: 20px;
+    }
+    .apk-emblem {
+      width: 68px; height: 68px; display: grid; place-items: center; margin: 0 auto 15px;
+      border-radius: 21px; font-size: 30px; color: #07111c;
+      background: linear-gradient(140deg, #67e8f9, #818cf8 60%, #c084fc);
+      box-shadow: 0 10px 35px rgba(34,211,238,.2);
+    }
+    .apk-emblem svg { width: 39px; height: 39px; display: block; color: #07111c; }\n    .apk-eyebrow { color: #67e8f9; font-size: 10px; letter-spacing: .2em; font-weight: 800; text-transform: uppercase; }
+    .apk-modal h2 { margin: 8px 0 7px; font-size: 23px; letter-spacing: -.035em; }
+    .apk-subtitle { color: #9aa9bd; font-size: 13px; line-height: 1.55; }
+    .apk-modal-body { padding: 5px 28px 27px; }
+    .apk-admin-chip {
+      display: flex; align-items: center; gap: 9px; padding: 11px 13px; margin: 8px 0 20px;
+      border: 1px solid rgba(34,211,238,.16); border-radius: 13px;
+      background: rgba(34,211,238,.055); color: #c8d6e8; font-size: 11px;
+    }
+    .apk-admin-chip .dot { width: 7px; height: 7px; border-radius: 50%; background: #34d399; box-shadow: 0 0 12px #34d399; }
+    .apk-field-label { display: block; margin: 0 0 8px; color: #dbeafe; font-size: 12px; font-weight: 700; }
+    .apk-password-wrap { position: relative; }
+    .apk-password {
+      width: 100%; height: 50px; padding: 0 78px 0 15px; border-radius: 13px;
+      border: 1px solid rgba(148,163,184,.24); outline: none;
+      background: rgba(2,6,23,.72); color: #f8fafc; font-size: 17px; letter-spacing: .22em;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .apk-password:focus { border-color: #22d3ee; box-shadow: 0 0 0 3px rgba(34,211,238,.12); }
+    .apk-show-password {
+      position: absolute; right: 8px; top: 8px; padding: 7px 9px; border-radius: 8px;
+      color: #9fb2ca; background: rgba(255,255,255,.06); border: 0; font-size: 11px;
+    }
+    .apk-error { min-height: 19px; padding-top: 7px; color: #fda4af; font-size: 11px; }
+    .apk-unlock {
+      width: 100%; height: 49px; margin-top: 9px; border: 0; border-radius: 13px;
+      background: linear-gradient(105deg, #22d3ee, #818cf8 58%, #a78bfa);
+      color: #07111c; font-size: 13px; font-weight: 900; letter-spacing: .02em;
+      box-shadow: 0 10px 28px rgba(99,102,241,.2);
+    }
+    .apk-unlock:hover { filter: brightness(1.1); }
+    .apk-modal-foot { margin-top: 17px; text-align: center; color: #718198; font-size: 10px; line-height: 1.5; }
+    @media (max-width: 520px) {
+      .apk-modal { border-radius: 20px; }
+      .apk-modal-top { padding: 25px 22px 17px; }
+      .apk-modal-body { padding: 5px 22px 23px; }
+      .apk-access-trigger { padding-inline: 9px; }
+    }
+
+
+       .powered {
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.4px;
+    color: #ffffff;
+  }
+  .powered a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .powered a::after { background: #ffffff; }
+  .powered a:hover { color: #ffffff; text-decoration: none; }
+  .powered a:hover::after {
+    width: 100%;
+  }
+
+
+    .apk-modal-foot a,
+    .apk-modal-foot a:link,
+    .apk-modal-foot a:visited,
+    .apk-modal-foot a:hover,
+    .apk-modal-foot a:active {
+      color: #ffffff !important;
+      text-decoration: none !important;
+    }
+    .apk-modal-foot a svg {
+      color: #ffffff !important;
+      stroke: currentColor;
+      vertical-align: -2px;
+    }
+    .apk-modal-foot a:hover {
+      opacity: .82;
+    }
+
   </style>
 </head>
 <body>
@@ -156,6 +269,7 @@
     <button type="button" id="btnCopy">Copy HTML</button>
     <button type="button" id="btnDownload">Download</button>
     <button type="button" id="btnSample">Sample</button>
+    <button type="button" class="apk-access-trigger" id="btnApkBuilder" aria-haspopup="dialog" aria-controls="apkAccessModal">APK builder</button>
     <button type="button" id="btnToggle" aria-pressed="false">Preview only</button>
     <span class="status" id="status">Ready</span>
   </header>
@@ -171,6 +285,108 @@
       <iframe id="preview" sandbox="allow-scripts allow-modals allow-forms allow-same-origin"></iframe>
     </div>
   </div>
+
+  <div class="apk-modal-backdrop" id="apkAccessModal" role="dialog" aria-modal="true" aria-labelledby="apkModalTitle">
+    <section class="apk-modal">
+      <div class="apk-modal-top">
+        <button type="button" class="apk-close" id="apkClose" aria-label="Close access window">×</button>
+        <div class="apk-emblem" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img" aria-label="Android" focusable="false">
+            <g fill="currentColor">
+              <path d="M14.2 17.2 10.8 11.5a1.2 1.2 0 0 1 2.1-1.2l3.5 5.9a17 17 0 0 1 15.2 0l3.5-5.9a1.2 1.2 0 0 1 2.1 1.2l-3.4 5.7A14.8 14.8 0 0 1 41 29H7a14.8 14.8 0 0 1 7.2-11.8Z"/>
+              <path d="M7 31h34v3.2A4.8 4.8 0 0 1 36.2 39H11.8A4.8 4.8 0 0 1 7 34.2V31Z"/>
+              <rect x="12" y="39.5" width="5" height="6.5" rx="2.2"/>
+              <rect x="31" y="39.5" width="5" height="6.5" rx="2.2"/>
+              <rect x="2.5" y="23" width="5" height="13" rx="2.5"/>
+              <rect x="40.5" y="23" width="5" height="13" rx="2.5"/>
+            </g>
+            <g fill="#111827">
+              <circle cx="17.5" cy="23" r="1.35"/>
+              <circle cx="30.5" cy="23" r="1.35"/>
+            </g>
+          </svg>
+        </div>
+        <div class="apk-eyebrow"></div>
+        <h2 id="apkModalTitle">Android APK Builder</h2>
+        <p class="apk-subtitle">Restricted workspace. Enter the access passcode to open the HTML-to-APK build studio.</p>
+      </div>
+      <div class="apk-modal-body">
+        <div class="apk-admin-chip"><span class="dot"></span><span>Admin access checkpoint</span></div>
+        <form id="apkAccessForm">
+          <label class="apk-field-label" for="apkAccessPassword">ADMIN ACCESS CODE</label>
+          <div class="apk-password-wrap">
+            <input class="apk-password" id="apkAccessPassword" type="password" inputmode="numeric"
+              autocomplete="off" maxlength="32" placeholder="Enter passcode" required>
+            <button class="apk-show-password" type="button" id="apkTogglePassword">Show</button>
+          </div>
+          <div class="apk-error" id="apkAccessError" aria-live="polite"></div>
+          <button class="apk-unlock" type="submit">UNLOCK APK BUILDER <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="apk-modal-foot">    Powered by <a href="https://niti.com.ng/" target="_blank" rel="noopener">
+        Neroitech Inventions
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </a></div></p>
+      </div>
+    </section>
+  </div>
+
   <script src="html-live.js"></script>
+
+  <script>
+    (() => {
+      const ACCESS_CODE = "4545";
+      const BUILDER_URL = "https://github.com/neroitech-inventions/neroitech-inventions-web/actions/workflows/build-web2apk.yml";
+      const modal = document.getElementById("apkAccessModal");
+      const pass = document.getElementById("apkAccessPassword");
+      const error = document.getElementById("apkAccessError");
+      const openBtn = document.getElementById("btnApkBuilder");
+      const closeBtn = document.getElementById("apkClose");
+      const form = document.getElementById("apkAccessForm");
+      const toggle = document.getElementById("apkTogglePassword");
+
+      function openModal() {
+        modal.classList.add("open");
+        error.textContent = "";
+        pass.value = "";
+        window.setTimeout(() => pass.focus(), 80);
+      }
+      function closeModal() {
+        modal.classList.remove("open");
+        openBtn.focus();
+      }
+      openBtn.addEventListener("click", openModal);
+      closeBtn.addEventListener("click", closeModal);
+      modal.addEventListener("click", event => {
+        if (event.target === modal) closeModal();
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && modal.classList.contains("open")) closeModal();
+      });
+      toggle.addEventListener("click", () => {
+        const showing = pass.type === "text";
+        pass.type = showing ? "password" : "text";
+        toggle.textContent = showing ? "Show" : "Hide";
+        pass.focus();
+      });
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+        if (pass.value === ACCESS_CODE) {
+          error.textContent = "";
+          const submit = form.querySelector('button[type="submit"]');
+          submit.textContent = "ACCESS GRANTED • OPENING…";
+          window.location.assign(BUILDER_URL);
+        } else {
+          error.textContent = "Access denied. Check the code and try again.";
+          pass.value = "";
+          pass.focus();
+        }
+      });
+    })();
+  </script>
+
 </body>
 </html>
