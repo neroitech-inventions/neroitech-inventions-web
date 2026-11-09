@@ -1,0 +1,73 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      website_url:
+        description: "Public HTTPS website URL"
+        required: true
+        type: string
+      app_name:
+        description: "Name shown under the app icon (2–32 characters)"
+        required: true
+        default: "My Website"
+        type: string
+      package_id:
+        description: "Android package ID"
+        required: true
+        default: "com.example.mywebsite"
+        type: string
+      app_theme:
+        description: "App appearance"
+        required: true
+        default: "light"
+        type: choice
+        options:
+          - light
+          - dark
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Generate debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Generate Android project
+        env:
+          WEBSITE_URL: ${{ inputs.website_url }}
+          APP_NAME: ${{ inputs.app_name }}
+          PACKAGE_ID: ${{ inputs.package_id }}
+          APP_THEME: ${{ inputs.app_theme }}
+        run: node web2apk-studio/scripts/generate-android.mjs
+
+      - name: Build APK
+        working-directory: android-project
+        run: |
+          gradle --no-daemon assembleDebug
+          test -s app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: web2apk-${{ github.run_number }}
+          path: android-project/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7
