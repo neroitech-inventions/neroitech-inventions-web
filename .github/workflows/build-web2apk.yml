@@ -47,14 +47,47 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      # GitHub-hosted Ubuntu runners already include the Android SDK.
-      # Avoid android-actions/setup-android here: its setup currently invokes
-      # the obsolete "sdkmanager tools" package, which fails on current SDK repos.
+      - name: Locate Android SDK manager
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          if [ ! -d "$ANDROID_HOME" ]; then
+            echo "::error::Android SDK directory not found at $ANDROID_HOME"
+            ls -la /usr/local/lib/android || true
+            exit 1
+          fi
+
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -perm -u+x 2>/dev/null | sort -V | tail -n 1)"
+          if [ -z "$SDKMANAGER" ]; then
+            echo "::error::sdkmanager was not found under $ANDROID_HOME/cmdline-tools"
+            find "$ANDROID_HOME" -maxdepth 5 -type f -name sdkmanager -print || true
+            exit 1
+          fi
+
+          SDKMANAGER_DIR="$(dirname "$SDKMANAGER")"
+          echo "Found sdkmanager: $SDKMANAGER"
+          echo "$SDKMANAGER_DIR" >> "$GITHUB_PATH"
+          echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
+          echo "SDKMANAGER=$SDKMANAGER" >> "$GITHUB_ENV"
+
       - name: Accept Android SDK licenses
-        run: yes | sdkmanager --licenses
+        shell: bash
+        run: |
+          set -euo pipefail
+          yes | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --licenses || {
+            result=$?
+            if [ "$result" -ne 141 ]; then exit "$result"; fi
+          }
 
       - name: Install Android SDK packages
-        run: sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --install \
+            "platform-tools" \
+            "platforms;android-35" \
+            "build-tools;35.0.0"
 
       - name: Generate Android project
         env:
