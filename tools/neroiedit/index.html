@@ -589,6 +589,61 @@ body.mobile-access-blocked{overflow:hidden!important}
 body.mobile-access-blocked .app{visibility:hidden!important;pointer-events:none!important;user-select:none!important}
 @media(prefers-reduced-motion:no-preference){.mobile-gate-card{animation:gate-enter .35s cubic-bezier(.2,.8,.2,1) both}@keyframes gate-enter{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}}
 
+
+/* Responsive access notice: remains readable on phones, tablets, laptops and short screens */
+html,body{width:100%;min-width:0;min-height:100%;overflow-x:hidden}
+.mobile-gate{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  min-height:100vh;
+  min-height:100dvh;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:clamp(12px,3.5vw,28px);
+  padding-top:max(clamp(12px,3.5vw,28px),env(safe-area-inset-top));
+  padding-right:max(clamp(12px,3.5vw,28px),env(safe-area-inset-right));
+  padding-bottom:max(clamp(12px,3.5vw,28px),env(safe-area-inset-bottom));
+  padding-left:max(clamp(12px,3.5vw,28px),env(safe-area-inset-left));
+}
+.mobile-gate-card{
+  box-sizing:border-box;
+  width:min(100%,440px);
+  max-height:calc(100dvh - 32px);
+  overflow-y:auto;
+  overflow-wrap:anywhere;
+  padding:clamp(20px,5vw,34px) clamp(16px,5vw,28px);
+}
+.mobile-gate-card h1{font-size:clamp(22px,6vw,30px);overflow-wrap:break-word}
+.mobile-gate-card p{font-size:clamp(12px,3.5vw,14px)}
+.mobile-gate-icon{flex:0 0 auto}
+.mobile-gate-notice{flex-wrap:wrap;line-height:1.45}
+.mobile-gate-brand{overflow-wrap:anywhere}
+@media(max-width:380px){
+  .mobile-gate-card{border-radius:18px}
+  .mobile-gate-icon{width:58px;height:58px;margin-bottom:16px}
+  .mobile-gate-notice{font-size:11px;padding:10px}
+}
+@media(max-height:560px){
+  .mobile-gate{align-items:flex-start}
+  .mobile-gate-card{margin:auto 0;padding-top:18px;padding-bottom:18px}
+  .mobile-gate-icon{width:48px;height:48px;margin-bottom:10px}
+  .mobile-gate-card h1{margin-bottom:8px}
+  .mobile-gate-notice{margin:12px 0;padding:9px}
+  .mobile-gate-brand{margin-top:12px}
+}
+@media(orientation:landscape) and (max-height:500px){
+  .mobile-gate-card{display:grid;grid-template-columns:56px minmax(0,1fr);column-gap:14px;text-align:left;align-items:center;width:min(100%,620px)}
+  .mobile-gate-icon{grid-column:1;grid-row:1 / span 3;margin:0;width:52px;height:52px}
+  .mobile-gate-kicker,.mobile-gate-card h1,.mobile-gate-card p,.mobile-gate-notice,.mobile-gate-foot,.mobile-gate-brand{grid-column:2}
+  .mobile-gate-kicker{margin:0 0 5px}
+  .mobile-gate-card h1{font-size:clamp(20px,4vw,26px);margin:0 0 6px}
+  .mobile-gate-card p{margin:0}
+  .mobile-gate-notice{justify-content:flex-start;margin:9px 0;padding:8px}
+  .mobile-gate-foot{display:none}
+  .mobile-gate-brand{margin-top:5px}
+}
+
 </style>
 </head>
 <body>
