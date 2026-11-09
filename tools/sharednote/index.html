@@ -2306,6 +2306,15 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
       cancelBtn.onclick = cleanup;
     }
 
+    function showSaveFailure(message) {
+      const cancelBtn = document.getElementById('modal-cancel');
+      showConfirm('Save failed', message, () => {
+        cancelBtn.style.display = '';
+      });
+      document.getElementById('modal-confirm').textContent = 'OK';
+      cancelBtn.style.display = 'none';
+    }
+
     function updateSaveButton() {
       const btn = document.getElementById('save-btn');
       if (!btn) return;
@@ -2524,8 +2533,10 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
           setTimeout(() => { const input = document.querySelector('#modal-input-container input'); if (input) input.value = shortUrl; }, 100);
         }
       } catch (error) {
+        currentShortUrl = null;
+        updateSaveButton();
         console.error(error);
-        showToast(error.message || 'Could not create password-protected link');
+        showSaveFailure(error.message || 'Unable to create a share link. Check the note for embedded images or unsupported special characters, then try again.');
       }
     }
 
@@ -2544,51 +2555,101 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
     };
 
     async function createShortLink(code, dest, user) {
-      const url = "https://sheets.googleapis.com/v4/spreadsheets/" + URLMINI.SHEET_ID + "/values/" + encodeURIComponent(URLMINI.RANGE) + "?key=" + URLMINI.API_KEY;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Could not check database");
-      const data = await res.json();
-      const rows = data.values || [];
+      // Google Sheets cells have a 50,000-character limit. Leave headroom so
+      // oversized notes (often caused by pasted/base64 images) fail before upload.
+      if (typeof dest !== 'string' || dest.length > 45000) {
+        throw new Error('This note is too large to create a share link. Remove or resize embedded images, then try again.');
+      }
+
+      const apiUrl = "https://sheets.googleapis.com/v4/spreadsheets/" + URLMINI.SHEET_ID +
+        "/values/" + encodeURIComponent(URLMINI.RANGE) + "?key=" + URLMINI.API_KEY;
+
+      const readRows = async () => {
+        const response = await fetch(apiUrl, { cache: 'no-store' });
+        if (!response.ok) throw new Error('Could not verify online storage. No share link was created.');
+        const result = await response.json();
+        return result.values || [];
+      };
+
+      const rows = await readRows();
       const used = new Set();
       rows.forEach(row => {
         if (row[1]) used.add(String(row[1]).trim().toLowerCase());
       });
+
       let finalCode = code.toLowerCase();
       let n = 1;
       while (used.has(finalCode)) {
         finalCode = code.toLowerCase() + '-' + n;
         n++;
-        if (n > 50) throw new Error("Could not find available code");
+        if (n > 50) throw new Error("Could not find an available sharing address. No link was created.");
       }
-      await new Promise((resolve) => {
-        const iframe = document.createElement("iframe");
-        iframe.name = "urlmini_" + Date.now();
-        iframe.style.display = "none";
-        document.body.appendChild(iframe);
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = URLMINI.FORM_ACTION;
-        form.target = iframe.name;
-        form.style.display = "none";
-        const fields = {
-          [URLMINI.FIELDS.code]: finalCode,
-          [URLMINI.FIELDS.url]: dest,
-          [URLMINI.FIELDS.user]: user,
-          fvv: "1",
-          pageHistory: "0"
-        };
-        Object.keys(fields).forEach(name => {
-          const input = document.createElement("input");
-          input.type = "hidden";
-          input.name = name;
-          input.value = fields[name];
-          form.appendChild(input);
-        });
-        document.body.appendChild(form);
-        form.submit();
-        setTimeout(() => { form.remove(); iframe.remove(); resolve(); }, 2000);
+
+      const iframe = document.createElement("iframe");
+      iframe.name = "urlmini_" + Date.now();
+      iframe.style.display = "none";
+      document.body.appendChild(iframe);
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = URLMINI.FORM_ACTION;
+      form.target = iframe.name;
+      form.style.display = "none";
+
+      const fields = {
+        [URLMINI.FIELDS.code]: finalCode,
+        [URLMINI.FIELDS.url]: dest,
+        [URLMINI.FIELDS.user]: user,
+        fvv: "1",
+        pageHistory: "0"
+      };
+
+      Object.keys(fields).forEach(name => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = fields[name];
+        form.appendChild(input);
       });
-      return URLMINI.GO_URL + "?c=" + finalCode;
+      document.body.appendChild(form);
+
+      try {
+        form.submit();
+
+        // A form submission to Google Forms is cross-origin, so its iframe
+        // response cannot reliably tell us whether the row was stored.
+        // Verify the exact code and destination through the read-only Sheets API.
+        let verified = false;
+        let lastReadError = null;
+        for (let attempt = 0; attempt < 12; attempt++) {
+          await new Promise(resolve => setTimeout(resolve, attempt === 0 ? 1200 : 900));
+          try {
+            const savedRows = await readRows();
+            const matchingRow = savedRows.find(row =>
+              String(row[1] || '').trim().toLowerCase() === finalCode &&
+              String(row[2] || '').trim() === dest
+            );
+            if (matchingRow) {
+              verified = true;
+              break;
+            }
+          } catch (error) {
+            lastReadError = error;
+          }
+        }
+
+        if (!verified) {
+          if (lastReadError) {
+            throw new Error('Unable to create a share link. The note may contain an embedded image or unsupported special character. Remove it and try again.');
+          }
+          throw new Error('Unable to create a share link. The note may contain an embedded image or unsupported special character. Remove it and try again.');
+        }
+
+        return URLMINI.GO_URL + "?c=" + finalCode;
+      } finally {
+        form.remove();
+        iframe.remove();
+      }
     }
 
     async function createShareLink(lockCode) {
@@ -2621,8 +2682,10 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
           }, 150);
         });
       } catch (e) {
-        showToast('Could not create short link');
+        currentShortUrl = null;
+        updateSaveButton();
         console.error(e);
+        showSaveFailure(e.message || 'Unable to create a share link. Check the note for embedded images or unsupported special characters, then try again.');
       }
     }
 
