@@ -2455,121 +2455,6 @@
   #modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) > .modal { margin-top: 0; margin-bottom: 0; }
 }
 
-
-
-    /* Modern QR display and camera scanner dialogs */
-    #qr-modal.qr-dialog-overlay, #scan-modal.qr-dialog-overlay {
-      z-index: 520;
-      align-items: center;
-      justify-content: center;
-      padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
-      background: rgba(8, 15, 30, .68);
-      -webkit-backdrop-filter: blur(7px);
-      backdrop-filter: blur(7px);
-    }
-    #qr-modal .qr-dialog, #scan-modal .qr-dialog {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      width: min(100%, 440px);
-      max-width: 440px;
-      max-height: calc(100dvh - 28px);
-      padding: 0;
-      overflow: hidden;
-      border: 1px solid rgba(226,232,240,.9);
-      border-radius: 24px;
-      background: #fff;
-      color: #0f172a;
-      text-align: left;
-      box-shadow: 0 28px 90px rgba(2, 8, 23, .32);
-    }
-    .qr-dialog-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 20px 22px 17px;
-      border-bottom: 1px solid #edf1f6;
-      background: linear-gradient(180deg, #fff 0%, #fbfdff 100%);
-    }
-    .qr-dialog-heading { display: flex; align-items: center; gap: 13px; min-width: 0; }
-    .qr-dialog-icon {
-      display: grid; place-items: center; flex: 0 0 44px; width: 44px; height: 44px;
-      border-radius: 14px; background: #eaf1ff; color: #2457c5; font-size: 1.15rem;
-    }
-    .scan-dialog-icon { background: #e8f7f1; color: #13835f; }
-    .qr-dialog-eyebrow { display: block; margin-bottom: 3px; color: #64748b; font-size: .65rem; font-weight: 800; letter-spacing: .11em; }
-    .qr-dialog-header h3 { margin: 0 !important; color: #101b31; font-size: 1.18rem; font-weight: 750; line-height: 1.25; }
-    .qr-dialog-close {
-      display: grid; place-items: center; flex: 0 0 40px; width: 40px; height: 40px;
-      padding: 0; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;
-      color: #475569; font-size: 1.1rem; cursor: pointer; touch-action: manipulation;
-    }
-    .qr-dialog-close:hover { background: #eef2f7; color: #0f172a; }
-    .qr-dialog-content {
-      min-height: 0; padding: 20px 22px 16px; overflow-y: auto; overflow-x: hidden;
-      -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
-    }
-    .qr-dialog-content > p:first-child { margin: 0 0 17px; color: #526176; font-size: .91rem; line-height: 1.6; }
-    .qr-code-stage {
-      display: grid; place-items: center; min-height: 230px; padding: 18px;
-      border: 1px solid #e5ebf3; border-radius: 20px;
-      background: radial-gradient(circle at 50% 0%, #f2f6ff 0, #f8fafc 62%);
-    }
-    #qr-canvas-wrap { display: flex; align-items: center; justify-content: center; width: 100%; min-width: 0; margin: 0 !important; }
-    #qr-canvas-wrap canvas, #qr-canvas-wrap img, #qr-canvas-wrap svg { display: block; width: min(100%, 260px) !important; height: auto !important; max-height: 300px; object-fit: contain; }
-    .qr-dialog-hint {
-      display: flex; align-items: flex-start; gap: 9px; margin: 15px 0 0 !important;
-      padding: 11px 13px; border-radius: 12px; background: #f1f5f9;
-      color: #58677d; font-size: .78rem !important; line-height: 1.5 !important;
-    }
-    .qr-dialog-hint i { flex: 0 0 auto; margin-top: 2px; color: #4266a5; }
-    .qr-dialog-footer { flex: 0 0 auto; padding: 14px 22px max(18px, env(safe-area-inset-bottom)); border-top: 1px solid #edf1f6; background: #fff; }
-    .qr-dialog-footer button {
-      display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: 48px;
-      padding: 12px 18px; border: 0; border-radius: 13px; font: inherit; font-size: .92rem; font-weight: 700;
-      cursor: pointer; touch-action: manipulation; transition: transform .15s ease, background .15s ease;
-    }
-    .qr-dialog-footer button:active { transform: scale(.99); }
-    .qr-dialog-primary { background: #14213d; color: #fff; }
-    .qr-dialog-primary:hover { background: #223657; }
-    .qr-dialog-secondary { background: #edf2f7; color: #26364d; }
-    .qr-dialog-secondary:hover { background: #e2e8f0; }
-    .scan-dialog { width: min(100%, 500px) !important; max-width: 500px !important; }
-    .scanner-stage {
-      display: grid; place-items: center; min-height: 220px; padding: 12px;
-      border-radius: 20px; background: #101827;
-    }
-    .scanner-frame { width: 100%; max-width: 420px; min-width: 0; overflow: hidden; border-radius: 14px; background: #050a12; }
-    #qr-reader { width: 100% !important; max-width: 100% !important; margin: 0 !important; border: 0 !important; color: #fff; }
-    #qr-reader video { display: block; width: 100% !important; max-width: 100% !important; max-height: min(52vh, 390px); object-fit: cover; border-radius: 12px; }
-    #qr-reader__scan_region { min-height: 180px; }
-    #qr-reader__dashboard { padding: 10px 8px 4px; color: #fff; }
-    #qr-reader__dashboard button, #qr-reader__dashboard select {
-      min-height: 40px; max-width: 100%; margin: 5px 4px; padding: 8px 12px;
-      border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; color: #172033; font-size: .85rem;
-    }
-    #qr-reader__status_span { color: #e2e8f0 !important; font-size: .8rem; }
-    @media (max-width: 520px) {
-      #qr-modal.qr-dialog-overlay, #scan-modal.qr-dialog-overlay { padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom)); }
-      #qr-modal .qr-dialog, #scan-modal .qr-dialog { width: 100%; max-width: 100%; max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px); border-radius: 20px; }
-      .qr-dialog-header { padding: 16px 16px 14px; }
-      .qr-dialog-content { padding: 16px 16px 14px; }
-      .qr-dialog-footer { padding: 12px 16px max(14px, env(safe-area-inset-bottom)); }
-      .qr-code-stage { min-height: 190px; padding: 12px; }
-      #qr-canvas-wrap canvas, #qr-canvas-wrap img, #qr-canvas-wrap svg { width: min(100%, 230px) !important; max-height: 250px; }
-      .scanner-stage { min-height: 180px; padding: 8px; }
-      #qr-reader video { max-height: 42vh; }
-    }
-    @media (max-height: 620px) {
-      #qr-modal .qr-dialog, #scan-modal .qr-dialog { max-height: calc(100dvh - 16px); }
-      .qr-dialog-header { padding-top: 12px; padding-bottom: 12px; }
-      .qr-dialog-content { padding-top: 12px; padding-bottom: 10px; }
-      .qr-dialog-footer { padding-top: 10px; padding-bottom: 12px; }
-      .qr-code-stage { min-height: 150px; }
-      #qr-canvas-wrap canvas, #qr-canvas-wrap img, #qr-canvas-wrap svg { width: min(100%, 190px) !important; max-height: 190px; }
-    }
-
 </style>
 </head>
 <body>
@@ -2795,44 +2680,26 @@
   </div>
 
 
-  <div class="modal-overlay qr-dialog-overlay" id="qr-modal" onclick="if(event.target===this) closeQrModal()" role="presentation">
-    <section class="modal qr-dialog" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title" aria-describedby="qr-modal-message">
-      <header class="qr-dialog-header">
-        <div class="qr-dialog-heading">
-          <span class="qr-dialog-icon" aria-hidden="true"><i class="fa-solid fa-qrcode"></i></span>
-          <div><span class="qr-dialog-eyebrow">SHAREDNOTE · QR SHARE</span><h3 id="qr-modal-title">Share private note</h3></div>
-        </div>
-        <button class="qr-dialog-close" type="button" onclick="closeQrModal()" aria-label="Close QR code"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
-      </header>
-      <div class="qr-dialog-content">
-        <p id="qr-modal-message">Scan this QR with another SharedNote page. The recipient will still need the password.</p>
-        <div class="qr-code-stage"><div id="qr-canvas-wrap"></div></div>
-        <p class="qr-dialog-hint"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>Keep the code visible and let the other device scan it with its camera.</span></p>
+  <div class="modal-overlay" id="qr-modal" onclick="if(event.target===this) closeQrModal()">
+    <div class="modal" style="text-align:center; max-width:380px;">
+      <h3 id="qr-modal-title">Share private note</h3>
+      <p id="qr-modal-message" style="font-size:0.9rem;">Scan this QR with another SharedNote page. The recipient will still need the password.</p>
+      <div id="qr-canvas-wrap" style="margin:16px 0; display:flex; justify-content:center;"></div>
+      <div class="modal-buttons">
+        <button onclick="closeQrModal()" style="background:#475569; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer;">Close</button>
       </div>
-      <footer class="qr-dialog-footer">
-        <button class="qr-dialog-primary" type="button" onclick="closeQrModal()">Done</button>
-      </footer>
-    </section>
+    </div>
   </div>
 
-  <div class="modal-overlay qr-dialog-overlay" id="scan-modal" onclick="if(event.target===this) closeScanModal()" role="presentation">
-    <section class="modal qr-dialog scan-dialog" role="dialog" aria-modal="true" aria-labelledby="scan-modal-title" aria-describedby="scan-modal-description">
-      <header class="qr-dialog-header">
-        <div class="qr-dialog-heading">
-          <span class="qr-dialog-icon scan-dialog-icon" aria-hidden="true"><i class="fa-solid fa-camera"></i></span>
-          <div><span class="qr-dialog-eyebrow">SHAREDNOTE · QR SCANNER</span><h3 id="scan-modal-title">Scan a QR code</h3></div>
-        </div>
-        <button class="qr-dialog-close" type="button" onclick="closeScanModal()" aria-label="Close QR scanner"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
-      </header>
-      <div class="qr-dialog-content scan-dialog-content">
-        <p id="scan-modal-description">Position a SharedNote QR code inside the camera frame. We'll open the shared note or link when it's recognised.</p>
-        <div class="scanner-stage"><div class="scanner-frame"><div id="qr-reader"></div></div></div>
-        <p class="qr-dialog-hint"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Your camera is used only to scan the QR code. You may need to allow camera access in your browser.</span></p>
+  <div class="modal-overlay" id="scan-modal" onclick="if(event.target===this) closeScanModal()">
+    <div class="modal" style="text-align:center; max-width:420px;">
+      <h3>Scan QR</h3>
+      <p style="font-size:0.9rem;">Point your camera at a SharedNote QR code (share link or private note).</p>
+      <div id="qr-reader" style="width:100%; margin:12px 0;"></div>
+      <div class="modal-buttons">
+        <button onclick="closeScanModal()" style="background:#475569; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer;">Cancel</button>
       </div>
-      <footer class="qr-dialog-footer">
-        <button class="qr-dialog-secondary" type="button" onclick="closeScanModal()">Cancel scanning</button>
-      </footer>
-    </section>
+    </div>
   </div>
 
   <div id="private-lock-screen" hidden role="dialog" aria-modal="true" aria-labelledby="private-lock-title">
