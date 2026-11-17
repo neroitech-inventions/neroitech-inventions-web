@@ -1,1541 +1,692 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <meta charset="UTF-8">
-     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-     <meta name="description" content="We drive growth with digital innovation and cutting-edge solutions, empowering transformation and success.">
-     <meta name="keywords" content="Neroitech Inventions, Digital Innovation, IT Solutions, Web3">
-     <meta name="author" content="Neroitech Inventions">
-     
-     <title>Neroitech Inventions - Digital Innovation & Growth</title>
-
-     <!-- Google Analytics -->
-     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
-     <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-QM106YDX6N');
-     </script>
-
-     <!-- Favicon -->
-     <link href="images/favicon.ico" rel="icon">
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-     <style>
-          * {
-               margin: 0;
-               padding: 0;
-               box-sizing: border-box;
-          }
-
-          :root {
-               --bg-dark: #0B0F1A;
-               --bg-darker: #06080F;
-               --bg-card: #12182B;
-               --bg-card-hover: #1A2138;
-               --accent: #38BDF8;
-               --accent-secondary: #A78BFA;
-               --accent-glow: rgba(56, 189, 248, 0.28);
-               --text-primary: #F1F5F9;
-               --text-secondary: #94A3B8;
-               --text-tertiary: #64748B;
-               --border: #1E293B;
-               --border-light: #334155;
-          }
-
-          html {
-               scroll-behavior: smooth;
-          }
-
-          body {
-               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-               color: var(--text-primary);
-               background: var(--bg-dark);
-               line-height: 1.6;
-               overflow-x: hidden;
-               -webkit-font-smoothing: antialiased;
-          }
-
-          /* Typography */
-          h1 { font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.12; letter-spacing: -0.035em; }
-          h2 { font-size: clamp(2rem, 4vw, 2.85rem); font-weight: 750; line-height: 1.2; letter-spacing: -0.025em; }
-          h3 { font-size: 1.55rem; font-weight: 700; }
-          h4 { font-size: 1.2rem; font-weight: 650; }
-          p { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.75; }
-
-          a {
-               color: var(--accent);
-               text-decoration: none;
-               transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-          }
-
-          a:hover { color: var(--accent-secondary); }
-
-          /* Preloader */
-          .preloader {
-               position: fixed;
-               inset: 0;
-               background: var(--bg-darker);
-               display: flex;
-               align-items: center;
-               justify-content: center;
-               z-index: 9999;
-               animation: fadeOut 0.5s ease-in-out 1s forwards;
-          }
-
-          .spinner {
-               width: 44px;
-               height: 44px;
-               border: 3px solid var(--border);
-               border-top-color: var(--accent);
-               border-radius: 50%;
-               animation: spin 0.8s linear infinite;
-          }
-
-          @keyframes spin { to { transform: rotate(360deg); } }
-          @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
-
-          /* Navbar */
-          nav {
-               background: rgba(11, 15, 26, 0.85);
-               position: fixed;
-               width: 100%;
-               top: 0;
-               z-index: 1000;
-               border-bottom: 1px solid var(--border);
-               backdrop-filter: blur(18px);
-               -webkit-backdrop-filter: blur(18px);
-          }
-
-          .navbar-container {
-               max-width: 1400px;
-               margin: 0 auto;
-               padding: 0 2.5rem;
-               display: flex;
-               justify-content: space-between;
-               align-items: center;
-               height: 72px;
-          }
-
-          .navbar-brand {
-               display: flex;
-               align-items: center;
-               gap: 11px;
-               font-size: 1.3rem;
-               font-weight: 800;
-               color: var(--text-primary);
-               letter-spacing: -0.02em;
-          }
-
-          .navbar-brand:hover { color: var(--accent); }
-
-          .navbar-brand img {
-               width: 42px;
-               height: 42px;
-               border-radius: 11px;
-               box-shadow: 0 6px 20px rgba(56, 189, 248, 0.18);
-          }
-
-          .hamburger {
-               display: none;
-               flex-direction: column;
-               gap: 6px;
-               cursor: pointer;
-               background: none;
-               border: none;
-               z-index: 1001;
-               padding: 6px;
-          }
-
-          .hamburger span {
-               width: 24px;
-               height: 2px;
-               background: var(--accent);
-               border-radius: 2px;
-               transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-          }
-
-          .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
-          .hamburger.active span:nth-child(2) { opacity: 0; }
-          .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
-
-          .nav-wrapper {
-               display: flex;
-               align-items: center;
-               gap: 2.8rem;
-          }
-
-          .nav-links {
-               display: flex;
-               gap: 2.2rem;
-               list-style: none;
-               align-items: center;
-          }
-
-          .nav-links a {
-               font-size: 0.95rem;
-               font-weight: 600;
-               color: var(--text-secondary);
-               position: relative;
-          }
-
-          .nav-links a::after {
-               content: '';
-               position: absolute;
-               bottom: -6px;
-               left: 0;
-               width: 0;
-               height: 2px;
-               background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
-               transition: width 0.3s ease;
-               border-radius: 2px;
-          }
-
-          .nav-links a:hover { color: var(--accent); }
-          .nav-links a:hover::after { width: 100%; }
-
-          .social-links {
-               display: flex;
-               gap: 0.7rem;
-          }
-
-          .social-links a {
-               width: 38px;
-               height: 38px;
-               display: flex;
-               align-items: center;
-               justify-content: center;
-               border-radius: 10px;
-               background: var(--bg-card);
-               color: var(--accent);
-               border: 1px solid var(--border);
-               font-size: 1rem;
-          }
-
-          .social-links a:hover {
-               background: var(--accent);
-               color: var(--bg-dark);
-               transform: translateY(-3px);
-               box-shadow: 0 8px 24px var(--accent-glow);
-          }
-
-          /* Mobile Menu */
-          .mobile-menu {
-               display: none;
-               position: fixed;
-               left: 0;
-               top: 72px;
-               width: 100%;
-               height: calc(100vh - 72px);
-               background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
-               flex-direction: column;
-               gap: 0.25rem;
-               padding: 1.5rem 1.75rem;
-               z-index: 999;
-               overflow-y: auto;
-          }
-
-          .mobile-menu.active { display: flex; }
-
-          .mobile-menu a {
-               font-size: 1.1rem;
-               font-weight: 600;
-               color: var(--text-secondary);
-               padding: 14px 4px;
-               border-bottom: 1px solid var(--border);
-          }
-
-          .mobile-menu a:hover {
-               color: var(--accent);
-               padding-left: 10px;
-          }
-
-          /* Sections */
-          section {
-               padding: 6.5rem 2.5rem;
-               max-width: 1400px;
-               margin: 0 auto;
-          }
-
-          .section-title {
-               margin-bottom: 3.5rem;
-               text-align: center;
-          }
-
-          .section-title h2 {
-               margin-bottom: 1rem;
-               background: linear-gradient(135deg, #fff 15%, var(--accent) 100%);
-               -webkit-background-clip: text;
-               -webkit-text-fill-color: transparent;
-               background-clip: text;
-          }
-
-          .section-title p {
-               color: var(--text-tertiary);
-               font-size: 1.1rem;
-               max-width: 520px;
-               margin: 0 auto;
-          }
-
-/* ===== HERO with Background Image ===== */
-#home {
-     margin-top: 72px;
-     padding: 5.5rem 2.5rem 6.5rem;
-     display: flex;
-     align-items: center;
-     min-height: calc(100vh - 72px);
-     position: relative;
-     overflow: hidden;
-
-     /* Background Image */
-     background-image: 
-          linear-gradient(
-               135deg,
-               rgba(6, 8, 15, 0.92) 0%,
-               rgba(11, 15, 26, 0.85) 40%,
-               rgba(6, 8, 15, 0.88) 100%
-          ),
-          url('images/home-bg.jpg');   /* ← change this path if needed */
-
-     background-size: cover;
-     background-position: center;
-     background-repeat: no-repeat;
-}
-
-/* Optional soft color glows on top of the image */
-#home::before {
-     content: '';
-     position: absolute;
-     inset: 0;
-     background: 
-          radial-gradient(ellipse 80% 60% at 70% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 55%),
-          radial-gradient(ellipse 60% 50% at 10% 80%, rgba(167, 139, 250, 0.08) 0%, transparent 50%);
-     pointer-events: none;
-     z-index: 1;
-}
-
-.hero-content {
-     display: grid;
-     grid-template-columns: 1.05fr 0.95fr;
-     gap: 4.5rem;
-     align-items: center;
-     width: 100%;
-     position: relative;
-     z-index: 2;
-}
-
-          .hero-text h1 {
-               margin-bottom: 1.75rem;
-          }
-
-          .hero-cta {
-               display: inline-flex;
-               align-items: center;
-               gap: 10px;
-               background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-               color: var(--bg-dark);
-               padding: 15px 34px;
-               border-radius: 12px;
-               font-weight: 700;
-               font-size: 1rem;
-               margin-bottom: 2.25rem;
-               border: none;
-               cursor: pointer;
-               box-shadow: 0 10px 32px var(--accent-glow);
-               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          }
-
-          .hero-cta:hover {
-               transform: translateY(-3px);
-               box-shadow: 0 14px 40px rgba(56, 189, 248, 0.4);
-          }
-
-          .hero-contact {
-               margin-top: 2.5rem;
-               padding-top: 2rem;
-          }
-
-          .hero-contact p {
-               margin: 0.4rem 0;
-               font-weight: 650;
-               color: var(--text-primary);
-               font-size: 1.05rem;
-          }
-
-          .hero-contact small {
-               display: block;
-               font-size: 0.9rem;
-               color: #94A3B8;
-               margin-top: 0.35rem;
-          }
-
-          .hero-video {
-               position: relative;
-               border-radius: 18px;
-               overflow: hidden;
-               box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--border);
-               background: var(--bg-card);
-          }
-
-          .hero-video::before {
-               content: '';
-               position: absolute;
-               inset: 0;
-               border-radius: 18px;
-               padding: 1px;
-               background: linear-gradient(135deg, rgba(56,189,248,0.4), transparent 40%, rgba(167,139,250,0.25));
-               -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-               mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-               -webkit-mask-composite: xor;
-               mask-composite: exclude;
-               pointer-events: none;
-               z-index: 1;
-          }
-
-          .hero-video iframe {
-               width: 100%;
-               height: 100%;
-               min-height: 420px;
-               border: none;
-               display: block;
-          }
-
-          /* ===== ABOUT ===== */
-          #about {
-               background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 100%);
-          }
-
-          .about-content {
-               display: grid;
-               grid-template-columns: 1fr 1.15fr;
-               gap: 4.5rem;
-               align-items: start;
-          }
-
-          .about-text h2 { margin-bottom: 1.5rem; }
-
-          .about-text p {
-               margin-bottom: 1.4rem;
-               font-size: 1.08rem;
-          }
-
-          .about-buttons {
-               display: flex;
-               gap: 1.4rem;
-               flex-wrap: wrap;
-               margin-top: 2.25rem;
-          }
-
-          .btn-primary {
-               background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-               color: var(--bg-dark);
-               padding: 14px 30px;
-               border-radius: 11px;
-               font-weight: 700;
-               display: inline-flex;
-               align-items: center;
-               gap: 9px;
-               border: none;
-               cursor: pointer;
-               box-shadow: 0 8px 28px var(--accent-glow);
-               transition: all 0.3s ease;
-          }
-
-          .btn-primary:hover {
-               transform: translateY(-2px);
-               box-shadow: 0 12px 36px rgba(56, 189, 248, 0.38);
-          }
-
-          .btn-secondary {
-               color: var(--accent);
-               font-weight: 700;
-               display: inline-flex;
-               align-items: center;
-               gap: 8px;
-               padding-bottom: 2px;
-               border-bottom: 2px solid transparent;
-               transition: all 0.25s ease;
-          }
-
-          .btn-secondary:hover {
-               border-bottom-color: var(--accent-secondary);
-               color: var(--accent-secondary);
-          }
-
-          .services-grid {
-               display: grid;
-               grid-template-columns: 1fr 1fr;
-               gap: 1.35rem;
-          }
-
-          .service-card {
-               background: var(--bg-dark);
-               border-radius: 16px;
-               padding: 1.85rem;
-               border: 1px solid var(--border);
-               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-               position: relative;
-               overflow: hidden;
-          }
-
-          .service-card::before {
-               content: '';
-               position: absolute;
-               top: 0;
-               left: 0;
-               right: 0;
-               height: 2px;
-               background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
-               opacity: 0.9;
-          }
-
-          .service-card:hover {
-               transform: translateY(-5px);
-               background: var(--bg-card-hover);
-               border-color: var(--border-light);
-               box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-          }
-
-          .service-icon {
-               width: 52px;
-               height: 52px;
-               border-radius: 12px;
-               display: flex;
-               align-items: center;
-               justify-content: center;
-               font-size: 1.35rem;
-               margin-bottom: 1.15rem;
-               background: rgba(56, 189, 248, 0.1);
-               color: var(--accent);
-               border: 1px solid rgba(56, 189, 248, 0.18);
-          }
-
-          .service-card h4 { margin-bottom: 0.6rem; }
-
-          .service-card p {
-               font-size: 0.95rem;
-               line-height: 1.65;
-               margin: 0;
-          }
-
-          /* ===== UPDATES ===== */
-          #updates {
-               background: var(--bg-darker);
-          }
-
-          .updates-grid {
-               display: grid;
-               grid-template-columns: repeat(2, 1fr);
-               gap: 1.75rem;
-          }
-
-          .update-card {
-               background: var(--bg-card);
-               border-radius: 16px;
-               overflow: hidden;
-               border: 1px solid var(--border);
-               display: flex;
-               flex-direction: column;
-               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          }
-
-          .update-card:hover {
-               transform: translateY(-6px);
-               border-color: var(--border-light);
-               box-shadow: 0 20px 48px rgba(0, 0, 0, 0.4);
-          }
-
-          .update-image {
-               width: 100%;
-               height: 210px;
-               object-fit: cover;
-               background: linear-gradient(135deg, #151c32, #0a0e1f);
-          }
-
-          .update-content {
-               padding: 1.75rem;
-               flex: 1;
-               display: flex;
-               flex-direction: column;
-          }
-
-          .update-date {
-               font-size: 0.8rem;
-               color: var(--accent);
-               margin-bottom: 0.75rem;
-               display: flex;
-               align-items: center;
-               gap: 7px;
-               font-weight: 650;
-               text-transform: uppercase;
-               letter-spacing: 0.06em;
-          }
-
-          .update-card h3 {
-               margin-bottom: 0.85rem;
-               font-size: 1.3rem;
-               line-height: 1.3;
-          }
-
-          .update-card h3 a { color: var(--text-primary); }
-          .update-card h3 a:hover { color: var(--accent); }
-
-          .update-card p {
-               flex: 1;
-               margin-bottom: 1.25rem;
-               font-size: 0.98rem;
-          }
-
-          .btn-view {
-               align-self: flex-start;
-               color: var(--accent);
-               font-weight: 700;
-               font-size: 0.95rem;
-               display: inline-flex;
-               align-items: center;
-               gap: 7px;
-               border-bottom: 2px solid transparent;
-               padding-bottom: 1px;
-          }
-
-          .btn-view:hover {
-               border-bottom-color: var(--accent-secondary);
-               color: var(--accent-secondary);
-               transform: translateX(3px);
-          }
-
-          /* ===== AWARDS ===== */
-          #awards {
-               background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%);
-          }
-
-          .awards-grid {
-               display: grid;
-               grid-template-columns: repeat(4, 1fr);
-               gap: 1.35rem;
-          }
-
-          .award-card {
-               background: var(--bg-dark);
-               border-radius: 16px;
-               padding: 2rem 1.5rem;
-               border: 1px solid var(--border);
-               text-align: center;
-               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-               position: relative;
-               overflow: hidden;
-               display: flex;
-               flex-direction: column;
-               align-items: center;
-          }
-
-          .award-card::before {
-               content: '';
-               position: absolute;
-               top: 0;
-               left: 0;
-               right: 0;
-               height: 2px;
-               background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
-          }
-
-          .award-card:hover {
-               transform: translateY(-6px);
-               border-color: var(--border-light);
-               box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-          }
-
-          .award-icon {
-               width: 72px;
-               height: 72px;
-               border-radius: 16px;
-               display: flex;
-               align-items: center;
-               justify-content: center;
-               font-size: 2rem;
-               margin-bottom: 1.25rem;
-               background: linear-gradient(145deg, rgba(56, 189, 248, 0.12), rgba(167, 139, 250, 0.08));
-               border: 1px solid rgba(56, 189, 248, 0.2);
-               color: var(--accent);
-               transition: all 0.3s ease;
-          }
-
-          .award-card:hover .award-icon {
-               transform: scale(1.08);
-               background: linear-gradient(145deg, rgba(56, 189, 248, 0.2), rgba(167, 139, 250, 0.12));
-               box-shadow: 0 8px 24px rgba(56, 189, 248, 0.15);
-          }
-
-          .award-info h3 {
-               font-size: 1.15rem;
-               margin-bottom: 0.45rem;
-          }
-
-          .award-info small {
-               color: var(--accent);
-               font-size: 0.8rem;
-               font-weight: 650;
-               text-transform: uppercase;
-               letter-spacing: 0.05em;
-          }
-
-          /* ===== CLIENTS ===== */
-          #clients {
-               background: var(--bg-darker);
-               padding: 5rem 2.5rem;
-          }
-
-          .clients-heading {
-               text-align: center;
-               margin-bottom: 3rem;
-          }
-
-          .clients-heading h3 {
-               color: var(--text-tertiary);
-               font-size: 0.85rem;
-               font-weight: 700;
-               text-transform: uppercase;
-               letter-spacing: 0.12em;
-               margin-bottom: 0.6rem;
-          }
-
-          .clients-heading p {
-               color: var(--text-secondary);
-               font-size: 1rem;
-               max-width: 480px;
-               margin: 0 auto;
-          }
-
-          .scroll-wrapper {
-               position: relative;
-               overflow: hidden;
-               mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-               -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-          }
-
-          .clients-list {
-               display: flex;
-               gap: 3.5rem;
-               animation: scroll 40s linear infinite;
-               width: max-content;
-               padding: 1rem 0;
-          }
-
-          .clients-list:hover { animation-play-state: paused; }
-
-          .clients-list img {
-               height: 56px;
-               width: auto;
-               object-fit: contain;
-               opacity: 0.55;
-               transition: all 0.3s ease;
-               filter: grayscale(100%);
-               flex-shrink: 0;
-          }
-
-          .clients-list img:hover {
-               opacity: 1;
-               filter: grayscale(0%);
-               transform: scale(1.08);
-          }
-
-          @keyframes scroll {
-               0% { transform: translateX(0); }
-               100% { transform: translateX(-50%); }
-          }
-
-          /* ===== CONTACT ===== */
-          #contact {
-               background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
-          }
-
-          .contact-container {
-               display: flex;
-               justify-content: center;
-          }
-
-          .contact-form {
-               background: var(--bg-card);
-               border-radius: 18px;
-               padding: 2.75rem;
-               display: grid;
-               grid-template-columns: 1fr 1fr;
-               gap: 1.5rem;
-               border: 1px solid var(--border);
-               max-width: 820px;
-               width: 100%;
-               box-shadow: 0 20px 56px rgba(0, 0, 0, 0.35);
-          }
-
-          .form-group {
-               display: flex;
-               flex-direction: column;
-          }
-
-          .form-group.full { grid-column: 1 / -1; }
-
-          .form-group label {
-               font-weight: 650;
-               margin-bottom: 0.55rem;
-               font-size: 0.8rem;
-               color: var(--text-secondary);
-               text-transform: uppercase;
-               letter-spacing: 0.06em;
-          }
-
-          .form-group input,
-          .form-group textarea,
-          .form-group select {
-               padding: 13px 16px;
-               border: 1px solid var(--border);
-               border-radius: 10px;
-               font-family: inherit;
-               font-size: 1rem;
-               background: var(--bg-dark);
-               color: var(--text-primary);
-               transition: all 0.25s ease;
-          }
-
-          .form-group input::placeholder,
-          .form-group textarea::placeholder {
-               color: var(--text-tertiary);
-          }
-
-          .form-group input:focus,
-          .form-group textarea:focus,
-          .form-group select:focus {
-               outline: none;
-               border-color: var(--accent);
-               box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
-          }
-
-          .form-group textarea {
-               resize: vertical;
-               min-height: 130px;
-          }
-
-          .form-group select {
-               cursor: pointer;
-               appearance: none;
-               background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338BDF8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-               background-repeat: no-repeat;
-               background-position: right 14px center;
-               background-size: 16px;
-               padding-right: 40px;
-          }
-
-          .form-submit {
-               grid-column: 1 / -1;
-               display: flex;
-               gap: 1.5rem;
-               align-items: center;
-               margin-top: 0.35rem;
-          }
-
-          .form-submit button {
-               background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-               color: var(--bg-dark);
-               padding: 14px 40px;
-               border: none;
-               border-radius: 11px;
-               font-weight: 700;
-               cursor: pointer;
-               font-size: 0.95rem;
-               letter-spacing: 0.03em;
-               box-shadow: 0 8px 28px var(--accent-glow);
-               transition: all 0.3s ease;
-          }
-
-          .form-submit button:hover {
-               transform: translateY(-2px);
-               box-shadow: 0 12px 36px rgba(56, 189, 248, 0.38);
-          }
-
-          .form-link {
-               font-size: 0.95rem;
-               color: var(--text-secondary);
-          }
-
-          .form-link a {
-               font-weight: 700;
-          }
-
-          /* ===== FOOTER ===== */
-          footer {
-               background: var(--bg-darker);
-               padding: 4rem 2.5rem 2rem;
-          }
-
-          .footer-container {
-               max-width: 1400px;
-               margin: 0 auto;
-          }
-
-          .footer-grid {
-               display: grid;
-               grid-template-columns: 1.8fr 1fr 1fr 1.3fr;
-               gap: 3.5rem;
-               margin-bottom: 3rem;
-          }
-
-          .footer-section h3 {
-               color: var(--accent);
-               margin-bottom: 1.25rem;
-               font-size: 0.95rem;
-               font-weight: 700;
-               text-transform: uppercase;
-               letter-spacing: 0.06em;
-          }
-
-          .footer-section p {
-               color: var(--text-secondary);
-               font-size: 0.95rem;
-               line-height: 1.7;
-          }
-
-          .footer-links {
-               list-style: none;
-          }
-
-          .footer-links li { margin-bottom: 0.9rem; }
-
-          .footer-links a {
-               color: var(--text-secondary);
-               font-weight: 500;
-               font-size: 0.95rem;
-          }
-
-          .footer-links a:hover {
-               color: var(--accent);
-               padding-left: 6px;
-          }
-
-          .footer-bottom {
-               border-top: 1px solid var(--border);
-               padding-top: 1.75rem;
-               display: flex;
-               justify-content: space-between;
-               align-items: center;
-               flex-wrap: wrap;
-               gap: 1.5rem;
-          }
-
-          .footer-copyright {
-               color: var(--text-tertiary);
-               font-size: 0.9rem;
-          }
-
-          .footer-social {
-               display: flex;
-               gap: 0.75rem;
-          }
-
-          .footer-social a {
-               width: 42px;
-               height: 42px;
-               display: flex;
-               align-items: center;
-               justify-content: center;
-               border-radius: 11px;
-               background: var(--bg-card);
-               color: var(--accent);
-               border: 1px solid var(--border);
-               font-size: 1.05rem;
-          }
-
-          .footer-social a:hover {
-               background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-               color: var(--bg-dark);
-               transform: translateY(-3px);
-               box-shadow: 0 8px 24px var(--accent-glow);
-          }
-
-          /* Back to top */
-          #topBtn {
-               position: fixed;
-               bottom: 9rem;
-               right: 1.75rem;
-               width: 48px;
-               height: 48px;
-               border-radius: 12px;
-               background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-               color: var(--bg-dark);
-               border: none;
-               cursor: pointer;
-               display: none;
-               align-items: center;
-               justify-content: center;
-               font-size: 1.2rem;
-               box-shadow: 0 8px 28px var(--accent-glow);
-               z-index: 999;
-               transition: all 0.3s ease;
-          }
-
-          #topBtn:hover {
-               transform: translateY(-3px);
-               box-shadow: 0 12px 36px rgba(56, 189, 248, 0.4);
-          }
-
-          #topBtn.show { display: flex; }
-
-          /* Tawk overrides */
-          iframe[src*="tawk.to"],
-          .tawk-min-container,
-          #tawk_frame,
-          .tawk-platform {
-               z-index: 9998 !important;
-          }
-
-          /* ===== RESPONSIVE ===== */
-          @media (max-width: 1100px) {
-               .awards-grid { grid-template-columns: repeat(2, 1fr); }
-               .footer-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
-          }
-
-          @media (max-width: 900px) {
-               .hero-content,
-               .about-content {
-                    grid-template-columns: 1fr;
-                    gap: 3rem;
-               }
-
-               .hero-video iframe { min-height: 320px; }
-
-               .services-grid,
-               .updates-grid {
-                    grid-template-columns: 1fr;
-               }
-
-               .nav-links { display: none; }
-               .hamburger { display: flex; }
-          }
-
-          @media (max-width: 640px) {
-               .navbar-container { padding: 0 1.25rem; height: 64px; }
-               .social-links { display: none; }
-
-               section { padding: 4rem 1.25rem; }
-               #home {
-                    margin-top: 64px;
-                    padding: 3rem 1.25rem 4rem;
-               }
-
-               .contact-form {
-                    grid-template-columns: 1fr;
-                    padding: 1.75rem;
-               }
-
-               .form-submit {
-                    flex-direction: column;
-                    align-items: flex-start;
-               }
-
-               .awards-grid { grid-template-columns: 1fr; }
-               .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
-
-               .footer-bottom {
-                    flex-direction: column;
-                    align-items: flex-start;
-               }
-
-               #clients { padding: 3.5rem 1.25rem; }
-               .clients-list img { height: 48px; }
-
-               .mobile-menu { top: 64px; height: calc(100vh - 64px); }
-          }
-     </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="We drive growth with digital innovation and cutting-edge solutions, empowering transformation and success.">
+  <meta name="keywords" content="Neroitech Inventions, Digital Innovation, IT Solutions, Web3">
+  <meta name="author" content="Neroitech Inventions">
+  <title>Neroitech Inventions - Digital Innovation & Growth</title>
+  <link href="images/favicon.ico" rel="icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QM106YDX6N');
+  </script>
+  <style>
+    :root {
+      --bg: #07090f;
+      --bg-elevated: #0e1219;
+      --bg-card: #121722;
+      --bg-card-hover: #181e2c;
+      --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.14);
+      --text: #f4f6fb;
+      --text-muted: #9aa3b5;
+      --text-dim: #6b7385;
+      --accent: #5eead4;
+      --accent-2: #818cf8;
+      --accent-soft: rgba(94,234,212,0.12);
+      --radius: 16px;
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* Nav */
+    nav {
+      position: fixed; inset: 0 0 auto 0; z-index: 100;
+      height: 68px;
+      display: flex; align-items: center;
+      background: rgba(7,9,15,0.72);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      width: min(1200px, calc(100% - 40px));
+      margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 800; font-size: 1.05rem; color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .brand img { width: 36px; height: 36px; border-radius: 10px; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { color: var(--text-muted); font-size: 0.92rem; font-weight: 500; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #041016; font-weight: 700; font-size: 0.88rem;
+      padding: 9px 16px; border-radius: 999px;
+      display: inline-flex; align-items: center; gap: 7px; border: 0; cursor: pointer;
+    }
+    .nav-cta i { font-size: 0.95rem; }
+    .social-links { display: flex; gap: 8px; align-items: center; }
+    .social-links a {
+      width: 34px; height: 34px; display: grid; place-items: center;
+      border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-muted); font-size: 0.9rem;
+    }
+    .social-links a:hover { color: var(--accent); border-color: var(--border-strong); background: var(--bg-card-hover); }
+    .hamburger { display: none; background: none; border: 0; color: var(--text); font-size: 1.3rem; cursor: pointer; }
+    .mobile-menu {
+      display: none; position: fixed; inset: 68px 0 0 0; z-index: 99;
+      background: rgba(7,9,15,0.96); backdrop-filter: blur(12px);
+      padding: 24px; flex-direction: column; gap: 8px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: var(--text); padding: 14px 4px; border-bottom: 1px solid var(--border); font-weight: 600; }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh; padding: 120px 20px 80px;
+      display: flex; align-items: center;
+      position: relative;
+      background:
+        linear-gradient(135deg, rgba(7,9,15,0.88) 0%, rgba(7,9,15,0.72) 45%, rgba(7,9,15,0.86) 100%),
+        url('images/home-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .hero-inner {
+      width: min(1200px, 100%); margin: 0 auto;
+      display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--accent); font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      line-height: 1.08; letter-spacing: -0.04em; font-weight: 800; margin-bottom: 18px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero p.lead { color: var(--text-muted); font-size: 1.1rem; max-width: 520px; margin-bottom: 28px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 22px; border-radius: 12px; font-weight: 700; font-size: 0.95rem;
+      border: 0; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #041016; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(94,234,212,0.25); }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border-strong); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.04); }
+    .hero-meta { color: var(--text-dim); font-size: 0.92rem; }
+    .hero-meta strong { color: var(--text); font-weight: 600; }
+    .hero-visual {
+      border-radius: 20px; overflow: hidden;
+      border: 1px solid var(--border); background: var(--bg-card);
+      box-shadow: var(--shadow);
+      aspect-ratio: 16/10;
+    }
+    .hero-visual iframe { width: 100%; height: 100%; border: 0; }
+
+    /* Sections */
+    section { padding: 90px 20px; }
+    .wrap { width: min(1200px, 100%); margin: 0 auto; }
+    .section-head { text-align: center; margin-bottom: 48px; }
+    .section-head h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem); letter-spacing: -0.03em; margin-bottom: 10px;
+    }
+    .section-head p { color: var(--text-muted); max-width: 520px; margin: 0 auto; }
+
+    /* About */
+    #about { background: var(--bg-elevated); }
+    .about-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; align-items: start; }
+    .about-text h2 { font-size: 2rem; letter-spacing: -0.03em; margin-bottom: 14px; }
+    .about-text p { color: var(--text-muted); margin-bottom: 14px; }
+    .services { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 20px; transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .card:hover { transform: translateY(-4px); border-color: var(--border-strong); background: var(--bg-card-hover); }
+    .card-icon {
+      width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+      background: var(--accent-soft); color: var(--accent); margin-bottom: 12px; font-size: 1.1rem;
+    }
+    .card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .card p { color: var(--text-muted); font-size: 0.92rem; margin: 0; }
+
+    /* Updates */
+    .updates { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .update {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    .update:hover { transform: translateY(-4px); border-color: var(--border-strong); }
+    .update img { width: 100%; height: 180px; object-fit: cover; background: #151a26; }
+    .update-body { padding: 18px 20px 20px; }
+    .update-date { color: var(--accent); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+    .update h3 { font-size: 1.15rem; margin-bottom: 8px; }
+    .update h3 a { color: var(--text); }
+    .update h3 a:hover { color: var(--accent); }
+    .update p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px; }
+    .link-arrow { color: var(--accent); font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px; }
+
+    /* Awards */
+    #awards { background: var(--bg-elevated); }
+    .awards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .award { text-align: center; }
+    .award-icon {
+      width: 64px; height: 64px; margin: 0 auto 12px; border-radius: 16px;
+      display: grid; place-items: center; font-size: 1.5rem; color: var(--accent);
+      background: linear-gradient(145deg, rgba(94,234,212,0.12), rgba(129,140,248,0.08));
+      border: 1px solid var(--border);
+    }
+    .award h3 { font-size: 1rem; margin-bottom: 4px; }
+    .award small { color: var(--text-dim); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+
+    /* Clients */
+    .clients-track { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+    .clients-row { display: flex; gap: 40px; align-items: center; animation: scroll 28s linear infinite; width: max-content; }
+    .clients-row img { height: 42px; width: auto; opacity: 0.75; filter: grayscale(1) brightness(1.4); }
+    @keyframes scroll { to { transform: translateX(-50%); } }
+
+    /* Contact */
+    #contact { background: var(--bg-elevated); }
+    .contact-form {
+      max-width: 720px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 28px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); }
+    input, select, textarea {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 14px; color: var(--text); font: inherit; font-size: 0.95rem;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+    textarea { min-height: 110px; resize: vertical; }
+    .form-submit { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 6px; }
+    .form-link { color: var(--text-dim); font-size: 0.9rem; }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 48px 20px 24px; }
+    .footer-grid { width: min(1200px, 100%); margin: 0 auto 28px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 28px; }
+    .footer-grid h3 { font-size: 0.95rem; margin-bottom: 12px; }
+    .footer-grid p, .footer-grid a { color: var(--text-muted); font-size: 0.9rem; }
+    .footer-grid ul { list-style: none; }
+    .footer-grid li { margin-bottom: 8px; }
+    .footer-grid a:hover { color: var(--accent); }
+    .footer-bottom {
+      width: min(1200px, 100%); margin: 0 auto; padding-top: 18px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+      color: var(--text-dim); font-size: 0.85rem;
+    }
+    .footer-social { display: flex; gap: 10px; }
+    .footer-social a {
+      width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px;
+      background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);
+    }
+    .footer-social a:hover { color: var(--accent); border-color: var(--border-strong); }
+
+    #topBtn {
+      position: fixed; bottom: 22px; right: 22px; width: 44px; height: 44px; border-radius: 50%;
+      background: var(--bg-card); border: 1px solid var(--border); color: var(--text);
+      display: none; place-items: center; cursor: pointer; z-index: 50;
+    }
+    #topBtn.show { display: grid; }
+
+    /* AI Terminal */
+    .terminal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+      display: none; align-items: flex-end; justify-content: flex-end; padding: 20px;
+    }
+    .terminal-overlay.open { display: flex; }
+    .terminal {
+      width: min(420px, 100%); height: min(560px, calc(100vh - 40px));
+      background: #0c1018; border: 1px solid var(--border-strong); border-radius: 16px;
+      box-shadow: var(--shadow); display: flex; flex-direction: column; overflow: hidden;
+    }
+    .terminal-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px; border-bottom: 1px solid var(--border); background: #10151f;
+    }
+    .terminal-head strong { font-size: 0.92rem; display: flex; align-items: center; gap: 8px; }
+    .terminal-head strong i { color: var(--accent); }
+    .terminal-head button { background: none; border: 0; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
+    .terminal-log {
+      flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px;
+      font-size: 0.9rem;
+    }
+    .msg { max-width: 90%; padding: 10px 12px; border-radius: 12px; line-height: 1.45; }
+    .msg.bot { background: #161c28; border: 1px solid var(--border); color: var(--text); align-self: flex-start; }
+    .msg.user { background: linear-gradient(135deg, rgba(94,234,212,0.18), rgba(129,140,248,0.18)); border: 1px solid var(--border); align-self: flex-end; }
+    .msg a { color: var(--accent); }
+    .terminal-input {
+      display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--border); background: #10151f;
+    }
+    .terminal-input input {
+      flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px 12px; color: var(--text); font: inherit;
+    }
+    .terminal-input button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #041016;
+      border: 0; border-radius: 10px; padding: 0 14px; font-weight: 700; cursor: pointer;
+    }
+    .suggest { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .suggest button {
+      background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+      border-radius: 999px; padding: 4px 10px; font-size: 0.75rem; cursor: pointer;
+    }
+    .suggest button:hover { color: var(--text); border-color: var(--border-strong); }
+
+    @media (max-width: 900px) {
+      .nav-links, .nav-cta, .social-links { display: none; }
+      .hamburger { display: block; }
+      .hero-inner, .about-grid, .updates, .awards, .footer-grid, .contact-form { grid-template-columns: 1fr; }
+      .hero { padding-top: 100px; }
+      .hero-visual { aspect-ratio: 16/9; }
+    }
+  </style>
 </head>
 <body>
+  <nav>
+    <div class="nav-inner">
+      <a href="#home" class="brand">
+        <img src="images/favicon.ico" alt="">
+        Neroitech Inventions
+      </a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#updates">Updates</a></li>
+        <li><a href="#awards">Awards</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="social-links">
+        <a href="https://www.linkedin.com/company/neroitech-inventions" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="https://medium.com/@neroitech-inventions" target="_blank" aria-label="Medium"><i class="fa-brands fa-medium"></i></a>
+        <a href="https://x.com/neroitech" target="_blank" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="https://www.youtube.com/@neroitech-inventions" target="_blank" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+      <button type="button" class="nav-cta" id="openTerminal" title="AI Assist">
+        <i class="fa-solid fa-robot"></i> AI Assist
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about">About</a>
+    <a href="#updates">Updates</a>
+    <a href="#awards">Awards</a>
+    <a href="#contact">Contact</a>
+    <a href="https://www.linkedin.com/company/neroitech-inventions" target="_blank">LinkedIn</a>
+    <a href="https://medium.com/@neroitech-inventions" target="_blank">Medium</a>
+    <a href="https://x.com/neroitech" target="_blank">X</a>
+  </div>
 
-     <!-- Preloader -->
-     <section class="preloader">
-          <div class="spinner"></div>
-     </section>
+  <header class="hero" id="home">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow"><i class="fa-solid fa-sparkles"></i> Since 2016</div>
+        <h1>Empowering growth through <span>digital innovation.</span></h1>
+        <p class="lead">We build digital solutions, research, and content that help businesses reach wider audiences and grow with confidence.</p>
+        <div class="hero-actions">
+          <a href="#about" class="btn btn-primary">Get started <i class="fa-solid fa-arrow-right"></i></a>
+          <a href="#updates" class="btn btn-ghost">See our work</a>
+        </div>
+        <div class="hero-meta">
+          <strong>(+234) 810-785-4712</strong><br>
+          For innovative digital solutions, content and research
+        </div>
+      </div>
+      <div class="hero-visual">
+        <iframe src="https://www.youtube.com/embed/7JlzdqYJ0oM?si=WSyU6JDFBVrswKmj" allowfullscreen title="Neroitech video"></iframe>
+      </div>
+    </div>
+  </header>
 
-     <!-- Navigation -->
-     <nav>
-          <div class="navbar-container">
-               <a href="#home" class="navbar-brand">
-                    <img src="images/about-image.png" alt="Neroitech">
-                    <span>Neroitech Inventions</span>
-               </a>
-               
-               <div class="nav-wrapper">
-                    <ul class="nav-links">
-                         <li><a href="#home">Home</a></li>
-                         <li><a href="#about">About</a></li>
-                         <li><a href="#updates">Updates</a></li>
-                         <li><a href="#awards">Awards</a></li>
-                         <li><a href="#contact">Contact</a></li>
-                    </ul>
+  <section id="about">
+    <div class="wrap about-grid">
+      <div class="about-text">
+        <h2>Who we are</h2>
+        <p>As an award-winning IT firm since 2016, we build digital solutions that empower growth through innovation.</p>
+        <p>Collaboration is at our core. We partner with clients to solve challenges through innovative technology, strategic research, dynamic content, and compelling visuals.</p>
+        <div class="hero-actions" style="margin-top:20px;">
+          <a href="#contact" class="btn btn-primary"><i class="fa-solid fa-envelope"></i> Work with us</a>
+          <a href="#awards" class="btn btn-ghost">See awards</a>
+        </div>
+      </div>
+      <div class="services">
+        <div class="card">
+          <div class="card-icon"><i class="fa-solid fa-pen-fancy"></i></div>
+          <h3>Writing & Research</h3>
+          <p>In-depth reports, pitch decks, and high-impact content that stand out and build authority.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fa-solid fa-people-group"></i></div>
+          <h3>Community Building</h3>
+          <p>Engage-to-earn systems, quest tools, and strategies that turn audiences into active communities.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fa-solid fa-video"></i></div>
+          <h3>Content Creation</h3>
+          <p>Visually rich ads, social content, and multimedia that reach and engage wider audiences.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fa-solid fa-cog"></i></div>
+          <h3>IT Support</h3>
+          <p>Web tools, digital infrastructure, and technology solutions built to solve real-world problems.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-                    <div class="social-links">
-                         <a href="https://www.linkedin.com/company/neroitech-inventions" target="_blank" title="LinkedIn">
-                              <i class="fab fa-linkedin"></i>
-                         </a>
-                         <a href="https://medium.com/@neroitech-inventions" target="_blank" title="Medium">
-                              <i class="fab fa-medium"></i>
-                         </a>
-                         <a href="https://x.com/neroitech" target="_blank" title="X (Twitter)">
-                              <i class="fab fa-x-twitter"></i>
-                         </a>
-                         <a href="https://www.youtube.com/@neroitech-inventions" target="_blank" title="YouTube">
-                              <i class="fab fa-youtube"></i>
-                         </a>
-                    </div>
-               </div>
-
-               <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-               </button>
+  <section id="updates">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Latest updates</h2>
+        <p>Discover what we've been building</p>
+      </div>
+      <div class="updates">
+        <article class="update">
+          <img src="images/blog-image1.jpg" alt="SnappQuest">
+          <div class="update-body">
+            <div class="update-date">September 2026</div>
+            <h3><a href="https://niti.com.ng/tools/nowalletconnect/" target="_blank">NoWalletConnect</a></h3>
+            <p>Walletless USDT payment gateway for Polygon and Solana that automatically verifies payments.</p>
+            <a class="link-arrow" href="https://niti.com.ng/tools/nowalletconnect/" target="_blank">View app <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
           </div>
-     </nav>
-
-     <!-- Mobile Menu -->
-     <div class="mobile-menu" id="mobileMenu">
-          <a href="#home">Home</a>
-          <a href="#about">About</a>
-          <a href="#updates">Updates</a>
-          <a href="#awards">Awards</a>
-          <a href="#contact">Contact</a>
-          <a href="https://www.linkedin.com/company/neroitech-inventions" target="_blank">LinkedIn</a>
-          <a href="https://medium.com/@neroitech-inventions" target="_blank">Medium</a>
-          <a href="https://x.com/neroitech" target="_blank">X (Twitter)</a>
-          <a href="https://www.youtube.com/@neroitech-inventions" target="_blank">YouTube</a>
-     </div>
-
-     <!-- Hero Section -->
-     <section id="home">
-          <div class="hero-content">
-               <div class="hero-text">
-                    <h1>Empowering growth through digital innovation.</h1>
-                    <button class="hero-cta" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'}); closeMobileMenu();">
-                         <i class="fas fa-arrow-right"></i> Get Started
-                    </button>
-                    <div class="hero-contact">
-                         <p>📞 (+234) 810-785-4712</p>
-                         <small>For innovative digital solutions, content and research</small>
-                    </div>
-               </div>
-               <div class="hero-video">
-                    <iframe src="https://www.youtube.com/embed/7JlzdqYJ0oM?si=WSyU6JDFBVrswKmj" allowfullscreen=""></iframe>
-               </div>
+        </article>
+        <article class="update">
+          <img src="images/blog-image2.jpg" alt="ZeroConnect">
+          <div class="update-body">
+            <div class="update-date">November 2026</div>
+            <h3><a href="https://niti.com.ng/tools/sharednote" target="_blank">SharedNote</a></h3>
+            <p>A collaborative note-taking tool that allows users to create, edit, and share notes in real-time.</p>
+            <a class="link-arrow" href="https://niti.com.ng/tools/sharednote" target="_blank">View app <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
           </div>
-     </section>
-
-     <!-- About Section -->
-     <section id="about">
-          <div class="about-content">
-               <div class="about-text">
-                    <h2>Who We Are</h2>
-                    <p>As an award-winning IT firm since 2016, we build digital solutions that empower growth through innovation.</p>
-                    <p>Collaboration is at our core. We partner with clients to solve challenges through innovative technology, strategic research, dynamic content, and compelling visuals.</p>
-                    <div class="about-buttons">
-                         <a href="#contact" class="btn-primary">
-                              <i class="fas fa-envelope"></i> Work With Us
-                         </a>
-                         <a href="#awards" class="btn-secondary">
-                              See Our Awards <i class="fas fa-arrow-right"></i>
-                         </a>
-                    </div>
-               </div>
-
-               <div class="services-grid">
-                    <div class="service-card">
-                         <div class="service-icon">
-                              <i class="fas fa-pen-fancy"></i>
-                         </div>
-                         <h4>Writing & Research</h4>
-                         <p>In-depth reports, pitch decks, and high-impact content that stand out and build authority.</p>
-                    </div>
-
-                    <div class="service-card">
-                         <div class="service-icon">
-                              <i class="fas fa-people-group"></i>
-                         </div>
-                         <h4>Community Building</h4>
-                         <p>Engage-to-earn systems, quest tools, and strategies that turn audiences into active communities.</p>
-                    </div>
-
-                    <div class="service-card">
-                         <div class="service-icon">
-                              <i class="fas fa-video"></i>
-                         </div>
-                         <h4>Content Creation</h4>
-                         <p>Visually rich ads, social content, and multimedia that reach and engage wider audiences.</p>
-                    </div>
-
-                    <div class="service-card">
-                         <div class="service-icon">
-                              <i class="fas fa-cog"></i>
-                         </div>
-                         <h4>IT Support</h4>
-                         <p>Web tools, digital infrastructure, and innovative technology solutions built to solve real-world problems.</p>
-                    </div>
-               </div>
+        </article>
+        <article class="update">
+          <img src="images/blog-image3.jpg" alt="2025 Recap">
+          <div class="update-body">
+            <div class="update-date">January 2026</div>
+            <h3><a href="https://medium.com/@neroitech-inventions/neroitech-inventions-a-decade-of-vision-the-trials-of-web3-and-the-rise-of-a-new-era-2025-recap-982730d99f41" target="_blank">2025 Recap</a></h3>
+            <p>A Decade of Vision and the Rise of a New Era, Our NITI 2025 Recap and Our 2026 Outlook.</p>
+            <a class="link-arrow" href="https://medium.com/@neroitech-inventions/neroitech-inventions-a-decade-of-vision-the-trials-of-web3-and-the-rise-of-a-new-era-2025-recap-982730d99f41" target="_blank">Read more <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
           </div>
-     </section>
-
-     <!-- Updates Section -->
-     <section id="updates">
-          <div class="section-title">
-               <h2>Latest Updates</h2>
-               <p>Discover what we've been building</p>
+        </article>
+        <article class="update">
+          <img src="images/blog-image4.jpg" alt="Solana DePIN Report">
+          <div class="update-body">
+            <div class="update-date">July 2025</div>
+            <h3><a href="https://earn.superteam.fun/listing/write-a-5-10-page-report-on-solana-depin" target="_blank">Report on Solana DePIN</a></h3>
+            <p>Our Solana DePIN research was selected as the #1 report by the Solana Foundation.</p>
+            <a class="link-arrow" href="https://earn.superteam.fun/listing/write-a-5-10-page-report-on-solana-depin" target="_blank">View report <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
           </div>
+        </article>
+      </div>
+    </div>
+  </section>
 
-          <div class="updates-grid">
-               <div class="update-card">
-                    <img src="images/blog-image1.jpg" alt="SnappQuest" class="update-image">
-                    <div class="update-content">
-                         <div class="update-date">
-                              <i class="far fa-calendar"></i> November 2025
-                         </div>
-                         <h3><a href="https://niti.com.ng/snappquest">Meet SnappQuest</a></h3>
-                         <p>Turn your link into a promotion quest. Get engagement for free, or boost it for more reach.</p>
-                         <a href="https://niti.com.ng/snappquest" target="_blank" class="btn-view">
-                              View App <i class="fas fa-external-link-alt"></i>
-                         </a>
-                    </div>
-               </div>
+  <section id="awards">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Our recognition</h2>
+        <p>Awards from leading organizations</p>
+      </div>
+      <div class="awards">
+        <div class="card award">
+          <div class="award-icon"><i class="fa-solid fa-trophy"></i></div>
+          <h3>Witnet</h3>
+          <small>Community Creation Challenge</small>
+        </div>
+        <div class="card award">
+          <div class="award-icon"><i class="fa-solid fa-award"></i></div>
+          <h3>Trava Finance</h3>
+          <small>Creative Content Contest</small>
+        </div>
+        <div class="card award">
+          <div class="award-icon"><i class="fa-solid fa-medal"></i></div>
+          <h3>Verse</h3>
+          <small>Vibe Coding Competition</small>
+        </div>
+        <div class="card award">
+          <div class="award-icon"><i class="fa-solid fa-star"></i></div>
+          <h3>Solana Collective</h3>
+          <small>fALL OUT Content Hackathon</small>
+        </div>
+      </div>
+    </div>
+  </section>
 
-               <div class="update-card">
-                    <img src="images/blog-image2.jpg" alt="ZeroConnect" class="update-image">
-                    <div class="update-content">
-                         <div class="update-date">
-                              <i class="far fa-calendar"></i> September 2026
-                         </div>
-                         <h3><a href="https://niti.com.ng/tools/nowalletconnect/">NoWalletConnect</a></h3>
-                         <p>Walletless USDT payment gateway for Polygon and Solana that automatically verifies payments.</p>
-                         <a href="https://niti.com.ng/tools/nowalletconnect/" target="_blank" class="btn-view">
-                              View App <i class="fas fa-external-link-alt"></i>
-                         </a>
-                    </div>
-               </div>
+  <section id="clients">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Trusted by industry leaders</h2>
+        <p>We've helped innovative companies grow through digital solutions, research, content, and creative technology</p>
+      </div>
+      <div class="clients-track">
+        <div class="clients-row">
+          <img src="images/client1.png" alt="client"><img src="images/client2.png" alt="client"><img src="images/client3.png" alt="client"><img src="images/client4.png" alt="client"><img src="images/client5.png" alt="client"><img src="images/client6.png" alt="client"><img src="images/client7.png" alt="client">
+          <img src="images/client1.png" alt="client"><img src="images/client2.png" alt="client"><img src="images/client3.png" alt="client"><img src="images/client4.png" alt="client"><img src="images/client5.png" alt="client"><img src="images/client6.png" alt="client"><img src="images/client7.png" alt="client">
+        </div>
+      </div>
+    </div>
+  </section>
 
-               <div class="update-card">
-                    <img src="images/blog-image3.jpg" alt="2025 Recap" class="update-image">
-                    <div class="update-content">
-                         <div class="update-date">
-                              <i class="far fa-calendar"></i> January 2026
-                         </div>
-                         <h3><a href="https://medium.com/@neroitech-inventions/neroitech-inventions-a-decade-of-vision-the-trials-of-web3-and-the-rise-of-a-new-era-2025-recap-982730d99f41">2025 Recap</a></h3>
-                         <p>A Decade of Vision and the Rise of a New Era, Our NITI 2025 Recap and Our 2026 Outlook.</p>
-                         <a href="https://medium.com/@neroitech-inventions/neroitech-inventions-a-decade-of-vision-the-trials-of-web3-and-the-rise-of-a-new-era-2025-recap-982730d99f41" target="_blank" class="btn-view">
-                              Read More <i class="fas fa-external-link-alt"></i>
-                         </a>
-                    </div>
-               </div>
+  <section id="contact">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Get in touch</h2>
+        <p>Let's work together to build something innovative.</p>
+      </div>
+      <form id="contact-form" class="contact-form" action="https://docs.google.com/forms/d/e/1FAIpQLSdnqEaQNwGpesZvnacwucRFbRzD4pmOCNJPAeHn3YlFUb3IBg/formResponse" method="POST" onsubmit="handleSubmit(event)">
+        <div class="form-group"><label for="name">Full name</label><input type="text" id="name" name="entry.2005620554" placeholder="Your name" required></div>
+        <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="entry.1045781291" placeholder="you@email.com" required></div>
+        <div class="form-group"><label for="phone">Phone</label><input type="tel" id="phone" name="entry.1166974658" placeholder="+234..." required></div>
+        <div class="form-group">
+          <label for="budget">Budget</label>
+          <select id="budget" name="entry.868891004" required>
+            <option value="" disabled selected>Select range</option>
+            <option>$50 to $100</option><option>$100 to $500</option><option>$500 to $1000</option>
+            <option>$1000 to $4000</option><option>$4000 to $7000</option><option>$7000 to $10000</option><option>$10000 or more</option>
+          </select>
+        </div>
+        <div class="form-group full"><label for="message">Project requirements</label><textarea id="message" name="entry.839337160" placeholder="Tell us about your project..." required></textarea></div>
+        <div class="form-submit">
+          <button class="btn btn-primary" type="submit">Send message</button>
+          <span class="form-link">or <a href="https://forms.gle/55vuh5MoC4zy4VjS9" target="_blank">use NITI forms →</a></span>
+        </div>
+      </form>
+    </div>
+  </section>
 
-               <div class="update-card">
-                    <img src="images/blog-image4.jpg" alt="Solana DePIN Report" class="update-image">
-                    <div class="update-content">
-                         <div class="update-date">
-                              <i class="far fa-calendar"></i> July 2025
-                         </div>
-                         <h3><a href="https://earn.superteam.fun/listing/write-a-5-10-page-report-on-solana-depin">Report on Solana DePIN</a></h3>
-                         <p>Our Solana DePIN research was selected as the #1 report by the Solana Foundation.</p>
-                         <a href="https://earn.superteam.fun/listing/write-a-5-10-page-report-on-solana-depin" target="_blank" class="btn-view">
-                              View Report <i class="fas fa-external-link-alt"></i>
-                         </a>
-                    </div>
-               </div>
-          </div>
-     </section>
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h3>Neroitech Inventions</h3>
+        <p>We drive growth through digital innovation, combining technology, research, content, and creative solutions to help businesses reach wider audiences.</p>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#awards">Awards</a></li>
+          <li><a href="https://medium.com/@neroitech-inventions" target="_blank">Blog</a></li>
+          <li><a href="https://drive.google.com/drive/folders/11mGKqDfj_OzY6WTvSrzF7tPnDO92BHIb?usp=sharing" target="_blank">Brand assets</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Portfolio</h3>
+        <ul>
+          <li><a href="https://niti.com.ng/snappquest" target="_blank">SnappQuest</a></li>
+          <li><a href="https://niti.com.ng/tools/nowalletconnect/" target="_blank">NoWalletConnect</a></li>
+          <li><a href="https://t.me/BlokFiMedia" target="_blank">BlokFi Media</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Tools</h3>
+        <ul>
+          <li><a href="https://niti.com.ng/tools/resume-builder" target="_blank">Free Resume Builder</a></li>
+          <li><a href="https://niti.com.ng/tools/neroiedit" target="_blank">Free Video Editor</a></li>
+          <li><a href="https://niti.com.ng/tools/sharednote" target="_blank">Online Notepad</a></li>
+          <li><a href="https://niti.com.ng/tools/gig-builder" target="_blank">Gig Builder</a></li>
+          <li><a href="https://niti.com.ng/tools/html-live" target="_blank">HTML Live Preview</a></li>
+          <li><a href="https://niti.com.ng/tools/ip-detector" target="_blank">My IP Address</a></li>
+          <li><a href="https://urlmini.github.io" target="_blank">URL Shortener</a></li>
+          <li><a href="https://niti.com.ng/tools/qrcode" target="_blank">QR Code Generator</a></li>
+          <li><a href="https://niti.com.ng/tools/quote-generator" target="_blank">Quote Generator</a></li>
+          <li><a href="https://niti.com.ng/tools/countdown-timer" target="_blank">Countdown Timer</a></li>
+          <li><a href="https://niti.com.ng/tools/x-link-analyzer" target="_blank">X Link Analyzer</a></li>
+          <li><a href="https://niti.com.ng/tools/cross-chain/" target="_blank">Polygon ↔ Solana Bridge</a></li>
+          <li><a href="https://niti.com.ng/tools/bagflow/" target="_blank">Crypto BagFlow</a></li>
+          <li><a href="https://niti.com.ng/tools/btc-prediction-tool" target="_blank">Bitcoin Market Prediction</a></li>
+          <li><a href="https://niti.com.ng/tools/usd-ngn" target="_blank">USD to Naira Rate</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2016–2026 Neroitech Inventions. All rights reserved.</div>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/company/neroitech-inventions" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="https://medium.com/@neroitech-inventions" target="_blank" aria-label="Medium"><i class="fa-brands fa-medium"></i></a>
+        <a href="https://x.com/neroitech" target="_blank" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="https://www.youtube.com/@neroitech-inventions" target="_blank" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+    </div>
+  </footer>
 
-     <!-- Awards Section -->
-     <section id="awards">
-          <div class="section-title">
-               <h2>Our Recognition</h2>
-               <p>Awards and recognition from leading organizations</p>
-          </div>
+  <div class="terminal-overlay" id="terminalOverlay">
+    <div class="terminal" role="dialog" aria-label="AI Assist">
+      <div class="terminal-head">
+        <strong><i class="fa-solid fa-robot"></i> AI Assist</strong>
+        <button type="button" id="closeTerminal" aria-label="Close">×</button>
+      </div>
+      <div class="terminal-log" id="terminalLog"></div>
+      <form class="terminal-input" id="terminalForm">
+        <input id="terminalInput" type="text" placeholder="Ask about Neroitech..." autocomplete="off">
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
 
-          <div class="awards-grid">
-               <div class="award-card">
-                    <div class="award-icon">
-                         <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="award-info">
-                         <h3>Witnet</h3>
-                         <small>Community Creation Challenge</small>
-                    </div>
-               </div>
+  <button id="topBtn" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
 
-               <div class="award-card">
-                    <div class="award-icon">
-                         <i class="fas fa-award"></i>
-                    </div>
-                    <div class="award-info">
-                         <h3>Trava Finance</h3>
-                         <small>Creative Content Contest</small>
-                    </div>
-               </div>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
 
-               <div class="award-card">
-                    <div class="award-icon">
-                         <i class="fas fa-medal"></i>
-                    </div>
-                    <div class="award-info">
-                         <h3>Verse</h3>
-                         <small>Vibe Coding Competition</small>
-                    </div>
-               </div>
+    const topBtn = document.getElementById('topBtn');
+    window.addEventListener('scroll', () => topBtn.classList.toggle('show', window.scrollY > 300));
+    topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-               <div class="award-card">
-                    <div class="award-icon">
-                         <i class="fas fa-star"></i>
-                    </div>
-                    <div class="award-info">
-                         <h3>Solana Collective</h3>
-                         <small>fALL OUT Content Hackathon</small>
-                    </div>
-               </div>
-          </div>
-     </section>
+    const openTerminal = document.getElementById('openTerminal');
+    const closeTerminal = document.getElementById('closeTerminal');
+    const terminalOverlay = document.getElementById('terminalOverlay');
+    const terminalLog = document.getElementById('terminalLog');
+    const terminalForm = document.getElementById('terminalForm');
+    const terminalInput = document.getElementById('terminalInput');
 
-     <!-- Clients Section -->
-     <section id="clients">
-          <div class="section-title">
-               <h2>Trusted by industry leaders</h2>
-               <p>We've helped innovative companies grow through digital solutions, research, content, and creative technology</p>
-          </div>
+    const knowledge = [
+      { keys: ['who', 'about', 'company', 'neroitech', 'niti'], reply: 'Neroitech Inventions (NITI) is an award-winning IT firm founded in 2016. We build digital solutions, research, content, and creative technology that help businesses grow.' },
+      { keys: ['contact', 'email', 'phone', 'reach', 'hire', 'work'], reply: 'You can reach us at (+234) 810-785-4712 or use the contact form on this page. We help with digital solutions, content, and research.' },
+      { keys: ['tool', 'tools', 'app', 'apps'], reply: 'Our tools include: Resume Builder, Video Editor, SharedNote (Online Notepad), Gig Builder, HTML Live Preview, My IP Address, URL Shortener, QR Code Generator, Quote Generator, Countdown Timer, X Link Analyzer, Polygon↔Solana Bridge, Crypto BagFlow, Bitcoin Market Prediction, and USD to Naira Rate. Find them in the footer.' },
+      { keys: ['sharednote', 'notepad', 'note'], reply: 'SharedNote is our online notepad. You can create, edit, and share notes, including private encrypted links and QR sharing. Visit niti.com.ng/tools/sharednote' },
+      { keys: ['award', 'awards', 'recognition'], reply: 'We have been recognized by Witnet (Community Creation Challenge), Trava Finance (Creative Content Contest), Verse (Vibe Coding Competition), and Solana Collective (fALL OUT Content Hackathon).' },
+      { keys: ['snappquest', 'snapp'], reply: 'SnappQuest turns a link into a promotion quest. Get engagement for free or boost it for more reach. Visit niti.com.ng/snappquest' },
+      { keys: ['nowallet', 'wallet', 'usdt', 'payment'], reply: 'NoWalletConnect is a walletless USDT payment gateway for Polygon and Solana that automatically verifies payments. Visit niti.com.ng/tools/nowalletconnect/' },
+      { keys: ['depin', 'solana', 'report', 'research'], reply: 'Our Solana DePIN research was selected as the #1 report by the Solana Foundation. We also publish research and recaps on Medium.' },
+      { keys: ['service', 'services', 'what do you do', 'offer'], reply: 'We offer Writing & Research, Community Building, Content Creation, and IT Support — from reports and pitch decks to web tools and digital infrastructure.' },
+      { keys: ['founded', 'when', 'started', '2016'], reply: 'Neroitech Inventions has been building digital solutions since 2016.' },
+      { keys: ['social', 'linkedin', 'medium', 'twitter', 'x', 'youtube'], reply: 'Find us on LinkedIn (neroitech-inventions), Medium (@neroitech-inventions), X (@neroitech), and YouTube (@neroitech-inventions).' },
+      { keys: ['hello', 'hi', 'hey'], reply: 'Hello. I am Neroitech AI Assist. Ask me about the company, our tools, awards, research, or how to get in touch.' }
+    ];
 
-          <div class="scroll-wrapper">
-               <div class="clients-list">
-                    <img src="images/client1.png" alt="client 1">
-                    <img src="images/client2.png" alt="client 2">
-                    <img src="images/client3.png" alt="client 3">
-                    <img src="images/client4.png" alt="client 4">
-                    <img src="images/client5.png" alt="client 5">
-                    <img src="images/client6.png" alt="client 6">
-                    <img src="images/client7.png" alt="client 7">
-                    <!-- Duplicate for seamless loop -->
-                    <img src="images/client1.png" alt="client 1">
-                    <img src="images/client2.png" alt="client 2">
-                    <img src="images/client3.png" alt="client 3">
-                    <img src="images/client4.png" alt="client 4">
-                    <img src="images/client5.png" alt="client 5">
-                    <img src="images/client6.png" alt="client 6">
-                    <img src="images/client7.png" alt="client 7">
-               </div>
-          </div>
-     </section>
+    function addMsg(text, who) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + who;
+      div.innerHTML = text;
+      terminalLog.appendChild(div);
+      terminalLog.scrollTop = terminalLog.scrollHeight;
+    }
 
-     <!-- Contact Section -->
-     <section id="contact">
-          <div class="section-title">
-               <h2>Get in Touch</h2>
-               <p>Let's work together to build something innovative.</p>
-          </div>
+    function answer(q) {
+      const s = q.toLowerCase();
+      for (const item of knowledge) {
+        if (item.keys.some(k => s.includes(k))) return item.reply;
+      }
+      return 'I can help with Neroitech company info, tools, awards, research, and contact details. Try asking about our tools, awards, SharedNote, or how to reach us.';
+    }
 
-          <div class="contact-container">
-               <form id="contact-form" action="https://docs.google.com/forms/d/e/1FAIpQLSdnqEaQNwGpesZvnacwucRFbRzD4pmOCNJPAeHn3YlFUb3IBg/formResponse" method="POST" class="contact-form" onsubmit="handleSubmit(event)">
-                    <div class="form-group">
-                         <label for="name">Full Name</label>
-                         <input type="text" id="name" name="entry.2005620554" placeholder="Your name" required>
-                    </div>
+    function welcome() {
+      if (terminalLog.childElementCount) return;
+      addMsg('AI Assist is ready. Ask me anything about Neroitech Inventions.<div class="suggest"><button type="button" data-q="What is Neroitech?">What is Neroitech?</button><button type="button" data-q="List NITI tools">List NITI tools</button><button type="button" data-q="Awards">Awards</button><button type="button" data-q="How to contact">Contact</button></div>', 'bot');
+      terminalLog.querySelectorAll('.suggest button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          terminalInput.value = btn.dataset.q;
+          terminalForm.requestSubmit();
+        });
+      });
+    }
 
-                    <div class="form-group">
-                         <label for="email">Email Address</label>
-                         <input type="email" id="email" name="entry.1045781291" placeholder="your@email.com" required>
-                    </div>
+    openTerminal.addEventListener('click', () => {
+      terminalOverlay.classList.add('open');
+      welcome();
+      setTimeout(() => terminalInput.focus(), 50);
+    });
+    closeTerminal.addEventListener('click', () => terminalOverlay.classList.remove('open'));
+    terminalOverlay.addEventListener('click', (e) => { if (e.target === terminalOverlay) terminalOverlay.classList.remove('open'); });
 
-                    <div class="form-group">
-                         <label for="phone">Phone Number</label>
-                         <input type="tel" id="phone" name="entry.1166974658" placeholder="+234..." required>
-                    </div>
+    terminalForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const q = terminalInput.value.trim();
+      if (!q) return;
+      addMsg(q.replace(/</g, '<'), 'user');
+      terminalInput.value = '';
+      setTimeout(() => addMsg(answer(q), 'bot'), 200);
+    });
 
-                    <div class="form-group">
-                         <label for="budget">Budget Level</label>
-                         <select id="budget" name="entry.868891004" required>
-                              <option value="" disabled selected>Select budget range</option>
-                              <option>$50 to $100</option>
-                              <option>$100 to $500</option>
-                              <option>$500 to $1000</option>
-                              <option>$1000 to $4000</option>
-                              <option>$4000 to $7000</option>
-                              <option>$7000 to $10000</option>
-                              <option>$10000 or more</option>
-                         </select>
-                    </div>
-
-                    <div class="form-group full">
-                         <label for="message">Project Requirements</label>
-                         <textarea id="message" name="entry.839337160" placeholder="Tell us about your project..." required></textarea>
-                    </div>
-
-                    <div class="form-submit">
-                         <button type="submit">Send Message</button>
-                         <div class="form-link">
-                              or <a href="https://forms.gle/55vuh5MoC4zy4VjS9" target="_blank">use NITI forms →</a>
-                         </div>
-                    </div>
-               </form>
-          </div>
-     </section>
-
-<!-- Footer -->
-<footer>
-     <div class="footer-container">
-          <div class="footer-grid">
-               <div class="footer-section">
-                    <h3>Neroitech Inventions</h3>
-                    <p>We drive growth through digital innovation, combining technology, research, content, and creative solutions to help businesses reach wider audiences.</p>
-               </div>
-
-               <div class="footer-section">
-                    <h3>Company</h3>
-                    <ul class="footer-links">
-                         <li><a href="#about">About Us</a></li>
-                         <li><a href="#awards">Awards</a></li>
-                         <li><a href="https://medium.com/@neroitech-inventions" target="_blank">Our Blog</a></li>
-                         <li><a href="https://drive.google.com/drive/folders/11mGKqDfj_OzY6WTvSrzF7tPnDO92BHIb?usp=sharing" target="_blank">Brand Assets</a></li>
-                         <li><a href="https://neroitech-inventions.medium.com/neroitech-inventions-unveils-brand-refresh-ushering-in-a-new-era-of-digital-innovation-bb99ba1ac98f" target="_blank">Brand Identity</a></li>
-                    </ul>
-               </div>
-
-               <div class="footer-section">
-                    <h3>Portfolio</h3>
-                    <ul class="footer-links">
-                    <li><a href="https://niti.com.ng/snappquest" target="_blank">SnappQuest</a></li>
-                    <li><a href="https://niti.com.ng/tools/nowalletconnect/" target="_blank">NoWalletConnect</a></li>
-                    <li><a href="https://t.me/BlokFiMedia" target="_blank">BlokFi Media</a></li>
-                    </ul>
-               </div>
-
-               <div class="footer-section">
-                    <h3>Tools</h3>
-                    <ul class="footer-links">
-                         <li><a href="https://niti.com.ng/tools/resume-builder" target="_blank">Free Resume Builder</a></li>
-                         <li><a href="https://niti.com.ng/tools/neroiedit" target="_blank">Free Video Editor</a></li>                         
-                         <li><a href="https://niti.com.ng/tools/sharednote" target="_blank">Online Notepad</a></li>                         
-                         <li><a href="https://niti.com.ng/tools/gig-builder" target="_blank">Gig Builder</a></li>                         
-                         <li><a href="https://niti.com.ng/tools/html-live" target="_blank">HTML Live Preview</a></li>                         
-                         <li><a href="https://niti.com.ng/tools/ip-detector" target="_blank">My IP Address</a></li>                         
-                         <li><a href="https://urlmini.github.io" target="_blank">URL Shortener</a></li>
-                         <li><a href="https://niti.com.ng/tools/qrcode" target="_blank">QR Code Generator</a></li>         
-                         <li><a href="https://niti.com.ng/tools/quote-generator" target="_blank">Quote Generator</a></li>                                                  
-                        <li><a href="https://niti.com.ng/tools/countdown-timer" target="_blank">Countdown Timer</a></li> 
-                        <li><a href="https://niti.com.ng/tools/x-link-analyzer" target="_blank">X Link Analyzer</a></li>
-                         <li><a href="https://niti.com.ng/tools/cross-chain/" target="_blank">Polygon ↔ Solana Bridge</a></li>
-                         <li><a href="https://niti.com.ng/tools/bagflow/" target="_blank">Crypto BagFlow</a></li>
-                         <li><a href="https://niti.com.ng/tools/btc-prediction-tool" target="_blank">Bitcoin Market Prediction</a></li>                         
-                         <li><a href="https://niti.com.ng/tools/usd-ngn" target="_blank">USD to Naira Rate</a></li>
-                    </ul>
-               </div>
-          </div>
-
-          <div class="footer-bottom">
-               <div class="footer-copyright">
-                    <p>&copy; 2016–2026 Neroitech Inventions. All rights reserved.</p>
-               </div>
-               <div class="footer-social">
-                    <a href="https://www.linkedin.com/company/neroitech-inventions" target="_blank" title="LinkedIn">
-                         <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="https://medium.com/@neroitech-inventions" target="_blank" title="Medium">
-                         <i class="fab fa-medium"></i>
-                    </a>
-                    <a href="https://x.com/neroitech" target="_blank" title="X">
-                         <i class="fab fa-x-twitter"></i>
-                    </a>
-                    <a href="https://www.youtube.com/@neroitech-inventions" target="_blank" title="YouTube">
-                         <i class="fab fa-youtube"></i>
-                    </a>
-               </div>
-          </div>
-     </div>
-</footer>
-
-     <!-- Back to Top Button -->
-     <button id="topBtn" title="Back to top">
-          <i class="fas fa-arrow-up"></i>
-     </button>
-
-     <!-- SweetAlert -->
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
-     <script>
-          const hamburger = document.getElementById('hamburgerBtn');
-          const mobileMenu = document.getElementById('mobileMenu');
-
-          hamburger.addEventListener('click', () => {
-               hamburger.classList.toggle('active');
-               mobileMenu.classList.toggle('active');
-          });
-
-          function closeMobileMenu() {
-               hamburger.classList.remove('active');
-               mobileMenu.classList.remove('active');
-          }
-
-          document.querySelectorAll('#mobileMenu a').forEach(link => {
-               link.addEventListener('click', closeMobileMenu);
-          });
-
-          const topBtn = document.getElementById("topBtn");
-          window.addEventListener("scroll", () => {
-               if (window.scrollY > 300) {
-                    topBtn.classList.add("show");
-               } else {
-                    topBtn.classList.remove("show");
-               }
-          });
-
-          topBtn.addEventListener("click", () => {
-               window.scrollTo({ top: 0, behavior: "smooth" });
-          });
-
-          function handleSubmit(event) {
-               event.preventDefault();
-               const form = document.getElementById('contact-form');
-               const formData = new FormData(form);
-
-               fetch(form.action, {
-                    method: 'POST',
-                    body: formData
-               })
-               .then(() => {
-                    Swal.fire({
-                         title: 'Submitted Successfully!',
-                         text: 'Thank you for reaching out to Neroitech Inventions. We\'ll get back to you soon.',
-                         icon: 'success',
-                         confirmButtonText: 'OK',
-                         confirmButtonColor: '#38BDF8'
-                    }).then(() => {
-                         form.reset();
-                         window.location.href = 'https://niti.com.ng';
-                    });
-               })
-               .catch(() => {
-                    Swal.fire({
-                         title: 'Submitted Successfully!',
-                         text: 'Thank you for reaching out to Neroitech Inventions.',
-                         icon: 'success',
-                         confirmButtonText: 'OK',
-                         confirmButtonColor: '#38BDF8'
-                    }).then(() => {
-                         form.reset();
-                         window.location.href = 'https://niti.com.ng';
-                    });
-               });
-          }
-
-          // Tawk.to
-          var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-          (function(){
-               var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-               s1.async = true;
-               s1.src = 'https://embed.tawk.to/63c751d247425128790e3fce/1gn19f843';
-               s1.charset = 'UTF-8';
-               s1.setAttribute('crossorigin', '*');
-               s0.parentNode.insertBefore(s1, s0);
-          })();
-     </script>
-
+    function handleSubmit(event) {
+      event.preventDefault();
+      const form = document.getElementById('contact-form');
+      fetch(form.action, { method: 'POST', body: new FormData(form) })
+        .then(() => Swal.fire({ title: 'Submitted!', text: "Thanks for reaching out. We'll get back to you soon.", icon: 'success', confirmButtonColor: '#5eead4' }))
+        .then(() => { form.reset(); })
+        .catch(() => Swal.fire({ title: 'Submitted!', text: 'Thanks for reaching out.', icon: 'success', confirmButtonColor: '#5eead4' }).then(() => form.reset()));
+    }
+  
+    // Tawk.to support
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function(){
+      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = 'https://embed.tawk.to/63c751d247425128790e3fce/1gn19f843';
+      s1.charset = 'UTF-8';
+      s1.setAttribute('crossorigin', '*');
+      s0.parentNode.insertBefore(s1, s0);
+    })();
+</script>
 </body>
 </html>
