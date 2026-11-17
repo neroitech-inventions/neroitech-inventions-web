@@ -2012,7 +2012,12 @@
       <div class="private-lock-icon" aria-hidden="true"><i class="fa-solid fa-lock"></i></div>
       <h2 id="private-lock-title">This note is password protected</h2>
       <p>Enter the password provided by the sender to decrypt and view this note. Its contents remain hidden until the password is correct.</p>
-      <input id="private-note-password" type="password" autocomplete="current-password" placeholder="Enter note password" required>
+      <div style="position:relative;">
+        <input id="private-note-password" type="password" autocomplete="current-password" placeholder="Enter note password" required style="padding-right:44px;">
+        <button type="button" onclick="togglePasswordVisibility('private-note-password', this)" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:transparent; border:none; cursor:pointer; color:#64748b; font-size:1.1rem;" title="Show password" aria-label="Show password">
+          <i class="fa-solid fa-eye"></i>
+        </button>
+      </div>
       <button type="submit">Unlock and view note</button>
       <div class="private-lock-error" id="private-lock-error" role="alert" aria-live="polite" hidden><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i><span id="private-lock-error-text"></span></div>
     </form>
@@ -3250,7 +3255,12 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
         </label>
         <div id="online-view-password-wrap" hidden style="margin-top:12px;">
           <label for="online-view-password" style="display:block;font-size:.9rem;font-weight:600;margin-bottom:6px;">Create viewing password</label>
-          <input id="online-view-password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" style="box-sizing:border-box;width:100%;padding:12px 14px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;">
+          <div style="position:relative;">
+            <input id="online-view-password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" style="box-sizing:border-box;width:100%;padding:12px 44px 12px 14px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;">
+            <button type="button" onclick="togglePasswordVisibility('online-view-password', this)" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:transparent; border:none; cursor:pointer; color:#64748b; font-size:1.1rem;" title="Show password" aria-label="Show password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
           <small style="display:block;color:#64748b;margin-top:5px;">Keep this password safe. It cannot be recovered if lost.</small>
         </div>`;
       const checkbox = container.querySelector('#online-view-protect');
@@ -3278,19 +3288,43 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
       cancelBtn.onclick = cleanup;
     }
 
+    function togglePasswordVisibility(inputOrId, button) {
+      const input = typeof inputOrId === 'string' ? document.getElementById(inputOrId) : inputOrId;
+      if (!input) return;
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      const icon = button.querySelector('i');
+      if (icon) {
+        icon.className = isPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+      }
+      button.title = isPassword ? 'Hide password' : 'Show password';
+      button.setAttribute('aria-label', button.title);
+    }
+
     function showPasswordPrompt(title, message, onSubmit, placeholder = 'Enter password') {
       const modal = document.getElementById('modal');
       document.getElementById('modal-title').textContent = title;
       document.getElementById('modal-message').textContent = message;
       const container = document.getElementById('modal-input-container');
       container.innerHTML = '';
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'position:relative; margin-top:8px;';
       const input = document.createElement('input');
       input.type = 'password';
       input.autocomplete = 'new-password';
       input.placeholder = placeholder;
       input.minLength = 8;
-      input.style.cssText = 'width:100%;padding:12px 14px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;margin-top:8px;';
-      container.appendChild(input);
+      input.style.cssText = 'width:100%;padding:12px 44px 12px 14px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;box-sizing:border-box;';
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.innerHTML = '<i class="fa-solid fa-eye"></i>';
+      toggle.title = 'Show password';
+      toggle.setAttribute('aria-label', 'Show password');
+      toggle.style.cssText = 'position:absolute; right:8px; top:50%; transform:translateY(-50%); background:transparent; border:none; cursor:pointer; color:#64748b; font-size:1.1rem;';
+      toggle.onclick = () => togglePasswordVisibility(input, toggle);
+      wrap.appendChild(input);
+      wrap.appendChild(toggle);
+      container.appendChild(wrap);
       modal.classList.add('show');
       const confirmBtn = document.getElementById('modal-confirm');
       const cancelBtn = document.getElementById('modal-cancel');
@@ -3385,7 +3419,7 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
         const choice = container.querySelector('input[name="qr-share-type"]:checked')?.value || 'private';
         cleanup();
         if (choice === 'link') shareLinkQr();
-        else sharePrivateQr();
+        else showPrivateQrPasswordChoice();
       };
       cancelBtn.onclick = cleanup;
     }
@@ -3414,6 +3448,90 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
       } catch (e) {
         console.error(e);
         showToast('Could not create QR for the link');
+      }
+    }
+
+    function showPrivateQrPasswordChoice() {
+      const modal = document.getElementById('modal');
+      document.getElementById('modal-title').textContent = 'Private note QR';
+      document.getElementById('modal-message').textContent = 'Should the QR require a password?';
+      const container = document.getElementById('modal-input-container');
+      container.innerHTML = `
+        <div class="privacy-choice-list" role="radiogroup">
+          <label class="privacy-choice-card selected" for="qr-priv-pass">
+            <input id="qr-priv-pass" type="radio" name="qr-priv-mode" value="password" checked>
+            <span class="privacy-choice-icon" aria-hidden="true">🔒</span>
+            <span class="privacy-choice-copy"><strong>With password</strong><small>Encrypted. Only people with the password can read the note.</small></span>
+            <span class="privacy-choice-check" aria-hidden="true">✓</span>
+          </label>
+          <label class="privacy-choice-card" for="qr-priv-nopass">
+            <input id="qr-priv-nopass" type="radio" name="qr-priv-mode" value="nopassword">
+            <span class="privacy-choice-icon" aria-hidden="true">👁️</span>
+            <span class="privacy-choice-copy"><strong>No password</strong><small>Anyone who scans the QR can read the note. Not private.</small></span>
+            <span class="privacy-choice-check" aria-hidden="true">✓</span>
+          </label>
+        </div>`;
+      modal.classList.add('show', 'privacy-modal');
+      const confirmBtn = document.getElementById('modal-confirm');
+      const cancelBtn = document.getElementById('modal-cancel');
+      confirmBtn.textContent = 'Continue';
+      cancelBtn.textContent = 'Cancel';
+      container.querySelectorAll('input[name="qr-priv-mode"]').forEach(input => {
+        input.addEventListener('change', () => {
+          container.querySelectorAll('.privacy-choice-card').forEach(card => {
+            card.classList.toggle('selected', card.querySelector('input').checked);
+          });
+        });
+      });
+      const cleanup = () => {
+        modal.classList.remove('show', 'privacy-modal');
+        confirmBtn.onclick = null;
+        cancelBtn.onclick = null;
+      };
+      confirmBtn.onclick = () => {
+        const mode = container.querySelector('input[name="qr-priv-mode"]:checked')?.value || 'password';
+        cleanup();
+        if (mode === 'nopassword') sharePrivateQrNoPassword();
+        else sharePrivateQr();
+      };
+      cancelBtn.onclick = cleanup;
+    }
+
+    function sharePrivateQrNoPassword() {
+      const data = { title: titleInput.value, content: editor.innerHTML };
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+      const qrPayload = window.location.origin + window.location.pathname + '#qrnote=' + encoded;
+
+      if (qrPayload.length > 1800) {
+        showConfirm(
+          'QR not suitable',
+          'This note is too long for a scannable QR code. Use Export JSON instead.',
+          () => { exportPrivateJson(); }
+        );
+        document.getElementById('modal-confirm').textContent = 'Export JSON';
+        document.getElementById('modal-cancel').textContent = 'Cancel';
+        return;
+      }
+
+      const wrap = document.getElementById('qr-canvas-wrap');
+      wrap.innerHTML = '';
+      const qrDiv = document.createElement('div');
+      wrap.appendChild(qrDiv);
+      try {
+        new QRCode(qrDiv, {
+          text: qrPayload,
+          width: 280,
+          height: 280,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+        document.getElementById('qr-modal-title').textContent = 'Private note QR (no password)';
+        document.getElementById('qr-modal-message').textContent = 'Anyone who scans this QR can read the note. It is not password-protected.';
+        document.getElementById('qr-modal').classList.add('show');
+      } catch (e) {
+        console.error(e);
+        showToast('Could not create QR');
       }
     }
 
@@ -3522,6 +3640,25 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
         if (!trimmed) {
           showToast('Empty QR');
           return;
+        }
+
+        // No-password private QR (#qrnote=)
+        const qrNoteIdx = trimmed.indexOf('#qrnote=');
+        if (qrNoteIdx !== -1) {
+          try {
+            const encoded = trimmed.slice(qrNoteIdx + 8);
+            const json = decodeURIComponent(escape(atob(encoded)));
+            const data = JSON.parse(json);
+            titleInput.value = data.title || 'Shared Note';
+            editor.innerHTML = data.content || '';
+            isReadOnly = true;
+            enterReadOnlyMode();
+            showToast('Note loaded from QR');
+            return;
+          } catch (e) {
+            showToast('Invalid QR note data');
+            return;
+          }
         }
 
         // Private note QR (#private2= payload)
@@ -4064,11 +4201,11 @@ window.promptUnlock = promptUnlock;
       },
       {
         title: "7 of 9 - Export, import and QR",
-        content: "<p><strong>Export JSON</strong> creates a password-protected private note file (no long URL). You set a password (at least 8 characters). The note is encrypted and downloaded as a <code>.sharednote.json</code> file.</p><p style='margin-top:10px;'><strong>Import JSON</strong> opens a previously exported file. Choose the file, then enter the password.</p><p style='margin-top:10px;'><strong>Share QR</strong> lets you put either of these in a QR code:</p><ul style='margin:8px 0 8px 20px; line-height:1.5;'><li><strong>Share link</strong> — QR of your current short link (create one with Save first if needed). Scanning it opens the link.</li><li><strong>Private note</strong> — encrypted QR. You set a password. Scanning it asks for that password before the note appears.</li></ul><p style='margin-top:10px;'><strong>Scan QR</strong> uses your camera. It works for both regular share-link QRs (opens the link) and private-note QRs (asks for the password). Very long notes or notes with images usually will not fit in a practical private QR — the app will suggest Export JSON instead. Keep passwords safe; they cannot be recovered.</p>"
+        content: "<p><strong>Export JSON</strong> creates a password-protected private note file (no long URL). You set a password (at least 8 characters). The note is encrypted and downloaded as a <code>.sharednote.json</code> file.</p><p style='margin-top:10px;'><strong>Import JSON</strong> opens a previously exported file. Choose the file, then enter the password.</p><p style='margin-top:10px;'><strong>Share QR</strong> lets you put either of these in a QR code:</p><ul style='margin:8px 0 8px 20px; line-height:1.5;'><li><strong>Share link</strong> — QR of your current short link (create one with Save first if needed). Scanning it opens the link.</li><li><strong>Private note</strong> — you can choose <strong>With password</strong> (encrypted; recipient needs the password) or <strong>No password</strong> (anyone who scans can read it).</li></ul><p style='margin-top:10px;'><strong>Scan QR</strong> uses your camera. It works for both regular share-link QRs (opens the link) and private-note QRs (asks for the password). Very long notes or notes with images usually will not fit in a practical private QR — the app will suggest Export JSON instead. Keep passwords safe; they cannot be recovered.</p>"
       },
       {
         title: "8 of 9 - Viewing, editing and password safety",
-        content: "<p>For an unencrypted Online Storage link, the lock code controls whether a recipient can edit the shared note; the note can still be read by anyone with the link. Password-protected links keep the note contents encrypted until the correct password is entered.</p><p style='margin-top:10px;'>Keep viewing passwords and edit lock codes safe. A lost encryption password cannot be used to decrypt the protected note. Existing older links may follow their original protection behaviour.</p>"
+        content: "<p>For an unencrypted Online Storage link, the lock code controls whether a recipient can edit the shared note; the note can still be read by anyone with the link. Password-protected links keep the note contents encrypted until the correct password is entered.</p><p style='margin-top:10px;'>When entering a password you can click the eye icon to show or hide what you are typing, so you can check for mistakes.</p><p style='margin-top:10px;'>Keep viewing passwords and edit lock codes safe. A lost encryption password cannot be used to decrypt the protected note. Existing older links may follow their original protection behaviour.</p>"
       },
       {
         title: "9 of 9 - Download or print as PDF",
