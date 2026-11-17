@@ -1912,6 +1912,93 @@
       }
     }
 
+
+
+    /* Consistent vertical rhythm: keep every modal action row clear of fields and content. */
+    .modal {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .modal > h3 { margin-bottom: 10px; }
+    .modal > p { margin-bottom: 16px; }
+    #modal-input-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-width: 0;
+      margin: 0;
+    }
+    #modal-input-container > * { min-width: 0; }
+    #modal-input-container input:not([type="checkbox"]):not([type="radio"]),
+    #modal-input-container select,
+    #modal-input-container textarea {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      min-height: 46px;
+      margin: 0 !important;
+    }
+    #modal-input-container .password-field {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+      width: 100%;
+      min-width: 0;
+      margin: 0 !important;
+    }
+    #modal-input-container .password-field input {
+      flex: 1 1 0;
+      width: 0;
+      min-width: 0;
+      margin: 0 !important;
+    }
+    #modal-input-container .password-field .password-toggle {
+      position: static !important;
+      flex: 0 0 48px;
+      width: 48px !important;
+      min-width: 48px;
+      min-height: 46px;
+      margin: 0 !important;
+    }
+    .modal .modal-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: stretch;
+      gap: 12px;
+      width: 100%;
+      margin: 22px 0 0 !important;
+      padding-top: 0;
+    }
+    .modal .modal-buttons button {
+      flex: 0 1 auto;
+      min-height: 46px;
+      margin: 0 !important;
+    }
+    /* Dialogs containing a choice list or form get deliberate breathing room. */
+    #modal.storage-modal #modal-input-container,
+    #modal.privacy-modal #modal-input-container { gap: 14px; }
+    #modal.storage-modal .modal-buttons,
+    #modal.privacy-modal .modal-buttons,
+    #modal.save-choice .modal-buttons { margin-top: 22px !important; }
+    @media (max-width: 600px) {
+      .modal .modal-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 22px !important;
+      }
+      .modal .modal-buttons button { width: 100%; min-width: 0; }
+      .modal .modal-buttons button:only-child { grid-column: 1 / -1; }
+      #modal-input-container { gap: 16px; }
+      #modal-input-container .online-protect-option { margin: 0 !important; }
+      #modal-input-container #online-view-password-wrap { margin-top: 0 !important; }
+    }
+    @media (max-width: 360px) {
+      .modal .modal-buttons { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    }
+
   </style>
 </head>
 <body>
