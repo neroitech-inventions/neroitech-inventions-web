@@ -2286,6 +2286,175 @@
   #help-modal .help-dialog { height: calc(100dvh - 20px) !important; min-height: 0 !important; }
 }
 
+
+
+/* Modern visual system for the general confirmation / input dialog.
+   Specialised storage, privacy and save-choice dialogs retain their own designs. */
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) {
+  align-items: center;
+  justify-content: center;
+  padding: max(16px, env(safe-area-inset-top))
+           max(16px, env(safe-area-inset-right))
+           max(16px, env(safe-area-inset-bottom))
+           max(16px, env(safe-area-inset-left));
+  background: rgba(9, 18, 34, .58);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) > .modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: min(100%, 480px);
+  max-width: 480px;
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 32px);
+  min-width: 0;
+  margin: auto;
+  padding: clamp(22px, 5vw, 30px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid rgba(148,163,184,.22);
+  border-radius: 24px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  box-shadow: 0 28px 80px rgba(2, 8, 23, .28), 0 4px 14px rgba(15,23,42,.08);
+}
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-title {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0 0 12px;
+  color: #0f172a;
+  font-size: clamp(1.2rem, 4vw, 1.45rem);
+  line-height: 1.28;
+  font-weight: 800;
+  letter-spacing: -.035em;
+  overflow-wrap: anywhere;
+}
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-title::before {
+  content: "";
+  display: block;
+  flex: 0 0 4px;
+  width: 4px;
+  height: 27px;
+  border-radius: 99px;
+  background: linear-gradient(180deg, #6366f1, #2563eb);
+}
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-message {
+  margin: 0 0 20px;
+  padding: 14px 15px;
+  border: 1px solid #e8edf5;
+  border-radius: 14px;
+  background: #f7f9fc;
+  color: #526176;
+  font-size: .94rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-input-container input:not([type="checkbox"]):not([type="radio"]),
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-input-container textarea,
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-input-container select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 50px;
+  margin: 0 !important;
+  padding: 13px 15px !important;
+  border: 1px solid #d9e2ee !important;
+  border-radius: 13px !important;
+  outline: none;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 16px !important;
+  box-shadow: 0 1px 2px rgba(15,23,42,.03);
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-input-container input:focus,
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-input-container textarea:focus,
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-input-container select:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 4px rgba(99,102,241,.13);
+}
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) .modal-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 11px;
+  width: 100%;
+  margin: 22px 0 0 !important;
+  padding: 18px 0 0 !important;
+  border-top: 1px solid #edf1f6;
+}
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) .modal-buttons button {
+  position: static !important;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  margin: 0 !important;
+  padding: 12px 16px !important;
+  border: 1px solid transparent !important;
+  border-radius: 13px !important;
+  font: inherit;
+  font-size: .92rem !important;
+  font-weight: 700 !important;
+  line-height: 1.25;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-cancel {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  border-color: #e2e8f0 !important;
+}
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-confirm {
+  background: linear-gradient(135deg, #3730a3, #2563eb) !important;
+  color: #fff !important;
+  box-shadow: 0 5px 14px rgba(37,99,235,.2);
+}
+#modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) .modal-buttons button:active {
+  transform: translateY(1px);
+}
+@media (hover:hover) {
+  #modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-cancel:hover { background: #e8eef6 !important; }
+  #modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-confirm:hover { box-shadow: 0 8px 20px rgba(37,99,235,.27); }
+}
+@media (max-width: 480px) {
+  #modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) { padding: 12px; }
+  #modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) > .modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
+    padding: 22px 17px;
+    border-radius: 20px;
+  }
+  #modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) #modal-message { margin-bottom: 17px; padding: 13px; }
+  #modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) .modal-buttons { gap: 9px; margin-top: 19px !important; padding-top: 15px !important; }
+}
+@media (max-width: 350px) {
+  #modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) > .modal { padding: 19px 14px; }
+  #modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) .modal-buttons { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-height: 520px) {
+  #modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) { align-items: flex-start; }
+  #modal:not(.storage-modal):not(.privacy-modal):not(.save-choice) > .modal { margin-top: 0; margin-bottom: 0; }
+}
+
 </style>
 </head>
 <body>
