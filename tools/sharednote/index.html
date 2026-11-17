@@ -1713,14 +1713,26 @@
     }
     .private-lock-card h2 { font-size: 1.35rem; letter-spacing: -.03em; margin-bottom: 8px; color: #0f172a; }
     .private-lock-card p { color: #64748b; font-size: .9rem; line-height: 1.55; margin-bottom: 18px; }
-    .private-lock-card input {
-      display: block; width: 100%; min-height: 48px; padding: 12px 14px; margin-bottom: 12px;
-      border: 1px solid #cbd5e1; border-radius: 12px; font: inherit; font-size: 16px;
+    .password-field {
+      display: flex; align-items: stretch; gap: 8px; width: 100%; min-width: 0;
     }
-    .private-lock-card input:focus { outline: 3px solid rgba(79,70,229,.15); border-color: #6366f1; }
-    .private-lock-card button {
-      width: 100%; min-height: 48px; border: 0; border-radius: 12px; background: #4338ca;
-      color: #fff; font: inherit; font-weight: 700; cursor: pointer;
+    .password-field input {
+      flex: 1 1 auto; min-width: 0; width: 0; margin: 0; min-height: 48px;
+      padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 12px;
+      font: inherit; font-size: 16px; box-sizing: border-box;
+    }
+    .password-field input:focus { outline: 3px solid rgba(79,70,229,.15); border-color: #6366f1; }
+    .password-field .password-toggle {
+      position: static !important; transform: none !important; flex: 0 0 48px;
+      width: 48px !important; min-width: 48px; min-height: 48px; padding: 0;
+      display: inline-grid; place-items: center; border: 1px solid #cbd5e1 !important;
+      border-radius: 12px; background: #f8fafc !important; color: #475569 !important;
+      font-size: 1.05rem; cursor: pointer; touch-action: manipulation;
+    }
+    .private-lock-card .password-field { margin-bottom: 12px; }
+    .private-lock-card > button[type="submit"] {
+      display: block; width: 100%; min-height: 48px; border: 0; border-radius: 12px;
+      background: #4338ca; color: #fff; font: inherit; font-weight: 700; cursor: pointer;
     }
     .private-lock-error {
       display: flex; align-items: flex-start; gap: 9px; margin-top: 14px; padding: 11px 13px;
@@ -2012,9 +2024,9 @@
       <div class="private-lock-icon" aria-hidden="true"><i class="fa-solid fa-lock"></i></div>
       <h2 id="private-lock-title">This note is password protected</h2>
       <p>Enter the password provided by the sender to decrypt and view this note. Its contents remain hidden until the password is correct.</p>
-      <div style="position:relative;">
-        <input id="private-note-password" type="password" autocomplete="current-password" placeholder="Enter note password" required style="padding-right:44px;">
-        <button type="button" onclick="togglePasswordVisibility('private-note-password', this)" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:transparent; border:none; cursor:pointer; color:#64748b; font-size:1.1rem;" title="Show password" aria-label="Show password">
+      <div class="password-field">
+        <input id="private-note-password" type="password" autocomplete="current-password" placeholder="Enter note password" required>
+        <button class="password-toggle" type="button" onclick="togglePasswordVisibility('private-note-password', this)" title="Show password" aria-label="Show password">
           <i class="fa-solid fa-eye"></i>
         </button>
       </div>
@@ -3255,9 +3267,9 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
         </label>
         <div id="online-view-password-wrap" hidden style="margin-top:12px;">
           <label for="online-view-password" style="display:block;font-size:.9rem;font-weight:600;margin-bottom:6px;">Create viewing password</label>
-          <div style="position:relative;">
-            <input id="online-view-password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" style="box-sizing:border-box;width:100%;padding:12px 44px 12px 14px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;">
-            <button type="button" onclick="togglePasswordVisibility('online-view-password', this)" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:transparent; border:none; cursor:pointer; color:#64748b; font-size:1.1rem;" title="Show password" aria-label="Show password">
+          <div class="password-field">
+            <input id="online-view-password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters">
+            <button class="password-toggle" type="button" onclick="togglePasswordVisibility('online-view-password', this)" title="Show password" aria-label="Show password">
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
@@ -3308,19 +3320,20 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
       const container = document.getElementById('modal-input-container');
       container.innerHTML = '';
       const wrap = document.createElement('div');
-      wrap.style.cssText = 'position:relative; margin-top:8px;';
+      wrap.className = 'password-field';
+      wrap.style.marginTop = '8px';
       const input = document.createElement('input');
       input.type = 'password';
       input.autocomplete = 'new-password';
       input.placeholder = placeholder;
       input.minLength = 8;
-      input.style.cssText = 'width:100%;padding:12px 44px 12px 14px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;box-sizing:border-box;';
+      input.style.cssText = 'flex:1 1 auto;min-width:0;width:0;padding:12px 14px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;box-sizing:border-box;margin:0;';
       const toggle = document.createElement('button');
       toggle.type = 'button';
       toggle.innerHTML = '<i class="fa-solid fa-eye"></i>';
       toggle.title = 'Show password';
       toggle.setAttribute('aria-label', 'Show password');
-      toggle.style.cssText = 'position:absolute; right:8px; top:50%; transform:translateY(-50%); background:transparent; border:none; cursor:pointer; color:#64748b; font-size:1.1rem;';
+      toggle.className = 'password-toggle';
       toggle.onclick = () => togglePasswordVisibility(input, toggle);
       wrap.appendChild(input);
       wrap.appendChild(toggle);
