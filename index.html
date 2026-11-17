@@ -123,7 +123,7 @@
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
-    .hero p.lead { color: var(--text-muted); font-size: 1.1rem; max-width: 520px; margin-bottom: 28px; }
+    .hero p.lead { color: #ffffff; font-size: 1.1rem; max-width: 520px; margin-bottom: 28px; }
     .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
@@ -134,7 +134,7 @@
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(94,234,212,0.25); }
     .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border-strong); }
     .btn-ghost:hover { background: rgba(255,255,255,0.04); }
-    .hero-meta { color: var(--text-dim); font-size: 0.92rem; }
+    .hero-meta { color: #ffffff; font-size: 0.92rem; }
     .hero-meta strong { color: var(--text); font-weight: 600; }
     .hero-visual {
       border-radius: 20px; overflow: hidden;
@@ -612,11 +612,40 @@
     const knowledge = [
       { keys: ['who', 'about', 'company', 'neroitech', 'niti'], reply: 'Neroitech Inventions (NITI) is an award-winning IT firm founded in 2016. We build digital solutions, research, content, and creative technology that help businesses grow.' },
       { keys: ['contact', 'email', 'phone', 'reach', 'hire', 'work'], reply: 'You can reach us at (+234) 810-785-4712 or use the contact form on this page. We help with digital solutions, content, and research.' },
-      { keys: ['tool', 'tools', 'app', 'apps'], reply: 'Our tools include: Resume Builder, Video Editor, SharedNote (Online Notepad), Gig Builder, HTML Live Preview, My IP Address, URL Shortener, QR Code Generator, Quote Generator, Countdown Timer, X Link Analyzer, Polygon↔Solana Bridge, Crypto BagFlow, Bitcoin Market Prediction, and USD to Naira Rate. Find them in the footer.' },
-      { keys: ['sharednote', 'notepad', 'note'], reply: 'SharedNote is our online notepad. You can create, edit, and share notes, including private encrypted links and QR sharing. Visit niti.com.ng/tools/sharednote' },
+      { keys: ['tool', 'tools', 'app', 'apps', 'list tools', 'list niti'], reply: 'Here are the Neroitech tools:<br><br>'
+        + '<a href="https://niti.com.ng/tools/resume-builder" target="_blank">Free Resume Builder</a><br>'
+        + '<a href="https://niti.com.ng/tools/neroiedit" target="_blank">Free Video Editor</a><br>'
+        + '<a href="https://niti.com.ng/tools/sharednote" target="_blank">SharedNote (Online Notepad)</a><br>'
+        + '<a href="https://niti.com.ng/tools/gig-builder" target="_blank">Gig Builder</a><br>'
+        + '<a href="https://niti.com.ng/tools/html-live" target="_blank">HTML Live Preview</a><br>'
+        + '<a href="https://niti.com.ng/tools/ip-detector" target="_blank">My IP Address</a><br>'
+        + '<a href="https://urlmini.github.io" target="_blank">URL Shortener</a><br>'
+        + '<a href="https://niti.com.ng/tools/qrcode" target="_blank">QR Code Generator</a><br>'
+        + '<a href="https://niti.com.ng/tools/quote-generator" target="_blank">Quote Generator</a><br>'
+        + '<a href="https://niti.com.ng/tools/countdown-timer" target="_blank">Countdown Timer</a><br>'
+        + '<a href="https://niti.com.ng/tools/x-link-analyzer" target="_blank">X Link Analyzer</a><br>'
+        + '<a href="https://niti.com.ng/tools/cross-chain/" target="_blank">Polygon ↔ Solana Bridge</a><br>'
+        + '<a href="https://niti.com.ng/tools/bagflow/" target="_blank">Crypto BagFlow</a><br>'
+        + '<a href="https://niti.com.ng/tools/btc-prediction-tool" target="_blank">Bitcoin Market Prediction</a><br>'
+        + '<a href="https://niti.com.ng/tools/usd-ngn" target="_blank">USD to Naira Rate</a>' },
+      { keys: ['resume'], reply: 'Free Resume Builder: <a href="https://niti.com.ng/tools/resume-builder" target="_blank">Open Resume Builder</a>' },
+      { keys: ['video', 'editor', 'neroiedit'], reply: 'Free Video Editor: <a href="https://niti.com.ng/tools/neroiedit" target="_blank">Open Video Editor</a>' },
+      { keys: ['sharednote', 'notepad', 'note'], reply: 'SharedNote is our online notepad. Create, edit, and share notes, including private links and QR sharing. <a href="https://niti.com.ng/tools/sharednote" target="_blank">Open SharedNote</a>' },
+      { keys: ['gig'], reply: 'Gig Builder: <a href="https://niti.com.ng/tools/gig-builder" target="_blank">Open Gig Builder</a>' },
+      { keys: ['html', 'live preview'], reply: 'HTML Live Preview: <a href="https://niti.com.ng/tools/html-live" target="_blank">Open HTML Live</a>' },
+      { keys: ['ip', 'ip address'], reply: 'My IP Address: <a href="https://niti.com.ng/tools/ip-detector" target="_blank">Open IP Detector</a>' },
+      { keys: ['url', 'shortener', 'urlmini'], reply: 'URL Shortener: <a href="https://urlmini.github.io" target="_blank">Open URL Shortener</a>' },
+      { keys: ['qr', 'qrcode', 'qr code'], reply: 'QR Code Generator: <a href="https://niti.com.ng/tools/qrcode" target="_blank">Open QR Generator</a>' },
+      { keys: ['quote'], reply: 'Quote Generator: <a href="https://niti.com.ng/tools/quote-generator" target="_blank">Open Quote Generator</a>' },
+      { keys: ['countdown', 'timer'], reply: 'Countdown Timer: <a href="https://niti.com.ng/tools/countdown-timer" target="_blank">Open Countdown Timer</a>' },
+      { keys: ['x link', 'analyzer', 'twitter'], reply: 'X Link Analyzer: <a href="https://niti.com.ng/tools/x-link-analyzer" target="_blank">Open X Link Analyzer</a>' },
+      { keys: ['bridge', 'cross-chain', 'cross chain', 'polygon', 'solana bridge'], reply: 'Polygon ↔ Solana Bridge: <a href="https://niti.com.ng/tools/cross-chain/" target="_blank">Open Bridge</a>' },
+      { keys: ['bagflow', 'bag flow'], reply: 'Crypto BagFlow: <a href="https://niti.com.ng/tools/bagflow/" target="_blank">Open BagFlow</a>' },
+      { keys: ['bitcoin', 'btc', 'prediction'], reply: 'Bitcoin Market Prediction: <a href="https://niti.com.ng/tools/btc-prediction-tool" target="_blank">Open BTC Prediction</a>' },
+      { keys: ['usd', 'naira', 'ngn', 'rate'], reply: 'USD to Naira Rate: <a href="https://niti.com.ng/tools/usd-ngn" target="_blank">Open USD to Naira</a>' },
       { keys: ['award', 'awards', 'recognition'], reply: 'We have been recognized by Witnet (Community Creation Challenge), Trava Finance (Creative Content Contest), Verse (Vibe Coding Competition), and Solana Collective (fALL OUT Content Hackathon).' },
-      { keys: ['snappquest', 'snapp'], reply: 'SnappQuest turns a link into a promotion quest. Get engagement for free or boost it for more reach. Visit niti.com.ng/snappquest' },
-      { keys: ['nowallet', 'wallet', 'usdt', 'payment'], reply: 'NoWalletConnect is a walletless USDT payment gateway for Polygon and Solana that automatically verifies payments. Visit niti.com.ng/tools/nowalletconnect/' },
+      { keys: ['snappquest', 'snapp'], reply: 'SnappQuest turns a link into a promotion quest. Get engagement for free or boost it for more reach. <a href="https://niti.com.ng/snappquest" target="_blank">Open SnappQuest</a>' },
+      { keys: ['nowallet', 'wallet', 'usdt', 'payment'], reply: 'NoWalletConnect is a walletless USDT payment gateway for Polygon and Solana that automatically verifies payments. <a href="https://niti.com.ng/tools/nowalletconnect/" target="_blank">Open NoWalletConnect</a>' },
       { keys: ['depin', 'solana', 'report', 'research'], reply: 'Our Solana DePIN research was selected as the #1 report by the Solana Foundation. We also publish research and recaps on Medium.' },
       { keys: ['service', 'services', 'what do you do', 'offer'], reply: 'We offer Writing & Research, Community Building, Content Creation, and IT Support — from reports and pitch decks to web tools and digital infrastructure.' },
       { keys: ['founded', 'when', 'started', '2016'], reply: 'Neroitech Inventions has been building digital solutions since 2016.' },
@@ -634,9 +663,17 @@
 
     function answer(q) {
       const s = q.toLowerCase();
+      let best = null;
+      let bestLen = 0;
       for (const item of knowledge) {
-        if (item.keys.some(k => s.includes(k))) return item.reply;
+        for (const k of item.keys) {
+          if (s.includes(k) && k.length > bestLen) {
+            best = item;
+            bestLen = k.length;
+          }
+        }
       }
+      if (best) return best.reply;
       return 'I can help with Neroitech company info, tools, awards, research, and contact details. Try asking about our tools, awards, SharedNote, or how to reach us.';
     }
 
