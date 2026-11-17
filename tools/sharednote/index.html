@@ -1775,6 +1775,143 @@
       .modal { margin: 0 auto; }
     }
 
+  
+    /* Responsive modal system: works across help, confirm, QR, scan and settings dialogs. */
+    .modal-overlay {
+      box-sizing: border-box;
+      padding: max(16px, env(safe-area-inset-top))
+               max(16px, env(safe-area-inset-right))
+               max(16px, env(safe-area-inset-bottom))
+               max(16px, env(safe-area-inset-left));
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+    .modal-overlay.show {
+      display: flex;
+    }
+    .modal-overlay > .modal {
+      width: min(100%, 520px);
+      max-width: 520px;
+      min-width: 0;
+      max-height: calc(100vh - 32px);
+      max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 32px);
+      margin: auto;
+      padding: clamp(18px, 4vw, 30px);
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      overflow-wrap: anywhere;
+      flex: 0 0 auto;
+    }
+    .modal h3 {
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+    .modal p {
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+    .modal input,
+    .modal select,
+    .modal textarea,
+    .modal button {
+      max-width: 100%;
+      min-width: 0;
+    }
+    .modal input,
+    .modal select,
+    .modal textarea {
+      font-size: 16px;
+    }
+    .modal-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: stretch;
+    }
+    .modal-buttons button {
+      min-height: 44px;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      touch-action: manipulation;
+    }
+    #qr-canvas-wrap,
+    #qr-reader,
+    .modal img,
+    .modal video,
+    .modal canvas,
+    .modal svg {
+      max-width: 100%;
+    }
+    #qr-canvas-wrap > * {
+      max-width: 100%;
+    }
+    @media (max-width: 600px) {
+      .modal-overlay {
+        align-items: center;
+        padding: max(12px, env(safe-area-inset-top))
+                 max(12px, env(safe-area-inset-right))
+                 max(12px, env(safe-area-inset-bottom))
+                 max(12px, env(safe-area-inset-left));
+      }
+      .modal-overlay > .modal,
+      #modal.storage-modal .modal,
+      #modal.privacy-modal .modal,
+      #modal.save-choice .modal {
+        width: 100%;
+        max-width: 100%;
+        max-height: calc(100vh - 24px);
+        max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
+        padding: 20px 16px;
+        border-radius: 18px;
+      }
+      .modal-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+      }
+      .modal-buttons button {
+        width: 100%;
+        min-width: 0;
+        padding: 11px 10px !important;
+      }
+      .modal-buttons button:only-child {
+        grid-column: 1 / -1;
+      }
+      .modal .storage-choice-card,
+      .modal .privacy-choice-card {
+        min-width: 0;
+      }
+    }
+    @media (max-width: 360px) {
+      .modal-overlay {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+      .modal-overlay > .modal,
+      #modal.storage-modal .modal,
+      #modal.privacy-modal .modal,
+      #modal.save-choice .modal {
+        padding: 17px 12px;
+        border-radius: 16px;
+      }
+      .modal-buttons {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    @media (max-height: 560px) {
+      .modal-overlay {
+        align-items: flex-start;
+      }
+      .modal-overlay > .modal {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+
   </style>
 </head>
 <body>
