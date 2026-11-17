@@ -1999,6 +1999,131 @@
       .modal .modal-buttons { grid-template-columns: minmax(0, 1fr); gap: 10px; }
     }
 
+  
+
+/* Final modal collision-prevention pass (all dialogs, including the help tour). */
+.modal-overlay > .modal {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 0;
+}
+.modal-overlay > .modal > .modal-buttons {
+  position: relative;
+  inset: auto;
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+  margin: 22px 0 0 !important;
+  padding: 0 !important;
+  clear: both;
+}
+.modal-overlay > .modal > .modal-buttons button {
+  position: relative !important;
+  inset: auto !important;
+  flex: 1 1 120px;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 46px;
+  margin: 0 !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.modal-overlay > .modal > #modal-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin: 0 !important;
+}
+.modal-overlay > .modal > #modal-input-container + .modal-buttons {
+  margin-top: 22px !important;
+}
+
+/* The help tour's close control was absolutely positioned over the dialog.
+   Put it in normal document flow so it can never cover the title or help text. */
+#help-modal > .modal > button:first-child {
+  position: static !important;
+  inset: auto !important;
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  margin: -8px -8px 8px 0 !important;
+  padding: 0 !important;
+  border-radius: 10px;
+  background: #f1f5f9 !important;
+  line-height: 1;
+}
+#help-modal > .modal > div:has(> #help-step-title) {
+  min-width: 0;
+  margin: 0 0 14px !important;
+  padding-right: 0 !important;
+}
+#help-modal #help-content {
+  min-width: 0;
+  min-height: 0 !important;
+  margin: 0 0 18px !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+#help-modal #help-content img,
+#help-modal #help-content video,
+#help-modal #help-content iframe {
+  max-width: 100%;
+  height: auto;
+}
+#help-modal > .modal > div:has(> #help-progress-bar) {
+  margin: 0 !important;
+  flex: 0 0 auto;
+}
+#help-modal .modal-buttons {
+  margin-top: 20px !important;
+  padding-top: 0 !important;
+}
+#help-modal .modal-buttons button {
+  min-height: 46px;
+  flex: 1 1 120px;
+}
+
+@media (max-width: 600px) {
+  .modal-overlay > .modal > .modal-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 20px !important;
+  }
+  .modal-overlay > .modal > .modal-buttons button {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 11px 10px !important;
+  }
+  #help-modal > .modal {
+    gap: 0;
+  }
+  #help-modal #help-content {
+    margin-bottom: 18px !important;
+    line-height: 1.65;
+  }
+  #help-modal .modal-buttons {
+    margin-top: 20px !important;
+  }
+}
+@media (max-width: 360px) {
+  .modal-overlay > .modal > .modal-buttons {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
   </style>
 </head>
 <body>
