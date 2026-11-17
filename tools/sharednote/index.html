@@ -3651,8 +3651,13 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
             const data = JSON.parse(json);
             titleInput.value = data.title || 'Shared Note';
             editor.innerHTML = data.content || '';
-            isReadOnly = true;
-            enterReadOnlyMode();
+            // No password was used, so open it ready to edit
+            isReadOnly = false;
+            currentLockCode = null;
+            editor.contentEditable = 'true';
+            titleInput.readOnly = false;
+            document.getElementById('toolbar').style.display = '';
+            document.getElementById('readonly-banner')?.remove();
             showToast('Note loaded from QR');
             return;
           } catch (e) {
