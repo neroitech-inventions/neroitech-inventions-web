@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QM106YDX6N');
+  </script>
+
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DeviceWorth NG</title>
+<link href="images/favicon.ico" rel="icon">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#15243a;font:15px system-ui,Arial}.wrap{max-width:1080px;margin:auto;padding:18px}.brand{font-weight:950;font-size:22px;margin:4px 0 18px}.brand b{color:#2459d3}.hero{background:linear-gradient(120deg,#10243b,#2459d3);color:white;padding:28px;border-radius:20px}.hero small{color:#ffd66d;font-weight:900;letter-spacing:.15em}.hero h1{font-size:clamp(28px,4vw,44px);line-height:1.05;margin:12px 0}.hero p{color:#dce8f6;max-width:650px;line-height:1.55}.layout{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:18px;align-items:start}.card{background:white;border:1px solid #e1e8f0;border-radius:17px;padding:20px;box-shadow:0 7px 24px #142b4808}.card h2{margin:0 0 5px;font-size:18px}.muted{color:#718095;font-size:12px;line-height:1.5;margin:0 0 15px}.types{display:flex;gap:9px;margin:14px 0}.types button{flex:1;background:white;border:1px solid #dbe3ed;border-radius:12px;padding:13px;text-align:left;font-weight:850;color:#253b56}.types button.active{border:2px solid #2459d3;background:#f1f5ff}.types span{font-size:22px;margin-right:8px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field{margin-bottom:11px}.field label{display:block;font-size:11px;font-weight:850;color:#43546a;margin-bottom:6px}input,select{width:100%;height:42px;border:1px solid #dbe3ed;border-radius:9px;padding:0 10px;background:white;color:#1b2c42;font:13px system-ui}hr{border:0;border-top:1px solid #edf0f4;margin:14px 0}.parts{display:grid;grid-template-columns:1fr 1fr;gap:7px}.part{display:flex;justify-content:space-between;align-items:center;border:1px solid #e6ebf1;border-radius:9px;padding:8px;gap:6px}.part span{font-size:11px;font-weight:750}.part select{width:105px;height:32px;font-size:11px;padding:0 5px}.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:900;cursor:pointer}.primary{background:#2459d3;color:white}.secondary{background:#edf1f7;color:#34465c}.actions{display:flex;gap:8px;margin-top:16px}.result{position:sticky;top:12px}.pricebox{margin:15px 0;padding:17px;background:#f4f7fc;border:1px solid #e5ebf4;border-radius:13px}.eyebrow{font-size:10px;font-weight:900;color:#77869a;letter-spacing:.12em}.price{font-size:clamp(25px,3.3vw,38px);font-weight:950;color:#15355f;letter-spacing:-.04em;margin:6px 0}.tag{display:inline-block;background:#e8f0ff;color:#3459a0;border-radius:99px;padding:6px 9px;font-size:10px;font-weight:850;margin:4px 4px 0 0}.metric{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #edf0f4;font-size:12px;gap:8px}.metric span{color:#718095}.metric strong{text-align:right}.bar{height:7px;background:#edf1f6;border-radius:99px;margin-top:8px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#f0b63c,#16966c);width:0}.note{background:#f5f8fc;border:1px solid #e4ebf4;border-radius:11px;padding:12px;font-size:11px;color:#52647b}.disclaimer{font-size:10px;color:#8995a4;line-height:1.5;margin-top:14px}.hidden{display:none!important}footer{text-align:center;color:#8b97a6;font-size:10px;padding:16px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.result{position:static}}@media(max-width:520px){.wrap{padding:10px}.hero{padding:20px}.card{padding:15px}.grid,.parts{grid-template-columns:1fr}.part select{width:120px}}
+</style></head><body><main class="wrap">
+<div class="brand">₦ DeviceWorth <b>NG</b></div>
+<section class="hero"><small>THE NIGERIAN USED-DEVICE ESTIMATOR</small><h1>Know what your phone or laptop is worth.</h1><p>Choose your device, tell us which parts work, and get an estimated resale range in naira. Built to help Nigerians price devices more confidently.</p></section>
+<div class="layout"><section class="card"><h2>Device details</h2><p class="muted">Choose from a larger catalogue of popular Nigerian phone and laptop models. If yours is missing, select Custom model and type it in.</p>
+<div class="types"><button id="phone" class="active"><span>📱</span> Phone</button><button id="laptop"><span>💻</span> Laptop</button></div>
+<div class="grid">
+<div class="field"><label>Brand</label><select id="brand"></select></div><div class="field"><label>Search all models</label><input id="modelSearch" list="modelSuggestions" placeholder="Type e.g. iPhone 13 Pro, Latitude 5420"><datalist id="modelSuggestions"></datalist><small>Search across brands. If it is not listed, type the name and use it as a custom model.</small></div>
+<div class="field"><label>Or browse models for selected brand</label><select id="model"></select></div>
+<div class="field"><label>RAM</label><select id="ram"></select></div>
+<div class="field"><label>Storage / SSD</label><select id="variant"></select></div><div class="field"><label>Year (optional)</label><select id="year"><option value="na">Not available / I don't know</option></select></div>
+<div class="field"><label>Device source</label><select id="source"><option value="uk">UK-used / foreign-used</option><option value="local">Nigerian-used</option><option value="new">Open-box / nearly new</option></select></div>
+<div class="field"><label>City</label><select id="city"><option value="lagos">Lagos</option><option value="abuja">Abuja / FCT</option><option value="ph">Port Harcourt</option><option value="other">Other city</option></select></div>
+</div><div id="custom" class="field hidden"><label>Enter exact model</label><input id="customName" placeholder="e.g. iPhone 13 Pro 256GB"></div>
+<hr><h2>Condition check</h2><p class="muted">Mark each part as working, faulty or not sure.</p>
+<div class="grid"><div class="field"><label>Physical condition</label><select id="condition"><option value="excellent">Excellent</option><option value="good" selected>Good / normal wear</option><option value="fair">Fair / visible scratches</option><option value="poor">Poor / cracks or dents</option></select></div>
+<div class="field"><label>Battery / backup</label><select id="battery"><option value="strong">Strong</option><option value="average" selected>Average</option><option value="weak">Weak / drains quickly</option><option value="replace">Needs replacement</option><option value="unknown">Not sure</option></select></div></div>
+<div class="parts" id="parts"></div>
+<div class="grid" style="margin-top:12px"><div class="field"><label>Account / activation lock</label><select id="lock"><option value="clear">No lock</option><option value="locked">Locked (iCloud / Google / BIOS)</option><option value="unknown">Not sure</option></select></div><div class="field"><label>Repair history</label><select id="repair"><option value="none">No repairs / original parts</option><option value="minor">Minor repair</option><option value="major">Major repair / board or screen</option><option value="unknown">Not sure</option></select></div></div>
+<div class="actions"><button class="btn primary" id="calc">Calculate my estimate →</button><button class="btn secondary" id="reset">Reset</button></div>
+</section>
+<aside class="card result"><h2>Your estimate</h2><div id="estimateDevice" style="font-size:17px;font-weight:800;color:var(--ink,#172033);margin:4px 0 7px">Device model will appear here</div><p class="muted">Indicative resale value in the Nigerian market.</p>
+<div class="pricebox"><div class="eyebrow">ESTIMATED PRIVATE-SALE RANGE</div><div class="price" id="price">₦ -</div><div class="muted" id="range">Complete the form to calculate.</div><span class="tag" id="grade">Awaiting details</span><span class="tag" id="confidence">Indicative estimate</span></div>
+<div class="metric"><span>Quick-sale guide</span><strong id="quick">-</strong></div><div class="metric"><span>Midpoint estimate</span><strong id="mid">-</strong></div><div class="metric"><span>Fault impact</span><strong id="faultImpact">-</strong></div><div class="metric"><span>Condition score</span><strong id="score">-</strong></div><div class="bar"><i id="bar"></i></div>
+<div class="actions"><button class="btn secondary" id="explain">How was this price calculated?</button></div>
+<div id="explanation" class="note hidden" style="margin-top:10px;line-height:1.65"></div>
+<div class="actions"><button class="btn primary" id="share">Share estimate</button><button class="btn secondary" id="copy">Copy estimate summary</button></div>
+<p class="disclaimer">Estimate is based on selected Nigerian asking-price references and an indicative condition model. Asking prices are not confirmed sale prices. Actual offers depend on inspection, exact variant, originality, battery health, location and buyer demand. Locked devices may have little or no normal resale value. Verify locally before trading.</p>
+</aside></div><footer>DEVICEWORTH NG · Know the value. Negotiate better.</footer></main>
+<script>
+(()=>{
+const data={
+ phone:{
+  Apple:{
+   'iPhone 7 32GB':85000,'iPhone 7 Plus 128GB':115000,'iPhone 8 64GB':105000,'iPhone 8 Plus 64GB':145000,
+   'iPhone X 64GB':145000,'iPhone XR 64GB':175000,'iPhone XS 64GB':190000,'iPhone XS Max 256GB':250000,
+   'iPhone 11 64GB':215000,'iPhone 11 128GB':250000,'iPhone 11 Pro 256GB':310000,'iPhone 11 Pro Max 256GB':350000,
+   'iPhone 12 64GB':290000,'iPhone 12 128GB':320000,'iPhone 12 Pro 128GB':390000,'iPhone 12 Pro Max 256GB':450000,
+   'iPhone 13 mini 128GB':330000,'iPhone 13 128GB':390000,'iPhone 13 256GB':430000,'iPhone 13 Pro 128GB':490000,'iPhone 13 Pro Max 256GB':570000,
+   'iPhone 14 128GB':532000,'iPhone 14 Plus 128GB':570000,'iPhone 14 Pro 256GB':690000,'iPhone 14 Pro Max 256GB':780000,
+   'iPhone 15 128GB':650000,'iPhone 15 Plus 128GB':710000,'iPhone 15 Pro 128GB':790000,'iPhone 15 Pro Max 256GB':920000,
+   'iPhone 16 128GB':820000,'iPhone 16 Plus 128GB':900000,'iPhone 16 Pro 256GB':1050000,'iPhone 16 Pro Max 256GB':1200000,
+   'iPhone 17 256GB':1100000,'iPhone 17 Pro 256GB':1450000,'Custom model':300000},
+  Samsung:{
+   'Galaxy A04e 64GB':75000,'Galaxy A05 64GB':95000,'Galaxy A05s 128GB':125000,'Galaxy A06 128GB':135000,'Galaxy A12 128GB':110000,
+   'Galaxy A13 4/64GB':140000,'Galaxy A14 128GB':155000,'Galaxy A15 128GB':185000,'Galaxy A16 8/256GB':230000,
+   'Galaxy A23 128GB':175000,'Galaxy A24 128GB':210000,'Galaxy A25 256GB':260000,'Galaxy A34 256GB':300000,'Galaxy A35 256GB':350000,
+   'Galaxy A52 128GB':230000,'Galaxy A53 256GB':280000,'Galaxy A54 256GB':350000,'Galaxy A55 256GB':420000,
+   'Galaxy S10 128GB':160000,'Galaxy S10+ 128GB':190000,'Galaxy S20 128GB':210000,'Galaxy S20 FE 128GB':230000,
+   'Galaxy S21 128GB':270000,'Galaxy S21 Ultra 256GB':370000,'Galaxy S22 128GB':330000,'Galaxy S22 Ultra 256GB':490000,
+   'Galaxy S23 256GB':470000,'Galaxy S23 Ultra 256GB':650000,'Galaxy S24 256GB':620000,'Galaxy S24 Ultra 256GB':850000,
+   'Galaxy S25 256GB':900000,'Galaxy Z Flip 4 128GB':360000,'Galaxy Z Flip 5 256GB':510000,'Galaxy Z Fold 4 256GB':650000,'Custom model':220000},
+  Tecno:{
+   'Pop 5 32GB':55000,'Pop 7 64GB':70000,'Pop 8 64GB':80000,'Pop 9 128GB':115000,
+   'Spark 8 64GB':75000,'Spark 10 128GB':105000,'Spark 20 256GB':145000,'Spark 20 Pro 256GB':185000,'Spark 30 128GB':185000,'Spark 40 4/128GB':250000,
+   'Camon 18 128GB':130000,'Camon 19 Pro 256GB':165000,'Camon 20 8/256GB':170000,'Camon 20 Pro 256GB':210000,
+   'Camon 30 8/256GB':220000,'Camon 30 Pro 5G 256GB':320000,'Camon 40 256GB':330000,'Phantom X2 256GB':330000,'Phantom V Fold 512GB':700000,'Custom model':160000},
+  Infinix:{
+   'Smart 6 64GB':65000,'Smart 7 64GB':75000,'Smart 8 2/64GB':116000,'Smart 9 128GB':125000,
+   'Hot 10 128GB':85000,'Hot 11 128GB':95000,'Hot 12 128GB':110000,'Hot 30 128GB':145000,'Hot 40 256GB':180000,'Hot 50 256GB':210000,'Hot 60 256GB':245000,
+   'Note 10 Pro 256GB':145000,'Note 12 128GB':140000,'Note 30 256GB':180000,'Note 40 8/256GB':240000,'Note 50 Pro 256GB':330000,
+   'Zero 20 256GB':180000,'Zero 30 256GB':260000,'GT 10 Pro 256GB':220000,'Custom model':160000},
+  Xiaomi:{
+   'Redmi 10C 128GB':100000,'Redmi 12C 128GB':105000,'Redmi 13C 128GB':120000,'Redmi 14C 128GB':100000,'Redmi 15C 128GB':145000,
+   'Redmi Note 10 Pro 128GB':145000,'Redmi Note 11 128GB':135000,'Redmi Note 12 128GB':165000,'Redmi Note 13 8/256GB':220000,'Redmi Note 14 256GB':280000,
+   'Redmi Note 14 Pro 256GB':360000,'Poco X3 Pro 256GB':150000,'Poco X5 Pro 256GB':240000,'Poco X6 Pro 512GB':390000,'Poco F5 256GB':330000,'Custom model':180000},
+  Google:{
+   'Pixel 4a 128GB':125000,'Pixel 5 128GB':165000,'Pixel 6 128GB':210000,'Pixel 6 Pro 128GB':250000,
+   'Pixel 6a 128GB':190000,'Pixel 7 128GB':260000,'Pixel 7 Pro 256GB':350000,'Pixel 7a 128GB':270000,
+   'Pixel 8 128GB':390000,'Pixel 8 Pro 256GB':530000,'Pixel 8a 128GB':370000,'Pixel 9 128GB':570000,'Pixel 9 Pro 256GB':760000,'Custom model':250000},
+  Oppo:{
+   'A16 64GB':85000,'A17 64GB':95000,'A38 128GB':145000,'A58 128GB':175000,'A60 256GB':230000,'Reno 8 256GB':230000,'Reno 10 256GB':330000,'Reno 11F 256GB':310000,'Custom model':170000},
+  Vivo:{
+   'Y15s 32GB':65000,'Y21 64GB':95000,'Y22 128GB':125000,'Y27 128GB':170000,'Y36 256GB':220000,'V25 256GB':250000,'V29 256GB':350000,'Custom model':160000},
+  OnePlus:{'OnePlus 8 128GB':170000,'OnePlus 9 128GB':230000,'OnePlus 10 Pro 256GB':360000,'OnePlus 11 256GB':470000,'OnePlus 12 256GB':650000,'Custom model':250000},
+  itel:{'A18 32GB':45000,'A49 32GB':55000,'A60s 64GB':70000,'A70 128GB':95000,'P40 128GB':100000,'S23 128GB':135000,'Custom model':70000},
+  Nokia:{'C21 32GB':55000,'C31 64GB':75000,'G21 128GB':95000,'G50 128GB':125000,'G60 128GB':155000,'Custom model':90000},
+  Huawei:{'Y7 2019 64GB':70000,'Y9 Prime 128GB':100000,'Nova 9 128GB':180000,'Nova 10 256GB':230000,'P30 Pro 256GB':190000,'Custom model':150000},
+  Other:{'Custom model':150000}
+ },
+ laptop:{
+  HP:{
+   'EliteBook 820 G3 i5 8/256GB':180000,'EliteBook 840 G3 i5 8/256GB':220000,'EliteBook 840 G5 i5 8/256GB':280000,'EliteBook 840 G6 i5 8/256GB':330000,
+   'EliteBook 840 G7 i5 16/256GB':420000,'EliteBook 840 G8 i5 16/512GB':520000,'EliteBook 840 G8 i7 16/512GB':610000,'EliteBook 840 G9 i7 16/512GB':730000,
+   'EliteBook 850 G5 i5 8/256GB':300000,'EliteBook 850 G6 i7 16/512GB':430000,'EliteBook 1030 G3 x360':390000,
+   'ProBook 440 G6 i5 8/256GB':260000,'ProBook 450 G8 i5 8/512GB':420000,'ProBook 640 G1 i5 8/500GB':190000,
+   'Pavilion 15 i5 8/512GB':380000,'Pavilion x360 i5 8/256GB':350000,'Envy x360 Ryzen 5 8/512GB':520000,'ZBook 15 G5 i7 16/512GB':520000,'Custom model':300000},
+  Dell:{
+   'Latitude E7470 i5 8/256GB':180000,'Latitude 5480 i5 8/256GB':240000,'Latitude 5480 i7 8/256GB':290000,'Latitude 7490 i5 8/256GB':260000,
+   'Latitude 7390 i5 8/256GB':310000,'Latitude 7390 i7 16/512GB':430000,'Latitude 5400 i5 8/256GB':300000,'Latitude 5410 i5 16/256GB':340000,
+   'Latitude 5420 i5 16/256GB':390000,'Latitude 5320 i5 16/256GB':410000,'Latitude 7420 x360 i7 16/512GB':670000,'Latitude 5430 i7 16/512GB':620000,
+   'XPS 13 9370 i7 16/512GB':400000,'XPS 13 9310 i7 16/512GB':650000,'Inspiron 15 i5 8/512GB':380000,'Vostro 15 i5 8/512GB':350000,'Custom model':300000},
+  Lenovo:{
+   'ThinkPad X250 i5 8/256GB':130000,'ThinkPad X250 i7 8/500GB':150000,'ThinkPad X260 i5 8/256GB':160000,'ThinkPad X270 i5 8/256GB':190000,
+   'ThinkPad X280 i5 8/256GB':240000,'ThinkPad T470 i5 8/256GB':190000,'ThinkPad T480 i5 8/256GB':280000,'ThinkPad T480s i7 16/512GB':350000,
+   'ThinkPad T490 i5 16/256GB':320000,'ThinkPad T14 Gen 2 i5 16/512GB':490000,'ThinkPad T14 Gen 3 i7 16/512GB':650000,
+   'ThinkPad X1 Carbon Gen 6 i7 16/512GB':360000,'ThinkPad X1 Carbon Gen 8 i7 16/512GB':520000,'IdeaPad 3 i5 8/512GB':350000,'Yoga 7 i5 16/512GB':570000,'Custom model':280000},
+  Apple:{
+   'MacBook Air 2015 8/128GB':190000,'MacBook Pro 2015 8/256GB':250000,'MacBook Air 2017 8/128GB':230000,
+   'MacBook Pro 2017 8/256GB':300000,'MacBook Air 2019 Intel 8/256GB':340000,'MacBook Pro 2019 16/256GB':430000,
+   'MacBook Air Intel 8/256GB':380000,'MacBook Air M1 8/256GB':650000,'MacBook Air M2 8/256GB':850000,
+   'MacBook Air M3 8/256GB':1050000,'MacBook Pro 13 M1 8/256GB':780000,'MacBook Pro 14 M1 Pro 16/512GB':1250000,
+   'MacBook Pro 14 M2 Pro 16/512GB':1550000,'Custom model':450000},
+  ASUS:{
+   'VivoBook 15 i3 8/256GB':280000,'VivoBook 15 i5 8/512GB':420000,'VivoBook 14 Ryzen 5 8/512GB':400000,
+   'ZenBook 14 i5 16/512GB':600000,'ROG Strix G15 Ryzen 7 16/512GB':850000,'TUF Gaming F15 i5 16/512GB':680000,'Custom model':320000},
+  Acer:{
+   'Aspire 3 i3 8/256GB':250000,'Aspire 5 i5 8/512GB':380000,'Swift 3 i5 8/512GB':420000,'TravelMate P2 i5 8/256GB':300000,'Nitro 5 i5 16/512GB':650000,'Custom model':300000},
+  Microsoft:{
+   'Surface Laptop 3 i5 8/256GB':390000,'Surface Laptop 4 i5 8/256GB':480000,'Surface Laptop 5 i5 8/512GB':650000,'Surface Pro 7 i5 8/256GB':360000,'Surface Pro 8 i5 8/256GB':520000,'Custom model':350000},
+  MSI:{'Modern 14 i5 8/512GB':420000,'GF63 Thin i5 16/512GB':580000,'Katana 15 i7 16/512GB':850000,'Custom model':420000},
+  Toshiba:{'Dynabook Tecra A40 i5 8/256GB':250000,'Satellite Pro i5 8/256GB':230000,'Custom model':220000},
+  Fujitsu:{'Lifebook U748 i5 8/256GB':220000,'Lifebook U749 i5 8/256GB':250000,'Custom model':220000},
+  Other:{'Custom model':250000}
+ }
+};
+const phoneParts=['Screen & touch','Rear camera','Front camera','Charging port','Speaker & mic','Network / Wi-Fi','Buttons','Face / fingerprint'];
+const laptopParts=['Screen','Keyboard','Touchpad','Battery','Charging port','Wi-Fi / Bluetooth','Webcam & mic','USB / HDMI ports','Hinge / body','Storage / boot'];
+let type='phone',last=null;
+const $=id=>document.getElementById(id),fmt=n=>'₦'+Math.round(n).toLocaleString('en-NG');
+function options(el,arr){el.innerHTML=arr.map(v=>`<option>${v}</option>`).join('')}
+function loadModels(){options($('brand'),Object.keys(data[type]));loadModel()}
+function loadModel(){let b=$('brand').value;options($('model'),Object.keys(data[type][b]));$('custom').classList.toggle('hidden',$('model').value!=='Custom model')}
+function parts(){let names=type==='phone'?phoneParts:laptopParts;$('parts').innerHTML=names.map((n,i)=>`<div class="part"><span>${n}</span><select data-i="${i}"><option value="ok">Working</option><option value="fault">Faulty</option><option value="unknown">Not sure</option><option value="na">N/A</option></select></div>`).join('')}
+function setType(t){type=t;$('phone').classList.toggle('active',t==='phone');$('laptop').classList.toggle('active',t==='laptop');loadModels();options($('variant'),t==='phone'?['32GB','64GB','128GB','256GB','512GB','1TB']:['128GB SSD','256GB SSD','512GB SSD','1TB SSD','2TB SSD']);options($('ram'),t==='phone'?['2GB','3GB','4GB','6GB','8GB','12GB','16GB']:['2GB','3GB','4GB','6GB','8GB','12GB','16GB','24GB','32GB','64GB']);$('ram').value=t==='phone'?'4GB':'8GB';parts()}
+function base(){
+ let b=$('brand').value,m=$('model').value,y=$('year').value,v=$('variant').value,ram=parseInt($('ram').value,10)||8;
+ let p=data[type][b]?.[m],sourceKind=(p&&m!=='Custom model')?'catalogue reference':'brand-level fallback';
+ if(!p||m==='Custom model'){
+  let tiers=type==='phone'?{Apple:520000,Samsung:300000,Tecno:190000,Infinix:180000,Xiaomi:210000,Google:330000,Oppo:220000,Vivo:210000,OnePlus:300000,itel:90000,Nokia:110000,Huawei:190000,Other:170000}:{Apple:650000,HP:360000,Dell:370000,Lenovo:330000,ASUS:320000,Acer:310000,Microsoft:420000,MSI:480000,Toshiba:230000,Fujitsu:230000,Other:260000};
+  p=tiers[b]||200000;
+  if(y!=='na')p*=Math.max(.24,1-Math.max(0,2026-Number(y))*.075);
+ }
+ let storageFactor=1;
+ if(type==='phone'){storageFactor=v==='32GB'?.82:v==='64GB'?.91:v==='256GB'?1.12:v==='512GB'?1.27:v==='1TB'?1.42:1}
+ else{storageFactor=v==='128GB SSD'?.88:v==='512GB SSD'?1.08:v==='1TB SSD'?1.18:v==='2TB SSD'?1.28:1}
+ // RAM is priced separately. 8GB is the baseline; lower RAM options reduce the estimate.
+ let ramFactor=ram<8?Math.max(.62,1-(8-ram)*.045):ram===8?1:ram<=16?1+(ram-8)*.018:1.144+(ram-16)*.009;
+ return {value:p*storageFactor*ramFactor,raw:p,variantFactor:storageFactor*ramFactor,storageFactor,ramFactor,sourceKind};
+}
+function calc(){
+ let baseInfo=base(),factor=1,steps=[];
+ let sourceFactor=$('source').value==='new'?1.12:$('source').value==='local'?.94:1;
+ factor*=sourceFactor;steps.push(['Device source',sourceFactor,$('source').selectedOptions[0].text]);
+ let yearValue=$('year').value,ageFactor=yearValue==='na'?1:Math.max(.52,1-Math.max(0,2026-Number(yearValue))*.018);
+ factor*=ageFactor;steps.push(['Age adjustment',ageFactor,yearValue==='na'?'Not applied - year not supplied':`Year ${yearValue}`]);
+ let cityFactor={lagos:1.03,abuja:1.02,ph:1,other:.96}[$('city').value];factor*=cityFactor;steps.push(['City adjustment',cityFactor,$('city').selectedOptions[0].text]);
+ let cond={excellent:1.08,good:1,fair:.84,poor:.63}[$('condition').value];factor*=cond;steps.push(['Physical condition',cond,$('condition').selectedOptions[0].text]);
+ let bat={strong:1,average:.97,weak:.84,replace:.72,unknown:.94}[$('battery').value];factor*=bat;steps.push(['Battery',bat,$('battery').selectedOptions[0].text]);
+ let weights=type==='phone'?[.25,.10,.07,.12,.09,.12,.05,.10]:[.23,.12,.08,.18,.10,.06,.05,.07,.08,.08],fault=0,unknown=0,faultCount=0,faultNames=[];
+ [...document.querySelectorAll('[data-i]')].forEach((el,i)=>{if(el.value==='fault'){fault+=weights[i];faultCount++;faultNames.push(el.parentElement.querySelector('span').textContent)}if(el.value==='unknown')unknown++});
+ let partsFactor=Math.max(.35,1-fault*.82);factor*=partsFactor;steps.push(['Faulty components',partsFactor,faultCount?faultNames.join(', '):'No faults marked']);
+ let lock=$('lock').value,lockFactor=lock==='locked'?.25:lock==='unknown'?.88:1;factor*=lockFactor;steps.push(['Account / activation status',lockFactor,$('lock').selectedOptions[0].text]);
+ let rep=$('repair').value,repairFactor={none:1,minor:.94,major:.76,unknown:.9}[rep];factor*=repairFactor;steps.push(['Repair history',repairFactor,$('repair').selectedOptions[0].text]);
+ let mid=baseInfo.value*factor,unc=.12+unknown*.012+(lock==='unknown'?.05:0)+(rep==='unknown'?.025:0)+(yearValue==='na'?.04:0);
+ let lo=Math.max(5000,mid*(1-unc)),hi=mid*(1+unc),quick=mid*.88;
+ let score=Math.max(0,Math.min(100,Math.round(100*cond*bat*lockFactor*repairFactor*partsFactor)));
+ $('price').textContent=fmt(lo)+' – '+fmt(hi);$('range').textContent='Private-sale guide · '+$('city').selectedOptions[0].text;
+ $('quick').textContent=fmt(quick);$('mid').textContent=fmt(mid);$('faultImpact').textContent=faultCount?faultCount+' faulty part(s) · approx. −'+Math.round(fault*.82*100)+'%':'No faults reported';
+ $('score').textContent=score+'/100';$('bar').style.width=score+'%';$('grade').textContent=(score>=90?'Excellent':score>=78?'Good':score>=62?'Fair':score>=40?'Needs repair':'Parts / repair value')+' condition';$('confidence').textContent=(unknown>1||yearValue==='na')?'Indicative · some details unknown':'Indicative estimate';
+ let modelName=$('customName').value.trim()||$('model').value;
+ let brand=$('brand').value,device=`${brand} ${modelName}`;
+ $('estimateDevice').textContent=`${type==='phone'?'📱 Phone':'💻 Laptop'} · ${device}`;
+ let detailRows=steps.map(([name,mult,detail])=>`<div style="display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #e4ebf4;padding:6px 0"><span><b>${name}</b><br><span style="color:#7b899b">${detail}</span></span><b>${mult===1?'No change':(mult>1?'+':'')+Math.round((mult-1)*100)+'%'}</b></div>`).join('');
+ $('explanation').innerHTML=`<b>How we arrived at ${fmt(mid)}</b><p style="margin:7px 0">Starting reference: <b>${fmt(baseInfo.raw)}</b> (${baseInfo.sourceKind}). The selected RAM (${ $('ram').value }) and storage (${ $('variant').value }) change this to <b>${fmt(baseInfo.value)}</b> (RAM adjustment ${Math.round((baseInfo.ramFactor-1)*100)}%; storage adjustment ${Math.round((baseInfo.storageFactor-1)*100)}%). We then apply the adjustments below:</p>${detailRows}<p style="margin:9px 0 0"><b>Final calculation:</b> configuration-adjusted reference × all adjustment factors = <b>${fmt(mid)}</b> midpoint. The displayed range is <b>${fmt(lo)}–${fmt(hi)}</b>, using an uncertainty band of approximately ±${Math.round(unc*100)}%.</p><p style="margin:8px 0 0;color:#78879a">This is a transparent estimate model, not a live quote. Catalogue reference amounts are starter benchmarks and should be checked against current Nigerian listings and actual completed sales.</p>`;
+ last={device,range:fmt(lo)+' – '+fmt(hi),mid:fmt(mid),quick:fmt(quick),score};
+}
+function refreshSearch(){
+ let optionsList=[];
+ Object.entries(data[type]).forEach(([brand,models])=>Object.keys(models).forEach(model=>{if(model!=='Custom model')optionsList.push(`${brand} - ${model}`)}));
+ $('modelSuggestions').innerHTML=optionsList.map(x=>`<option value="${x.replaceAll('&','&amp;').replaceAll('"','&quot;')}"></option>`).join('');
+}
+function useSearch(){
+ let q=$('modelSearch').value.trim();if(!q)return;
+ let found=null;
+ Object.entries(data[type]).some(([brand,models])=>Object.keys(models).some(model=>{
+  if(model!=='Custom model'&&(model.toLowerCase()===q.toLowerCase()||`${brand} - ${model}`.toLowerCase()===q.toLowerCase())){found={brand,model};return true}return false
+ }));
+ if(found){$('brand').value=found.brand;loadModel();$('model').value=found.model;$('custom').classList.add('hidden');$('customName').value=''}
+ else{$('model').value='Custom model';$('custom').classList.remove('hidden');$('customName').value=q}
+}
+$('phone').onclick=()=>{setType('phone');$('modelSearch').value=''};$('laptop').onclick=()=>{setType('laptop');$('modelSearch').value=''};$('brand').onchange=()=>{loadModel();$('modelSearch').value=''};$('model').onchange=()=>{$('custom').classList.toggle('hidden',$('model').value!=='Custom model');$('customName').value='';$('modelSearch').value=$('model').value==='Custom model'?'':$('brand').value+' - '+$('model').value};
+$('modelSearch').addEventListener('change',useSearch);$('modelSearch').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();useSearch()}});
+$('explain').onclick=()=>{if(!last)calc();$('explanation').classList.toggle('hidden');$('explain').textContent=$('explanation').classList.contains('hidden')?'How was this price calculated?':'Hide price explanation';};
+$('calc').onclick=calc;$('reset').onclick=()=>location.reload();
+function downloadEstimateGraphic(){
+  if(!last)calc();
+  const canvas=document.createElement('canvas');
+  canvas.width=1200; canvas.height=1600;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const rounded=(x,y,w,h,r,fill,stroke)=>{
+    ctx.beginPath();ctx.roundRect(x,y,w,h,r);
+    if(fill){ctx.fillStyle=fill;ctx.fill();}
+    if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();}
+  };
+  const text=(value,x,y,size,color,weight='600',align='left')=>{
+    ctx.font=`${weight} ${size}px system-ui, Arial`;
+    ctx.fillStyle=color;ctx.textAlign=align;ctx.textBaseline='alphabetic';
+    ctx.fillText(String(value),x,y);
+  };
+  const fitText=(value,x,y,maxWidth,maxSize,minSize,color,weight='700',align='left')=>{
+    let size=maxSize;
+    while(size>minSize){ctx.font=`${weight} ${size}px system-ui, Arial`;if(ctx.measureText(String(value)).width<=maxWidth)break;size-=1;}
+    text(value,x,y,size,color,weight,align);
+  };
+  const wrap=(value,x,y,maxWidth,lineHeight,size,color,weight='700',maxLines=2)=>{
+    ctx.font=`${weight} ${size}px system-ui, Arial`;
+    const words=String(value).split(/\s+/);let line='',yy=y,lines=0;
+    for(let i=0;i<words.length;i++){
+      const test=line?line+' '+words[i]:words[i];
+      if(ctx.measureText(test).width>maxWidth&&line){
+        text(line,x,yy,size,color,weight);lines++;yy+=lineHeight;line=words[i];
+        if(lines>=maxLines-1){
+          let rest=[line,...words.slice(i+1)].join(' ');
+          while(rest.length&&ctx.measureText(rest+'…').width>maxWidth)rest=rest.slice(0,-1);
+          text(rest.trim()+'…',x,yy,size,color,weight);return yy;
+        }
+      }else line=test;
+    }
+    if(line)text(line,x,yy,size,color,weight);
+    return yy;
+  };
+
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#0b1930');bg.addColorStop(.58,'#153c75');bg.addColorStop(1,'#2459d3');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  ctx.globalAlpha=.12;ctx.fillStyle='#8db8ff';
+  ctx.beginPath();ctx.arc(1080,130,260,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(90,1510,300,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+
+  // Generous fixed-height card keeps every element inside the exported image.
+  rounded(60,60,1080,1480,38,'#ffffff');
+  text('₦ DEVICEWORTH',118,150,34,'#16345d','900');
+  text('NG',412,150,34,'#2459d3','900');
+  rounded(118,190,390,50,24,'#edf3ff');
+  text('USED-DEVICE VALUE ESTIMATE',313,223,17,'#315b9b','800','center');
+
+  wrap(last.device||'Your device',118,330,960,58,46,'#15243a','850',2);
+  text('ESTIMATED PRIVATE-SALE RANGE',118,490,20,'#75849a','800');
+  fitText(last.range,118,575,960,62,38,'#173b70','900');
+  text('Indicative resale value · Nigerian market',118,625,21,'#718095','500');
+
+  rounded(118,685,964,190,24,'#f2f6fc','#e4ebf4');
+  text('MIDPOINT ESTIMATE',158,745,18,'#77869a','800');
+  fitText(last.mid,158,815,390,44,30,'#15355f','900');
+  text('QUICK-SALE GUIDE',640,745,18,'#77869a','800');
+  fitText(last.quick,640,815,390,42,29,'#15355f','900');
+
+  text('CONDITION SCORE',118,965,19,'#77869a','800');
+  text(`${last.score}/100`,1082,965,28,'#15355f','900','right');
+  rounded(118,990,964,20,10,'#e9eef5');
+  rounded(118,990,964*Math.max(0,Math.min(100,last.score))/100,20,10,'#1b9b79');
+
+  rounded(118,1055,964,150,20,'#eef4ff');
+  fitText($('grade').textContent,158,1115,884,27,19,'#315b9b','800');
+  wrap('Based on the selected device details and condition',158,1165,880,27,18,'#6f7f94','500',2);
+
+  ctx.strokeStyle='#e8edf4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(118,1225);ctx.lineTo(1082,1225);ctx.stroke();
+  text('KNOW THE VALUE. NEGOTIATE BETTER.',118,1275,20,'#315b9b','900');
+  text('Indicative estimate only · Verify locally before trading',118,1310,17,'#8491a2','500');
+  fitText('Try Device Worth: http://niti.com.ng/tools/deviceworth',118,1360,900,19,15,'#2459d3','800');
+  text('DEVICEWORTH NG',1082,1360,17,'#8491a2','800','right');
+
+  canvas.toBlob(blob=>{
+    if(!blob){$('share').textContent='Could not create image';return;}
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    const safe=(last.device||'device-estimate').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    a.href=url;a.download=`deviceworth-${safe||'estimate'}.png`;
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+    const btn=$('share');btn.textContent='Graphic downloaded ✓';
+    setTimeout(()=>btn.textContent='Share estimate',2200);
+  },'image/png');
+}
+$('share').onclick=downloadEstimateGraphic;
+$('copy').onclick=async()=>{
+  if(!last)calc();
+  const message = `I checked the estimated resale value of my ${last.device} with DeviceWorth NG.
+
+Estimated selling price in Nigeria: ${last.range}
+Typical selling price (midpoint): ${last.mid}
+If I want to sell quickly: around ${last.quick}
+Device condition score: ${last.score} out of 100.
+
+This is an estimate, not a confirmed offer. The final price may change after someone inspects the device.
+
+Check your own device value with DeviceWorth NG:
+http://niti.com.ng/tools/deviceworth`;
+  const btn=$('copy');
+  try {
+    if(navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(message);
+      btn.textContent='Summary copied ✓';
+    } else {
+      const field=document.createElement('textarea');
+      field.value=message;field.setAttribute('readonly','');
+      field.style.position='fixed';field.style.opacity='0';
+      document.body.appendChild(field);field.select();
+      const copied=document.execCommand('copy');field.remove();
+      btn.textContent=copied?'Summary copied ✓':'Select and copy manually';
+    }
+  } catch(e) {
+    btn.textContent='Could not copy — try again';
+  }
+  setTimeout(()=>btn.textContent='Copy estimate summary',2600);
+};
+for(let y=2026;y>=2014;y--){let o=document.createElement('option');o.value=String(y);o.textContent=y;if(y===2022)o.selected=true;$('year').append(o)}
+setType('phone');refreshSearch();
+const oldSetType=setType;setType=(t)=>{oldSetType(t);refreshSearch()};
+})();
+</script>
+<footer class="site-footer" style="text-align:center;padding:22px 16px;margin-top:28px;color:#64748b;font-size:14px;border-top:1px solid rgba(148,163,184,.25)">
+  Powered by <a href="https://niti.com.ng/" target="_blank" rel="noopener noreferrer" style="color:inherit;font-weight:700;text-decoration:none">Neroitech Inventions</a>
+</footer>
+
+</body></html>
