@@ -136,8 +136,11 @@
     }
     .status { color: var(--muted); font-size: 0.75rem; }
     @media (max-width: 800px) {
-      .wrap { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+      .wrap { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
       .col { border-right: none; border-bottom: 1px solid var(--border); }
+      .wrap.preview-only { grid-template-rows: 1fr; }
+      .wrap.preview-only .editor-col { display: none; }
+      iframe { min-height: 70vh; }
     }
 
     /* Secure-looking APK Builder access experience */
