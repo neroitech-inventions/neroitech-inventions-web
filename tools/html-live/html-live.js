@@ -14,6 +14,65 @@
 
   const STORAGE_KEY = "htmlLivePreviewDraft";
 
+  // URL option: ?control=off hides the floating "Show controls" button.
+  // The default (or ?control=on) keeps the button available.
+  const controlSetting = new URLSearchParams(window.location.search).get("control");
+  const controlMode = controlSetting ? controlSetting.toLowerCase() : "";
+  const disableShowControlsCheckbox = document.getElementById("disableShowControls");
+
+  function applyControlOff() {
+    const params = new URLSearchParams(window.location.search);
+    params.set("control", "off");
+    const query = params.toString();
+    window.history.replaceState(null, "", window.location.pathname + (query ? "?" + query : "") + window.location.hash);
+
+    const showControlsButton = document.getElementById("showHeaderBtn");
+    if (showControlsButton) showControlsButton.style.display = "none";
+
+    if (disableShowControlsCheckbox) {
+      disableShowControlsCheckbox.checked = true;
+      disableShowControlsCheckbox.disabled = true;
+    }
+  }
+
+  const controlWarningModal = document.getElementById("controlWarningModal");
+  const cancelHideControls = document.getElementById("cancelHideControls");
+  const confirmHideControls = document.getElementById("confirmHideControls");
+
+  function closeControlWarning() {
+    if (controlWarningModal) controlWarningModal.classList.remove("open");
+    if (disableShowControlsCheckbox && !disableShowControlsCheckbox.disabled) {
+      disableShowControlsCheckbox.checked = false;
+    }
+  }
+
+  if (controlMode === "off") {
+    applyControlOff();
+  } else if (disableShowControlsCheckbox && controlWarningModal) {
+    disableShowControlsCheckbox.addEventListener("change", function () {
+      if (!disableShowControlsCheckbox.checked) return;
+      controlWarningModal.classList.add("open");
+      if (cancelHideControls) cancelHideControls.focus();
+    });
+
+    if (cancelHideControls) cancelHideControls.addEventListener("click", closeControlWarning);
+    if (confirmHideControls) confirmHideControls.addEventListener("click", function () {
+      controlWarningModal.classList.remove("open");
+      applyControlOff();
+      showToast("Show controls disabled for this URL.");
+    });
+
+    controlWarningModal.addEventListener("click", function (event) {
+      if (event.target === controlWarningModal) closeControlWarning();
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && controlWarningModal.classList.contains("open")) {
+        closeControlWarning();
+      }
+    });
+  }
+
   const URLMINI = {
     SHEET_ID: "1ZUUmPDQGseg5bGEagOeFy89akZRtFQAIm5MksrGOrtw",
     API_KEY: "AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q",
@@ -41,6 +100,24 @@
     const open = "<scr" + "ipt>";
     const close = "</scr" + "ipt>";
     return ["<!DOCTYPE html><html><head><meta charset='UTF-8'>","<meta name='viewport' content='width=device-width, initial-scale=1.0'>","<style>",cssEl.value,"</style></head><body>",htmlEl.value,open,jsEl.value,close,"</body></html>"].join("\n");
+  }
+
+  function updateAddressBarWithPreview() {
+    const data = {
+      html: htmlEl.value,
+      css: cssEl.value,
+      js: jsEl.value
+    };
+
+    try {
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+      const fullUrl = window.location.pathname + window.location.search + "#live=" + encoded;
+      window.history.replaceState(null, "", fullUrl);
+      showToast("Preview URL updated in the address bar");
+    } catch (e) {
+      console.error("Could not update preview URL:", e);
+      showToast("Could not generate preview URL");
+    }
   }
 
   function runPreview(opts) {
@@ -202,6 +279,7 @@ async function doShare() {
     const longUrl =
       window.location.origin +
       window.location.pathname +
+      window.location.search +
       "#live=" + encoded;
 
     showToast("Creating share link...");
@@ -272,7 +350,10 @@ async function doShare() {
   document.getElementById("tab-html").onclick = function () { showTab("html"); };
   document.getElementById("tab-css").onclick = function () { showTab("css"); };
   document.getElementById("tab-js").onclick = function () { showTab("js"); };
-  document.getElementById("btnRun").onclick = runPreview;
+  document.getElementById("btnRun").onclick = function () {
+    runPreview();
+    updateAddressBarWithPreview();
+  };
   document.getElementById("btnBack").onclick = goBackPreview;
   document.getElementById("btnRefresh").onclick = function () { runPreview({ record: false }); };
   document.getElementById("btnCopy").onclick = copyCode;

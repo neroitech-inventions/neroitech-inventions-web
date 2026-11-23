@@ -170,6 +170,46 @@
     .apk-modal-foot { margin-top: 17px; text-align: center; color: #718198; font-size: 10px; line-height: 1.5; }
     .apk-modal-foot a, .apk-modal-foot a:link, .apk-modal-foot a:visited, .apk-modal-foot a:hover, .apk-modal-foot a:active { color: #ffffff !important; text-decoration: none !important; }
     @media (max-width: 520px) { .apk-modal { border-radius: 20px; } .apk-modal-top { padding: 25px 22px 17px; } .apk-modal-body { padding: 5px 22px 23px; } .apk-access-trigger { padding-inline: 9px; } }
+
+    .control-warning-backdrop {
+      position: fixed; inset: 0; z-index: 10000; display: none;
+      align-items: center; justify-content: center; padding: 22px;
+      background: rgba(2, 6, 23, .78); backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .control-warning-backdrop.open { display: flex; }
+    .control-warning-modal {
+      width: min(100%, 440px); overflow: hidden; position: relative;
+      border: 1px solid rgba(251, 191, 36, .28); border-radius: 24px;
+      color: #f8fafc; text-align: center;
+      background: radial-gradient(circle at 50% 0%, rgba(245,158,11,.15), transparent 42%),
+                  linear-gradient(155deg, #1b2639, #0b1220 70%);
+      box-shadow: 0 28px 90px rgba(0,0,0,.6), 0 0 45px rgba(245,158,11,.08);
+      animation: controlModalIn .22s ease-out;
+    }
+    @keyframes controlModalIn {
+      from { opacity: 0; transform: translateY(12px) scale(.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .control-warning-content { padding: 30px 30px 26px; }
+    .control-warning-icon {
+      width: 62px; height: 62px; display: grid; place-items: center;
+      margin: 0 auto 17px; border-radius: 20px; font-size: 29px;
+      color: #fbbf24; background: rgba(245,158,11,.12);
+      border: 1px solid rgba(251,191,36,.24);
+      box-shadow: 0 8px 28px rgba(245,158,11,.1);
+    }
+    .control-warning-modal h2 { margin: 0 0 12px; font-size: 21px; letter-spacing: -.025em; }
+    .control-warning-modal p { color: #b8c4d6; font-size: 13px; line-height: 1.7; margin: 0; }
+    .control-warning-modal .contact { margin-top: 13px; color: #fcd34d; font-weight: 700; }
+    .control-warning-actions { display: flex; gap: 10px; padding: 0 30px 28px; }
+    .control-warning-actions button { flex: 1; min-height: 44px; border-radius: 12px; font-size: 13px; }
+    .control-warning-cancel { background: rgba(148,163,184,.1); border: 1px solid rgba(148,163,184,.22); color: #dbeafe; }
+    .control-warning-continue { border: 0; color: #111827; background: linear-gradient(110deg,#fbbf24,#f59e0b); font-weight: 800; }
+    @media (max-width: 520px) {
+      .control-warning-content { padding: 27px 22px 22px; }
+      .control-warning-actions { padding: 0 22px 22px; }
+    }
   </style>
 </head>
 <body>
@@ -190,6 +230,10 @@
     <button type="button" id="btnShare">Share</button>
     <button type="button" class="apk-access-trigger" id="btnApkBuilder">APK builder</button>
     <button type="button" id="btnToggle" aria-pressed="false">Preview only</button>
+    <label class="status" style="display:flex;align-items:center;gap:6px;white-space:nowrap;">
+      <input type="checkbox" id="disableShowControls">
+      Permanently hide Show controls
+    </label>
     <span class="status" id="status">Ready</span>
   </header>
   <button type="button" id="showHeaderBtn">
@@ -198,6 +242,22 @@
     </svg>
     Show controls
   </button>
+  <div class="control-warning-backdrop" id="controlWarningModal" role="dialog" aria-modal="true" aria-labelledby="controlWarningTitle" aria-describedby="controlWarningDescription">
+    <section class="control-warning-modal">
+      <div class="control-warning-content">
+        <div class="control-warning-icon" aria-hidden="true">⚠</div>
+        <h2 id="controlWarningTitle">Hide the Show Controls button?</h2>
+        <p id="controlWarningDescription">
+          If you continue, the floating Show controls button will be hidden for this link. This action cannot be reversed from the page.
+        </p>
+        <p class="contact">To restore it, contact the developer on Telegram @LiquidityApe.</p>
+      </div>
+      <div class="control-warning-actions">
+        <button type="button" class="control-warning-cancel" id="cancelHideControls">No, cancel</button>
+        <button type="button" class="control-warning-continue" id="confirmHideControls">Yes, continue</button>
+      </div>
+    </section>
+  </div>
   <div class="wrap" id="wrap">
     <div class="col editor-col">
       <div class="label" id="editorLabel">HTML</div>
