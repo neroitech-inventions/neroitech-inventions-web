@@ -377,6 +377,11 @@
     htmlEl.readOnly = true;
     cssEl.readOnly = true;
     jsEl.readOnly = true;
+
+    // Hide Share button while locked (user cannot edit, so cannot create a new share)
+    const shareBtn = document.getElementById("btnShare");
+    if (shareBtn) shareBtn.style.display = "none";
+
     const banner = document.createElement("div");
     banner.id = "readonly-banner";
     banner.style.cssText = "background:#1e293b;color:white;padding:10px 16px;text-align:center;font-size:0.85rem;display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;";
@@ -394,9 +399,14 @@
         cssEl.readOnly = false;
         jsEl.readOnly = false;
         document.getElementById("readonly-banner")?.remove();
+        const shareBtn = document.getElementById("btnShare");
+        if (shareBtn) shareBtn.style.display = "";
         showToast("Unlocked — you can now edit");
       } else {
-        showToast("Wrong code");
+        // Re-prompt with clear error
+        showConfirm("Wrong Code", "The lock code you entered is incorrect. Try again?", (retry) => {
+          if (retry) promptUnlock();
+        }, true);
       }
     }, true);
   }
