@@ -11,6 +11,10 @@ const USDT_POLYGON =
 const USDT_SOLANA =
   "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB";
 
+// BAOBAO SPL mint on Solana (merchant receives into their BAOBAO token account)
+const BAOBAO_SOLANA =
+  "7Da1f2wibgzZZheXnVvqYgbWpccnGPM2CJPUkdcebonk";
+
 const SHEETS = {
   // Used by index.html
   NWC_SHEET_ID:

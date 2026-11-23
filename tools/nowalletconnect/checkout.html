@@ -238,7 +238,7 @@
             <div class="error" id="error"></div>
 
             <h1>NoWalletConnect</h1>
-            <p class="subtitle">Pay with USDT</p>
+            <p class="subtitle">Pay with USDT or BAOBAO</p>
             <div class="merchant-chip" id="merchantChip">Merchant: —</div>
 
             <form onsubmit="handlePayment(event)">
@@ -248,7 +248,7 @@
                         type="number"
                         id="amount"
                         placeholder="100.00"
-                        step="0.01"
+                        step="any"
                         min="0.01"
                         required
                         oninput="updateDisplay()"
@@ -269,6 +269,16 @@
                         </div>
                     </div>
                     <p class="lock-note" id="networkLockNote" hidden>Network is fixed.</p>
+                </div>
+
+                <div class="form-group" id="assetGroup" hidden>
+                    <label for="asset">Solana payment token</label>
+                    <select id="asset" style="width:100%;padding:14px 16px;background:rgba(30,41,59,.8);border:2px solid rgba(148,163,184,.12);border-radius:12px;color:#f1f5f9;font:inherit;" onchange="updateDisplay()">
+                        <option value="usdt">USDT</option>
+                        <option value="baobao">BAOBAO</option>
+                    </select>
+                    <p class="lock-note" id="assetLockNote" hidden>Payment token is fixed.</p>
+                    <p class="lock-note" id="assetMintHint" hidden>Send your payment in BAOBAO tokens. The amount shown is the amount of BAOBAO you need to pay.<br>BAOBAO token address: 7Da1f2wibgzZZheXnVvqYgbWpccnGPM2CJPUkdcebonk</p>
                 </div>
 
                 <div class="display-box">
@@ -298,7 +308,8 @@
         const locked = {
             merchant: (params.get("merchant") || "").trim(),
             amount: params.get("amount"),
-            network: (params.get("network") || "").trim().toLowerCase()
+            network: (params.get("network") || "").trim().toLowerCase(),
+            asset: (params.get("asset") || "").trim().toLowerCase()
         };
 
         function showError(message) {
@@ -315,13 +326,22 @@
         function updateDisplay() {
             const raw = document.getElementById("amount").value;
             const amount = parseFloat(raw);
-            const network = selectedNetwork();
+            let network = selectedNetwork();
+            const assetSelect = document.getElementById("asset");
+            let asset = assetSelect ? assetSelect.value : "usdt";
+            if (asset === "baobao") {
+                network = "solana";
+                document.getElementById("solana").checked = true;
+            }
+            document.getElementById("assetGroup").hidden = network !== "solana";
+            document.getElementById("assetMintHint").hidden = !(network === "solana" && asset === "baobao");
+            document.getElementById("amount").min = asset === "baobao" ? "0.000001" : "0.01";
             const payBtn = document.getElementById("payBtn");
 
             document.getElementById("displayAmount").textContent =
-                raw && !Number.isNaN(amount) ? amount.toFixed(2) : "—";
+                raw && !Number.isNaN(amount) ? amount.toLocaleString(undefined, { maximumFractionDigits: 6 }) : "—";
             document.getElementById("displayNetwork").textContent =
-                network === "solana" ? "Solana" : "Polygon";
+                network === "solana" ? "Solana · " + (asset === "baobao" ? "BAOBAO" : "USDT") : "Polygon · USDT";
 
             payBtn.disabled = !locked.merchant || !raw || Number.isNaN(amount) || amount <= 0;
         }
@@ -333,7 +353,7 @@
                 showError("This payment link has an invalid amount.");
                 return;
             }
-            input.value = parsed.toFixed(2);
+            input.value = String(parsed);
             input.readOnly = true;
             input.tabIndex = -1;
             document.getElementById("amountLockNote").hidden = false;
@@ -353,6 +373,16 @@
             document.getElementById("networkLockNote").hidden = false;
         }
 
+        function lockAsset(value) {
+            const asset = value === "baobao" ? "baobao" : (value === "usdt" ? "usdt" : "");
+            if (!asset) { showError("This payment link has an invalid asset."); return; }
+            const select = document.getElementById("asset");
+            select.value = asset;
+            select.disabled = true;
+            document.getElementById("assetLockNote").hidden = false;
+            if (asset === "baobao") lockNetwork("solana");
+        }
+
         function handlePayment(event) {
             event.preventDefault();
 
@@ -362,7 +392,9 @@
             }
 
             const amount = parseFloat(document.getElementById("amount").value);
-            const network = selectedNetwork();
+            let network = selectedNetwork();
+            const asset = document.getElementById("asset").value === "baobao" ? "baobao" : "usdt";
+            if (asset === "baobao") network = "solana";
 
             if (!amount || amount <= 0) {
                 showError("Please enter a valid amount.");
@@ -373,7 +405,8 @@
                 CHECKOUT_PAGE +
                 "?merchant=" + encodeURIComponent(locked.merchant) +
                 "&amount=" + encodeURIComponent(amount) +
-                "&network=" + encodeURIComponent(network);
+                "&network=" + encodeURIComponent(network) +
+                "&asset=" + encodeURIComponent(asset);
         }
 
         if (!locked.merchant) {
@@ -390,6 +423,9 @@
 
         if (locked.network) {
             lockNetwork(locked.network);
+        }
+        if (locked.asset) {
+            lockAsset(locked.asset);
         }
 
         updateDisplay();

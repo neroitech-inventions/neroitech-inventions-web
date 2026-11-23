@@ -241,6 +241,7 @@
         const amount = first(["amount"]);
         const merchant = first(["merchant"]);
         const network = first(["network"]).toLowerCase();
+        const asset = (first(["asset"]) || "usdt").toLowerCase() === "baobao" ? "BAOBAO" : "USDT";
         const tx = first(["tx_hash", "tx", "hash"]);
         const paymentId = first(["payment_id"]);
         const buttonUrl = safeHttpUrl(first(["redirect", "next", "url", "button", "home", "href"]));
@@ -262,7 +263,7 @@
         }
 
         const facts = [];
-        if (amount) facts.push(["Amount", parseFloat(amount) ? parseFloat(amount).toFixed(2) + " USDT" : amount]);
+        if (amount) facts.push(["Amount", parseFloat(amount) ? parseFloat(amount).toLocaleString(undefined, { maximumFractionDigits: 6 }) + " " + asset : amount]);
         if (network) facts.push(["Network", network === "solana" ? "Solana" : "Polygon"]);
         if (merchant) facts.push(["Merchant", merchant]);
         if (paymentId) facts.push(["Reference", paymentId]);

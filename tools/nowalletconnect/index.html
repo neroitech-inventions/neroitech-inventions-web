@@ -1075,13 +1075,22 @@
     placeholder="0.00"
     value=""
     min="0.01"
-    step="0.01"
+    step="any"
     oninput="onAmountTyped()"
     onblur="lockUniqueAmount(); startWatchingFromCheckout()"
 >
             <button type="button" class="amount-clear" id="clearAmountBtn" onclick="clearAmount()">×</button>
         </div>
-        <span>USDT</span>
+        <span id="amountAssetSymbol">USDT</span>
+    </div>
+
+    <div id="assetSelectorWrap" style="margin: 0 0 16px;">
+        <label for="paymentAssetSelect" style="display:block;font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--muted);margin-bottom:7px;">PAYMENT TOKEN</label>
+        <select id="paymentAssetSelect" onchange="selectAsset(this.value)" style="width:100%;padding:12px;background:rgba(30,41,59,.8);border:1px solid var(--border);border-radius:9px;color:var(--text);font:inherit;">
+            <option value="usdt">USDT</option>
+            <option value="baobao">BAOBAO (Solana)</option>
+        </select>
+        <div id="assetAmountHint" style="font-size:.78rem;color:var(--muted);margin-top:6px;">The amount shown is the amount of USDT to send.</div>
     </div>
 
     <div class="payment-details">
@@ -1268,6 +1277,7 @@
 
         let state = {
             network: 'polygon',
+            asset: 'usdt',
             walletAddress: DEFAULT_POLYGON_WALLET,
             polygonWallet: DEFAULT_POLYGON_WALLET,
             solanaWallet: DEFAULT_SOLANA_WALLET,
@@ -1282,6 +1292,7 @@
         const GATEWAY = {
           merchantId: null,
           amount: null,
+          asset: 'usdt',
           returnUrl: null,
           isGatewayMode: false,
         };
@@ -1293,9 +1304,17 @@
         // ═════════════════════════════════════════
 
 
-function uniquePayAmount(base) {
-  const price = Math.round(Number(base) * 100) / 100;
+function roundAssetAmount(value, asset = state.asset || 'usdt') {
+  // Keep the merchant's base price at two decimal places for both tokens.
+  const factor = 100;
+  return Math.round(Number(value) * factor) / factor;
+}
+
+function uniquePayAmount(base, asset = state.asset || 'usdt') {
+  const price = roundAssetAmount(base, asset);
   if (!Number.isFinite(price) || price <= 0) return 0;
+
+  // Use the same four-decimal payment reference for USDT and BAOBAO.
   const tag = Math.floor(Math.random() * 90) + 10;
   return Number((price + tag / 10000).toFixed(4));
 }        
@@ -1304,7 +1323,9 @@ function detectGatewayMode() {
   const params = new URLSearchParams(window.location.search);
   const merchantId = params.get('merchant');
   const amount = params.get('amount');
-  const network = params.get('network') || 'polygon';
+  const requestedAsset = (params.get('asset') || 'usdt').toLowerCase();
+  const asset = requestedAsset === 'baobao' ? 'baobao' : 'usdt';
+  const network = asset === 'baobao' ? 'solana' : (params.get('network') || 'polygon');
 
   if (!merchantId) {
     return false;
@@ -1322,10 +1343,11 @@ function detectGatewayMode() {
 
   GATEWAY.merchantId = merchantId;
   GATEWAY.listedAmount = parseFloat(amount);
-  GATEWAY.amount = uniquePayAmount(GATEWAY.listedAmount);
+  GATEWAY.amount = uniquePayAmount(GATEWAY.listedAmount, asset);
+  GATEWAY.asset = asset;
   GATEWAY.isGatewayMode = true;
   console.log('🎯 GATEWAY MODE DETECTED', GATEWAY);
-  loadMerchantForGateway(merchantId, GATEWAY.amount, network);
+  loadMerchantForGateway(merchantId, GATEWAY.amount, network, asset);
   return true;
 }
 
@@ -1359,7 +1381,7 @@ function showMerchantError(message) {
   `;
 }
 
-async function loadMerchantForGateway(merchantId, amount, network) {
+async function loadMerchantForGateway(merchantId, amount, network, asset = 'usdt') {
   try {
     const merchants = await fetchMerchants();
     const merchant = merchants[merchantId];
@@ -1376,8 +1398,9 @@ async function loadMerchantForGateway(merchantId, amount, network) {
     GATEWAY.isGatewayMode = true;
 
     // ✅ Use network from URL
-    state.network = network;
-    state.walletAddress = network === 'polygon' ? merchant.polygonWallet : merchant.solanaWallet;
+    state.network = asset === 'baobao' ? 'solana' : network;
+    state.asset = asset === 'baobao' ? 'baobao' : 'usdt';
+    state.walletAddress = state.network === 'polygon' ? merchant.polygonWallet : merchant.solanaWallet;
     
     // ✅ UPDATE UI WITH NETWORK INFO
     updatePaymentNetwork();
@@ -1393,6 +1416,8 @@ async function loadMerchantForGateway(merchantId, amount, network) {
     // Update UI
     document.getElementById('expectedAmount').value = amount;
     document.getElementById('expectedAmount').disabled = true;
+    const assetSelect = document.getElementById('paymentAssetSelect');
+    if (assetSelect) { assetSelect.value = state.asset; assetSelect.disabled = true; }
 
     // Regenerate QR code with correct wallet for network
     generateQRCode(state.walletAddress);
@@ -1405,7 +1430,7 @@ async function loadMerchantForGateway(merchantId, amount, network) {
 
     const addressLabel = document.getElementById('addressLabel');
     if (addressLabel) {
-      addressLabel.textContent = 'Send USDT to:';
+      addressLabel.textContent = 'Send ' + assetLabel(state.asset) + ' to:';
       addressLabel.style.display = 'block';
     }
 
@@ -1443,6 +1468,7 @@ async function loadMerchantForGateway(merchantId, amount, network) {
           redirectUrl.searchParams.append('amount', GATEWAY.amount);
           redirectUrl.searchParams.append('merchant', GATEWAY.merchantId);
           redirectUrl.searchParams.append('network', state.network);
+          redirectUrl.searchParams.append('asset', state.asset);
           redirectUrl.searchParams.append('status', 'success');
 
           console.log('🔄 Redirecting to merchant:', redirectUrl.toString());
@@ -1614,6 +1640,7 @@ function returnToMerchant() {
     url.searchParams.set("paid", String(state.expectedAmount || ""));
     url.searchParams.set("merchant", GATEWAY.merchantId || "");
     url.searchParams.set("network", state.network || "");
+    url.searchParams.set("asset", state.asset || "usdt");
     url.searchParams.set("status", "success");
     window.location.href = url.toString();
   } catch (e) {
@@ -1661,55 +1688,69 @@ function returnToMerchant() {
             return '';
         }
 
+function assetLabel(asset = state.asset) {
+    return asset === 'baobao' ? 'BAOBAO' : 'USDT';
+}
+
 function selectNetwork(network) {
     state.network = network;
-    state.walletAddress =
-        network === 'polygon'
-            ? state.polygonWallet
-            : state.solanaWallet;
+    if (network === 'polygon') state.asset = 'usdt';
+    state.walletAddress = network === 'polygon' ? state.polygonWallet : state.solanaWallet;
 
-    document.querySelectorAll('.network-btn')
-        .forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.network-btn').forEach(btn => btn.classList.remove('active'));
+    const selected = document.querySelector(`.network-btn[onclick*="${network}"]`);
+    if (selected) selected.classList.add('active');
 
-    event.target.closest('.network-btn')
-        .classList.add('active');
-
-    // Update payment information
+    const assetSelect = document.getElementById('paymentAssetSelect');
+    if (assetSelect) assetSelect.value = state.asset;
     updatePaymentNetwork();
-
     setCookie('network', state.network);
 }
 
+function selectAsset(asset) {
+    state.asset = asset === 'baobao' ? 'baobao' : 'usdt';
+    if (state.asset === 'baobao') {
+        state.network = 'solana';
+        state.walletAddress = state.solanaWallet;
+        document.querySelectorAll('.network-btn').forEach(btn => btn.classList.remove('active'));
+        const solanaButton = document.querySelector('.network-btn[onclick*="solana"]');
+        if (solanaButton) solanaButton.classList.add('active');
+    }
+    state.expectedAmount = 0;
+    state.listedAmount = 0;
+    const amount = document.getElementById('expectedAmount');
+    if (amount && !amount.disabled) amount.value = '';
+    updatePaymentNetwork();
+}
+
 function updatePaymentNetwork() {
-    const networkElement =
-        document.getElementById('paymentNetwork');
-
-    const tokenElement =
-        document.getElementById('paymentToken');
-
-    const warningElement =
-        document.getElementById('networkWarning');
+    const networkElement = document.getElementById('paymentNetwork');
+    const tokenElement = document.getElementById('paymentToken');
+    const warningElement = document.getElementById('networkWarning');
+    const assetSelect = document.getElementById('paymentAssetSelect');
+    const assetWrap = document.getElementById('assetSelectorWrap');
+    const symbol = document.getElementById('amountAssetSymbol');
+    const hint = document.getElementById('assetAmountHint');
 
     if (state.network === 'solana') {
-
+        if (assetWrap) assetWrap.style.display = 'block';
+        if (assetSelect) assetSelect.value = state.asset;
         networkElement.textContent = 'Solana';
-        tokenElement.textContent = 'USDT (SPL)';
-
-        warningElement.innerHTML = `
-            <strong>⚠️ Only send USDT on Solana</strong>
-            <span>Sending from another network may result in permanent loss.</span>
-        `;
-
+        tokenElement.textContent = state.asset === 'baobao' ? 'BAOBAO (SPL)' : 'USDT (SPL)';
+        warningElement.innerHTML = state.asset === 'baobao'
+            ? '<strong>⚠️ Only send BAOBAO on Solana</strong><span>Use the exact BAOBAO mint shown in the payment details. Sending another token may result in loss.</span>'
+            : '<strong>⚠️ Only send USDT on Solana</strong><span>Sending from another network or token may result in permanent loss.</span>';
     } else {
-
+        state.asset = 'usdt';
+        if (assetWrap) assetWrap.style.display = 'none';
         networkElement.textContent = 'Polygon';
         tokenElement.textContent = 'USDT (ERC-20)';
-
-        warningElement.innerHTML = `
-            <strong>⚠️ Only send USDT on Polygon</strong>
-            <span>Sending from another network may result in permanent loss.</span>
-        `;
+        warningElement.innerHTML = '<strong>⚠️ Only send USDT on Polygon</strong><span>Sending from another network may result in permanent loss.</span>';
     }
+    if (symbol) symbol.textContent = assetLabel();
+    if (hint) hint.textContent = state.asset === 'baobao' ? 'Please send the amount shown in BAOBAO tokens to the wallet below.' : 'The amount shown is the amount of USDT to send.';
+    const amountInput = document.getElementById('expectedAmount');
+    if (amountInput) amountInput.min = state.asset === 'baobao' ? '0.000001' : '0.01';
 }
 
 function goToPaymentPage() {
@@ -1791,10 +1832,10 @@ function copyToClipboard() {
                 return;
             }
 
-            state.listedAmount = listed;
-            state.expectedAmount = uniquePayAmount(listed);
+            state.listedAmount = roundAssetAmount(listed);
+            state.expectedAmount = uniquePayAmount(state.listedAmount, state.asset);
             document.getElementById('expectedAmount').value = state.expectedAmount;
-            document.getElementById('waitAmount').textContent = state.expectedAmount + ' USDT';
+            document.getElementById('waitAmount').textContent = state.expectedAmount + ' ' + assetLabel();
             clearLog();
             
             console.log('Calling goToSection(3)');
@@ -1938,8 +1979,8 @@ function startWatchingFromCheckout() {
     }
 
     if (!state.expectedAmount) {
-        state.listedAmount = Math.round(typed * 100) / 100;
-        state.expectedAmount = uniquePayAmount(state.listedAmount);
+        state.listedAmount = roundAssetAmount(typed);
+        state.expectedAmount = uniquePayAmount(state.listedAmount, state.asset);
         document.getElementById("expectedAmount").value = state.expectedAmount;
     }
     setWatchStatus("Awaiting your payment...");
@@ -1974,10 +2015,25 @@ async function startAutoVerification() {
                 `${API}/verify?network=${encodeURIComponent(state.network)}` +
                 `&address=${encodeURIComponent(state.walletAddress)}` +
                 `&amount=${encodeURIComponent(state.expectedAmount)}` +
-                `&since=${state.watchStartedAt}`;
+                `&since=${state.watchStartedAt}` +
+                `&asset=${encodeURIComponent(state.asset || 'usdt')}`;
 
             const result = await (await fetch(url)).json();
             console.log("verify result", result);
+
+            // Fail closed until the Worker explicitly confirms BAOBAO support.
+            if (state.asset === 'baobao' && result.asset !== 'baobao') {
+                stopVerification();
+                setCountdownText("");
+                setWatchStatus("BAOBAO verification is not enabled on the server yet. Do not treat this payment as confirmed; deploy the Worker update first.");
+                return;
+            }
+            if (result.paid && state.asset === 'baobao' && result.mint !== BAOBAO_SOLANA) {
+                stopVerification();
+                setCountdownText("");
+                setWatchStatus("The server did not confirm the BAOBAO mint. Payment has not been marked as received.");
+                return;
+            }
 
 if (result.paid && result.tx) {
     if (state.recordedTx === result.tx) return;
@@ -2010,7 +2066,7 @@ async function showSuccess(txHash) {
   state.recordedTx = txHash;
   stopVerification();
 
-  document.getElementById("finalAmount").textContent = state.expectedAmount + " USDT";
+  document.getElementById("finalAmount").textContent = state.expectedAmount + " " + assetLabel();
 
   const explorerUrl = state.network === "polygon"
     ? "https://polygonscan.com/tx/" + txHash
@@ -2029,7 +2085,7 @@ async function showSuccess(txHash) {
         merchant_id: GATEWAY.merchantId || state.merchantId || "",
         amount: state.expectedAmount,
         tx_hash: txHash,
-        network: state.network,
+        network: state.network === 'solana' && state.asset === 'baobao' ? 'solana:baobao' : state.network,
         return_url: GATEWAY.returnUrl || ""
       });
     }
@@ -2057,6 +2113,10 @@ function goBack() {
 function newPayment() {
     stopVerification();
     state.expectedAmount = 0;
+    state.asset = 'usdt';
+    const assetSelect = document.getElementById('paymentAssetSelect');
+    if (assetSelect) assetSelect.value = 'usdt';
+    updatePaymentNetwork();
     const amountInput = document.getElementById("expectedAmount");
     if (amountInput) amountInput.value = "";
     setWatchStatus("Enter how much they should send");
@@ -2111,8 +2171,8 @@ function lockUniqueAmount() {
     if (!typed || typed <= 0) return;
 
     if (!state.expectedAmount) {
-        state.listedAmount = Math.round(typed * 100) / 100;
-        state.expectedAmount = uniquePayAmount(state.listedAmount);
+        state.listedAmount = roundAssetAmount(typed);
+        state.expectedAmount = uniquePayAmount(state.listedAmount, state.asset);
         el.value = state.expectedAmount;
     }
     onAmountTyped();
