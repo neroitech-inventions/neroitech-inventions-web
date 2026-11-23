@@ -215,9 +215,10 @@
     htmlEl.readOnly = true; cssEl.readOnly = true; jsEl.readOnly = true;
     const shareBtn = document.getElementById("btnShare");
     if (shareBtn) shareBtn.style.display = "none";
+    // Banner is created but hidden until Show controls is clicked
     const banner = document.createElement("div");
     banner.id = "readonly-banner";
-    banner.style.cssText = "background:#1e293b;color:white;padding:10px 16px;text-align:center;font-size:0.85rem;display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;";
+    banner.style.cssText = "display:none;background:#1e293b;color:white;padding:10px 16px;text-align:center;font-size:0.85rem;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;";
     banner.innerHTML = `<span>Read-only preview</span><button type="button" id="btnUnlock" style="background:#2563eb;color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:0.8rem;">Unlock to Edit</button>`;
     document.body.insertBefore(banner, document.getElementById("wrap"));
     document.getElementById("btnUnlock").onclick = promptUnlock;
@@ -231,6 +232,8 @@
         document.getElementById("readonly-banner")?.remove();
         const shareBtn = document.getElementById("btnShare");
         if (shareBtn) shareBtn.style.display = "";
+        const showBtn = document.getElementById("showHeaderBtn");
+        if (showBtn) showBtn.style.display = "";
         showToast("Unlocked — you can now edit");
       } else {
         showConfirm("Wrong Code", "The lock code you entered is incorrect. Try again?", (retry) => { if (retry) promptUnlock(); }, true);
@@ -310,6 +313,12 @@
   };
   document.getElementById("showHeaderBtn").onclick = function () {
     document.body.classList.remove("header-hidden");
+    if (isReadOnly) {
+      const banner = document.getElementById("readonly-banner");
+      if (banner) banner.style.display = "flex";
+      status.textContent = "Read-only — enter lock code to edit";
+      return;
+    }
     document.body.classList.remove("preview-only");
     const wrap = document.getElementById("wrap");
     const btn = document.getElementById("btnToggle");

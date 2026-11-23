@@ -112,17 +112,28 @@
       right: 2px;
       box-shadow: -8px 0 32px rgba(0,212,255,0.3), inset 0 1px 0 rgba(255,255,255,0.18);
     }
-    #showHeaderBtn svg {
-      width: 18px;
-      height: 18px;
-      opacity: 0.95;
-    }
+    #showHeaderBtn svg { width: 18px; height: 18px; opacity: 0.95; }
     body.header-hidden #showHeaderBtn { display: flex; }
     @media (max-width: 800px) {
       .wrap { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
       .col { border-right: none; border-bottom: 1px solid var(--border); }
       .wrap.preview-only { grid-template-rows: 1fr; }
       iframe { min-height: 70vh; }
+      #showHeaderBtn {
+        writing-mode: horizontal-tb;
+        flex-direction: row;
+        padding: 10px;
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        justify-content: center;
+        gap: 0;
+        right: 12px;
+        top: auto;
+        bottom: 20px;
+        transform: none;
+        font-size: 0;
+      }
     }
     .apk-access-trigger { background: linear-gradient(115deg, #00d4ff 0%, #8b5cf6 55%, #c084fc 100%); color: #07111c; border: 0; font-weight: 800; box-shadow: 0 7px 24px rgba(0, 212, 255, .18); }
     .apk-access-trigger:hover { filter: brightness(1.12); transform: translateY(-1px); }
@@ -134,7 +145,6 @@
     .apk-close { position: absolute; top: 14px; right: 14px; width: 34px; height: 34px; padding: 0; border-radius: 11px; color: #a8b4c7; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.09); font-size: 20px; }
     .apk-emblem { width: 68px; height: 68px; display: grid; place-items: center; margin: 0 auto 15px; border-radius: 21px; font-size: 30px; color: #07111c; background: linear-gradient(140deg, #67e8f9, #818cf8 60%, #c084fc); box-shadow: 0 10px 35px rgba(34,211,238,.2); }
     .apk-emblem svg { width: 39px; height: 39px; display: block; color: #07111c; }
-    .apk-eyebrow { color: #67e8f9; font-size: 10px; letter-spacing: .2em; font-weight: 800; text-transform: uppercase; }
     .apk-modal h2 { margin: 8px 0 7px; font-size: 23px; letter-spacing: -.035em; }
     .apk-subtitle { color: #9aa9bd; font-size: 13px; line-height: 1.55; }
     .apk-modal-body { padding: 5px 28px 27px; }
