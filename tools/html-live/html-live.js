@@ -401,7 +401,7 @@
         document.getElementById("readonly-banner")?.remove();
         const shareBtn = document.getElementById("btnShare");
         if (shareBtn) shareBtn.style.display = "";
-        showToast("Unlocked — you can now edit");
+        showToast("Unlocked - you can now edit");
       } else {
         // Re-prompt with clear error
         showConfirm("Wrong Code", "The lock code you entered is incorrect. Try again?", (retry) => {
@@ -523,7 +523,7 @@
     btn.setAttribute("aria-pressed", previewOnly ? "true" : "false");
     btn.textContent = previewOnly ? "Show editor" : "Preview only";
     status.textContent = previewOnly
-      ? "Preview only — click Show editor to return"
+      ? "Preview only - click Show editor to return"
       : "Editor visible";
   };
   [htmlEl, cssEl, jsEl].forEach(function (el) {
