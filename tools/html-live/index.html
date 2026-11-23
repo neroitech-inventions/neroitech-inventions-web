@@ -80,13 +80,39 @@
     body.header-hidden header { display: none; }
     body.header-hidden .wrap { height: 100vh; }
     #showHeaderBtn {
-      position: fixed; top: 12px; right: 12px; z-index: 1000; display: none;
-      background: rgba(26, 31, 46, 0.9); backdrop-filter: blur(10px);
-      border: 1px solid rgba(0, 212, 255, 0.4); color: var(--cyan);
-      border-radius: 999px; padding: 8px 14px; font-size: 0.75rem; font-weight: 600;
-      cursor: pointer; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(124,58,237,0.15));
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(0,212,255,0.35);
+      color: #e2e8f0;
+      border-radius: 999px;
+      padding: 10px 16px 10px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+      transition: all 0.2s ease;
     }
-    body.header-hidden #showHeaderBtn { display: block; }
+    #showHeaderBtn:hover {
+      background: linear-gradient(135deg, rgba(0,212,255,0.25), rgba(124,58,237,0.25));
+      border-color: rgba(0,212,255,0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.2), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    #showHeaderBtn svg {
+      width: 16px;
+      height: 16px;
+      opacity: 0.9;
+    }
+    body.header-hidden #showHeaderBtn { display: flex; }
     @media (max-width: 800px) {
       .wrap { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
       .col { border-right: none; border-bottom: 1px solid var(--border); }
@@ -142,7 +168,12 @@
     <button type="button" id="btnToggle" aria-pressed="false">Preview only</button>
     <span class="status" id="status">Ready</span>
   </header>
-  <button type="button" id="showHeaderBtn">Show controls</button>
+  <button type="button" id="showHeaderBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 5v14M5 12h14"/>
+    </svg>
+    Show controls
+  </button>
   <div class="wrap" id="wrap">
     <div class="col editor-col">
       <div class="label" id="editorLabel">HTML</div>
