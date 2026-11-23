@@ -10,8 +10,6 @@
   let currentDoc = "";
   let currentShortUrl = null;
   let isDirty = true;
-  let isReadOnly = false;
-  let currentLockCode = null;
   let saveTimer = null;
 
   const STORAGE_KEY = "htmlLivePreviewDraft";
@@ -128,35 +126,6 @@
 
   function showToast(msg) { status.textContent = msg; }
 
-  function showConfirm(title, message, onConfirm, withInput = false) {
-    const overlay = document.createElement("div");
-    overlay.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:2000;";
-    const modal = document.createElement("div");
-    modal.style.cssText = "background:#1a1f2e;color:#f1f5f9;padding:24px;border-radius:12px;max-width:360px;width:90%;text-align:center;";
-    modal.innerHTML = `<h3 style="margin:0 0 8px">${title}</h3><p style="color:#94a3b8;margin:0 0 16px">${message}</p>`;
-    let input = null;
-    if (withInput) {
-      input = document.createElement("input");
-      input.type = "text";
-      input.placeholder = "Lock code (optional)";
-      input.style.cssText = "width:100%;padding:10px;margin-bottom:16px;border:1px solid rgba(148,163,184,.3);border-radius:8px;background:#0b0f14;color:#f1f5f9;";
-      modal.appendChild(input);
-    }
-    const btns = document.createElement("div");
-    btns.style.cssText = "display:flex;gap:10px;justify-content:center;";
-    const cancel = document.createElement("button");
-    cancel.textContent = "Cancel";
-    cancel.style.cssText = "background:#475569;color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;";
-    const ok = document.createElement("button");
-    ok.textContent = "OK";
-    ok.style.cssText = "background:linear-gradient(135deg,#00d4ff,#7c3aed);color:#0f1419;border:none;padding:8px 16px;border-radius:8px;font-weight:700;cursor:pointer;";
-    btns.appendChild(cancel); btns.appendChild(ok); modal.appendChild(btns); overlay.appendChild(modal); document.body.appendChild(overlay);
-    const cleanup = () => overlay.remove();
-    cancel.onclick = cleanup;
-    ok.onclick = () => { const value = input ? input.value.trim() : true; cleanup(); onConfirm(value); };
-    if (input) setTimeout(() => input.focus(), 50);
-  }
-
   function extractTitleCode() {
     const html = htmlEl.value || "";
     const match = html.match(/<title[^>]*>([^<]+)<\/title>/i);
@@ -202,92 +171,102 @@
     } finally { form.remove(); iframe.remove(); }
   }
 
-  function enterReadOnlyMode() {
-    isReadOnly = true;
-    const wrap = document.getElementById("wrap");
-    const btn = document.getElementById("btnToggle");
-    if (wrap && !wrap.classList.contains("preview-only")) {
-      wrap.classList.add("preview-only");
-      document.body.classList.add("preview-only");
-      document.body.classList.add("header-hidden");
-      if (btn) { btn.classList.add("on"); btn.setAttribute("aria-pressed", "true"); btn.textContent = "Show editor"; }
-    }
-    htmlEl.readOnly = true; cssEl.readOnly = true; jsEl.readOnly = true;
-    const shareBtn = document.getElementById("btnShare");
-    if (shareBtn) shareBtn.style.display = "none";
-    // Banner is created but hidden until Show controls is clicked
-    const banner = document.createElement("div");
-    banner.id = "readonly-banner";
-    banner.style.cssText = "display:none;background:#1e293b;color:white;padding:10px 16px;text-align:center;font-size:0.85rem;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;";
-    banner.innerHTML = `<span>Read-only preview</span><button type="button" id="btnUnlock" style="background:#2563eb;color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:0.8rem;">Unlock to Edit</button>`;
-    document.body.insertBefore(banner, document.getElementById("wrap"));
-    document.getElementById("btnUnlock").onclick = promptUnlock;
-  }
-
-  function promptUnlock() {
-    showConfirm("Unlock Preview", "Enter the lock code to edit this page.", (code) => {
-      if (code === currentLockCode) {
-        isReadOnly = false;
-        htmlEl.readOnly = false; cssEl.readOnly = false; jsEl.readOnly = false;
-        document.getElementById("readonly-banner")?.remove();
-        const shareBtn = document.getElementById("btnShare");
-        if (shareBtn) shareBtn.style.display = "";
-        const showBtn = document.getElementById("showHeaderBtn");
-        if (showBtn) showBtn.style.display = "";
-        showToast("Unlocked — you can now edit");
-      } else {
-        showConfirm("Wrong Code", "The lock code you entered is incorrect. Try again?", (retry) => { if (retry) promptUnlock(); }, true);
-      }
-    }, true);
-  }
-
-  async function sharePreview() {
-    if (currentShortUrl && !isDirty) {
-      try { await navigator.clipboard.writeText(currentShortUrl); showToast("Link copied!"); } catch { prompt("Copy this link:", currentShortUrl); }
-      return;
-    }
-    showConfirm("Share Preview", "Optional: enter a lock code so viewers must unlock before they can edit. Leave blank for open editing.", (lockCode) => { doShare(lockCode); }, true);
-  }
-
-  async function doShare(lockCode) {
-    const data = { html: htmlEl.value, css: cssEl.value, js: jsEl.value };
-    if (lockCode && lockCode.length >= 3) data.lockCode = btoa(lockCode);
+async function sharePreview() {
+  if (currentShortUrl && !isDirty) {
     try {
-      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-      const longUrl = window.location.origin + window.location.pathname + "#live=" + encoded;
-      showToast("Creating share link...");
-      let code = extractTitleCode();
-      if (!code) code = "live-" + Date.now().toString(36);
-      const shortUrl = await createShortLink(code, longUrl, "html-preview");
-      currentShortUrl = shortUrl;
-      isDirty = false;
-      updateShareButton();
-      try { await navigator.clipboard.writeText(shortUrl); showToast("Share link copied!"); } catch { prompt("Copy this link:", shortUrl); }
-    } catch (e) { console.error(e); showToast(e.message || "Could not create share link"); }
+      await navigator.clipboard.writeText(currentShortUrl);
+      showToast("Link copied!");
+    } catch {
+      prompt("Copy this link:", currentShortUrl);
+    }
+    return;
   }
+
+  doShare();
+}
+
+
+
+async function doShare() {
+  const data = {
+    html: htmlEl.value,
+    css: cssEl.value,
+    js: jsEl.value
+  };
+
+  try {
+    const encoded = btoa(
+      unescape(encodeURIComponent(JSON.stringify(data)))
+    );
+
+    const longUrl =
+      window.location.origin +
+      window.location.pathname +
+      "#live=" + encoded;
+
+    showToast("Creating share link...");
+
+    let code = extractTitleCode();
+    if (!code) code = "live-" + Date.now().toString(36);
+
+    const shortUrl = await createShortLink(
+      code,
+      longUrl,
+      "html-preview"
+    );
+
+    currentShortUrl = shortUrl;
+    isDirty = false;
+    updateShareButton();
+
+    try {
+      await navigator.clipboard.writeText(shortUrl);
+      showToast("Share link copied!");
+    } catch {
+      prompt("Copy this link:", shortUrl);
+    }
+  } catch (e) {
+    console.error(e);
+    showToast(e.message || "Could not create share link");
+  }
+}
+
 
   function loadFromShareLink() {
     const hash = window.location.hash;
     if (!hash.startsWith("#live=")) return false;
+
     try {
       const encoded = hash.slice(6);
       const json = decodeURIComponent(escape(atob(encoded)));
       const data = JSON.parse(json);
-      htmlEl.value = data.html || ""; cssEl.value = data.css || ""; jsEl.value = data.js || "";
+
+      htmlEl.value = data.html || "";
+      cssEl.value = data.css || "";
+      jsEl.value = data.js || "";
       isDirty = false;
-      if (data.lockCode) { currentLockCode = atob(data.lockCode); enterReadOnlyMode(); }
-      else {
-        const wrap = document.getElementById("wrap");
-        const btn = document.getElementById("btnToggle");
-        if (wrap && !wrap.classList.contains("preview-only")) {
-          wrap.classList.add("preview-only");
-          document.body.classList.add("preview-only");
-          document.body.classList.add("header-hidden");
-          if (btn) { btn.classList.add("on"); btn.setAttribute("aria-pressed", "true"); btn.textContent = "Show editor"; }
+
+      const wrap = document.getElementById("wrap");
+      const btn = document.getElementById("btnToggle");
+
+      if (wrap && !wrap.classList.contains("preview-only")) {
+        wrap.classList.add("preview-only");
+        document.body.classList.add("preview-only");
+        document.body.classList.add("header-hidden");
+
+        if (btn) {
+          btn.classList.add("on");
+          btn.setAttribute("aria-pressed", "true");
+          btn.textContent = "Show editor";
         }
       }
+
       return true;
-    } catch (e) { console.error(e); showToast("Invalid share link"); return false; }
+    } catch (e) {
+      console.error("Could not load shared preview:", e);
+      showToast("Invalid or damaged share link");
+      return false;
+    }
   }
 
   document.getElementById("tab-html").onclick = function () { showTab("html"); };
@@ -313,12 +292,6 @@
   };
   document.getElementById("showHeaderBtn").onclick = function () {
     document.body.classList.remove("header-hidden");
-    if (isReadOnly) {
-      const banner = document.getElementById("readonly-banner");
-      if (banner) banner.style.display = "flex";
-      status.textContent = "Read-only — enter lock code to edit";
-      return;
-    }
     document.body.classList.remove("preview-only");
     const wrap = document.getElementById("wrap");
     const btn = document.getElementById("btnToggle");
