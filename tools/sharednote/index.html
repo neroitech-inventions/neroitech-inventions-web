@@ -3174,6 +3174,7 @@
     // URL-only mode never writes note content to localStorage.
     let storageMode = localStorage.getItem('sharednote-storage-mode') || 'local';
     let shareModePreference = localStorage.getItem('sharednote-share-mode') || 'online';
+    let urlDraftWarningShown = false;
     let isDirty = true;
     let lastFindIndex = -1;
     let findMatches = [];
@@ -3444,8 +3445,9 @@
       // Clear saved data and hash
       localStorage.removeItem('sharednote-data');
       if (window.location.hash) {
-        history.replaceState(null, '', window.location.pathname);
+        history.replaceState(null, '', window.location.pathname + window.location.search);
       }
+      if (storageMode === 'url') saveData();
 
       // Reset find UI
       updateFindUI();
@@ -3850,7 +3852,24 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
     function saveData() {
       if (isReadOnly) return;
       if (storageMode === 'url') {
+        // URL-only drafts live in the fragment; note content is never written to localStorage.
         localStorage.removeItem('sharednote-data');
+        try {
+          const data = { title: titleInput.value, content: editor.innerHTML };
+          const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+          const draftHash = '#draft=' + encoded;
+          const nextUrl = window.location.pathname + window.location.search + draftHash;
+          if (window.location.pathname + window.location.search + window.location.hash !== nextUrl) {
+            history.replaceState(null, '', nextUrl);
+          }
+          urlDraftWarningShown = false;
+        } catch (error) {
+          console.error('Could not update URL-only draft:', error);
+          if (!urlDraftWarningShown) {
+            showToast('This note is too large to fit safely in the URL. Create a share link or export it instead.');
+            urlDraftWarningShown = true;
+          }
+        }
         return;
       }
       const data = {
@@ -3912,11 +3931,11 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
           <label class="storage-choice-card ${storageMode === 'url' ? 'selected' : ''}" for="draft-storage-url">
             <input id="draft-storage-url" type="radio" name="draft-storage-mode" value="url" ${storageMode === 'url' ? 'checked' : ''}>
             <span class="storage-choice-icon" aria-hidden="true">🔗</span>
-            <span class="storage-choice-copy"><strong>URL only</strong><small>Do not save note content in this browser. Keep the note in the current tab and create a link when you're ready to share.</small><em>More local privacy</em></span>
+            <span class="storage-choice-copy"><strong>URL only</strong><small>Do not save note content in this browser. Keep the working note in the URL as you type, then share that URL when ready.</small><em>More local privacy</em></span>
             <span class="storage-choice-check" aria-hidden="true">✓</span>
           </label>
         </div>
-        <div class="storage-modal-note"><span aria-hidden="true">ⓘ</span><span>In URL-only mode, changes can be lost if you close or reload the tab before creating and keeping a share link.</span></div>`;
+        <div class="storage-modal-note"><span aria-hidden="true">ⓘ</span><span>In URL-only mode, the note is stored in this page URL. Keep the full URL to reopen the note; use Save to create a separate share link.</span></div>`;
       modal.classList.remove('privacy-modal', 'save-choice');
       modal.classList.add('show', 'storage-modal');
       const confirmBtn = document.getElementById('modal-confirm');
@@ -3935,8 +3954,9 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
             storageMode = 'url';
             localStorage.setItem('sharednote-storage-mode', 'url');
             localStorage.removeItem('sharednote-data');
+            saveData();
             cleanup();
-            showToast('URL-only mode enabled; local draft removed');
+            showToast('URL-only mode enabled; note stored in this URL');
           };
           cleanup();
           showConfirm('Remove local draft?', 'Switching to URL-only will delete the saved draft from this browser. Your current note remains open until you leave or reload. Continue?', apply);
@@ -3944,7 +3964,10 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
         }
         storageMode = selected;
         localStorage.setItem('sharednote-storage-mode', selected);
-        if (selected === 'local') saveData();
+        saveData();
+        if (selected === 'local' && window.location.hash.startsWith('#draft=')) {
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
         cleanup();
         showToast(selected === 'local' ? 'Drafts will be saved on this device' : 'URL-only mode enabled');
       };
@@ -4878,6 +4901,26 @@ doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><\/body
 
     async function loadFromShareLink() {
       const hash = window.location.hash;
+      if (hash.startsWith('#draft=')) {
+        try {
+          const encoded = hash.slice(7);
+          const data = JSON.parse(decodeURIComponent(escape(atob(encoded))));
+          if (!data || typeof data !== 'object') throw new Error('Invalid URL draft');
+          titleInput.value = data.title || 'Untitled Note';
+          editor.innerHTML = data.content || '';
+          storageMode = 'url';
+          localStorage.setItem('sharednote-storage-mode', 'url');
+          localStorage.removeItem('sharednote-data');
+          currentShortUrl = null;
+          currentPrivateUrl = null;
+          isDirty = true;
+          return true;
+        } catch (error) {
+          console.error('Invalid URL-only draft:', error);
+          showToast('Could not restore the note from this URL');
+          return false;
+        }
+      }
       if (hash.startsWith('#private2=')) {
         try {
           const parts = hash.slice(10).split('.');
@@ -5030,7 +5073,7 @@ window.promptUnlock = promptUnlock;
       },
       {
         title: "5 of 9 - Choose draft storage",
-        content: "<p>Open <strong>Storage</strong> to choose where your working draft is kept. <strong>On this device</strong> saves the draft in this browser so you can return to it on the same device.</p><p style='margin-top:10px;'><strong>URL only</strong> does not save note content in this browser. Keep the tab open and create and keep a share link before closing or reloading, or unsaved changes may be lost. Draft storage is separate from sharing.</p>"
+        content: "<p>Open <strong>Storage</strong> to choose where your working draft is kept. <strong>On this device</strong> saves the draft in this browser so you can return to it on the same device.</p><p style='margin-top:10px;'><strong>URL only</strong> keeps the working note in the page URL as you type and does not save note content in this browser. Keep the full URL to reopen the draft. Use Save when you want to create a separate share link. Draft storage is separate from sharing.</p>"
       },
       {
         title: "6 of 9 - Save and protect a shared note",
