@@ -383,22 +383,23 @@ async function doShare() {
   [htmlEl, cssEl, jsEl].forEach(function (el) { el.addEventListener("input", schedule); });
   autoRun.addEventListener("change", function () { if (autoRun.checked) runPreview(); });
   document.addEventListener("keydown", function (e) { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); runPreview(); } });
-preview.addEventListener("load", function () {
-  try {
-    const doc = preview.contentDocument;
-    if (!doc) return;
-    doc.addEventListener("click", function (e) {
-      const a = e.target.closest && e.target.closest("a[href]");
-      if (!a) return;
-      const href = a.getAttribute("href");
-      if (!href || href.charAt(0) === "#") return;
-      if (!/^https?:/i.test(href)) return;
-
-      e.preventDefault();
-      window.open(href, "_blank", "noopener,noreferrer");
-    }, true);
-  } catch (err) {}
-});
+  preview.addEventListener("load", function () {
+    try {
+      const doc = preview.contentDocument;
+      if (!doc) return;
+      doc.addEventListener("click", function (e) {
+        const a = e.target.closest && e.target.closest("a[href]");
+        if (!a) return;
+        const href = a.getAttribute("href");
+        if (!href || href.charAt(0) === "#") return;
+        if (!/^https?:/i.test(href)) return;
+        e.preventDefault();
+        if (currentDoc) { previewStack.push(currentDoc); if (previewStack.length > 50) previewStack.shift(); }
+        preview.removeAttribute("srcdoc");
+        preview.src = href;
+      }, true);
+    } catch (err) {}
+  });
 
   if (loadFromShareLink()) { runPreview({ record: false }); updateShareButton(); }
   else if (loadDraft()) { runPreview({ record: false }); isDirty = true; updateShareButton(); showToast("Restored your last draft"); }
