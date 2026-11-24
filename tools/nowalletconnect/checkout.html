@@ -449,7 +449,10 @@
             if (locked.asset) {
                 lockAsset(locked.asset);
             } else if (locked.network === "solana") {
-                lockAsset("usdt");
+                // No asset parameter means the payer may choose USDT or BAOBAO on Solana.
+                document.getElementById("asset").value = "usdt";
+                document.getElementById("asset").disabled = false;
+                document.getElementById("assetLockNote").hidden = true;
             }
         }
 
