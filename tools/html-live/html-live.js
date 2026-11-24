@@ -406,3 +406,87 @@ async function doShare() {
   else if (loadDraft()) { runPreview({ record: false }); isDirty = true; updateShareButton(); showToast("Restored your last draft"); }
   else { loadSample(); }
 })();
+
+// ---------- Broken preview detection + fancy reload modal ----------
+function isPreviewBroken() {
+  try {
+    const win = preview.contentWindow;
+    if (!win) return false;
+    const href = win.location.href;
+    return href && href !== "about:srcdoc" && !href.startsWith("about:");
+  } catch (err) {
+    return true;
+  }
+}
+
+function showReloadModal() {
+  if (document.getElementById("previewBrokenModal")) return;
+
+  const backdrop = document.createElement("div");
+  backdrop.id = "previewBrokenModal";
+  backdrop.style.cssText = `
+    position: fixed; inset: 0; z-index: 10001;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(2, 6, 23, 0.82); backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px); padding: 20px;
+  `;
+
+  backdrop.innerHTML = `
+    <section style="
+      width: min(100%, 440px); border-radius: 24px; overflow: hidden;
+      background: linear-gradient(155deg, #1b2639, #0b1220 70%);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      box-shadow: 0 28px 90px rgba(0,0,0,.65), 0 0 50px rgba(245,158,11,.12);
+      color: #f8fafc; text-align: center; animation: modalIn .22s ease-out;
+    ">
+      <div style="padding: 32px 30px 24px;">
+        <div style="
+          width: 64px; height: 64px; margin: 0 auto 16px;
+          border-radius: 20px; display: grid; place-items: center;
+          background: rgba(245,158,11,.15); border: 1px solid rgba(251,191,36,.3);
+          font-size: 32px;
+        ">⚠️</div>
+        <h2 style="margin: 0 0 12px; font-size: 22px; letter-spacing: -0.03em;">Preview needs a reload</h2>
+        <p style="margin: 0; color: #b8c4d6; font-size: 14px; line-height: 1.65;">
+          The live preview got into a bad state after navigating away and back.<br>
+          Please reload the page to restore a clean preview.
+        </p>
+      </div>
+      <div style="padding: 0 30px 28px;">
+        <button id="previewBrokenReload" type="button" style="
+          width: 100%; min-height: 48px; border: 0; border-radius: 14px;
+          background: linear-gradient(110deg, #fbbf24, #f59e0b);
+          color: #111827; font-weight: 800; font-size: 15px; cursor: pointer;
+          font-family: inherit;
+        ">Reload page</button>
+      </div>
+    </section>
+  `;
+
+  const style = document.createElement("style");
+  style.textContent = `@keyframes modalIn { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }`;
+  document.head.appendChild(style);
+
+  document.body.appendChild(backdrop);
+
+  document.getElementById("previewBrokenReload").onclick = function () {
+    window.location.reload();
+  };
+
+  backdrop.addEventListener("click", function (e) {
+    if (e.target === backdrop) backdrop.remove();
+  });
+}
+
+function checkPreviewHealth() {
+  if (isPreviewBroken()) {
+    showReloadModal();
+  }
+}
+
+preview.addEventListener("load", function () {
+  setTimeout(checkPreviewHealth, 80);
+});
+
+window.addEventListener("focus", checkPreviewHealth);
+// -------------------------------------------------------------------
