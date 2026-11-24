@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0d0b14">
-  <meta name="description" content="BAOBAO the Analyst checks Bitcoin market data and shares a short-term up or down bias.">
+  <meta name="description" content="BAOBAO the Analyst checks Bitcoin and BONK market data and shares a short-term up or down bias.">
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
 <script>
@@ -50,6 +50,12 @@
       #baobao-analyst { padding: 52px 14px !important; }
       #analystCard { padding: 24px 16px !important; }
     }
+    .asset-switch { display:inline-flex; gap:6px; padding:6px; margin:0 auto 24px; border:1px solid rgba(255,180,0,.38); border-radius:999px; background:rgba(12,10,18,.82); box-shadow:0 10px 30px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.07); }
+    .asset-switch button { border:0; border-radius:999px; padding:12px 24px; min-width:132px; color:rgba(255,248,240,.72); background:transparent; font:900 .95rem 'Nunito',sans-serif; cursor:pointer; transition:color .2s ease,background .25s ease,box-shadow .25s ease,transform .2s ease; }
+    .asset-switch button[aria-pressed="true"] { color:#241000; background:linear-gradient(135deg,#fff06a,#ffad00 55%,#ff6b00); box-shadow:0 4px 14px rgba(255,133,0,.28),inset 0 1px 0 rgba(255,255,255,.65); }
+    .asset-switch button:hover { transform:translateY(-1px); }
+    .asset-switch button:focus-visible { outline:3px solid #fff06a; outline-offset:4px; }
+    @media(max-width:420px) { .asset-switch { width:100%; max-width:330px; } .asset-switch button { min-width:0; flex:1; padding:12px 15px; } }
   </style>
 </head>
 <body>
@@ -63,11 +69,15 @@
   Call BAOBAO the Analyst
 </div>
     <h2 class="font-display" style="font-size:clamp(2rem,5vw,3.2rem);color:#fff8f0;margin:0 0 12px;line-height:1.05;">
-      Will Bitcoin Go <span style="color:#ff6b00;">Up</span> or <span style="color:#ff6b00;">Down</span>?
+      Will <span id="assetHeading">Bitcoin</span> Go <span style="color:#ff6b00;">Up</span> or <span style="color:#ff6b00;">Down</span>?
     </h2>
     <p style="color:rgba(255,248,240,.78);font-size:1.05rem;max-width:560px;margin:0 auto 28px;line-height:1.6;">
       BAOBAO checks the vibes and tells you straight. No fancy words. Just up or down, and why.
     </p>
+    <div class="asset-switch" role="group" aria-label="Choose asset to analyse">
+      <button type="button" id="assetBitcoin" aria-pressed="true">Bitcoin</button>
+      <button type="button" id="assetBonk" aria-pressed="false">BONK</button>
+    </div>
     <img src="https://pbs.twimg.com/media/HVVHLbTWAAAM8tM.jpg" alt="BAOBAO the Analyst" style="width:100%;max-width:420px;border-radius:20px;margin:0 auto 28px;display:block;box-shadow:0 16px 50px rgba(0,0,0,.5);border:2px solid rgba(255,107,0,.3);">
     <div id="analystCard" style="background:linear-gradient(135deg,rgba(255,107,0,.18),rgba(255,60,172,.1));border:1px solid rgba(255,107,0,.4);border-radius:24px;padding:32px 24px;margin-bottom:28px;box-shadow:0 20px 60px rgba(0,0,0,.45);">
       <div id="analystLoading" style="color:rgba(255,248,240,.75);font-family:'Nunito',sans-serif;font-weight:700;">BAOBAO is sniffing out the market vibes...</div>
@@ -106,7 +116,10 @@
   const probsEl = $('analystProbabilities'), reasonsEl = $('analystReasons');
   const plainExplainEl = $('analystPlainExplain');
   const metaEl = $('analystMeta'), refreshBtn = $('analystRefresh');
-  if (!loadingEl || !resultEl || !refreshBtn) return;
+  const bitcoinBtn = $('assetBitcoin'), bonkBtn = $('assetBonk'), assetHeading = $('assetHeading');
+  let selectedAsset = 'bitcoin';
+  let analysisRun = 0;
+  if (!loadingEl || !resultEl || !refreshBtn || !bitcoinBtn || !bonkBtn) return;
 
   function classifyFng(v) {
     if (v <= 24) return 'Extreme Fear';
@@ -161,7 +174,7 @@
   }
 
   // This scoring and probability calculation follows generatePrediction() in the supplied BTC app.js.
-  function generatePrediction(fng, previousFng, prices, rsi, macd, ema20, ema50, volumes) {
+  function generatePrediction(assetName, assetLabel, fng, previousFng, prices, rsi, macd, ema20, ema50, volumes) {
     let bullScore = 0, bearScore = 0;
     const bullFactors = [], bearFactors = [];
     const fngChange = fng - previousFng;
@@ -175,17 +188,17 @@
     const n = prices.length;
     const chg4h = n > 5 ? ((prices[n-1] - prices[n-5]) / prices[n-5]) * 100 : 0;
     const chg24h = n > 25 ? ((prices[n-1] - prices[n-25]) / prices[n-25]) * 100 : 0;
-    if (chg24h > 2) { bullScore += 8; bullFactors.push('BTC has solid upward momentum'); }
-    else if (chg24h > 0.5) { bullScore += 4; bullFactors.push('BTC is edging up'); }
-    else if (chg24h < -2) { bearScore += 8; bearFactors.push('BTC is sliding with strong downward momentum'); }
-    else if (chg24h < -0.5) { bearScore += 4; bearFactors.push('BTC is drifting down'); }
+    if (chg24h > 2) { bullScore += 8; bullFactors.push(`${assetName} has solid upward momentum`); }
+    else if (chg24h > 0.5) { bullScore += 4; bullFactors.push(`${assetName} is edging up`); }
+    else if (chg24h < -2) { bearScore += 8; bearFactors.push(`${assetName} is sliding with strong downward momentum`); }
+    else if (chg24h < -0.5) { bearScore += 4; bearFactors.push(`${assetName} is drifting down`); }
     if (chg4h > 1) bullScore += 3;
     if (chg4h < -1) bearScore += 3;
 
     if (rsi !== null) {
-      if (rsi < 30) { bullScore += 10; bullFactors.push('BTC may be oversold - a bounce is possible'); }
+      if (rsi < 30) { bullScore += 10; bullFactors.push(`${assetName} may be oversold - a bounce is possible`); }
       else if (rsi < 40) { bullScore += 5; bullFactors.push('Selling may be getting stretched'); }
-      else if (rsi > 70) { bearScore += 10; bearFactors.push('BTC may be overheated - a cool-off is possible'); }
+      else if (rsi > 70) { bearScore += 10; bearFactors.push(`${assetName} may be overheated - a cool-off is possible`); }
       else if (rsi > 60) { bearScore += 5; bearFactors.push('Buyers may be getting a little too excited'); }
     }
     if (macd) {
@@ -193,8 +206,8 @@
       else if (macd.histogram < 0 && macd.macd < macd.signal) { bearScore += 6; bearFactors.push('Momentum is leaning bearish'); }
     }
     const current = prices[n - 1];
-    if (ema20 && current > ema20) { bullScore += 5; bullFactors.push('BTC is trading above its short-term trend'); }
-    else if (ema20 && current < ema20) { bearScore += 5; bearFactors.push('BTC is trading below its short-term trend'); }
+    if (ema20 && current > ema20) { bullScore += 5; bullFactors.push(`${assetName} is trading above its short-term trend`); }
+    else if (ema20 && current < ema20) { bearScore += 5; bearFactors.push(`${assetName} is trading below its short-term trend`); }
     if (ema50 && ema20 && ema20 > ema50) { bullScore += 4; bullFactors.push('The short-term trend is above the longer trend'); }
     else if (ema50 && ema20 && ema20 < ema50) { bearScore += 4; bearFactors.push('The short-term trend is below the longer trend'); }
     const volChange = volumes.length > 24 ? (volumes[volumes.length-1] / (volumes.slice(-25, -1).reduce((a,b)=>a+b,0) / 24)) : 1;
@@ -216,30 +229,35 @@
     return { signal, upProb, downProb, sideProb, bullFactors: bullFactors.slice(0,3), bearFactors: bearFactors.slice(0,3), netScore: net, chg24h, rsi };
   }
 
-  async function getMarketData() {
+  async function getMarketData(asset) {
     const fngResponse = await fetch('https://api.alternative.me/fng/?limit=8');
     if (!fngResponse.ok) throw new Error('Fear & Greed data unavailable');
     const fngJson = await fngResponse.json();
     if (!Array.isArray(fngJson.data) || fngJson.data.length < 2) throw new Error('Not enough Fear & Greed history');
     const fngData = fngJson.data.map(x => Number(x.value));
     const currentFng = fngData[0], previousFng = fngData[1];
+    const config = asset === 'bonk'
+      ? { id: 'bonk', symbol: 'BONKUSDT', name: 'BONK', label: 'BONK' }
+      : { id: 'bitcoin', symbol: 'BTCUSDT', name: 'Bitcoin', label: 'BTC' };
 
     let prices = [], volumes = [], source = 'CoinGecko';
     try {
-      const response = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7&interval=hourly');
+      const response = await fetch(`https://api.coingecko.com/api/v3/coins/${config.id}/market_chart?vs_currency=usd&days=7&interval=hourly`);
       if (!response.ok) throw new Error('CoinGecko request failed');
       const data = await response.json();
       if (!Array.isArray(data.prices) || !Array.isArray(data.total_volumes)) throw new Error('CoinGecko response incomplete');
-      prices = data.prices.map(x => Number(x[1])); volumes = data.total_volumes.map(x => Number(x[1]));
+      prices = data.prices.map(x => Number(x[1]));
+      volumes = data.total_volumes.map(x => Number(x[1]));
     } catch (e) {
       source = 'Binance';
-      const response = await fetch('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=168');
-      if (!response.ok) throw new Error('Market price sources unavailable');
+      const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${config.symbol}&interval=1h&limit=168`);
+      if (!response.ok) throw new Error(`${config.name} market data sources unavailable`);
       const data = await response.json();
-      prices = data.map(x => Number(x[4])); volumes = data.map(x => Number(x[5]));
+      prices = data.map(x => Number(x[4]));
+      volumes = data.map(x => Number(x[5]));
     }
     if (prices.length < 60 || prices.some(x => !Number.isFinite(x)) || !prices[prices.length-1]) throw new Error('Insufficient or invalid market data');
-    return { currentFng, previousFng, prices, volumes, source };
+    return { currentFng, previousFng, prices, volumes, source, assetName: config.name, assetLabel: config.label };
   }
 
   function renderReasons(prediction) {
@@ -251,26 +269,31 @@
   }
 
   async function runAnalysis() {
+    const runId = ++analysisRun;
+    const assetAtStart = selectedAsset;
     loadingEl.style.display = 'block'; loadingEl.textContent = 'BAOBAO is sniffing out the market vibes...';
     resultEl.style.display = 'none'; refreshBtn.disabled = true;
     try {
-      const data = await getMarketData();
-      const { currentFng, previousFng, prices, volumes, source } = data;
+      const data = await getMarketData(assetAtStart);
+      if (runId !== analysisRun) return;
+      const { currentFng, previousFng, prices, volumes, source, assetName, assetLabel } = data;
       const price = prices[prices.length - 1];
       const rsi = calculateRSI(prices), macd = calculateMACD(prices);
       const ema20 = calculateEMA(prices, 20), ema50 = calculateEMA(prices, 50);
-      const prediction = generatePrediction(currentFng, previousFng, prices, rsi, macd, ema20, ema50, volumes);
+      const prediction = generatePrediction(assetName, assetLabel, currentFng, previousFng, prices, rsi, macd, ema20, ema50, volumes);
       const directionColor = prediction.signal === 'UP BIAS' ? '#3fb950' : '#ff5c5c';
       dirEl.textContent = prediction.signal === 'UP BIAS' ? '🚀 MORE LIKELY UP' : '🩸 MORE LIKELY DOWN';
       dirEl.style.color = directionColor;
-      subEl.textContent = prediction.signal === 'UP BIAS' ? 'BAOBAO thinks Bitcoin is more likely to go up in the short term.' : 'BAOBAO thinks Bitcoin is more likely to go down in the short term.';
+      subEl.textContent = prediction.signal === 'UP BIAS' ? `BAOBAO thinks ${assetName} is more likely to go up in the short term.` : `BAOBAO thinks ${assetName} is more likely to go down in the short term.`;
       probsEl.innerHTML = `<span>🟢 Up ${prediction.upProb}%</span><span>🔴 Down ${prediction.downProb}%</span><span>🟡 Sideways ${prediction.sideProb}%</span>`;
-      if (plainExplainEl) plainExplainEl.textContent = prediction.sideProb >= Math.max(prediction.upProb, prediction.downProb) ? 'The market looks pretty undecided. BTC could chop around instead of making a big move. No need to force a trade.' : prediction.signal === 'UP BIAS' ? 'The signals are leaning bullish. That does not mean it will pump for sure, just that the current setup points more up than down.' : 'The signals are leaning bearish. That does not mean it will dump for sure, just that the current setup points more down than up.';
+      if (plainExplainEl) plainExplainEl.textContent = prediction.sideProb >= Math.max(prediction.upProb, prediction.downProb) ? `The market looks pretty undecided. ${assetLabel} could chop around instead of making a big move. No need to force a trade.` : prediction.signal === 'UP BIAS' ? 'The signals are leaning bullish. That does not mean it will pump for sure, just that the current setup points more up than down.' : 'The signals are leaning bearish. That does not mean it will dump for sure, just that the current setup points more down than up.';
       reasonsEl.innerHTML = renderReasons(prediction);
       const fngLabel = classifyFng(currentFng);
-      metaEl.textContent = `BTC $${Math.round(price).toLocaleString()} · 24h change ${prediction.chg24h >= 0 ? '+' : ''}${prediction.chg24h.toFixed(2)}% · RSI ${rsi === null ? 'N/A' : rsi.toFixed(1)} · Fear & Greed ${currentFng} (${fngLabel}) · Updated ${new Date().toLocaleTimeString()}`;
+      const priceText = price < 0.01 ? price.toFixed(8) : price < 1 ? price.toFixed(5) : price.toLocaleString(undefined, { maximumFractionDigits: 2 });
+      metaEl.textContent = `${assetLabel} $${priceText} · 24h change ${prediction.chg24h >= 0 ? '+' : ''}${prediction.chg24h.toFixed(2)}% · RSI ${rsi === null ? 'N/A' : rsi.toFixed(1)} · Fear & Greed ${currentFng} (${fngLabel}) · ${source} · Updated ${new Date().toLocaleTimeString()}`;
       loadingEl.style.display = 'none'; resultEl.style.display = 'block';
     } catch (error) {
+      if (runId !== analysisRun) return;
       console.error('BAOBAO Analyst:', error);
       loadingEl.textContent = 'BAOBAO could not load reliable market data right now. Please try again shortly.';
     } finally { refreshBtn.disabled = false; }
@@ -290,6 +313,17 @@
       // Sound is optional; the market analysis still runs if audio is unavailable.
     }
   }
+
+  function selectAsset(asset) {
+    selectedAsset = asset;
+    const isBonk = asset === 'bonk';
+    bitcoinBtn.setAttribute('aria-pressed', String(!isBonk));
+    bonkBtn.setAttribute('aria-pressed', String(isBonk));
+    assetHeading.textContent = isBonk ? 'BONK' : 'Bitcoin';
+    runAnalysis();
+  }
+  bitcoinBtn.addEventListener('click', () => selectAsset('bitcoin'));
+  bonkBtn.addEventListener('click', () => selectAsset('bonk'));
 
   refreshBtn.addEventListener('click', () => {
     playCallSound();
