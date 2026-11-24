@@ -70,6 +70,8 @@
     .wrap { flex: 1; display: grid; grid-template-columns: 1fr 1fr; min-height: 0; }
     .wrap.preview-only { grid-template-columns: 1fr; }
     .wrap.preview-only .editor-col { display: none; }
+    .wrap.edit-only { grid-template-columns: 1fr; }
+    .wrap.edit-only .preview-col { display: none; }
     body.preview-only .tabs { opacity: 0.35; pointer-events: none; }
     .col { min-height: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
     .col:last-child { border-right: none; }
@@ -118,6 +120,7 @@
       .wrap { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
       .col { border-right: none; border-bottom: 1px solid var(--border); }
       .wrap.preview-only { grid-template-rows: 1fr; }
+      .wrap.edit-only { grid-template-rows: 1fr; }
       iframe { min-height: 70vh; }
 
 #showHeaderBtn {
@@ -230,6 +233,7 @@
     <button type="button" id="btnShare">Share</button>
     <button type="button" class="apk-access-trigger" id="btnApkBuilder">APK builder</button>
     <button type="button" id="btnToggle" aria-pressed="false">Preview only</button>
+    <button type="button" id="btnEditOnly" aria-pressed="false">Edit only</button>
     <label class="status" style="display:flex;align-items:center;gap:6px;white-space:nowrap;">
       <input type="checkbox" id="disableShowControls">
       Permanently hide Show controls
@@ -265,7 +269,7 @@
       <textarea id="css" spellcheck="false" hidden></textarea>
       <textarea id="js" spellcheck="false" hidden></textarea>
     </div>
-    <div class="col">
+    <div class="col preview-col">
       <div class="label">Preview</div>
       <iframe id="preview" sandbox="allow-scripts allow-modals allow-forms allow-same-origin"></iframe>
     </div>
@@ -295,7 +299,7 @@
       </div>
     </section>
   </div>
-  <script src="html-live.js"></script>
+  <script src="html-live-edit-only.js"></script>
   <script>
     (() => {
       const ACCESS_CODE = "4545";

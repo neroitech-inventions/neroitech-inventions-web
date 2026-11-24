@@ -360,10 +360,30 @@ async function doShare() {
   document.getElementById("btnDownload").onclick = downloadFile;
   document.getElementById("btnSample").onclick = loadSample;
   document.getElementById("btnShare").onclick = sharePreview;
+  document.getElementById("btnEditOnly").onclick = function () {
+    const wrap = document.getElementById("wrap");
+    const btn = document.getElementById("btnEditOnly");
+    const previewBtn = document.getElementById("btnToggle");
+    const editOnly = wrap.classList.toggle("edit-only");
+    wrap.classList.remove("preview-only");
+    document.body.classList.remove("preview-only", "header-hidden");
+    previewBtn.classList.remove("on");
+    previewBtn.setAttribute("aria-pressed", "false");
+    previewBtn.textContent = "Preview only";
+    btn.classList.toggle("on", editOnly);
+    btn.setAttribute("aria-pressed", editOnly ? "true" : "false");
+    btn.textContent = editOnly ? "Show preview" : "Edit only";
+    status.textContent = editOnly ? "Edit only — preview hidden" : "Editor and preview visible";
+  };
   document.getElementById("btnToggle").onclick = function () {
     const wrap = document.getElementById("wrap");
     const btn = document.getElementById("btnToggle");
     const previewOnly = wrap.classList.toggle("preview-only");
+    wrap.classList.remove("edit-only");
+    const editOnlyBtn = document.getElementById("btnEditOnly");
+    editOnlyBtn.classList.remove("on");
+    editOnlyBtn.setAttribute("aria-pressed", "false");
+    editOnlyBtn.textContent = "Edit only";
     document.body.classList.toggle("preview-only", previewOnly);
     document.body.classList.toggle("header-hidden", previewOnly);
     btn.classList.toggle("on", previewOnly);
@@ -376,7 +396,9 @@ async function doShare() {
     document.body.classList.remove("preview-only");
     const wrap = document.getElementById("wrap");
     const btn = document.getElementById("btnToggle");
-    if (wrap) wrap.classList.remove("preview-only");
+    if (wrap) wrap.classList.remove("preview-only", "edit-only");
+    const editOnlyBtn = document.getElementById("btnEditOnly");
+    if (editOnlyBtn) { editOnlyBtn.classList.remove("on"); editOnlyBtn.setAttribute("aria-pressed", "false"); editOnlyBtn.textContent = "Edit only"; }
     if (btn) { btn.classList.remove("on"); btn.setAttribute("aria-pressed", "false"); btn.textContent = "Preview only"; }
     status.textContent = "Controls visible";
   };
@@ -406,4 +428,3 @@ async function doShare() {
   else if (loadDraft()) { runPreview({ record: false }); isDirty = true; updateShareButton(); showToast("Restored your last draft"); }
   else { loadSample(); }
 })();
-
