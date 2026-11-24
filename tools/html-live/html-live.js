@@ -133,31 +133,16 @@
     status.textContent = "Updated " + new Date().toLocaleTimeString();
   }
 
-  function goBackPreview() {
-    try {
-      const win = preview.contentWindow;
-      // Only use iframe history when we are actually on an external page
-      // (not the srcdoc document). After history.back() the load handler
-      // will re-attach. If history is empty or we are already on srcdoc,
-      // fall through to a clean srcdoc restore.
-      if (win && win.location.href !== "about:srcdoc" && win.history.length > 1) {
-        win.history.back();
-        return;
-      }
-    } catch (err) {}
-
-    // Clean restore path — avoids the src/srcdoc duplication glitch
-    if (!previewStack.length) {
-      // Nothing in the stack; re-render current content cleanly
-      runPreview({ record: false });
-      return;
-    }
+function goBackPreview() {
+  if (previewStack.length) {
     currentDoc = previewStack.pop();
     preview.removeAttribute("src");
     preview.removeAttribute("srcdoc");
-    // Force a fresh document so the browser doesn't keep a stale history entry
     preview.srcdoc = currentDoc;
+    return;
   }
+  runPreview({ record: false });
+}
 
   function schedule() {
     if (!autoRun.checked) return;
@@ -398,34 +383,22 @@ async function doShare() {
   [htmlEl, cssEl, jsEl].forEach(function (el) { el.addEventListener("input", schedule); });
   autoRun.addEventListener("change", function () { if (autoRun.checked) runPreview(); });
   document.addEventListener("keydown", function (e) { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); runPreview(); } });
-  preview.addEventListener("load", function () {
-    try {
-      const doc = preview.contentDocument;
-      if (!doc) return;
-      doc.addEventListener("click", function (e) {
-        const a = e.target.closest && e.target.closest("a[href]");
-        if (!a) return;
-        const href = a.getAttribute("href");
-        if (!href || href.charAt(0) === "#") return;
-        if (!/^https?:/i.test(href)) return;
+preview.addEventListener("load", function () {
+  try {
+    const doc = preview.contentDocument;
+    if (!doc) return;
+    doc.addEventListener("click", function (e) {
+      const a = e.target.closest && e.target.closest("a[href]");
+      if (!a) return;
+      const href = a.getAttribute("href");
+      if (!href || href.charAt(0) === "#") return;
+      if (!/^https?:/i.test(href)) return;
 
-        // Honor target="_blank" / "_top" / "_parent" so links that should leave
-        // the preview (e.g. donation links) open in a new tab instead of
-        // navigating the iframe. Navigating the iframe then returning causes
-        // a src/srcdoc history glitch that duplicates the preview panel.
-        const target = (a.getAttribute("target") || "").toLowerCase();
-        if (target === "_blank" || target === "_top" || target === "_parent") {
-          return; // let the browser handle it normally
-        }
-
-        e.preventDefault();
-        // Let the iframe's own browser history track external-page navigation.
-        // Do not also push the editor document into previewStack for every link click.
-        preview.removeAttribute("srcdoc");
-        preview.src = href;
-      }, true);
-    } catch (err) {}
-  });
+      e.preventDefault();
+      window.open(href, "_blank", "noopener,noreferrer");
+    }, true);
+  } catch (err) {}
+});
 
   if (loadFromShareLink()) { runPreview({ record: false }); updateShareButton(); }
   else if (loadDraft()) { runPreview({ record: false }); isDirty = true; updateShareButton(); showToast("Restored your last draft"); }
