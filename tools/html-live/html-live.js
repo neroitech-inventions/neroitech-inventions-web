@@ -133,16 +133,16 @@
     status.textContent = "Updated " + new Date().toLocaleTimeString();
   }
 
-function goBackPreview() {
-  if (previewStack.length) {
+  function goBackPreview() {
+    try {
+      const win = preview.contentWindow;
+      if (win && win.location.href !== "about:srcdoc" && win.history.length > 1) { win.history.back(); return; }
+    } catch (err) {}
+    if (!previewStack.length) return;
     currentDoc = previewStack.pop();
     preview.removeAttribute("src");
-    preview.removeAttribute("srcdoc");
     preview.srcdoc = currentDoc;
-    return;
   }
-  runPreview({ record: false });
-}
 
   function schedule() {
     if (!autoRun.checked) return;
