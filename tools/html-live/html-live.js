@@ -136,11 +136,26 @@
   function goBackPreview() {
     try {
       const win = preview.contentWindow;
-      if (win && win.location.href !== "about:srcdoc" && win.history.length > 1) { win.history.back(); return; }
+      // Only use iframe history when we are actually on an external page
+      // (not the srcdoc document). After history.back() the load handler
+      // will re-attach. If history is empty or we are already on srcdoc,
+      // fall through to a clean srcdoc restore.
+      if (win && win.location.href !== "about:srcdoc" && win.history.length > 1) {
+        win.history.back();
+        return;
+      }
     } catch (err) {}
-    if (!previewStack.length) return;
+
+    // Clean restore path — avoids the src/srcdoc duplication glitch
+    if (!previewStack.length) {
+      // Nothing in the stack; re-render current content cleanly
+      runPreview({ record: false });
+      return;
+    }
     currentDoc = previewStack.pop();
     preview.removeAttribute("src");
+    preview.removeAttribute("srcdoc");
+    // Force a fresh document so the browser doesn't keep a stale history entry
     preview.srcdoc = currentDoc;
   }
 
@@ -393,6 +408,16 @@ async function doShare() {
         const href = a.getAttribute("href");
         if (!href || href.charAt(0) === "#") return;
         if (!/^https?:/i.test(href)) return;
+
+        // Honor target="_blank" / "_top" / "_parent" so links that should leave
+        // the preview (e.g. donation links) open in a new tab instead of
+        // navigating the iframe. Navigating the iframe then returning causes
+        // a src/srcdoc history glitch that duplicates the preview panel.
+        const target = (a.getAttribute("target") || "").toLowerCase();
+        if (target === "_blank" || target === "_top" || target === "_parent") {
+          return; // let the browser handle it normally
+        }
+
         e.preventDefault();
         // Let the iframe's own browser history track external-page navigation.
         // Do not also push the editor document into previewStack for every link click.
