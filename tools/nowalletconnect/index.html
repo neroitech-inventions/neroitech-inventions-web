@@ -1294,6 +1294,7 @@
           amount: null,
           asset: 'usdt',
           returnUrl: null,
+          perPaymentReturnUrl: null,
           isGatewayMode: false,
         };
 
@@ -1325,6 +1326,22 @@ function detectGatewayMode() {
   const amount = params.get('amount');
   const requestedAsset = (params.get('asset') || 'usdt').toLowerCase();
   const asset = requestedAsset === 'baobao' ? 'baobao' : 'usdt';
+  const requestedReturnUrl = (params.get('return_url') || '').trim();
+  if (requestedReturnUrl) {
+    try {
+      const parsedReturnUrl = new URL(requestedReturnUrl);
+      if (parsedReturnUrl.protocol !== 'https:') {
+        showMerchantError('The payment link contains an invalid return URL.');
+        return false;
+      }
+      GATEWAY.perPaymentReturnUrl = parsedReturnUrl.toString();
+    } catch (error) {
+      showMerchantError('The payment link contains an invalid return URL.');
+      return false;
+    }
+  } else {
+    GATEWAY.perPaymentReturnUrl = null;
+  }
   const network = asset === 'baobao' ? 'solana' : (params.get('network') || 'polygon');
 
   if (!merchantId) {
@@ -1391,8 +1408,8 @@ async function loadMerchantForGateway(merchantId, amount, network, asset = 'usdt
       return;
     }
 
-    // ✅ Get return URL from Google Sheet
-    GATEWAY.returnUrl = merchant.webhookUrl;  // ✅ Uses column 6 from database
+    // Per-payment return URL takes priority; otherwise preserve the merchant's saved webhook.
+    GATEWAY.returnUrl = GATEWAY.perPaymentReturnUrl || merchant.webhookUrl || "";
     GATEWAY.merchantId = merchantId;
     GATEWAY.amount = amount;
     GATEWAY.isGatewayMode = true;

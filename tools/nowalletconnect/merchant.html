@@ -898,6 +898,11 @@
                         </div>
                     </div>
                     <div class="link-field" style="margin-top:12px;">
+                        <label>Per-payment return URL (optional)</label>
+                        <input type="url" id="linkReturnUrl" placeholder="https://yoursite.com/donation-thank-you" oninput="updateGeneratedLink()">
+                        <p class="hint">After this payment succeeds, the payer returns here instead of your saved merchant webhook URL. Leave empty to use your default webhook.</p>
+                    </div>
+                    <div class="link-field" style="margin-top:12px;">
                         <label>Payment token</label>
                         <div class="link-options" id="assetModeOptions">
                             <button class="chip active" type="button" data-asset="any" onclick="setAssetMode('any', this)">Payer chooses</button>
@@ -1027,6 +1032,7 @@
         const CHECKOUT_URL = "https://niti.com.ng/tools/nowalletconnect/checkout.html";
         const RETURN_URL = "https://niti.com.ng/tools/nowalletconnect/return.html";
         const SESSION_KEY = "nwc_session";
+        const REGISTRATION_DRAFT_KEY = "nwc_registration_draft";
         const SETUP = {
             merchant: "NITI",
             amount: 0.25,
@@ -1130,6 +1136,50 @@ async function setupTxExistsInPayments(tx) {
             setTimeout(() => toast.classList.remove("show"), 2500);
         }
 
+        function registrationDraftValues() {
+            return {
+                merchantId: document.getElementById("registerMerchantId").value,
+                businessName: document.getElementById("registerBusinessName").value,
+                email: document.getElementById("registerEmail").value,
+                polygonWallet: document.getElementById("registerPolygonWallet").value,
+                solanaWallet: document.getElementById("registerSolanaWallet").value,
+                webhook: document.getElementById("registerWebhook").value
+            };
+        }
+
+        function saveRegistrationDraft() {
+            try {
+                localStorage.setItem(REGISTRATION_DRAFT_KEY, JSON.stringify(registrationDraftValues()));
+            } catch (error) {
+                // Keep registration usable if browser storage is unavailable.
+            }
+        }
+
+        function restoreRegistrationDraft() {
+            try {
+                const draft = JSON.parse(localStorage.getItem(REGISTRATION_DRAFT_KEY) || "null");
+                if (!draft || typeof draft !== "object") return;
+                const fields = {
+                    merchantId: "registerMerchantId",
+                    businessName: "registerBusinessName",
+                    email: "registerEmail",
+                    polygonWallet: "registerPolygonWallet",
+                    solanaWallet: "registerSolanaWallet",
+                    webhook: "registerWebhook"
+                };
+                Object.entries(fields).forEach(([key, id]) => {
+                    const input = document.getElementById(id);
+                    if (input && typeof draft[key] === "string") input.value = draft[key];
+                });
+            } catch (error) {
+                // Ignore malformed or unavailable local storage.
+            }
+        }
+
+        function clearRegistrationDraft() {
+            localStorage.removeItem(REGISTRATION_DRAFT_KEY);
+        }
+
         function setupPaid() {
             return sessionStorage.getItem(SETUP.storageKey) === "1";
         }
@@ -1154,6 +1204,7 @@ async function setupTxExistsInPayments(tx) {
         }
 
         function startSetupPayment() {
+            saveRegistrationDraft();
             sessionStorage.setItem("nwc_setup_pending", "1");
             window.location.href = SETUP.payUrl;
         }
@@ -1396,6 +1447,7 @@ async function handleRegister() {
 
                 sessionStorage.removeItem(SETUP.storageKey);
                 sessionStorage.removeItem("nwc_setup_pending");
+                clearRegistrationDraft();
                 enterDashboard(user);
                 showToast("Account created");
             } catch (err) {
@@ -1450,6 +1502,17 @@ async function handleRegister() {
             updateGeneratedLink();
         }
 
+        function safePaymentReturnUrl(value) {
+            const raw = String(value || "").trim();
+            if (!raw) return "";
+            try {
+                const url = new URL(raw);
+                return url.protocol === "https:" ? url.toString() : "";
+            } catch {
+                return "";
+            }
+        }
+
         function buildPaymentLink() {
             if (!currentMerchant) return "";
             const params = new URLSearchParams();
@@ -1461,6 +1524,11 @@ async function handleRegister() {
                 }
             }
             if (linkAssetMode === "usdt" || linkAssetMode === "baobao") params.set("asset", linkAssetMode);
+            const returnUrlRaw = String((document.getElementById("linkReturnUrl") || {}).value || "").trim();
+            if (returnUrlRaw) {
+                const returnUrl = safePaymentReturnUrl(returnUrlRaw);
+                if (returnUrl) params.set("return_url", returnUrl);
+            }
             const network = linkAssetMode === "baobao" ? "solana" : linkNetworkMode;
             if (network === "polygon" || network === "solana") params.set("network", network);
             return CHECKOUT_URL + "?" + params.toString();
@@ -1490,13 +1558,18 @@ async function handleRegister() {
                 ? (linkNetworkMode === "polygon" ? "USDT only" : "USDT or BAOBAO")
                 : linkAssetMode.toUpperCase();
 
-            summaryEl.textContent = amountLabel + " · " + assetLabel + " · " + networkLabel;
-            linkEl.textContent = amountOk ? buildPaymentLink() : "Enter a valid amount to finish this link.";
+            const returnUrlRaw = String((document.getElementById("linkReturnUrl") || {}).value || "").trim();
+            const returnUrlValid = !returnUrlRaw || !!safePaymentReturnUrl(returnUrlRaw);
+            summaryEl.textContent = amountLabel + " · " + assetLabel + " · " + networkLabel +
+                (returnUrlRaw ? (returnUrlValid ? " · custom return URL" : " · return URL must use HTTPS") : " · merchant default return URL");
+            linkEl.textContent = !returnUrlValid
+                ? "Enter a valid HTTPS return URL."
+                : (amountOk ? buildPaymentLink() : "Enter a valid amount to finish this link.");
         }
 
         function copyGeneratedLink() {
             const text = (document.getElementById("generatedLink") || {}).textContent || "";
-            if (!text || text === "—" || text.indexOf("http") !== 0) {
+            if (!text || text === "—" || text.indexOf("http") !== 0 || text.indexOf("Enter a valid") === 0) {
                 showToast("Finish the link first");
                 return;
             }
@@ -1705,6 +1778,13 @@ async function handleRegister() {
         }
 
         (async function init() {
+            restoreRegistrationDraft();
+            ["registerMerchantId", "registerBusinessName", "registerEmail", "registerPolygonWallet", "registerSolanaWallet", "registerWebhook"]
+                .forEach(id => {
+                    const field = document.getElementById(id);
+                    if (field) field.addEventListener("input", saveRegistrationDraft);
+                });
+
             if (await captureSetupReturn()) return;
             if (captureSetupReturn()) return;
 

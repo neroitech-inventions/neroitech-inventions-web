@@ -309,7 +309,8 @@
             merchant: (params.get("merchant") || "").trim(),
             amount: params.get("amount"),
             network: (params.get("network") || "").trim().toLowerCase(),
-            asset: (params.get("asset") || "").trim().toLowerCase()
+            asset: (params.get("asset") || "").trim().toLowerCase(),
+            returnUrl: (params.get("return_url") || "").trim()
         };
 
         function showError(message) {
@@ -406,12 +407,27 @@
                 return;
             }
 
-            window.location.href =
-                CHECKOUT_PAGE +
-                "?merchant=" + encodeURIComponent(locked.merchant) +
-                "&amount=" + encodeURIComponent(amount) +
-                "&network=" + encodeURIComponent(network) +
-                "&asset=" + encodeURIComponent(asset);
+            const paymentParams = new URLSearchParams({
+                merchant: locked.merchant,
+                amount: String(amount),
+                network: network,
+                asset: asset
+            });
+            if (locked.returnUrl) {
+                let parsedReturnUrl;
+                try {
+                    parsedReturnUrl = new URL(locked.returnUrl);
+                } catch (error) {
+                    showError("This payment link has an invalid return URL.");
+                    return;
+                }
+                if (parsedReturnUrl.protocol !== "https:") {
+                    showError("The return URL must use HTTPS.");
+                    return;
+                }
+                paymentParams.set("return_url", parsedReturnUrl.toString());
+            }
+            window.location.href = CHECKOUT_PAGE + "?" + paymentParams.toString();
         }
 
         if (!locked.merchant) {
