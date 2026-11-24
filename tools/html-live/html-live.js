@@ -8,6 +8,11 @@
   let timer = null;
   const previewStack = [];
   let currentDoc = "";
+  // Keep one return snapshot for the active external page in the preview.
+  // This is separate from the editor's undo/history stack.
+  let externalPreviewReturnDoc = null;
+  let externalPreviewActive = false;
+  const previewDocumentsWithClickHandler = new WeakSet();
   let currentShortUrl = null;
   let isDirty = true;
   let saveTimer = null;
@@ -128,16 +133,43 @@
       if (previewStack.length > 50) previewStack.shift();
     }
     currentDoc = next;
+    externalPreviewReturnDoc = null;
+    externalPreviewActive = false;
+    previewStack.length = 0;
     preview.removeAttribute("src");
     preview.srcdoc = next;
     status.textContent = "Updated " + new Date().toLocaleTimeString();
   }
 
+  function restoreExternalPreview() {
+    const returnDoc = externalPreviewReturnDoc || currentDoc;
+    if (!returnDoc) return;
+
+    externalPreviewActive = false;
+    externalPreviewReturnDoc = null;
+    previewStack.length = 0;
+    currentDoc = returnDoc;
+    preview.removeAttribute("src");
+    preview.srcdoc = returnDoc;
+    status.textContent = "Returned to preview";
+  }
+
   function goBackPreview() {
+    // One Back action exits the external payment/donation flow and restores
+    // the saved preview, instead of walking through every redirect in the iframe.
+    if (externalPreviewActive) {
+      restoreExternalPreview();
+      return;
+    }
+
     try {
       const win = preview.contentWindow;
-      if (win && win.location.href !== "about:srcdoc" && win.history.length > 1) { win.history.back(); return; }
+      if (win && win.location.href !== "about:srcdoc" && win.history.length > 1) {
+        win.history.back();
+        return;
+      }
     } catch (err) {}
+
     if (!previewStack.length) return;
     currentDoc = previewStack.pop();
     preview.removeAttribute("src");
@@ -383,54 +415,59 @@ async function doShare() {
   [htmlEl, cssEl, jsEl].forEach(function (el) { el.addEventListener("input", schedule); });
   autoRun.addEventListener("change", function () { if (autoRun.checked) runPreview(); });
   document.addEventListener("keydown", function (e) { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); runPreview(); } });
-  // Restore the previous preview after an external payment/donation flow
-  // leaves the iframe and then returns to this site's origin.
-  let previewLeftOrigin = false;
-  let restoringPreviousPreview = false;
-
   preview.addEventListener("load", function () {
+    // If the external flow redirects back to this exact origin, restore the
+    // saved preview automatically. Cross-origin pages cannot be inspected here.
     try {
       const frameWindow = preview.contentWindow;
-      const frameUrl = frameWindow.location.href;
+      const frameHref = frameWindow.location.href;
 
-      // Accessing a cross-origin frame URL throws; remember that the
-      // preview has left this site's origin.
-      if (frameUrl && frameUrl !== "about:srcdoc" &&
-          frameWindow.location.origin !== window.location.origin) {
-        previewLeftOrigin = true;
-        return;
-      }
-
-      // A same-origin page loaded after a cross-origin payment page is
-      // the return from that flow. Restore the original live preview.
-      if (previewLeftOrigin && !restoringPreviousPreview && currentDoc) {
-        previewLeftOrigin = false;
-        restoringPreviousPreview = true;
-        preview.removeAttribute("src");
-        preview.srcdoc = currentDoc;
+      if (
+        externalPreviewActive &&
+        frameHref !== "about:srcdoc" &&
+        frameWindow.location.origin === window.location.origin
+      ) {
+        restoreExternalPreview();
         return;
       }
 
       const doc = preview.contentDocument;
-      if (!doc) return;
+      if (!doc || previewDocumentsWithClickHandler.has(doc)) return;
+      previewDocumentsWithClickHandler.add(doc);
+
       doc.addEventListener("click", function (e) {
         const a = e.target.closest && e.target.closest("a[href]");
         if (!a) return;
-        const href = a.getAttribute("href");
+
+        const href = a.href || a.getAttribute("href");
         if (!href || href.charAt(0) === "#") return;
         if (!/^https?:/i.test(href)) return;
+
         e.preventDefault();
-        if (currentDoc) { previewStack.push(currentDoc); if (previewStack.length > 50) previewStack.shift(); }
+
+        // Save the current preview only once. Repeated donation attempts
+        // reuse this same return point rather than stacking duplicates.
+        if (!externalPreviewActive) {
+          externalPreviewReturnDoc = currentDoc || buildDoc();
+          externalPreviewActive = true;
+        }
+
+        previewStack.length = 0;
         preview.removeAttribute("srcdoc");
         preview.src = href;
       }, true);
-      if (preview.srcdoc && frameWindow.location.href === "about:srcdoc") {
-        restoringPreviousPreview = false;
-      }
     } catch (err) {
-      // Cross-origin preview pages cannot be inspected by the parent page.
-      previewLeftOrigin = true;
+      // Cross-origin iframe: the browser intentionally prevents inspection.
+      // A return page can notify this parent with the postMessage event below.
     }
+  });
+
+  // Allows a controlled return page inside the iframe to request restoration.
+  // The message is accepted only from this preview iframe.
+  window.addEventListener("message", function (event) {
+    if (event.source !== preview.contentWindow) return;
+    if (!event.data || event.data.type !== "HTML_LIVE_PREVIEW_RETURN") return;
+    if (externalPreviewActive) restoreExternalPreview();
   });
 
   if (loadFromShareLink()) { runPreview({ record: false }); updateShareButton(); }
