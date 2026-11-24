@@ -12,6 +12,7 @@
   // This is separate from the editor's undo/history stack.
   let externalPreviewReturnDoc = null;
   let externalPreviewActive = false;
+  let externalPreviewLeftOrigin = false;
   const previewDocumentsWithClickHandler = new WeakSet();
   let currentShortUrl = null;
   let isDirty = true;
@@ -135,6 +136,7 @@
     currentDoc = next;
     externalPreviewReturnDoc = null;
     externalPreviewActive = false;
+    externalPreviewLeftOrigin = false;
     previewStack.length = 0;
     preview.removeAttribute("src");
     preview.srcdoc = next;
@@ -147,6 +149,7 @@
 
     externalPreviewActive = false;
     externalPreviewReturnDoc = null;
+    externalPreviewLeftOrigin = false;
     previewStack.length = 0;
     currentDoc = returnDoc;
     preview.removeAttribute("src");
@@ -425,6 +428,16 @@ async function doShare() {
       if (
         externalPreviewActive &&
         frameHref !== "about:srcdoc" &&
+        frameWindow.location.origin !== window.location.origin
+      ) {
+        externalPreviewLeftOrigin = true;
+        return;
+      }
+
+      if (
+        externalPreviewActive &&
+        externalPreviewLeftOrigin &&
+        frameHref !== "about:srcdoc" &&
         frameWindow.location.origin === window.location.origin
       ) {
         restoreExternalPreview();
@@ -457,8 +470,9 @@ async function doShare() {
         preview.src = href;
       }, true);
     } catch (err) {
-      // Cross-origin iframe: the browser intentionally prevents inspection.
-      // A return page can notify this parent with the postMessage event below.
+      // A cross-origin load means the iframe has left the preview's origin.
+      if (externalPreviewActive) externalPreviewLeftOrigin = true;
+      // The browser intentionally prevents inspection of cross-origin pages.
     }
   });
 
