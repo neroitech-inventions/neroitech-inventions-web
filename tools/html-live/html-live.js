@@ -394,7 +394,8 @@ async function doShare() {
         if (!href || href.charAt(0) === "#") return;
         if (!/^https?:/i.test(href)) return;
         e.preventDefault();
-        if (currentDoc) { previewStack.push(currentDoc); if (previewStack.length > 50) previewStack.shift(); }
+        // Let the iframe's own browser history track external-page navigation.
+        // Do not also push the editor document into previewStack for every link click.
         preview.removeAttribute("srcdoc");
         preview.src = href;
       }, true);
