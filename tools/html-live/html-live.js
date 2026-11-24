@@ -383,34 +383,8 @@ async function doShare() {
   [htmlEl, cssEl, jsEl].forEach(function (el) { el.addEventListener("input", schedule); });
   autoRun.addEventListener("change", function () { if (autoRun.checked) runPreview(); });
   document.addEventListener("keydown", function (e) { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); runPreview(); } });
-  // Restore the previous preview after an external payment/donation flow
-  // leaves the iframe and then returns to this site's origin.
-  let previewLeftOrigin = false;
-  let restoringPreviousPreview = false;
-
   preview.addEventListener("load", function () {
     try {
-      const frameWindow = preview.contentWindow;
-      const frameUrl = frameWindow.location.href;
-
-      // Accessing a cross-origin frame URL throws; remember that the
-      // preview has left this site's origin.
-      if (frameUrl && frameUrl !== "about:srcdoc" &&
-          frameWindow.location.origin !== window.location.origin) {
-        previewLeftOrigin = true;
-        return;
-      }
-
-      // A same-origin page loaded after a cross-origin payment page is
-      // the return from that flow. Restore the original live preview.
-      if (previewLeftOrigin && !restoringPreviousPreview && currentDoc) {
-        previewLeftOrigin = false;
-        restoringPreviousPreview = true;
-        preview.removeAttribute("src");
-        preview.srcdoc = currentDoc;
-        return;
-      }
-
       const doc = preview.contentDocument;
       if (!doc) return;
       doc.addEventListener("click", function (e) {
@@ -424,13 +398,7 @@ async function doShare() {
         preview.removeAttribute("srcdoc");
         preview.src = href;
       }, true);
-      if (preview.srcdoc && frameWindow.location.href === "about:srcdoc") {
-        restoringPreviousPreview = false;
-      }
-    } catch (err) {
-      // Cross-origin preview pages cannot be inspected by the parent page.
-      previewLeftOrigin = true;
-    }
+    } catch (err) {}
   });
 
   if (loadFromShareLink()) { runPreview({ record: false }); updateShareButton(); }
