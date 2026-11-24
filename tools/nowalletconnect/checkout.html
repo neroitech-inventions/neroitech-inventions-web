@@ -430,7 +430,11 @@
             lockAsset("baobao");
         } else {
             if (locked.network) lockNetwork(locked.network);
-            if (locked.asset) lockAsset(locked.asset);
+            if (locked.asset) {
+                lockAsset(locked.asset);
+            } else if (locked.network === "solana") {
+                lockAsset("usdt");
+            }
         }
 
         updateDisplay();
