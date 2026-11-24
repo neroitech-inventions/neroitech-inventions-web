@@ -230,6 +230,96 @@
         }
 
         .powered a:hover { color: #00d4ff; }
+
+        /* Prevent long token details and labels from forcing horizontal overflow. */
+        .container,
+        .card,
+        .form-group,
+        .network-option,
+        .display-item {
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        .lock-note {
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            line-height: 1.55;
+        }
+
+        #assetMintHint { display: block; }
+        #assetMintHint[hidden] { display: none; }
+
+        #asset {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .merchant-chip,
+        .display-value,
+        .subtitle,
+        .error {
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+                align-items: flex-start;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .card {
+                width: 100%;
+                padding: 24px 18px;
+                border-radius: 16px;
+            }
+
+            h1 { font-size: clamp(1.4rem, 7vw, 1.8rem); }
+
+            .network-selector {
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                gap: 8px;
+            }
+
+            .network-label {
+                padding: 12px 8px;
+                overflow-wrap: anywhere;
+            }
+
+            .display-box {
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                gap: 8px;
+                padding: 12px 8px;
+            }
+
+            .display-value { font-size: clamp(1rem, 5vw, 1.3rem); }
+
+            #displayNetwork {
+                font-size: clamp(0.85rem, 4vw, 1.1rem) !important;
+            }
+
+            #assetMintHint {
+                font-size: 0.72rem;
+                line-height: 1.6;
+            }
+        }
+
+        @media (max-width: 360px) {
+            body { padding: 8px; }
+            .card { padding: 20px 14px; }
+            .display-box { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
