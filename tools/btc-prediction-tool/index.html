@@ -1,207 +1,429 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d0b14">
+  <meta name="description" content="BAOBAO the Analyst checks Bitcoin market data and shares a short-term up or down bias.">
 
-     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-QM106YDX6N');
-</script>
+</script>  
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BTC 24h Market Prediction & Sentiment</title>
-    <link href="images/favicon.ico" rel="icon">
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial@0.2.1/dist/chartjs-chart-financial.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <title>BAOBAO the Analyst</title>
+
+  <link href="images/favicon.ico" rel="icon">  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html { min-height: 100%; background: #0d0b14; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: #0d0b14;
+      color: #fff8f0;
+      font-family: 'Nunito', sans-serif;
+    }
+    .font-display { font-family: 'Fredoka', sans-serif; font-weight: 700; }
+    .badge {
+      color: #ffe08a;
+      background: rgba(255,107,0,.12);
+      border: 1px solid rgba(255,180,0,.38);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid #ffe500;
+      outline-offset: 4px;
+    }
+    @media (max-width: 520px) {
+      #baobao-analyst { padding: 52px 14px !important; }
+      #analystCard { padding: 24px 16px !important; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Bitcoin 24-Hour Market Prediction & Sentiment Analysis</h1>
-            <p class="subtitle">Rule-based analysis combining Fear & Greed Index, technical indicators, and price action. Not financial advice.</p>
-<div class="last-update" id="lastUpdate">
-    <span class="loader"></span>
-    <span>Loading market data</span>
-        </header>
-
-        <section class="market-overview" id="marketOverview">
-            <div class="card">
-                <h2>BTC Market Overview</h2>
-                <div class="price-display">
-                    <span class="price" id="btcPrice">--</span>
-                    <span class="change" id="btcChange">--</span>
-                </div>
-                <div class="stats">
-                    <div>24h Volume: <span id="volume">--</span></div>
-                    <div>Data: <span id="priceSource">--</span></div>
-                </div>
-            </div>
-            <div class="card fng-card">
-                <h2>Fear & Greed Index</h2>
-                <div class="gauge" id="fngGauge">
-                    <div class="gauge-value" id="fngValue">--</div>
-                    <div class="gauge-label" id="fngLabel">--</div>
-                </div>
-                <div class="fng-trend" id="fngTrend">--</div>
-            </div>
-        </section>
-
-        <section class="charts">
-            <div class="card">
-                <h2>Price & Sentiment (7 Days)</h2>
-                <canvas id="priceSentimentChart"></canvas>
-            </div>
-        </section>
-<section class="charts">
-    <div class="card">
-        <h2>Bitcoin Price Chart</h2>
-        <div class="chart-controls" style="margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-            <button class="tf-btn active" data-tf="24h">24h</button>
-            <button class="tf-btn" data-tf="7d">7d</button>
-            <span style="margin: 0 0.5rem; opacity: 0.4;">|</span>
-            <button class="chart-type-btn active" data-type="line">Line</button>
-            <button class="chart-type-btn" data-type="area">Area</button>
-            <button class="chart-type-btn" data-type="candlestick">Candlestick</button>
-        </div>
-        <canvas id="btcPriceChart"></canvas>
-    </div>
-</section>
-
-        <section class="analysis-grid">
-            <div class="card">
-                <h2>7-Day Sentiment vs Price</h2>
-                <div id="sentimentAnalysis" class="analysis-text"></div>
-                <table id="dailyTable">
-                    <thead>
-                        <tr><th>Date</th><th>F&G</th><th>Category</th><th>BTC Close</th><th>Change %</th></tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="card">
-                <h2>Technical Indicators</h2>
-                <div id="techIndicators"></div>
-            </div>
-        </section>
-
-        <section class="prediction-panel">
-            <div class="card prediction-card">
-                <h2>24-Hour Prediction</h2>
-                <div class="signal" id="signal">--</div>
-                <div class="probabilities">
-                    <div>Up: <span id="probUp">--</span>%</div>
-                    <div>Down: <span id="probDown">--</span>%</div>
-                    <div>Sideways: <span id="probSide">--</span>%</div>
-                </div>
-                <div class="reasons">
-                    <h3>Bullish Factors</h3>
-                    <ul id="bullishFactors"></ul>
-                    <h3>Bearish Factors</h3>
-                    <ul id="bearishFactors"></ul>
-                </div>
-                <div class="support-resistance" id="srLevels"></div>
-                <div class="invalidation" id="invalidation"></div>
-                <div class="forecast-meta" id="forecastMeta"></div>
-                <div class="share-actions">
-    <button id="shareSignalBtn" class="share-btn">Share Signal as Image</button>
-    <button id="copySignalBtn" class="share-btn secondary">Copy Signal as Text</button>
+<!-- BAOBAO the Analyst - drop this section into the BAOBAO site -->
+<section id="baobao-analyst" style="padding:80px 20px;background:linear-gradient(180deg,#0d0b14 0%,#1a1208 100%);position:relative;overflow:hidden;">
+  <div style="max-width:960px;margin:0 auto;text-align:center;">
+    <div class="badge" style="margin-bottom:16px; display:inline-flex; align-items:center; gap:8px;">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+  </svg>
+  Call BAOBAO the Analyst
 </div>
-            </div>
-        </section>
-
-<section class="position-advisor">
-    <div class="card">
-        <h2>Position Advisor</h2>
-        <div class="toggle" style="margin-bottom: 1.25rem;">
-            <input type="checkbox" id="advisorToggle">
-            <label for="advisorToggle" style="margin:0; color: var(--text);">Enable Position Advisor</label>
-        </div>
-
-        <div id="advisorSection" class="hidden">
-            <div class="advisor-grid">
-                <div class="field">
-                    <label>Position Type</label>
-                    <select id="positionType">
-                        <option value="long">LONG</option>
-                        <option value="short">SHORT</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label>Leverage</label>
-                    <input type="number" id="leverage" placeholder="40" value="1" min="1" step="1">
-                </div>
-                <div class="field">
-                    <label>Entry Price ($)</label>
-                    <input type="number" id="entryPrice" placeholder="82000" step="any">
-                </div>
-                <div class="field">
-                    <label>Position Size (USDC)</label>
-                    <input type="number" id="positionSize" placeholder="82" step="any">
-                </div>
-                <div class="field">
-                    <label>Initial Margin (USDC)</label>
-                    <input type="number" id="margin" placeholder="Auto-calculated" step="any" readonly>
-                </div>
-                <div class="field">
-                    <label>Target Price ($)</label>
-                    <input type="number" id="targetPrice" placeholder="80000" step="any">
-                </div>
-                <div class="field">
-                    <label>Liquidation Price ($)</label>
-                    <input type="number" id="liqPrice" placeholder="82810" step="any">
-                </div>
-            </div>
-
-            <div class="advisor-actions">
-                <button id="analyzePosition">Analyze Position</button>
-                <button id="resetPosition" class="secondary">Reset</button>
-            </div>
-
-            <div id="positionResult"></div>
-            <div id="scenarioTable"></div>
-        </div>
+    <h2 class="font-display" style="font-size:clamp(2rem,5vw,3.2rem);color:#fff8f0;margin:0 0 12px;line-height:1.05;">
+      Will Bitcoin Go <span style="color:#ff6b00;">Up</span> or <span style="color:#ff6b00;">Down</span>?
+    </h2>
+    <p style="color:rgba(255,248,240,.78);font-size:1.05rem;max-width:560px;margin:0 auto 28px;line-height:1.6;">
+      BAOBAO checks the vibes and tells you straight. No fancy words. Just up or down, and why.
+    </p>
+    <img src="https://pbs.twimg.com/media/HVVHLbTWAAAM8tM.jpg" alt="BAOBAO the Analyst" style="width:100%;max-width:420px;border-radius:20px;margin:0 auto 28px;display:block;box-shadow:0 16px 50px rgba(0,0,0,.5);border:2px solid rgba(255,107,0,.3);">
+    <div id="analystCard" style="background:linear-gradient(135deg,rgba(255,107,0,.18),rgba(255,60,172,.1));border:1px solid rgba(255,107,0,.4);border-radius:24px;padding:32px 24px;margin-bottom:28px;box-shadow:0 20px 60px rgba(0,0,0,.45);">
+      <div id="analystLoading" style="color:rgba(255,248,240,.75);font-family:'Nunito',sans-serif;font-weight:700;">BAOBAO is sniffing out the market vibes...</div>
+      <div id="analystResult" style="display:none;">
+        <div id="analystDirection" style="font-family:'Fredoka One',cursive;font-size:clamp(2.4rem,7vw,3.8rem);margin:8px 0 6px;letter-spacing:.02em;color:#fff8f0;"></div>
+        <div id="analystSub" style="color:rgba(255,248,240,.85);font-size:1.05rem;margin-bottom:20px;font-weight:600;"></div>
+        <div id="analystProbabilities" style="display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin:0 auto 20px;color:#fff8f0;font-weight:800;"></div>
+        <div id="analystPlainExplain" style="max-width:600px;margin:0 auto 20px;color:#fff8f0;font-size:1.05rem;line-height:1.65;font-weight:700;"></div>
+        <div style="text-align:left;max-width:540px;margin:0 auto;font-family:'Nunito',sans-serif;font-weight:700;font-size:.98rem;line-height:1.75;color:#fff8f0;"><div style="font-weight:900;margin-bottom:8px;">What BAOBAO is seeing</div><div id="analystReasons"></div></div>
+        <div id="analystMeta" style="margin-top:18px;font-size:.78rem;color:rgba(255,248,240,.65);"></div>
+      </div>
     </div>
+    <button id="analystRefresh" type="button" style="background:linear-gradient(135deg,#ffe500,#ff6b00);color:#1a0a00;border:none;font-family:'Fredoka One',cursive;font-size:1rem;padding:14px 28px;border-radius:14px;cursor:pointer;box-shadow:0 6px 0 #7a4000;font-weight:800;">Call BAOBAO Again</button>
+    <p style="margin-top:14px;font-size:.78rem;color:rgba(255,248,240,.55);">Just a data-based guess, not a crystal ball. DYOR degen.</p>
+
+    <!-- BAOBAO donation link: added without changing the existing analyst logic -->
+    <div style="max-width:560px;margin:34px auto 0;padding:22px 20px;border:1px solid rgba(255,180,0,.38);border-radius:20px;background:linear-gradient(135deg,rgba(255,180,0,.13),rgba(255,107,0,.10));box-shadow:0 12px 35px rgba(0,0,0,.25);">
+      <div style="font-family:'Fredoka One',cursive;font-size:1.45rem;color:#ffe08a;margin-bottom:8px;">🍵 Buy Analyst a Treat!</div>
+      <p style="color:rgba(255,248,240,.82);font-size:.96rem;line-height:1.6;margin:0 0 16px;">
+        Enjoying BAOBAO's signals? If the analysis has been useful, you can support the Dev with a little donation. Every bit of love keeps the market vibes going.
+      </p>
+      <a href="https://niti.com.ng/tools/nowalletconnect/checkout.html?merchant=NITI&return_url=https%3A%2F%2Fniti.com.ng%2Ftools%2Fnowalletconnect%2Freturn.html%3Fmessage%3DThank%2Byou%2Bfor%2Bsupporting%2BBAOBAO%2Bthe%2BAnalyst.%2BEvery%2Bdonation%2Bmeans%2Ba%2Blot%2Band%2Bhelps%2Bkeep%2Bthe%2Bmarket%2Bvibes%2Bflowing.%26redirect%3Dhttps%253A%252F%252Furlmini.github.io%252F%253Fc%253Dbaobao-the-analyst&network=solana" rel="noopener noreferrer"
+         style="display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 24px;border-radius:14px;background:linear-gradient(135deg,#ffe500,#ff8a00);color:#241000;text-decoration:none;font-family:'Fredoka One',cursive;font-size:1.05rem;font-weight:800;box-shadow:0 5px 0 #9a4b00,0 10px 22px rgba(255,107,0,.2);">
+        ❤️ Support Dev
+      </a>
+      <div style="margin-top:12px;font-size:.76rem;color:rgba(255,248,240,.58);">Donations are completely voluntary. Thank you for supporting!</div>
+    </div>
+  </div>
 </section>
 
-        <section class="forecasts">
-            <div class="card">
-                <h2>Recent Forecasts (Local Storage)</h2>
-                <div id="forecastHistory"></div>
-                <button id="clearHistory">Clear History</button>
-            </div>
-        </section>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const loadingEl = $('analystLoading'), resultEl = $('analystResult');
+  const dirEl = $('analystDirection'), subEl = $('analystSub');
+  const probsEl = $('analystProbabilities'), reasonsEl = $('analystReasons');
+  const plainExplainEl = $('analystPlainExplain');
+  const metaEl = $('analystMeta'), refreshBtn = $('analystRefresh');
+  if (!loadingEl || !resultEl || !refreshBtn) return;
 
-<footer>
-    <p class="disclaimer">
-        Data sources: Alternative.me (Fear & Greed), CoinGecko / Binance (prices). All calculations client-side. Predictions are rule-based estimates, not statistically validated probabilities. Past performance does not guarantee future results. Never trade with money you cannot afford to lose.
-    </p>
-    <div class="powered">
-        <span>Powered by</span>
-        <a href="https://niti.com.ng/" target="_blank" rel="noopener">
-            Neroitech Inventions
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-        </a>
-    </div>
-</footer>
-    </div>
+  function classifyFng(v) {
+    if (v <= 24) return 'Extreme Fear';
+    if (v <= 44) return 'Fear';
+    if (v <= 55) return 'Neutral';
+    if (v <= 74) return 'Greed';
+    return 'Extreme Greed';
+  }
+  function calculateEMA(prices, period) {
+    if (prices.length < period) return null;
+    const k = 2 / (period + 1);
+    let ema = prices.slice(0, period).reduce((a, b) => a + b, 0) / period;
+    for (let i = period; i < prices.length; i++) ema = prices[i] * k + ema * (1 - k);
+    return ema;
+  }
+  function calculateRSI(prices, period = 14) {
+    if (prices.length < period + 1) return null;
+    let gains = 0, losses = 0;
+    for (let i = 1; i <= period; i++) {
+      const d = prices[i] - prices[i - 1];
+      if (d > 0) gains += d; else losses -= d;
+    }
+    let avgGain = gains / period, avgLoss = losses / period;
+    for (let i = period + 1; i < prices.length; i++) {
+      const d = prices[i] - prices[i - 1];
+      avgGain = (avgGain * (period - 1) + Math.max(d, 0)) / period;
+      avgLoss = (avgLoss * (period - 1) + Math.max(-d, 0)) / period;
+    }
+    if (avgLoss === 0) return 100;
+    return 100 - (100 / (1 + avgGain / avgLoss));
+  }
+  function calculateMACD(prices, fast = 12, slow = 26, signal = 9) {
+    if (prices.length < slow + signal) return null;
+    const fastValues = [], slowValues = [];
+    let ef = prices.slice(0, fast).reduce((a, b) => a + b, 0) / fast;
+    let es = prices.slice(0, slow).reduce((a, b) => a + b, 0) / slow;
+    for (let i = 0; i < prices.length; i++) {
+      if (i >= fast - 1) {
+        if (i === fast - 1) fastValues.push(ef);
+        else { ef = prices[i] * (2 / (fast + 1)) + ef * (1 - 2 / (fast + 1)); fastValues.push(ef); }
+      }
+      if (i >= slow - 1) {
+        if (i === slow - 1) slowValues.push(es);
+        else { es = prices[i] * (2 / (slow + 1)) + es * (1 - 2 / (slow + 1)); slowValues.push(es); }
+      }
+    }
+    const line = fastValues.slice(fastValues.length - slowValues.length).map((v, i) => v - slowValues[i]);
+    if (line.length < signal) return null;
+    let sig = line.slice(0, signal).reduce((a, b) => a + b, 0) / signal;
+    for (let i = signal; i < line.length; i++) sig = line[i] * (2 / (signal + 1)) + sig * (1 - 2 / (signal + 1));
+    return { macd: line[line.length - 1], signal: sig, histogram: line[line.length - 1] - sig };
+  }
 
-<button id="backToTop" title="Back to top" aria-label="Back to top">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="18 15 12 9 6 15"></polyline>
-    </svg>
+  // This scoring and probability calculation follows generatePrediction() in the supplied BTC app.js.
+  function generatePrediction(fng, previousFng, prices, rsi, macd, ema20, ema50, volumes) {
+    let bullScore = 0, bearScore = 0;
+    const bullFactors = [], bearFactors = [];
+    const fngChange = fng - previousFng;
+    if (fng <= 25) { bullScore += 12; bullFactors.push('Market fear is high - sometimes that sets up a bounce'); }
+    else if (fng <= 40) { bullScore += 6; bullFactors.push('Traders are nervous'); }
+    else if (fng >= 75) { bearScore += 12; bearFactors.push('Market hype is running hot - a pullback could hit'); }
+    else if (fng >= 60) { bearScore += 6; bearFactors.push('Greed is heating up'); }
+    if (fngChange > 5) { bullScore += 4; bullFactors.push('Market mood is improving'); }
+    if (fngChange < -5) { bearScore += 4; bearFactors.push('Market mood is getting worse'); }
+
+    const n = prices.length;
+    const chg4h = n > 5 ? ((prices[n-1] - prices[n-5]) / prices[n-5]) * 100 : 0;
+    const chg24h = n > 25 ? ((prices[n-1] - prices[n-25]) / prices[n-25]) * 100 : 0;
+    if (chg24h > 2) { bullScore += 8; bullFactors.push('BTC has solid upward momentum'); }
+    else if (chg24h > 0.5) { bullScore += 4; bullFactors.push('BTC is edging up'); }
+    else if (chg24h < -2) { bearScore += 8; bearFactors.push('BTC is sliding with strong downward momentum'); }
+    else if (chg24h < -0.5) { bearScore += 4; bearFactors.push('BTC is drifting down'); }
+    if (chg4h > 1) bullScore += 3;
+    if (chg4h < -1) bearScore += 3;
+
+    if (rsi !== null) {
+      if (rsi < 30) { bullScore += 10; bullFactors.push('BTC may be oversold - a bounce is possible'); }
+      else if (rsi < 40) { bullScore += 5; bullFactors.push('Selling may be getting stretched'); }
+      else if (rsi > 70) { bearScore += 10; bearFactors.push('BTC may be overheated - a cool-off is possible'); }
+      else if (rsi > 60) { bearScore += 5; bearFactors.push('Buyers may be getting a little too excited'); }
+    }
+    if (macd) {
+      if (macd.histogram > 0 && macd.macd > macd.signal) { bullScore += 6; bullFactors.push('Momentum is leaning bullish'); }
+      else if (macd.histogram < 0 && macd.macd < macd.signal) { bearScore += 6; bearFactors.push('Momentum is leaning bearish'); }
+    }
+    const current = prices[n - 1];
+    if (ema20 && current > ema20) { bullScore += 5; bullFactors.push('BTC is trading above its short-term trend'); }
+    else if (ema20 && current < ema20) { bearScore += 5; bearFactors.push('BTC is trading below its short-term trend'); }
+    if (ema50 && ema20 && ema20 > ema50) { bullScore += 4; bullFactors.push('The short-term trend is above the longer trend'); }
+    else if (ema50 && ema20 && ema20 < ema50) { bearScore += 4; bearFactors.push('The short-term trend is below the longer trend'); }
+    const volChange = volumes.length > 24 ? (volumes[volumes.length-1] / (volumes.slice(-25, -1).reduce((a,b)=>a+b,0) / 24)) : 1;
+    if (volChange > 1.3 && chg24h > 0) { bullScore += 3; bullFactors.push('More trading activity is backing the move up'); }
+    if (volChange > 1.3 && chg24h < 0) { bearScore += 3; bearFactors.push('More trading activity is backing the move down'); }
+
+    const net = bullScore - bearScore;
+    let upProb, downProb, sideProb;
+    if (Math.abs(net) < 5) {
+      upProb = net >= 0 ? 38 : 32; downProb = net < 0 ? 38 : 32; sideProb = 30;
+    } else if (net > 0) {
+      upProb = 45 + Math.min(25, net * 0.8); downProb = 25 - Math.min(10, net * 0.3); sideProb = 100 - upProb - downProb;
+    } else {
+      downProb = 45 + Math.min(25, -net * 0.8); upProb = 25 - Math.min(10, -net * 0.3); sideProb = 100 - upProb - downProb;
+    }
+    const sum = upProb + downProb + sideProb;
+    upProb = Math.round(upProb / sum * 100); downProb = Math.round(downProb / sum * 100); sideProb = 100 - upProb - downProb;
+    const signal = net >= 0 ? 'UP BIAS' : 'DOWN BIAS';
+    return { signal, upProb, downProb, sideProb, bullFactors: bullFactors.slice(0,3), bearFactors: bearFactors.slice(0,3), netScore: net, chg24h, rsi };
+  }
+
+  async function getMarketData() {
+    const fngResponse = await fetch('https://api.alternative.me/fng/?limit=8');
+    if (!fngResponse.ok) throw new Error('Fear & Greed data unavailable');
+    const fngJson = await fngResponse.json();
+    if (!Array.isArray(fngJson.data) || fngJson.data.length < 2) throw new Error('Not enough Fear & Greed history');
+    const fngData = fngJson.data.map(x => Number(x.value));
+    const currentFng = fngData[0], previousFng = fngData[1];
+
+    let prices = [], volumes = [], source = 'CoinGecko';
+    try {
+      const response = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7&interval=hourly');
+      if (!response.ok) throw new Error('CoinGecko request failed');
+      const data = await response.json();
+      if (!Array.isArray(data.prices) || !Array.isArray(data.total_volumes)) throw new Error('CoinGecko response incomplete');
+      prices = data.prices.map(x => Number(x[1])); volumes = data.total_volumes.map(x => Number(x[1]));
+    } catch (e) {
+      source = 'Binance';
+      const response = await fetch('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=168');
+      if (!response.ok) throw new Error('Market price sources unavailable');
+      const data = await response.json();
+      prices = data.map(x => Number(x[4])); volumes = data.map(x => Number(x[5]));
+    }
+    if (prices.length < 60 || prices.some(x => !Number.isFinite(x)) || !prices[prices.length-1]) throw new Error('Insufficient or invalid market data');
+    return { currentFng, previousFng, prices, volumes, source };
+  }
+
+  function renderReasons(prediction) {
+    const lines = [];
+    prediction.bullFactors.forEach(x => lines.push('🟢 ' + x));
+    prediction.bearFactors.forEach(x => lines.push('🔴 ' + x));
+    if (!lines.length) lines.push('🟡 The signals are mixed - no clear edge right now. Maybe sit tight and wait.');
+    return lines.map(x => '<div style="margin-bottom:8px;">' + x.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) + '</div>').join('');
+  }
+
+  async function runAnalysis() {
+    loadingEl.style.display = 'block'; loadingEl.textContent = 'BAOBAO is sniffing out the market vibes...';
+    resultEl.style.display = 'none'; refreshBtn.disabled = true;
+    try {
+      const data = await getMarketData();
+      const { currentFng, previousFng, prices, volumes, source } = data;
+      const price = prices[prices.length - 1];
+      const rsi = calculateRSI(prices), macd = calculateMACD(prices);
+      const ema20 = calculateEMA(prices, 20), ema50 = calculateEMA(prices, 50);
+      const prediction = generatePrediction(currentFng, previousFng, prices, rsi, macd, ema20, ema50, volumes);
+      const directionColor = prediction.signal === 'UP BIAS' ? '#3fb950' : '#ff5c5c';
+      dirEl.textContent = prediction.signal === 'UP BIAS' ? '🚀 MORE LIKELY UP' : '🩸 MORE LIKELY DOWN';
+      dirEl.style.color = directionColor;
+      subEl.textContent = prediction.signal === 'UP BIAS' ? 'BAOBAO thinks Bitcoin is more likely to go up in the short term.' : 'BAOBAO thinks Bitcoin is more likely to go down in the short term.';
+      probsEl.innerHTML = `<span>🟢 Up ${prediction.upProb}%</span><span>🔴 Down ${prediction.downProb}%</span><span>🟡 Sideways ${prediction.sideProb}%</span>`;
+      if (plainExplainEl) plainExplainEl.textContent = prediction.sideProb >= Math.max(prediction.upProb, prediction.downProb) ? 'The market looks pretty undecided. BTC could chop around instead of making a big move. No need to force a trade.' : prediction.signal === 'UP BIAS' ? 'The signals are leaning bullish. That does not mean it will pump for sure, just that the current setup points more up than down.' : 'The signals are leaning bearish. That does not mean it will dump for sure, just that the current setup points more down than up.';
+      reasonsEl.innerHTML = renderReasons(prediction);
+      const fngLabel = classifyFng(currentFng);
+      metaEl.textContent = `BTC $${Math.round(price).toLocaleString()} · 24h change ${prediction.chg24h >= 0 ? '+' : ''}${prediction.chg24h.toFixed(2)}% · RSI ${rsi === null ? 'N/A' : rsi.toFixed(1)} · Fear & Greed ${currentFng} (${fngLabel}) · Updated ${new Date().toLocaleTimeString()}`;
+      loadingEl.style.display = 'none'; resultEl.style.display = 'block';
+    } catch (error) {
+      console.error('BAOBAO Analyst:', error);
+      loadingEl.textContent = 'BAOBAO could not load reliable market data right now. Please try again shortly.';
+    } finally { refreshBtn.disabled = false; }
+  }
+  // Classic vintage metal-bell phone ring (CC0).
+  const callSound = new Audio('https://sfxmint.com/dl/phone-ring-03.mp3');
+  callSound.preload = 'auto';
+  callSound.volume = 0.65;
+
+  function playCallSound() {
+    try {
+      callSound.pause();
+      callSound.currentTime = 0;
+      const playback = callSound.play();
+      if (playback && typeof playback.catch === 'function') playback.catch(() => {});
+    } catch (error) {
+      // Sound is optional; the market analysis still runs if audio is unavailable.
+    }
+  }
+
+  refreshBtn.addEventListener('click', () => {
+    playCallSound();
+    runAnalysis();
+  });
+  runAnalysis();
+})();
+</script>
+
+
+<style>
+  /* BAOBAO gold/orange floating Back to Top control */
+  #baobaoBackToTop {
+    position: fixed;
+    right: clamp(16px, 3vw, 30px);
+    bottom: clamp(18px, 3vw, 30px);
+    z-index: 9999;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 0 19px;
+    border: 1px solid rgba(255, 224, 138, .72);
+    border-radius: 999px;
+    color: #241000;
+    background: linear-gradient(135deg, #fff06a 0%, #ffb000 48%, #ff6b00 100%);
+    box-shadow:
+      0 7px 0 rgba(122, 64, 0, .85),
+      0 13px 30px rgba(255, 107, 0, .28),
+      inset 0 1px 0 rgba(255, 255, 255, .65);
+    font: 900 .9rem 'Nunito', sans-serif;
+    letter-spacing: .02em;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px) scale(.96);
+    transition:
+      opacity .22s ease,
+      transform .22s ease,
+      visibility .22s ease,
+      filter .18s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #baobaoBackToTop.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
+
+  #baobaoBackToTop:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  #baobaoBackToTop:active {
+    transform: translateY(2px) scale(.98);
+    box-shadow:
+      0 3px 0 rgba(122, 64, 0, .85),
+      0 7px 18px rgba(255, 107, 0, .22);
+  }
+
+  #baobaoBackToTop:focus-visible {
+    outline: 3px solid #fff8f0;
+    outline-offset: 4px;
+  }
+
+  #baobaoBackToTop svg {
+    width: 19px;
+    height: 19px;
+    flex: 0 0 auto;
+    stroke: currentColor;
+  }
+
+  @media (max-width: 520px) {
+    #baobaoBackToTop {
+      right: 16px;
+      bottom: 18px;
+      min-height: 48px;
+      padding: 0 16px;
+      font-size: .82rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #baobaoBackToTop {
+      transition: none;
+    }
+  }
+</style>
+
+<button id="baobaoBackToTop" type="button" aria-label="Back to top" title="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 19V5"></path>
+    <path d="m5.5 11.5 6.5-6.5 6.5 6.5"></path>
+  </svg>
+  <span>BACK TO TOP</span>
 </button>
 
-    <script src="app.js"></script>
+<script>
+(function () {
+  const button = document.getElementById('baobaoBackToTop');
+  if (!button) return;
+
+  const showAfter = 320;
+  let ticking = false;
+
+  function updateButton() {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+    button.classList.toggle('is-visible', scrollTop > showAfter);
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      window.requestAnimationFrame(updateButton);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  button.addEventListener('click', function () {
+    const reducedMotion = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    window.scrollTo({
+      top: 0,
+      behavior: reducedMotion ? 'auto' : 'smooth'
+    });
+  });
+
+  updateButton();
+})();
+</script>
+
 </body>
 </html>
