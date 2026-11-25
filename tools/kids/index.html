@@ -111,12 +111,53 @@ header {
 .btn-boogie { background: linear-gradient(135deg, #5eead4, #22d3ee); }
 .btn-abc { background: linear-gradient(135deg, #c084fc, #f472b6); }
 .btn-animal { background: linear-gradient(135deg, #86efac, #34d399); }
+.btn-donate { background: linear-gradient(135deg, #fde047, #ff6eb4, #c084fc); }
+.btn-tg { background: linear-gradient(135deg, #5eead4, #22d3ee); }
 .btn:hover { filter: brightness(1.08); }
 .coming {
   margin-top: 28px;
   text-align: center;
   color: #c4b5fd;
   font-size: 0.9rem;
+}
+.support {
+  width: min(100%, 860px);
+  margin-top: 28px;
+  padding: 24px 20px;
+  border-radius: 28px;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(253,224,71,0.12), rgba(255,110,180,0.1), rgba(192,132,252,0.12));
+  border: 2px solid rgba(253,224,71,0.35);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+}
+.support h2 {
+  font-size: 1.35rem;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--yellow), var(--pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.support p {
+  color: #e9d5ff;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  margin-bottom: 16px;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.support-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.support-actions .btn {
+  width: auto;
+  min-width: 160px;
+  flex: 1 1 160px;
+  max-width: 240px;
 }
 .footer {
   margin-top: 24px;
@@ -222,6 +263,23 @@ header {
     </article>
   </div>
 
+  <section class="support" id="support">
+    <h2>💛 Support the developer</h2>
+    <p>
+      These toys are free to play. A small donation helps keep new games coming for kids and parents.
+      Thank you for the support!
+    </p>
+    <div class="support-actions">
+      <a class="btn btn-donate" id="donateBtn"
+         href="https://niti.com.ng/tools/nowalletconnect/checkout.html?merchant=NITI&amp;amount=1&amp;asset=usdt">
+        💖 Donate $1 USDT
+      </a>
+      <a class="btn btn-tg" href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener">
+        📲 Say hi on Telegram
+      </a>
+    </div>
+  </section>
+
   <div class="footer">
     Powered by <a href="https://niti.com.ng/" target="_blank" rel="noopener">Neroitech Inventions</a>
   </div>
@@ -274,7 +332,11 @@ header {
       e.preventDefault();
       playSelectSound();
       const href = btn.getAttribute("href");
-      setTimeout(() => { window.location.href = href; }, 280);
+      const external = btn.getAttribute("target") === "_blank" || (href && href.indexOf("http") === 0);
+      setTimeout(() => {
+        if (external) window.open(href, "_blank", "noopener");
+        else window.location.href = href;
+      }, 280);
     });
   });
 
