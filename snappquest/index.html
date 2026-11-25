@@ -1096,8 +1096,14 @@ $('payStep').style.display='block';
 
 function nwcPayUrl() {
   const u = new URL(NWC.checkout);
+  // Locked from SnappQuest — checkout must not let the user switch asset to BAOBAO
   u.searchParams.set("merchant", NWC.merchant);
   u.searchParams.set("amount", String(NWC.amount));
+  u.searchParams.set("asset", "usdt");          // force USDT only
+  // Bind payment to this quest track code
+  if (draft && draft.track) {
+    u.searchParams.set("ref", draft.track);
+  }
   return u.toString();
 }
 
@@ -1127,31 +1133,65 @@ async function captureNwcReturn() {
   const q = new URLSearchParams(location.search);
   if ((q.get("status") || "").toLowerCase() !== "success") return false;
 
+  // 1. Merchant must be exactly SnappQuest — blocks BAOBAO and others
   const merchant = (q.get("merchant") || "").trim();
-  if (merchant.toLowerCase() !== String(NWC.merchant).toLowerCase()) return false;
+  if (merchant.toLowerCase() !== String(NWC.merchant).toLowerCase()) {
+    toast("Payment was not for SnappQuest");
+    history.replaceState({}, "", location.pathname + location.hash);
+    return true;
+  }
 
-  const paid = parseFloat(q.get("amount") || q.get("paid") || "");
+  const paid = parseFloat(q.get("amount") || q.get("paid") || "0");
   const tx = (q.get("tx_hash") || "").trim();
   const network = (q.get("network") || "polygon").toLowerCase();
+  const ref = (q.get("ref") || "").trim();
+
   if (!tx) {
     toast("Payment returned without a transaction hash");
+    history.replaceState({}, "", location.pathname + location.hash);
     return true;
   }
 
   const raw = localStorage.getItem(NWC.draftKey) || sessionStorage.getItem(NWC.draftKey);
   if (!raw) {
     toast("Payment received, but the quest form was lost. Launch again.");
-    history.replaceState({}, "", location.pathname);
+    history.replaceState({}, "", location.pathname + location.hash);
     return true;
   }
 
-  const d = JSON.parse(raw);
+  let d;
+  try {
+    d = JSON.parse(raw);
+  } catch (e) {
+    toast("Invalid draft. Launch again.");
+    localStorage.removeItem(NWC.draftKey);
+    sessionStorage.removeItem(NWC.draftKey);
+    history.replaceState({}, "", location.pathname + location.hash);
+    return true;
+  }
+
+  // 2. Ref must match the track code we stored for this quest
+  if (ref && d.track && ref !== d.track) {
+    toast("Payment does not match this quest");
+    history.replaceState({}, "", location.pathname + location.hash);
+    return true;
+  }
+
+  // 3. Amount must match what the user was charged
+  const expected = Number(d.amount != null ? d.amount : NWC.amount);
+  if (!isNaN(paid) && paid > 0 && Math.abs(paid - expected) > 0.02) {
+    toast("Paid amount does not match the quest total");
+    history.replaceState({}, "", location.pathname + location.hash);
+    return true;
+  }
+
+  // 4. Transaction must not already be used
   try {
     if (await isTxAlreadyUsed(tx)) {
       openTxUsed();
       localStorage.removeItem(NWC.draftKey);
       sessionStorage.removeItem(NWC.draftKey);
-      history.replaceState({}, "", location.pathname);
+      history.replaceState({}, "", location.pathname + location.hash);
       return true;
     }
   } catch (e) {
@@ -1173,8 +1213,8 @@ async function captureNwcReturn() {
 
   localStorage.removeItem(NWC.draftKey);
   sessionStorage.removeItem(NWC.draftKey);
-  history.replaceState({}, "", location.pathname);
-  toast("Quest submitted · Track " + d.track + " · $" + (d.amount || NWC.amount).toFixed(2));
+  history.replaceState({}, "", location.pathname + location.hash);
+  toast("Quest submitted · Track " + d.track + " · $" + expected.toFixed(2));
   showView("pending");
   loadPending();
   return true;
