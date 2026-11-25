@@ -93,6 +93,19 @@
     <button id="analystRefresh" type="button" style="background:linear-gradient(135deg,#ffe500,#ff6b00);color:#1a0a00;border:none;font-family:'Fredoka One',cursive;font-size:1rem;padding:14px 28px;border-radius:14px;cursor:pointer;box-shadow:0 6px 0 #7a4000;font-weight:800;">Call BAOBAO Again</button>
     <p style="margin-top:14px;font-size:.78rem;color:rgba(255,248,240,.55);">Just a data-based guess, not a crystal ball. DYOR degen.</p>
 
+    <!-- Share panel -->
+    <div id="sharePanel" style="display:none;margin-top:28px;max-width:560px;margin-left:auto;margin-right:auto;">
+      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+        <button id="copyTextBtn" type="button" style="background:linear-gradient(135deg,#ffe500,#ff6b00);color:#1a0a00;border:none;font-family:'Fredoka One',cursive;font-size:.95rem;padding:13px 22px;border-radius:14px;cursor:pointer;box-shadow:0 5px 0 #7a4000;font-weight:800;display:inline-flex;align-items:center;gap:8px;">
+          📋 Copy Cool Text
+        </button>
+        <button id="downloadImgBtn" type="button" style="background:linear-gradient(135deg,#fff06a,#ffad00);color:#1a0a00;border:none;font-family:'Fredoka One',cursive;font-size:.95rem;padding:13px 22px;border-radius:14px;cursor:pointer;box-shadow:0 5px 0 #9a4b00;font-weight:800;display:inline-flex;align-items:center;gap:8px;">
+          🖼️ Download Share Image
+        </button>
+      </div>
+      <p id="shareStatus" style="margin-top:12px;font-size:.85rem;color:rgba(255,248,240,.7);min-height:20px;"></p>
+    </div>
+
     <!-- BAOBAO donation link: added without changing the existing analyst logic -->
     <div style="max-width:560px;margin:34px auto 0;padding:22px 20px;border:1px solid rgba(255,180,0,.38);border-radius:20px;background:linear-gradient(135deg,rgba(255,180,0,.13),rgba(255,107,0,.10));box-shadow:0 12px 35px rgba(0,0,0,.25);">
       <div style="font-family:'Fredoka One',cursive;font-size:1.45rem;color:#ffe08a;margin-bottom:8px;">🍵 Buy Analyst a Treat!</div>
@@ -117,8 +130,10 @@
   const plainExplainEl = $('analystPlainExplain');
   const metaEl = $('analystMeta'), refreshBtn = $('analystRefresh');
   const bitcoinBtn = $('assetBitcoin'), bonkBtn = $('assetBonk'), assetHeading = $('assetHeading');
+  const sharePanel = $('sharePanel'), copyTextBtn = $('copyTextBtn'), downloadImgBtn = $('downloadImgBtn'), shareStatus = $('shareStatus');
   let selectedAsset = 'bitcoin';
   let analysisRun = 0;
+  let lastPrediction = null; // stores data needed for sharing
   if (!loadingEl || !resultEl || !refreshBtn || !bitcoinBtn || !bonkBtn) return;
 
   function classifyFng(v) {
@@ -273,6 +288,7 @@
     const assetAtStart = selectedAsset;
     loadingEl.style.display = 'block'; loadingEl.textContent = 'BAOBAO is sniffing out the market vibes...';
     resultEl.style.display = 'none'; refreshBtn.disabled = true;
+    if (sharePanel) sharePanel.style.display = 'none';
     try {
       const data = await getMarketData(assetAtStart);
       if (runId !== analysisRun) return;
@@ -292,10 +308,23 @@
       const priceText = price < 0.01 ? price.toFixed(8) : price < 1 ? price.toFixed(5) : price.toLocaleString(undefined, { maximumFractionDigits: 2 });
       metaEl.textContent = `${assetLabel} $${priceText} · 24h change ${prediction.chg24h >= 0 ? '+' : ''}${prediction.chg24h.toFixed(2)}% · RSI ${rsi === null ? 'N/A' : rsi.toFixed(1)} · Fear & Greed ${currentFng} (${fngLabel}) · ${source} · Updated ${new Date().toLocaleTimeString()}`;
       loadingEl.style.display = 'none'; resultEl.style.display = 'block';
+
+      // Store data for sharing
+      lastPrediction = {
+        assetName, assetLabel, priceText,
+        signal: prediction.signal,
+        upProb: prediction.upProb, downProb: prediction.downProb, sideProb: prediction.sideProb,
+        bullFactors: prediction.bullFactors, bearFactors: prediction.bearFactors,
+        chg24h: prediction.chg24h, rsi, currentFng, fngLabel, source,
+        plain: plainExplainEl ? plainExplainEl.textContent : ''
+      };
+      if (sharePanel) sharePanel.style.display = 'block';
+      if (shareStatus) shareStatus.textContent = '';
     } catch (error) {
       if (runId !== analysisRun) return;
       console.error('BAOBAO Analyst:', error);
       loadingEl.textContent = 'BAOBAO could not load reliable market data right now. Please try again shortly.';
+      if (sharePanel) sharePanel.style.display = 'none';
     } finally { refreshBtn.disabled = false; }
   }
   // Classic vintage metal-bell phone ring (CC0).
@@ -329,6 +358,194 @@
     playCallSound();
     runAnalysis();
   });
+
+  // ========== SHARE FEATURES ==========
+  function buildShareText() {
+    if (!lastPrediction) return '';
+    const p = lastPrediction;
+    const direction = p.signal === 'UP BIAS' ? '🚀 MORE LIKELY UP' : '🩸 MORE LIKELY DOWN';
+    const reasons = [];
+    (p.bullFactors || []).forEach(r => reasons.push('🟢 ' + r));
+    (p.bearFactors || []).forEach(r => reasons.push('🔴 ' + r));
+
+    let text = `BAOBAO the Analyst just checked ${p.assetName}\n\n`;
+    text += `${direction}\n`;
+    text += `🟢 Up ${p.upProb}%  ·  🔴 Down ${p.downProb}%  ·  🟡 Sideways ${p.sideProb}%\n\n`;
+    if (p.plain) text += `${p.plain}\n\n`;
+    if (reasons.length) {
+      text += `What BAOBAO is seeing:\n`;
+      reasons.forEach(r => text += r + '\n');
+      text += '\n';
+    }
+    text += `${p.assetLabel} $${p.priceText} · 24h ${p.chg24h >= 0 ? '+' : ''}${p.chg24h.toFixed(2)}%\n`;
+    text += `Fear & Greed: ${p.currentFng} (${p.fngLabel})\n\n`;
+    text += `Just a data-based vibe check. DYOR degen.\n`;
+    text += `#Bitcoin #Crypto #BAOBAO`;
+    return text;
+  }
+
+  async function copyShareText() {
+    if (!lastPrediction) return;
+    const text = buildShareText();
+    try {
+      await navigator.clipboard.writeText(text);
+      if (shareStatus) {
+        shareStatus.textContent = '✅ Cool text copied! Paste it anywhere.';
+        shareStatus.style.color = '#3fb950';
+      }
+    } catch (e) {
+      // Fallback for older browsers
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        if (shareStatus) {
+          shareStatus.textContent = '✅ Cool text copied! Paste it anywhere.';
+          shareStatus.style.color = '#3fb950';
+        }
+      } catch (err) {
+        if (shareStatus) {
+          shareStatus.textContent = 'Could not copy automatically. Please select and copy manually.';
+          shareStatus.style.color = '#ff5c5c';
+        }
+      }
+      document.body.removeChild(ta);
+    }
+  }
+
+  function downloadShareImage() {
+    if (!lastPrediction) return;
+    const p = lastPrediction;
+    const canvas = document.createElement('canvas');
+    const size = 1080;
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    // Helper for rounded rectangles
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    // Background gradient
+    const grad = ctx.createLinearGradient(0, 0, size, size);
+    grad.addColorStop(0, '#0d0b14');
+    grad.addColorStop(0.5, '#1a1208');
+    grad.addColorStop(1, '#2a1800');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
+
+    // Soft orange glow circle
+    const glow = ctx.createRadialGradient(size/2, 280, 20, size/2, 280, 420);
+    glow.addColorStop(0, 'rgba(255,107,0,0.25)');
+    glow.addColorStop(1, 'rgba(255,107,0,0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, size, size);
+
+    // Card background
+    ctx.fillStyle = 'rgba(20,14,8,0.85)';
+    roundRect(ctx, 60, 80, size - 120, size - 200, 40);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,180,0,0.45)';
+    ctx.lineWidth = 3;
+    roundRect(ctx, 60, 80, size - 120, size - 200, 40);
+    ctx.stroke();
+
+    // Title
+    ctx.fillStyle = '#ffe08a';
+    ctx.font = 'bold 42px Nunito, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('BAOBAO the Analyst', size / 2, 160);
+
+    // Asset
+    ctx.fillStyle = '#fff8f0';
+    ctx.font = 'bold 36px Nunito, sans-serif';
+    ctx.fillText(p.assetName.toUpperCase(), size / 2, 220);
+
+    // Direction
+    const isUp = p.signal === 'UP BIAS';
+    ctx.fillStyle = isUp ? '#3fb950' : '#ff5c5c';
+    ctx.font = 'bold 72px Fredoka, sans-serif';
+    ctx.fillText(isUp ? '🚀 MORE LIKELY UP' : '🩸 MORE LIKELY DOWN', size / 2, 330);
+
+    // Probabilities
+    ctx.fillStyle = '#fff8f0';
+    ctx.font = 'bold 34px Nunito, sans-serif';
+    ctx.fillText(`🟢 Up ${p.upProb}%    🔴 Down ${p.downProb}%    🟡 Side ${p.sideProb}%`, size / 2, 410);
+
+    // Divider
+    ctx.strokeStyle = 'rgba(255,180,0,0.3)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(140, 460);
+    ctx.lineTo(size - 140, 460);
+    ctx.stroke();
+
+    // Reasons title
+    ctx.fillStyle = '#ffe08a';
+    ctx.font = 'bold 28px Nunito, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('What BAOBAO is seeing', 140, 520);
+
+    // Reasons (max 4)
+    const allReasons = [];
+    (p.bullFactors || []).forEach(r => allReasons.push({ t: '🟢 ' + r, c: '#3fb950' }));
+    (p.bearFactors || []).forEach(r => allReasons.push({ t: '🔴 ' + r, c: '#ff5c5c' }));
+    ctx.font = '24px Nunito, sans-serif';
+    ctx.fillStyle = '#fff8f0';
+    let y = 570;
+    allReasons.slice(0, 4).forEach(item => {
+      // simple text wrap
+      const maxW = size - 280;
+      const words = item.t.split(' ');
+      let line = '';
+      for (let w of words) {
+        const test = line + w + ' ';
+        if (ctx.measureText(test).width > maxW && line) {
+          ctx.fillText(line.trim(), 140, y);
+          line = w + ' ';
+          y += 34;
+        } else {
+          line = test;
+        }
+      }
+      if (line) {
+        ctx.fillText(line.trim(), 140, y);
+        y += 42;
+      }
+    });
+
+    // Footer meta
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255,248,240,0.7)';
+    ctx.font = '22px Nunito, sans-serif';
+    ctx.fillText(`${p.assetLabel} $${p.priceText}  ·  24h ${p.chg24h >= 0 ? '+' : ''}${p.chg24h.toFixed(2)}%  ·  F&G ${p.currentFng}`, size / 2, size - 140);
+
+    // Download
+    const link = document.createElement('a');
+    link.download = `BAOBAO-${p.assetLabel}-${isUp ? 'UP' : 'DOWN'}-${Date.now()}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+
+    if (shareStatus) {
+      shareStatus.textContent = '✅ Share image downloaded! Post it on social.';
+      shareStatus.style.color = '#3fb950';
+    }
+  }
+
+  if (copyTextBtn) copyTextBtn.addEventListener('click', copyShareText);
+  if (downloadImgBtn) downloadImgBtn.addEventListener('click', downloadShareImage);
+
   runAnalysis();
 })();
 </script>

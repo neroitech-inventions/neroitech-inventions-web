@@ -3,83 +3,302 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Live USD to Naira conversion rate with simple calculator.">
   <title>USD to Naira Rate</title>
-    <!-- Google Analytics -->
-     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
-     <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-QM106YDX6N');
-     </script>
 
-     <!-- Favicon -->
-     <link href="images/favicon.ico" rel="icon">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QM106YDX6N');
+  </script>
+
+  <link href="images/favicon.ico" rel="icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:#07110c;--card:#0d1c14;--line:#1d3a2a;
-      --green:#22c55e;--gold:#fbbf24;--text:#ecfdf3;--muted:#86a396;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #07090f;
+      --bg-elevated: #0c1018;
+      --card: #111827;
+      --border: rgba(148, 163, 184, 0.1);
+      --border-strong: rgba(148, 163, 184, 0.18);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --dim: #64748b;
+      --accent: #34d399;
+      --accent-soft: rgba(52, 211, 153, 0.12);
+      --gold: #fbbf24;
+      --error: #f87171;
+      --radius: 18px;
+      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55);
     }
-    body{
-      min-height:100vh;background:radial-gradient(circle at top,#163224,var(--bg) 55%);
-      color:var(--text);font-family:Syne,system-ui,sans-serif;
-      display:flex;justify-content:center;padding:28px 14px;
+
+    html { height: 100%; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      color: var(--text);
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(52, 211, 153, 0.1), transparent),
+        radial-gradient(ellipse 50% 40% at 100% 0%, rgba(251, 191, 36, 0.05), transparent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 16px;
+      -webkit-font-smoothing: antialiased;
     }
-    .wrap{width:100%;max-width:420px}
-    h1{font-size:1.45rem;font-weight:800}
-    .sub{font-family:"DM Mono",monospace;font-size:.68rem;color:var(--muted);margin:6px 0 18px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:12px}
-    .rate{font-family:"DM Mono",monospace;font-size:1.7rem;font-weight:500;color:var(--green)}
-    .lbl{font-size:.68rem;color:var(--muted);font-family:"DM Mono",monospace;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
-    .hint{font-size:.72rem;color:var(--gold);font-family:"DM Mono",monospace;margin-top:8px}
-    .tabs{display:flex;gap:8px;margin-bottom:12px}
-    .tabs button{
-      flex:1;padding:10px;border:1px solid var(--line);background:transparent;
-      color:var(--muted);border-radius:12px;font-weight:800;font-family:Syne,sans-serif;cursor:pointer;
+
+    .wrap {
+      width: 100%;
+      max-width: 420px;
     }
-    .tabs button.on{background:#143322;color:var(--text);border-color:var(--green)}
-    input{
-      width:100%;padding:14px;border-radius:12px;border:1px solid var(--line);
-      background:#0a1810;color:var(--text);font-family:"DM Mono",monospace;font-size:1.15rem;outline:none;
+
+    /* Header */
+    .brand {
+      text-align: center;
+      margin-bottom: 24px;
     }
-    .out{margin-top:12px;font-size:1.25rem;font-family:"DM Mono",monospace}
-    .row{display:flex;justify-content:space-between;gap:8px;font-size:.7rem;color:var(--muted);font-family:"DM Mono",monospace;margin-top:8px}
-    button.refresh{
-      width:100%;margin-top:10px;padding:12px;border:none;border-radius:12px;
-      background:var(--green);color:#06210f;font-weight:800;cursor:pointer;font-family:Syne,sans-serif;
+    .icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 14px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #34d399, #10b981);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 8px 24px rgba(52, 211, 153, 0.25);
     }
-    .err{color:#f87171;font-family:"DM Mono",monospace;font-size:.75rem;margin-top:8px}
-    .powered{
-      text-align:center;margin-top:8px;font-family:"DM Mono",monospace;
-      font-size:.68rem;color:var(--muted);
+    .icon svg {
+      width: 26px;
+      height: 26px;
+      stroke: #07090f;
+      stroke-width: 2.1;
+      fill: none;
     }
-    .powered span{color:var(--green)}
-    .powered a{
-  color:var(--green);
-  text-decoration:none;
-}
+    h1 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #d1fae5, var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .lbl {
+      font-size: 0.7rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--dim);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    /* Rate display */
+    .rate-box {
+      background: var(--accent-soft);
+      border: 1px solid rgba(52, 211, 153, 0.22);
+      border-radius: 14px;
+      padding: 18px 16px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .rate {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1.6rem, 5vw, 2rem);
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: -0.01em;
+    }
+    .hint {
+      font-size: 0.8rem;
+      color: var(--gold);
+      margin-top: 10px;
+      line-height: 1.45;
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      color: var(--dim);
+      margin-top: 12px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      background: var(--bg-elevated);
+      padding: 5px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .tabs button {
+      flex: 1;
+      padding: 10px 8px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tabs button.on {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      color: #06210f;
+      box-shadow: 0 2px 10px rgba(52, 211, 153, 0.3);
+    }
+
+    /* Input */
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    input:focus {
+      border-color: var(--accent);
+    }
+    input::placeholder { color: var(--dim); }
+
+    .out {
+      margin-top: 14px;
+      padding: 14px 16px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Button */
+    .btn-refresh {
+      width: 100%;
+      margin-top: 12px;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #34d399, #10b981);
+      color: #06210f;
+      font-weight: 800;
+      font-size: 0.95rem;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(52, 211, 153, 0.25);
+      transition: transform 0.12s ease, opacity 0.15s ease;
+    }
+    .btn-refresh:hover:not(:disabled) {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+    .btn-refresh:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .err {
+      color: var(--error);
+      font-size: 0.82rem;
+      margin-top: 10px;
+      min-height: 1.2em;
+    }
+
+    /* Powered */
+    .powered {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: var(--dim);
+    }
+    .powered a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .powered a:hover { text-decoration: underline; }
+
+    @media (max-width: 420px) {
+      .card { padding: 18px 16px; }
+      .rate { font-size: 1.55rem; }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>USD to Naira</h1>
-    <p class="sub">Live conversion rate</p>
+    <div class="brand">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <h1>USD to Naira</h1>
+      <p class="sub">Live conversion rate</p>
+    </div>
 
+    <!-- Rate card -->
     <div class="card">
       <div class="lbl">Official USD to NGN</div>
-      <div class="rate" id="official">Loading…</div>
+      <div class="rate-box">
+        <div class="rate" id="official">Loading…</div>
+      </div>
       <div class="hint" id="adjusted">NGN to USD rate: —</div>
-      <div class="row"><span id="updated">—</span></div>
-      <button class="refresh" id="refreshBtn" type="button">Refresh rate</button>
+      <div class="meta">
+        <span id="updated">—</span>
+      </div>
+      <button class="btn-refresh" id="refreshBtn" type="button">Refresh rate</button>
       <div class="err" id="err"></div>
     </div>
 
+    <!-- Converter card -->
     <div class="card">
       <div class="tabs">
-        <button type="button" class="on" id="tabUsd" onclick="setMode('usd')">USD → NGN</button>
-        <button type="button" id="tabNgn" onclick="setMode('ngn')">NGN → USD</button>
+        <button type="button" class="on" id="tabUsd" onclick="setMode('usd')">USD to NGN</button>
+        <button type="button" id="tabNgn" onclick="setMode('ngn')">NGN to USD</button>
       </div>
       <div class="lbl" id="inLabel">Amount in USD</div>
       <input id="amount" type="number" min="0" step="0.01" placeholder="100" value="100">
@@ -87,87 +306,92 @@
     </div>
 
     <p class="powered">
-  Powered by
-  <a href="https://niti.com.ng/" target="_blank" rel="noopener">Neroitech Inventions</a>
-</p>
+      Powered by
+      <a href="https://niti.com.ng/" target="_blank" rel="noopener">Neroitech Inventions</a>
+    </p>
   </div>
 
-<script>
-const WORKER = "https://usd-ngn.nyerhowoisuru.workers.dev/";
-const API_USD_NGN = WORKER + "?from=USD&to=NGN";
-const API_NGN_USD = WORKER + "?from=NGN&to=USD";
-const MARKUP_USD_TO_NGN = -15; // extra fees converting USD → NGN
-const MARKUP_NGN_TO_USD = 80; // extra fees when converting NGN → USD
+  <script>
+    const WORKER = "https://usd-ngn.nyerhowoisuru.workers.dev/";
+    const API_USD_NGN = WORKER + "?from=USD&to=NGN";
+    const API_NGN_USD = WORKER + "?from=NGN&to=USD";
+    const MARKUP_USD_TO_NGN = -15; // extra fees converting USD to NGN
+    const MARKUP_NGN_TO_USD = 80;  // extra fees when converting NGN to USD
 
-let usdToNgn = 0;
-let ngnToUsd = 0;
-let mode = "usd";
+    let usdToNgn = 0;
+    let ngnToUsd = 0;
+    let mode = "usd";
 
-const $ = id => document.getElementById(id);
+    const $ = id => document.getElementById(id);
 
-function money(n, dec){
-  return Number(n).toLocaleString(undefined, { minimumFractionDigits: dec, maximumFractionDigits: dec });
-}
+    function money(n, dec) {
+      return Number(n).toLocaleString(undefined, {
+        minimumFractionDigits: dec,
+        maximumFractionDigits: dec
+      });
+    }
 
-function render(){
-  const amt = parseFloat($("amount").value);
-  if (!amt || amt < 0){
-    $("result").textContent = "—";
-    return;
-  }
-  if (mode === "usd"){
-    if (!usdToNgn){ $("result").textContent = "—"; return; }
-    $("result").textContent = "$" + money(amt, 2) + " = ₦" + money(amt * (usdToNgn + MARKUP_USD_TO_NGN), 2);
-  } else {
-    if (!ngnToUsd){ $("result").textContent = "—"; return; }
-    const ngnPerUsd = (1 / ngnToUsd) + MARKUP_NGN_TO_USD;
-    $("result").textContent = "₦" + money(amt, 2) + " = $" + money(amt / ngnPerUsd, 2);
-  }
-}
+    function render() {
+      const amt = parseFloat($("amount").value);
+      if (!amt || amt < 0) {
+        $("result").textContent = "—";
+        return;
+      }
+      if (mode === "usd") {
+        if (!usdToNgn) { $("result").textContent = "—"; return; }
+        $("result").textContent = "$" + money(amt, 2) + " = ₦" + money(amt * (usdToNgn + MARKUP_USD_TO_NGN), 2);
+      } else {
+        if (!ngnToUsd) { $("result").textContent = "—"; return; }
+        const ngnPerUsd = (1 / ngnToUsd) + MARKUP_NGN_TO_USD;
+        $("result").textContent = "₦" + money(amt, 2) + " = $" + money(amt / ngnPerUsd, 2);
+      }
+    }
 
-function setMode(next){
-  mode = next;
-  $("tabUsd").classList.toggle("on", next === "usd");
-  $("tabNgn").classList.toggle("on", next === "ngn");
-  $("inLabel").textContent = next === "usd" ? "Amount in USD" : "Amount in Naira";
-  $("amount").placeholder = next === "usd" ? "100" : "100000";
-  render();
-}
+    function setMode(next) {
+      mode = next;
+      $("tabUsd").classList.toggle("on", next === "usd");
+      $("tabNgn").classList.toggle("on", next === "ngn");
+      $("inLabel").textContent = next === "usd" ? "Amount in USD" : "Amount in Naira";
+      $("amount").placeholder = next === "usd" ? "100" : "100000";
+      render();
+    }
 
-async function loadRate(){
-  $("err").textContent = "";
-  $("refreshBtn").disabled = true;
-  try{
-    const opts = {};
-    const [usdRes, ngnRes] = await Promise.all([
-      fetch(API_USD_NGN, opts),
-      fetch(API_NGN_USD, opts)
-    ]);
-    const usdData = await usdRes.json();
-    const ngnData = await ngnRes.json();
-    const usdRate = usdData && usdData.result && usdData.result.NGN;
-    const ngnRate = ngnData && ngnData.result && ngnData.result.USD;
-    if (!usdRate) throw new Error((usdData && usdData.error) || "No USD to NGN rate");
-    if (!ngnRate) throw new Error((ngnData && ngnData.error) || "No NGN to USD rate");
-    usdToNgn = Number(usdRate);
-    ngnToUsd = Number(ngnRate);
-    const ngnPerUsdLive = 1 / ngnToUsd;
-    $("official").textContent = "₦" + money(usdToNgn, 2);
-    $("adjusted").textContent =
-      "USD to NGN used ₦" + money(usdToNgn + MARKUP_USD_TO_NGN, 2) +
-      " · used ₦" + money(ngnPerUsdLive + MARKUP_NGN_TO_USD, 2) + " / $1";
-    $("updated").textContent = "Updated " + new Date().toLocaleTimeString();
-    render();
-  }catch(e){
-    $("err").textContent = e.message || "Could not load rate";
-  }
-  $("refreshBtn").disabled = false;
-}
+    async function loadRate() {
+      $("err").textContent = "";
+      $("refreshBtn").disabled = true;
+      $("refreshBtn").textContent = "Loading…";
+      try {
+        const opts = {};
+        const [usdRes, ngnRes] = await Promise.all([
+          fetch(API_USD_NGN, opts),
+          fetch(API_NGN_USD, opts)
+        ]);
+        const usdData = await usdRes.json();
+        const ngnData = await ngnRes.json();
+        const usdRate = usdData && usdData.result && usdData.result.NGN;
+        const ngnRate = ngnData && ngnData.result && ngnData.result.USD;
+        if (!usdRate) throw new Error((usdData && usdData.error) || "No USD to NGN rate");
+        if (!ngnRate) throw new Error((ngnData && ngnData.error) || "No NGN to USD rate");
+        usdToNgn = Number(usdRate);
+        ngnToUsd = Number(ngnRate);
+        const ngnPerUsdLive = 1 / ngnToUsd;
+        $("official").textContent = "₦" + money(usdToNgn, 2);
+        $("adjusted").textContent =
+          "USD - NGN used ₦" + money(usdToNgn + MARKUP_USD_TO_NGN, 2) +
+          "  ·  NGN - USD used ₦" + money(ngnPerUsdLive + MARKUP_NGN_TO_USD, 2) + " / $1";
+        $("updated").textContent = "Updated " + new Date().toLocaleTimeString();
+        render();
+      } catch (e) {
+        $("err").textContent = e.message || "Could not load rate";
+      }
+      $("refreshBtn").disabled = false;
+      $("refreshBtn").textContent = "Refresh rate";
+    }
 
-$("amount").addEventListener("input", render);
-$("refreshBtn").onclick = loadRate;
-window.setMode = setMode;
-loadRate();
-</script>
+    $("amount").addEventListener("input", render);
+    $("refreshBtn").onclick = loadRate;
+    window.setMode = setMode;
+    loadRate();
+  </script>
 </body>
 </html>
