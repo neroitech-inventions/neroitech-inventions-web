@@ -138,6 +138,7 @@ h1 {
   <div class="controls">
     <button class="btn btn-random" id="btnRandom">🎲 Random Animal</button>
     <button class="btn btn-listen" id="btnListen">🎤 Start Listening</button>
+    <button class="btn" id="btnSpeak" style="background:linear-gradient(135deg,#c084fc,#f472b6);color:#1a1035;">🔊 Sounds: ON</button>
     <div class="heard" id="heard"></div>
   </div>
 
@@ -176,9 +177,21 @@ h1 {
     const grid = document.getElementById("grid");
     const btnRandom = document.getElementById("btnRandom");
     const btnListen = document.getElementById("btnListen");
+    const btnSpeak = document.getElementById("btnSpeak");
 
     let recognition = null;
     let listening = false;
+    let speakEnabled = true;
+
+    function speak(text) {
+      if (!speakEnabled || !window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.rate = 0.95;
+      utter.pitch = 1.05;
+      utter.lang = "en-US";
+      window.speechSynthesis.speak(utter);
+    }
 
     function showAnimal(a) {
       emojiEl.textContent = a.emoji;
@@ -187,6 +200,7 @@ h1 {
       emojiEl.style.animation = "none";
       void emojiEl.offsetWidth;
       emojiEl.style.animation = "bounce 0.5s ease";
+      speak(a.name + ". " + a.sound);
     }
 
     function randomAnimal() {
@@ -252,6 +266,14 @@ h1 {
 
     btnRandom.onclick = randomAnimal;
     btnListen.onclick = () => listening ? stopListening() : startListening();
+    btnSpeak.onclick = () => {
+      speakEnabled = !speakEnabled;
+      btnSpeak.textContent = speakEnabled ? "🔊 Sounds: ON" : "🔇 Sounds: OFF";
+      btnSpeak.style.background = speakEnabled
+        ? "linear-gradient(135deg,#c084fc,#f472b6)"
+        : "linear-gradient(135deg,#64748b,#475569)";
+      if (!speakEnabled && window.speechSynthesis) window.speechSynthesis.cancel();
+    };
 
     buildGrid();
     randomAnimal();
