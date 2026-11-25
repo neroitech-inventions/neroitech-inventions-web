@@ -534,7 +534,71 @@
       amount: 0.25,
       draftKey: "soundtorch_unlock_draft"
     };
+    // Same gift card source as SnappQuest
+    const SHEETS = {
+      API_KEY: "AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q",
+      GIFT_ID: "1D6NaJ0I1kLNUSUqWRjy4aaY1pE-we1PqpTmCytG5ass",
+      GIFT_RANGE: "Gift card!A1:Z2000",
+      PENDING_ID: "1o_kkpaYmp56mq_May0bBdbmdXK669DGOYY3YHZpdh7E",
+      GIFT_FORM: "https://docs.google.com/forms/d/e/1FAIpQLSdir7IFUdyasF2LWvt-DNVEx9kGQCezxaRQ3gG5ftlxSJa70A/formResponse"
+    };
     const SOUNDS_KEY = "soundTorchCoolSoundsSession";
+    const USED_GIFTS_KEY = "nitiUsedGiftCards";
+
+    function normCode(s) {
+      return String(s || "").trim().toUpperCase();
+    }
+    function getLocalUsedGifts() {
+      try {
+        const raw = localStorage.getItem(USED_GIFTS_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) { return []; }
+    }
+    function addLocalUsedGift(code) {
+      const list = getLocalUsedGifts();
+      const c = normCode(code);
+      if (!list.includes(c)) {
+        list.push(c);
+        try { localStorage.setItem(USED_GIFTS_KEY, JSON.stringify(list)); } catch (e) {}
+      }
+    }
+    async function fetchSheetRows(spreadsheetId, range) {
+      const url =
+        "https://sheets.googleapis.com/v4/spreadsheets/" +
+        spreadsheetId +
+        "/values/" +
+        encodeURIComponent(range) +
+        "?key=" +
+        SHEETS.API_KEY;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      return data.values || [];
+    }
+    async function isValidGiftCard(code) {
+      const rows = await fetchSheetRows(SHEETS.GIFT_ID, SHEETS.GIFT_RANGE);
+      const want = normCode(code);
+      return rows.some(row => (row || []).some(cell => normCode(cell) === want));
+    }
+    async function isGiftCardUsed(code) {
+      const want = normCode(code);
+      if (getLocalUsedGifts().includes(want)) return true;
+      const rows = await fetchSheetRows(SHEETS.PENDING_ID, "Pending Quest!E:E");
+      return rows.some(r => normCode(r[0]) === want);
+    }
+    async function markGiftCardUsed(code) {
+      addLocalUsedGift(code);
+      try {
+        const body = new URLSearchParams();
+        body.set("entry.2147360639", code);
+        body.set("entry.1526178092", "used");
+        body.set("entry.884208731", "sound-torch");
+        body.set("entry.256576255", "cool-sounds");
+        body.set("entry.1138659293", "session");
+        await fetch(SHEETS.GIFT_FORM, { method: "POST", mode: "no-cors", body });
+      } catch (e) {}
+    }
+
     function coolSoundsUnlocked() {
       try { return sessionStorage.getItem(SOUNDS_KEY) === "1"; } catch (e) { return false; }
     }
@@ -1164,17 +1228,42 @@
       u.searchParams.set("ref", "cool_sounds");
       window.location.href = u.toString();
     });
-    document.getElementById("unlockGiftBtn").addEventListener("click", () => {
+    document.getElementById("unlockGiftBtn").addEventListener("click", async () => {
       const code = (document.getElementById("unlockGiftCode").value || "").trim();
       if (!code) {
         errorEl.textContent = "Enter a gift card code.";
         return;
       }
-      // Session unlock (wire real gift-sheet validation in production)
-      setCoolSoundsUnlocked();
-      unlockOverlay.style.display = "none";
-      setStatus("Cool Sounds unlocked! 🔊", "detected");
-      playOnSound();
+      const btn = document.getElementById("unlockGiftBtn");
+      if (btn) btn.disabled = true;
+      errorEl.textContent = "";
+      setStatus("Checking gift card…", "listening");
+      try {
+        const valid = await isValidGiftCard(code);
+        if (!valid) {
+          errorEl.textContent = "Invalid gift card code.";
+          setStatus("Invalid gift card", "off");
+          if (btn) btn.disabled = false;
+          return;
+        }
+        const used = await isGiftCardUsed(code);
+        if (used) {
+          errorEl.textContent = "This gift card was already used.";
+          setStatus("Gift card already used", "off");
+          if (btn) btn.disabled = false;
+          return;
+        }
+        await markGiftCardUsed(code);
+        setCoolSoundsUnlocked();
+        unlockOverlay.style.display = "none";
+        setStatus("Cool Sounds unlocked! 🔊", "detected");
+        playOnSound();
+      } catch (e) {
+        console.error(e);
+        errorEl.textContent = "Could not verify gift card. Try again.";
+        setStatus("Check failed", "off");
+        if (btn) btn.disabled = false;
+      }
     });
     (function captureSoundsReturn() {
       const q = new URLSearchParams(location.search);

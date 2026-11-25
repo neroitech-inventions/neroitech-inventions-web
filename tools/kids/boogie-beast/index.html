@@ -543,7 +543,7 @@ a.tg-link:active, .tg-link:active {
 
   <section class="panel" id="keyboardPanel">
     <h2>🎹 Cool Keyboard</h2>
-    <p class="hint" id="keyboardHint">Tap the keys to make music — the beast dances to every note! Unlock for $0.25 (this browser session only).</p>
+    <p class="hint" id="keyboardHint">Tap the keys to make music - the beast dances to every note! Unlock for $0.25 (this browser session only).</p>
     <div id="keyboardLocked" style="text-align:center;padding:12px 0;">
       <button type="button" class="btn versus" id="unlockKeyboardBtn">🔓 Unlock Cool Keyboard · $0.25</button>
       <p class="hint" style="margin-top:10px;">
@@ -688,7 +688,7 @@ a.tg-link:active, .tg-link:active {
     munch:    { name: "Munch the Goblin", body: "#fb923c", belly: "#fed7aa", accent: "#fde047", eyes: 2, locked: false, style: "round" },
     wiggles:  { name: "Sir Wiggles",      body: "#67e8f9", belly: "#cffafe", accent: "#f472b6", eyes: 1, locked: false, style: "round" },
     spark:    { name: "Spark the Star",   body: "#c084fc", belly: "#e9d5ff", accent: "#fde047", eyes: 2, locked: false, style: "round" },
-    // Cool unlockables — original simple drawings, not official art
+    // Cool unlockables - original simple drawings, not official art
     spongebob:{ name: "Square Bob",       body: "#fde047", belly: "#fef08a", accent: "#3b82f6", eyes: 1, locked: true, style: "square" },
     spiderman:{ name: "Web Hero",         body: "#ef4444", belly: "#1e3a8a", accent: "#fff", eyes: 2, locked: true, style: "hero" },
     superman: { name: "Sky Hero",         body: "#2563eb", belly: "#fef08a", accent: "#ef4444", eyes: 1, locked: true, style: "cape" },
@@ -705,8 +705,59 @@ a.tg-link:active, .tg-link:active {
     amount: 0.25,
     draftKey: "boogie_unlock_draft"
   };
+  // Same gift card source as SnappQuest
+  const SHEETS = {
+    API_KEY: "AIzaSyCs8fSiITdfU4WyZRgKsWRlbhAKeJaVC0Q",
+    GIFT_ID: "1D6NaJ0I1kLNUSUqWRjy4aaY1pE-we1PqpTmCytG5ass",
+    GIFT_RANGE: "Gift card!A1:Z2000",
+    PENDING_ID: "1o_kkpaYmp56mq_May0bBdbmdXK669DGOYY3YHZpdh7E",
+    GIFT_FORM: "https://docs.google.com/forms/d/e/1FAIpQLSdir7IFUdyasF2LWvt-DNVEx9kGQCezxaRQ3gG5ftlxSJa70A/formResponse"
+  };
   const UNLOCK_KEY = "boogieUnlockedSession";
   const KEYBOARD_ID = "cool_keyboard";
+
+  function normCode(s) {
+    return String(s || "").trim().toUpperCase();
+  }
+  async function fetchSheetRows(spreadsheetId, range) {
+    const url =
+      "https://sheets.googleapis.com/v4/spreadsheets/" +
+      spreadsheetId +
+      "/values/" +
+      encodeURIComponent(range) +
+      "?key=" +
+      SHEETS.API_KEY;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    return data.values || [];
+  }
+  async function isValidGiftCard(code) {
+    const rows = await fetchSheetRows(SHEETS.GIFT_ID, SHEETS.GIFT_RANGE);
+    const want = normCode(code);
+    return rows.some(row =>
+      (row || []).some(cell => normCode(cell) === want)
+    );
+  }
+  async function isGiftCardUsed(code) {
+    const rows = await fetchSheetRows(
+      SHEETS.PENDING_ID,
+      "Pending Quest!E:E"
+    );
+    const want = normCode(code);
+    return rows.some(r => normCode(r[0]) === want);
+  }
+  async function markGiftCardUsed(code) {
+    try {
+      const body = new URLSearchParams();
+      body.set("entry.2147360639", code);
+      body.set("entry.1526178092", "used");
+      body.set("entry.884208731", "boogie-beast");
+      body.set("entry.256576255", "unlock");
+      body.set("entry.1138659293", "session");
+      await fetch(SHEETS.GIFT_FORM, { method: "POST", mode: "no-cors", body });
+    } catch (e) {}
+  }
 
   function getUnlocked() {
     try {
@@ -738,11 +789,11 @@ a.tg-link:active, .tg-link:active {
     if (isKeyboardUnlocked()) {
       if (locked) locked.style.display = "none";
       if (wrap) wrap.style.display = "block";
-      if (hint) hint.textContent = "Tap the keys — every note makes the beast dance!";
+      if (hint) hint.textContent = "Tap the keys - every note makes the beast dance!";
     } else {
       if (locked) locked.style.display = "block";
       if (wrap) wrap.style.display = "none";
-      if (hint) hint.textContent = "Make music with your fingers — the beast dances to every note! Unlock for $0.25 (this session only).";
+      if (hint) hint.textContent = "Make music with your fingers - the beast dances to every note! Unlock for $0.25 (this session only).";
     }
   }
 
@@ -1414,7 +1465,7 @@ a.tg-link:active, .tg-link:active {
       $("versusStartTurn").disabled = false;
       $("status").textContent = "Player 1 done. Player 2 - press Start when ready.";
       // On stage: after TIME UP, show Player 2's turn (like the timer)
-      showHudMsg("Player 2 — your turn!", "turn");
+      showHudMsg("Player 2 - your turn!", "turn");
       playSfx(660, 0.12, "sine", 0.12);
       setTimeout(() => playSfx(880, 0.18, "sine", 0.12), 120);
     } else if (versusPhase === "p2") {
@@ -1537,8 +1588,34 @@ a.tg-link:active, .tg-link:active {
       return;
     }
     if (!unlockTarget) return;
-    // Accept any non-empty code for session unlock (wire real gift sheet check in production)
-    applyUnlock(unlockTarget, unlockKind);
+    const btn = $("unlockGiftBtn");
+    if (btn) btn.disabled = true;
+    $("status").textContent = "Checking gift card…";
+    try {
+      const valid = await isValidGiftCard(code);
+      if (!valid) {
+        $("status").textContent = "Invalid gift card code.";
+        if (btn) btn.disabled = false;
+        return;
+      }
+      const used = await isGiftCardUsed(code);
+      if (used) {
+        $("status").textContent = "This gift card was already used.";
+        if (btn) btn.disabled = false;
+        return;
+      }
+      await markGiftCardUsed(code);
+      applyUnlock(unlockTarget, unlockKind);
+      $("status").textContent =
+        (unlockKind === "keyboard"
+          ? "Cool Keyboard"
+          : (profiles[unlockTarget] && profiles[unlockTarget].name) || "Item") +
+        " unlocked with gift card!";
+    } catch (e) {
+      console.error(e);
+      $("status").textContent = "Could not verify gift card. Try again.";
+      if (btn) btn.disabled = false;
+    }
   });
 
   function applyUnlock(id, kind) {
