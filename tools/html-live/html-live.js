@@ -183,6 +183,48 @@
     a.click();
   }
 
+  function exportJson() {
+    const data = {
+      html: htmlEl.value,
+      css: cssEl.value,
+      js: jsEl.value,
+      exportedAt: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "preview.json";
+    a.click();
+    showToast("JSON exported");
+  }
+
+  function importJson(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (typeof data.html !== "string") throw new Error("Missing html field");
+        htmlEl.value = data.html || "";
+        cssEl.value = data.css || "";
+        jsEl.value = data.js || "";
+        currentShortUrl = null;
+        isDirty = true;
+        runPreview({ record: false });
+        updateShareButton();
+        saveDraft();
+        showToast("JSON imported successfully");
+      } catch (err) {
+        console.error(err);
+        showToast("Invalid or damaged JSON file");
+      }
+    };
+    reader.onerror = function () {
+      showToast("Could not read the file");
+    };
+    reader.readAsText(file);
+  }
+
   function loadSample() {
     htmlEl.value = SAMPLE_HTML;
     cssEl.value = SAMPLE_CSS;
@@ -358,32 +400,31 @@ async function doShare() {
   document.getElementById("btnRefresh").onclick = function () { runPreview({ record: false }); };
   document.getElementById("btnCopy").onclick = copyCode;
   document.getElementById("btnDownload").onclick = downloadFile;
+  document.getElementById("btnExportJson").onclick = exportJson;
+  document.getElementById("btnImportJson").onclick = function () {
+    document.getElementById("importJsonFile").click();
+  };
+  document.getElementById("importJsonFile").onchange = function (e) {
+    const file = e.target.files && e.target.files[0];
+    if (file) importJson(file);
+    e.target.value = ""; // reset so same file can be selected again
+  };
   document.getElementById("btnSample").onclick = loadSample;
   document.getElementById("btnShare").onclick = sharePreview;
-  document.getElementById("btnEditOnly").onclick = function () {
-    const wrap = document.getElementById("wrap");
-    const btn = document.getElementById("btnEditOnly");
-    const previewBtn = document.getElementById("btnToggle");
-    const editOnly = wrap.classList.toggle("edit-only");
-    wrap.classList.remove("preview-only");
-    document.body.classList.remove("preview-only", "header-hidden");
-    previewBtn.classList.remove("on");
-    previewBtn.setAttribute("aria-pressed", "false");
-    previewBtn.textContent = "Preview only";
-    btn.classList.toggle("on", editOnly);
-    btn.setAttribute("aria-pressed", editOnly ? "true" : "false");
-    btn.textContent = editOnly ? "Show preview" : "Edit only";
-    status.textContent = editOnly ? "Edit only — preview hidden" : "Editor and preview visible";
-  };
   document.getElementById("btnToggle").onclick = function () {
     const wrap = document.getElementById("wrap");
     const btn = document.getElementById("btnToggle");
+    const hidePreviewBtn = document.getElementById("btnHidePreview");
+    // Turn off editor-only mode if active
+    if (wrap.classList.contains("editor-only")) {
+      wrap.classList.remove("editor-only");
+      if (hidePreviewBtn) {
+        hidePreviewBtn.classList.remove("on");
+        hidePreviewBtn.setAttribute("aria-pressed", "false");
+        hidePreviewBtn.textContent = "Hide preview";
+      }
+    }
     const previewOnly = wrap.classList.toggle("preview-only");
-    wrap.classList.remove("edit-only");
-    const editOnlyBtn = document.getElementById("btnEditOnly");
-    editOnlyBtn.classList.remove("on");
-    editOnlyBtn.setAttribute("aria-pressed", "false");
-    editOnlyBtn.textContent = "Edit only";
     document.body.classList.toggle("preview-only", previewOnly);
     document.body.classList.toggle("header-hidden", previewOnly);
     btn.classList.toggle("on", previewOnly);
@@ -391,14 +432,33 @@ async function doShare() {
     btn.textContent = previewOnly ? "Show editor" : "Preview only";
     status.textContent = previewOnly ? "Preview only — header hidden" : "Editor visible";
   };
+  document.getElementById("btnHidePreview").onclick = function () {
+    const wrap = document.getElementById("wrap");
+    const btn = document.getElementById("btnHidePreview");
+    const toggleBtn = document.getElementById("btnToggle");
+    // Turn off preview-only mode if active
+    if (wrap.classList.contains("preview-only")) {
+      wrap.classList.remove("preview-only");
+      document.body.classList.remove("preview-only");
+      document.body.classList.remove("header-hidden");
+      if (toggleBtn) {
+        toggleBtn.classList.remove("on");
+        toggleBtn.setAttribute("aria-pressed", "false");
+        toggleBtn.textContent = "Preview only";
+      }
+    }
+    const editorOnly = wrap.classList.toggle("editor-only");
+    btn.classList.toggle("on", editorOnly);
+    btn.setAttribute("aria-pressed", editorOnly ? "true" : "false");
+    btn.textContent = editorOnly ? "Show preview" : "Hide preview";
+    status.textContent = editorOnly ? "Preview hidden" : "Preview visible";
+  };
   document.getElementById("showHeaderBtn").onclick = function () {
     document.body.classList.remove("header-hidden");
     document.body.classList.remove("preview-only");
     const wrap = document.getElementById("wrap");
     const btn = document.getElementById("btnToggle");
-    if (wrap) wrap.classList.remove("preview-only", "edit-only");
-    const editOnlyBtn = document.getElementById("btnEditOnly");
-    if (editOnlyBtn) { editOnlyBtn.classList.remove("on"); editOnlyBtn.setAttribute("aria-pressed", "false"); editOnlyBtn.textContent = "Edit only"; }
+    if (wrap) wrap.classList.remove("preview-only");
     if (btn) { btn.classList.remove("on"); btn.setAttribute("aria-pressed", "false"); btn.textContent = "Preview only"; }
     status.textContent = "Controls visible";
   };
@@ -428,3 +488,4 @@ async function doShare() {
   else if (loadDraft()) { runPreview({ record: false }); isDirty = true; updateShareButton(); showToast("Restored your last draft"); }
   else { loadSample(); }
 })();
+
