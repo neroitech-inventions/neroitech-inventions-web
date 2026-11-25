@@ -5,238 +5,371 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Countdown Timer</title>
 
-     <!-- Google Analytics -->
-     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
-     <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-QM106YDX6N');
-     </script>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM106YDX6N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QM106YDX6N');
+  </script>
 
-     <!-- Favicon -->
-     <link href="images/favicon.ico" rel="icon">
+  <link href="images/favicon.ico" rel="icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
   :root {
-    --bg: #0f0f1a;
-    --card: #1a1a2e;
-    --accent: #6c5ce7;
-    --accent2: #a29bfe;
-    --text: #f8f9fa;
-    --muted: #a0a0b8;
-    --danger: #ff6b6b;
-    --success: #51cf66;
+    --bg: #07070f;
+    --surface: rgba(18, 18, 32, 0.72);
+    --surface-solid: #12121f;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.14);
+    --accent: #7c6cff;
+    --accent-soft: rgba(124, 108, 255, 0.15);
+    --accent-glow: rgba(124, 108, 255, 0.35);
+    --text: #f4f4f8;
+    --muted: #9494b0;
+    --success: #3dd68c;
+    --danger: #ff6b7a;
+    --radius: 20px;
+    --radius-sm: 12px;
+    --shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    background: radial-gradient(ellipse at top, #1a1a2e 0%, var(--bg) 70%);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
     color: var(--text);
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1.5rem;
+    padding: 1.25rem;
+    -webkit-font-smoothing: antialiased;
   }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 108, 255, 0.22), transparent 55%),
+      radial-gradient(ellipse 50% 40% at 90% 80%, rgba(99, 102, 241, 0.08), transparent);
+    z-index: 0;
+  }
+
   .container {
+    position: relative;
+    z-index: 1;
     width: 100%;
-    max-width: 640px;
-    background: var(--card);
-    border-radius: 24px;
-    padding: 2.5rem 2rem;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    max-width: 520px;
+    background: var(--surface);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 2.25rem 1.75rem 2rem;
+    box-shadow: var(--shadow);
     text-align: center;
   }
+
   h1 {
-    font-size: 2.2rem;
-    font-weight: 700;
+    font-size: clamp(1.65rem, 5vw, 2.1rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
     margin-bottom: 0.5rem;
-    background: linear-gradient(90deg, var(--accent2), #fff);
+    background: linear-gradient(135deg, #c4b5fd 0%, #fff 50%, #a5b4fc 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
   .description {
     color: var(--muted);
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    line-height: 1.5;
+    font-size: 0.98rem;
+    line-height: 1.55;
+    margin-bottom: 1.75rem;
+    max-width: 36ch;
+    margin-left: auto;
+    margin-right: auto;
   }
+
+  /* Timer units */
   .timer {
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    margin: 1.5rem 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.6rem;
+    margin: 0.5rem 0 1.5rem;
   }
+
+  @media (max-width: 420px) {
+    .timer { gap: 0.4rem; }
+  }
+
   .unit {
-    background: rgba(108, 92, 231, 0.15);
-    border: 1px solid rgba(108, 92, 231, 0.3);
+    background: var(--accent-soft);
+    border: 1px solid rgba(124, 108, 255, 0.28);
     border-radius: 16px;
-    padding: 1rem 0.8rem;
-    min-width: 80px;
+    padding: 1rem 0.4rem 0.85rem;
+    position: relative;
+    overflow: hidden;
   }
+
+  .unit::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent 40%);
+    pointer-events: none;
+  }
+
   .unit .value {
-    font-size: 3rem;
-    font-weight: 700;
+    font-size: clamp(1.75rem, 7vw, 2.6rem);
+    font-weight: 800;
     font-variant-numeric: tabular-nums;
     line-height: 1;
     color: #fff;
+    letter-spacing: -0.02em;
   }
+
   .unit .label {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--accent2);
-    margin-top: 0.4rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-top: 0.45rem;
+    opacity: 0.9;
   }
+
   .finished {
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 1.85rem;
+    font-weight: 800;
     color: var(--success);
-    margin: 2rem 0;
-    animation: pulse 1.5s infinite;
+    margin: 1.75rem 0 1rem;
+    letter-spacing: -0.02em;
+    animation: pulse 1.6s ease-in-out infinite;
   }
+
   @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.04); opacity: 0.9; }
   }
+
   .target-info {
     color: var(--muted);
-    font-size: 0.95rem;
-    margin-top: 1rem;
+    font-size: 0.88rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
   }
+
   /* Creator form */
   .creator {
     text-align: left;
-    margin-top: 1rem;
   }
+
   .creator h2 {
     text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.35rem;
   }
+
+  .creator .sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 1.75rem;
+    line-height: 1.45;
+  }
+
   label {
     display: block;
-    margin: 1rem 0 0.4rem;
-    font-size: 0.9rem;
+    margin: 1.1rem 0 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 600;
     color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
+
   input, textarea {
     width: 100%;
-    padding: 0.8rem 1rem;
-    border-radius: 12px;
-    border: 1px solid #333;
-    background: #12121f;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-solid);
     color: var(--text);
-    font-size: 1rem;
+    font-size: 0.98rem;
+    font-family: inherit;
     outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
   }
+
   input:focus, textarea:focus {
     border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
   }
-  textarea { min-height: 80px; resize: vertical; }
+
+  textarea {
+    min-height: 84px;
+    resize: vertical;
+    line-height: 1.45;
+  }
+
+  /* Mode toggle */
   .mode-toggle {
-    display: flex;
-    gap: 1rem;
-    margin: 1rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin: 1.15rem 0 0.25rem;
+    background: var(--surface-solid);
+    padding: 4px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
   }
+
   .mode-toggle label {
-    flex: 1;
     text-align: center;
-    padding: 0.6rem;
-    border-radius: 10px;
-    border: 1px solid #333;
+    padding: 0.7rem 0.5rem;
+    border-radius: 11px;
+    border: none;
     cursor: pointer;
     margin: 0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--muted);
+    transition: all 0.18s;
   }
+
   .mode-toggle input { display: none; }
+
   .mode-toggle input:checked + label {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 14px var(--accent-glow);
+  }
+
+  button, .btn {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.95rem 1.25rem;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #7c6cff, #6366f1);
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+    box-shadow: 0 8px 24px var(--accent-glow);
+  }
+
+  button:hover, .btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+  }
+
+  button:active, .btn:active {
+    transform: translateY(0);
+  }
+
+  .share-url {
+    margin-top: 1.35rem;
+    background: var(--surface-solid);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    word-break: break-all;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 0.8rem;
+    color: #c4b5fd;
+    border: 1px dashed rgba(124, 108, 255, 0.35);
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  .copy-btn {
+    margin-top: 0.65rem;
+    padding: 0.55rem 1.1rem;
+    width: auto;
+    font-size: 0.88rem;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+    border: 1px solid var(--border-strong);
+  }
+
+  .copy-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    filter: none;
+  }
+
+  .open-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #c4b5fd;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+
+  .open-link:hover { text-decoration: underline; }
+
+  .create-new {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1.5rem;
+    padding: 0.65rem 1.35rem;
+    background: transparent;
+    border: 1px solid rgba(124, 108, 255, 0.45);
+    color: #c4b5fd;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: all 0.2s;
+  }
+
+  .create-new:hover {
     background: var(--accent);
     border-color: var(--accent);
     color: white;
   }
-  button {
-    width: 100%;
-    margin-top: 1.5rem;
-    padding: 1rem;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(90deg, var(--accent), #8b7cf7);
-    color: white;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.15s;
-  }
-  button:hover { transform: translateY(-2px); }
-  .share-url {
-    margin-top: 1.5rem;
-    background: #12121f;
-    border-radius: 12px;
-    padding: 1rem;
-    word-break: break-all;
-    font-family: monospace;
-    font-size: 0.85rem;
-    color: var(--accent2);
-    border: 1px dashed #444;
-  }
-  .copy-btn {
-    margin-top: 0.5rem;
-    padding: 0.5rem 1rem;
-    width: auto;
-    font-size: 0.9rem;
-    background: #333;
-  }
-  .footer {
-    margin-top: 2rem;
-    font-size: 0.8rem;
-    color: #555;
-  }
+
   .powered {
-    margin-top: 1.25rem;
-    font-size: 0.9rem;
-    letter-spacing: 0.4px;
+    margin-top: 1.75rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 0.02em;
   }
+
   .powered a {
-    color: var(--accent);
+    color: #a5b4fc;
     text-decoration: none;
     font-weight: 600;
-    position: relative;
     transition: color 0.2s;
   }
-  .powered a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #58a6ff, #79b8ff);
-    transition: width 0.3s ease;
+
+  .powered a:hover { color: #c7d2fe; }
+
+  .footer {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: #5a5a72;
   }
-  .powered a:hover {
-    color: #79b8ff;
-  }
-  .powered a:hover::after {
-    width: 100%;
-  }
-  .create-new {
-    display: inline-block;
-    margin-top: 1.5rem;
-    padding: 0.6rem 1.4rem;
-    background: transparent;
-    border: 1px solid var(--accent);
-    color: var(--accent2);
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: all 0.2s;
-  }
-  .create-new:hover {
-    background: var(--accent);
-    color: white;
+
+  .field-group {
+    margin-top: 0.25rem;
   }
 </style>
 </head>
@@ -268,6 +401,12 @@ function formatTarget(date) {
   });
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function renderTimer(targetDate, isDuration = false) {
   const app = document.getElementById('app');
   app.innerHTML = `
@@ -283,17 +422,9 @@ function renderTimer(targetDate, isDuration = false) {
     <div class="target-info" id="target-info"></div>
     <a href="${window.location.pathname}" class="create-new">+ Create new timer</a>
     <div class="powered">
-      <span>Powered by</span>
-      <a href="https://niti.com.ng/" target="_blank" rel="noopener">
-        Neroitech Inventions
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-          <polyline points="15 3 21 3 21 9"></polyline>
-          <line x1="10" y1="14" x2="21" y2="3"></line>
-        </svg>
-      </a>
+      Powered by
+      <a href="https://niti.com.ng/" target="_blank" rel="noopener">Neroitech Inventions</a>
     </div>
-    <div class="footer"></div>
   `;
 
   const daysEl = document.getElementById('days');
@@ -305,9 +436,9 @@ function renderTimer(targetDate, isDuration = false) {
   const targetInfo = document.getElementById('target-info');
 
   if (isDuration) {
-    targetInfo.textContent = `Duration timer • Started on page load`;
+    targetInfo.textContent = 'Duration timer · started on page load';
   } else {
-    targetInfo.textContent = `Counting down to ${formatTarget(targetDate)}`;
+    targetInfo.textContent = `Ends ${formatTarget(targetDate)}`;
   }
 
   function update() {
@@ -337,7 +468,6 @@ function renderTimer(targetDate, isDuration = false) {
     minutesEl.textContent = pad(minutes);
     secondsEl.textContent = pad(seconds);
 
-    // Hide days unit if 0 and not many days
     const dayUnit = daysEl.parentElement;
     dayUnit.style.display = days > 0 ? 'block' : 'none';
   }
@@ -346,63 +476,48 @@ function renderTimer(targetDate, isDuration = false) {
   const interval = setInterval(update, 1000);
 }
 
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
 function showCreator() {
   const app = document.getElementById('app');
   const now = new Date();
-  const defaultEnd = new Date(now.getTime() + 24 * 60 * 60 * 1000); // tomorrow
-  const isoLocal = defaultEnd.toISOString().slice(0, 16); // datetime-local format
+  const defaultEnd = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+  const isoLocal = defaultEnd.toISOString().slice(0, 16);
 
   app.innerHTML = `
     <div class="creator">
-      <h2>Create Countdown Timer</h2>
-      <p style="color:var(--muted); text-align:center; margin-bottom:1.5rem;">
-        Fill the form to generate a shareable URL. All data lives in the link — no server needed.
-      </p>
+      <h2>Create countdown</h2>
+      <p class="sub">Set a name and end time (or duration). You’ll get a shareable link.</p>
 
-      <label>Timer Name</label>
-      <input type="text" id="c-name" placeholder="e.g. Product Launch" value="My Timer">
+      <label for="c-name">Timer name</label>
+      <input type="text" id="c-name" placeholder="e.g. Product Launch" value="My Timer" autocomplete="off">
 
-      <label>Description (optional)</label>
+      <label for="c-desc">Description (optional)</label>
       <textarea id="c-desc" placeholder="What is this countdown for?"></textarea>
 
       <div class="mode-toggle">
         <input type="radio" name="mode" id="mode-end" checked>
-        <label for="mode-end">End Date & Time</label>
+        <label for="mode-end">End date & time</label>
         <input type="radio" name="mode" id="mode-duration">
         <label for="mode-duration">Duration from now</label>
       </div>
 
-      <div id="end-fields">
-        <label>End Date & Time (your local timezone)</label>
+      <div id="end-fields" class="field-group">
+        <label for="c-end">End date & time (your local time)</label>
         <input type="datetime-local" id="c-end" value="${isoLocal}">
       </div>
 
-      <div id="duration-fields" style="display:none;">
-        <label>Duration in seconds</label>
+      <div id="duration-fields" class="field-group" style="display:none;">
+        <label for="c-seconds">Duration in seconds</label>
         <input type="number" id="c-seconds" min="1" value="300" placeholder="300">
-        <label>Or minutes</label>
+        <label for="c-minutes">Or minutes</label>
         <input type="number" id="c-minutes" min="0" value="5" placeholder="5">
       </div>
 
-      <button onclick="generateUrl()">Generate Shareable URL</button>
+      <button type="button" onclick="generateUrl()">Generate shareable URL</button>
       <div id="result"></div>
     </div>
     <div class="powered">
-      <span>Powered by</span>
-      <a href="https://niti.com.ng/" target="_blank" rel="noopener">
-        Neroitech Inventions
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-          <polyline points="15 3 21 3 21 9"></polyline>
-          <line x1="10" y1="14" x2="21" y2="3"></line>
-        </svg>
-      </a>
+      Powered by
+      <a href="https://niti.com.ng/" target="_blank" rel="noopener">Neroitech Inventions</a>
     </div>
     <div class="footer">Open the generated URL to start the countdown</div>
   `;
@@ -429,7 +544,6 @@ function generateUrl() {
   if (isEnd) {
     const endVal = document.getElementById('c-end').value;
     if (!endVal) { alert('Please pick an end date/time'); return; }
-    // datetime-local is local; convert to ISO with timezone offset or just pass as-is (browser parses local)
     url.searchParams.set('end', endVal);
   } else {
     let secs = parseInt(document.getElementById('c-seconds').value, 10);
@@ -442,21 +556,18 @@ function generateUrl() {
   const finalUrl = url.toString();
   document.getElementById('result').innerHTML = `
     <div class="share-url">${escapeHtml(finalUrl)}</div>
-    <button class="copy-btn" onclick="navigator.clipboard.writeText('${finalUrl.replace(/'/g, "\\'")}').then(() => alert('Copied!'))">Copy URL</button>
-    <p style="margin-top:1rem; text-align:center;"><a href="${finalUrl}" style="color:var(--accent2);">Open timer →</a></p>
+    <button type="button" class="copy-btn" onclick="navigator.clipboard.writeText('${finalUrl.replace(/'/g, "\\'")}').then(() => this.textContent = 'Copied!')">Copy URL</button>
+    <p style="text-align:center;"><a class="open-link" href="${finalUrl}">Open timer →</a></p>
   `;
 }
 
-// Main logic
 function init() {
   let target = null;
   let isDuration = false;
 
   if (endParam) {
-    // Support both datetime-local style (no Z) and full ISO
     target = new Date(endParam);
     if (isNaN(target.getTime())) {
-      // Try appending local interpretation
       target = new Date(endParam.replace(' ', 'T'));
     }
   } else if (secondsParam) {

@@ -8,15 +8,14 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-QM106YDX6N');
 </script>
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>SnappQuest - Every promotion is a quest</title>
+  <title>SnappQuest - Every promotion is a quest.</title>
   <link href="images/favicon.png" rel="icon">
-  <meta name="description" content="Boost a quest for $0.50 USDT. Discover startups, AI, crypto & communities.">
+  <meta name="description" content="Host a quest for $0.25 + $0.25 per like or RT. Pay only for the engagement you want.">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -38,7 +37,7 @@
     .page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 16px;}
     .nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 0;backdrop-filter:blur(16px);background:rgba(7,8,15,0.82);border-bottom:1px solid var(--border);margin:0 -16px;padding-left:16px;padding-right:16px;}
     .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);}
-    .logo-mark{width:36px;height:36px;border-radius:11px;overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(167,139,250,0.3);background:var(--grad);}
+    .logo-mark{width:36px;height:36px;border-radius:25px;overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(167,139,250,0.3);background:var(--grad);}
     .logo-mark img{width:100%;height:100%;object-fit:cover;display:block;}
     .logo-text{font-size:1.05rem;font-weight:800;}.logo-text span{background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
     .nav-btn{padding:8px 14px;border-radius:10px;font-size:0.78rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--font);}
@@ -78,7 +77,8 @@
     .quest-actions{display:flex;gap:8px;}
     .quest-actions .btn{flex:1;}
     .boost-banner{background:linear-gradient(135deg,rgba(167,139,250,0.14),rgba(34,211,238,0.08));border:1px solid rgba(167,139,250,0.28);border-radius:var(--radius);padding:16px;text-align:center;margin-bottom:20px;}
-    .boost-price{font-size:1.4rem;font-weight:800;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:8px 0;}
+    .boost-price{font-size:1.25rem;font-weight:800;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:8px 0;}
+    .price-breakdown{font-size:0.78rem;color:var(--muted);line-height:1.5;margin-bottom:10px;}
     .overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:all .25s;}
     .overlay.show{opacity:1;visibility:visible;}
     .modal{background:#0e1020;border:1px solid var(--border2);border-radius:22px 22px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;padding:16px 16px 28px;transform:translateY(36px);transition:transform .25s;}
@@ -96,11 +96,13 @@
     .pay-box{background:linear-gradient(160deg,var(--surface2),#151c2c);border:1px solid var(--border2);border-radius:14px;padding:14px;margin:10px 0;}
     .pay-amount{font-size:1.6rem;font-weight:700;color:var(--green);text-align:center;}
     .pay-net{font-family:var(--mono);font-size:0.62rem;color:var(--muted);text-align:center;margin:2px 0 10px;}
+    .calc-box{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px;margin:12px 0;}
+    .calc-row{display:flex;justify-content:space-between;align-items:center;font-size:0.82rem;margin-bottom:6px;color:var(--muted);}
+    .calc-row strong{color:var(--text);font-weight:700;}
+    .calc-total{display:flex;justify-content:space-between;align-items:center;font-size:1.05rem;font-weight:800;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);color:var(--green);}
     .addr-row{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.35);padding:10px;border-radius:10px;margin-bottom:8px;border:1px solid var(--border);}
     .addr-text{flex:1;font-family:var(--mono);font-size:0.66rem;word-break:break-all;color:var(--green);}
     .copy-btn{padding:6px 10px;background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.25);border-radius:8px;font-size:0.68rem;font-weight:600;cursor:pointer;font-family:var(--font);}
-    
-    /* Enhanced QR Code Styling */
     .qr-section{display:none;margin-top:12px;padding-top:12px;border-top:1px solid rgba(52,211,153,0.15);}
     .qr-section.show{display:block;}
     .qr-label{font-size:0.7rem;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
@@ -110,7 +112,6 @@
     .qr-hint{font-size:0.65rem;color:var(--muted);text-align:center;line-height:1.6;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.15);border-radius:10px;padding:10px;display:flex;align-items:center;justify-content:center;gap:6px;}
     .qr-hint i{font-size:0.75rem;color:var(--green);flex-shrink:0;}
     .qr-fallback{font-size:0.65rem;color:var(--yellow);text-align:center;padding:12px;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);border-radius:10px;margin-bottom:10px;}
-    
     .pay-hint{font-size:0.62rem;color:var(--muted);text-align:center;}
     .status-log{background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:10px;min-height:40px;max-height:110px;overflow-y:auto;font-family:var(--mono);font-size:0.66rem;line-height:1.65;margin-top:10px;color:var(--muted);}
     .lg-ok{color:var(--green);}.lg-err{color:var(--red);}.lg-warn{color:var(--yellow);}.lg-info{color:var(--muted);}
@@ -122,12 +123,8 @@
     .chain-tab.active.poly{color:var(--green);}
     .chain-tab.active.sol{color:var(--purple);}
     .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:90;background:rgba(10,12,22,0.94);backdrop-filter:blur(18px);border-top:1px solid var(--border);padding:8px 0 calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;align-items:center;}
-    .modal {
-  padding-bottom: 120px;
-}
-body.modal-open .bottom-nav {
-  display: none;
-}
+    .modal { padding-bottom: 120px; }
+    body.modal-open .bottom-nav { display: none; }
     .bn-item{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:0.58rem;font-weight:600;color:var(--muted2);background:none;border:none;cursor:pointer;font-family:var(--font);padding:6px 8px;}
     .bn-item i{font-size:1.05rem;}.bn-item.active{color:var(--cyan);}
     .bn-fab{width:48px;height:48px;border-radius:14px;margin-top:-18px;background:var(--grad);color:#0b0d18;border:none;display:flex;align-items:center;justify-content:center;font-size:1.15rem;box-shadow:0 6px 22px rgba(96,165,250,0.4);cursor:pointer;}
@@ -146,7 +143,6 @@ body.modal-open .bottom-nav {
     .pager .btn.page-num.active{background:var(--grad);color:#0b0d18;border:none;font-weight:700;}
     .pager-info{font-size:0.7rem;color:var(--muted);font-weight:600;width:100%;text-align:center;margin-bottom:2px;}
     .pager-dots{color:var(--muted2);font-size:0.75rem;padding:0 2px;user-select:none;}
-  /* Centered modern confirm dialog */
 .overlay.center {
   align-items: center;
   padding: 20px;
@@ -206,19 +202,23 @@ body.modal-open .bottom-nav {
 
     <div id="view-discover">
       <section class="hero">
-        <div class="hero-badge"><i class="fas fa-sparkles"></i> Discover & Promote</div>
+        
         <h1>Every promotion<br>is a <em>quest</em>.</h1>
-        <p>Boost your project for $0.50 USDT and get more eyes on your post.</p>
+        <p>$0.25 to host + $0.25 per like or RT. Choose how much engagement you want.</p>
         <div class="hero-cta">
           <button class="btn btn-grad" onclick="openLaunch()"><i class="fas fa-rocket"></i> Launch Quest</button>
           <button class="btn btn-ghost" onclick="document.getElementById('feed').scrollIntoView({behavior:'smooth'})"><i class="fas fa-compass"></i> Explore Quests</button>
         </div>
       </section>
 <div class="boost-banner">
-  <div style="font-weight:700;margin-bottom:4px;">Boost = more eyes on your post</div>
-  <div style="font-size:0.76rem;color:var(--muted);">Get featured on the feed with higher reach for a little amount</div>
-  <div class="boost-price">$0.50 USDT</div>
-  <button class="btn btn-grad btn-sm" onclick="openLaunch(true)">Boost a Quest</button>
+  <div style="font-weight:700;margin-bottom:4px;">Simple pricing</div>
+  <div class="price-breakdown">
+    Hosting fee: <strong style="color:var(--text);">$0.25</strong><br>
+    Per like or RT: <strong style="color:var(--text);">$0.25</strong><br>
+    Total = $0.25 + (engagements × $0.25)
+  </div>
+  <div class="boost-price">Example: 10 engagements = $2.75</div>
+  <button class="btn btn-grad btn-sm" onclick="openLaunch()">Calculate &amp; Launch</button>
 </div>
       <section class="section">
         <div class="section-head"><div class="section-title">Categories</div></div>
@@ -270,12 +270,12 @@ body.modal-open .bottom-nav {
   <div class="boost-banner" style="text-align:left;">
     <div class="boost-price" style="text-align:center;">P2P Market</div>
     <p style="font-size:0.84rem;color:var(--muted);text-align:center;margin-bottom:12px;">
-      Trade SnappQuest gift cards with the community. Use a code here to boost a quest.
+      Trade SnappQuest gift cards with the community. Use a code here to cover part or all of your calculated total.
     </p>
     <ul style="list-style:none;font-size:0.84rem;color:var(--muted);margin:0 0 16px;">
       <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Buy a gift card from other members</li>
       <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Sell unused or earned cards</li>
-      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Redeem a code when you launch a boost</li>
+      <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Redeem a code when you launch</li>
       <li style="padding:6px 0;display:flex;gap:8px;"><i class="fas fa-check" style="color:var(--green);"></i> Deals happen in Telegram, not on-site</li>
     </ul>
     <a class="btn btn-grad btn-full" href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener">
@@ -287,7 +287,7 @@ body.modal-open .bottom-nav {
   </div>
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:14px;">
     <div style="font-weight:700;margin-bottom:4px;">Validate a gift card</div>
-    <p style="font-size:0.76rem;color:var(--muted);margin-bottom:12px;">Check whether a code is real and still unused. Redeem happens when you boost a quest.</p>
+    <p style="font-size:0.76rem;color:var(--muted);margin-bottom:12px;">Check whether a code is real and still unused. Redeem happens when you launch a quest.</p>
     <div class="field" style="margin-bottom:8px;">
       <label>Enter Gift card code</label>
       <input type="text" id="giftCheckCode" placeholder="Enter gift card" spellcheck="false" autocomplete="off">
@@ -320,7 +320,7 @@ body.modal-open .bottom-nav {
     <div class="modal">
       <div class="modal-handle"></div>
       <div class="modal-title" id="launchTitle">Launch a Quest</div>
-      <div class="modal-sub" id="launchSub">Pay $0.50 USDT to boost your quest and reach thousands of users in 24 hours.</div>
+      <div class="modal-sub" id="launchSub">$0.25 host fee + $0.25 per like or RT. Pay the calculated total via NoWalletConnect before your quest is hosted.</div>
 
       <div id="launchForm">
         <div class="field"><label>Email</label><input type="email" id="qEmail" placeholder="you@email.com"></div>
@@ -333,21 +333,33 @@ body.modal-open .bottom-nav {
         </div>
         <div class="field"><label>Telegram</label><input type="text" id="qTg" placeholder="@handle or t.me/…"></div>
         <div class="field"><label>Twitter / X</label><input type="text" id="qX" placeholder="@handle"></div>
+
+        <div class="field">
+          <label>Desired engagements (likes or RTs)</label>
+          <input type="number" id="qEngagements" min="1" max="500" step="1" value="10" placeholder="e.g. 10" oninput="updatePriceCalc()">
+        </div>
+
+        <div class="calc-box" id="priceCalc">
+          <div class="calc-row"><span>Hosting fee</span><strong>$0.25</strong></div>
+          <div class="calc-row"><span>Engagements × $0.25</span><strong id="engCost">$2.50</strong></div>
+          <div class="calc-total"><span>Total to pay</span><span id="totalCost">$2.75</span></div>
+        </div>
+
         <div class="modal-actions">
-          <button class="btn btn-ghost btn-full" onclick="startLaunch(true)">Boost for $0.50 USDT</button>
+          <button class="btn btn-grad btn-full" onclick="startLaunch()">Continue to payment</button>
           <button class="btn btn-ghost btn-full" style="color:var(--muted2);" onclick="closeLaunch()">Cancel</button>
         </div>
       </div>
 
       <div id="payStep" style="display:none;">
-        <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Pay with USDT or a gift card.</p>
+        <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Pay the calculated total with USDT or a gift card.</p>
         <div class="chain-tabs">
-          <button type="button" class="chain-tab active" id="payTabUsdt" onclick="setPayMethod('usdt')">USDT $0.50</button>
+          <button type="button" class="chain-tab active" id="payTabUsdt" onclick="setPayMethod('usdt')">USDT</button>
           <button type="button" class="chain-tab" id="payTabGift" onclick="setPayMethod('gift')">Gift card</button>
         </div>
         <div id="usdtPayBox">
-          <div class="pay-amount">0.50 USDT</div>
-          <div class="pay-net">Pay with USDT on Polygon or Solana.</div>
+          <div class="pay-amount" id="payAmountDisplay">$2.75 USDT</div>
+          <div class="pay-net">Pay with USDT on Polygon or Solana via NoWalletConnect.</div>
           <div style="display:block;text-align:center;margin:12px 0;">
             <button type="button" class="btn btn-grad btn-full" onclick="goPayWithNwc()">
               Pay with USDT
@@ -403,13 +415,17 @@ body.modal-open .bottom-nav {
 <script src="config.js"></script>
 <script>
 
+// Pricing
+const HOST_FEE = 0.25;
+const PER_ENGAGEMENT = 0.25;
+
 // ═══ SAME PAY AS pay-plugin-v1.html ═══
 const PAY = {
   USDT_POLYGON: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
   USDT_SOLANA: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
   receiverPolygon: '0xf2BcDD45Dd5D6AAf1718CdE1CEeA169A870ea4eB',
   receiverSolana: 'HFUZVFgtSXwKTJuwo8t4NuGWvwkns5c3MmZBM8BCgWMG',
-  amount: 0.50,
+  amount: 0.50, // default, overwritten by calc
   tolerance: 0.02,
   timeWindowMin: 45,
   telegramPending: 'https://t.me/SnappQuest_Chat'
@@ -418,7 +434,7 @@ const PAY = {
 const NWC = {
   merchant: "SnappQuest",
   checkout: "https://niti.com.ng/tools/nowalletconnect/checkout.html",
-  amount: 0.50,
+  amount: 0.50, // set dynamically
   draftKey: "sq_boost_draft"
 };
 
@@ -492,6 +508,33 @@ function parseExpiry(str) {
   if (!str) return null;
   const d = new Date(String(str).trim().replace(' ', 'T'));
   return isNaN(d.getTime()) ? null : d;
+}
+
+function getEngagements() {
+  const el = $('qEngagements');
+  let n = parseInt(el && el.value, 10);
+  if (isNaN(n) || n < 1) n = 1;
+  if (n > 500) n = 500;
+  return n;
+}
+
+function calcTotal(engagements) {
+  const eng = engagements != null ? engagements : getEngagements();
+  const engCost = eng * PER_ENGAGEMENT;
+  const total = HOST_FEE + engCost;
+  return { eng, engCost, total: Math.round(total * 100) / 100 };
+}
+
+function updatePriceCalc() {
+  const { eng, engCost, total } = calcTotal();
+  const engCostEl = $('engCost');
+  const totalCostEl = $('totalCost');
+  const payAmountDisplay = $('payAmountDisplay');
+  if (engCostEl) engCostEl.textContent = '$' + engCost.toFixed(2);
+  if (totalCostEl) totalCostEl.textContent = '$' + total.toFixed(2);
+  if (payAmountDisplay) payAmountDisplay.textContent = '$' + total.toFixed(2) + ' USDT';
+  NWC.amount = total;
+  PAY.amount = total;
 }
 
 async function isTxAlreadyUsed(txHash){
@@ -966,21 +1009,25 @@ function openLaunch(){
   $('launchOverlay').classList.add('show');
   $('launchForm').style.display='block';
   $('payStep').style.display='none';
-  $('launchTitle').textContent='Boost a Quest';
-  $('launchSub').textContent='Pay $0.50 USDT to boost your quest and reach thousands of users in 24 hours.';
+  $('launchTitle').textContent='Launch a Quest';
+  $('launchSub').textContent='$0.25 host fee + $0.25 per like or RT. Pay the calculated total via NoWalletConnect before your quest is hosted.';
+  updatePriceCalc();
 }
 function clearLaunchForm(){
   ['qEmail','qName','qSponsor','qDesc','qWeb','qTg','qX','payWallet','giftCode'].forEach(id=>{
     const el = $(id);
     if(el) el.value = '';
   });
+  const engEl = $('qEngagements');
+  if (engEl) engEl.value = '10';
   const log = $('payLog');
-  if(log) log.innerHTML = 'Enter wallet, send 0.50 USDT, verify.';
+  if(log) log.innerHTML = 'Enter wallet, send payment, verify.';
   const giftBtn = $('giftBtn');
   if(giftBtn) giftBtn.disabled = false;
   const verifyBtn = $('verifyBtn');
   if(verifyBtn) verifyBtn.disabled = false;
   setPayMethod('usdt');
+  updatePriceCalc();
 }
 
 function closeLaunch(){
@@ -1003,7 +1050,7 @@ function confirmTxSupport(){
   toast('Contact admin on Telegram');
 }
 
-async function startLaunch(boost){
+async function startLaunch(){
   const email=$('qEmail').value.trim();
   const name=$('qName').value.trim();
   const sponsor=$('qSponsor').value.trim();
@@ -1011,6 +1058,8 @@ async function startLaunch(boost){
   const web=$('qWeb').value.trim();
   const tg=$('qTg').value.trim();
   const x=$('qX').value.trim();
+  const engagements = getEngagements();
+
 if(!email||!name||!sponsor||!desc||!web||!tg){
   toast('Fill email, title, sponsor, description, Twitter link & Telegram');
   return;
@@ -1030,7 +1079,17 @@ if(linkUsed){
   return;
 }
 
-draft={email,name,sponsor,desc,web,tg,x,boost:true,track:trackCode()};
+const { total } = calcTotal(engagements);
+draft={
+  email, name, sponsor, desc, web, tg, x,
+  boost: true,
+  track: trackCode(),
+  engagements,
+  amount: total
+};
+NWC.amount = total;
+PAY.amount = total;
+updatePriceCalc();
 $('launchForm').style.display='none';
 $('payStep').style.display='block';
 }
@@ -1047,6 +1106,9 @@ function goPayWithNwc() {
     toast("Fill the launch form first");
     return;
   }
+  const { total } = calcTotal(draft.engagements);
+  draft.amount = total;
+  NWC.amount = total;
   const raw = JSON.stringify(draft);
   sessionStorage.setItem(NWC.draftKey, raw);
   localStorage.setItem(NWC.draftKey, raw);
@@ -1112,7 +1174,7 @@ async function captureNwcReturn() {
   localStorage.removeItem(NWC.draftKey);
   sessionStorage.removeItem(NWC.draftKey);
   history.replaceState({}, "", location.pathname);
-  toast("Boosted quest submitted · Track " + d.track);
+  toast("Quest submitted · Track " + d.track + " · $" + (d.amount || NWC.amount).toFixed(2));
   showView("pending");
   loadPending();
   return true;
@@ -1124,12 +1186,16 @@ async function submitToGoogleForm(d){
   body.set('entry.1526178092', d.name);
   body.set('entry.884208731', d.sponsor);
   body.set('entry.1178007064', d.desc);
-body.set('entry.1547645284', d.giftCode || (d.boost ? '0.5 USDT' : '0'));
+  // Payment note includes amount + engagements
+  const payNote = d.giftCode
+    ? ('Gift: ' + d.giftCode)
+    : ((d.amount ? d.amount.toFixed(2) : NWC.amount.toFixed(2)) + ' USDT · ' + (d.engagements || 0) + ' eng');
+  body.set('entry.1547645284', payNote);
   body.set('entry.899075060', d.web);
   body.set('entry.112634495', d.tg);
   body.set('entry.1507763482', d.x||'');
   body.set('entry.269247622', d.track);
-body.set('entry.256576255', d.giftCode || (d.boost ? (d.txLink || d.txHash || '') : 'Standard Quest'));
+  body.set('entry.256576255', d.giftCode || (d.txLink || d.txHash || ''));
   body.set('entry.1138659293', '1');
   await fetch(SHEETS.CREATE_FORM, {method:'POST', mode:'no-cors', body});
 }
@@ -1222,11 +1288,11 @@ async function checkGiftCardStatus(){
 
 async function submitGiftCardUsed(code, d){
   const body = new URLSearchParams();
-  body.set('entry.2147360639', code);            // B Track Code = gift card
-  body.set('entry.1526178092', 'used');          // Proof of Quest
-  body.set('entry.884208731', d.web || 'used');  // Quest Link
-  body.set('entry.256576255', d.tg || 'used');   // Telegram
-  body.set('entry.1138659293', d.x || 'used');   // Twitter
+  body.set('entry.2147360639', code);
+  body.set('entry.1526178092', 'used');
+  body.set('entry.884208731', d.web || 'used');
+  body.set('entry.256576255', d.tg || 'used');
+  body.set('entry.1138659293', d.x || 'used');
   await fetch(SHEETS.GIFT_FORM, { method:'POST', mode:'no-cors', body });
 }
 
@@ -1333,7 +1399,7 @@ async function verifyBoostPayment(){
   const track = draft.track;
   setTimeout(()=>{
     closeLaunch();
-    toast('Boosted quest submitted · Track ' + track);
+    toast('Quest submitted · Track ' + track);
     showView('pending');
     loadPending();
   }, 1000);
@@ -1356,7 +1422,7 @@ async function verifyPolygon(userWallet){
     if((tx.to||'').toLowerCase()!==receiver||(tx.from||'').toLowerCase()!==user)continue;
     if(Math.abs(amount-PAY.amount)<=PAY.tolerance){payLog('<span class="lg-ok">✅ '+amount.toFixed(2)+' USDT</span>');return {tx:tx.hash};}
   }
-  payLog('<span class="lg-err">❌ No matching 0.50 USDT</span>');return null;
+  payLog('<span class="lg-err">❌ No matching payment</span>');return null;
 }
 
 async function verifySolana(userWallet){
@@ -1392,6 +1458,7 @@ document.getElementById('catBar').addEventListener('click', e => {
 
 captureNwcReturn();
 loadLiveQuests();
+updatePriceCalc();
 
 (function bootTabFromUrl(){
   const view = currentTabFromUrl();
