@@ -1004,6 +1004,40 @@ function showView(name){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
+const FORM_DRAFT_KEY = 'sq_launch_form';
+
+function saveFormDraft() {
+  const data = {
+    email: ($('qEmail') && $('qEmail').value) || '',
+    name: ($('qName') && $('qName').value) || '',
+    sponsor: ($('qSponsor') && $('qSponsor').value) || '',
+    desc: ($('qDesc') && $('qDesc').value) || '',
+    web: ($('qWeb') && $('qWeb').value) || '',
+    tg: ($('qTg') && $('qTg').value) || '',
+    x: ($('qX') && $('qX').value) || '',
+    engagements: ($('qEngagements') && $('qEngagements').value) || '10'
+  };
+  try {
+    sessionStorage.setItem(FORM_DRAFT_KEY, JSON.stringify(data));
+  } catch (e) {}
+}
+
+function restoreFormDraft() {
+  try {
+    const raw = sessionStorage.getItem(FORM_DRAFT_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if ($('qEmail') && data.email) $('qEmail').value = data.email;
+    if ($('qName') && data.name) $('qName').value = data.name;
+    if ($('qSponsor') && data.sponsor) $('qSponsor').value = data.sponsor;
+    if ($('qDesc') && data.desc) $('qDesc').value = data.desc;
+    if ($('qWeb') && data.web) $('qWeb').value = data.web;
+    if ($('qTg') && data.tg) $('qTg').value = data.tg;
+    if ($('qX') && data.x) $('qX').value = data.x;
+    if ($('qEngagements') && data.engagements) $('qEngagements').value = data.engagements;
+  } catch (e) {}
+}
+
 function openLaunch(){
   document.body.classList.add('modal-open');
   $('launchOverlay').classList.add('show');
@@ -1011,6 +1045,7 @@ function openLaunch(){
   $('payStep').style.display='none';
   $('launchTitle').textContent='Launch a Quest';
   $('launchSub').textContent='$0.25 host fee + $0.25 per like or RT. Pay the calculated total via NoWalletConnect before your quest is hosted.';
+  restoreFormDraft();
   updatePriceCalc();
 }
 function clearLaunchForm(){
@@ -1027,14 +1062,17 @@ function clearLaunchForm(){
   const verifyBtn = $('verifyBtn');
   if(verifyBtn) verifyBtn.disabled = false;
   setPayMethod('usdt');
+  try { sessionStorage.removeItem(FORM_DRAFT_KEY); } catch (e) {}
   updatePriceCalc();
 }
 
 function closeLaunch(){
+  // Save what the user typed so closing by mistake does not wipe the form
+  saveFormDraft();
   $('launchOverlay').classList.remove('show');
   document.body.classList.remove('modal-open');
-  clearLaunchForm();
-  draft=null;
+  // Do NOT clear the form or draft fields — only hide the modal
+  draft = null;
 }
 function backToForm(){$('payStep').style.display='none';$('launchForm').style.display='block';}
 
@@ -1214,6 +1252,7 @@ async function captureNwcReturn() {
   localStorage.removeItem(NWC.draftKey);
   sessionStorage.removeItem(NWC.draftKey);
   history.replaceState({}, "", location.pathname + location.hash);
+  clearLaunchForm();
   toast("Quest submitted · Track " + d.track + " · $" + expected.toFixed(2));
   showView("pending");
   loadPending();
@@ -1369,6 +1408,7 @@ async function redeemGiftCard(){
     await submitToGoogleForm(draft);
 
     const track = draft.track;
+    clearLaunchForm();
     closeLaunch();
     toast('Gift card accepted · Track ' + track);
     showView('pending');
@@ -1438,6 +1478,7 @@ async function verifyBoostPayment(){
   try{ await submitToGoogleForm(draft); }catch(e){}
   const track = draft.track;
   setTimeout(()=>{
+    clearLaunchForm();
     closeLaunch();
     toast('Quest submitted · Track ' + track);
     showView('pending');
@@ -1494,6 +1535,15 @@ document.getElementById('catBar').addEventListener('click', e => {
   activeCat = btn.dataset.cat;
   livePage = 1;
   renderLive();
+});
+
+// Autosave launch form so closing the modal by mistake does not lose input
+['qEmail','qName','qSponsor','qDesc','qWeb','qTg','qX','qEngagements'].forEach(id => {
+  const el = $(id);
+  if (el) {
+    el.addEventListener('input', saveFormDraft);
+    el.addEventListener('change', saveFormDraft);
+  }
 });
 
 captureNwcReturn();
