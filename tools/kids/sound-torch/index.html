@@ -376,6 +376,35 @@
       transform: translateY(2px);
       box-shadow: 0 1px 0 rgba(0,0,0,0.25);
     }
+    .gift-msg {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: center;
+    }
+    .gift-msg.info {
+      background: rgba(94,234,212,0.12);
+      border: 1px solid rgba(94,234,212,0.3);
+      color: var(--cyan);
+    }
+    .gift-msg.ok {
+      background: rgba(52,211,153,0.15);
+      border: 1px solid rgba(52,211,153,0.35);
+      color: #34d399;
+    }
+    .gift-msg.err {
+      background: rgba(248,113,113,0.15);
+      border: 1px solid rgba(248,113,113,0.4);
+      color: #fca5a5;
+    }
+    .gift-msg.warn {
+      background: rgba(253,224,71,0.12);
+      border: 1px solid rgba(253,224,71,0.35);
+      color: var(--yellow);
+    }
   </style>
 </head>
 <body>
@@ -469,6 +498,7 @@
       <div id="unlockGiftBox" style="display:none;">
         <input type="text" id="unlockGiftCode" placeholder="SnappQuest gift card code">
         <button type="button" class="btn-voice" id="unlockGiftBtn" style="width:100%;">Redeem gift card</button>
+        <div id="giftMsg" class="gift-msg" style="display:none;"></div>
         <p class="hint" style="text-align:center;margin-top:10px;">
           Need a gift card?
           <a class="link" href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener">📲 Join SnappQuest on Telegram</a>
@@ -1196,6 +1226,9 @@
       document.getElementById("unlockTabGift").classList.remove("active");
       document.getElementById("unlockUsdtBox").style.display = "block";
       document.getElementById("unlockGiftBox").style.display = "none";
+      clearGiftMsg();
+      const btn = document.getElementById("unlockGiftBtn");
+      if (btn) btn.disabled = false;
     });
     document.getElementById("unlockCancel").addEventListener("click", () => {
       unlockOverlay.style.display = "none";
@@ -1214,6 +1247,7 @@
       document.getElementById("unlockTabUsdt").classList.remove("active");
       document.getElementById("unlockUsdtBox").style.display = "none";
       document.getElementById("unlockGiftBox").style.display = "block";
+      clearGiftMsg();
     });
     document.getElementById("unlockPayBtn").addEventListener("click", () => {
       const draft = { product: "cool_sounds", amount: NWC.amount, t: Date.now() };
@@ -1228,40 +1262,55 @@
       u.searchParams.set("ref", "cool_sounds");
       window.location.href = u.toString();
     });
+    function showGiftMsg(text, kind) {
+      const el = document.getElementById("giftMsg");
+      if (!el) return;
+      el.style.display = "block";
+      el.className = "gift-msg " + (kind || "info");
+      el.textContent = text;
+    }
+    function clearGiftMsg() {
+      const el = document.getElementById("giftMsg");
+      if (!el) return;
+      el.style.display = "none";
+      el.textContent = "";
+    }
+
     document.getElementById("unlockGiftBtn").addEventListener("click", async () => {
       const code = (document.getElementById("unlockGiftCode").value || "").trim();
       if (!code) {
-        errorEl.textContent = "Enter a gift card code.";
+        showGiftMsg("Enter a gift card code first.", "warn");
         return;
       }
       const btn = document.getElementById("unlockGiftBtn");
       if (btn) btn.disabled = true;
       errorEl.textContent = "";
-      setStatus("Checking gift card…", "listening");
+      showGiftMsg("Checking gift card…", "info");
       try {
         const valid = await isValidGiftCard(code);
         if (!valid) {
-          errorEl.textContent = "Invalid gift card code.";
-          setStatus("Invalid gift card", "off");
+          showGiftMsg("Invalid gift card.", "err");
           if (btn) btn.disabled = false;
           return;
         }
         const used = await isGiftCardUsed(code);
         if (used) {
-          errorEl.textContent = "This gift card was already used.";
-          setStatus("Gift card already used", "off");
+          showGiftMsg("This gift card was already used.", "warn");
           if (btn) btn.disabled = false;
           return;
         }
         await markGiftCardUsed(code);
+        showGiftMsg("Gift card accepted! Unlocking…", "ok");
         setCoolSoundsUnlocked();
-        unlockOverlay.style.display = "none";
-        setStatus("Cool Sounds unlocked! 🔊", "detected");
-        playOnSound();
+        setTimeout(() => {
+          unlockOverlay.style.display = "none";
+          clearGiftMsg();
+          setStatus("Cool Sounds unlocked! 🔊", "detected");
+          playOnSound();
+        }, 500);
       } catch (e) {
         console.error(e);
-        errorEl.textContent = "Could not verify gift card. Try again.";
-        setStatus("Check failed", "off");
+        showGiftMsg("Could not verify gift card. Try again.", "err");
         if (btn) btn.disabled = false;
       }
     });

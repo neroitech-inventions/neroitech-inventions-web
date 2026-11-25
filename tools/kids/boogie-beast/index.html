@@ -450,6 +450,89 @@ a.tg-link:active, .tg-link:active {
   transform: translateY(2px);
   box-shadow: 0 1px 0 rgba(0,0,0,0.25);
 }
+.gift-msg {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+.gift-msg.info {
+  background: rgba(94,234,212,0.12);
+  border: 1px solid rgba(94,234,212,0.3);
+  color: var(--cyan);
+}
+.gift-msg.ok {
+  background: rgba(52,211,153,0.15);
+  border: 1px solid rgba(52,211,153,0.35);
+  color: #34d399;
+}
+.gift-msg.err {
+  background: rgba(248,113,113,0.15);
+  border: 1px solid rgba(248,113,113,0.4);
+  color: #fca5a5;
+}
+.gift-msg.warn {
+  background: rgba(253,224,71,0.12);
+  border: 1px solid rgba(253,224,71,0.35);
+  color: var(--yellow);
+}
+.inst-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.inst-tab {
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 14px;
+  padding: 12px 10px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: rgba(0,0,0,.25);
+  color: #c4b5fd;
+  font-family: inherit;
+}
+.inst-tab.active {
+  background: linear-gradient(135deg, #5eead4, #fde047);
+  color: #1a1035;
+  border-color: transparent;
+  box-shadow: 0 3px 0 rgba(0,0,0,.25);
+}
+.drums {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.drum {
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 50%;
+  font-weight: 900;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #1a1035;
+  box-shadow: 0 5px 0 rgba(0,0,0,.3);
+  touch-action: manipulation;
+  font-family: inherit;
+}
+.drum:active, .drum.down {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 rgba(0,0,0,.3);
+}
+.drum.kick { background: linear-gradient(145deg, #fde047, #f97316); }
+.drum.snare { background: linear-gradient(145deg, #5eead4, #22d3ee); }
+.drum.hat { background: linear-gradient(145deg, #c084fc, #a855f7); }
+.drum.tom { background: linear-gradient(145deg, #fb7185, #f43f5e); }
+.drum.clap { background: linear-gradient(145deg, #86efac, #34d399); }
+.drum.crash { background: linear-gradient(145deg, #f9a8d4, #ec4899); }
 </style>
 </head>
 <body>
@@ -542,8 +625,13 @@ a.tg-link:active, .tg-link:active {
   </section>
 
   <section class="panel" id="keyboardPanel">
-    <h2>🎹 Cool Keyboard</h2>
-    <p class="hint" id="keyboardHint">Tap the keys to make music - the beast dances to every note! Unlock for $0.25 (this browser session only).</p>
+    <h2>🎹 Music Toys</h2>
+    <div class="inst-tabs" id="instTabs">
+      <button type="button" class="inst-tab active" data-inst="keyboard">🎹 Keyboard</button>
+      <button type="button" class="inst-tab" data-inst="drums">🥁 Drums</button>
+    </div>
+    <p class="hint" id="keyboardHint">Tap the keys to make music — the beast dances to every note! Unlock for $0.25 (this session only).</p>
+
     <div id="keyboardLocked" style="text-align:center;padding:12px 0;">
       <button type="button" class="btn versus" id="unlockKeyboardBtn">🔓 Unlock Cool Keyboard · $0.25</button>
       <p class="hint" style="margin-top:10px;">
@@ -554,7 +642,21 @@ a.tg-link:active, .tg-link:active {
     <div id="keyboardWrap" style="display:none;">
       <div class="keys" id="keys"></div>
       <div class="row" style="margin-top:10px;justify-content:center;">
-        <button type="button" class="btn pink" id="keyboardStop" style="padding:10px 14px;font-size:.85rem;">■ Stop keys</button>
+        <button type="button" class="btn pink" id="keyboardStop" style="padding:10px 14px;font-size:.85rem;">■ Stop</button>
+      </div>
+    </div>
+
+    <div id="drumsLocked" style="display:none;text-align:center;padding:12px 0;">
+      <button type="button" class="btn versus" id="unlockDrumsBtn">🔓 Unlock Cool Drums · $0.25</button>
+      <p class="hint" style="margin-top:10px;">
+        Or unlock free with a gift card from
+        <a class="tg-link" href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener">📲 SnappQuest Telegram</a>
+      </p>
+    </div>
+    <div id="drumsWrap" style="display:none;">
+      <div class="drums" id="drums"></div>
+      <div class="row" style="margin-top:10px;justify-content:center;">
+        <button type="button" class="btn pink" id="drumsStop" style="padding:10px 14px;font-size:.85rem;">■ Stop</button>
       </div>
     </div>
   </section>
@@ -578,6 +680,7 @@ a.tg-link:active, .tg-link:active {
     <div id="unlockGiftBox" style="display:none;">
       <input type="text" id="unlockGiftCode" placeholder="SnappQuest gift card code" style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:#1a1035;color:#fff;font-weight:700;margin-bottom:10px;">
       <button type="button" class="btn secondary" id="unlockGiftBtn" style="width:100%;">Redeem gift card</button>
+      <div id="giftMsg" class="gift-msg" style="display:none;"></div>
       <p class="hint" style="text-align:center;margin-top:12px;">
         Need a gift card?
         <a class="tg-link" href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener">📲 Join SnappQuest on Telegram</a>
@@ -697,7 +800,8 @@ a.tg-link:active, .tg-link:active {
   };
   let creature = "bloop";
   let unlockTarget = null;
-  let unlockKind = "character"; // character | keyboard
+  let unlockKind = "character"; // character | keyboard | drums
+  let activeInst = "keyboard"; // keyboard | drums
 
   const NWC = {
     merchant: "NITI",
@@ -715,6 +819,7 @@ a.tg-link:active, .tg-link:active {
   };
   const UNLOCK_KEY = "boogieUnlockedSession";
   const KEYBOARD_ID = "cool_keyboard";
+  const DRUMS_ID = "cool_drums";
 
   function normCode(s) {
     return String(s || "").trim().toUpperCase();
@@ -766,7 +871,7 @@ a.tg-link:active, .tg-link:active {
     } catch (e) { return []; }
   }
   function isUnlocked(id) {
-    if (id === KEYBOARD_ID) return getUnlocked().includes(KEYBOARD_ID);
+    if (id === KEYBOARD_ID || id === DRUMS_ID) return getUnlocked().includes(id);
     const p = profiles[id];
     if (!p) return false;
     if (!p.locked) return true;
@@ -782,19 +887,46 @@ a.tg-link:active, .tg-link:active {
   function isKeyboardUnlocked() {
     return isUnlocked(KEYBOARD_ID);
   }
-  function refreshKeyboardUI() {
-    const locked = $("keyboardLocked");
-    const wrap = $("keyboardWrap");
+  function isDrumsUnlocked() {
+    return isUnlocked(DRUMS_ID);
+  }
+  function setInstrument(inst) {
+    activeInst = inst === "drums" ? "drums" : "keyboard";
+    document.querySelectorAll(".inst-tab").forEach(t => {
+      t.classList.toggle("active", t.dataset.inst === activeInst);
+    });
+    refreshInstrumentUI();
+  }
+  function refreshInstrumentUI() {
     const hint = $("keyboardHint");
-    if (isKeyboardUnlocked()) {
-      if (locked) locked.style.display = "none";
-      if (wrap) wrap.style.display = "block";
-      if (hint) hint.textContent = "Tap the keys - every note makes the beast dance!";
+    const kLocked = $("keyboardLocked");
+    const kWrap = $("keyboardWrap");
+    const dLocked = $("drumsLocked");
+    const dWrap = $("drumsWrap");
+    if (kLocked) kLocked.style.display = "none";
+    if (kWrap) kWrap.style.display = "none";
+    if (dLocked) dLocked.style.display = "none";
+    if (dWrap) dWrap.style.display = "none";
+    if (activeInst === "drums") {
+      if (isDrumsUnlocked()) {
+        if (dWrap) dWrap.style.display = "block";
+        if (hint) hint.textContent = "Tap the pads — every hit makes the beast dance!";
+      } else {
+        if (dLocked) dLocked.style.display = "block";
+        if (hint) hint.textContent = "Cool Drums are locked. Unlock for $0.25 (this session only).";
+      }
     } else {
-      if (locked) locked.style.display = "block";
-      if (wrap) wrap.style.display = "none";
-      if (hint) hint.textContent = "Make music with your fingers - the beast dances to every note! Unlock for $0.25 (this session only).";
+      if (isKeyboardUnlocked()) {
+        if (kWrap) kWrap.style.display = "block";
+        if (hint) hint.textContent = "Tap the keys — every note makes the beast dance!";
+      } else {
+        if (kLocked) kLocked.style.display = "block";
+        if (hint) hint.textContent = "Cool Keyboard is locked. Unlock for $0.25 (this session only).";
+      }
     }
+  }
+  function refreshKeyboardUI() {
+    refreshInstrumentUI();
   }
 
   function refreshCreatureSelect() {
@@ -834,10 +966,15 @@ a.tg-link:active, .tg-link:active {
 
   function openUnlockModal(id, kind) {
     unlockKind = kind || "character";
-    unlockTarget = id || (unlockKind === "keyboard" ? KEYBOARD_ID : $("creature").value);
+    if (unlockKind === "keyboard") unlockTarget = KEYBOARD_ID;
+    else if (unlockKind === "drums") unlockTarget = DRUMS_ID;
+    else unlockTarget = id || $("creature").value;
     if (unlockKind === "keyboard") {
       if (isKeyboardUnlocked()) return;
       $("unlockTitle").textContent = "Unlock Cool Keyboard";
+    } else if (unlockKind === "drums") {
+      if (isDrumsUnlocked()) return;
+      $("unlockTitle").textContent = "Unlock Cool Drums";
     } else {
       if (!profiles[unlockTarget] || !profiles[unlockTarget].locked) return;
       if (isUnlocked(unlockTarget)) return;
@@ -848,11 +985,17 @@ a.tg-link:active, .tg-link:active {
     $("unlockTabGift").classList.remove("active");
     $("unlockUsdtBox").style.display = "block";
     $("unlockGiftBox").style.display = "none";
+    const g = $("giftMsg");
+    if (g) { g.style.display = "none"; g.textContent = ""; }
+    const ub = $("unlockGiftBtn");
+    if (ub) ub.disabled = false;
   }
   function closeUnlockModal() {
     $("unlockOverlay").style.display = "none";
     unlockTarget = null;
     unlockKind = "character";
+    const g = $("giftMsg");
+    if (g) { g.style.display = "none"; g.textContent = ""; }
   }
 
   function resize() {
@@ -1561,11 +1704,26 @@ a.tg-link:active, .tg-link:active {
     $("unlockUsdtBox").style.display = "block";
     $("unlockGiftBox").style.display = "none";
   });
+  function showGiftMsg(text, kind) {
+    const el = $("giftMsg");
+    if (!el) return;
+    el.style.display = "block";
+    el.className = "gift-msg " + (kind || "info");
+    el.textContent = text;
+  }
+  function clearGiftMsg() {
+    const el = $("giftMsg");
+    if (!el) return;
+    el.style.display = "none";
+    el.textContent = "";
+  }
+
   $("unlockTabGift").addEventListener("click", () => {
     $("unlockTabGift").classList.add("active");
     $("unlockTabUsdt").classList.remove("active");
     $("unlockUsdtBox").style.display = "none";
     $("unlockGiftBox").style.display = "block";
+    clearGiftMsg();
   });
   $("unlockPayBtn").addEventListener("click", () => {
     if (!unlockTarget) return;
@@ -1584,36 +1742,35 @@ a.tg-link:active, .tg-link:active {
   $("unlockGiftBtn").addEventListener("click", async () => {
     const code = ($("unlockGiftCode").value || "").trim();
     if (!code) {
-      $("status").textContent = "Enter a gift card code.";
+      showGiftMsg("Enter a gift card code first.", "warn");
       return;
     }
     if (!unlockTarget) return;
     const btn = $("unlockGiftBtn");
     if (btn) btn.disabled = true;
-    $("status").textContent = "Checking gift card…";
+    showGiftMsg("Checking gift card…", "info");
     try {
       const valid = await isValidGiftCard(code);
       if (!valid) {
-        $("status").textContent = "Invalid gift card code.";
+        showGiftMsg("Invalid gift card.", "err");
         if (btn) btn.disabled = false;
         return;
       }
       const used = await isGiftCardUsed(code);
       if (used) {
-        $("status").textContent = "This gift card was already used.";
+        showGiftMsg("This gift card was already used.", "warn");
         if (btn) btn.disabled = false;
         return;
       }
       await markGiftCardUsed(code);
-      applyUnlock(unlockTarget, unlockKind);
-      $("status").textContent =
-        (unlockKind === "keyboard"
-          ? "Cool Keyboard"
-          : (profiles[unlockTarget] && profiles[unlockTarget].name) || "Item") +
-        " unlocked with gift card!";
+      showGiftMsg("Gift card accepted! Unlocking…", "ok");
+      setTimeout(() => {
+        applyUnlock(unlockTarget, unlockKind);
+        clearGiftMsg();
+      }, 450);
     } catch (e) {
       console.error(e);
-      $("status").textContent = "Could not verify gift card. Try again.";
+      showGiftMsg("Could not verify gift card. Try again.", "err");
       if (btn) btn.disabled = false;
     }
   });
@@ -1622,8 +1779,16 @@ a.tg-link:active, .tg-link:active {
     markUnlocked(id);
     closeUnlockModal();
     if (kind === "keyboard" || id === KEYBOARD_ID) {
-      refreshKeyboardUI();
+      activeInst = "keyboard";
+      refreshInstrumentUI();
       $("status").textContent = "Cool Keyboard unlocked for this session! Tap the keys!";
+      burst(); burst();
+      return;
+    }
+    if (kind === "drums" || id === DRUMS_ID) {
+      activeInst = "drums";
+      setInstrument("drums");
+      $("status").textContent = "Cool Drums unlocked for this session! Hit the pads!";
       burst(); burst();
       return;
     }
@@ -1649,10 +1814,13 @@ a.tg-link:active, .tg-link:active {
     let draft = null;
     try { draft = raw ? JSON.parse(raw) : null; } catch (e) {}
     const id = ref || (draft && draft.id);
-    const kind = (draft && draft.kind) || (id === KEYBOARD_ID ? "keyboard" : "character");
+    let kind = (draft && draft.kind) || "character";
+    if (id === KEYBOARD_ID) kind = "keyboard";
+    if (id === DRUMS_ID) kind = "drums";
     if (!id) return;
     if (kind === "character" && !profiles[id]) return;
     if (kind === "keyboard" && id !== KEYBOARD_ID) return;
+    if (kind === "drums" && id !== DRUMS_ID) return;
     if (paid > 0 && Math.abs(paid - NWC.amount) > 0.02) return;
     try {
       sessionStorage.removeItem(NWC.draftKey);
@@ -1755,6 +1923,154 @@ a.tg-link:active, .tg-link:active {
     $("status").textContent = "Keyboard paused. Tap keys again anytime!";
   });
 
+  /* ===== COOL DRUMS ===== */
+  const DRUM_PADS = [
+    { label: "KICK", cls: "kick", type: "kick" },
+    { label: "SNARE", cls: "snare", type: "snare" },
+    { label: "HAT", cls: "hat", type: "hat" },
+    { label: "TOM", cls: "tom", type: "tom" },
+    { label: "CLAP", cls: "clap", type: "clap" },
+    { label: "CRASH", cls: "crash", type: "crash" }
+  ];
+
+  function playDrum(type) {
+    if (!isDrumsUnlocked()) return;
+    try {
+      const ctx2 = ensureAudio();
+      const now = ctx2.currentTime;
+      if (type === "kick") {
+        const osc = ctx2.createOscillator();
+        const gain = ctx2.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(40, now + 0.18);
+        gain.gain.setValueAtTime(0.5, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        osc.connect(gain);
+        gain.connect(ctx2.destination);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      } else if (type === "snare") {
+        const bufSize = ctx2.sampleRate * 0.15;
+        const buffer = ctx2.createBuffer(1, bufSize, ctx2.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+        const noise = ctx2.createBufferSource();
+        noise.buffer = buffer;
+        const filter = ctx2.createBiquadFilter();
+        filter.type = "highpass";
+        filter.frequency.value = 1200;
+        const gain = ctx2.createGain();
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx2.destination);
+        noise.start(now);
+        noise.stop(now + 0.15);
+      } else if (type === "hat" || type === "crash") {
+        const bufSize = ctx2.sampleRate * (type === "crash" ? 0.4 : 0.08);
+        const buffer = ctx2.createBuffer(1, bufSize, ctx2.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+        const noise = ctx2.createBufferSource();
+        noise.buffer = buffer;
+        const filter = ctx2.createBiquadFilter();
+        filter.type = "highpass";
+        filter.frequency.value = type === "crash" ? 4000 : 7000;
+        const gain = ctx2.createGain();
+        gain.gain.setValueAtTime(type === "crash" ? 0.28 : 0.22, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + (type === "crash" ? 0.4 : 0.08));
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx2.destination);
+        noise.start(now);
+        noise.stop(now + (type === "crash" ? 0.4 : 0.08));
+      } else if (type === "tom") {
+        const osc = ctx2.createOscillator();
+        const gain = ctx2.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(90, now + 0.2);
+        gain.gain.setValueAtTime(0.4, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc.connect(gain);
+        gain.connect(ctx2.destination);
+        osc.start(now);
+        osc.stop(now + 0.28);
+      } else if (type === "clap") {
+        const bufSize = ctx2.sampleRate * 0.12;
+        const buffer = ctx2.createBuffer(1, bufSize, ctx2.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+        const noise = ctx2.createBufferSource();
+        noise.buffer = buffer;
+        const filter = ctx2.createBiquadFilter();
+        filter.type = "bandpass";
+        filter.frequency.value = 1500;
+        const gain = ctx2.createGain();
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx2.destination);
+        noise.start(now);
+        noise.stop(now + 0.12);
+      }
+
+      keyboardActive = true;
+      mode = mode === "idle" ? "demo" : mode;
+      energy = Math.min(100, energy + 22 + Math.random() * 15);
+      beat++;
+      phase += 1.0;
+      kickPulse = 1.3;
+      burst();
+      $("stopBtn").disabled = false;
+      updateUI();
+      clearTimeout(keyDecayTimer);
+      keyDecayTimer = setTimeout(() => {
+        if (keyboardActive && mode === "demo") {
+          energy = Math.max(15, energy * 0.7);
+          updateUI();
+        }
+      }, 400);
+    } catch (e) {}
+  }
+
+  function buildDrums() {
+    const wrap = $("drums");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+    DRUM_PADS.forEach(p => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "drum " + p.cls;
+      btn.textContent = p.label;
+      const press = (ev) => {
+        ev.preventDefault();
+        btn.classList.add("down");
+        playDrum(p.type);
+      };
+      const release = () => btn.classList.remove("down");
+      btn.addEventListener("mousedown", press);
+      btn.addEventListener("mouseup", release);
+      btn.addEventListener("mouseleave", release);
+      btn.addEventListener("touchstart", press, { passive: false });
+      btn.addEventListener("touchend", release);
+      wrap.appendChild(btn);
+    });
+  }
+
+  document.querySelectorAll(".inst-tab").forEach(tab => {
+    tab.addEventListener("click", () => setInstrument(tab.dataset.inst));
+  });
+  $("unlockDrumsBtn").addEventListener("click", () => openUnlockModal(DRUMS_ID, "drums"));
+  $("drumsStop").addEventListener("click", () => {
+    keyboardActive = false;
+    stop(true);
+    $("status").textContent = "Drums paused. Hit the pads again anytime!";
+  });
+
   $("versusBtn").addEventListener("click", openVersus);
   $("versusStartTurn").addEventListener("click", startVersusTurn);
   $("versusCancel").addEventListener("click", exitVersus);
@@ -1777,7 +2093,8 @@ a.tg-link:active, .tg-link:active {
 
   refreshCreatureSelect();
   buildKeyboard();
-  refreshKeyboardUI();
+  buildDrums();
+  refreshInstrumentUI();
   updateUI();
   refreshHighscoreUI();
   cancelAnimationFrame(raf);
