@@ -302,6 +302,80 @@
       margin: 6px 0;
       min-height: 1.4em;
     }
+    .sounds-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 2px dashed rgba(253,224,71,0.35);
+      background: rgba(253,224,71,0.08);
+      text-align: center;
+    }
+    .sounds-box h3 { color: var(--yellow); font-size: 0.95rem; margin-bottom: 6px; }
+    .sounds-box p { font-size: 0.78rem; color: #e9d5ff; margin-bottom: 10px; line-height: 1.4; }
+    .btn-unlock-sounds {
+      background: linear-gradient(135deg, var(--yellow), var(--orange));
+      color: #1a1035;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+      font-family: inherit;
+    }
+    .sounds-unlocked-badge {
+      display: none;
+      font-weight: 800;
+      color: #34d399;
+      font-size: 0.9rem;
+    }
+    .unlock-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(10,8,24,.78);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .unlock-modal {
+      width: min(100%, 360px);
+      background: linear-gradient(160deg, #2a1a4a, #1a1035);
+      border: 2px solid rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 18px;
+      text-align: left;
+    }
+    .unlock-modal h3 { color: var(--yellow); margin-bottom: 6px; }
+    .unlock-modal .sub { font-size: 0.85rem; color: #c4b5fd; margin-bottom: 12px; line-height: 1.4; }
+    .unlock-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+    .unlock-tab {
+      border: 0; border-radius: 12px; padding: 10px; font-weight: 800; cursor: pointer;
+      background: rgba(255,255,255,0.08); color: #e9d5ff; font-family: inherit;
+    }
+    .unlock-tab.active { background: var(--cyan); color: #0f172a; }
+    .unlock-modal input {
+      width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.25);
+      background: #0f0a1e; color: #fff; font-weight: 700; margin-bottom: 10px;
+    }
+    a.link, .link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 0.82rem;
+      text-decoration: none !important;
+      color: #1a1035 !important;
+      background: linear-gradient(135deg, #5eead4, #fde047, #ff6eb4);
+      box-shadow: 0 3px 0 rgba(0,0,0,0.25), 0 0 16px rgba(94,234,212,0.35);
+      -webkit-text-fill-color: #1a1035;
+    }
+    a.link:active, .link:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+    }
   </style>
 </head>
 <body>
@@ -365,8 +439,43 @@
       <span>let there be darkness</span><span>light</span><span>dark</span>
     </div>
 
+    <div class="sounds-box" id="soundsBox">
+      <h3>🔊 Cool Sounds Pack</h3>
+      <p>Unlock alarm, siren, party blasts, game-over &amp; win fanfares when sound is detected or games end.</p>
+      <button type="button" class="btn-unlock-sounds" id="btnUnlockSounds">🔓 Unlock Cool Sounds · $0.25</button>
+      <div class="sounds-unlocked-badge" id="soundsUnlockedBadge">✅ Cool Sounds unlocked this session</div>
+      <p class="hint" style="margin-top:10px;margin-bottom:0;">
+        Gift cards:
+        <a class="link" href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener">📲 Join SnappQuest on Telegram</a>
+      </p>
+    </div>
+
     <p class="hint">Best on Android Chrome. Allow mic + camera.<br>Voice works when the Voice button is ON.</p>
     <div class="error" id="error"></div>
+  </div>
+
+  <div id="unlockOverlay" class="unlock-overlay" style="display:none;">
+    <div class="unlock-modal">
+      <h3>Unlock Cool Sounds</h3>
+      <p class="sub">Pay <strong>$0.25 USDT</strong> once. Unlock lasts until you refresh this page.</p>
+      <div class="unlock-tabs">
+        <button type="button" class="unlock-tab active" id="unlockTabUsdt">USDT</button>
+        <button type="button" class="unlock-tab" id="unlockTabGift">Gift card</button>
+      </div>
+      <div id="unlockUsdtBox">
+        <button type="button" class="btn-unlock-sounds" id="unlockPayBtn">Pay $0.25 with USDT</button>
+        <p class="hint" style="text-align:center;margin-top:8px;">Powered by NoWalletConnect · USDT only</p>
+      </div>
+      <div id="unlockGiftBox" style="display:none;">
+        <input type="text" id="unlockGiftCode" placeholder="SnappQuest gift card code">
+        <button type="button" class="btn-voice" id="unlockGiftBtn" style="width:100%;">Redeem gift card</button>
+        <p class="hint" style="text-align:center;margin-top:10px;">
+          Need a gift card?
+          <a class="link" href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener">📲 Join SnappQuest on Telegram</a>
+        </p>
+      </div>
+      <button type="button" class="btn-exit-game" id="unlockCancel" style="width:100%;margin-top:10px;">Cancel</button>
+    </div>
   </div>
 
   <script>
@@ -419,6 +528,28 @@
       "day", "night", "let there be light", "light", "dark"
     ];
 
+    const NWC = {
+      merchant: "SoundTorch",
+      checkout: "https://niti.com.ng/tools/nowalletconnect/checkout.html",
+      amount: 0.25,
+      draftKey: "soundtorch_unlock_draft"
+    };
+    const SOUNDS_KEY = "soundTorchCoolSoundsSession";
+    function coolSoundsUnlocked() {
+      try { return sessionStorage.getItem(SOUNDS_KEY) === "1"; } catch (e) { return false; }
+    }
+    function setCoolSoundsUnlocked() {
+      try { sessionStorage.setItem(SOUNDS_KEY, "1"); } catch (e) {}
+      refreshSoundsUI();
+    }
+    function refreshSoundsUI() {
+      const unlocked = coolSoundsUnlocked();
+      const btn = document.getElementById("btnUnlockSounds");
+      const badge = document.getElementById("soundsUnlockedBadge");
+      if (btn) btn.style.display = unlocked ? "none" : "block";
+      if (badge) badge.style.display = unlocked ? "block" : "none";
+    }
+
     function playTone(freq, duration, type = "sine", volume = 0.15) {
       const ctx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
       try {
@@ -436,11 +567,33 @@
       } catch (e) {}
     }
     function playOnSound() {
+      if (coolSoundsUnlocked()) {
+        // Party blast / laser on
+        playTone(523, 0.08, "square", 0.12);
+        setTimeout(() => playTone(784, 0.1, "square", 0.14), 50);
+        setTimeout(() => playTone(1046, 0.18, "sawtooth", 0.12), 110);
+        setTimeout(() => playTone(1318, 0.2, "sine", 0.1), 200);
+        return;
+      }
       playTone(880, 0.12, "sine", 0.2);
       setTimeout(() => playTone(1175, 0.15, "sine", 0.18), 80);
     }
     function playTick() { playTone(660, 0.06, "square", 0.08); }
-    function playOffSound() { playTone(440, 0.18, "triangle", 0.15); }
+    function playOffSound() {
+      if (coolSoundsUnlocked()) {
+        playTone(392, 0.12, "triangle", 0.14);
+        setTimeout(() => playTone(262, 0.22, "sine", 0.12), 90);
+        return;
+      }
+      playTone(440, 0.18, "triangle", 0.15);
+    }
+    function playDetectSfx() {
+      if (!coolSoundsUnlocked()) return;
+      // Alarm / siren-ish detection sting
+      playTone(880, 0.1, "square", 0.14);
+      setTimeout(() => playTone(660, 0.1, "square", 0.14), 90);
+      setTimeout(() => playTone(990, 0.14, "sawtooth", 0.12), 180);
+    }
     function playCountdownTick(urgent) {
       if (urgent) {
         playTone(880, 0.08, "square", 0.14);
@@ -450,15 +603,35 @@
       }
     }
     function playTimeUpSfx() {
+      if (coolSoundsUnlocked()) {
+        playTone(440, 0.12, "square", 0.16);
+        setTimeout(() => playTone(330, 0.15, "square", 0.14), 100);
+        setTimeout(() => playTone(220, 0.28, "sawtooth", 0.12), 220);
+        setTimeout(() => playTone(165, 0.35, "triangle", 0.1), 400);
+        return;
+      }
       playTone(400, 0.15, "triangle", 0.16);
       setTimeout(() => playTone(300, 0.2, "triangle", 0.14), 120);
       setTimeout(() => playTone(220, 0.25, "sawtooth", 0.1), 260);
     }
     function playWinSfx() {
+      if (coolSoundsUnlocked()) {
+        [523, 659, 784, 988, 1175, 1318].forEach((f, i) => {
+          setTimeout(() => playTone(f, 0.16, i % 2 ? "triangle" : "sine", 0.14), i * 90);
+        });
+        setTimeout(() => playTone(1568, 0.4, "sine", 0.12), 580);
+        return;
+      }
       [523, 659, 784, 1046].forEach((f, i) => {
         setTimeout(() => playTone(f, 0.18, "sine", 0.14), i * 110);
       });
       setTimeout(() => playTone(1318, 0.35, "triangle", 0.12), 480);
+    }
+    function playGameOverSfx() {
+      if (!coolSoundsUnlocked()) return;
+      playTone(392, 0.2, "sawtooth", 0.14);
+      setTimeout(() => playTone(311, 0.25, "triangle", 0.14), 150);
+      setTimeout(() => playTone(233, 0.4, "sine", 0.12), 320);
     }
     function playTieSfx() {
       playTone(520, 0.15, "sine", 0.12);
@@ -564,10 +737,12 @@
           gameLive.textContent = "Detections: " + detectCount + " (lower is better)";
         }
         setStatus("Detected! Stay quiet…", "detected");
+        playDetectSfx();
         return;
       }
 
       setStatus("Sound detected! 🎉", "detected");
+      playDetectSfx();
       setTorch(true).then(ok => { if (ok) scheduleAutoOff(); });
     }
     function analyze() {
@@ -827,6 +1002,7 @@
           gameTimer.textContent = "TIME UP!";
           gameLive.textContent = "Time's up - locking in your score…";
           setStatus("Time up!", "detected");
+          playTimeUpSfx();
           // short pause so players see the text, then score
           setTimeout(() => endGameTurn(), 800);
         }
@@ -887,6 +1063,7 @@
       } else {
         gameResult.textContent = "🤝 It's a tie!";
         playTieSfx();
+        playGameOverSfx();
       }
       // Highscore from best player score this match
       const best = Math.max(p1, p2);
@@ -946,7 +1123,80 @@
     document.getElementById("pickVoice").addEventListener("click", () => pickGame("voice"));
     btnStartTurn.addEventListener("click", startGameTurn);
     btnExitGame.addEventListener("click", exitGame);
+
+    // Cool Sounds unlock
+    const unlockOverlay = document.getElementById("unlockOverlay");
+    document.getElementById("btnUnlockSounds").addEventListener("click", () => {
+      unlockOverlay.style.display = "flex";
+      document.getElementById("unlockTabUsdt").classList.add("active");
+      document.getElementById("unlockTabGift").classList.remove("active");
+      document.getElementById("unlockUsdtBox").style.display = "block";
+      document.getElementById("unlockGiftBox").style.display = "none";
+    });
+    document.getElementById("unlockCancel").addEventListener("click", () => {
+      unlockOverlay.style.display = "none";
+    });
+    unlockOverlay.addEventListener("click", (e) => {
+      if (e.target === unlockOverlay) unlockOverlay.style.display = "none";
+    });
+    document.getElementById("unlockTabUsdt").addEventListener("click", () => {
+      document.getElementById("unlockTabUsdt").classList.add("active");
+      document.getElementById("unlockTabGift").classList.remove("active");
+      document.getElementById("unlockUsdtBox").style.display = "block";
+      document.getElementById("unlockGiftBox").style.display = "none";
+    });
+    document.getElementById("unlockTabGift").addEventListener("click", () => {
+      document.getElementById("unlockTabGift").classList.add("active");
+      document.getElementById("unlockTabUsdt").classList.remove("active");
+      document.getElementById("unlockUsdtBox").style.display = "none";
+      document.getElementById("unlockGiftBox").style.display = "block";
+    });
+    document.getElementById("unlockPayBtn").addEventListener("click", () => {
+      const draft = { product: "cool_sounds", amount: NWC.amount, t: Date.now() };
+      try {
+        sessionStorage.setItem(NWC.draftKey, JSON.stringify(draft));
+        localStorage.setItem(NWC.draftKey, JSON.stringify(draft));
+      } catch (e) {}
+      const u = new URL(NWC.checkout);
+      u.searchParams.set("merchant", NWC.merchant);
+      u.searchParams.set("amount", String(NWC.amount));
+      u.searchParams.set("asset", "usdt");
+      u.searchParams.set("ref", "cool_sounds");
+      window.location.href = u.toString();
+    });
+    document.getElementById("unlockGiftBtn").addEventListener("click", () => {
+      const code = (document.getElementById("unlockGiftCode").value || "").trim();
+      if (!code) {
+        errorEl.textContent = "Enter a gift card code.";
+        return;
+      }
+      // Session unlock (wire real gift-sheet validation in production)
+      setCoolSoundsUnlocked();
+      unlockOverlay.style.display = "none";
+      setStatus("Cool Sounds unlocked! 🔊", "detected");
+      playOnSound();
+    });
+    (function captureSoundsReturn() {
+      const q = new URLSearchParams(location.search);
+      if ((q.get("status") || "").toLowerCase() !== "success") return;
+      const merchant = (q.get("merchant") || "").trim().toLowerCase();
+      if (merchant !== String(NWC.merchant).toLowerCase()) return;
+      const paid = parseFloat(q.get("amount") || q.get("paid") || "0");
+      const ref = (q.get("ref") || "").trim();
+      if (ref && ref !== "cool_sounds") return;
+      if (paid > 0 && Math.abs(paid - NWC.amount) > 0.02) return;
+      try {
+        sessionStorage.removeItem(NWC.draftKey);
+        localStorage.removeItem(NWC.draftKey);
+      } catch (e) {}
+      history.replaceState({}, "", location.pathname + location.hash);
+      setCoolSoundsUnlocked();
+      setStatus("Cool Sounds unlocked! 🔊", "detected");
+      playOnSound();
+    })();
+
     refreshHighscoreUI();
+    refreshSoundsUI();
   </script>
 </body>
 </html>

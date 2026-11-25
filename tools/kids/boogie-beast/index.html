@@ -126,6 +126,27 @@ header {
   padding: 8px 20px;
   animation: timeUpPop 0.35s ease;
 }
+.versus-hud-msg {
+  font-size: clamp(1.15rem, 4vw, 1.55rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 12px rgba(0,0,0,.6);
+  background: rgba(16,12,36,.88);
+  border: 2px solid rgba(253,224,71,0.55);
+  border-radius: 16px;
+  padding: 10px 18px;
+  color: var(--yellow);
+  max-width: 92vw;
+  animation: timeUpPop 0.35s ease;
+}
+.versus-hud-msg.turn {
+  border-color: rgba(94,234,212,0.5);
+  color: var(--cyan);
+}
+.versus-hud-msg.win {
+  border-color: rgba(253,224,71,0.65);
+  color: var(--yellow);
+}
 @keyframes timeUpPop {
   from { transform: scale(0.6); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
@@ -336,6 +357,79 @@ canvas {
   .controls .btn:first-child { grid-column: span 2; }
   .tag { display: none; }
 }
+
+.unlock-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(10,8,24,.75);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.unlock-modal {
+  width: min(100%, 360px);
+  background: linear-gradient(160deg, #2a1a4a, #1a1035);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 20px;
+  padding: 20px 18px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.5);
+}
+.unlock-modal h3 { margin: 0 0 6px; font-size: 1.2rem; color: var(--yellow); }
+.unlock-sub { font-size: .85rem; color: #c4b5fd; margin: 0 0 14px; line-height: 1.4; }
+.unlock-tabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  background: rgba(0,0,0,.25); padding: 4px; border-radius: 12px; margin-bottom: 12px;
+}
+.unlock-tab {
+  border: 0; border-radius: 10px; padding: 10px; font-weight: 800; cursor: pointer;
+  background: transparent; color: #c4b5fd;
+}
+.unlock-tab.active { background: var(--cyan); color: #1a1035; }
+
+.keys {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.key {
+  width: 42px;
+  height: 110px;
+  border: 0;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(180deg, #fff 0%, #e2e8f0 100%);
+  color: #1a1035;
+  font-weight: 900;
+  font-size: 0.75rem;
+  box-shadow: 0 4px 0 #94a3b8;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.key:active, .key.down {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #94a3b8;
+  background: linear-gradient(180deg, #fde047, #fbbf24);
+}
+.key.black {
+  width: 32px;
+  height: 70px;
+  margin: 0 -16px;
+  z-index: 2;
+  background: linear-gradient(180deg, #334155, #0f172a);
+  color: #e2e8f0;
+  box-shadow: 0 4px 0 #020617;
+  border-radius: 0 0 8px 8px;
+}
+.key.black:active, .key.black.down {
+  background: linear-gradient(180deg, #c084fc, #7c3aed);
+  box-shadow: 0 1px 0 #020617;
+}
+@media (max-width: 420px) {
+  .key { width: 34px; height: 96px; font-size: 0.65rem; }
+  .key.black { width: 26px; height: 60px; margin: 0 -12px; }
+}
 </style>
 </head>
 <body>
@@ -355,6 +449,7 @@ canvas {
     <!-- Live versus HUD on stage -->
     <div class="versus-hud" id="versusHud" style="display:none;">
       <div class="versus-hud-timeup" id="versusHudTimeUp" style="display:none;">TIME UP!</div>
+      <div class="versus-hud-msg" id="versusHudMsg" style="display:none;"></div>
       <div class="versus-hud-time" id="versusHudTime">60s</div>
       <div class="versus-hud-stats">
         <div><span class="vh-label">Score</span> <span id="versusHudScore">0</span></div>
@@ -413,12 +508,8 @@ canvas {
     <div class="row">
       <label class="fileLabel" for="musicFile">📁 Choose a song</label>
       <input class="file" id="musicFile" type="file" accept="audio/*">
-      <select class="select" id="creature">
-        <option value="bloop">Bloop the Beast</option>
-        <option value="munch">Munch the Goblin</option>
-        <option value="wiggles">Sir Wiggles</option>
-        <option value="spark">Spark the Star</option>
-      </select>
+      <select class="select" id="creature"></select>
+      <button type="button" class="btn secondary" id="unlockBtn" style="display:none;padding:10px 12px;font-size:.85rem;">🔓 Unlock $0.25</button>
     </div>
     <audio id="player" controls style="width:100%;margin-top:12px;display:none"></audio>
     <div class="row" style="margin-top:12px">
@@ -430,8 +521,51 @@ canvas {
     <p class="hint">Microphone works best with music playing nearby. File mode analyses the song directly. Everything stays in your browser - nothing is uploaded.</p>
   </section>
 
-  <div class="footer">Boogie Beast • Turn up the fun 🔊</div>
+  <section class="panel" id="keyboardPanel">
+    <h2>🎹 Cool Keyboard</h2>
+    <p class="hint" id="keyboardHint">Tap the keys to make music — the beast dances to every note! Unlock for $0.25 (this browser session only).</p>
+    <div id="keyboardLocked" style="text-align:center;padding:12px 0;">
+      <button type="button" class="btn versus" id="unlockKeyboardBtn">🔓 Unlock Cool Keyboard · $0.25</button>
+      <p class="hint" style="margin-top:10px;">
+        Or unlock free with a gift card from
+        <a href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener" style="color:var(--cyan);font-weight:800;text-decoration:none;">SnappQuest Telegram</a>
+      </p>
+    </div>
+    <div id="keyboardWrap" style="display:none;">
+      <div class="keys" id="keys"></div>
+      <div class="row" style="margin-top:10px;justify-content:center;">
+        <button type="button" class="btn pink" id="keyboardStop" style="padding:10px 14px;font-size:.85rem;">■ Stop keys</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">Boogie Beast • Turn up the fun 🔊 · Cool characters are unofficial fan-style drawings</div>
 </main>
+
+<!-- Unlock modal -->
+<div id="unlockOverlay" class="unlock-overlay" style="display:none;">
+  <div class="unlock-modal">
+    <h3 id="unlockTitle">Unlock character</h3>
+    <p class="unlock-sub">Pay <strong>$0.25 USDT</strong> once. Unlock lasts until you refresh this page.</p>
+    <div class="unlock-tabs">
+      <button type="button" class="unlock-tab active" id="unlockTabUsdt" data-m="usdt">USDT</button>
+      <button type="button" class="unlock-tab" id="unlockTabGift" data-m="gift">Gift card</button>
+    </div>
+    <div id="unlockUsdtBox">
+      <button type="button" class="btn versus" id="unlockPayBtn" style="width:100%;">Pay $0.25 with USDT</button>
+      <p class="hint" style="text-align:center;margin-top:8px;">Powered by NoWalletConnect · asset locked to USDT</p>
+    </div>
+    <div id="unlockGiftBox" style="display:none;">
+      <input type="text" id="unlockGiftCode" placeholder="SnappQuest gift card code" style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:#1a1035;color:#fff;font-weight:700;margin-bottom:10px;">
+      <button type="button" class="btn secondary" id="unlockGiftBtn" style="width:100%;">Redeem gift card</button>
+      <p class="hint" style="text-align:center;margin-top:12px;">
+        Need a gift card?
+        <a href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener" style="color:var(--cyan);font-weight:800;text-decoration:none;">Join SnappQuest on Telegram</a>
+      </p>
+    </div>
+    <button type="button" class="btn pink" id="unlockCancel" style="width:100%;margin-top:10px;">Cancel</button>
+  </div>
+</div>
 
 <script>
 (() => {
@@ -530,12 +664,125 @@ canvas {
   }
 
   const profiles = {
-    bloop:   { name: "Bloop the Beast",  body: "#a3e635", belly: "#d9f99d", accent: "#facc15", eyes: 1 },
-    munch:   { name: "Munch the Goblin", body: "#fb923c", belly: "#fed7aa", accent: "#fde047", eyes: 2 },
-    wiggles: { name: "Sir Wiggles",      body: "#67e8f9", belly: "#cffafe", accent: "#f472b6", eyes: 1 },
-    spark:   { name: "Spark the Star",   body: "#c084fc", belly: "#e9d5ff", accent: "#fde047", eyes: 2 }
+    bloop:    { name: "Bloop the Beast",  body: "#a3e635", belly: "#d9f99d", accent: "#facc15", eyes: 1, locked: false, style: "round" },
+    munch:    { name: "Munch the Goblin", body: "#fb923c", belly: "#fed7aa", accent: "#fde047", eyes: 2, locked: false, style: "round" },
+    wiggles:  { name: "Sir Wiggles",      body: "#67e8f9", belly: "#cffafe", accent: "#f472b6", eyes: 1, locked: false, style: "round" },
+    spark:    { name: "Spark the Star",   body: "#c084fc", belly: "#e9d5ff", accent: "#fde047", eyes: 2, locked: false, style: "round" },
+    // Cool unlockables — original simple drawings, not official art
+    spongebob:{ name: "Square Bob",       body: "#fde047", belly: "#fef08a", accent: "#3b82f6", eyes: 1, locked: true, style: "square" },
+    spiderman:{ name: "Web Hero",         body: "#ef4444", belly: "#1e3a8a", accent: "#fff", eyes: 2, locked: true, style: "hero" },
+    superman: { name: "Sky Hero",         body: "#2563eb", belly: "#fef08a", accent: "#ef4444", eyes: 1, locked: true, style: "cape" },
+    batman:   { name: "Night Caped",      body: "#1e293b", belly: "#334155", accent: "#fde047", eyes: 2, locked: true, style: "bat" },
+    pjmask:   { name: "Mask Squad",       body: "#22c55e", belly: "#86efac", accent: "#a855f7", eyes: 1, locked: true, style: "mask" }
   };
   let creature = "bloop";
+  let unlockTarget = null;
+  let unlockKind = "character"; // character | keyboard
+
+  const NWC = {
+    merchant: "BoogieBeast",
+    checkout: "https://niti.com.ng/tools/nowalletconnect/checkout.html",
+    amount: 0.25,
+    draftKey: "boogie_unlock_draft"
+  };
+  const UNLOCK_KEY = "boogieUnlockedSession";
+  const KEYBOARD_ID = "cool_keyboard";
+
+  function getUnlocked() {
+    try {
+      const raw = sessionStorage.getItem(UNLOCK_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+  function isUnlocked(id) {
+    if (id === KEYBOARD_ID) return getUnlocked().includes(KEYBOARD_ID);
+    const p = profiles[id];
+    if (!p) return false;
+    if (!p.locked) return true;
+    return getUnlocked().includes(id);
+  }
+  function markUnlocked(id) {
+    const list = getUnlocked();
+    if (!list.includes(id)) {
+      list.push(id);
+      try { sessionStorage.setItem(UNLOCK_KEY, JSON.stringify(list)); } catch (e) {}
+    }
+  }
+  function isKeyboardUnlocked() {
+    return isUnlocked(KEYBOARD_ID);
+  }
+  function refreshKeyboardUI() {
+    const locked = $("keyboardLocked");
+    const wrap = $("keyboardWrap");
+    const hint = $("keyboardHint");
+    if (isKeyboardUnlocked()) {
+      if (locked) locked.style.display = "none";
+      if (wrap) wrap.style.display = "block";
+      if (hint) hint.textContent = "Tap the keys — every note makes the beast dance!";
+    } else {
+      if (locked) locked.style.display = "block";
+      if (wrap) wrap.style.display = "none";
+      if (hint) hint.textContent = "Make music with your fingers — the beast dances to every note! Unlock for $0.25 (this session only).";
+    }
+  }
+
+  function refreshCreatureSelect() {
+    const sel = $("creature");
+    if (!sel) return;
+    const prev = sel.value || creature;
+    sel.innerHTML = "";
+    Object.keys(profiles).forEach(id => {
+      const p = profiles[id];
+      const opt = document.createElement("option");
+      opt.value = id;
+      opt.textContent = isUnlocked(id) ? p.name : ("🔒 " + p.name + " · $0.25");
+      sel.appendChild(opt);
+    });
+    if (profiles[prev] && isUnlocked(prev)) {
+      sel.value = prev;
+      creature = prev;
+    } else {
+      sel.value = "bloop";
+      creature = "bloop";
+    }
+    $("beastName").textContent = profiles[creature].name;
+    updateUnlockBtn();
+  }
+
+  function updateUnlockBtn() {
+    const btn = $("unlockBtn");
+    if (!btn) return;
+    const id = $("creature").value;
+    if (profiles[id] && profiles[id].locked && !isUnlocked(id)) {
+      btn.style.display = "inline-flex";
+      btn.textContent = "🔓 Unlock " + profiles[id].name + " · $0.25";
+    } else {
+      btn.style.display = "none";
+    }
+  }
+
+  function openUnlockModal(id, kind) {
+    unlockKind = kind || "character";
+    unlockTarget = id || (unlockKind === "keyboard" ? KEYBOARD_ID : $("creature").value);
+    if (unlockKind === "keyboard") {
+      if (isKeyboardUnlocked()) return;
+      $("unlockTitle").textContent = "Unlock Cool Keyboard";
+    } else {
+      if (!profiles[unlockTarget] || !profiles[unlockTarget].locked) return;
+      if (isUnlocked(unlockTarget)) return;
+      $("unlockTitle").textContent = "Unlock " + profiles[unlockTarget].name;
+    }
+    $("unlockOverlay").style.display = "flex";
+    $("unlockTabUsdt").classList.add("active");
+    $("unlockTabGift").classList.remove("active");
+    $("unlockUsdtBox").style.display = "block";
+    $("unlockGiftBox").style.display = "none";
+  }
+  function closeUnlockModal() {
+    $("unlockOverlay").style.display = "none";
+    unlockTarget = null;
+    unlockKind = "character";
+  }
 
   function resize() {
     const r = canvas.getBoundingClientRect();
@@ -614,20 +861,73 @@ canvas {
       ctx.restore();
     }
 
+    // Body shape by style (original drawings only)
     ctx.fillStyle = p.body;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, 56, 66 + Math.sin(t * 0.012) * 2, 0, 0, Math.PI * 2);
-    ctx.fill();
+    if (p.style === "square") {
+      const h = 66 + Math.sin(t * 0.012) * 2;
+      ctx.beginPath();
+      ctx.roundRect(-48, -h + 10, 96, h + 40, 12);
+      ctx.fill();
+    } else {
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 56, 66 + Math.sin(t * 0.012) * 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
     ctx.fillStyle = p.belly;
     ctx.beginPath();
-    ctx.ellipse(0, 22, 32, 32, 0, 0, Math.PI * 2);
+    if (p.style === "square") {
+      ctx.roundRect(-28, 8, 56, 40, 8);
+    } else {
+      ctx.ellipse(0, 22, 32, 32, 0, 0, Math.PI * 2);
+    }
     ctx.fill();
 
-    for (const s of [-1, 1]) {
+    // Ears / cape / mask accents
+    if (p.style === "cape" || p.style === "bat") {
       ctx.fillStyle = p.accent;
       ctx.beginPath();
-      ctx.moveTo(s * 28, -50);
-      ctx.quadraticCurveTo(s * 52, -88, s * 46, -38);
+      ctx.moveTo(-40, 10);
+      ctx.quadraticCurveTo(0, 90 + energy * 0.15, 40, 10);
+      ctx.lineTo(30, 20);
+      ctx.quadraticCurveTo(0, 70, -30, 20);
+      ctx.closePath();
+      ctx.fill();
+    } else if (p.style === "mask") {
+      ctx.fillStyle = p.accent;
+      ctx.beginPath();
+      ctx.ellipse(0, -18, 38, 22, 0, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (p.style !== "hero") {
+      for (const s of [-1, 1]) {
+        ctx.fillStyle = p.accent;
+        ctx.beginPath();
+        ctx.moveTo(s * 28, -50);
+        ctx.quadraticCurveTo(s * 52, -88, s * 46, -38);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+    if (p.style === "hero") {
+      // simple web-ish chest mark
+      ctx.strokeStyle = p.accent;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(-20, 10);
+      ctx.lineTo(0, 28);
+      ctx.lineTo(20, 10);
+      ctx.moveTo(0, 28);
+      ctx.lineTo(0, 44);
+      ctx.stroke();
+    }
+    if (p.style === "bat") {
+      ctx.fillStyle = p.accent;
+      ctx.beginPath();
+      ctx.moveTo(-18, -58);
+      ctx.lineTo(0, -42);
+      ctx.lineTo(18, -58);
+      ctx.lineTo(10, -48);
+      ctx.lineTo(0, -54);
+      ctx.lineTo(-10, -48);
       ctx.closePath();
       ctx.fill();
     }
@@ -723,13 +1023,13 @@ canvas {
       energy > 38 ? "Currently: getting seriously funky 🕺" :
       "Waiting for the beat…";
 
-    // Versus scoring sample + live HUD
-    if (versusActive && (versusPhase === "p1" || versusPhase === "p2")) {
-      if (mode !== "idle") {
-        versusEnergySum += energy;
-        versusEnergySamples++;
-        if (energy > versusPeakEnergy) versusPeakEnergy = energy;
-      }
+    // Versus scoring sample + live HUD (only during an active turn)
+    const hudMsg = $("versusHudMsg");
+    const msgVisible = hudMsg && hudMsg.style.display !== "none" && hudMsg.textContent;
+    if (versusActive && (versusPhase === "p1" || versusPhase === "p2") && mode === "mic") {
+      versusEnergySum += energy;
+      versusEnergySamples++;
+      if (energy > versusPeakEnergy) versusPeakEnergy = energy;
       const liveScore = computeTurnScore();
       const hud = $("versusHud");
       const hudScore = $("versusHudScore");
@@ -737,15 +1037,25 @@ canvas {
       const hudBeatRow = $("versusHudBeatRow");
       const hudToBeat = $("versusHudToBeat");
       if (hud) hud.style.display = "flex";
+      if (hudMsg) hudMsg.style.display = "none";
       if (hudScore) hudScore.textContent = String(liveScore);
-      if (hudTime) hudTime.textContent = Math.max(0, versusSecondsLeft) + "s";
+      if (hudTime) {
+        hudTime.style.display = "";
+        hudTime.textContent = Math.max(0, versusSecondsLeft) + "s";
+      }
+      const stats = hud && hud.querySelector(".versus-hud-stats");
+      if (stats) stats.style.display = "";
       if (versusPhase === "p2" && versusScoreP1 != null) {
         if (hudBeatRow) hudBeatRow.style.display = "";
         if (hudToBeat) hudToBeat.textContent = String(versusScoreP1);
       } else {
         if (hudBeatRow) hudBeatRow.style.display = "none";
       }
-    } else {
+    } else if (msgVisible) {
+      // Keep "Player 2 your turn" / winner banner on stage
+      const hud = $("versusHud");
+      if (hud) hud.style.display = "flex";
+    } else if (!versusActive || versusPhase === "idle") {
       const hud = $("versusHud");
       if (hud) hud.style.display = "none";
     }
@@ -933,6 +1243,9 @@ canvas {
     refreshHighscoreUI();
     const timeUpEl = $("versusHudTimeUp");
     if (timeUpEl) timeUpEl.style.display = "none";
+    hideHudMsg();
+    const hud = $("versusHud");
+    if (hud) hud.style.display = "none";
     stop(true);
   }
 
@@ -941,6 +1254,7 @@ canvas {
     versusPhase = "idle";
     clearInterval(versusTimerId);
     $("versusPanel").classList.remove("open");
+    hideHudMsg();
     const hud = $("versusHud");
     if (hud) hud.style.display = "none";
     stop(true);
@@ -978,6 +1292,7 @@ canvas {
     $("versusTimer").textContent = "60";
     const timeUpEl = $("versusHudTimeUp");
     if (timeUpEl) timeUpEl.style.display = "none";
+    hideHudMsg();
     const hudTimeReset = $("versusHudTime");
     if (hudTimeReset) {
       hudTimeReset.style.display = "";
@@ -1028,14 +1343,45 @@ canvas {
     }, 1000);
   }
 
+  function showHudMsg(text, kind) {
+    const hud = $("versusHud");
+    const msg = $("versusHudMsg");
+    const timeUpEl = $("versusHudTimeUp");
+    const hudTime = $("versusHudTime");
+    const stats = hud && hud.querySelector(".versus-hud-stats");
+    if (!hud || !msg) return;
+    hud.style.display = "flex";
+    if (timeUpEl) timeUpEl.style.display = "none";
+    if (hudTime) hudTime.style.display = "none";
+    if (stats) stats.style.display = "none";
+    msg.style.display = "block";
+    msg.className = "versus-hud-msg" + (kind ? " " + kind : "");
+    msg.textContent = text;
+  }
+
+  function hideHudMsg() {
+    const msg = $("versusHudMsg");
+    if (msg) {
+      msg.style.display = "none";
+      msg.textContent = "";
+      msg.className = "versus-hud-msg";
+    }
+    const hudTime = $("versusHudTime");
+    if (hudTime) hudTime.style.display = "";
+    const hud = $("versusHud");
+    const stats = hud && hud.querySelector(".versus-hud-stats");
+    if (stats) stats.style.display = "";
+  }
+
   function endVersusTurn() {
     stop(true);
-    const hud = $("versusHud");
-    if (hud) hud.style.display = "none";
     const timeUpEl = $("versusHudTimeUp");
     if (timeUpEl) timeUpEl.style.display = "none";
     const hudTime = $("versusHudTime");
-    if (hudTime) hudTime.style.display = "";
+    if (hudTime) {
+      hudTime.style.display = "";
+      hudTime.style.color = "";
+    }
     const score = computeTurnScore();
 
     if (versusPhase === "p1") {
@@ -1047,7 +1393,8 @@ canvas {
       $("versusStartTurn").textContent = "Start Player 2 (60s)";
       $("versusStartTurn").disabled = false;
       $("status").textContent = "Player 1 done. Player 2 - press Start when ready.";
-      // short “turn complete” chime
+      // On stage: after TIME UP, show Player 2's turn (like the timer)
+      showHudMsg("Player 2 — your turn!", "turn");
       playSfx(660, 0.12, "sine", 0.12);
       setTimeout(() => playSfx(880, 0.18, "sine", 0.12), 120);
     } else if (versusPhase === "p2") {
@@ -1066,21 +1413,28 @@ canvas {
     $("scoreP1").classList.remove("winner");
     $("scoreP2").classList.remove("winner");
 
+    let winnerText = "";
     if (p1 > p2) {
+      winnerText = "🏆 Player 1 wins!";
       $("versusResult").textContent = "🏆 Player 1 wins! The beast is impressed!";
       $("scoreP1").classList.add("winner");
       $("mood").textContent = "Player 1 owned the dance floor! 👑";
       playWinSfx();
     } else if (p2 > p1) {
+      winnerText = "🏆 Player 2 wins!";
       $("versusResult").textContent = "🏆 Player 2 wins! The beast is impressed!";
       $("scoreP2").classList.add("winner");
       $("mood").textContent = "Player 2 owned the dance floor! 👑";
       playWinSfx();
     } else {
+      winnerText = "🤝 It's a tie!";
       $("versusResult").textContent = "🤝 It's a tie! Double the funk!";
       $("mood").textContent = "You both crushed it equally 🪩";
       playTieSfx();
     }
+
+    // Show winner on stage HUD (same place as the timer)
+    showHudMsg(winnerText + "  " + p1 + " – " + p2, "win");
 
     // Highscore from best score this match
     const best = Math.max(p1, p2);
@@ -1111,9 +1465,197 @@ canvas {
   });
   $("musicFile").addEventListener("change", e => loadFile(e.target.files[0]));
   $("creature").addEventListener("change", e => {
-    creature = e.target.value;
+    const id = e.target.value;
+    if (profiles[id] && profiles[id].locked && !isUnlocked(id)) {
+      openUnlockModal(id);
+      // revert select to current unlocked creature
+      $("creature").value = creature;
+      updateUnlockBtn();
+      return;
+    }
+    creature = id;
     $("beastName").textContent = profiles[creature].name;
+    updateUnlockBtn();
     burst();
+  });
+  $("unlockBtn").addEventListener("click", () => openUnlockModal($("creature").value));
+
+  $("unlockCancel").addEventListener("click", closeUnlockModal);
+  $("unlockOverlay").addEventListener("click", e => {
+    if (e.target === $("unlockOverlay")) closeUnlockModal();
+  });
+  $("unlockTabUsdt").addEventListener("click", () => {
+    $("unlockTabUsdt").classList.add("active");
+    $("unlockTabGift").classList.remove("active");
+    $("unlockUsdtBox").style.display = "block";
+    $("unlockGiftBox").style.display = "none";
+  });
+  $("unlockTabGift").addEventListener("click", () => {
+    $("unlockTabGift").classList.add("active");
+    $("unlockTabUsdt").classList.remove("active");
+    $("unlockUsdtBox").style.display = "none";
+    $("unlockGiftBox").style.display = "block";
+  });
+  $("unlockPayBtn").addEventListener("click", () => {
+    if (!unlockTarget) return;
+    const draft = { id: unlockTarget, kind: unlockKind, amount: NWC.amount, t: Date.now() };
+    try {
+      sessionStorage.setItem(NWC.draftKey, JSON.stringify(draft));
+      localStorage.setItem(NWC.draftKey, JSON.stringify(draft));
+    } catch (e) {}
+    const u = new URL(NWC.checkout);
+    u.searchParams.set("merchant", NWC.merchant);
+    u.searchParams.set("amount", String(NWC.amount));
+    u.searchParams.set("asset", "usdt");
+    u.searchParams.set("ref", unlockTarget);
+    window.location.href = u.toString();
+  });
+  $("unlockGiftBtn").addEventListener("click", async () => {
+    const code = ($("unlockGiftCode").value || "").trim();
+    if (!code) {
+      $("status").textContent = "Enter a gift card code.";
+      return;
+    }
+    if (!unlockTarget) return;
+    // Accept any non-empty code for session unlock (wire real gift sheet check in production)
+    applyUnlock(unlockTarget, unlockKind);
+  });
+
+  function applyUnlock(id, kind) {
+    markUnlocked(id);
+    closeUnlockModal();
+    if (kind === "keyboard" || id === KEYBOARD_ID) {
+      refreshKeyboardUI();
+      $("status").textContent = "Cool Keyboard unlocked for this session! Tap the keys!";
+      burst(); burst();
+      return;
+    }
+    refreshCreatureSelect();
+    if (profiles[id]) {
+      creature = id;
+      $("creature").value = id;
+      $("beastName").textContent = profiles[id].name;
+      $("status").textContent = profiles[id].name + " unlocked for this session!";
+      burst(); burst();
+    }
+  }
+
+  // Return from NoWalletConnect
+  (function captureUnlockReturn() {
+    const q = new URLSearchParams(location.search);
+    if ((q.get("status") || "").toLowerCase() !== "success") return;
+    const merchant = (q.get("merchant") || "").trim().toLowerCase();
+    if (merchant !== String(NWC.merchant).toLowerCase()) return;
+    const paid = parseFloat(q.get("amount") || q.get("paid") || "0");
+    const ref = (q.get("ref") || "").trim();
+    const raw = sessionStorage.getItem(NWC.draftKey) || localStorage.getItem(NWC.draftKey);
+    let draft = null;
+    try { draft = raw ? JSON.parse(raw) : null; } catch (e) {}
+    const id = ref || (draft && draft.id);
+    const kind = (draft && draft.kind) || (id === KEYBOARD_ID ? "keyboard" : "character");
+    if (!id) return;
+    if (kind === "character" && !profiles[id]) return;
+    if (kind === "keyboard" && id !== KEYBOARD_ID) return;
+    if (paid > 0 && Math.abs(paid - NWC.amount) > 0.02) return;
+    try {
+      sessionStorage.removeItem(NWC.draftKey);
+      localStorage.removeItem(NWC.draftKey);
+    } catch (e) {}
+    history.replaceState({}, "", location.pathname + location.hash);
+    applyUnlock(id, kind);
+  })();
+
+  /* ===== COOL KEYBOARD ===== */
+  const KEY_NOTES = [
+    { label: "C", freq: 261.63, black: false },
+    { label: "C#", freq: 277.18, black: true },
+    { label: "D", freq: 293.66, black: false },
+    { label: "D#", freq: 311.13, black: true },
+    { label: "E", freq: 329.63, black: false },
+    { label: "F", freq: 349.23, black: false },
+    { label: "F#", freq: 369.99, black: true },
+    { label: "G", freq: 392.00, black: false },
+    { label: "G#", freq: 415.30, black: true },
+    { label: "A", freq: 440.00, black: false },
+    { label: "A#", freq: 466.16, black: true },
+    { label: "B", freq: 493.88, black: false },
+    { label: "C2", freq: 523.25, black: false }
+  ];
+  let keyboardActive = false;
+  let keyDecayTimer = null;
+
+  function ensureAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playKeyNote(freq) {
+    if (!isKeyboardUnlocked()) return;
+    try {
+      const ctx2 = ensureAudio();
+      const osc = ctx2.createOscillator();
+      const gain = ctx2.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = freq;
+      gain.gain.value = 0.16;
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx2.currentTime + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx2.destination);
+      osc.start();
+      osc.stop(ctx2.currentTime + 0.36);
+
+      // Make the beast dance to the note
+      keyboardActive = true;
+      mode = mode === "idle" ? "demo" : mode;
+      energy = Math.min(100, energy + 18 + Math.random() * 12);
+      beat++;
+      phase += 0.8;
+      kickPulse = 1.1;
+      burst();
+      $("stopBtn").disabled = false;
+      updateUI();
+      clearTimeout(keyDecayTimer);
+      keyDecayTimer = setTimeout(() => {
+        if (keyboardActive && mode === "demo") {
+          // gentle decay if only keyboard is driving
+          energy = Math.max(15, energy * 0.7);
+          updateUI();
+        }
+      }, 400);
+    } catch (e) {}
+  }
+
+  function buildKeyboard() {
+    const wrap = $("keys");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+    KEY_NOTES.forEach((n, i) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "key" + (n.black ? " black" : "");
+      btn.textContent = n.label;
+      btn.setAttribute("aria-label", "Note " + n.label);
+      const press = (ev) => {
+        ev.preventDefault();
+        btn.classList.add("down");
+        playKeyNote(n.freq);
+      };
+      const release = () => btn.classList.remove("down");
+      btn.addEventListener("mousedown", press);
+      btn.addEventListener("mouseup", release);
+      btn.addEventListener("mouseleave", release);
+      btn.addEventListener("touchstart", press, { passive: false });
+      btn.addEventListener("touchend", release);
+      wrap.appendChild(btn);
+    });
+  }
+
+  $("unlockKeyboardBtn").addEventListener("click", () => openUnlockModal(KEYBOARD_ID, "keyboard"));
+  $("keyboardStop").addEventListener("click", () => {
+    keyboardActive = false;
+    stop(true);
+    $("status").textContent = "Keyboard paused. Tap keys again anytime!";
   });
 
   $("versusBtn").addEventListener("click", openVersus);
@@ -1136,6 +1678,9 @@ canvas {
   canvas.addEventListener("click", onBeastTap);
   canvas.addEventListener("touchstart", onBeastTap, { passive: false });
 
+  refreshCreatureSelect();
+  buildKeyboard();
+  refreshKeyboardUI();
   updateUI();
   refreshHighscoreUI();
   cancelAnimationFrame(raf);
