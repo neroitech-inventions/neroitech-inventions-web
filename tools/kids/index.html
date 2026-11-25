@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1a1035">
+<title>Neroitech Kids - Fun Digital Toys</title>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QM106YDX6N');
+  </script>
+  <link href="images/favicon.ico" rel="icon">
+<style>
+:root {
+  --ink: #1a1035;
+  --pink: #ff6eb4;
+  --cyan: #5eead4;
+  --yellow: #fde047;
+  --purple: #c084fc;
+  --white: #fff7ff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  color: var(--white);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 15% 20%, #6b21a8 0, transparent 40%),
+    radial-gradient(circle at 85% 15%, #0e7490 0, transparent 35%),
+    radial-gradient(circle at 50% 90%, #be185d 0, transparent 40%),
+    linear-gradient(160deg, #0f0a1e, #1e1038 50%, #0c1a2e);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 40px;
+}
+header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.logo {
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, var(--yellow), var(--pink), var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.logo span { -webkit-text-fill-color: var(--yellow); }
+.tagline {
+  margin-top: 6px;
+  font-size: 1rem;
+  color: #ddd6fe;
+  font-weight: 600;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  width: min(100%, 860px);
+}
+.card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 28px;
+  padding: 28px 22px 22px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 50px rgba(0,0,0,0.45);
+}
+.icon {
+  font-size: 4rem;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
+}
+.card h2 {
+  font-size: 1.45rem;
+  margin-bottom: 8px;
+}
+.card p {
+  color: #e9d5ff;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  margin-bottom: 18px;
+  min-height: 2.8em;
+}
+.btn {
+  display: inline-block;
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 16px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1a1035;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.1s, filter 0.1s;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+}
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.25); }
+.btn-torch { background: linear-gradient(135deg, #fde047, #f97316); }
+.btn-boogie { background: linear-gradient(135deg, #5eead4, #22d3ee); }
+.btn-abc { background: linear-gradient(135deg, #c084fc, #f472b6); }
+.btn-animal { background: linear-gradient(135deg, #86efac, #34d399); }
+.btn:hover { filter: brightness(1.08); }
+.coming {
+  margin-top: 28px;
+  text-align: center;
+  color: #c4b5fd;
+  font-size: 0.9rem;
+}
+.footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #c4b5fd;
+}
+.footer a {
+  color: #fde047;
+  text-decoration: none;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fde047, #ff6eb4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: filter 0.2s, transform 0.2s;
+}
+.footer a:hover {
+  filter: brightness(1.2);
+  transform: scale(1.05);
+  display: inline-block;
+}
+#topBtn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #fde047, #ff6eb4);
+  color: #1a1035;
+  font-size: 1.4rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  display: none;
+  place-items: center;
+  z-index: 100;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+#topBtn.show { display: grid; }
+#topBtn:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.5); }
+#topBtn:active { transform: scale(0.96); }
+.cursor {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fde047, #ff6eb4);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  opacity: 0.85;
+  transition: width 0.15s, height 0.15s;
+}
+.cursor.hovering {
+  width: 48px;
+  height: 48px;
+  background: radial-gradient(circle, #5eead4, #c084fc);
+}
+@media (max-width: 500px) {
+  .grid { grid-template-columns: 1fr; }
+  body { padding: 16px 12px 32px; }
+  .cursor { display: none; }
+}
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">Neroitech <span>Kids</span></div>
+    <p class="tagline">Cool digital toys for parents & kids to play with together</p>
+  </header>
+
+  <div class="grid">
+    <article class="card">
+      <div class="icon">🔦</div>
+      <h2>Sound Torch</h2>
+      <p>Clap, talk, or say “let there be light” and the phone torch turns on. Fun voice commands for the whole family.</p>
+      <a class="btn btn-torch" href="sound-torch">Play Sound Torch</a>
+    </article>
+
+    <article class="card">
+      <div class="icon">👾</div>
+      <h2>Boogie Beast</h2>
+      <p>Dance monsters that groove to any music. Start a demo, use the mic, or load a song and watch them go wild.</p>
+      <a class="btn btn-boogie" href="boogie-beast">Play Boogie Beast</a>
+    </article>
+
+    <article class="card">
+      <div class="icon">🔤</div>
+      <h2>ABC & 123</h2>
+      <p>Say a letter or number and watch it appear big and colorful. Switch between the alphabet and numbers.</p>
+      <a class="btn btn-abc" href="abc-123">Play ABC & 123</a>
+    </article>
+
+    <article class="card">
+      <div class="icon">🐾</div>
+      <h2>Animal Friends</h2>
+      <p>Say an animal name or tap one to see it big with its sound. Dogs, lions, frogs and more!</p>
+      <a class="btn btn-animal" href="animals">Play Animal Friends</a>
+    </article>
+  </div>
+
+  <div class="footer">
+    Powered by <a href="https://niti.com.ng/" target="_blank" rel="noopener">Neroitech Inventions</a>
+  </div>
+
+  <button id="topBtn" aria-label="Back to top">↑</button>
+  <div class="cursor" id="cursor"></div>
+
+<script>
+  function playTone(freq, duration, volume = 0.12, type = "sine") {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(volume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration);
+    setTimeout(() => ctx.close(), duration * 1000 + 100);
+  }
+
+  function playSelectSound() {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = ctx.currentTime;
+    [523, 659, 784].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.18, now + i * 0.07);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.07 + 0.25);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + i * 0.07);
+      osc.stop(now + i * 0.07 + 0.25);
+    });
+    setTimeout(() => ctx.close(), 600);
+  }
+
+  function playHoverSound() {
+    playTone(880, 0.08, 0.06, "sine");
+  }
+
+  document.querySelectorAll(".btn").forEach(btn => {
+    btn.addEventListener("mouseenter", playHoverSound);
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      playSelectSound();
+      const href = btn.getAttribute("href");
+      setTimeout(() => { window.location.href = href; }, 280);
+    });
+  });
+
+  const topBtn = document.getElementById("topBtn");
+  window.addEventListener("scroll", () => {
+    topBtn.classList.toggle("show", window.scrollY > 200);
+  });
+  topBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    playTone(700, 0.1, 0.1);
+  });
+
+  const cursor = document.getElementById("cursor");
+  document.addEventListener("mousemove", (e) => {
+    cursor.style.left = e.clientX + "px";
+    cursor.style.top = e.clientY + "px";
+  });
+  document.querySelectorAll("a, button, .card").forEach(el => {
+    el.addEventListener("mouseenter", () => cursor.classList.add("hovering"));
+    el.addEventListener("mouseleave", () => cursor.classList.remove("hovering"));
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1a1035">
+<title>Boogie Beast - Dance to Your Beat</title>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QM106YDX6N');
+  </script>
+  <link href="images/favicon.ico" rel="icon">
+<style>
+:root {
+  --ink: #1a1035;
+  --panel: #2a1a4a;
+  --pink: #ff6eb4;
+  --cyan: #5eead4;
+  --yellow: #fde047;
+  --purple: #c084fc;
+  --white: #fff7ff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--white);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 20% 10%, #6b21a8 0, transparent 40%),
+    radial-gradient(circle at 85% 25%, #0e7490 0, transparent 35%),
+    linear-gradient(160deg, #0f0a1e, #1e1038 50%, #0c1a2e);
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+.app { width: min(100%, 860px); }
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.brand {
+  font-weight: 900;
+  font-size: clamp(1.7rem, 5vw, 2.4rem);
+  letter-spacing: -1px;
+}
+.brand span { color: var(--yellow); }
+.tag {
+  font-size: .75rem;
+  color: #ddd6fe;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.stage {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 28px;
+  background: linear-gradient(160deg, rgba(60,30,100,.85), rgba(20,40,80,.85));
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+  min-height: 400px;
+}
+.stage::before, .stage::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: .35;
+  pointer-events: none;
+}
+.stage::before { width: 220px; height: 220px; background: #ff4d94; top: -80px; left: -50px; }
+.stage::after { width: 260px; height: 260px; background: #22d3ee; bottom: -100px; right: -60px; }
+.stageTop, .stageBottom {
+  position: absolute;
+  z-index: 2;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+.stageTop { top: 14px; }
+.stageBottom { bottom: 14px; align-items: flex-end; }
+.pill {
+  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(16,12,36,.7);
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 800;
+  backdrop-filter: blur(8px);
+}
+canvas {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 400px;
+  display: block;
+}
+.beastName {
+  font-weight: 900;
+  font-size: 1.15rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,.6);
+}
+.mood { font-size: .78rem; color: #e9d5ff; margin-top: 2px; }
+.controls {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 10px;
+}
+.btn {
+  border: 0;
+  border-radius: 16px;
+  padding: 14px 10px;
+  font-weight: 800;
+  font-size: .95rem;
+  color: #1a1035;
+  background: var(--yellow);
+  cursor: pointer;
+  box-shadow: 0 4px 0 #ca8a04;
+  transition: transform .1s, filter .1s;
+}
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #ca8a04; }
+.btn.secondary { background: var(--cyan); box-shadow: 0 4px 0 #0d9488; }
+.btn.pink { background: #f9a8d4; box-shadow: 0 4px 0 #db2777; }
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.panel {
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 20px;
+  background: rgba(255,255,255,.06);
+  backdrop-filter: blur(10px);
+}
+.panel h2 { font-size: 1rem; margin: 0 0 12px; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.file { display: none; }
+.fileLabel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,.1);
+  border: 1px dashed rgba(255,255,255,.4);
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.meter {
+  height: 10px;
+  border-radius: 99px;
+  background: rgba(255,255,255,.12);
+  overflow: hidden;
+  flex: 1;
+  min-width: 100px;
+}
+.meter > i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--cyan), var(--yellow), var(--pink));
+  border-radius: 99px;
+  transition: width .06s linear;
+}
+.hint { font-size: .78rem; color: #c4b5fd; line-height: 1.45; margin: 10px 0 0; }
+.status { font-size: .82rem; color: #ede9fe; min-height: 1.3em; margin-top: 8px; }
+.select {
+  background: #1a1035;
+  color: white;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-weight: 700;
+}
+.footer {
+  text-align: center;
+  color: #a78bfa;
+  font-size: .72rem;
+  margin: 14px 0 6px;
+}
+@media (max-width: 600px) {
+  body { padding: 10px; }
+  .stage { min-height: 340px; }
+  canvas { height: 340px; }
+  .controls { grid-template-columns: 1fr 1fr; }
+  .controls .btn:first-child { grid-column: span 2; }
+  .tag { display: none; }
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <div>
+      <div class="brand">BOOGIE <span>BEAST</span> 👾</div>
+      <div class="tag">YOUR MUSIC · YOUR MONSTER · YOUR DANCE FLOOR</div>
+    </div>
+    <div class="pill">🎵 BEAT REACTIVE</div>
+  </header>
+
+  <section class="stage">
+    <div class="stageTop">
+      <div class="pill" id="danceMode">🪩 READY</div>
+      <div class="pill" id="beatCount">BEATS 0</div>
+    </div>
+    <canvas id="scene" aria-label="A funny dancing creature"></canvas>
+    <div class="stageBottom">
+      <div>
+        <div class="beastName" id="beastName">Bloop the Beast</div>
+        <div class="mood" id="mood">Waiting for the beat…</div>
+      </div>
+      <div class="pill" id="energy">ENERGY 0%</div>
+    </div>
+  </section>
+
+  <div class="controls">
+    <button class="btn" id="demoBtn">▶ START DANCE PARTY</button>
+    <button class="btn secondary" id="micBtn">🎙 MICROPHONE</button>
+    <button class="btn pink" id="stopBtn" disabled>■ STOP</button>
+  </div>
+
+  <section class="panel">
+    <h2>🎧 Feed the beast some music</h2>
+    <div class="row">
+      <label class="fileLabel" for="musicFile">📁 Choose a song</label>
+      <input class="file" id="musicFile" type="file" accept="audio/*">
+      <select class="select" id="creature">
+        <option value="bloop">Bloop the Beast</option>
+        <option value="munch">Munch the Goblin</option>
+        <option value="wiggles">Sir Wiggles</option>
+        <option value="spark">Spark the Star</option>
+      </select>
+    </div>
+    <audio id="player" controls style="width:100%;margin-top:12px;display:none"></audio>
+    <div class="row" style="margin-top:12px">
+      <span style="font-size:.78rem;font-weight:800">BEAT POWER</span>
+      <div class="meter"><i id="level"></i></div>
+      <span id="levelText" style="font-size:.78rem;min-width:36px">0%</span>
+    </div>
+    <p class="status" id="status">Ready! Start a demo, pick a song, or use the microphone.</p>
+    <p class="hint">Microphone works best with music playing nearby. File mode analyses the song directly. Everything stays in your browser - nothing is uploaded.</p>
+  </section>
+
+  <div class="footer">Boogie Beast • Turn up the fun 🔊</div>
+</main>
+
+<script>
+(() => {
+  const canvas = document.getElementById("scene");
+  const ctx = canvas.getContext("2d");
+  const $ = id => document.getElementById(id);
+
+  let W = 0, H = 0, raf = 0, audioCtx = null, analyser = null, source = null, micStream = null, fileURL = null;
+  let mode = "idle", energy = 0, beat = 0, lastBeat = 0, phase = 0, smoothed = 0;
+  let particles = [], bass = 0, mids = 0, highs = 0, kickPulse = 0;
+  let beatIntervals = [], tempo = 0, previousSpectrum = null, fluxHistory = [];
+  let rafAudio = 0, demoTimer = null;
+
+  const profiles = {
+    bloop:   { name: "Bloop the Beast",  body: "#a3e635", belly: "#d9f99d", accent: "#facc15", eyes: 1 },
+    munch:   { name: "Munch the Goblin", body: "#fb923c", belly: "#fed7aa", accent: "#fde047", eyes: 2 },
+    wiggles: { name: "Sir Wiggles",      body: "#67e8f9", belly: "#cffafe", accent: "#f472b6", eyes: 1 },
+    spark:   { name: "Spark the Star",   body: "#c084fc", belly: "#e9d5ff", accent: "#fde047", eyes: 2 }
+  };
+  let creature = "bloop";
+
+  function resize() {
+    const r = canvas.getBoundingClientRect();
+    const d = Math.min(devicePixelRatio || 1, 2);
+    W = r.width; H = r.height;
+    canvas.width = Math.round(W * d);
+    canvas.height = Math.round(H * d);
+    ctx.setTransform(d, 0, 0, d, 0, 0);
+  }
+  addEventListener("resize", resize);
+  resize();
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    const cx = W / 2;
+    const base = H * 0.72;
+    const amp = mode === "idle" ? Math.sin(t * 0.0018) * 4 : 6 + energy * 0.22;
+    const bounce = Math.abs(Math.sin(t * (0.006 + energy * 0.00008))) * amp + kickPulse * (12 + bass * 0.1);
+    const tilt = Math.sin(t * 0.0035 + phase) * (0.04 + energy * 0.0006) + Math.sin(t * 0.012 + phase) * highs * 0.0007;
+    const p = profiles[creature];
+
+    // floating lights
+    for (let i = 0; i < 8; i++) {
+      const x = (i * 140 + t * 0.02 * (i % 2 ? 1 : -1)) % (W + 50) - 25;
+      const y = 50 + (i * 67) % Math.max(80, H - 120);
+      ctx.globalAlpha = 0.18 + 0.12 * Math.sin(t * 0.002 + i);
+      ctx.fillStyle = ["#ff73ba", "#5eead4", "#fde047", "#c084fc"][i % 4];
+      ctx.beginPath();
+      ctx.arc(x, y, 4 + (i % 3) * 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // shadow
+    ctx.fillStyle = "rgba(8,7,24,0.35)";
+    ctx.beginPath();
+    ctx.ellipse(cx, base + 18, 70 + bounce * 0.6, 12, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.save();
+    ctx.translate(cx, base - bounce);
+    ctx.rotate(tilt);
+
+    // legs
+    const legSwing = Math.sin(t * (0.009 + energy * 0.00012) + phase) * (0.35 + energy * 0.0035) + Math.sin(t * 0.018 + phase) * bass * 0.0018;
+    for (const s of [-1, 1]) {
+      ctx.save();
+      ctx.translate(s * 24, 42);
+      ctx.rotate(s * legSwing);
+      ctx.strokeStyle = p.body;
+      ctx.lineWidth = 16;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(s * 8, 30 + Math.abs(legSwing) * 8);
+      ctx.stroke();
+      ctx.fillStyle = "#3b2460";
+      ctx.beginPath();
+      ctx.ellipse(s * 8, 34 + Math.abs(legSwing) * 8, 13, 6, s * -0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // arms
+    for (const s of [-1, 1]) {
+      ctx.save();
+      ctx.translate(s * 50, -6);
+      ctx.rotate(s * (Math.sin(t * (0.008 + highs * 0.00002) + phase) * (0.75 + highs * 0.005) + 0.12 + energy * 0.007));
+      ctx.strokeStyle = p.body;
+      ctx.lineWidth = 15;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(s * 16, 12, s * 22, -12 - Math.sin(t * 0.012 + s) * 6);
+      ctx.stroke();
+      ctx.fillStyle = p.accent;
+      ctx.beginPath();
+      ctx.arc(s * 22, -12 - Math.sin(t * 0.012 + s) * 6, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // body
+    ctx.fillStyle = p.body;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 56, 66 + Math.sin(t * 0.012) * 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = p.belly;
+    ctx.beginPath();
+    ctx.ellipse(0, 22, 32, 32, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // horns / ears
+    for (const s of [-1, 1]) {
+      ctx.fillStyle = p.accent;
+      ctx.beginPath();
+      ctx.moveTo(s * 28, -50);
+      ctx.quadraticCurveTo(s * 52, -88, s * 46, -38);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // eyes
+    const blink = Math.sin(t * 0.0022) > 0.993;
+    for (const s of [-1, 1]) {
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.ellipse(s * 20, -18, 12, blink ? 2 : 15, 0, 0, Math.PI * 2);
+      ctx.fill();
+      if (!blink) {
+        ctx.fillStyle = "#1e1b4b";
+        ctx.beginPath();
+        ctx.arc(s * 20 + Math.sin(t * 0.003) * 1.5, -16, 5.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        ctx.arc(s * 20 + Math.sin(t * 0.003) * 1.5 - 1.5, -19, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // mouth
+    ctx.strokeStyle = "#3f2a4a";
+    ctx.lineWidth = 3.5;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.arc(0, 2, 14, 0.2, Math.PI - 0.2);
+    ctx.stroke();
+    ctx.fillStyle = "#fb7185";
+    ctx.beginPath();
+    ctx.ellipse(2, 12, 6, 3.5 + energy * 0.02, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // cheeks
+    ctx.fillStyle = "rgba(251,113,133,0.55)";
+    for (const s of [-1, 1]) {
+      ctx.beginPath();
+      ctx.arc(s * 36, 0, 7, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+
+    // beat ring
+    if (mode !== "idle" && energy > 12) {
+      ctx.strokeStyle = `rgba(253,224,71,${Math.min(0.55, energy / 200)})`;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(cx, base - 48, 82 + Math.sin(t * 0.01) * energy * 0.15, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // particles
+    particles = particles.filter(q => q.life > 0);
+    particles.forEach(q => {
+      q.x += q.vx;
+      q.y += q.vy;
+      q.vy += 0.04;
+      q.life--;
+      ctx.globalAlpha = Math.max(0, q.life / 42);
+      ctx.font = "18px system-ui";
+      ctx.fillText(q.char, q.x, q.y);
+    });
+    ctx.globalAlpha = 1;
+
+    raf = requestAnimationFrame(draw);
+  }
+
+  function burst() {
+    const chars = ["✨", "⭐", "🎵", "💖", "🪩", "🔥"];
+    for (let i = 0; i < 6; i++) {
+      particles.push({
+        x: W / 2 + (Math.random() - 0.5) * 120,
+        y: H * 0.48,
+        vx: (Math.random() - 0.5) * 4.2,
+        vy: -2.2 - Math.random() * 3,
+        life: 38 + Math.random() * 18,
+        char: chars[Math.floor(Math.random() * chars.length)]
+      });
+    }
+  }
+
+  function updateUI() {
+    const n = Math.round(energy);
+    $("level").style.width = n + "%";
+    $("levelText").textContent = n + "%";
+    $("energy").textContent = "ENERGY " + n + "%";
+    $("beatCount").textContent = "BEATS " + beat;
+    $("danceMode").textContent =
+      mode === "demo" ? "🪩 DEMO PARTY" :
+      mode === "mic"  ? "🎙 LISTENING" :
+      mode === "file" ? "🎧 TRACK PARTY" : "🪩 READY";
+    $("mood").textContent =
+      energy > 72 ? "Currently: absolutely losing it 🤪" :
+      energy > 38 ? "Currently: getting seriously funky 🕺" :
+      "Waiting for the beat…";
+  }
+
+  function analyse() {
+    if (!analyser) return;
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(data);
+    const hzPerBin = audioCtx.sampleRate / analyser.fftSize;
+    const band = (lo, hi) => {
+      let a = Math.max(0, Math.floor(lo / hzPerBin));
+      let b = Math.min(data.length - 1, Math.ceil(hi / hzPerBin));
+      let v = 0, n = 0;
+      for (let i = a; i <= b; i++) { v += data[i]; n++; }
+      return n ? v / n / 255 * 100 : 0;
+    };
+    bass  = bass  * 0.62 + band(35, 150)   * 0.38;
+    mids  = mids  * 0.68 + band(150, 2000) * 0.32;
+    highs = highs * 0.70 + band(2000, 9000)* 0.30;
+
+    let total = 0;
+    for (let i = 1; i < data.length; i++) total += data[i];
+    const raw = total / Math.max(1, data.length - 1) / 255 * 100;
+    smoothed = smoothed * 0.82 + raw * 0.18;
+    energy = Math.min(100, smoothed * 1.85);
+
+    let flux = 0;
+    if (previousSpectrum) {
+      for (let i = 1; i < data.length; i++) flux += Math.max(0, data[i] - previousSpectrum[i]);
+      flux /= data.length;
+    }
+    previousSpectrum = new Uint8Array(data);
+    fluxHistory.push(flux);
+    if (fluxHistory.length > 48) fluxHistory.shift();
+    const avgFlux = fluxHistory.reduce((a, b) => a + b, 0) / Math.max(1, fluxHistory.length);
+    const now = performance.now();
+    const onset = (flux > Math.max(1.8, avgFlux * 1.42)) && (bass > 5);
+    if (onset && now - lastBeat > 250) {
+      const interval = now - lastBeat;
+      if (lastBeat && interval > 300 && interval < 1200) {
+        beatIntervals.push(interval);
+        if (beatIntervals.length > 8) beatIntervals.shift();
+        const sorted = [...beatIntervals].sort((a, b) => a - b);
+        tempo = Math.round(60000 / sorted[Math.floor(sorted.length / 2)]);
+        if (tempo < 65 || tempo > 180) tempo = 0;
+      }
+      beat++;
+      lastBeat = now;
+      phase += 1.05;
+      kickPulse = 1;
+      burst();
+    }
+    kickPulse *= 0.88;
+    if (kickPulse < 0.015) kickPulse = 0;
+    updateUI();
+    if (mode === "mic" || mode === "file") rafAudio = requestAnimationFrame(analyse);
+  }
+
+  async function setupAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") await audioCtx.resume();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 2048;
+    analyser.smoothingTimeConstant = 0.35;
+    previousSpectrum = null;
+    fluxHistory = [];
+    beatIntervals = [];
+    tempo = 0;
+    bass = mids = highs = kickPulse = 0;
+  }
+
+  function startDemo() {
+    stop(false);
+    mode = "demo";
+    energy = 40;
+    beat = 0;
+    $("status").textContent = "Demo party started - watch the beast go wild!";
+    $("stopBtn").disabled = false;
+    demoLoop();
+    updateUI();
+  }
+
+  function demoLoop() {
+    clearInterval(demoTimer);
+    let n = 0;
+    demoTimer = setInterval(() => {
+      if (mode !== "demo") return;
+      energy = 22 + Math.abs(Math.sin(n * 0.33)) * 68;
+      if (n % 2 === 0) { beat++; burst(); }
+      n++;
+      updateUI();
+    }, 210);
+  }
+
+  async function startMic() {
+    try {
+      stop(false);
+      await setupAudio();
+      micStream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+      });
+      source = audioCtx.createMediaStreamSource(micStream);
+      source.connect(analyser);
+      mode = "mic";
+      beat = 0;
+      energy = 0;
+      $("status").textContent = "Listening… play music nearby!";
+      $("stopBtn").disabled = false;
+      analyse();
+    } catch (e) {
+      $("status").textContent = "Microphone blocked. Please allow access and try again.";
+    }
+  }
+
+  async function loadFile(file) {
+    if (!file) return;
+    stop(false);
+    if (fileURL) URL.revokeObjectURL(fileURL);
+    fileURL = URL.createObjectURL(file);
+    const player = $("player");
+    player.src = fileURL;
+    player.style.display = "block";
+    await setupAudio();
+    source = audioCtx.createMediaElementSource(player);
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    mode = "file";
+    beat = 0;
+    $("stopBtn").disabled = false;
+    $("status").textContent = "Song loaded! Press play on the player.";
+    player.onplay = () => { if (mode === "file") analyse(); };
+    player.onended = () => stop();
+  }
+
+  function stop(reset = true) {
+    clearInterval(demoTimer);
+    cancelAnimationFrame(rafAudio);
+    if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
+    if (source) { try { source.disconnect(); } catch {} source = null; }
+    if (mode === "file") $("player").pause();
+    mode = "idle";
+    energy = 0;
+    smoothed = 0;
+    if (reset) {
+      $("status").textContent = "Party paused. Start again whenever you're ready!";
+      tempo = 0;
+      beatIntervals = [];
+      previousSpectrum = null;
+      fluxHistory = [];
+      bass = mids = highs = kickPulse = 0;
+      $("stopBtn").disabled = true;
+    }
+    updateUI();
+  }
+
+  $("demoBtn").addEventListener("click", startDemo);
+  $("micBtn").addEventListener("click", startMic);
+  $("stopBtn").addEventListener("click", () => stop());
+  $("musicFile").addEventListener("change", e => loadFile(e.target.files[0]));
+  $("creature").addEventListener("change", e => {
+    creature = e.target.value;
+    $("beastName").textContent = profiles[creature].name;
+    burst();
+  });
+
+  updateUI();
+  cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>

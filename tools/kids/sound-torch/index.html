@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+  <title>Sound Torch - Neroitech Kids</title>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QM106YDX6N');
+  </script>
+  <link href="images/favicon.ico" rel="icon">  
+  <style>
+    :root {
+      --yellow: #fde047;
+      --pink: #ff6eb4;
+      --cyan: #5eead4;
+      --purple: #c084fc;
+      --orange: #fb923c;
+      --bg: #1a1035;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, #6b21a8 0, transparent 40%),
+        radial-gradient(circle at 80% 20%, #0e7490 0, transparent 35%),
+        radial-gradient(circle at 50% 90%, #be185d 0, transparent 40%),
+        linear-gradient(160deg, #0f0a1e, #1e1038);
+      color: #fff7ff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+    }
+    h1 {
+      font-size: clamp(1.8rem, 6vw, 2.4rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--yellow), var(--pink), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+    .subtitle { color: #ddd6fe; margin-bottom: 16px; font-size: 0.95rem; font-weight: 600; }
+    .toy {
+      background: linear-gradient(160deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      border: 3px solid rgba(255,255,255,0.2);
+      border-radius: 36px;
+      padding: 24px 20px 20px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+    }
+    .torch-face {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #fff 0%, #fde047 40%, #f97316 100%);
+      border: 6px solid #fbbf24;
+      box-shadow: 0 0 0 6px rgba(251,191,36,0.3), 0 10px 30px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.2rem;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+    .torch-face.on {
+      box-shadow: 0 0 40px #fde047, 0 0 80px rgba(251,191,36,0.6), 0 10px 30px rgba(0,0,0,0.4);
+      animation: glow 1.2s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from { transform: scale(1); }
+      to { transform: scale(1.06); }
+    }
+    .countdown {
+      font-size: 2.6rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      margin: 4px 0;
+      min-height: 1.2em;
+      color: var(--yellow);
+      text-shadow: 0 0 20px rgba(253,224,71,0.6);
+    }
+    .countdown.hidden { visibility: hidden; }
+    .status {
+      font-size: 1.05rem;
+      margin: 6px 0 10px;
+      min-height: 1.3em;
+      font-weight: 700;
+    }
+    .status.listening { color: var(--cyan); }
+    .status.detected { color: var(--yellow); }
+    .status.off { color: #c4b5fd; }
+    .heard { color: var(--cyan); font-weight: 700; min-height: 1.2em; margin: 4px 0; font-size: 0.95rem; }
+    .meter {
+      height: 14px;
+      background: rgba(0,0,0,0.35);
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 10px 0 16px;
+      border: 2px solid rgba(255,255,255,0.15);
+    }
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--yellow), var(--pink));
+      border-radius: 99px;
+      transition: width 0.05s linear;
+    }
+    button {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 18px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 10px;
+      font-family: inherit;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.25);
+      transition: transform 0.1s;
+    }
+    button:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
+    .btn-start {
+      background: linear-gradient(135deg, var(--cyan), #22d3ee);
+      color: #0f172a;
+    }
+    .btn-torch {
+      background: linear-gradient(135deg, var(--yellow), var(--orange));
+      color: #1a1035;
+    }
+    .btn-torch.on {
+      background: linear-gradient(135deg, #f97316, #ef4444);
+      color: white;
+    }
+    .btn-voice {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      color: #0f172a;
+    }
+    .btn-voice.on {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      color: white;
+    }
+    .controls { margin-top: 14px; }
+    label { display: block; font-size: 0.85rem; color: #ddd6fe; margin: 10px 0 4px; text-align: left; font-weight: 700; }
+    input[type="range"] { width: 100%; accent-color: var(--yellow); height: 8px; }
+    .commands {
+      margin-top: 14px;
+      text-align: left;
+      font-size: 0.78rem;
+      color: #e9d5ff;
+      background: rgba(0,0,0,0.25);
+      padding: 12px;
+      border-radius: 16px;
+      border: 2px dashed rgba(255,255,255,0.15);
+    }
+    .commands strong { color: var(--yellow); display: block; margin-bottom: 8px; font-size: 0.9rem; }
+    .commands span {
+      display: inline-block;
+      margin: 3px 4px 3px 0;
+      background: rgba(253,224,71,0.15);
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-weight: 700;
+    }
+    .hint { font-size: 0.72rem; color: #c4b5fd; margin-top: 14px; line-height: 1.4; }
+    .error { color: #fca5a5; font-size: 0.85rem; margin-top: 8px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <h1>Sound Torch</h1>
+  <p class="subtitle">Clap, talk, or say a word! ✨</p>
+
+  <div class="toy">
+    <div class="torch-face" id="torchIcon">💡</div>
+    <div class="countdown hidden" id="countdown"></div>
+    <div class="status off" id="status">Ready to play!</div>
+    <div class="heard" id="heard"></div>
+    <div class="meter"><div class="meter-fill" id="meter"></div></div>
+
+    <button type="button" class="btn-start" id="btnStart">▶ Start Listening</button>
+    <button type="button" class="btn-torch" id="btnTorch">🔦 Torch OFF</button>
+    <button type="button" class="btn-voice" id="btnVoice">🎤 Voice: OFF</button>
+
+    <div class="controls">
+      <label for="sensitivity">How sensitive?</label>
+      <input type="range" id="sensitivity" min="10" max="80" value="35">
+    </div>
+
+    <div class="commands">
+      <strong>Try saying:</strong>
+      <span>on</span><span>off</span><span>light on</span><span>light off</span>
+      <span>torch on</span><span>torch off</span><span>day</span><span>night</span>
+      <span>let there be light</span><span>and there was light</span>
+      <span>let there be darkness</span><span>light</span><span>dark</span>
+    </div>
+
+    <p class="hint">Best on Android Chrome. Allow mic + camera.<br>Voice works when the Voice button is ON.</p>
+    <div class="error" id="error"></div>
+  </div>
+
+  <script>
+    const statusEl = document.getElementById("status");
+    const meterEl = document.getElementById("meter");
+    const torchIcon = document.getElementById("torchIcon");
+    const btnStart = document.getElementById("btnStart");
+    const btnTorch = document.getElementById("btnTorch");
+    const btnVoice = document.getElementById("btnVoice");
+    const sensitivityEl = document.getElementById("sensitivity");
+    const errorEl = document.getElementById("error");
+    const countdownEl = document.getElementById("countdown");
+    const heardEl = document.getElementById("heard");
+
+    let recognition = null, voiceActive = false;
+    let audioCtx = null, analyser = null, micStream = null, videoStream = null, videoTrack = null;
+    let torchSupported = false, isListening = false, isTorchOn = false;
+    let autoOffTimer = null, countdownInterval = null, manualOverride = false, animId = null, remaining = 0;
+
+    function playTone(freq, duration, type = "sine", volume = 0.15) {
+      const ctx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      try {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.value = volume;
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+        if (!audioCtx) setTimeout(() => ctx.close(), duration * 1000 + 100);
+      } catch (e) {}
+    }
+    function playOnSound() {
+      playTone(880, 0.12, "sine", 0.2);
+      setTimeout(() => playTone(1175, 0.15, "sine", 0.18), 80);
+    }
+    function playTick() { playTone(660, 0.06, "square", 0.08); }
+    function playOffSound() { playTone(440, 0.18, "triangle", 0.15); }
+
+    function setStatus(text, cls) {
+      statusEl.textContent = text;
+      statusEl.className = "status " + (cls || "");
+    }
+    function updateTorchUI(on) {
+      isTorchOn = on;
+      torchIcon.classList.toggle("on", on);
+      torchIcon.textContent = on ? "🔦" : "💡";
+      btnTorch.textContent = on ? "🔦 Torch ON" : "🔦 Torch OFF";
+      btnTorch.classList.toggle("on", on);
+    }
+    function clearCountdown() {
+      clearInterval(countdownInterval);
+      countdownInterval = null;
+      countdownEl.classList.add("hidden");
+      countdownEl.textContent = "";
+      remaining = 0;
+    }
+    function startCountdown(seconds = 10) {
+      clearCountdown();
+      remaining = seconds;
+      countdownEl.classList.remove("hidden");
+      countdownEl.textContent = remaining + "s";
+      playTick();
+      countdownInterval = setInterval(() => {
+        remaining--;
+        if (remaining > 0) {
+          countdownEl.textContent = remaining + "s";
+          playTick();
+        } else clearCountdown();
+      }, 1000);
+    }
+    async function ensureTorchReady() {
+      if (videoTrack && videoTrack.readyState === "live") return true;
+      try {
+        videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } } });
+        videoTrack = videoStream.getVideoTracks()[0];
+        torchSupported = true;
+        return true;
+      } catch (e) {
+        errorEl.textContent = "Could not access camera for torch.";
+        return false;
+      }
+    }
+    async function setTorch(on, playSound = false) {
+      const ready = await ensureTorchReady();
+      if (!ready || !videoTrack) return false;
+      try {
+        await videoTrack.applyConstraints({ advanced: [{ torch: on }] });
+        updateTorchUI(on);
+        if (on && playSound) playOnSound();
+        if (!on) { playOffSound(); clearCountdown(); }
+        return true;
+      } catch (e) {
+        errorEl.textContent = "Torch not supported on this device/browser.";
+        return false;
+      }
+    }
+    function scheduleAutoOff() {
+      clearTimeout(autoOffTimer);
+      startCountdown(10);
+      autoOffTimer = setTimeout(async () => {
+        if (!manualOverride) {
+          await setTorch(false);
+          if (isListening) setStatus("Listening...", "listening");
+        }
+      }, 10000);
+    }
+    function onSoundDetected() {
+      if (manualOverride) return;
+      setStatus("Sound detected! 🎉", "detected");
+      setTorch(true).then(ok => { if (ok) scheduleAutoOff(); });
+    }
+    function analyze() {
+      if (!analyser || !isListening) return;
+      const data = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(data);
+      let sum = 0;
+      for (let i = 0; i < data.length; i++) sum += data[i];
+      const avg = sum / data.length;
+      const threshold = Number(sensitivityEl.value);
+      meterEl.style.width = Math.min(100, (avg / 255) * 100 * 2) + "%";
+      if (avg > threshold) onSoundDetected();
+      animId = requestAnimationFrame(analyze);
+    }
+    async function startListening() {
+      errorEl.textContent = "";
+      try {
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioCtx.createMediaStreamSource(micStream);
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        analyser.smoothingTimeConstant = 0.8;
+        source.connect(analyser);
+        try {
+          videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } } });
+          videoTrack = videoStream.getVideoTracks()[0];
+          torchSupported = true;
+        } catch (camErr) {
+          torchSupported = false;
+          errorEl.textContent = "Camera/torch not available. Sound still works.";
+        }
+        isListening = true;
+        btnStart.textContent = "■ Stop Listening";
+        setStatus("Listening for sounds…", "listening");
+        analyze();
+      } catch (err) {
+        errorEl.textContent = "Permission denied or not supported.";
+        setStatus("Oops!", "off");
+      }
+    }
+    function stopListening() {
+      isListening = false;
+      if (animId) cancelAnimationFrame(animId);
+      clearTimeout(autoOffTimer);
+      clearCountdown();
+      if (micStream) micStream.getTracks().forEach(t => t.stop());
+      if (audioCtx) audioCtx.close();
+      micStream = audioCtx = analyser = null;
+      btnStart.textContent = "▶ Start Listening";
+      setStatus("Ready to play!", "off");
+      meterEl.style.width = "0%";
+    }
+
+    const ON_COMMANDS = ["torch on","light on","lights on","turn on","on","let there be light","and there was light","let the be light","day","light","sunshine","bright","wake up","good morning","morning","sun","sunny","shine"];
+    const OFF_COMMANDS = ["torch off","light off","lights off","turn off","off","let there be darkness","and there was darkness","night","dark","darkness","bedtime","sleep","goodnight"];
+
+    function handleVoice(text) {
+      const said = text.toLowerCase().trim();
+      heardEl.textContent = "Heard: “" + said + "”";
+      if (ON_COMMANDS.some(cmd => said.includes(cmd))) {
+        manualOverride = true;
+        clearTimeout(autoOffTimer);
+        clearCountdown();
+        setTorch(true, true).then(ok => {
+          if (ok) setStatus("Voice: Torch ON! ✨", "detected");
+          setTimeout(() => { manualOverride = false; }, 1500);
+        });
+      } else if (OFF_COMMANDS.some(cmd => said.includes(cmd))) {
+        manualOverride = true;
+        clearTimeout(autoOffTimer);
+        clearCountdown();
+        setTorch(false).then(ok => {
+          if (ok) setStatus("Voice: Torch OFF", "listening");
+          setTimeout(() => { manualOverride = false; }, 1500);
+        });
+      }
+    }
+    function startVoice() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        errorEl.textContent = "Voice not supported in this browser.";
+        return false;
+      }
+      recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = false;
+      recognition.lang = "en-US";
+      recognition.onresult = (e) => {
+        const last = e.results[e.results.length - 1];
+        if (last.isFinal) handleVoice(last[0].transcript);
+      };
+      recognition.onerror = () => {};
+      recognition.onend = () => { if (voiceActive) try { recognition.start(); } catch (e) {} };
+      try { recognition.start(); return true; } catch (e) { return false; }
+    }
+    function stopVoice() {
+      voiceActive = false;
+      if (recognition) { try { recognition.stop(); } catch (e) {} recognition = null; }
+      heardEl.textContent = "";
+    }
+
+    btnStart.addEventListener("click", () => isListening ? stopListening() : startListening());
+    btnTorch.addEventListener("click", async () => {
+      manualOverride = true;
+      clearTimeout(autoOffTimer);
+      clearCountdown();
+      const newState = !isTorchOn;
+      const ok = await setTorch(newState, newState);
+      if (ok) {
+        setStatus(newState ? "Manual torch ON! ✨" : "Manual torch OFF", newState ? "detected" : (isListening ? "listening" : "off"));
+        setTimeout(() => { manualOverride = false; }, 2000);
+      }
+    });
+    btnVoice.addEventListener("click", () => {
+      if (voiceActive) {
+        stopVoice();
+        btnVoice.textContent = "🎤 Voice: OFF";
+        btnVoice.classList.remove("on");
+        setStatus(isListening ? "Listening…" : "Ready to play!", isListening ? "listening" : "off");
+      } else {
+        voiceActive = true;
+        if (startVoice()) {
+          btnVoice.textContent = "🎤 Voice: ON";
+          btnVoice.classList.add("on");
+          setStatus("Say aword! ✨", "listening");
+        } else voiceActive = false;
+      }
+    });
+  </script>
+</body>
+</html>

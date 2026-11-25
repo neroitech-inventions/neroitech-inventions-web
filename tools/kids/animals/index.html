@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Animal Friends - Neroitech Kids</title>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QM106YDX6N');
+  </script>
+  <link href="images/favicon.ico" rel="icon">
+<style>
+:root {
+  --yellow: #fde047;
+  --pink: #ff6eb4;
+  --cyan: #5eead4;
+  --purple: #c084fc;
+  --orange: #fb923c;
+  --green: #86efac;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 20% 15%, #6b21a8 0, transparent 40%),
+    radial-gradient(circle at 80% 20%, #0e7490 0, transparent 35%),
+    radial-gradient(circle at 40% 90%, #be185d 0, transparent 40%),
+    linear-gradient(160deg, #0f0a1e, #1e1038);
+  color: #fff7ff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  text-align: center;
+}
+h1 {
+  font-size: clamp(1.8rem, 6vw, 2.5rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--yellow), var(--pink), var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 6px 0 4px;
+}
+.subtitle { color: #ddd6fe; margin-bottom: 14px; font-weight: 600; }
+.stage {
+  width: min(100%, 460px);
+  background: rgba(255,255,255,0.08);
+  border: 3px solid rgba(255,255,255,0.18);
+  border-radius: 32px;
+  padding: 20px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+}
+.animal-emoji {
+  font-size: 7rem;
+  line-height: 1;
+  margin: 6px 0;
+  animation: bounce 0.5s ease;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+}
+@keyframes bounce {
+  0% { transform: scale(0.6); }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+.animal-name {
+  font-size: 2rem;
+  font-weight: 900;
+  margin: 4px 0;
+  color: var(--yellow);
+  text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.sound-text {
+  font-size: 1.2rem;
+  color: var(--cyan);
+  font-weight: 700;
+  min-height: 1.4em;
+}
+.controls {
+  width: min(100%, 460px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 18px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 rgba(0,0,0,0.25);
+  transition: transform 0.1s;
+}
+.btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
+.btn-random { background: linear-gradient(135deg, var(--yellow), var(--orange)); color: #1a1035; }
+.btn-listen { background: linear-gradient(135deg, var(--cyan), #22d3ee); color: #0f172a; }
+.btn-listen.on { background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; }
+.heard { min-height: 1.3em; color: #86efac; font-weight: 700; margin: 4px 0; }
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 12px;
+  max-width: 460px;
+}
+.grid span {
+  font-size: 2rem;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,0.1);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.grid span:active { transform: scale(0.9); }
+.hint { font-size: 0.75rem; color: #c4b5fd; margin-top: 14px; line-height: 1.4; }
+</style>
+</head>
+<body>
+  <h1>Animal Friends</h1>
+  <p class="subtitle">Say an animal name or tap one! 🐾</p>
+
+  <div class="stage">
+    <div class="animal-emoji" id="emoji">🐶</div>
+    <div class="animal-name" id="name">Dog</div>
+    <div class="sound-text" id="sound">Woof woof!</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-random" id="btnRandom">🎲 Random Animal</button>
+    <button class="btn btn-listen" id="btnListen">🎤 Start Listening</button>
+    <div class="heard" id="heard"></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <p class="hint">Say “dog”, “cat”, “lion”… or just tap an animal.<br>Best on Chrome. More animals coming soon!</p>
+
+  <script>
+    const animals = [
+      { name: "Dog", emoji: "🐶", sound: "Woof woof!" },
+      { name: "Cat", emoji: "🐱", sound: "Meow!" },
+      { name: "Cow", emoji: "🐮", sound: "Moo!" },
+      { name: "Lion", emoji: "🦁", sound: "Roar!" },
+      { name: "Elephant", emoji: "🐘", sound: "Trumpet!" },
+      { name: "Monkey", emoji: "🐵", sound: "Ooh ooh ah ah!" },
+      { name: "Duck", emoji: "🦆", sound: "Quack quack!" },
+      { name: "Frog", emoji: "🐸", sound: "Ribbit!" },
+      { name: "Pig", emoji: "🐷", sound: "Oink oink!" },
+      { name: "Horse", emoji: "🐴", sound: "Neigh!" },
+      { name: "Sheep", emoji: "🐑", sound: "Baa!" },
+      { name: "Chicken", emoji: "🐔", sound: "Cluck cluck!" },
+      { name: "Bird", emoji: "🐦", sound: "Tweet tweet!" },
+      { name: "Fish", emoji: "🐟", sound: "Blub blub!" },
+      { name: "Bear", emoji: "🐻", sound: "Grrrr!" },
+      { name: "Rabbit", emoji: "🐰", sound: "Squeak!" },
+      { name: "Owl", emoji: "🦉", sound: "Hoo hoo!" },
+      { name: "Bee", emoji: "🐝", sound: "Bzzz!" },
+      { name: "Snake", emoji: "🐍", sound: "Hiss!" },
+      { name: "Tiger", emoji: "🐯", sound: "Roar!" }
+    ];
+
+    const emojiEl = document.getElementById("emoji");
+    const nameEl = document.getElementById("name");
+    const soundEl = document.getElementById("sound");
+    const heard = document.getElementById("heard");
+    const grid = document.getElementById("grid");
+    const btnRandom = document.getElementById("btnRandom");
+    const btnListen = document.getElementById("btnListen");
+
+    let recognition = null;
+    let listening = false;
+
+    function showAnimal(a) {
+      emojiEl.textContent = a.emoji;
+      nameEl.textContent = a.name;
+      soundEl.textContent = a.sound;
+      emojiEl.style.animation = "none";
+      void emojiEl.offsetWidth;
+      emojiEl.style.animation = "bounce 0.5s ease";
+    }
+
+    function randomAnimal() {
+      showAnimal(animals[Math.floor(Math.random() * animals.length)]);
+    }
+
+    function buildGrid() {
+      animals.forEach(a => {
+        const s = document.createElement("span");
+        s.textContent = a.emoji;
+        s.title = a.name;
+        s.onclick = () => showAnimal(a);
+        grid.appendChild(s);
+      });
+    }
+
+    function findAnimal(text) {
+      const t = text.toLowerCase();
+      return animals.find(a => t.includes(a.name.toLowerCase()));
+    }
+
+    function startListening() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) {
+        heard.textContent = "Voice not supported in this browser.";
+        return;
+      }
+      recognition = new SR();
+      recognition.continuous = true;
+      recognition.interimResults = false;
+      recognition.lang = "en-US";
+      recognition.onresult = (e) => {
+        const last = e.results[e.results.length - 1];
+        if (last.isFinal) {
+          const said = last[0].transcript;
+          heard.textContent = "Heard: “" + said + "”";
+          const found = findAnimal(said);
+          if (found) showAnimal(found);
+        }
+      };
+      recognition.onerror = () => {};
+      recognition.onend = () => {
+        if (listening) try { recognition.start(); } catch (e) {}
+      };
+      try {
+        recognition.start();
+        listening = true;
+        btnListen.textContent = "■ Stop Listening";
+        btnListen.classList.add("on");
+      } catch (e) {}
+    }
+
+    function stopListening() {
+      listening = false;
+      if (recognition) {
+        try { recognition.stop(); } catch (e) {}
+        recognition = null;
+      }
+      btnListen.textContent = "🎤 Start Listening";
+      btnListen.classList.remove("on");
+      heard.textContent = "";
+    }
+
+    btnRandom.onclick = randomAnimal;
+    btnListen.onclick = () => listening ? stopListening() : startListening();
+
+    buildGrid();
+    randomAnimal();
+  </script>
+</body>
+</html>
