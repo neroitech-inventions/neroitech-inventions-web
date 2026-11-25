@@ -347,7 +347,7 @@ body.modal-open .bottom-nav {
 
         <div class="modal-actions">
           <button class="btn btn-grad btn-full" onclick="startLaunch()">Continue to payment</button>
-          <button class="btn btn-ghost btn-full" style="color:var(--muted2);" onclick="closeLaunch()">Cancel</button>
+          <button class="btn btn-ghost btn-full" style="color:var(--muted2);" onclick="cancelLaunch()">Cancel</button>
         </div>
       </div>
 
@@ -1067,11 +1067,17 @@ function clearLaunchForm(){
 }
 
 function closeLaunch(){
-  // Save what the user typed so closing by mistake does not wipe the form
+  // Accidental close (click outside) — keep what the user typed
   saveFormDraft();
   $('launchOverlay').classList.remove('show');
   document.body.classList.remove('modal-open');
-  // Do NOT clear the form or draft fields — only hide the modal
+  draft = null;
+}
+function cancelLaunch(){
+  // Explicit Cancel — clear the form and close
+  clearLaunchForm();
+  $('launchOverlay').classList.remove('show');
+  document.body.classList.remove('modal-open');
   draft = null;
 }
 function backToForm(){$('payStep').style.display='none';$('launchForm').style.display='block';}
