@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Animal Friends - Neroitech Kids</title>
+<title>ABC & 123 - Neroitech Kids</title>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -24,9 +24,9 @@
 body {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   background:
-    radial-gradient(circle at 20% 15%, #6b21a8 0, transparent 40%),
-    radial-gradient(circle at 80% 20%, #0e7490 0, transparent 35%),
-    radial-gradient(circle at 40% 90%, #be185d 0, transparent 40%),
+    radial-gradient(circle at 15% 20%, #6b21a8 0, transparent 40%),
+    radial-gradient(circle at 85% 15%, #0e7490 0, transparent 35%),
+    radial-gradient(circle at 50% 90%, #be185d 0, transparent 40%),
     linear-gradient(160deg, #0f0a1e, #1e1038);
   color: #fff7ff;
   min-height: 100vh;
@@ -37,58 +37,75 @@ body {
   text-align: center;
 }
 h1 {
-  font-size: clamp(1.8rem, 6vw, 2.5rem);
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
   font-weight: 900;
   background: linear-gradient(135deg, var(--yellow), var(--pink), var(--cyan));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin: 6px 0 4px;
+  margin: 8px 0 4px;
 }
-.subtitle { color: #ddd6fe; margin-bottom: 14px; font-weight: 600; }
-.stage {
-  width: min(100%, 460px);
+.subtitle { color: #ddd6fe; margin-bottom: 16px; font-weight: 600; }
+.mode-switch {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  width: min(100%, 420px);
+}
+.mode-switch button {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 16px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 2px solid transparent;
+  transition: all 0.15s;
+}
+.mode-switch button.active {
+  background: linear-gradient(135deg, var(--yellow), var(--orange));
+  color: #1a1035;
+  border-color: #fbbf24;
+  box-shadow: 0 4px 0 #ca8a04;
+}
+.display {
+  width: min(100%, 480px);
+  min-height: 280px;
   background: rgba(255,255,255,0.08);
   border: 3px solid rgba(255,255,255,0.18);
   border-radius: 32px;
-  padding: 20px 16px;
-  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
   box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  position: relative;
+  overflow: hidden;
 }
-.animal-emoji {
-  font-size: 7rem;
-  line-height: 1;
-  margin: 6px 0;
-  animation: bounce 0.5s ease;
-  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
-}
-@keyframes bounce {
-  0% { transform: scale(0.6); }
-  60% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-.animal-name {
-  font-size: 2rem;
+.big-char {
+  font-size: clamp(6rem, 28vw, 10rem);
   font-weight: 900;
-  margin: 4px 0;
-  color: var(--yellow);
-  text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  line-height: 1;
+  text-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  user-select: none;
 }
-.sound-text {
-  font-size: 1.2rem;
-  color: var(--cyan);
-  font-weight: 700;
-  min-height: 1.4em;
+@keyframes pop {
+  0% { transform: scale(0.3); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 .controls {
-  width: min(100%, 460px);
+  width: min(100%, 480px);
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 .btn {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   border: none;
   border-radius: 18px;
   font-size: 1.05rem;
@@ -98,114 +115,189 @@ h1 {
   transition: transform 0.1s;
 }
 .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
-.btn-random { background: linear-gradient(135deg, var(--yellow), var(--orange)); color: #1a1035; }
-.btn-listen { background: linear-gradient(135deg, var(--cyan), #22d3ee); color: #0f172a; }
-.btn-listen.on { background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; }
-.heard { min-height: 1.3em; color: #86efac; font-weight: 700; margin: 4px 0; }
-.grid {
+.btn-listen {
+  background: linear-gradient(135deg, var(--cyan), #22d3ee);
+  color: #0f172a;
+}
+.btn-listen.on {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: white;
+}
+.heard {
+  min-height: 1.4em;
+  color: var(--cyan);
+  font-weight: 700;
+  margin: 6px 0;
+  font-size: 0.95rem;
+}
+.hint {
+  font-size: 0.75rem;
+  color: #c4b5fd;
+  margin-top: 12px;
+  line-height: 1.4;
+}
+.grid-preview {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   justify-content: center;
-  margin-top: 12px;
-  max-width: 460px;
+  margin-top: 14px;
+  max-width: 480px;
 }
-.grid span {
-  font-size: 2rem;
-  width: 56px;
-  height: 56px;
+.grid-preview span {
+  width: 36px;
+  height: 36px;
   display: grid;
   place-items: center;
   background: rgba(255,255,255,0.1);
-  border-radius: 16px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: transform 0.1s;
 }
-.grid span:active { transform: scale(0.9); }
-.hint { font-size: 0.75rem; color: #c4b5fd; margin-top: 14px; line-height: 1.4; }
+.grid-preview span:active { transform: scale(0.92); }
 </style>
 </head>
 <body>
-  <h1>Animal Friends</h1>
-  <p class="subtitle">Say an animal name or tap one! 🐾</p>
+  <h1>ABC & 123</h1>
+  <p class="subtitle">Say a letter or number and watch it appear! ✨</p>
 
-  <div class="stage">
-    <div class="animal-emoji" id="emoji">🐶</div>
-    <div class="animal-name" id="name">Dog</div>
-    <div class="sound-text" id="sound">Woof woof!</div>
+  <div class="mode-switch">
+    <button id="btnAlpha" class="active">A – Z</button>
+    <button id="btnNum">1 – 100</button>
+  </div>
+
+  <div class="display">
+    <div class="big-char" id="bigChar">A</div>
   </div>
 
   <div class="controls">
-    <button class="btn btn-random" id="btnRandom">🎲 Random Animal</button>
     <button class="btn btn-listen" id="btnListen">🎤 Start Listening</button>
     <div class="heard" id="heard"></div>
   </div>
 
-  <div class="grid" id="grid"></div>
+  <div class="grid-preview" id="preview"></div>
 
-  <p class="hint">Say “dog”, “cat”, “lion”… or just tap an animal.<br>Best on Chrome. More animals coming soon!</p>
+  <p class="hint">Best on Chrome. Tap a letter/number or say it out loud.<br>Switch between Alphabet and Numbers anytime.</p>
 
   <script>
-    const animals = [
-      { name: "Dog", emoji: "🐶", sound: "Woof woof!" },
-      { name: "Cat", emoji: "🐱", sound: "Meow!" },
-      { name: "Cow", emoji: "🐮", sound: "Moo!" },
-      { name: "Lion", emoji: "🦁", sound: "Roar!" },
-      { name: "Elephant", emoji: "🐘", sound: "Trumpet!" },
-      { name: "Monkey", emoji: "🐵", sound: "Ooh ooh ah ah!" },
-      { name: "Duck", emoji: "🦆", sound: "Quack quack!" },
-      { name: "Frog", emoji: "🐸", sound: "Ribbit!" },
-      { name: "Pig", emoji: "🐷", sound: "Oink oink!" },
-      { name: "Horse", emoji: "🐴", sound: "Neigh!" },
-      { name: "Sheep", emoji: "🐑", sound: "Baa!" },
-      { name: "Chicken", emoji: "🐔", sound: "Cluck cluck!" },
-      { name: "Bird", emoji: "🐦", sound: "Tweet tweet!" },
-      { name: "Fish", emoji: "🐟", sound: "Blub blub!" },
-      { name: "Bear", emoji: "🐻", sound: "Grrrr!" },
-      { name: "Rabbit", emoji: "🐰", sound: "Squeak!" },
-      { name: "Owl", emoji: "🦉", sound: "Hoo hoo!" },
-      { name: "Bee", emoji: "🐝", sound: "Bzzz!" },
-      { name: "Snake", emoji: "🐍", sound: "Hiss!" },
-      { name: "Tiger", emoji: "🐯", sound: "Roar!" }
-    ];
-
-    const emojiEl = document.getElementById("emoji");
-    const nameEl = document.getElementById("name");
-    const soundEl = document.getElementById("sound");
-    const heard = document.getElementById("heard");
-    const grid = document.getElementById("grid");
-    const btnRandom = document.getElementById("btnRandom");
+    const bigChar = document.getElementById("bigChar");
+    const btnAlpha = document.getElementById("btnAlpha");
+    const btnNum = document.getElementById("btnNum");
     const btnListen = document.getElementById("btnListen");
+    const heard = document.getElementById("heard");
+    const preview = document.getElementById("preview");
 
+    let mode = "alpha"; // alpha | num
     let recognition = null;
     let listening = false;
 
-    function showAnimal(a) {
-      emojiEl.textContent = a.emoji;
-      nameEl.textContent = a.name;
-      soundEl.textContent = a.sound;
-      emojiEl.style.animation = "none";
-      void emojiEl.offsetWidth;
-      emojiEl.style.animation = "bounce 0.5s ease";
+    const colors = ["#fde047","#ff6eb4","#5eead4","#c084fc","#fb923c","#86efac","#f472b6","#67e8f9"];
+
+    const letterMap = {};
+    "abcdefghijklmnopqrstuvwxyz".split("").forEach((l, i) => {
+      letterMap[l] = l.toUpperCase();
+      letterMap[l + "s"] = l.toUpperCase(); // "bees" etc.
+    });
+    // common speech recognition variants
+    Object.assign(letterMap, {
+      "ay": "A", "bee": "B", "see": "C", "cee": "C", "dee": "D", "ee": "E", "eff": "F",
+      "gee": "G", "aitch": "H", "eye": "I", "jay": "J", "kay": "K", "el": "L", "ell": "L",
+      "em": "M", "en": "N", "oh": "O", "pee": "P", "cue": "Q", "ar": "R", "ess": "S",
+      "tee": "T", "you": "U", "vee": "V", "double you": "W", "ex": "X", "why": "Y", "zee": "Z", "zed": "Z"
+    });
+
+    const numberWords = {
+      "zero":0,"one":1,"two":2,"three":3,"four":4,"five":5,"six":6,"seven":7,"eight":8,"nine":9,"ten":10,
+      "eleven":11,"twelve":12,"thirteen":13,"fourteen":14,"fifteen":15,"sixteen":16,"seventeen":17,"eighteen":18,"nineteen":19,
+      "twenty":20,"thirty":30,"forty":40,"fifty":50,"sixty":60,"seventy":70,"eighty":80,"ninety":90,"hundred":100
+    };
+
+    function setMode(m) {
+      mode = m;
+      btnAlpha.classList.toggle("active", m === "alpha");
+      btnNum.classList.toggle("active", m === "num");
+      buildPreview();
+      show(m === "alpha" ? "A" : "1");
     }
 
-    function randomAnimal() {
-      showAnimal(animals[Math.floor(Math.random() * animals.length)]);
+    function randomColor() {
+      return colors[Math.floor(Math.random() * colors.length)];
     }
 
-    function buildGrid() {
-      animals.forEach(a => {
-        const s = document.createElement("span");
-        s.textContent = a.emoji;
-        s.title = a.name;
-        s.onclick = () => showAnimal(a);
-        grid.appendChild(s);
-      });
+    function show(text) {
+      bigChar.textContent = text;
+      bigChar.style.color = randomColor();
+      bigChar.style.animation = "none";
+      void bigChar.offsetWidth;
+      bigChar.style.animation = "pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
+      speak(text);
     }
 
-    function findAnimal(text) {
-      const t = text.toLowerCase();
-      return animals.find(a => t.includes(a.name.toLowerCase()));
+    function speak(text) {
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.rate = 0.9;
+      utter.pitch = 1.1;
+      utter.lang = "en-US";
+      window.speechSynthesis.speak(utter);
+    }
+
+    function buildPreview() {
+      preview.innerHTML = "";
+      if (mode === "alpha") {
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(l => {
+          const s = document.createElement("span");
+          s.textContent = l;
+          s.onclick = () => show(l);
+          preview.appendChild(s);
+        });
+      } else {
+        for (let i = 1; i <= 100; i++) {
+          const s = document.createElement("span");
+          s.textContent = i;
+          s.onclick = () => show(String(i));
+          preview.appendChild(s);
+        }
+      }
+    }
+
+    function parseSpeech(text) {
+      const t = text.toLowerCase().trim();
+      heard.textContent = "Heard: “" + t + "”";
+
+      if (mode === "alpha") {
+        // direct letter
+        if (t.length === 1 && letterMap[t]) return letterMap[t];
+        // word forms
+        for (const [word, letter] of Object.entries(letterMap)) {
+          if (t.includes(word)) return letter;
+        }
+      } else {
+        // spoken number
+        const words = t.split(/\s+/);
+        let total = 0;
+        let found = false;
+        for (const w of words) {
+          if (numberWords[w] !== undefined) {
+            total += numberWords[w];
+            found = true;
+          } else if (/^\d+$/.test(w)) {
+            total = parseInt(w, 10);
+            found = true;
+          }
+        }
+        if (found && total >= 1 && total <= 100) return String(total);
+        // pure digits
+        const digits = t.match(/\d+/);
+        if (digits) {
+          const n = parseInt(digits[0], 10);
+          if (n >= 1 && n <= 100) return String(n);
+        }
+      }
+      return null;
     }
 
     function startListening() {
@@ -221,10 +313,8 @@ h1 {
       recognition.onresult = (e) => {
         const last = e.results[e.results.length - 1];
         if (last.isFinal) {
-          const said = last[0].transcript;
-          heard.textContent = "Heard: “" + said + "”";
-          const found = findAnimal(said);
-          if (found) showAnimal(found);
+          const result = parseSpeech(last[0].transcript);
+          if (result) show(result);
         }
       };
       recognition.onerror = () => {};
@@ -250,11 +340,11 @@ h1 {
       heard.textContent = "";
     }
 
-    btnRandom.onclick = randomAnimal;
+    btnAlpha.onclick = () => setMode("alpha");
+    btnNum.onclick = () => setMode("num");
     btnListen.onclick = () => listening ? stopListening() : startListening();
 
-    buildGrid();
-    randomAnimal();
+    setMode("alpha");
   </script>
 </body>
 </html>
