@@ -430,6 +430,26 @@ canvas {
   .key { width: 34px; height: 96px; font-size: 0.65rem; }
   .key.black { width: 26px; height: 60px; margin: 0 -12px; }
 }
+
+a.tg-link, .tg-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 0.82rem;
+  text-decoration: none !important;
+  color: #1a1035 !important;
+  background: linear-gradient(135deg, #5eead4, #fde047, #ff6eb4);
+  box-shadow: 0 3px 0 rgba(0,0,0,0.25), 0 0 16px rgba(94,234,212,0.35);
+  -webkit-text-fill-color: #1a1035;
+}
+a.tg-link:active, .tg-link:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
 </style>
 </head>
 <body>
@@ -528,7 +548,7 @@ canvas {
       <button type="button" class="btn versus" id="unlockKeyboardBtn">🔓 Unlock Cool Keyboard · $0.25</button>
       <p class="hint" style="margin-top:10px;">
         Or unlock free with a gift card from
-        <a href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener" style="color:var(--cyan);font-weight:800;text-decoration:none;">SnappQuest Telegram</a>
+        <a class="tg-link" href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener">📲 SnappQuest Telegram</a>
       </p>
     </div>
     <div id="keyboardWrap" style="display:none;">
@@ -560,7 +580,7 @@ canvas {
       <button type="button" class="btn secondary" id="unlockGiftBtn" style="width:100%;">Redeem gift card</button>
       <p class="hint" style="text-align:center;margin-top:12px;">
         Need a gift card?
-        <a href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener" style="color:var(--cyan);font-weight:800;text-decoration:none;">Join SnappQuest on Telegram</a>
+        <a class="tg-link" href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener">📲 Join SnappQuest on Telegram</a>
       </p>
     </div>
     <button type="button" class="btn pink" id="unlockCancel" style="width:100%;margin-top:10px;">Cancel</button>
