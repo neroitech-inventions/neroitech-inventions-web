@@ -404,15 +404,45 @@
       }
       recognition = new SpeechRecognition();
       recognition.continuous = true;
-      recognition.interimResults = false;
+      recognition.interimResults = true;
       recognition.lang = "en-US";
+      recognition.maxAlternatives = 1;
+
       recognition.onresult = (e) => {
-        const last = e.results[e.results.length - 1];
-        if (last.isFinal) handleVoice(last[0].transcript);
+        let finalText = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          if (e.results[i].isFinal) {
+            finalText += e.results[i][0].transcript + " ";
+          }
+        }
+        if (finalText.trim()) handleVoice(finalText.trim());
       };
-      recognition.onerror = () => {};
-      recognition.onend = () => { if (voiceActive) try { recognition.start(); } catch (e) {} };
-      try { recognition.start(); return true; } catch (e) { return false; }
+
+      recognition.onerror = (ev) => {
+        console.warn("Speech error:", ev.error);
+        if (ev.error === "not-allowed" || ev.error === "service-not-allowed") {
+          errorEl.textContent = "Microphone permission blocked for voice.";
+          voiceActive = false;
+          btnVoice.textContent = "🎤 Voice: OFF";
+          btnVoice.classList.remove("on");
+        }
+      };
+
+      recognition.onend = () => {
+        if (voiceActive) {
+          setTimeout(() => {
+            try { recognition.start(); } catch (e) {}
+          }, 300);
+        }
+      };
+
+      try {
+        recognition.start();
+        return true;
+      } catch (e) {
+        errorEl.textContent = "Could not start voice. Try again.";
+        return false;
+      }
     }
     function stopVoice() {
       voiceActive = false;
@@ -443,7 +473,7 @@
         if (startVoice()) {
           btnVoice.textContent = "🎤 Voice: ON";
           btnVoice.classList.add("on");
-          setStatus("Say aword! ✨", "listening");
+          setStatus("Say a magic word! ✨", "listening");
         } else voiceActive = false;
       }
     });

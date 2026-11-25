@@ -103,6 +103,7 @@ canvas {
   width: 100%;
   height: 400px;
   display: block;
+  cursor: pointer;
 }
 .beastName {
   font-weight: 900;
@@ -661,6 +662,24 @@ canvas {
     $("beastName").textContent = profiles[creature].name;
     burst();
   });
+
+  // Touch / tap the beast to make it dance and make a sound
+  function onBeastTap(e) {
+    e.preventDefault();
+    energy = Math.min(100, energy + 35);
+    beat++;
+    phase += 1.2;
+    kickPulse = 1.4;
+    burst();
+    playSfx(420 + Math.random() * 280, 0.12, "triangle", 0.18);
+    setTimeout(() => playSfx(620 + Math.random() * 200, 0.1, "sine", 0.14), 80);
+    $("mood").textContent = "You poked me! 🤪";
+    updateUI();
+    // little extra bounce animation
+    setTimeout(() => { if (mode === "idle") energy = Math.max(0, energy - 20); updateUI(); }, 600);
+  }
+  canvas.addEventListener("click", onBeastTap);
+  canvas.addEventListener("touchstart", onBeastTap, { passive: false });
 
   updateUI();
   cancelAnimationFrame(raf);
