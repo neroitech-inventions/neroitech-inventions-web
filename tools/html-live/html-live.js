@@ -484,6 +484,67 @@ async function doShare() {
     } catch (err) {}
   });
 
+  /* ===== Device screen size simulator ===== */
+  const deviceSelect = document.getElementById("deviceSelect");
+  const deviceWidth = document.getElementById("deviceWidth");
+  const deviceHeight = document.getElementById("deviceHeight");
+  const deviceApply = document.getElementById("deviceApply");
+  const previewFrame = document.getElementById("previewFrame");
+
+  function applyDeviceSize(w, h, key) {
+    if (!previewFrame) return;
+    const stage = previewFrame.parentElement;
+    if (!w || key === "full") {
+      // Reset to normal full-page preview (no device chrome)
+      previewFrame.style.width = "";
+      previewFrame.style.maxWidth = "";
+      previewFrame.style.height = "";
+      previewFrame.dataset.device = "full";
+      if (stage) stage.classList.remove("is-device");
+      if (status) status.textContent = "Preview: full width";
+      return;
+    }
+    previewFrame.style.width = w + "px";
+    previewFrame.style.maxWidth = "100%";
+    previewFrame.style.height = h ? h + "px" : "";
+    previewFrame.dataset.device = key || (w + "x" + (h || "auto"));
+    if (stage) stage.classList.add("is-device");
+    if (status) status.textContent = "Preview: " + w + "×" + (h || "auto");
+  }
+
+  function onDeviceChange() {
+    if (!deviceSelect) return;
+    const val = deviceSelect.value;
+    const showCustom = val === "custom";
+    if (deviceWidth) deviceWidth.style.display = showCustom ? "" : "none";
+    if (deviceHeight) deviceHeight.style.display = showCustom ? "" : "none";
+    if (deviceApply) deviceApply.style.display = showCustom ? "" : "none";
+
+    if (val === "full") {
+      applyDeviceSize(null, null, "full");
+    } else if (val !== "custom") {
+      const parts = val.split("x");
+      const w = parseInt(parts[0], 10);
+      const h = parseInt(parts[1], 10);
+      applyDeviceSize(w, h, val);
+    }
+  }
+
+  if (deviceSelect) {
+    deviceSelect.addEventListener("change", onDeviceChange);
+  }
+  if (deviceApply) {
+    deviceApply.addEventListener("click", function () {
+      const w = parseInt(deviceWidth && deviceWidth.value, 10);
+      const h = parseInt(deviceHeight && deviceHeight.value, 10);
+      if (!w || w < 200) {
+        showToast("Enter a width of at least 200px");
+        return;
+      }
+      applyDeviceSize(w, h && h >= 200 ? h : null, "custom");
+    });
+  }
+
   if (loadFromShareLink()) { runPreview({ record: false }); updateShareButton(); }
   else if (loadDraft()) { runPreview({ record: false }); isDirty = true; updateShareButton(); showToast("Restored your last draft"); }
   else { loadSample(); }

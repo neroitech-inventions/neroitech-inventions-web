@@ -75,10 +75,70 @@
     body.preview-only .tabs { opacity: 0.35; pointer-events: none; }
     .col { min-height: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
     .col:last-child { border-right: none; }
-    .label { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    .label { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 8px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
     textarea { flex: 1; width: 100%; resize: none; border: none; outline: none; background: #0b0f14; color: #e2e8f0; font-family: ui-monospace, Consolas, monospace; font-size: 13px; line-height: 1.5; padding: 12px; tab-size: 2; }
     iframe { flex: 1; width: 100%; border: none; background: #fff; }
     .status { color: var(--muted); font-size: 0.75rem; }
+
+    /* Device simulator */
+    .device-bar {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    }
+    .device-bar select, .device-bar input {
+      background: #0b0f14; border: 1px solid var(--border); color: var(--text);
+      border-radius: 7px; padding: 5px 8px; font-size: 0.75rem; font-family: inherit;
+      outline: none;
+    }
+    .device-bar select:focus, .device-bar input:focus { border-color: var(--cyan); }
+    .device-bar input { width: 64px; }
+    .device-bar .device-label { font-size: 0.7rem; color: var(--muted); white-space: nowrap; text-transform: none; letter-spacing: 0; }
+    .preview-stage {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+      overflow: hidden;
+      padding: 0;
+    }
+    .preview-stage.is-device {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: center;
+      background: #0a0e13;
+      overflow: auto;
+      padding: 16px;
+    }
+    .preview-frame {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      background: #fff;
+      border: none;
+      border-radius: 0;
+      overflow: hidden;
+      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .preview-frame iframe {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      border: none;
+      background: #fff;
+    }
+    /* Only when a device size is selected */
+    .preview-stage.is-device .preview-frame {
+      flex: 0 0 auto;
+      border-radius: 18px;
+      border: 2px solid #334155;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.06);
+      min-height: 280px;
+      max-height: 100%;
+    }
     body.header-hidden header { display: none; }
     body.header-hidden .wrap { height: 100vh; }
     #showHeaderBtn {
@@ -272,8 +332,32 @@
       <textarea id="js" spellcheck="false" hidden></textarea>
     </div>
     <div class="col">
-      <div class="label">Preview</div>
-      <iframe id="preview" sandbox="allow-scripts allow-modals allow-forms allow-same-origin"></iframe>
+      <div class="label">
+        <span>Preview</span>
+        <div class="device-bar">
+          <span class="device-label">Device</span>
+          <select id="deviceSelect" title="Simulate device screen size">
+            <option value="full">Full width</option>
+            <option value="320x568">iPhone SE (320×568)</option>
+            <option value="375x667">iPhone 8 (375×667)</option>
+            <option value="390x844">iPhone 14 (390×844)</option>
+            <option value="412x915">Pixel 7 (412×915)</option>
+            <option value="768x1024">iPad (768×1024)</option>
+            <option value="1024x768">iPad Landscape (1024×768)</option>
+            <option value="1280x800">Laptop (1280×800)</option>
+            <option value="1440x900">Desktop (1440×900)</option>
+            <option value="custom">Custom…</option>
+          </select>
+          <input type="number" id="deviceWidth" min="200" max="3000" placeholder="W" title="Width" style="display:none">
+          <input type="number" id="deviceHeight" min="200" max="3000" placeholder="H" title="Height" style="display:none">
+          <button type="button" id="deviceApply" style="display:none;padding:5px 10px;font-size:0.72rem;">Apply</button>
+        </div>
+      </div>
+      <div class="preview-stage">
+        <div class="preview-frame" id="previewFrame" data-device="full">
+          <iframe id="preview" sandbox="allow-scripts allow-modals allow-forms allow-same-origin"></iframe>
+        </div>
+      </div>
     </div>
   </div>
   <div class="apk-modal-backdrop" id="apkAccessModal" role="dialog" aria-modal="true">
