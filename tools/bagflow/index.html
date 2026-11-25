@@ -15,108 +15,140 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
-      color: #e0e0e0;
-      line-height: 1.6;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #07090f;
+      color: #f4f6fb;
+      line-height: 1.55;
       min-height: 100vh;
     }
-    .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-    .header { text-align: center; margin-bottom: 50px; }
+    body::before {
+      content: "";
+      position: fixed; inset: 0; pointer-events: none; z-index: -1;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(94,234,212,0.12) 0, transparent 40%),
+        radial-gradient(circle at 85% 15%, rgba(129,140,248,0.14) 0, transparent 35%),
+        radial-gradient(circle at 50% 90%, rgba(236,72,153,0.08) 0, transparent 40%);
+    }
+    .container { max-width: 920px; margin: 0 auto; padding: 36px 18px 48px; }
+    .header { text-align: center; margin-bottom: 36px; }
     .header h1 {
-      font-size: 48px; font-weight: 700;
-      background: linear-gradient(120deg, #ffffff, #a0a0a0);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: 12px;
+      font-size: clamp(2.4rem, 6vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #5eead4, #818cf8, #f472b6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
     }
-    .header p { font-size: 16px; color: #999; }
+    .header p { font-size: 1rem; color: #9aa3b5; font-weight: 500; }
     .input-section, .projections-section, .chart-section {
-      background: rgba(30, 30, 30, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 40px;
-      margin-bottom: 40px;
-      backdrop-filter: blur(10px);
+      background: rgba(18,23,34,0.75);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
     }
-    .form-group { margin-bottom: 28px; }
-    .form-label { display: block; font-size: 14px; font-weight: 500; color: #ccc; margin-bottom: 10px; }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 0.82rem; font-weight: 700; color: #c4b5fd; margin-bottom: 8px; letter-spacing: 0.02em; }
     .form-input {
-      width: 100%; padding: 14px 16px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px; color: #fff; font-size: 15px; transition: all 0.2s;
+      width: 100%; padding: 13px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px; color: #fff; font-size: 0.95rem;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .form-input:focus { outline: none; border-color: rgba(100, 200, 255, 0.4); background: rgba(255, 255, 255, 0.08); box-shadow: 0 0 0 3px rgba(100, 200, 255, 0.1); }
-    .form-input::placeholder { color: #666; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-input:focus {
+      outline: none;
+      border-color: #5eead4;
+      box-shadow: 0 0 0 3px rgba(94,234,212,0.15);
+    }
+    .form-input::placeholder { color: #6b7385; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .current-value {
-      background: linear-gradient(135deg, rgba(100, 200, 255, 0.15), rgba(100, 200, 255, 0.05));
-      border: 1px solid rgba(100, 200, 255, 0.3);
-      border-radius: 12px; padding: 24px; text-align: center;
+      background: linear-gradient(135deg, rgba(94,234,212,0.15), rgba(129,140,248,0.12));
+      border: 1px solid rgba(94,234,212,0.3);
+      border-radius: 16px;
+      padding: 22px;
+      text-align: center;
+      margin-top: 8px;
     }
-    .current-value-label { font-size: 13px; color: #999; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .current-value-amount { font-size: 36px; font-weight: 700; color: #64c8ff; }
-    .projections-title { font-size: 20px; font-weight: 600; margin-bottom: 28px; color: #fff; }
-    .market-cap-buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); gap: 10px; margin-bottom: 28px; }
+    .current-value-label { font-size: 0.75rem; color: #9aa3b5; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .current-value-amount { font-size: 2.2rem; font-weight: 800; color: #5eead4; }
+    .projections-title { font-size: 1.15rem; font-weight: 800; margin-bottom: 16px; color: #fff; }
+    .market-cap-buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(78px, 1fr)); gap: 8px; margin-bottom: 16px; }
     .market-cap-btn {
-      padding: 12px 10px; background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px;
-      color: #aaa; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s;
+      padding: 10px 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: #9aa3b5;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 700;
+      transition: all 0.15s;
     }
-    .market-cap-btn:hover { background: rgba(100, 200, 255, 0.15); border-color: rgba(100, 200, 255, 0.3); color: #64c8ff; transform: translateY(-2px); }
-    .market-cap-btn.active { background: rgba(100, 200, 255, 0.25); border-color: rgba(100, 200, 255, 0.5); color: #64c8ff; box-shadow: 0 4px 12px rgba(100, 200, 255, 0.2); }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    thead { background: rgba(255, 255, 255, 0.05); border-bottom: 2px solid rgba(255, 255, 255, 0.1); }
-    th { padding: 14px; text-align: left; color: #888; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-    td { padding: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: #e0e0e0; }
-    tbody tr:hover { background: rgba(100, 200, 255, 0.05); }
-    .gain { color: #4ade80; font-weight: 600; }
-    .error { background: rgba(230, 75, 75, 0.15); border: 1px solid rgba(230, 75, 75, 0.3); border-radius: 10px; padding: 14px 16px; color: #ff6b6b; margin-bottom: 20px; font-size: 14px; }
-    .note { background: rgba(100, 150, 255, 0.08); border: 1px solid rgba(100, 150, 255, 0.2); border-radius: 10px; padding: 14px 16px; color: #aaa; font-size: 13px; margin-bottom: 20px; line-height: 1.6; }
-    .disclaimer { font-size: 12px; color: #777; margin-top: 32px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); text-align: center; }
+    .market-cap-btn:hover { background: rgba(94,234,212,0.12); border-color: #5eead4; color: #5eead4; transform: translateY(-2px); }
+    .market-cap-btn.active { background: rgba(94,234,212,0.2); border-color: #5eead4; color: #5eead4; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    thead { background: rgba(255,255,255,0.04); }
+    th { padding: 12px 10px; text-align: left; color: #9aa3b5; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    tbody tr:hover { background: rgba(94,234,212,0.06); }
+    .gain { color: #4ade80; font-weight: 700; }
+    .error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 12px 14px; color: #fca5a5; margin-bottom: 16px; font-size: 0.88rem; }
+    .note { background: rgba(94,234,212,0.08); border: 1px solid rgba(94,234,212,0.2); border-radius: 12px; padding: 12px 14px; color: #c4b5fd; font-size: 0.82rem; margin-bottom: 16px; }
+    .disclaimer { font-size: 0.72rem; color: #6b7385; margin-top: 16px; text-align: center; }
     .hidden { display: none !important; }
-    .chart-upload-area { border: 2px dashed rgba(100, 200, 255, 0.3); border-radius: 12px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.3s; background: rgba(100, 200, 255, 0.05); }
-    .chart-upload-area:hover { border-color: rgba(100, 200, 255, 0.6); background: rgba(100, 200, 255, 0.1); }
+    .chart-upload-area {
+      border: 2px dashed rgba(94,234,212,0.35);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(94,234,212,0.04);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .chart-upload-area:hover { border-color: #5eead4; background: rgba(94,234,212,0.08); }
     .chart-upload-area input { display: none; }
-    #chartPreview { max-width: 100%; max-height: 400px; border-radius: 12px; margin-top: 20px; border: 1px solid rgba(100, 200, 255, 0.2); }
-    .chart-insights { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 24px; }
-    .insight-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 16px; }
-    .insight-title { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-    .insight-value { font-size: 16px; font-weight: 600; color: #64c8ff; }
-    .chart-analysis-text { background: rgba(100, 150, 255, 0.08); border: 1px solid rgba(100, 150, 255, 0.2); border-radius: 10px; padding: 16px; margin-top: 20px; font-size: 13px; line-height: 1.6; color: #aaa; }
+    #chartPreview { max-width: 100%; max-height: 380px; border-radius: 14px; margin-top: 16px; border: 1px solid rgba(94,234,212,0.2); }
+    .chart-insights { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 16px; }
+    .insight-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; }
+    .insight-title { font-size: 0.7rem; color: #9aa3b5; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+    .insight-value { font-size: 1rem; font-weight: 700; color: #5eead4; }
+    .chart-analysis-text { background: rgba(129,140,248,0.08); border: 1px solid rgba(129,140,248,0.2); border-radius: 12px; padding: 14px; margin-top: 14px; font-size: 0.82rem; color: #c4b5fd; }
     footer {
       text-align: center;
-      margin-top: 40px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 13px;
-      color: #888;
+      margin-top: 32px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.82rem;
+      color: #9aa3b5;
     }
     footer a {
-      color: #64c8ff;
+      color: #5eead4;
       text-decoration: none;
-      font-weight: 600;
-      position: relative;
-      transition: color 0.2s;
+      font-weight: 700;
     }
-    footer a:hover { color: #a0e0ff; }
-    footer a::after {
-      content: '';
-      position: absolute;
-      left: 0; bottom: -2px;
-      width: 0; height: 2px;
-      background: linear-gradient(90deg, #64c8ff, #a0e0ff);
-      transition: width 0.3s ease;
+    footer a:hover { color: #a7f3d0; }
+    .add-btn {
+      padding: 12px 18px;
+      background: linear-gradient(135deg, #5eead4, #818cf8);
+      border: none;
+      border-radius: 10px;
+      color: #041016;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 0.88rem;
     }
-    footer a:hover::after { width: 100%; }
-    @media (max-width: 768px) {
-      .container { padding: 24px 16px; }
-      .header h1 { font-size: 32px; }
-      .input-section, .projections-section, .chart-section { padding: 24px; }
+    .add-btn:hover { filter: brightness(1.08); }
+    @media (max-width: 700px) {
       .form-row { grid-template-columns: 1fr; }
-      .market-cap-buttons { grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); }
-      table { font-size: 13px; }
-      th, td { padding: 10px; }
+      .container { padding: 20px 14px; }
+      .input-section, .projections-section, .chart-section { padding: 20px; }
+      .market-cap-buttons { grid-template-columns: repeat(auto-fit, minmax(68px, 1fr)); }
     }
   </style>
 </head>
@@ -124,14 +156,14 @@
   <div class="container">
     <div class="header">
       <h1>Crypto BagFlow</h1>
-      <p>See your holdings at any market cap</p>
+      <p>See what your bag is worth at any market cap</p>
     </div>
 
     <div class="chart-section" id="chartSection" style="display: none;">
-      <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 24px; color: #fff;">Chart Analysis</h2>
+      <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 16px;">Chart Analysis</h2>
       <div class="chart-upload-area" onclick="document.getElementById('chartUpload').click()">
-        <div style="font-size: 14px; color: #64c8ff; margin-bottom: 8px;">📊 Click to upload token chart</div>
-        <div style="font-size: 12px; color: #888;">PNG, JPG, or GIF • Max 5MB • Or drag & drop • Or paste (Ctrl+V)</div>
+        <div style="font-size: 0.9rem; color: #5eead4; margin-bottom: 6px;">📊 Upload token chart</div>
+        <div style="font-size: 0.75rem; color: #9aa3b5;">PNG, JPG • Max 5MB • Drag & drop or paste</div>
         <input type="file" id="chartUpload" accept="image/*" onchange="handleChartUpload(event)" />
       </div>
       <div id="chartDisplay" style="display: none;">
@@ -142,60 +174,51 @@
           <div class="insight-card"><div class="insight-title">Volatility</div><div class="insight-value" id="volatility">Analyzing...</div></div>
           <div class="insight-card"><div class="insight-title">Volume Trend</div><div class="insight-value" id="volumeTrend">Analyzing...</div></div>
         </div>
-        <div class="chart-analysis-text" id="chartAnalysis">📈 Analyzing chart patterns...</div>
-        <button onclick="clearChart()" style="margin-top: 16px; padding: 10px 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #888; cursor: pointer;">Clear Chart</button>
+        <div class="chart-analysis-text" id="chartAnalysis">Analyzing chart patterns...</div>
+        <button onclick="clearChart()" style="margin-top: 12px; padding: 8px 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #9aa3b5; cursor: pointer;">Clear Chart</button>
       </div>
     </div>
 
     <div class="input-section">
-      <div class="note">✓ Works with ANY token. Enter numbers as: <strong>1000000</strong> or <strong>1M</strong> or <strong>543.87K</strong> or <strong>1.5B</strong></div>
-      <div style="margin-bottom: 20px; padding: 12px; background: rgba(100, 200, 255, 0.1); border: 1px solid rgba(100, 200, 255, 0.2); border-radius: 8px; display: flex; align-items: center; gap: 10px;">
-        <input type="checkbox" id="enableChartAnalysis" style="cursor: pointer; width: 18px; height: 18px;" onchange="toggleChartSection()">
-        <label for="enableChartAnalysis" style="cursor: pointer; margin: 0; color: #aaa; font-size: 13px;">Enable Chart Analysis (Optional)</label>
+      <div class="note">✓ Works with any token. Enter numbers as <strong>1000000</strong>, <strong>1M</strong>, <strong>543.87K</strong>, or <strong>1.5B</strong></div>
+      <div style="margin-bottom: 16px; padding: 10px 12px; background: rgba(94,234,212,0.08); border: 1px solid rgba(94,234,212,0.2); border-radius: 10px; display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" id="enableChartAnalysis" style="cursor: pointer; width: 16px; height: 16px;" onchange="toggleChartSection()">
+        <label for="enableChartAnalysis" style="cursor: pointer; margin: 0; color: #c4b5fd; font-size: 0.82rem;">Enable Chart Analysis (Optional)</label>
       </div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Token Name</label><input type="text" id="tokenName" class="form-input" placeholder="e.g. BONK, Solana, Bitcoin" /></div>
+        <div class="form-group"><label class="form-label">Token Name</label><input type="text" id="tokenName" class="form-input" placeholder="e.g. BONK, SOL, BTC" /></div>
         <div class="form-group"><label class="form-label">Current Price (USD)</label><input type="text" id="currentPrice" class="form-input" placeholder="e.g. 0.00001 or 25.5" /></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Amount You Hold</label><input type="text" id="holdings" class="form-input" placeholder="e.g. 1000000 or 1M or 543.87K" /></div>
-        <div class="form-group"><label class="form-label">Circulating Supply</label><input type="text" id="circulatingSupply" class="form-input" placeholder="e.g. 100000000000 or 100B or 543.87M" /></div>
+        <div class="form-group"><label class="form-label">Amount You Hold</label><input type="text" id="holdings" class="form-input" placeholder="e.g. 1M or 543.87K" /></div>
+        <div class="form-group"><label class="form-label">Circulating Supply</label><input type="text" id="circulatingSupply" class="form-input" placeholder="e.g. 100B or 543.87M" /></div>
       </div>
       <div id="errorMsg" class="error hidden"></div>
       <div class="current-value" id="currentValue" style="display: none;">
         <div class="current-value-label">Your Holdings Worth Today</div>
         <div class="current-value-amount" id="currentValueAmount">$0.00</div>
-        <div style="font-size: 12px; color: #888; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(100, 200, 255, 0.2);">
-          Current Market Cap: <strong id="currentMarketCap" style="color: #aaa;">$0.00</strong>
-        </div>
+        <div style="font-size: 0.75rem; color: #9aa3b5; margin-top: 8px;">Current Market Cap: <strong id="currentMarketCap" style="color: #c4b5fd;">$0.00</strong></div>
       </div>
-      <div class="projections-section" id="projectionsSection" style="display: none; margin-top: 28px; padding: 24px; background: rgba(30, 30, 30, 0.5); border-top: 1px solid rgba(100, 200, 255, 0.2); border-radius: 0;">
+      <div class="projections-section" id="projectionsSection" style="display: none; margin-top: 20px; padding: 20px; background: rgba(18,23,34,0.5); border-radius: 16px;">
         <div class="projections-title" id="projectionsTitleText">If this token reaches...</div>
         <div class="market-cap-buttons" id="marketCapButtons"></div>
-        <div style="display: flex; gap: 10px; margin-bottom: 28px; align-items: flex-end;">
-          <input type="text" id="customMarketCapInput" class="form-input" placeholder="Enter your target market cap (e.g. 250M or 2.5B)" style="flex: 1; margin: 0; padding: 12px 16px; font-size: 14px;" />
-          <button onclick="addCustomMarketCap()" style="padding: 12px 20px; background: linear-gradient(120deg, #64c8ff, #40a0ff); border: none; border-radius: 8px; color: #000; font-weight: 600; cursor: pointer; font-size: 14px; white-space: nowrap;">Add Target</button>
-          <button onclick="clearCustomMarketCaps()" id="clearCustomBtn" style="padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #888; font-weight: 600; cursor: pointer; font-size: 13px; display: none;">Clear</button>
+        <div style="display: flex; gap: 8px; margin-bottom: 16px; align-items: flex-end; flex-wrap: wrap;">
+          <input type="text" id="customMarketCapInput" class="form-input" placeholder="Custom target (e.g. 250M or 2.5B)" style="flex: 1; min-width: 180px; margin: 0;" />
+          <button class="add-btn" onclick="addCustomMarketCap()">Add Target</button>
+          <button onclick="clearCustomMarketCaps()" id="clearCustomBtn" style="padding: 12px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #9aa3b5; font-weight: 700; cursor: pointer; display: none;">Clear</button>
         </div>
         <div style="overflow-x: auto;">
           <table>
-            <thead><tr><th>Market Cap</th><th>Token Price</th><th>Your Bag Worth</th><th>Gain</th><th>Return %</th></tr></thead>
+            <thead><tr><th>Market Cap</th><th>Token Price</th><th>Your Bag</th><th>Gain</th><th>Return %</th></tr></thead>
             <tbody id="projectionsBody"></tbody>
           </table>
         </div>
-        <div class="disclaimer" style="margin-top: 20px;">⚠️ Projections are hypothetical. Actual prices may differ. Always do your own research.</div>
+        <div class="disclaimer">⚠️ Projections are hypothetical. Always DYOR.</div>
       </div>
     </div>
 
     <footer>
-      Powered by <a href="https://niti.com.ng/" target="_blank" rel="noopener">
-        Neroitech Inventions
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-left: 4px;">
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-          <polyline points="15 3 21 3 21 9"></polyline>
-          <line x1="10" y1="14" x2="21" y2="3"></line>
-        </svg>
-      </a>
+      Powered by <a href="https://niti.com.ng/" target="_blank" rel="noopener">Neroitech Inventions</a>
     </footer>
   </div>
 
@@ -315,8 +338,8 @@
         const gain = newValue - currentValue;
         const gainPercent = currentValue > 0 ? (gain / currentValue) * 100 : 0;
         const isCustom = customMarketCaps.some(cap => cap.value === preset.value);
-        const style = isCustom ? 'background: rgba(100, 200, 255, 0.08); font-weight: 600;' : '';
-        return `<tr style="${style}"><td><strong>${preset.name}</strong> ${isCustom ? '<span style="color: #64c8ff; font-size: 11px; margin-left: 6px;">(YOUR TARGET)</span>' : ''}</td><td>${formatCurrency(newPrice)}</td><td><strong>${formatCurrency(newValue)}</strong></td><td class="gain">${gain > 0 ? '+' : ''}${formatCurrency(gain)}</td><td class="gain">${gainPercent > 0 ? '+' : ''}${gainPercent.toFixed(1)}%</td></tr>`;
+        const style = isCustom ? 'background: rgba(94,234,212,0.08); font-weight: 600;' : '';
+        return `<tr style="${style}"><td><strong>${preset.name}</strong> ${isCustom ? '<span style="color:#5eead4;font-size:11px;margin-left:6px;">(YOUR TARGET)</span>' : ''}</td><td>${formatCurrency(newPrice)}</td><td><strong>${formatCurrency(newValue)}</strong></td><td class="gain">${gain > 0 ? '+' : ''}${formatCurrency(gain)}</td><td class="gain">${gainPercent > 0 ? '+' : ''}${gainPercent.toFixed(1)}%</td></tr>`;
       }).join('');
     }
 
@@ -371,7 +394,7 @@
       document.getElementById('trendDirection').textContent = selected.trend;
       document.getElementById('volatility').textContent = selected.volatility;
       document.getElementById('volumeTrend').textContent = selected.volume;
-      document.getElementById('chartAnalysis').innerHTML = `<strong style="color: #64c8ff;">Pattern Analysis:</strong><br><br>${selected.analysis}`;
+      document.getElementById('chartAnalysis').innerHTML = `<strong style="color:#5eead4;">Pattern Analysis:</strong><br><br>${selected.analysis}`;
     }
 
     function clearChart() {
@@ -387,11 +410,11 @@
 
     const uploadArea = document.querySelector('.chart-upload-area');
     if (uploadArea) {
-      uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.borderColor = 'rgba(100, 200, 255, 0.8)'; });
-      uploadArea.addEventListener('dragleave', (e) => { e.preventDefault(); uploadArea.style.borderColor = 'rgba(100, 200, 255, 0.3)'; });
+      uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.borderColor = '#5eead4'; });
+      uploadArea.addEventListener('dragleave', (e) => { e.preventDefault(); uploadArea.style.borderColor = 'rgba(94,234,212,0.35)'; });
       uploadArea.addEventListener('drop', (e) => {
         e.preventDefault();
-        uploadArea.style.borderColor = 'rgba(100, 200, 255, 0.3)';
+        uploadArea.style.borderColor = 'rgba(94,234,212,0.35)';
         const files = e.dataTransfer.files;
         if (files.length > 0) processChartFile(files[0]);
       });

@@ -226,6 +226,9 @@ canvas {
     <button class="btn secondary" id="micBtn">🎙 MICROPHONE</button>
     <button class="btn pink" id="stopBtn" disabled>■ STOP</button>
   </div>
+  <div class="controls" style="margin-top:8px; grid-template-columns:1fr;">
+    <button class="btn secondary" id="sfxBtn" style="background:#c084fc; color:#1a1035; box-shadow:0 4px 0 #7c3aed;">🔊 Sound Effects: ON</button>
+  </div>
 
   <section class="panel">
     <h2>🎧 Feed the beast some music</h2>
@@ -263,6 +266,29 @@ canvas {
   let particles = [], bass = 0, mids = 0, highs = 0, kickPulse = 0;
   let beatIntervals = [], tempo = 0, previousSpectrum = null, fluxHistory = [];
   let rafAudio = 0, demoTimer = null;
+  let sfxEnabled = true;
+
+  function playSfx(freq, duration = 0.08, type = "sine", vol = 0.12) {
+    if (!sfxEnabled) return;
+    try {
+      const ctx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      gain.gain.value = vol;
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+      if (!audioCtx) setTimeout(() => ctx.close(), duration * 1000 + 80);
+    } catch (e) {}
+  }
+
+  function playBeatSfx() {
+    playSfx(520 + Math.random() * 200, 0.07, "square", 0.08);
+  }
 
   const profiles = {
     bloop:   { name: "Bloop the Beast",  body: "#a3e635", belly: "#d9f99d", accent: "#facc15", eyes: 1 },
@@ -516,6 +542,7 @@ canvas {
       phase += 1.05;
       kickPulse = 1;
       burst();
+      playBeatSfx();
     }
     kickPulse *= 0.88;
     if (kickPulse < 0.015) kickPulse = 0;
@@ -553,7 +580,7 @@ canvas {
     demoTimer = setInterval(() => {
       if (mode !== "demo") return;
       energy = 22 + Math.abs(Math.sin(n * 0.33)) * 68;
-      if (n % 2 === 0) { beat++; burst(); }
+      if (n % 2 === 0) { beat++; burst(); playBeatSfx(); }
       n++;
       updateUI();
     }, 210);
@@ -623,6 +650,12 @@ canvas {
   $("demoBtn").addEventListener("click", startDemo);
   $("micBtn").addEventListener("click", startMic);
   $("stopBtn").addEventListener("click", () => stop());
+  $("sfxBtn").addEventListener("click", () => {
+    sfxEnabled = !sfxEnabled;
+    $("sfxBtn").textContent = sfxEnabled ? "🔊 Sound Effects: ON" : "🔇 Sound Effects: OFF";
+    $("sfxBtn").style.background = sfxEnabled ? "#c084fc" : "#64748b";
+    $("sfxBtn").style.boxShadow = sfxEnabled ? "0 4px 0 #7c3aed" : "0 4px 0 #334155";
+  });
   $("musicFile").addEventListener("change", e => loadFile(e.target.files[0]));
   $("creature").addEventListener("change", e => {
     creature = e.target.value;
