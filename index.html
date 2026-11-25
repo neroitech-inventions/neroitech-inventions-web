@@ -245,12 +245,21 @@
 
     /* Footer */
     footer { border-top: 1px solid var(--border); padding: 48px 20px 24px; }
-    .footer-grid { width: min(1200px, 100%); margin: 0 auto 28px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 28px; }
+    .footer-grid { width: min(1200px, 100%); margin: 0 auto 28px; display: grid; grid-template-columns: 1.3fr 0.9fr 1.1fr 1.1fr 1.1fr; gap: 28px; }
     .footer-grid h3 { font-size: 0.95rem; margin-bottom: 12px; }
     .footer-grid p, .footer-grid a { color: var(--text-muted); font-size: 0.9rem; }
     .footer-grid ul { list-style: none; }
     .footer-grid li { margin-bottom: 8px; }
     .footer-grid a:hover { color: var(--accent); }
+    .footer-cat {
+      color: var(--text-dim);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin: 14px 0 8px;
+    }
+    .footer-cat:first-child { margin-top: 0; }
     .footer-bottom {
       width: min(1200px, 100%); margin: 0 auto; padding-top: 18px;
       border-top: 1px solid var(--border);
@@ -320,6 +329,7 @@
       .nav-links, .nav-cta, .social-links { display: none; }
       .hamburger { display: block; }
       .hero-inner, .about-grid, .updates, .awards, .footer-grid, .contact-form { grid-template-columns: 1fr; }
+      .footer-grid { gap: 22px; }
       .hero { padding-top: 100px; }
       .hero-visual { aspect-ratio: 16/9; }
     }
@@ -551,9 +561,7 @@
           <li><a href="https://medium.com/@neroitech-inventions" target="_blank">Blog</a></li>
           <li><a href="https://drive.google.com/drive/folders/11mGKqDfj_OzY6WTvSrzF7tPnDO92BHIb?usp=sharing" target="_blank">Brand assets</a></li>
         </ul>
-      </div>
-      <div>
-        <h3>Portfolio</h3>
+        <p class="footer-cat">Portfolio</p>
         <ul>
           <li><a href="https://niti.com.ng/snappquest" target="_blank">SnappQuest</a></li>
           <li><a href="https://niti.com.ng/tools/nowalletconnect/" target="_blank">NoWalletConnect</a></li>
@@ -561,24 +569,42 @@
         </ul>
       </div>
       <div>
-        <h3>Tools</h3>
+        <h3>Productivity</h3>
         <ul>
           <li><a href="https://niti.com.ng/tools/resume-builder" target="_blank">Free Resume Builder</a></li>
           <li><a href="https://niti.com.ng/tools/neroiedit" target="_blank">Free Video Editor</a></li>
           <li><a href="https://niti.com.ng/tools/sharednote" target="_blank">Online Notepad</a></li>
           <li><a href="https://niti.com.ng/tools/gig-builder" target="_blank">Gig Builder</a></li>
           <li><a href="https://niti.com.ng/tools/html-live" target="_blank">HTML Live Preview</a></li>
-          <li><a href="https://niti.com.ng/tools/kids" target="_blank">Digital Toys</a></li>
-          <li><a href="https://niti.com.ng/tools/ip-detector" target="_blank">My IP Address</a></li>
-          <li><a href="https://urlmini.github.io" target="_blank">URL Shortener</a></li>
           <li><a href="https://niti.com.ng/tools/qrcode" target="_blank">QR Code Generator</a></li>
           <li><a href="https://niti.com.ng/tools/quote-generator" target="_blank">Quote Generator</a></li>
           <li><a href="https://niti.com.ng/tools/countdown-timer" target="_blank">Countdown Timer</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Web &amp; Kids</h3>
+        <p class="footer-cat">Web utilities</p>
+        <ul>
+          <li><a href="https://niti.com.ng/tools/ip-detector" target="_blank">My IP Address</a></li>
+          <li><a href="https://urlmini.github.io" target="_blank">URL Shortener</a></li>
           <li><a href="https://niti.com.ng/tools/x-link-analyzer" target="_blank">X Link Analyzer</a></li>
+        </ul>
+        <p class="footer-cat">Kids</p>
+        <ul>
+          <li><a href="https://niti.com.ng/tools/kids" target="_blank">Neroitech Kids (Digital Toys)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Crypto &amp; Local</h3>
+        <p class="footer-cat">Crypto &amp; finance</p>
+        <ul>
           <li><a href="https://niti.com.ng/tools/cross-chain/" target="_blank">Polygon ↔ Solana Bridge</a></li>
           <li><a href="https://niti.com.ng/tools/bagflow/" target="_blank">Crypto BagFlow</a></li>
           <li><a href="https://niti.com.ng/tools/btc-prediction-tool" target="_blank">Bitcoin Market Prediction</a></li>
           <li><a href="https://niti.com.ng/tools/usd-ngn" target="_blank">USD to Naira Rate</a></li>
+        </ul>
+        <p class="footer-cat">Nigeria</p>
+        <ul>
           <li><a href="https://niti.com.ng/tools/deviceworth" target="_blank">Device Worth (NG)</a></li>
         </ul>
       </div>
