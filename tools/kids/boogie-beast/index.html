@@ -630,7 +630,7 @@ a.tg-link:active, .tg-link:active {
       <button type="button" class="inst-tab active" data-inst="keyboard">🎹 Keyboard</button>
       <button type="button" class="inst-tab" data-inst="drums">🥁 Drums</button>
     </div>
-    <p class="hint" id="keyboardHint">Tap the keys to make music — the beast dances to every note! Unlock for $0.25 (this session only).</p>
+    <p class="hint" id="keyboardHint">Tap the keys to make music - the beast dances to every note! Unlock for $0.25 (this session only).</p>
 
     <div id="keyboardLocked" style="text-align:center;padding:12px 0;">
       <button type="button" class="btn versus" id="unlockKeyboardBtn">🔓 Unlock Cool Keyboard · $0.25</button>
@@ -910,7 +910,7 @@ a.tg-link:active, .tg-link:active {
     if (activeInst === "drums") {
       if (isDrumsUnlocked()) {
         if (dWrap) dWrap.style.display = "block";
-        if (hint) hint.textContent = "Tap the pads — every hit makes the beast dance!";
+        if (hint) hint.textContent = "Tap the pads - every hit makes the beast dance!";
       } else {
         if (dLocked) dLocked.style.display = "block";
         if (hint) hint.textContent = "Cool Drums are locked. Unlock for $0.25 (this session only).";
@@ -918,7 +918,7 @@ a.tg-link:active, .tg-link:active {
     } else {
       if (isKeyboardUnlocked()) {
         if (kWrap) kWrap.style.display = "block";
-        if (hint) hint.textContent = "Tap the keys — every note makes the beast dance!";
+        if (hint) hint.textContent = "Tap the keys - every note makes the beast dance!";
       } else {
         if (kLocked) kLocked.style.display = "block";
         if (hint) hint.textContent = "Cool Keyboard is locked. Unlock for $0.25 (this session only).";
