@@ -43,6 +43,7 @@ header {
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 .brand {
   font-weight: 900;
@@ -88,6 +89,75 @@ header {
 }
 .stageTop { top: 14px; }
 .stageBottom { bottom: 14px; align-items: flex-end; }
+.versus-hud {
+  position: absolute;
+  z-index: 3;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  text-align: center;
+}
+.versus-hud-time {
+  font-size: clamp(1.8rem, 6vw, 2.4rem);
+  font-weight: 900;
+  color: var(--cyan);
+  text-shadow: 0 2px 12px rgba(0,0,0,.6);
+  letter-spacing: 0.04em;
+  background: rgba(16,12,36,.75);
+  border: 1px solid rgba(94,234,212,.35);
+  border-radius: 16px;
+  padding: 6px 18px;
+  backdrop-filter: blur(8px);
+}
+.versus-hud-timeup {
+  font-size: clamp(1.6rem, 5vw, 2.1rem);
+  font-weight: 900;
+  color: #fb7185;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 20px rgba(251,113,133,0.55);
+  background: rgba(16,12,36,.85);
+  border: 2px solid rgba(251,113,133,0.5);
+  border-radius: 16px;
+  padding: 8px 20px;
+  animation: timeUpPop 0.35s ease;
+}
+@keyframes timeUpPop {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.versus-highscore {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #c4b5fd;
+  margin: 6px 0 2px;
+}
+.versus-highscore strong { color: var(--yellow); }
+.versus-hud-stats {
+  display: flex;
+  gap: 14px;
+  background: rgba(16,12,36,.75);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 12px;
+  padding: 6px 14px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  backdrop-filter: blur(8px);
+}
+.versus-hud-stats .vh-label {
+  color: #c4b5fd;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-right: 4px;
+}
+.versus-hud-stats span:not(.vh-label) {
+  color: var(--yellow);
+}
 .pill {
   border: 1px solid rgba(255,255,255,.2);
   background: rgba(16,12,36,.7);
@@ -132,6 +202,7 @@ canvas {
 .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #ca8a04; }
 .btn.secondary { background: var(--cyan); box-shadow: 0 4px 0 #0d9488; }
 .btn.pink { background: #f9a8d4; box-shadow: 0 4px 0 #db2777; }
+.btn.versus { background: linear-gradient(135deg, #fde047, #fb923c); box-shadow: 0 4px 0 #c2410c; color: #1a1035; }
 .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
 .panel {
   margin-top: 12px;
@@ -187,6 +258,76 @@ canvas {
   font-size: .72rem;
   margin: 14px 0 6px;
 }
+
+/* Versus UI */
+.versus-panel {
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid rgba(251,146,60,.35);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(251,146,60,.12), rgba(192,132,252,.1));
+  display: none;
+}
+.versus-panel.open { display: block; }
+.versus-panel h2 {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  color: var(--yellow);
+}
+.versus-timer {
+  font-size: 2.2rem;
+  font-weight: 900;
+  text-align: center;
+  color: var(--cyan);
+  margin: 8px 0;
+  letter-spacing: 0.04em;
+}
+.versus-turn {
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+}
+.versus-scores {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+.score-card {
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+}
+.score-card .who { font-size: .8rem; color: #c4b5fd; font-weight: 700; }
+.score-card .pts {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--yellow);
+  margin-top: 4px;
+}
+.score-card.winner {
+  border-color: rgba(253,224,71,.5);
+  box-shadow: 0 0 20px rgba(253,224,71,.2);
+}
+.versus-result {
+  text-align: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+  margin-top: 12px;
+  color: var(--yellow);
+  min-height: 1.4em;
+}
+.versus-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.versus-actions .btn { flex: 1; min-width: 120px; }
+
 @media (max-width: 600px) {
   body { padding: 10px; }
   .stage { min-height: 340px; }
@@ -211,6 +352,15 @@ canvas {
       <div class="pill" id="danceMode">🪩 READY</div>
       <div class="pill" id="beatCount">BEATS 0</div>
     </div>
+    <!-- Live versus HUD on stage -->
+    <div class="versus-hud" id="versusHud" style="display:none;">
+      <div class="versus-hud-timeup" id="versusHudTimeUp" style="display:none;">TIME UP!</div>
+      <div class="versus-hud-time" id="versusHudTime">60s</div>
+      <div class="versus-hud-stats">
+        <div><span class="vh-label">Score</span> <span id="versusHudScore">0</span></div>
+        <div id="versusHudBeatRow" style="display:none;"><span class="vh-label">To beat</span> <span id="versusHudToBeat">-</span></div>
+      </div>
+    </div>
     <canvas id="scene" aria-label="A funny dancing creature"></canvas>
     <div class="stageBottom">
       <div>
@@ -226,9 +376,37 @@ canvas {
     <button class="btn secondary" id="micBtn">🎙 MICROPHONE</button>
     <button class="btn pink" id="stopBtn" disabled>■ STOP</button>
   </div>
-  <div class="controls" style="margin-top:8px; grid-template-columns:1fr;">
+  <div class="controls" style="margin-top:8px; grid-template-columns:1fr 1fr;">
     <button class="btn secondary" id="sfxBtn" style="background:#c084fc; color:#1a1035; box-shadow:0 4px 0 #7c3aed;">🔊 Sound Effects: ON</button>
+    <button class="btn versus" id="versusBtn">⚔️ 2-PLAYER VERSUS</button>
   </div>
+
+  <!-- Versus panel -->
+  <section class="versus-panel" id="versusPanel">
+    <h2>⚔️ Versus Mode - Impress the Beast!</h2>
+    <div class="versus-highscore">🏆 Highscore: <strong id="versusHighscore">0</strong></div>
+    <div class="versus-turn" id="versusTurn">Get ready…</div>
+    <div class="versus-timer" id="versusTimer">60</div>
+    <div class="versus-scores">
+      <div class="score-card" id="scoreP1">
+        <div class="who">Player 1</div>
+        <div class="pts" id="ptsP1">-</div>
+      </div>
+      <div class="score-card" id="scoreP2">
+        <div class="who">Player 2</div>
+        <div class="pts" id="ptsP2">-</div>
+      </div>
+    </div>
+    <div class="versus-result" id="versusResult"></div>
+    <div class="versus-actions">
+      <button class="btn versus" id="versusStartTurn">Start my 60s</button>
+      <button class="btn pink" id="versusCancel">Exit Versus</button>
+    </div>
+    <p class="hint" style="margin-top:10px;">
+      Each player gets 60 seconds with the microphone. Play music nearby or make noise to pump the energy.
+      Highest score wins. The beast is listening!
+    </p>
+  </section>
 
   <section class="panel">
     <h2>🎧 Feed the beast some music</h2>
@@ -268,26 +446,87 @@ canvas {
   let rafAudio = 0, demoTimer = null;
   let sfxEnabled = true;
 
+  // Versus state
+  let versusActive = false;
+  let versusPhase = "idle"; // idle | p1 | p2 | result
+  let versusTimerId = null;
+  let versusSecondsLeft = 60;
+  let versusScoreP1 = null;
+  let versusScoreP2 = null;
+  let versusEnergySum = 0;
+  let versusEnergySamples = 0;
+  let versusPeakEnergy = 0;
+  let versusStartBeats = 0;
+
   function playSfx(freq, duration = 0.08, type = "sine", vol = 0.12) {
     if (!sfxEnabled) return;
     try {
-      const ctx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      const ctx2 = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx2.createOscillator();
+      const gain = ctx2.createGain();
       osc.type = type;
       osc.frequency.value = freq;
       gain.gain.value = vol;
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx2.currentTime + duration);
       osc.connect(gain);
-      gain.connect(ctx.destination);
+      gain.connect(ctx2.destination);
       osc.start();
-      osc.stop(ctx.currentTime + duration);
-      if (!audioCtx) setTimeout(() => ctx.close(), duration * 1000 + 80);
+      osc.stop(ctx2.currentTime + duration);
+      if (!audioCtx) setTimeout(() => ctx2.close(), duration * 1000 + 80);
     } catch (e) {}
   }
 
   function playBeatSfx() {
     playSfx(520 + Math.random() * 200, 0.07, "square", 0.08);
+  }
+
+  // Versus interaction sounds
+  function playCountdownTick(urgent) {
+    if (urgent) {
+      playSfx(880, 0.08, "square", 0.14);
+      setTimeout(() => playSfx(990, 0.06, "square", 0.1), 60);
+    } else {
+      playSfx(660, 0.06, "sine", 0.1);
+    }
+  }
+  function playTimeUpSfx() {
+    playSfx(400, 0.15, "triangle", 0.16);
+    setTimeout(() => playSfx(300, 0.2, "triangle", 0.14), 120);
+    setTimeout(() => playSfx(220, 0.25, "sawtooth", 0.1), 260);
+  }
+  function playWinSfx() {
+    // little victory fanfare
+    const notes = [523, 659, 784, 1046];
+    notes.forEach((f, i) => {
+      setTimeout(() => playSfx(f, 0.18, "sine", 0.14), i * 110);
+    });
+    setTimeout(() => playSfx(1318, 0.35, "triangle", 0.12), 480);
+  }
+  function playTieSfx() {
+    playSfx(520, 0.15, "sine", 0.12);
+    setTimeout(() => playSfx(520, 0.15, "sine", 0.12), 180);
+    setTimeout(() => playSfx(390, 0.25, "triangle", 0.12), 360);
+  }
+  function playHighscoreSfx() {
+    // bigger fanfare for new highscore
+    const notes = [523, 659, 784, 988, 1175, 1318];
+    notes.forEach((f, i) => {
+      setTimeout(() => playSfx(f, 0.16, i % 2 ? "triangle" : "sine", 0.15), i * 90);
+    });
+    setTimeout(() => playSfx(1568, 0.4, "sine", 0.12), 580);
+  }
+
+  function getHighscore() {
+    try { return Number(localStorage.getItem("boogieBeastHighscore") || 0); } catch (e) { return 0; }
+  }
+  function setHighscore(n) {
+    try { localStorage.setItem("boogieBeastHighscore", String(n)); } catch (e) {}
+    const el = $("versusHighscore");
+    if (el) el.textContent = String(n);
+  }
+  function refreshHighscoreUI() {
+    const el = $("versusHighscore");
+    if (el) el.textContent = String(getHighscore());
   }
 
   const profiles = {
@@ -318,7 +557,6 @@ canvas {
     const tilt = Math.sin(t * 0.0035 + phase) * (0.04 + energy * 0.0006) + Math.sin(t * 0.012 + phase) * highs * 0.0007;
     const p = profiles[creature];
 
-    // floating lights
     for (let i = 0; i < 8; i++) {
       const x = (i * 140 + t * 0.02 * (i % 2 ? 1 : -1)) % (W + 50) - 25;
       const y = 50 + (i * 67) % Math.max(80, H - 120);
@@ -330,7 +568,6 @@ canvas {
     }
     ctx.globalAlpha = 1;
 
-    // shadow
     ctx.fillStyle = "rgba(8,7,24,0.35)";
     ctx.beginPath();
     ctx.ellipse(cx, base + 18, 70 + bounce * 0.6, 12, 0, 0, Math.PI * 2);
@@ -340,7 +577,6 @@ canvas {
     ctx.translate(cx, base - bounce);
     ctx.rotate(tilt);
 
-    // legs
     const legSwing = Math.sin(t * (0.009 + energy * 0.00012) + phase) * (0.35 + energy * 0.0035) + Math.sin(t * 0.018 + phase) * bass * 0.0018;
     for (const s of [-1, 1]) {
       ctx.save();
@@ -360,7 +596,6 @@ canvas {
       ctx.restore();
     }
 
-    // arms
     for (const s of [-1, 1]) {
       ctx.save();
       ctx.translate(s * 50, -6);
@@ -379,7 +614,6 @@ canvas {
       ctx.restore();
     }
 
-    // body
     ctx.fillStyle = p.body;
     ctx.beginPath();
     ctx.ellipse(0, 0, 56, 66 + Math.sin(t * 0.012) * 2, 0, 0, Math.PI * 2);
@@ -389,7 +623,6 @@ canvas {
     ctx.ellipse(0, 22, 32, 32, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // horns / ears
     for (const s of [-1, 1]) {
       ctx.fillStyle = p.accent;
       ctx.beginPath();
@@ -399,7 +632,6 @@ canvas {
       ctx.fill();
     }
 
-    // eyes
     const blink = Math.sin(t * 0.0022) > 0.993;
     for (const s of [-1, 1]) {
       ctx.fillStyle = "white";
@@ -418,7 +650,6 @@ canvas {
       }
     }
 
-    // mouth
     ctx.strokeStyle = "#3f2a4a";
     ctx.lineWidth = 3.5;
     ctx.lineCap = "round";
@@ -430,7 +661,6 @@ canvas {
     ctx.ellipse(2, 12, 6, 3.5 + energy * 0.02, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // cheeks
     ctx.fillStyle = "rgba(251,113,133,0.55)";
     for (const s of [-1, 1]) {
       ctx.beginPath();
@@ -440,7 +670,6 @@ canvas {
 
     ctx.restore();
 
-    // beat ring
     if (mode !== "idle" && energy > 12) {
       ctx.strokeStyle = `rgba(253,224,71,${Math.min(0.55, energy / 200)})`;
       ctx.lineWidth = 3;
@@ -449,7 +678,6 @@ canvas {
       ctx.stroke();
     }
 
-    // particles
     particles = particles.filter(q => q.life > 0);
     particles.forEach(q => {
       q.x += q.vx;
@@ -486,6 +714,7 @@ canvas {
     $("energy").textContent = "ENERGY " + n + "%";
     $("beatCount").textContent = "BEATS " + beat;
     $("danceMode").textContent =
+      versusActive && (versusPhase === "p1" || versusPhase === "p2") ? "⚔️ VERSUS" :
       mode === "demo" ? "🪩 DEMO PARTY" :
       mode === "mic"  ? "🎙 LISTENING" :
       mode === "file" ? "🎧 TRACK PARTY" : "🪩 READY";
@@ -493,6 +722,41 @@ canvas {
       energy > 72 ? "Currently: absolutely losing it 🤪" :
       energy > 38 ? "Currently: getting seriously funky 🕺" :
       "Waiting for the beat…";
+
+    // Versus scoring sample + live HUD
+    if (versusActive && (versusPhase === "p1" || versusPhase === "p2")) {
+      if (mode !== "idle") {
+        versusEnergySum += energy;
+        versusEnergySamples++;
+        if (energy > versusPeakEnergy) versusPeakEnergy = energy;
+      }
+      const liveScore = computeTurnScore();
+      const hud = $("versusHud");
+      const hudScore = $("versusHudScore");
+      const hudTime = $("versusHudTime");
+      const hudBeatRow = $("versusHudBeatRow");
+      const hudToBeat = $("versusHudToBeat");
+      if (hud) hud.style.display = "flex";
+      if (hudScore) hudScore.textContent = String(liveScore);
+      if (hudTime) hudTime.textContent = Math.max(0, versusSecondsLeft) + "s";
+      if (versusPhase === "p2" && versusScoreP1 != null) {
+        if (hudBeatRow) hudBeatRow.style.display = "";
+        if (hudToBeat) hudToBeat.textContent = String(versusScoreP1);
+      } else {
+        if (hudBeatRow) hudBeatRow.style.display = "none";
+      }
+    } else {
+      const hud = $("versusHud");
+      if (hud) hud.style.display = "none";
+    }
+  }
+
+  function computeTurnScore() {
+    const avg = versusEnergySamples ? versusEnergySum / versusEnergySamples : 0;
+    const beatsThisTurn = Math.max(0, beat - versusStartBeats);
+    // Weighted score out of ~1000
+    const score = Math.round(avg * 4 + versusPeakEnergy * 3 + beatsThisTurn * 8);
+    return Math.max(0, score);
   }
 
   function analyse() {
@@ -647,6 +911,195 @@ canvas {
     updateUI();
   }
 
+  /* ===== VERSUS MODE ===== */
+  function openVersus() {
+    versusActive = true;
+    versusPhase = "idle";
+    versusScoreP1 = null;
+    versusScoreP2 = null;
+    versusSecondsLeft = 60;
+    clearInterval(versusTimerId);
+    $("versusPanel").classList.add("open");
+    $("versusResult").textContent = "";
+    $("ptsP1").textContent = "-";
+    $("ptsP2").textContent = "-";
+    $("scoreP1").classList.remove("winner");
+    $("scoreP2").classList.remove("winner");
+    $("versusTurn").textContent = "Player 1 - you're up first!";
+    $("versusTimer").textContent = "60";
+    $("versusStartTurn").textContent = "Start Player 1 (60s)";
+    $("versusStartTurn").disabled = false;
+    $("status").textContent = "Versus mode ready. Player 1 starts when ready.";
+    refreshHighscoreUI();
+    const timeUpEl = $("versusHudTimeUp");
+    if (timeUpEl) timeUpEl.style.display = "none";
+    stop(true);
+  }
+
+  function exitVersus() {
+    versusActive = false;
+    versusPhase = "idle";
+    clearInterval(versusTimerId);
+    $("versusPanel").classList.remove("open");
+    const hud = $("versusHud");
+    if (hud) hud.style.display = "none";
+    stop(true);
+    $("status").textContent = "Versus ended. Back to free dance!";
+  }
+
+  function resetTurnTracking() {
+    versusEnergySum = 0;
+    versusEnergySamples = 0;
+    versusPeakEnergy = 0;
+    versusStartBeats = beat;
+  }
+
+  async function startVersusTurn() {
+    if (!versusActive) return;
+    if (versusPhase === "result") {
+      // Play again
+      openVersus();
+      return;
+    }
+
+    if (versusPhase === "idle") {
+      versusPhase = "p1";
+      $("versusTurn").textContent = "Player 1 - IMPRESS THE BEAST!";
+      $("versusStartTurn").disabled = true;
+    } else if (versusPhase === "p1") {
+      // shouldn't start again mid-turn
+      return;
+    } else if (versusPhase === "p2") {
+      $("versusTurn").textContent = "Player 2 - IMPRESS THE BEAST!";
+      $("versusStartTurn").disabled = true;
+    }
+
+    versusSecondsLeft = 60;
+    $("versusTimer").textContent = "60";
+    const timeUpEl = $("versusHudTimeUp");
+    if (timeUpEl) timeUpEl.style.display = "none";
+    const hudTimeReset = $("versusHudTime");
+    if (hudTimeReset) {
+      hudTimeReset.style.display = "";
+      hudTimeReset.style.color = "";
+      hudTimeReset.textContent = "60s";
+    }
+
+    // Versus uses the microphone to impress the beast
+    $("status").textContent = "Allow the microphone, then play music or make noise to impress the beast!";
+    await startMic();
+    if (mode !== "mic") {
+      $("status").textContent = "Microphone needed for versus. Allow access and try again.";
+      $("versusStartTurn").disabled = false;
+      return;
+    }
+    resetTurnTracking(); // after mic starts (beat is reset inside startMic)
+
+    clearInterval(versusTimerId);
+    versusTimerId = setInterval(() => {
+      versusSecondsLeft--;
+      const left = Math.max(0, versusSecondsLeft);
+      $("versusTimer").textContent = String(left);
+      const hudTime = $("versusHudTime");
+      if (hudTime) hudTime.textContent = left + "s";
+
+      // Countdown warning sounds in the last 10 seconds
+      if (left > 0 && left <= 10) {
+        playCountdownTick(left <= 3); // more urgent in last 3s
+        if (hudTime) {
+          hudTime.style.color = left <= 3 ? "#fb7185" : "#fde047";
+        }
+      }
+
+      // refresh live score on the HUD even if energy is quiet
+      updateUI();
+      if (versusSecondsLeft <= 0) {
+        clearInterval(versusTimerId);
+        playTimeUpSfx();
+        if (hudTime) {
+          hudTime.style.color = "";
+          hudTime.style.display = "none";
+        }
+        const timeUpEl = $("versusHudTimeUp");
+        if (timeUpEl) timeUpEl.style.display = "block";
+        // brief pause so players see TIME UP, then finish the turn
+        setTimeout(() => endVersusTurn(), 900);
+      }
+    }, 1000);
+  }
+
+  function endVersusTurn() {
+    stop(true);
+    const hud = $("versusHud");
+    if (hud) hud.style.display = "none";
+    const timeUpEl = $("versusHudTimeUp");
+    if (timeUpEl) timeUpEl.style.display = "none";
+    const hudTime = $("versusHudTime");
+    if (hudTime) hudTime.style.display = "";
+    const score = computeTurnScore();
+
+    if (versusPhase === "p1") {
+      versusScoreP1 = score;
+      $("ptsP1").textContent = score;
+      versusPhase = "p2";
+      $("versusTurn").textContent = "Player 1 scored " + score + "! Hand the device to Player 2.";
+      $("versusTimer").textContent = "60";
+      $("versusStartTurn").textContent = "Start Player 2 (60s)";
+      $("versusStartTurn").disabled = false;
+      $("status").textContent = "Player 1 done. Player 2 - press Start when ready.";
+      // short “turn complete” chime
+      playSfx(660, 0.12, "sine", 0.12);
+      setTimeout(() => playSfx(880, 0.18, "sine", 0.12), 120);
+    } else if (versusPhase === "p2") {
+      versusScoreP2 = score;
+      $("ptsP2").textContent = score;
+      versusPhase = "result";
+      declareWinner();
+      $("versusStartTurn").textContent = "Play again";
+      $("versusStartTurn").disabled = false;
+    }
+  }
+
+  function declareWinner() {
+    const p1 = versusScoreP1 || 0;
+    const p2 = versusScoreP2 || 0;
+    $("scoreP1").classList.remove("winner");
+    $("scoreP2").classList.remove("winner");
+
+    if (p1 > p2) {
+      $("versusResult").textContent = "🏆 Player 1 wins! The beast is impressed!";
+      $("scoreP1").classList.add("winner");
+      $("mood").textContent = "Player 1 owned the dance floor! 👑";
+      playWinSfx();
+    } else if (p2 > p1) {
+      $("versusResult").textContent = "🏆 Player 2 wins! The beast is impressed!";
+      $("scoreP2").classList.add("winner");
+      $("mood").textContent = "Player 2 owned the dance floor! 👑";
+      playWinSfx();
+    } else {
+      $("versusResult").textContent = "🤝 It's a tie! Double the funk!";
+      $("mood").textContent = "You both crushed it equally 🪩";
+      playTieSfx();
+    }
+
+    // Highscore from best score this match
+    const best = Math.max(p1, p2);
+    const prev = getHighscore();
+    if (best > prev) {
+      setHighscore(best);
+      $("versusResult").textContent += " · 🎉 NEW HIGHSCORE!";
+      setTimeout(() => playHighscoreSfx(), 500);
+    } else {
+      refreshHighscoreUI();
+    }
+
+    $("versusTurn").textContent = "Final ranking";
+    $("status").textContent = "Versus complete. Play again or exit.";
+    burst();
+    burst();
+    burst();
+  }
+
   $("demoBtn").addEventListener("click", startDemo);
   $("micBtn").addEventListener("click", startMic);
   $("stopBtn").addEventListener("click", () => stop());
@@ -663,7 +1116,10 @@ canvas {
     burst();
   });
 
-  // Touch / tap the beast to make it dance and make a sound
+  $("versusBtn").addEventListener("click", openVersus);
+  $("versusStartTurn").addEventListener("click", startVersusTurn);
+  $("versusCancel").addEventListener("click", exitVersus);
+
   function onBeastTap(e) {
     e.preventDefault();
     energy = Math.min(100, energy + 35);
@@ -675,13 +1131,13 @@ canvas {
     setTimeout(() => playSfx(620 + Math.random() * 200, 0.1, "sine", 0.14), 80);
     $("mood").textContent = "You poked me! 🤪";
     updateUI();
-    // little extra bounce animation
     setTimeout(() => { if (mode === "idle") energy = Math.max(0, energy - 20); updateUI(); }, 600);
   }
   canvas.addEventListener("click", onBeastTap);
   canvas.addEventListener("touchstart", onBeastTap, { passive: false });
 
   updateUI();
+  refreshHighscoreUI();
   cancelAnimationFrame(raf);
   raf = requestAnimationFrame(draw);
 })();

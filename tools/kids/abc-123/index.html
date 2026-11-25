@@ -73,7 +73,7 @@ h1 {
 }
 .display {
   width: min(100%, 480px);
-  min-height: 280px;
+  min-height: 240px;
   background: rgba(255,255,255,0.08);
   border: 3px solid rgba(255,255,255,0.18);
   border-radius: 32px;
@@ -113,8 +113,10 @@ h1 {
   cursor: pointer;
   box-shadow: 0 5px 0 rgba(0,0,0,0.25);
   transition: transform 0.1s;
+  font-family: inherit;
 }
 .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 .btn-listen {
   background: linear-gradient(135deg, var(--cyan), #22d3ee);
   color: #0f172a;
@@ -122,6 +124,10 @@ h1 {
 .btn-listen.on {
   background: linear-gradient(135deg, #f59e0b, #ef4444);
   color: white;
+}
+.btn-games {
+  background: linear-gradient(135deg, #c084fc, #f472b6);
+  color: #1a1035;
 }
 .heard {
   min-height: 1.4em;
@@ -157,6 +163,99 @@ h1 {
   transition: transform 0.1s;
 }
 .grid-preview span:active { transform: scale(0.92); }
+
+/* Games panel */
+.games-panel {
+  display: none;
+  width: min(100%, 480px);
+  margin-top: 12px;
+  text-align: left;
+  background: rgba(0,0,0,0.28);
+  border: 2px solid rgba(192,132,252,0.35);
+  border-radius: 18px;
+  padding: 14px;
+}
+.games-panel.open { display: block; }
+.games-panel h3 {
+  color: var(--yellow);
+  font-size: 1rem;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.game-hud { display: none; text-align: center; }
+.game-hud.open { display: block; }
+.game-result {
+  text-align: center;
+  font-weight: 900;
+  color: var(--yellow);
+  margin: 0 0 8px;
+  min-height: 1.3em;
+  font-size: 1.15rem;
+  text-shadow: 0 0 16px rgba(253,224,71,0.35);
+}
+.game-timer {
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--cyan);
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 18px rgba(94,234,212,0.45);
+  transition: color 0.15s ease;
+}
+.game-timer.urgent { color: #fb7185; text-shadow: 0 0 18px rgba(251,113,133,0.5); }
+.game-turn { font-weight: 800; margin: 4px 0; font-size: 1rem; }
+.game-tobeat {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fde047;
+  margin: 4px 0;
+  background: rgba(253,224,71,0.12);
+  border: 1px solid rgba(253,224,71,0.3);
+  border-radius: 999px;
+  padding: 4px 12px;
+  display: inline-block;
+}
+.game-highscore {
+  font-size: 0.82rem;
+  color: #c4b5fd;
+  font-weight: 700;
+  margin: 4px 0 6px;
+}
+.game-highscore strong { color: var(--yellow); }
+.game-live {
+  font-size: 0.9rem;
+  color: var(--yellow);
+  font-weight: 700;
+  min-height: 1.3em;
+}
+.game-scores {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+.score-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+}
+.score-card .who { font-size: 0.75rem; color: #c4b5fd; font-weight: 700; }
+.score-card .pts { font-size: 1.35rem; font-weight: 900; color: var(--yellow); margin-top: 2px; }
+.score-card.winner {
+  border-color: rgba(253,224,71,0.5);
+  box-shadow: 0 0 16px rgba(253,224,71,0.2);
+}
+.game-actions { display: flex; gap: 8px; margin-top: 8px; }
+.game-actions .btn { margin-top: 0; flex: 1; padding: 12px; font-size: 0.9rem; }
+.btn-start-turn {
+  background: linear-gradient(135deg, var(--yellow), var(--orange));
+  color: #1a1035;
+}
+.btn-exit-game {
+  background: linear-gradient(135deg, #f9a8d4, #db2777);
+  color: white;
+}
 </style>
 </head>
 <body>
@@ -175,12 +274,39 @@ h1 {
   <div class="controls">
     <button class="btn btn-listen" id="btnListen">🎤 Start Listening</button>
     <button class="btn" id="btnSpeak" style="background:linear-gradient(135deg,#c084fc,#f472b6);color:#1a1035;">🔊 Speak: ON</button>
+    <button class="btn btn-games" id="btnGames">🎮 Games / Multiplayer</button>
     <div class="heard" id="heard"></div>
+  </div>
+
+  <div class="games-panel" id="gamesPanel">
+    <h3>🎮 2-Player Challenge</h3>
+    <div class="game-hud open" id="gameHud">
+      <div class="game-result" id="gameResult"></div>
+      <div class="game-timer" id="gameTimer">60</div>
+      <div class="game-turn" id="gameTurn">Say as many correct letters/numbers as you can!</div>
+      <div class="game-tobeat" id="gameToBeat" style="display:none;">Score to beat: <strong id="toBeatVal">-</strong></div>
+      <div class="game-highscore">🏆 Highscore: <strong id="highscoreVal">0</strong></div>
+      <div class="game-live" id="gameLive">Correct answers score points.</div>
+      <div class="game-scores">
+        <div class="score-card" id="scoreP1">
+          <div class="who">Player 1</div>
+          <div class="pts" id="ptsP1">-</div>
+        </div>
+        <div class="score-card" id="scoreP2">
+          <div class="who">Player 2</div>
+          <div class="pts" id="ptsP2">-</div>
+        </div>
+      </div>
+      <div class="game-actions">
+        <button type="button" class="btn btn-start-turn" id="btnStartTurn">Start Player 1 (60s)</button>
+        <button type="button" class="btn btn-exit-game" id="btnExitGame">Exit</button>
+      </div>
+    </div>
   </div>
 
   <div class="grid-preview" id="preview"></div>
 
-  <p class="hint">Best on Chrome. Tap a letter/number or say it out loud.<br>Switch between Alphabet and Numbers anytime.</p>
+  <p class="hint">Best on Chrome. Tap a letter/number or say it out loud.<br>Multiplayer: each player gets 60 seconds - most accurate wins!</p>
 
   <script>
     const bigChar = document.getElementById("bigChar");
@@ -188,22 +314,45 @@ h1 {
     const btnNum = document.getElementById("btnNum");
     const btnListen = document.getElementById("btnListen");
     const btnSpeak = document.getElementById("btnSpeak");
+    const btnGames = document.getElementById("btnGames");
     const heard = document.getElementById("heard");
     const preview = document.getElementById("preview");
+
+    const gamesPanel = document.getElementById("gamesPanel");
+    const gameTimer = document.getElementById("gameTimer");
+    const gameTurn = document.getElementById("gameTurn");
+    const gameLive = document.getElementById("gameLive");
+    const gameResult = document.getElementById("gameResult");
+    const ptsP1 = document.getElementById("ptsP1");
+    const ptsP2 = document.getElementById("ptsP2");
+    const scoreP1 = document.getElementById("scoreP1");
+    const scoreP2 = document.getElementById("scoreP2");
+    const btnStartTurn = document.getElementById("btnStartTurn");
+    const btnExitGame = document.getElementById("btnExitGame");
 
     let mode = "alpha";
     let recognition = null;
     let listening = false;
     let speakEnabled = true;
 
+    // Multiplayer state
+    let gameActive = false;
+    let gamePhase = "idle"; // idle | p1 | p2 | result
+    let gameSeconds = 60;
+    let gameTimerId = null;
+    let gameScoreP1 = null;
+    let gameScoreP2 = null;
+    let correctCount = 0;
+    let attemptCount = 0;
+    let lastScored = "";
+
     const colors = ["#fde047","#ff6eb4","#5eead4","#c084fc","#fb923c","#86efac","#f472b6","#67e8f9"];
 
     const letterMap = {};
-    "abcdefghijklmnopqrstuvwxyz".split("").forEach((l, i) => {
+    "abcdefghijklmnopqrstuvwxyz".split("").forEach((l) => {
       letterMap[l] = l.toUpperCase();
-      letterMap[l + "s"] = l.toUpperCase(); // "bees" etc.
+      letterMap[l + "s"] = l.toUpperCase();
     });
-    // common speech recognition variants
     Object.assign(letterMap, {
       "ay": "A", "bee": "B", "see": "C", "cee": "C", "dee": "D", "ee": "E", "eff": "F",
       "gee": "G", "aitch": "H", "eye": "I", "jay": "J", "kay": "K", "el": "L", "ell": "L",
@@ -217,25 +366,77 @@ h1 {
       "twenty":20,"thirty":30,"forty":40,"fifty":50,"sixty":60,"seventy":70,"eighty":80,"ninety":90,"hundred":100
     };
 
+    function playTone(freq, duration, type = "sine", volume = 0.12) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.value = volume;
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+        setTimeout(() => ctx.close(), duration * 1000 + 80);
+      } catch (e) {}
+    }
+    function playWinSfx() {
+      [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => playTone(f, 0.18, "sine", 0.14), i * 110));
+      setTimeout(() => playTone(1318, 0.35, "triangle", 0.12), 480);
+    }
+    function playTieSfx() {
+      playTone(520, 0.15, "sine", 0.12);
+      setTimeout(() => playTone(520, 0.15, "sine", 0.12), 180);
+      setTimeout(() => playTone(390, 0.25, "triangle", 0.12), 360);
+    }
+    function playTurnDoneSfx() {
+      playTone(660, 0.12, "sine", 0.12);
+      setTimeout(() => playTone(880, 0.18, "sine", 0.12), 120);
+    }
+    function playHighscoreSfx() {
+      [523, 659, 784, 988, 1175, 1318].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.16, i % 2 ? "triangle" : "sine", 0.14), i * 90);
+      });
+    }
+    function playCorrectSfx() {
+      playTone(880, 0.08, "sine", 0.1);
+      setTimeout(() => playTone(1175, 0.1, "sine", 0.1), 60);
+    }
+
+    function getHighscore() {
+      try { return Number(localStorage.getItem("abc123Highscore") || 0); } catch (e) { return 0; }
+    }
+    function setHighscore(n) {
+      try { localStorage.setItem("abc123Highscore", String(n)); } catch (e) {}
+      const el = document.getElementById("highscoreVal");
+      if (el) el.textContent = String(n);
+    }
+    function refreshHighscoreUI() {
+      const el = document.getElementById("highscoreVal");
+      if (el) el.textContent = String(getHighscore());
+    }
+
     function setMode(m) {
       mode = m;
       btnAlpha.classList.toggle("active", m === "alpha");
       btnNum.classList.toggle("active", m === "num");
       buildPreview();
-      show(m === "alpha" ? "A" : "1");
+      show(m === "alpha" ? "A" : "1", false);
     }
 
     function randomColor() {
       return colors[Math.floor(Math.random() * colors.length)];
     }
 
-    function show(text) {
+    function show(text, doSpeak = true) {
       bigChar.textContent = text;
       bigChar.style.color = randomColor();
       bigChar.style.animation = "none";
       void bigChar.offsetWidth;
       bigChar.style.animation = "pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
-      speak(text);
+      if (doSpeak) speak(text);
     }
 
     function speak(text) {
@@ -254,17 +455,33 @@ h1 {
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(l => {
           const s = document.createElement("span");
           s.textContent = l;
-          s.onclick = () => show(l);
+          s.onclick = () => {
+            show(l);
+            if (gameActive && (gamePhase === "p1" || gamePhase === "p2")) registerCorrect(l);
+          };
           preview.appendChild(s);
         });
       } else {
         for (let i = 1; i <= 100; i++) {
           const s = document.createElement("span");
           s.textContent = i;
-          s.onclick = () => show(String(i));
+          s.onclick = () => {
+            show(String(i));
+            if (gameActive && (gamePhase === "p1" || gamePhase === "p2")) registerCorrect(String(i));
+          };
           preview.appendChild(s);
         }
       }
+    }
+
+    function registerCorrect(value) {
+      // Avoid double-counting the same item repeatedly
+      if (value === lastScored) return;
+      lastScored = value;
+      correctCount++;
+      attemptCount++;
+      gameLive.textContent = "Correct: " + correctCount + " · Attempts: " + attemptCount;
+      playCorrectSfx();
     }
 
     function parseSpeech(text) {
@@ -272,14 +489,11 @@ h1 {
       heard.textContent = "Heard: “" + t + "”";
 
       if (mode === "alpha") {
-        // direct letter
         if (t.length === 1 && letterMap[t]) return letterMap[t];
-        // word forms
         for (const [word, letter] of Object.entries(letterMap)) {
           if (t.includes(word)) return letter;
         }
       } else {
-        // spoken number
         const words = t.split(/\s+/);
         let total = 0;
         let found = false;
@@ -293,7 +507,6 @@ h1 {
           }
         }
         if (found && total >= 1 && total <= 100) return String(total);
-        // pure digits
         const digits = t.match(/\d+/);
         if (digits) {
           const n = parseInt(digits[0], 10);
@@ -303,11 +516,24 @@ h1 {
       return null;
     }
 
+    function onSpeechResult(transcript) {
+      const result = parseSpeech(transcript);
+      if (result) {
+        show(result);
+        if (gameActive && (gamePhase === "p1" || gamePhase === "p2")) {
+          registerCorrect(result);
+        }
+      } else if (gameActive && (gamePhase === "p1" || gamePhase === "p2")) {
+        attemptCount++;
+        gameLive.textContent = "Correct: " + correctCount + " · Attempts: " + attemptCount;
+      }
+    }
+
     function startListening() {
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SR) {
         heard.textContent = "Voice not supported in this browser.";
-        return;
+        return false;
       }
       recognition = new SR();
       recognition.continuous = true;
@@ -315,10 +541,7 @@ h1 {
       recognition.lang = "en-US";
       recognition.onresult = (e) => {
         const last = e.results[e.results.length - 1];
-        if (last.isFinal) {
-          const result = parseSpeech(last[0].transcript);
-          if (result) show(result);
-        }
+        if (last.isFinal) onSpeechResult(last[0].transcript);
       };
       recognition.onerror = () => {};
       recognition.onend = () => {
@@ -329,7 +552,10 @@ h1 {
         listening = true;
         btnListen.textContent = "■ Stop Listening";
         btnListen.classList.add("on");
-      } catch (e) {}
+        return true;
+      } catch (e) {
+        return false;
+      }
     }
 
     function stopListening() {
@@ -340,7 +566,152 @@ h1 {
       }
       btnListen.textContent = "🎤 Start Listening";
       btnListen.classList.remove("on");
-      heard.textContent = "";
+      if (!gameActive) heard.textContent = "";
+    }
+
+    /* ===== MULTIPLAYER ===== */
+    function openGames() {
+      gameActive = true;
+      gamePhase = "idle";
+      gameScoreP1 = null;
+      gameScoreP2 = null;
+      ptsP1.textContent = "-";
+      ptsP2.textContent = "-";
+      scoreP1.classList.remove("winner");
+      scoreP2.classList.remove("winner");
+      gameResult.textContent = "";
+      gameLive.textContent = mode === "alpha"
+        ? "Say letters clearly. Most correct in 60s wins!"
+        : "Say numbers 1–100. Most correct in 60s wins!";
+      gameTimer.textContent = "60";
+      gameTimer.classList.remove("urgent");
+      document.getElementById("gameToBeat").style.display = "none";
+      gameTurn.textContent = "Player 1 - you're up first!";
+      btnStartTurn.textContent = "Start Player 1 (60s)";
+      btnStartTurn.disabled = false;
+      gamesPanel.classList.add("open");
+      refreshHighscoreUI();
+    }
+
+    function startGameTurn() {
+      if (gamePhase === "result") {
+        openGames();
+        return;
+      }
+      if (gamePhase === "idle") {
+        gamePhase = "p1";
+        gameTurn.textContent = "Player 1 - GO! Say " + (mode === "alpha" ? "letters" : "numbers") + "!";
+      } else if (gamePhase === "p2") {
+        gameTurn.textContent = "Player 2 - GO! Say " + (mode === "alpha" ? "letters" : "numbers") + "!";
+      } else {
+        return;
+      }
+
+      btnStartTurn.disabled = true;
+      gameSeconds = 60;
+      gameTimer.textContent = "60";
+      gameTimer.classList.remove("urgent");
+      correctCount = 0;
+      attemptCount = 0;
+      lastScored = "";
+      gameLive.textContent = "Correct: 0 · Attempts: 0";
+      gameResult.textContent = "";
+
+      if (!listening) {
+        if (!startListening()) {
+          btnStartTurn.disabled = false;
+          gamePhase = gamePhase === "p1" ? "idle" : "p1";
+          gameLive.textContent = "Microphone needed. Allow access and try again.";
+          return;
+        }
+      }
+
+      clearInterval(gameTimerId);
+      gameTimerId = setInterval(() => {
+        gameSeconds--;
+        const left = Math.max(0, gameSeconds);
+        gameTimer.textContent = String(left);
+        // Visual urgency only - no timer beeps (keeps voice recognition cleaner)
+        if (left > 0 && left <= 10) {
+          gameTimer.classList.toggle("urgent", left <= 3);
+        }
+        if (gameSeconds <= 0) {
+          clearInterval(gameTimerId);
+          gameTimer.classList.remove("urgent");
+          gameTimer.textContent = "TIME UP!";
+          gameLive.textContent = "Time's up - locking in your score…";
+          setTimeout(() => endGameTurn(), 800);
+        }
+      }, 1000);
+    }
+
+    function endGameTurn() {
+      // Score = correct answers (bonus for accuracy)
+      const accuracy = attemptCount ? correctCount / attemptCount : 0;
+      const score = correctCount * 10 + Math.round(accuracy * 20);
+
+      if (listening) stopListening();
+
+      if (gamePhase === "p1") {
+        gameScoreP1 = score;
+        ptsP1.textContent = score;
+        gamePhase = "p2";
+        gameTurn.textContent = "Player 1 scored " + score + "! Hand to Player 2.";
+        gameTimer.textContent = "60";
+        gameLive.textContent = "Correct answers: " + correctCount;
+        document.getElementById("gameToBeat").style.display = "inline-block";
+        document.getElementById("toBeatVal").textContent = String(score);
+        playTurnDoneSfx();
+        btnStartTurn.textContent = "Start Player 2 (60s)";
+        btnStartTurn.disabled = false;
+      } else if (gamePhase === "p2") {
+        gameScoreP2 = score;
+        ptsP2.textContent = score;
+        gamePhase = "result";
+        declareWinner();
+        btnStartTurn.textContent = "Play again";
+        btnStartTurn.disabled = false;
+      }
+    }
+
+    function declareWinner() {
+      const p1 = gameScoreP1 || 0;
+      const p2 = gameScoreP2 || 0;
+      scoreP1.classList.remove("winner");
+      scoreP2.classList.remove("winner");
+      if (p1 > p2) {
+        gameResult.textContent = "🏆 Player 1 wins!";
+        scoreP1.classList.add("winner");
+        playWinSfx();
+      } else if (p2 > p1) {
+        gameResult.textContent = "🏆 Player 2 wins!";
+        scoreP2.classList.add("winner");
+        playWinSfx();
+      } else {
+        gameResult.textContent = "🤝 It's a tie!";
+        playTieSfx();
+      }
+
+      const best = Math.max(p1, p2);
+      if (best > getHighscore()) {
+        setHighscore(best);
+        gameResult.textContent += " · 🎉 NEW HIGHSCORE!";
+        setTimeout(() => playHighscoreSfx(), 500);
+      } else {
+        refreshHighscoreUI();
+      }
+
+      gameTurn.textContent = "Final ranking";
+      gameLive.textContent = "";
+      document.getElementById("gameToBeat").style.display = "none";
+    }
+
+    function exitGame() {
+      clearInterval(gameTimerId);
+      gameActive = false;
+      gamePhase = "idle";
+      gamesPanel.classList.remove("open");
+      if (listening) stopListening();
     }
 
     btnAlpha.onclick = () => setMode("alpha");
@@ -354,8 +725,12 @@ h1 {
         : "linear-gradient(135deg,#64748b,#475569)";
       if (!speakEnabled && window.speechSynthesis) window.speechSynthesis.cancel();
     };
+    btnGames.onclick = openGames;
+    btnStartTurn.onclick = startGameTurn;
+    btnExitGame.onclick = exitGame;
 
     setMode("alpha");
+    refreshHighscoreUI();
   </script>
 </body>
 </html>

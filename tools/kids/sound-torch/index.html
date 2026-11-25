@@ -10,7 +10,7 @@
     gtag('js', new Date());
     gtag('config', 'G-QM106YDX6N');
   </script>
-  <link href="images/favicon.ico" rel="icon">  
+  <link href="images/favicon.ico" rel="icon">
   <style>
     :root {
       --yellow: #fde047;
@@ -129,6 +129,7 @@
       transition: transform 0.1s;
     }
     button:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     .btn-start {
       background: linear-gradient(135deg, var(--cyan), #22d3ee);
       color: #0f172a;
@@ -148,6 +149,10 @@
     .btn-voice.on {
       background: linear-gradient(135deg, #f59e0b, #ef4444);
       color: white;
+    }
+    .btn-games {
+      background: linear-gradient(135deg, #c084fc, #f472b6);
+      color: #1a1035;
     }
     .controls { margin-top: 14px; }
     label { display: block; font-size: 0.85rem; color: #ddd6fe; margin: 10px 0 4px; text-align: left; font-weight: 700; }
@@ -173,6 +178,130 @@
     }
     .hint { font-size: 0.72rem; color: #c4b5fd; margin-top: 14px; line-height: 1.4; }
     .error { color: #fca5a5; font-size: 0.85rem; margin-top: 8px; font-weight: 600; }
+
+    /* Games panel */
+    .games-panel {
+      display: none;
+      margin-top: 14px;
+      text-align: left;
+      background: rgba(0,0,0,0.28);
+      border: 2px solid rgba(192,132,252,0.35);
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .games-panel.open { display: block; }
+    .games-panel h3 {
+      color: var(--yellow);
+      font-size: 1rem;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .game-pick {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .game-pick button {
+      margin-top: 0;
+      padding: 12px 8px;
+      font-size: 0.88rem;
+      border-radius: 14px;
+    }
+    .game-pick .listen-game {
+      background: linear-gradient(135deg, var(--cyan), #22d3ee);
+      color: #0f172a;
+    }
+    .game-pick .voice-game {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      color: #0f172a;
+    }
+    .game-hud {
+      display: none;
+      text-align: center;
+      margin: 8px 0;
+    }
+    .game-hud.open { display: block; }
+    .game-timer {
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--cyan);
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 18px rgba(94,234,212,0.45);
+      transition: color 0.15s ease;
+    }
+    .game-timer.urgent { color: #fb7185; text-shadow: 0 0 18px rgba(251,113,133,0.5); }
+    .game-turn { font-weight: 800; margin: 4px 0; font-size: 1rem; }
+    .game-tobeat {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fde047;
+      margin: 4px 0;
+      background: rgba(253,224,71,0.12);
+      border: 1px solid rgba(253,224,71,0.3);
+      border-radius: 999px;
+      padding: 4px 12px;
+      display: inline-block;
+    }
+    .game-highscore {
+      font-size: 0.82rem;
+      color: #c4b5fd;
+      font-weight: 700;
+      margin: 4px 0 6px;
+    }
+    .game-highscore strong { color: var(--yellow); }
+    .game-live {
+      font-size: 0.9rem;
+      color: var(--yellow);
+      font-weight: 700;
+      min-height: 1.3em;
+    }
+    .game-scores {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .score-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+    }
+    .score-card .who { font-size: 0.75rem; color: #c4b5fd; font-weight: 700; }
+    .score-card .pts { font-size: 1.35rem; font-weight: 900; color: var(--yellow); margin-top: 2px; }
+    .score-card.winner {
+      border-color: rgba(253,224,71,0.5);
+      box-shadow: 0 0 16px rgba(253,224,71,0.2);
+    }
+    .game-result {
+      text-align: center;
+      font-weight: 900;
+      color: var(--yellow);
+      margin: 0 0 8px;
+      min-height: 1.3em;
+      font-size: 1.15rem;
+      text-shadow: 0 0 16px rgba(253,224,71,0.35);
+    }
+    .game-actions { display: flex; gap: 8px; margin-top: 8px; }
+    .game-actions button { margin-top: 0; flex: 1; padding: 12px; font-size: 0.9rem; }
+    .btn-start-turn {
+      background: linear-gradient(135deg, var(--yellow), var(--orange));
+      color: #1a1035;
+    }
+    .btn-exit-game {
+      background: linear-gradient(135deg, #f9a8d4, #db2777);
+      color: white;
+    }
+    .game-prompt {
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #e9d5ff;
+      margin: 6px 0;
+      min-height: 1.4em;
+    }
   </style>
 </head>
 <body>
@@ -189,6 +318,39 @@
     <button type="button" class="btn-start" id="btnStart">▶ Start Listening</button>
     <button type="button" class="btn-torch" id="btnTorch">🔦 Torch OFF</button>
     <button type="button" class="btn-voice" id="btnVoice">🎤 Voice: OFF</button>
+    <button type="button" class="btn-games" id="btnGames">🎮 Games / Multiplayer</button>
+
+    <div class="games-panel" id="gamesPanel">
+      <h3>🎮 2-Player Games</h3>
+      <div class="game-pick" id="gamePick">
+        <button type="button" class="listen-game" id="pickListen">🤫 Listening<br><small>Fewest detections wins</small></button>
+        <button type="button" class="voice-game" id="pickVoice">🗣️ Voice<br><small>Most accurate wins</small></button>
+      </div>
+
+      <div class="game-hud" id="gameHud">
+        <div class="game-result" id="gameResult"></div>
+        <div class="game-timer" id="gameTimer">60</div>
+        <div class="game-turn" id="gameTurn">Player 1</div>
+        <div class="game-tobeat" id="gameToBeat" style="display:none;">Score to beat: <strong id="toBeatVal">-</strong></div>
+        <div class="game-highscore">🏆 Highscore: <strong id="highscoreVal">0</strong></div>
+        <div class="game-prompt" id="gamePrompt"></div>
+        <div class="game-live" id="gameLive"></div>
+        <div class="game-scores">
+          <div class="score-card" id="scoreP1">
+            <div class="who">Player 1</div>
+            <div class="pts" id="ptsP1">-</div>
+          </div>
+          <div class="score-card" id="scoreP2">
+            <div class="who">Player 2</div>
+            <div class="pts" id="ptsP2">-</div>
+          </div>
+        </div>
+        <div class="game-actions">
+          <button type="button" class="btn-start-turn" id="btnStartTurn">Start my 60s</button>
+          <button type="button" class="btn-exit-game" id="btnExitGame">Exit</button>
+        </div>
+      </div>
+    </div>
 
     <div class="controls">
       <label for="sensitivity">How sensitive?</label>
@@ -214,15 +376,48 @@
     const btnStart = document.getElementById("btnStart");
     const btnTorch = document.getElementById("btnTorch");
     const btnVoice = document.getElementById("btnVoice");
+    const btnGames = document.getElementById("btnGames");
     const sensitivityEl = document.getElementById("sensitivity");
     const errorEl = document.getElementById("error");
     const countdownEl = document.getElementById("countdown");
     const heardEl = document.getElementById("heard");
 
+    const gamesPanel = document.getElementById("gamesPanel");
+    const gamePick = document.getElementById("gamePick");
+    const gameHud = document.getElementById("gameHud");
+    const gameTurn = document.getElementById("gameTurn");
+    const gameTimer = document.getElementById("gameTimer");
+    const gamePrompt = document.getElementById("gamePrompt");
+    const gameLive = document.getElementById("gameLive");
+    const gameResult = document.getElementById("gameResult");
+    const ptsP1 = document.getElementById("ptsP1");
+    const ptsP2 = document.getElementById("ptsP2");
+    const scoreP1 = document.getElementById("scoreP1");
+    const scoreP2 = document.getElementById("scoreP2");
+    const btnStartTurn = document.getElementById("btnStartTurn");
+    const btnExitGame = document.getElementById("btnExitGame");
+
     let recognition = null, voiceActive = false;
     let audioCtx = null, analyser = null, micStream = null, videoStream = null, videoTrack = null;
     let torchSupported = false, isListening = false, isTorchOn = false;
     let autoOffTimer = null, countdownInterval = null, manualOverride = false, animId = null, remaining = 0;
+
+    // Game state
+    let gameMode = null; // "listen" | "voice" | null
+    let gamePhase = "idle"; // idle | p1 | p2 | result
+    let gameSeconds = 60;
+    let gameTimerId = null;
+    let gameScoreP1 = null;
+    let gameScoreP2 = null;
+    let detectCount = 0;
+    let lastDetectAt = 0;
+    let voiceHits = 0;
+    let voiceMisses = 0;
+    let voiceTarget = null;
+    const VOICE_TARGETS = [
+      "on", "off", "light on", "light off", "torch on", "torch off",
+      "day", "night", "let there be light", "light", "dark"
+    ];
 
     function playTone(freq, duration, type = "sine", volume = 0.15) {
       const ctx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
@@ -246,6 +441,47 @@
     }
     function playTick() { playTone(660, 0.06, "square", 0.08); }
     function playOffSound() { playTone(440, 0.18, "triangle", 0.15); }
+    function playCountdownTick(urgent) {
+      if (urgent) {
+        playTone(880, 0.08, "square", 0.14);
+        setTimeout(() => playTone(990, 0.06, "square", 0.1), 60);
+      } else {
+        playTone(660, 0.06, "sine", 0.1);
+      }
+    }
+    function playTimeUpSfx() {
+      playTone(400, 0.15, "triangle", 0.16);
+      setTimeout(() => playTone(300, 0.2, "triangle", 0.14), 120);
+      setTimeout(() => playTone(220, 0.25, "sawtooth", 0.1), 260);
+    }
+    function playWinSfx() {
+      [523, 659, 784, 1046].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.18, "sine", 0.14), i * 110);
+      });
+      setTimeout(() => playTone(1318, 0.35, "triangle", 0.12), 480);
+    }
+    function playTieSfx() {
+      playTone(520, 0.15, "sine", 0.12);
+      setTimeout(() => playTone(520, 0.15, "sine", 0.12), 180);
+      setTimeout(() => playTone(390, 0.25, "triangle", 0.12), 360);
+    }
+    function playTurnDoneSfx() {
+      playTone(660, 0.12, "sine", 0.12);
+      setTimeout(() => playTone(880, 0.18, "sine", 0.12), 120);
+    }
+
+    function getHighscore() {
+      try { return Number(localStorage.getItem("soundTorchHighscore") || 0); } catch (e) { return 0; }
+    }
+    function setHighscore(n) {
+      try { localStorage.setItem("soundTorchHighscore", String(n)); } catch (e) {}
+      const el = document.getElementById("highscoreVal");
+      if (el) el.textContent = String(n);
+    }
+    function refreshHighscoreUI() {
+      const el = document.getElementById("highscoreVal");
+      if (el) el.textContent = String(getHighscore());
+    }
 
     function setStatus(text, cls) {
       statusEl.textContent = text;
@@ -306,6 +542,7 @@
       }
     }
     function scheduleAutoOff() {
+      if (gameMode === "listen" && (gamePhase === "p1" || gamePhase === "p2")) return; // no auto during listen game
       clearTimeout(autoOffTimer);
       startCountdown(10);
       autoOffTimer = setTimeout(async () => {
@@ -317,6 +554,19 @@
     }
     function onSoundDetected() {
       if (manualOverride) return;
+
+      // Listening game: count detections (cooldown so continuous noise doesn't spam)
+      if (gameMode === "listen" && (gamePhase === "p1" || gamePhase === "p2")) {
+        const now = Date.now();
+        if (now - lastDetectAt > 800) {
+          detectCount++;
+          lastDetectAt = now;
+          gameLive.textContent = "Detections: " + detectCount + " (lower is better)";
+        }
+        setStatus("Detected! Stay quiet…", "detected");
+        return;
+      }
+
       setStatus("Sound detected! 🎉", "detected");
       setTorch(true).then(ok => { if (ok) scheduleAutoOff(); });
     }
@@ -354,9 +604,11 @@
         btnStart.textContent = "■ Stop Listening";
         setStatus("Listening for sounds…", "listening");
         analyze();
+        return true;
       } catch (err) {
         errorEl.textContent = "Permission denied or not supported.";
         setStatus("Oops!", "off");
+        return false;
       }
     }
     function stopListening() {
@@ -365,7 +617,7 @@
       clearTimeout(autoOffTimer);
       clearCountdown();
       if (micStream) micStream.getTracks().forEach(t => t.stop());
-      if (audioCtx) audioCtx.close();
+      if (audioCtx) try { audioCtx.close(); } catch (e) {}
       micStream = audioCtx = analyser = null;
       btnStart.textContent = "▶ Start Listening";
       setStatus("Ready to play!", "off");
@@ -378,6 +630,23 @@
     function handleVoice(text) {
       const said = text.toLowerCase().trim();
       heardEl.textContent = "Heard: “" + said + "”";
+
+      // Voice game scoring
+      if (gameMode === "voice" && (gamePhase === "p1" || gamePhase === "p2") && voiceTarget) {
+        if (said.includes(voiceTarget.toLowerCase())) {
+          voiceHits++;
+          gameLive.textContent = "Hits: " + voiceHits + " · Misses: " + voiceMisses;
+          setStatus("Correct! ✅", "detected");
+          playOnSound();
+          nextVoiceTarget();
+        } else {
+          voiceMisses++;
+          gameLive.textContent = "Hits: " + voiceHits + " · Misses: " + voiceMisses;
+          setStatus("Try again…", "listening");
+        }
+        return;
+      }
+
       if (ON_COMMANDS.some(cmd => said.includes(cmd))) {
         manualOverride = true;
         clearTimeout(autoOffTimer);
@@ -450,6 +719,200 @@
       heardEl.textContent = "";
     }
 
+    function nextVoiceTarget() {
+      voiceTarget = VOICE_TARGETS[Math.floor(Math.random() * VOICE_TARGETS.length)];
+      gamePrompt.textContent = 'Say: “' + voiceTarget + '”';
+    }
+
+    /* ===== GAMES ===== */
+    function openGames() {
+      gamesPanel.classList.add("open");
+      gamePick.style.display = "grid";
+      gameHud.classList.remove("open");
+      gameMode = null;
+      gamePhase = "idle";
+    }
+
+    function pickGame(mode) {
+      gameMode = mode;
+      gamePhase = "idle";
+      gameScoreP1 = null;
+      gameScoreP2 = null;
+      ptsP1.textContent = "-";
+      ptsP2.textContent = "-";
+      scoreP1.classList.remove("winner");
+      scoreP2.classList.remove("winner");
+      gameResult.textContent = "";
+      gameLive.textContent = "";
+      gamePrompt.textContent = "";
+      gamePick.style.display = "none";
+      gameHud.classList.add("open");
+      gameTimer.textContent = "60";
+      gameTimer.classList.remove("urgent");
+      document.getElementById("gameToBeat").style.display = "none";
+      refreshHighscoreUI();
+      btnStartTurn.disabled = false;
+      if (mode === "listen") {
+        gameTurn.textContent = "Listening game - Player 1";
+        btnStartTurn.textContent = "Start Player 1 (60s)";
+        gameLive.textContent = "Stay quiet! Fewest detections wins.";
+      } else {
+        gameTurn.textContent = "Voice game - Player 1";
+        btnStartTurn.textContent = "Start Player 1 (60s)";
+        gameLive.textContent = "Say the commands shown. Most correct wins.";
+      }
+    }
+
+    async function startGameTurn() {
+      if (gamePhase === "result") {
+        pickGame(gameMode);
+        return;
+      }
+      if (gamePhase === "idle") {
+        gamePhase = "p1";
+        gameTurn.textContent = (gameMode === "listen" ? "Listening" : "Voice") + " - Player 1 GO!";
+      } else if (gamePhase === "p2") {
+        gameTurn.textContent = (gameMode === "listen" ? "Listening" : "Voice") + " - Player 2 GO!";
+      } else {
+        return;
+      }
+
+      btnStartTurn.disabled = true;
+      gameSeconds = 60;
+      gameTimer.textContent = "60";
+      detectCount = 0;
+      lastDetectAt = 0;
+      voiceHits = 0;
+      voiceMisses = 0;
+
+      if (gameMode === "listen") {
+        gameLive.textContent = "Detections: 0 (lower is better)";
+        gamePrompt.textContent = "Stay as quiet as you can!";
+        if (!isListening) {
+          const ok = await startListening();
+          if (!ok) {
+            btnStartTurn.disabled = false;
+            gamePhase = gamePhase === "p1" ? "idle" : "p1";
+            return;
+          }
+        }
+      } else {
+        nextVoiceTarget();
+        gameLive.textContent = "Hits: 0 · Misses: 0";
+        if (!voiceActive) {
+          voiceActive = true;
+          if (!startVoice()) {
+            voiceActive = false;
+            btnStartTurn.disabled = false;
+            gamePhase = gamePhase === "p1" ? "idle" : "p1";
+            return;
+          }
+          btnVoice.textContent = "🎤 Voice: ON";
+          btnVoice.classList.add("on");
+        }
+      }
+
+      clearInterval(gameTimerId);
+      gameTimerId = setInterval(() => {
+        gameSeconds--;
+        const left = Math.max(0, gameSeconds);
+        gameTimer.textContent = String(left);
+        // Visual only - no timer sounds (would trigger the mic in Listening game)
+        if (left > 0 && left <= 10) {
+          gameTimer.classList.toggle("urgent", left <= 3);
+        }
+        if (gameSeconds <= 0) {
+          clearInterval(gameTimerId);
+          gameTimer.classList.remove("urgent");
+          gameTimer.textContent = "TIME UP!";
+          gameLive.textContent = "Time's up - locking in your score…";
+          setStatus("Time up!", "detected");
+          // short pause so players see the text, then score
+          setTimeout(() => endGameTurn(), 800);
+        }
+      }, 1000);
+    }
+
+    function endGameTurn() {
+      let score;
+      if (gameMode === "listen") {
+        // Lower detections = higher score. Cap at 0 detections → 100 pts
+        score = Math.max(0, 100 - detectCount * 5);
+        if (isListening) stopListening();
+      } else {
+        // Accuracy-based score
+        const total = voiceHits + voiceMisses;
+        score = total === 0 ? 0 : Math.round((voiceHits / total) * 100) + voiceHits * 2;
+      }
+
+      if (gamePhase === "p1") {
+        gameScoreP1 = score;
+        ptsP1.textContent = score;
+        gamePhase = "p2";
+        gameTurn.textContent = "Player 1 scored " + score + "! Hand to Player 2.";
+        gameTimer.textContent = "60";
+        gamePrompt.textContent = "";
+        gameLive.textContent = gameMode === "listen"
+          ? "Player 1 detections were counted."
+          : "Player 1 voice accuracy locked in.";
+        // Show score to beat for Player 2
+        document.getElementById("gameToBeat").style.display = "inline-block";
+        document.getElementById("toBeatVal").textContent = String(score);
+        playTurnDoneSfx();
+        btnStartTurn.textContent = "Start Player 2 (60s)";
+        btnStartTurn.disabled = false;
+      } else if (gamePhase === "p2") {
+        gameScoreP2 = score;
+        ptsP2.textContent = score;
+        gamePhase = "result";
+        declareGameWinner();
+        btnStartTurn.textContent = "Play again";
+        btnStartTurn.disabled = false;
+      }
+    }
+
+    function declareGameWinner() {
+      const p1 = gameScoreP1 || 0;
+      const p2 = gameScoreP2 || 0;
+      scoreP1.classList.remove("winner");
+      scoreP2.classList.remove("winner");
+      if (p1 > p2) {
+        gameResult.textContent = "🏆 Player 1 wins!";
+        scoreP1.classList.add("winner");
+        playWinSfx();
+      } else if (p2 > p1) {
+        gameResult.textContent = "🏆 Player 2 wins!";
+        scoreP2.classList.add("winner");
+        playWinSfx();
+      } else {
+        gameResult.textContent = "🤝 It's a tie!";
+        playTieSfx();
+      }
+      // Highscore from best player score this match
+      const best = Math.max(p1, p2);
+      if (best > getHighscore()) {
+        setHighscore(best);
+        gameResult.textContent += " · New highscore!";
+      } else {
+        refreshHighscoreUI();
+      }
+      gameTurn.textContent = "Final ranking";
+      gamePrompt.textContent = "";
+      gameLive.textContent = "";
+      document.getElementById("gameToBeat").style.display = "none";
+      setStatus("Game over!", "detected");
+    }
+
+    function exitGame() {
+      clearInterval(gameTimerId);
+      gameMode = null;
+      gamePhase = "idle";
+      gamesPanel.classList.remove("open");
+      gameHud.classList.remove("open");
+      gamePick.style.display = "grid";
+      setStatus(isListening ? "Listening…" : "Ready to play!", isListening ? "listening" : "off");
+    }
+
     btnStart.addEventListener("click", () => isListening ? stopListening() : startListening());
     btnTorch.addEventListener("click", async () => {
       manualOverride = true;
@@ -477,6 +940,13 @@
         } else voiceActive = false;
       }
     });
+
+    btnGames.addEventListener("click", openGames);
+    document.getElementById("pickListen").addEventListener("click", () => pickGame("listen"));
+    document.getElementById("pickVoice").addEventListener("click", () => pickGame("voice"));
+    btnStartTurn.addEventListener("click", startGameTurn);
+    btnExitGame.addEventListener("click", exitGame);
+    refreshHighscoreUI();
   </script>
 </body>
 </html>
