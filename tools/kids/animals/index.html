@@ -148,26 +148,26 @@ h1 {
 
   <script>
     const animals = [
-      { name: "Dog", emoji: "🐶", sound: "Woof woof!", audio: "https://archive.org/download/animal_201701/Dog.mp3" },
-      { name: "Cat", emoji: "🐱", sound: "Meow!", audio: "https://archive.org/download/animal_201701/Cat.mp3" },
-      { name: "Cow", emoji: "🐮", sound: "Moo!", audio: "https://archive.org/download/animal_201701/Cows.mp3" },
-      { name: "Lion", emoji: "🦁", sound: "Roar!", audio: "https://archive.org/download/animal_201701/Lion.mp3" },
-      { name: "Elephant", emoji: "🐘", sound: "Trumpet!", audio: "https://archive.org/download/animal_201701/Elephant.mp3" },
-      { name: "Monkey", emoji: "🐵", sound: "Ooh ooh ah ah!", audio: "https://archive.org/download/animal_201701/Monkey.mp3" },
-      { name: "Duck", emoji: "🦆", sound: "Quack quack!", audio: null },
-      { name: "Frog", emoji: "🐸", sound: "Ribbit!", audio: "https://archive.org/download/animal_201701/Frog.mp3" },
-      { name: "Pig", emoji: "🐷", sound: "Oink oink!", audio: "https://archive.org/download/animal_201701/Pig.mp3" },
-      { name: "Horse", emoji: "🐴", sound: "Neigh!", audio: "https://archive.org/download/animal_201701/Horse%20Gallop.mp3" },
-      { name: "Sheep", emoji: "🐑", sound: "Baa!", audio: null },
-      { name: "Chicken", emoji: "🐔", sound: "Cluck cluck!", audio: "https://archive.org/download/animal_201701/Chicken.mp3" },
-      { name: "Bird", emoji: "🐦", sound: "Tweet tweet!", audio: null },
-      { name: "Fish", emoji: "🐟", sound: "Blub blub!", audio: null },
-      { name: "Bear", emoji: "🐻", sound: "Grrrr!", audio: null },
-      { name: "Rabbit", emoji: "🐰", sound: "Squeak!", audio: null },
-      { name: "Owl", emoji: "🦉", sound: "Hoo hoo!", audio: null },
-      { name: "Bee", emoji: "🐝", sound: "Bzzz!", audio: "https://actions.google.com/sounds/v1/animals/bee_buzz.ogg" },
-      { name: "Snake", emoji: "🐍", sound: "Hiss!", audio: "https://actions.google.com/sounds/v1/animals/animal_hiss_and_rattle.ogg" },
-      { name: "Tiger", emoji: "🐯", sound: "Roar!", audio: "https://archive.org/download/animal_201701/Lion.mp3" }
+      { name: "Dog", emoji: "🐶", sound: "Woof woof!" },
+      { name: "Cat", emoji: "🐱", sound: "Meow!" },
+      { name: "Cow", emoji: "🐮", sound: "Moo!" },
+      { name: "Lion", emoji: "🦁", sound: "Roar!" },
+      { name: "Elephant", emoji: "🐘", sound: "Trumpet!" },
+      { name: "Monkey", emoji: "🐵", sound: "Ooh ooh ah ah!" },
+      { name: "Duck", emoji: "🦆", sound: "Quack quack!" },
+      { name: "Frog", emoji: "🐸", sound: "Ribbit!" },
+      { name: "Pig", emoji: "🐷", sound: "Oink oink!" },
+      { name: "Horse", emoji: "🐴", sound: "Neigh!" },
+      { name: "Sheep", emoji: "🐑", sound: "Baa!" },
+      { name: "Chicken", emoji: "🐔", sound: "Cluck cluck!" },
+      { name: "Bird", emoji: "🐦", sound: "Tweet tweet!" },
+      { name: "Fish", emoji: "🐟", sound: "Blub blub!" },
+      { name: "Bear", emoji: "🐻", sound: "Grrrr!" },
+      { name: "Rabbit", emoji: "🐰", sound: "Squeak!" },
+      { name: "Owl", emoji: "🦉", sound: "Hoo hoo!" },
+      { name: "Bee", emoji: "🐝", sound: "Bzzz!" },
+      { name: "Snake", emoji: "🐍", sound: "Hiss!" },
+      { name: "Tiger", emoji: "🐯", sound: "Roar!" }
     ];
 
     let currentAudio = null;
@@ -187,27 +187,14 @@ h1 {
 
     function playAnimalSound(a) {
       if (!speakEnabled) return;
-      if (currentAudio) {
-        currentAudio.pause();
-        currentAudio = null;
-      }
-      if (a.audio) {
-        currentAudio = new Audio(a.audio);
-        currentAudio.volume = 0.8;
-        currentAudio.play().catch(() => {
-          // fallback to speech if audio fails
-          speakText(a.name + ". " + a.sound);
-        });
-      } else {
-        speakText(a.name + ". " + a.sound);
-      }
+      speakText(a.name + ". " + a.sound);
     }
 
     function speakText(text) {
       if (!window.speechSynthesis) return;
       window.speechSynthesis.cancel();
       const utter = new SpeechSynthesisUtterance(text);
-      utter.rate = 0.95;
+      utter.rate = 0.9;
       utter.pitch = 1.05;
       utter.lang = "en-US";
       window.speechSynthesis.speak(utter);
@@ -250,27 +237,52 @@ h1 {
       }
       recognition = new SR();
       recognition.continuous = true;
-      recognition.interimResults = false;
+      recognition.interimResults = true;
       recognition.lang = "en-US";
+      recognition.maxAlternatives = 1;
+
       recognition.onresult = (e) => {
-        const last = e.results[e.results.length - 1];
-        if (last.isFinal) {
-          const said = last[0].transcript;
+        let finalText = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          if (e.results[i].isFinal) {
+            finalText += e.results[i][0].transcript + " ";
+          }
+        }
+        if (finalText.trim()) {
+          const said = finalText.trim();
           heard.textContent = "Heard: “" + said + "”";
           const found = findAnimal(said);
           if (found) showAnimal(found);
         }
       };
-      recognition.onerror = () => {};
-      recognition.onend = () => {
-        if (listening) try { recognition.start(); } catch (e) {}
+
+      recognition.onerror = (ev) => {
+        console.warn("Speech error:", ev.error);
+        if (ev.error === "not-allowed" || ev.error === "service-not-allowed") {
+          heard.textContent = "Microphone permission blocked.";
+          listening = false;
+          btnListen.textContent = "🎤 Start Listening";
+          btnListen.classList.remove("on");
+        }
       };
+
+      recognition.onend = () => {
+        if (listening) {
+          setTimeout(() => {
+            try { recognition.start(); } catch (e) {}
+          }, 300);
+        }
+      };
+
       try {
         recognition.start();
         listening = true;
         btnListen.textContent = "■ Stop Listening";
         btnListen.classList.add("on");
-      } catch (e) {}
+        heard.textContent = "Listening… say an animal name";
+      } catch (e) {
+        heard.textContent = "Could not start voice. Try again.";
+      }
     }
 
     function stopListening() {
@@ -293,10 +305,6 @@ h1 {
         ? "linear-gradient(135deg,#c084fc,#f472b6)"
         : "linear-gradient(135deg,#64748b,#475569)";
       if (!speakEnabled && window.speechSynthesis) window.speechSynthesis.cancel();
-      if (!speakEnabled && currentAudio) {
-        currentAudio.pause();
-        currentAudio = null;
-      }
     };
 
     buildGrid();
