@@ -809,6 +809,7 @@ a.tg-link:active, .tg-link:active {
     merchant: "NITI",
     checkout: "https://niti.com.ng/tools/nowalletconnect/checkout.html",
     amount: 0.25,
+    returnUrl: "https://niti.com.ng/tools/kids/boogie-beast/",
     draftKey: "boogie_unlock_draft"
   };
   // Same gift card source as SnappQuest
@@ -1778,6 +1779,7 @@ a.tg-link:active, .tg-link:active {
     u.searchParams.set("amount", String(NWC.amount));
     u.searchParams.set("asset", "usdt");
     u.searchParams.set("ref", unlockTarget);
+    u.searchParams.set("return_url", NWC.returnUrl);
     window.location.href = u.toString();
   });
   $("unlockGiftBtn").addEventListener("click", async () => {

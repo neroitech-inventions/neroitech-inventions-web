@@ -563,6 +563,7 @@
       merchant: "NITI",
       checkout: "https://niti.com.ng/tools/nowalletconnect/checkout.html",
       amount: 0.25,
+      returnUrl: "https://niti.com.ng/tools/kids/sound-torch/",
       draftKey: "soundtorch_unlock_draft"
     };
     // Same gift card source as SnappQuest
@@ -1500,6 +1501,7 @@
       u.searchParams.set("amount", String(NWC.amount));
       u.searchParams.set("asset", "usdt");
       u.searchParams.set("ref", "cool_sounds");
+      u.searchParams.set("return_url", NWC.returnUrl);
       window.location.href = u.toString();
     });
     document.getElementById("unlockGiftBtn").addEventListener("click", async () => {

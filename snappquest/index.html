@@ -755,6 +755,8 @@ async function loadPending(){
     listedCodes=new Set(listed.map(q=>q['Track Code']).filter(Boolean));
     pendingQuests=pending
       .filter(q=>q['Track Code'] && !listedCodes.has(q['Track Code']))
+      // hide automatic gift-card unlock rows from Boogie Beast / Sound Torch (email column B, e.g. sound-torch@example.com)
+      .filter(q=>!/@example\.com\s*$/i.test((q['Email address']||'').trim()))
       .map(q=>({
         title:q.Title||'Untitled',
         sponsor:q.Sponsor||'',
