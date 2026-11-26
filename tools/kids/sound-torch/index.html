@@ -330,6 +330,22 @@
       box-shadow: 0 4px 0 rgba(0,0,0,0.25);
       font-family: inherit;
     }
+    .sound-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .sound-opt {
+      padding: 10px 8px; border-radius: 12px; cursor: pointer; font-family: inherit;
+      border: 2px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.08);
+      color: #fff; font-weight: 800; font-size: 0.85rem; line-height: 1.25;
+    }
+    .sound-opt .em { display: block; font-size: 1.3rem; }
+    .sound-opt.active {
+      border-color: var(--yellow); background: rgba(253,224,71,0.18);
+      box-shadow: 0 0 12px rgba(253,224,71,0.25);
+    }
+    .game-sound-row { display: flex; align-items: center; gap: 8px; margin: 6px 0 10px; font-size: 0.8rem; font-weight: 700; color: #e9d5ff; }
+    .game-sound-row select {
+      flex: 1; padding: 8px 10px; border-radius: 10px; font-family: inherit; font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.25); background: #1a1035; color: #fff;
+    }
     .sounds-unlocked-badge {
       display: none;
       font-weight: 800;
@@ -401,6 +417,10 @@
 
     <div class="games-panel" id="gamesPanel">
       <h3>🎮 2-Player Games</h3>
+      <div class="game-sound-row" id="gameSoundRow" style="display:none;">
+        <label for="gameSoundSelect">🔊 Detection sound</label>
+        <select id="gameSoundSelect"></select>
+      </div>
       <div class="game-pick" id="gamePick">
         <button type="button" class="listen-game" id="pickListen">🤫 Listening<br><small>Fewest detections wins</small></button>
         <button type="button" class="voice-game" id="pickVoice">🗣️ Voice<br><small>Most accurate wins</small></button>
@@ -449,6 +469,11 @@
       <p>Unlock alarm, siren, party blasts, game-over &amp; win fanfares when sound is detected or games end.</p>
       <button type="button" class="btn-unlock-sounds" id="btnUnlockSounds">🔓 Unlock Cool Sounds · $0.25</button>
       <div class="sounds-unlocked-badge" id="soundsUnlockedBadge">✅ Cool Sounds unlocked this session</div>
+      <div id="soundPicker" style="display:none;margin-top:12px;">
+        <p style="margin-bottom:8px;"><strong>🎵 Pick your sound</strong><br>All sounds are unlocked. The one you choose plays when sound is detected, including in the Listening game. Tap to select &amp; preview.</p>
+        <div class="sound-grid" id="soundGrid"></div>
+        <p class="hint" style="margin-top:10px;margin-bottom:0;">Using: <strong id="soundPickedLabel"></strong></p>
+      </div>
       <p class="hint" style="margin-top:10px;margin-bottom:0;">
         Gift cards:
         <a class="link" href="https://t.me/SnappQuest_Chat" target="_blank" rel="noopener">📲 Join SnappQuest on Telegram</a>
@@ -648,6 +673,10 @@
     function setCoolSoundsUnlocked() {
       try { sessionStorage.setItem(SOUNDS_KEY, "1"); } catch (e) {}
       refreshSoundsUI();
+      setTimeout(() => {
+        const box = document.getElementById("soundsBox");
+        if (box && box.scrollIntoView) box.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 700);
     }
     function refreshSoundsUI() {
       const unlocked = coolSoundsUnlocked();
@@ -655,6 +684,11 @@
       const badge = document.getElementById("soundsUnlockedBadge");
       if (btn) btn.style.display = unlocked ? "none" : "block";
       if (badge) badge.style.display = unlocked ? "block" : "none";
+      const picker = document.getElementById("soundPicker");
+      const gameRow = document.getElementById("gameSoundRow");
+      if (picker) picker.style.display = unlocked ? "block" : "none";
+      if (gameRow) gameRow.style.display = unlocked ? "flex" : "none";
+      if (unlocked) renderSoundPicker();
     }
 
     function playTone(freq, duration, type = "sine", volume = 0.15) {
@@ -694,12 +728,123 @@
       }
       playTone(440, 0.18, "triangle", 0.15);
     }
+    // ----- Cool Sounds pack: every sound unlocks together; the player picks one -----
+    const SOUND_PICK_KEY = "soundTorchPickedSound";
+    let lastDetectSfxAt = 0;
+    function playSweep(f1, f2, duration, type = "sine", volume = 0.14) {
+      const ctx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      try {
+        const t = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(f1, t);
+        osc.frequency.linearRampToValueAtTime(f2, t + duration);
+        gain.gain.setValueAtTime(volume, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + duration);
+        if (!audioCtx) setTimeout(() => ctx.close(), duration * 1000 + 100);
+      } catch (e) {}
+    }
+    const SOUND_PACK = [
+      { id: "alarm", emoji: "🚨", name: "Alarm", play() {
+        playTone(880, 0.1, "square", 0.14);
+        setTimeout(() => playTone(660, 0.1, "square", 0.14), 90);
+        setTimeout(() => playTone(990, 0.14, "sawtooth", 0.12), 180);
+      } },
+      { id: "siren", emoji: "🚓", name: "Siren", play() {
+        playSweep(600, 1000, 0.28, "sawtooth", 0.1);
+        setTimeout(() => playSweep(1000, 600, 0.28, "sawtooth", 0.1), 280);
+      } },
+      { id: "party", emoji: "🎉", name: "Party blast", play() {
+        playTone(523, 0.08, "square", 0.12);
+        setTimeout(() => playTone(784, 0.1, "square", 0.14), 50);
+        setTimeout(() => playTone(1046, 0.18, "sawtooth", 0.12), 110);
+        setTimeout(() => playTone(1318, 0.2, "sine", 0.1), 200);
+      } },
+      { id: "laser", emoji: "🔫", name: "Laser", play() {
+        playSweep(1400, 300, 0.18, "square", 0.1);
+        setTimeout(() => playSweep(1200, 250, 0.18, "square", 0.1), 150);
+      } },
+      { id: "coin", emoji: "🪙", name: "Coin", play() {
+        playTone(988, 0.08, "square", 0.12);
+        setTimeout(() => playTone(1319, 0.25, "square", 0.12), 80);
+      } },
+      { id: "fanfare", emoji: "🎺", name: "Fanfare", play() {
+        [523, 659, 784, 1046].forEach((f, i) => {
+          setTimeout(() => playTone(f, 0.16, i % 2 ? "triangle" : "sine", 0.14), i * 90);
+        });
+      } },
+      { id: "gameover", emoji: "😵", name: "Game over", play() {
+        playTone(392, 0.2, "sawtooth", 0.14);
+        setTimeout(() => playTone(311, 0.25, "triangle", 0.14), 150);
+        setTimeout(() => playTone(233, 0.4, "sine", 0.12), 320);
+      } },
+      { id: "beep", emoji: "🔔", name: "Classic beep", play() {
+        playTone(880, 0.12, "sine", 0.2);
+        setTimeout(() => playTone(1175, 0.15, "sine", 0.18), 80);
+      } },
+      { id: "silent", emoji: "🔇", name: "Silent", play() {} }
+    ];
+    function getPickedSoundId() {
+      let id = "alarm";
+      try { id = localStorage.getItem(SOUND_PICK_KEY) || "alarm"; } catch (e) {}
+      return SOUND_PACK.some(x => x.id === id) ? id : "alarm";
+    }
+    function setPickedSoundId(id) {
+      try { localStorage.setItem(SOUND_PICK_KEY, id); } catch (e) {}
+    }
+    function playPickedSound() {
+      const snd = SOUND_PACK.find(x => x.id === getPickedSoundId());
+      if (snd) snd.play();
+    }
+    function selectSound(id, preview) {
+      setPickedSoundId(id);
+      renderSoundPicker();
+      if (preview) {
+        const snd = SOUND_PACK.find(x => x.id === id);
+        if (snd) snd.play();
+      }
+    }
+    function renderSoundPicker() {
+      const picked = getPickedSoundId();
+      const grid = document.getElementById("soundGrid");
+      if (grid) {
+        grid.innerHTML = "";
+        SOUND_PACK.forEach(snd => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "sound-opt" + (snd.id === picked ? " active" : "");
+          b.innerHTML = '<span class="em">' + snd.emoji + "</span>" + snd.name;
+          b.addEventListener("click", () => selectSound(snd.id, true));
+          grid.appendChild(b);
+        });
+      }
+      const sel = document.getElementById("gameSoundSelect");
+      if (sel) {
+        sel.innerHTML = "";
+        SOUND_PACK.forEach(snd => {
+          const o = document.createElement("option");
+          o.value = snd.id;
+          o.textContent = snd.emoji + " " + snd.name;
+          if (snd.id === picked) o.selected = true;
+          sel.appendChild(o);
+        });
+      }
+      const label = document.getElementById("soundPickedLabel");
+      const cur = SOUND_PACK.find(x => x.id === picked);
+      if (label && cur) label.textContent = cur.emoji + " " + cur.name;
+    }
+    // Plays the sound the player picked (throttled, since detection fires many times a second)
     function playDetectSfx() {
       if (!coolSoundsUnlocked()) return;
-      // Alarm / siren-ish detection sting
-      playTone(880, 0.1, "square", 0.14);
-      setTimeout(() => playTone(660, 0.1, "square", 0.14), 90);
-      setTimeout(() => playTone(990, 0.14, "sawtooth", 0.12), 180);
+      const now = Date.now();
+      if (now - lastDetectSfxAt < 900) return;
+      lastDetectSfxAt = now;
+      playPickedSound();
     }
     function playCountdownTick(urgent) {
       if (urgent) {
@@ -807,19 +952,73 @@
         return false;
       }
     }
-    async function setTorch(on, playSound = false) {
+    async function setTorch(on, playSound = false, silent = false) {
       const ready = await ensureTorchReady();
       if (!ready || !videoTrack) return false;
       try {
         await videoTrack.applyConstraints({ advanced: [{ torch: on }] });
         updateTorchUI(on);
         if (on && playSound) playOnSound();
-        if (!on) { playOffSound(); clearCountdown(); }
+        if (!on) { if (!silent) playOffSound(); clearCountdown(); }
         return true;
       } catch (e) {
         errorEl.textContent = "Torch not supported on this device/browser.";
         return false;
       }
+    }
+    // ----- Torch during multiplayer games (silent, so the mic doesn't hear tones) -----
+    let gameTorchOn = false, gameTorchTimer = null;
+    const OFF_VOICE_TARGETS = ["off", "light off", "torch off", "night", "dark"];
+    // Silent countdown (no ticks: the Listening game's mic would hear them)
+    let gameCountdownTimer = null, gameCountdownLeft = 0;
+    function gameCountdownStop() {
+      clearInterval(gameCountdownTimer);
+      gameCountdownTimer = null;
+      gameCountdownLeft = 0;
+      clearCountdown();
+    }
+    function gameCountdownReset(seconds = 10) {
+      gameCountdownLeft = seconds;
+      countdownEl.classList.remove("hidden");
+      countdownEl.textContent = gameCountdownLeft + "s";
+      if (gameCountdownTimer) return;
+      gameCountdownTimer = setInterval(() => {
+        gameCountdownLeft--;
+        if (gameCountdownLeft > 0) {
+          countdownEl.textContent = gameCountdownLeft + "s";
+        } else {
+          gameCountdownStop();
+          gameTorchOn = false;
+          setTorch(false, false, true);
+        }
+      }, 1000);
+    }
+    function gameTorchOff() {
+      clearTimeout(gameTorchTimer);
+      gameTorchTimer = null;
+      gameCountdownStop();
+      if (!gameTorchOn && !isTorchOn) return;
+      gameTorchOn = false;
+      setTorch(false, false, true);
+    }
+    // Listening game: torch turns on when noise is detected and the 10s countdown starts.
+    // More noise restarts the countdown; when it hits 0 the torch turns off.
+    function gameTorchHoldOn() {
+      if (!gameTorchOn) {
+        gameTorchOn = true;
+        setTorch(true, false, true).then(ok => {
+          if (!ok) { gameTorchOn = false; gameCountdownStop(); }
+        });
+      }
+      gameCountdownReset(10);
+    }
+    // Voice game: a correct command does what it says (on-type words light it, off-type words turn it off)
+    function gameTorchForVoice(target) {
+      const off = OFF_VOICE_TARGETS.includes(String(target).toLowerCase());
+      clearTimeout(gameTorchTimer);
+      gameCountdownStop();
+      gameTorchOn = !off;
+      setTorch(!off, false, true).then(ok => { if (!ok) gameTorchOn = false; });
     }
     function scheduleAutoOff() {
       if (gameMode === "listen" && (gamePhase === "p1" || gamePhase === "p2")) return; // no auto during listen game
@@ -845,6 +1044,7 @@
         }
         setStatus("Detected! Stay quiet…", "detected");
         playDetectSfx();
+        gameTorchHoldOn();
         return;
       }
 
@@ -875,8 +1075,10 @@
         analyser.smoothingTimeConstant = 0.8;
         source.connect(analyser);
         try {
-          videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } } });
-          videoTrack = videoStream.getVideoTracks()[0];
+          if (!(videoTrack && videoTrack.readyState === "live")) {
+            videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } } });
+            videoTrack = videoStream.getVideoTracks()[0];
+          }
           torchSupported = true;
         } catch (camErr) {
           torchSupported = false;
@@ -920,6 +1122,7 @@
           gameLive.textContent = "Hits: " + voiceHits + " · Misses: " + voiceMisses;
           setStatus("Correct! ✅", "detected");
           playOnSound();
+          gameTorchForVoice(voiceTarget);
           nextVoiceTarget();
         } else {
           voiceMisses++;
@@ -1066,6 +1269,8 @@
       lastDetectAt = 0;
       voiceHits = 0;
       voiceMisses = 0;
+      gameTorchOff();
+      await ensureTorchReady();
 
       if (gameMode === "listen") {
         gameLive.textContent = "Detections: 0 (lower is better)";
@@ -1117,6 +1322,7 @@
     }
 
     function endGameTurn() {
+      gameTorchOff();
       let score;
       if (gameMode === "listen") {
         // Lower detections = higher score. Cap at 0 detections → 100 pts
@@ -1189,6 +1395,7 @@
 
     function exitGame() {
       clearInterval(gameTimerId);
+      gameTorchOff();
       gameMode = null;
       gamePhase = "idle";
       gamesPanel.classList.remove("open");
@@ -1352,6 +1559,9 @@
       playOnSound();
     })();
 
+    document.getElementById("gameSoundSelect").addEventListener("change", (e) => {
+      selectSound(e.target.value, true);
+    });
     refreshHighscoreUI();
     refreshSoundsUI();
   </script>
