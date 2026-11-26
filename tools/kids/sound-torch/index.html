@@ -617,16 +617,18 @@
       return rows.some(r => normCode(r[0]) === want);
     }
     async function markGiftCardUsed(code) {
-      addLocalUsedGift(code);
-      try {
-        const body = new URLSearchParams();
-        body.set("entry.2147360639", code);
-        body.set("entry.1526178092", "used");
-        body.set("entry.884208731", "sound-torch");
-        body.set("entry.256576255", "cool-sounds");
-        body.set("entry.1138659293", "session");
-        await fetch(SHEETS.GIFT_FORM, { method: "POST", mode: "no-cors", body });
-      } catch (e) {}
+      const normalizedCode = normCode(code);
+      const body = new URLSearchParams();
+      body.set("entry.2147360639", normalizedCode);
+      body.set("entry.1526178092", "used");
+      body.set("entry.884208731", "sound-torch");
+      body.set("entry.256576255", "cool-sounds");
+      body.set("entry.1138659293", "session");
+
+      // Google Forms no-cors submissions have opaque responses, so the browser
+      // cannot verify that the linked Google Sheet has received the row.
+      await fetch(SHEETS.GIFT_FORM, { method: "POST", mode: "no-cors", body });
+      addLocalUsedGift(normalizedCode);
     }
 
     function coolSoundsUnlocked() {
@@ -1300,14 +1302,14 @@
           return;
         }
         await markGiftCardUsed(code);
-        showGiftMsg("Gift card accepted! Unlocking…", "ok");
+        showGiftMsg("Redemption sent to SnappQuest. Google Forms cannot confirm the Sheet update in the browser; the record may take a moment to appear. Unlocking…", "ok");
         setCoolSoundsUnlocked();
         setTimeout(() => {
           unlockOverlay.style.display = "none";
           clearGiftMsg();
           setStatus("Cool Sounds unlocked! 🔊", "detected");
           playOnSound();
-        }, 500);
+        }, 900);
       } catch (e) {
         console.error(e);
         showGiftMsg("Could not verify gift card. Try again.", "err");

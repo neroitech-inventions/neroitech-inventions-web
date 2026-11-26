@@ -853,15 +853,21 @@ a.tg-link:active, .tg-link:active {
     return rows.some(r => normCode(r[0]) === want);
   }
   async function markGiftCardUsed(code) {
-    try {
-      const body = new URLSearchParams();
-      body.set("entry.2147360639", code);
-      body.set("entry.1526178092", "used");
-      body.set("entry.884208731", "boogie-beast");
-      body.set("entry.256576255", "unlock");
-      body.set("entry.1138659293", "session");
-      await fetch(SHEETS.GIFT_FORM, { method: "POST", mode: "no-cors", body });
-    } catch (e) {}
+    const body = new URLSearchParams();
+    body.set("entry.2147360639", normCode(code));
+    body.set("entry.1526178092", "used");
+    body.set("entry.884208731", "boogie-beast");
+    body.set("entry.256576255", "unlock");
+    body.set("entry.1138659293", "session");
+
+    // Google Forms no-cors requests return an opaque response:
+    // a resolved fetch means the request was sent, not that the form
+    // response was validated or written to the linked Sheet.
+    await fetch(SHEETS.GIFT_FORM, {
+      method: "POST",
+      mode: "no-cors",
+      body
+    });
   }
 
   function getUnlocked() {
@@ -1763,11 +1769,14 @@ a.tg-link:active, .tg-link:active {
         return;
       }
       await markGiftCardUsed(code);
-      showGiftMsg("Gift card accepted! Unlocking…", "ok");
+      showGiftMsg(
+        "Redemption sent to SnappQuest. Google Forms does not provide browser confirmation, so the Sheets record may take a moment to appear. Unlocking this session…",
+        "warn"
+      );
       setTimeout(() => {
         applyUnlock(unlockTarget, unlockKind);
         clearGiftMsg();
-      }, 450);
+      }, 900);
     } catch (e) {
       console.error(e);
       showGiftMsg("Could not verify gift card. Try again.", "err");
