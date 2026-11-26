@@ -969,8 +969,13 @@
     // ----- Torch during multiplayer games (silent, so the mic doesn't hear tones) -----
     let gameTorchOn = false, gameTorchTimer = null;
     const OFF_VOICE_TARGETS = ["off", "light off", "torch off", "night", "dark"];
-    // Silent countdown (no ticks: the Listening game's mic would hear them)
-    let gameCountdownTimer = null, gameCountdownLeft = 0;
+    // Countdown with tick sounds, same as normal mode. Detection is paused for a moment
+    // after each tick so the mic doesn't hear the speaker and count it as noise.
+    let gameCountdownTimer = null, gameCountdownLeft = 0, detectLockUntil = 0;
+    function gameTick() {
+      detectLockUntil = Date.now() + 300;
+      playTick();
+    }
     function gameCountdownStop() {
       clearInterval(gameCountdownTimer);
       gameCountdownTimer = null;
@@ -982,10 +987,12 @@
       countdownEl.classList.remove("hidden");
       countdownEl.textContent = gameCountdownLeft + "s";
       if (gameCountdownTimer) return;
+      gameTick();
       gameCountdownTimer = setInterval(() => {
         gameCountdownLeft--;
         if (gameCountdownLeft > 0) {
           countdownEl.textContent = gameCountdownLeft + "s";
+          gameTick();
         } else {
           gameCountdownStop();
           gameTorchOn = false;
@@ -1036,6 +1043,7 @@
 
       // Listening game: count detections (cooldown so continuous noise doesn't spam)
       if (gameMode === "listen" && (gamePhase === "p1" || gamePhase === "p2")) {
+        if (Date.now() < detectLockUntil) return; // ignore the countdown tick itself
         const now = Date.now();
         if (now - lastDetectAt > 800) {
           detectCount++;
