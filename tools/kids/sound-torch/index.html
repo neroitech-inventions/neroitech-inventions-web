@@ -178,6 +178,11 @@
     }
     .hint { font-size: 0.72rem; color: #c4b5fd; margin-top: 14px; line-height: 1.4; }
     .error { color: #fca5a5; font-size: 0.85rem; margin-top: 8px; font-weight: 600; }
+    .gift-msg { margin-top: 10px; padding: 10px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; line-height: 1.4; text-align: center; }
+    .gift-msg.info { background: rgba(94,234,212,0.12); border: 1px solid rgba(94,234,212,0.3); color: #5eead4; }
+    .gift-msg.ok { background: rgba(52,211,153,0.15); border: 1px solid rgba(52,211,153,0.35); color: #34d399; }
+    .gift-msg.err { background: rgba(248,113,113,0.15); border: 1px solid rgba(248,113,113,0.4); color: #fca5a5; }
+    .gift-msg.warn { background: rgba(253,224,71,0.12); border: 1px solid rgba(253,224,71,0.35); color: #fde047; }
 
     /* Games panel */
     .games-panel {
@@ -376,35 +381,6 @@
       transform: translateY(2px);
       box-shadow: 0 1px 0 rgba(0,0,0,0.25);
     }
-    .gift-msg {
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      line-height: 1.4;
-      text-align: center;
-    }
-    .gift-msg.info {
-      background: rgba(94,234,212,0.12);
-      border: 1px solid rgba(94,234,212,0.3);
-      color: var(--cyan);
-    }
-    .gift-msg.ok {
-      background: rgba(52,211,153,0.15);
-      border: 1px solid rgba(52,211,153,0.35);
-      color: #34d399;
-    }
-    .gift-msg.err {
-      background: rgba(248,113,113,0.15);
-      border: 1px solid rgba(248,113,113,0.4);
-      color: #fca5a5;
-    }
-    .gift-msg.warn {
-      background: rgba(253,224,71,0.12);
-      border: 1px solid rgba(253,224,71,0.35);
-      color: var(--yellow);
-    }
   </style>
 </head>
 <body>
@@ -570,7 +546,7 @@
       GIFT_ID: "1D6NaJ0I1kLNUSUqWRjy4aaY1pE-we1PqpTmCytG5ass",
       GIFT_RANGE: "Gift card!A1:Z2000",
       PENDING_ID: "1o_kkpaYmp56mq_May0bBdbmdXK669DGOYY3YHZpdh7E",
-      GIFT_FORM: "https://docs.google.com/forms/d/e/1FAIpQLSdir7IFUdyasF2LWvt-DNVEx9kGQCezxaRQ3gG5ftlxSJa70A/formResponse"
+      CREATE_FORM: "https://docs.google.com/forms/d/e/1FAIpQLSe9lmAvmoScW5kuVpZprjVq5rF7TLYQTU_PJYKnN1SRQXAI5Q/formResponse"
     };
     const SOUNDS_KEY = "soundTorchCoolSoundsSession";
     const USED_GIFTS_KEY = "nitiUsedGiftCards";
@@ -616,19 +592,54 @@
       const rows = await fetchSheetRows(SHEETS.PENDING_ID, "Pending Quest!E:E");
       return rows.some(r => normCode(r[0]) === want);
     }
-    async function markGiftCardUsed(code) {
-      const normalizedCode = normCode(code);
+    function trackCode() {
+      const c = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let r = "";
+      for (let i = 0; i < 8; i++) r += c[Math.floor(Math.random() * c.length)];
+      return r;
+    }
+    // The user only enters a gift card code. Everything else the Pending form
+    // needs (all its questions are required) is filled in here.
+    function buildQuestData() {
+      return {
+        email: "sound-torch@example.com",
+        name: "Sound Torch unlock · Cool Sounds",
+        sponsor: "Sound Torch",
+        desc: "Gift card unlock: Cool Sounds",
+        web: "https://x.com/sound_torch/status/" + Date.now() + String(Math.floor(Math.random() * 1000)).padStart(3, "0"),
+        tg: "@sound_torch",
+        x: "@sound_torch",
+        track: trackCode()
+      };
+    }
+    // Same submission as SnappQuest: Pending Quest form, gift code in the
+    // payment note and in the code field (col E).
+    async function submitGiftCardUsed(code, d) {
       const body = new URLSearchParams();
-      body.set("entry.2147360639", normalizedCode);
-      body.set("entry.1526178092", "used");
-      body.set("entry.884208731", "sound-torch");
-      body.set("entry.256576255", "cool-sounds");
-      body.set("entry.1138659293", "session");
-
-      // Google Forms no-cors submissions have opaque responses, so the browser
-      // cannot verify that the linked Google Sheet has received the row.
-      await fetch(SHEETS.GIFT_FORM, { method: "POST", mode: "no-cors", body });
-      addLocalUsedGift(normalizedCode);
+      body.set("entry.2147360639", d.email);
+      body.set("entry.1526178092", d.name);
+      body.set("entry.884208731", d.sponsor);
+      body.set("entry.1178007064", d.desc);
+      body.set("entry.1547645284", "Gift: " + code);
+      body.set("entry.899075060", d.web);
+      body.set("entry.112634495", d.tg);
+      body.set("entry.1507763482", d.x || "");
+      body.set("entry.269247622", d.track);
+      body.set("entry.256576255", code);
+      body.set("entry.1138659293", "1");
+      await fetch(SHEETS.CREATE_FORM, { method: "POST", mode: "no-cors", body });
+    }
+    // no-cors hides Google's reply, so confirm the code really reached the sheet
+    async function waitForSheetRow(code) {
+      const want = normCode(code);
+      for (let i = 0; i < 8; i++) {
+        await new Promise(r => setTimeout(r, 1500));
+        try {
+          const rows = await fetchSheetRows(SHEETS.PENDING_ID, "Pending Quest!E:E");
+          if (rows.some(r => normCode(r[0]) === want)) return true;
+        } catch (e) {}
+      }
+      return false;
     }
 
     function coolSoundsUnlocked() {
@@ -1224,16 +1235,28 @@
     const unlockOverlay = document.getElementById("unlockOverlay");
     document.getElementById("btnUnlockSounds").addEventListener("click", () => {
       unlockOverlay.style.display = "flex";
+      clearGiftMsg();
       document.getElementById("unlockTabUsdt").classList.add("active");
       document.getElementById("unlockTabGift").classList.remove("active");
       document.getElementById("unlockUsdtBox").style.display = "block";
       document.getElementById("unlockGiftBox").style.display = "none";
-      clearGiftMsg();
-      const btn = document.getElementById("unlockGiftBtn");
-      if (btn) btn.disabled = false;
     });
+    function showGiftMsg(text, kind) {
+      const el = document.getElementById("giftMsg");
+      if (!el) return;
+      el.style.display = "block";
+      el.className = "gift-msg " + (kind || "info");
+      el.textContent = text;
+    }
+    function clearGiftMsg() {
+      const el = document.getElementById("giftMsg");
+      if (!el) return;
+      el.style.display = "none";
+      el.textContent = "";
+    }
     document.getElementById("unlockCancel").addEventListener("click", () => {
       unlockOverlay.style.display = "none";
+      clearGiftMsg();
     });
     unlockOverlay.addEventListener("click", (e) => {
       if (e.target === unlockOverlay) unlockOverlay.style.display = "none";
@@ -1264,20 +1287,6 @@
       u.searchParams.set("ref", "cool_sounds");
       window.location.href = u.toString();
     });
-    function showGiftMsg(text, kind) {
-      const el = document.getElementById("giftMsg");
-      if (!el) return;
-      el.style.display = "block";
-      el.className = "gift-msg " + (kind || "info");
-      el.textContent = text;
-    }
-    function clearGiftMsg() {
-      const el = document.getElementById("giftMsg");
-      if (!el) return;
-      el.style.display = "none";
-      el.textContent = "";
-    }
-
     document.getElementById("unlockGiftBtn").addEventListener("click", async () => {
       const code = (document.getElementById("unlockGiftCode").value || "").trim();
       if (!code) {
@@ -1286,7 +1295,6 @@
       }
       const btn = document.getElementById("unlockGiftBtn");
       if (btn) btn.disabled = true;
-      errorEl.textContent = "";
       showGiftMsg("Checking gift card…", "info");
       try {
         const valid = await isValidGiftCard(code);
@@ -1301,15 +1309,24 @@
           if (btn) btn.disabled = false;
           return;
         }
-        await markGiftCardUsed(code);
-        showGiftMsg("Redemption sent to SnappQuest. Google Forms cannot confirm the Sheet update in the browser; the record may take a moment to appear. Unlocking…", "ok");
+        await submitGiftCardUsed(code, buildQuestData());
+        const landed = await waitForSheetRow(code);
+        if (!landed) {
+          console.error("Gift card submit not found in Pending Quest!E:E", code);
+          showGiftMsg("Could not redeem this gift card. Try again or contact SnappQuest on Telegram.", "err");
+          if (btn) btn.disabled = false;
+          return;
+        }
+        addLocalUsedGift(code);
+        showGiftMsg("Gift card accepted! Unlocking…", "ok");
         setCoolSoundsUnlocked();
         setTimeout(() => {
           unlockOverlay.style.display = "none";
           clearGiftMsg();
+          if (btn) btn.disabled = false;
           setStatus("Cool Sounds unlocked! 🔊", "detected");
           playOnSound();
-        }, 900);
+        }, 450);
       } catch (e) {
         console.error(e);
         showGiftMsg("Could not verify gift card. Try again.", "err");
